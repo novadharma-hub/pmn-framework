@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -40,23 +40,23 @@ button:disabled{opacity:.22!important;cursor:default}
 #pip-num{font-family:'Source Code Pro',monospace;font-size:.52rem;color:var(--mute2)}
 .view{display:none}.view.on{display:block}#reader-view.on{display:flex}
 #home-view{max-width:1000px;margin:0 auto;padding:4.5rem 2.5rem 8rem}
-.hero{display:grid;grid-template-columns:5fr 4fr;gap:5rem;align-items:start;padding-bottom:4.5rem;margin-bottom:4rem;border-bottom:1px solid var(--rule)}
-.hero-orn{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:1.4rem;display:flex;align-items:center;gap:.7rem}
-.hero-orn::before{content:'';display:block;width:22px;height:1px;background:var(--acc)}
-.hero-h1{font-family:'Libre Baskerville',serif;font-size:clamp(1.9rem,4.2vw,2.9rem);font-weight:400;line-height:1.1;letter-spacing:-.01em;margin-bottom:.5rem}
+.hero{text-align:center;padding-bottom:4rem;margin-bottom:4rem;border-bottom:1px solid var(--rule);max-width:680px;margin-left:auto;margin-right:auto}
+.hero-orn{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:1.8rem;display:flex;align-items:center;justify-content:center;gap:.7rem}
+.hero-orn::before,.hero-orn::after{content:'';display:block;width:22px;height:1px;background:var(--acc)}
+.hero-h1{font-family:'Libre Baskerville',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;line-height:1.08;letter-spacing:-.02em;margin-bottom:.6rem}
 .hero-h1 em{font-style:italic;color:var(--acc)}
-.hero-sub{font-style:italic;font-size:1rem;color:var(--mute);margin-bottom:2.6rem}
-.hero-ctas{display:flex;gap:.7rem;flex-wrap:wrap}
+.hero-sub{font-style:italic;font-size:1rem;color:var(--mute);margin-bottom:.8rem}
+.hero-quote{font-style:italic;font-size:.9rem;line-height:1.85;color:var(--mute2);margin-bottom:2rem;max-width:520px;margin-left:auto;margin-right:auto}
+.hero-stats{display:flex;justify-content:center;gap:3rem;padding:.8rem 0 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:2rem}
+.stat{display:flex;flex-direction:column;align-items:center;gap:.18rem}
+.stat-lbl{font-family:'Source Code Pro',monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
+.stat-val{font-family:'Libre Baskerville',serif;font-size:.95rem;color:var(--ink2)}
+.hero-ctas{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
 .cta-p{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;background:var(--acc);color:var(--bg);padding:.68rem 1.4rem;border:1px solid var(--acc);transition:background .18s,border-color .18s}
 .cta-p:hover{background:var(--acc2);border-color:var(--acc2);opacity:1}
 .cta-s{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:var(--mute);padding:.68rem 1.4rem;border:1px solid var(--rule2);transition:color .18s,border-color .18s}
 .cta-s:hover{color:var(--acc);border-color:var(--acc);opacity:1}
-.hero-panel{border-left:1px solid var(--rule);padding-left:3rem;padding-top:.3rem}
-.hero-quote{font-style:italic;font-size:1.02rem;line-height:1.85;color:var(--mute);margin-bottom:2rem;padding-left:1.1rem;border-left:2px solid var(--acc)}
-.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;border-top:1px solid var(--rule);padding-top:1.2rem}
-.stat{display:flex;flex-direction:column;gap:.18rem}
-.stat-lbl{font-family:'Source Code Pro',monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
-.stat-val{font-family:'Libre Baskerville',serif;font-size:.95rem;color:var(--ink2)}
+.hero-panel{display:none}
 .toc-lbl{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mute2);margin-bottom:1.8rem}
 .toc-grid{display:grid;grid-template-columns:1fr 1fr}
 .toc-card{border-top:1px solid var(--rule);padding:1.4rem 0}
@@ -144,7 +144,7 @@ mark{background:#7a5c1e22;color:var(--acc2);padding:0 2px}
 #tt::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--acc)}
 #tt-term{font-family:'Source Code Pro',monospace;font-size:.54rem;letter-spacing:.16em;color:var(--acc);text-transform:uppercase;margin-bottom:.45rem}
 #tt-def{font-family:'Lora',serif;font-size:.86rem;color:var(--ttink);line-height:1.72;font-style:italic}
-@media(max-width:820px){.hero{grid-template-columns:1fr;gap:2.5rem}.hero-panel{border-left:none;border-top:1px solid var(--rule);padding-left:0;padding-top:2rem}.toc-grid{grid-template-columns:1fr}.toc-card:nth-child(even){border-left:none;padding-left:0}.gl-grid{grid-template-columns:1fr}#reader-col{max-width:100%;padding:2.8rem 1.6rem 6rem}#home-view,#srch-view{padding:3rem 1.5rem 6rem}#pip{display:none}}
+@media(max-width:820px){.hero{padding-bottom:2.5rem}.toc-grid{grid-template-columns:1fr}.toc-card:nth-child(even){border-left:none;padding-left:0}.gl-grid{grid-template-columns:1fr}#reader-col{max-width:100%;padding:2.8rem 1.6rem 6rem}#home-view,#srch-view{padding:3rem 1.5rem 6rem}#pip{display:none}}
 @media(max-width:480px){html{font-size:17px}#hdr{padding:0 1rem;gap:.8rem}.hbtn.hsm{display:none}}</style>
 </head>
 <body>
@@ -168,26 +168,20 @@ mark{background:#7a5c1e22;color:var(--acc2);padding:0 2px}
 </header>
 <div id="home-view" class="view on">
   <div class="hero">
-    <div>
-      <div class="hero-orn">Adaptive Naturalism &middot; Nova Dharma</div>
-      <h1 class="hero-h1">Progressive<br>Materialist<br><em>Naturalism</em></h1>
-      <p class="hero-sub">A Framework for Navigating Material Reality</p>
-      <div class="hero-ctas">
-        <button id="cta-begin" class="cta-p">Begin Reading</button>
-        <button id="cta-gl" class="cta-s">Key Terms</button>
-      </div>
+    <div class="hero-orn">Adaptive Naturalism &middot; Nova Dharma</div>
+    <h1 class="hero-h1">Progressive Materialist<br><em>Naturalism</em></h1>
+    <p class="hero-sub">A Framework for Navigating Material Reality</p>
+    <p class="hero-quote">What follows is a first document, not a finished system &mdash;
+      what matters is not its completeness but its direction.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">36</span></div>
+      <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
+      <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
+      <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
     </div>
-    <div class="hero-panel">
-      <p class="hero-quote">What follows is a first document, not a finished system.
-        What matters about a first document is not its completeness but its direction &mdash;
-        whether the starting point it establishes is generative enough to produce
-        further analysis that could not have been produced from any other starting point.</p>
-      <div class="hero-stats">
-        <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">36</span></div>
-        <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
-        <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
-        <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
-      </div>
+    <div class="hero-ctas">
+      <button id="cta-begin" class="cta-p">Begin Reading</button>
+      <button id="cta-gl" class="cta-s">Key Terms</button>
     </div>
   </div>
   <p class="toc-lbl">Contents</p>
@@ -242,7 +236,7 @@ mark{background:#7a5c1e22;color:var(--acc2);padding:0 2px}
 
   // Theme
   function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); }
-  function initTheme(){ try{ applyTheme(localStorage.getItem('pmn-theme')||'light'); }catch(e){ applyTheme('light'); } }
+  function initTheme(){ try{ applyTheme(localStorage.getItem('pmn-theme')||'dark'); }catch(e){ applyTheme('dark'); } }
   function toggleTheme(){ var c=document.documentElement.getAttribute('data-theme'); var n=c==='dark'?'light':'dark'; applyTheme(n); try{localStorage.setItem('pmn-theme',n);}catch(e){} }
   initTheme();
 
