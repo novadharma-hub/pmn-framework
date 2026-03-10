@@ -121,6 +121,10 @@ button:disabled{opacity:.22!important;cursor:default}
 .rel-sid{font-family:'Source Code Pro',monospace;font-size:.56rem;font-weight:500;color:var(--acc);flex-shrink:0;min-width:40px}
 .rel-stitle{font-family:'Lora',serif;font-style:italic;font-size:.88rem;color:var(--mute);line-height:1.3}
 .rel-pt{font-family:'Source Code Pro',monospace;font-size:.48rem;color:var(--mute3);flex-shrink:0;margin-left:auto;padding-left:.5rem}
+.feedback-bar{margin-top:2.5rem;padding-top:1.8rem;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.feedback-lbl{font-family:'Source Code Pro',monospace;font-size:.52rem;letter-spacing:.12em;color:var(--mute2);text-transform:uppercase}
+.feedback-btn{font-family:'Source Code Pro',monospace;font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);padding:.45rem 1rem;border:1px solid var(--rule2);background:none;text-decoration:none;display:inline-block;transition:border-color .15s,color .15s}
+.feedback-btn:hover{border-color:var(--acc);color:var(--acc2);opacity:1}
 .rnav{display:flex;justify-content:space-between;align-items:center;margin-top:4.5rem;padding-top:2rem;border-top:1px solid var(--rule)}
 .rnav-btn{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:.6rem 1.1rem;border:1px solid var(--rule2);transition:color .18s,border-color .18s,background .18s}
 .rnav-btn:hover{color:var(--acc);border-color:var(--acc);opacity:1}
@@ -218,6 +222,7 @@ mark{background:#7a5c1e22;color:var(--acc2);padding:0 2px}
       <span id="read-time" style="display:block;font-family:'Source Code Pro',monospace;font-size:.52rem;letter-spacing:.08em;color:var(--mute3);margin-bottom:2.4rem;padding-bottom:2.4rem;border-bottom:1px solid var(--rule)"></span>
       <div id="prose" class="prose"></div>
       <div id="related-sec" class="related"></div>
+      <div class="feedback-bar"><span class="feedback-lbl">Komentar atau saran?</span><div style="display:flex;gap:.6rem"><a id="feedback-link" class="feedback-btn" href="#">Email &rarr;</a><a id="twitter-link" class="feedback-btn" href="https://twitter.com/nova_dharma_pm" target="_blank" rel="noopener">Twitter &rarr;</a></div></div>
       <nav class="rnav">
         <button class="rnav-btn" id="rn-p">&larr; Previous</button>
         <span id="rn-pos" class="rnav-pos"></span>
@@ -383,6 +388,12 @@ mark{background:#7a5c1e22;color:var(--acc2);padding:0 2px}
     var mins=Math.max(1,Math.round(words/200));
     g('read-time').textContent=mins+' min read';
     renderRelated(s.id);
+    // Update feedback mailto with current section context
+    var subj=encodeURIComponent('PMN v36 — Feedback: '+s.id+' '+s.title);
+    var body=encodeURIComponent('Section: '+s.id+' — '+s.title+'\n\n');
+    g('feedback-link').href='mailto:novadharma.pm@gmail.com?subject='+subj+'&body='+body;
+    var tweet=encodeURIComponent('Re: PMN v36 — '+s.id+' '+s.title+' @nova_dharma_pm');
+    g('twitter-link').href='https://twitter.com/intent/tweet?text='+tweet;
     var col=g('reader-col');
     col.classList.remove('fi'); void col.offsetWidth; col.classList.add('fi');
     var first=curP===0&&curS===0, last=curP===PARTS.length-1&&curS===PARTS[curP].subs.length-1;
