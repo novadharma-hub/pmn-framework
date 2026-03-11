@@ -51,7 +51,7 @@ button:disabled{opacity:.22!important;cursor:default}
 .stat{display:flex;flex-direction:column;align-items:center;gap:.18rem}
 .stat-lbl{font-family:'Source Code Pro',monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
 .stat-val{font-family:'Libre Baskerville',serif;font-size:.95rem;color:var(--ink2)}
-.hero-ctas{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+.hero-ctas{display:flex;flex-direction:column;align-items:center;gap:1rem}.cta-main{font-size:.68rem;letter-spacing:.2em;padding:.85rem 2.8rem;min-width:220px}.cta-row-s{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
 .cta-p{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;background:var(--acc);color:var(--bg);padding:.68rem 1.4rem;border:1px solid var(--acc);transition:background .18s,border-color .18s}
 .cta-p:hover{background:var(--acc2);border-color:var(--acc2);opacity:1}
 .cta-s{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:var(--mute);padding:.68rem 1.4rem;border:1px solid var(--rule2);transition:color .18s,border-color .18s}
@@ -200,8 +200,8 @@ mark{background:#7a5c1e22;color:var(--acc2);padding:0 2px}
     <div class="hero-orn">Adaptive Naturalism &middot; Nova Dharma</div>
     <h1 class="hero-h1">Progressive Materialist<br><em>Naturalism</em></h1>
     <p class="hero-sub">A Framework for Navigating Material Reality</p>
-    <p class="hero-quote">What follows is a first document, not a finished system &mdash;
-      what matters is not its completeness but its direction.</p>
+    <p class="hero-quote">What follows is a first document, not a finished system &mdash;<br>
+      the starting point is the thing worth arguing about.</p>
     <div class="hero-stats">
       <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">39</span></div>
       <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
@@ -209,10 +209,13 @@ mark{background:#7a5c1e22;color:var(--acc2);padding:0 2px}
       <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
     </div>
     <div class="hero-ctas">
-      <button id="cta-begin" class="cta-p">Begin Reading</button>
-      <button id="cta-gl" class="cta-s">Key Terms</button>
-      <button id="cta-resume" class="cta-s" style="display:none">Resume &rarr;</button>
-      <a href="pmn-agent-guide.html" class="cta-s" style="text-decoration:none;display:inline-block">Use as AI Agent &rarr;</a>
+      <button id="cta-begin" class="cta-p cta-main">Begin Reading</button>
+      <button id="cta-resume" class="cta-p cta-main" style="display:none">Resume &rarr;</button>
+      <div class="cta-row-s">
+        <button id="cta-gl" class="cta-s">Key Terms</button>
+        <a href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" class="cta-s" target="_blank" style="text-decoration:none">Download PDF &darr;</a>
+        <a href="pmn-agent-guide.html" class="cta-s" style="text-decoration:none">Use as AI Agent &rarr;</a>
+      </div>
     </div>
   </div>
   <p class="toc-lbl">Contents</p>
