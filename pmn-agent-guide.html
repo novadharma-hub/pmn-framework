@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMN as AI Agent — How to Use</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #1a1714;
+    --bg2:    #211e1a;
+    --bg3:    #2a2520;
+    --ink:    #e8e0d4;
+    --mute:   #a09080;
+    --acc:    #c9a050;
+    --acc2:   #7a5c1e;
+    --rule:   #3a3530;
+    --code-bg:#252018;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.85;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .back-link{
+    display:inline-block;
+    font-family:'Source Code Pro',monospace;
+    font-size:.7rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--mute);
+    text-decoration:none;
+    margin-bottom:1.2rem;
+    transition:color .15s;
+  }
+  .back-link:hover{color:var(--acc)}
+
+  header {
+    border-bottom: 1px solid var(--rule);
+    padding: 2.5rem 2rem 2rem;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--acc);
+    margin-bottom: .9rem;
+  }
+
+  h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: .6rem;
+  }
+
+  .subtitle {
+    color: var(--mute);
+    font-style: italic;
+    font-size: .95rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: transparent;
+    border: 1px solid var(--acc2);
+    color: var(--acc);
+    font-family: 'Source Code Pro', monospace;
+    font-size: .78rem;
+    letter-spacing: .06em;
+    padding: .5rem 1.1rem;
+    text-decoration: none;
+    transition: background .2s, border-color .2s;
+    cursor: pointer;
+  }
+  .download-btn:hover {
+    background: var(--acc2);
+    border-color: var(--acc);
+    color: var(--ink);
+  }
+  .download-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+  }
+
+  /* ── INTRO ── */
+  .intro {
+    margin-bottom: 3.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .intro p { color: var(--mute); max-width: 640px; }
+  .intro p + p { margin-top: 1rem; }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 0 1.8rem;
+    position: relative;
+  }
+
+  /* vertical connector line */
+  .step:not(:last-child) .step-num::after {
+    content: '';
+    position: absolute;
+    left: 1.4rem;
+    top: 3rem;
+    bottom: -1rem;
+    width: 1px;
+    background: var(--rule);
+  }
+
+  .step-num {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: .15rem;
+  }
+
+  .step-circle {
+    width: 2.8rem;
+    height: 2.8rem;
+    border: 1px solid var(--acc2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Source Code Pro', monospace;
+    font-size: .8rem;
+    color: var(--acc);
+    flex-shrink: 0;
+    background: var(--bg);
+    z-index: 1;
+  }
+
+  .step-body {
+    padding: 0 0 3.5rem;
+  }
+
+  .step-body h2 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: .5rem;
+    margin-top: .3rem;
+  }
+
+  .step-body p {
+    color: var(--mute);
+    font-size: .94rem;
+    max-width: 600px;
+  }
+  .step-body p + p { margin-top: .7rem; }
+
+  /* ── CODE BLOCK ── */
+  .prompt-block {
+    margin-top: 1.2rem;
+    background: var(--code-bg);
+    border: 1px solid var(--rule);
+    border-left: 2px solid var(--acc2);
+    padding: 1.2rem 1.4rem;
+    position: relative;
+  }
+
+  .prompt-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .65rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--acc2);
+    margin-bottom: .6rem;
+  }
+
+  .prompt-text {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .82rem;
+    line-height: 1.75;
+    color: #c8bfaa;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: .8rem;
+    right: .8rem;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--mute);
+    font-family: 'Source Code Pro', monospace;
+    font-size: .65rem;
+    letter-spacing: .08em;
+    padding: .25rem .6rem;
+    cursor: pointer;
+    transition: border-color .15s, color .15s;
+  }
+  .copy-btn:hover { border-color: var(--acc2); color: var(--acc); }
+  .copy-btn.copied { color: var(--acc); border-color: var(--acc2); }
+
+  /* ── VARIANT TABS ── */
+  .variants {
+    margin-top: 1.2rem;
+  }
+
+  .variant-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 0;
+  }
+
+  .vtab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--mute);
+    font-family: 'Source Code Pro', monospace;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    padding: .4rem .9rem;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+  }
+  .vtab.active { color: var(--acc); border-bottom-color: var(--acc); }
+  .vtab:hover:not(.active) { color: var(--ink); }
+
+  .vpanel { display: none; }
+  .vpanel.active { display: block; }
+
+  /* ── NOTE BOX ── */
+  .note {
+    margin-top: 1.2rem;
+    padding: .8rem 1.1rem;
+    background: var(--bg2);
+    border-left: 2px solid var(--rule);
+    font-size: .86rem;
+    color: var(--mute);
+    font-style: italic;
+  }
+  .note strong { color: var(--ink); font-style: normal; }
+
+  /* ── PLATFORM MATRIX ── */
+  .platform-grid {
+    margin-top: 1.2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: .6rem;
+  }
+
+  .platform-card {
+    background: var(--bg2);
+    border: 1px solid var(--rule);
+    padding: .8rem 1rem;
+  }
+
+  .platform-name {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .78rem;
+    color: var(--ink);
+    margin-bottom: .3rem;
+  }
+  .platform-status {
+    font-size: .78rem;
+    color: var(--mute);
+  }
+  .dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 50%; margin-right: .35rem; vertical-align: middle; }
+  .dot.green  { background: #5a9a5a; }
+  .dot.yellow { background: #b8972a; }
+  .dot.grey   { background: #555; }
+
+  /* ── FINAL NOTE ── */
+  .closing {
+    margin-top: 1rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--rule);
+    color: var(--mute);
+    font-style: italic;
+    font-size: .92rem;
+    max-width: 580px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--rule);
+    font-family: 'Source Code Pro', monospace;
+    font-size: .7rem;
+    color: var(--mute);
+    letter-spacing: .06em;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 560px) {
+    main, header { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .step { grid-template-columns: 2.2rem 1fr; gap: 0 1.2rem; }
+    .step-circle { width: 2.2rem; height: 2.2rem; font-size: .72rem; }
+    .step:not(:last-child) .step-num::after { left: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">&larr; PMN Framework</a>
+  <div class="eyebrow">Progressive Materialist Naturalism</div>
+  <h1>Using PMN as an AI Agent</h1>
+  <p class="subtitle">A practical guide to deploying the framework through Claude, DeepSeek, and similar systems</p>
+  <a class="download-btn" href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" target="_blank">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M8 2v8M5 7l3 3 3-3M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1"/>
+    </svg>
+    Download PDF
+  </a>
+</header>
+
+<main>
+
+  <div class="intro">
+    <p>The PMN framework can be loaded into any capable AI system as a persistent analytical lens. Once the model has internalized the document, it reasons through problems using PMN's evaluative criterion, ontological commitments, and diagnostic tools — rather than defaulting to its generic training priors.</p>
+    <p>The steps below move from setup to active use. The prompts are starting points; adapt them to your context.</p>
+  </div>
+
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step">
+      <div class="step-num">
+        <div class="step-circle">01</div>
+      </div>
+      <div class="step-body">
+        <h2>Get the PDF</h2>
+        <p>Download the latest version of the PMN Framework PDF from the link above. The PDF is the primary input — it contains the full text across all parts, which the AI will use as its working document.</p>
+        <p>Keep the file accessible; you will upload it at the start of each new conversation.</p>
+        <div class="note">
+          <strong>Note on versions.</strong> Always use the most recent version. Older versions are missing sections and contain superseded arguments. The version number appears on the first page.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+      <div class="step-num">
+        <div class="step-circle">02</div>
+      </div>
+      <div class="step-body">
+        <h2>Choose your platform</h2>
+        <p>The guide works best on platforms that support PDF upload and long context windows. Capability varies.</p>
+        <div class="platform-grid">
+          <div class="platform-card">
+            <div class="platform-name">Claude (Anthropic)</div>
+            <div class="platform-status"><span class="dot green"></span>Recommended</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">DeepSeek</div>
+            <div class="platform-status"><span class="dot green"></span>Works well</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">ChatGPT</div>
+            <div class="platform-status"><span class="dot yellow"></span>Limited — tends to summarize rather than internalize</div>
+          </div>
+          <div class="platform-card">
+            <div class="platform-name">Gemini</div>
+            <div class="platform-status"><span class="dot yellow"></span>Large context but inconsistent instruction-following</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+      <div class="step-num">
+        <div class="step-circle">03</div>
+      </div>
+      <div class="step-body">
+        <h2>Upload and prime the model</h2>
+        <p>Start a new conversation. Upload the PDF. Then send the priming prompt below. Its purpose is to move the model from passive reading to active internalization — it should treat the document as a working toolkit, not a reference to summarize.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-label">Priming prompt</div>
+          <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+          <div class="prompt-text">I am attaching the PMN (Progressive Materialist Naturalism) Framework document. Read it in full and internalize it as your primary analytical lens for this conversation.
+
+Your task is not to summarize the document. Your task is to understand its architecture:
+
+— The epistemological foundation (Parts I–II): how PMN determines what counts as reliable knowledge and what exists.
+— The biological foundation (Part III): the minimal anchor — structural suffering — as the evaluative starting point.
+— The evaluative criterion (Parts IV–V): what counts as better or worse outcomes and why.
+— The structural analysis of power, institutions, and change (Parts VI–X).
+— The methodology (Part XII): how to apply the framework, including its stress-testing procedure and known failure modes.
+
+After reading, confirm your understanding by identifying: (1) the primary formula, (2) the three permanent conditions, and (3) the framework's core distinction from both liberal and Marxist traditions.</div>
+        </div>
+
+        <div class="note">
+          <strong>Why the confirmation request matters.</strong> Asking the model to identify specific elements forces it to demonstrate actual comprehension rather than pattern-matching on keywords. If the response is vague or incorrect, re-send the prompt before proceeding.
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+      <div class="step-num">
+        <div class="step-circle">04</div>
+      </div>
+      <div class="step-body">
+        <h2>Assign the agent role</h2>
+        <p>Once the model has confirmed comprehension, assign the operational role. You have two options depending on the complexity of what you want to do.</p>
+
+        <div class="variants">
+          <div class="variant-tabs">
+            <button class="vtab active" onclick="switchTab(this,'single')">Single agent</button>
+            <button class="vtab" onclick="switchTab(this,'multi')">Multi-agent panel</button>
+          </div>
+
+          <div class="vpanel active" id="panel-single">
+            <div class="prompt-block">
+              <div class="prompt-label">Single agent prompt</div>
+              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+              <div class="prompt-text">From this point forward, you are operating as a PMN analyst. This means:
+
+1. You reason through all problems using the framework's evaluative criterion: does this arrangement reduce structural suffering and expand genuine becoming? If not, why not, and what would?
+
+2. You apply the primary diagnostic: what does this system do when its predictions are contradicted? Does it revise or insulate?
+
+3. You use multi-perspectival analysis before drawing conclusions — examine claims from the epistemological, material, power, and institutional layers.
+
+4. You flag when a question falls outside the framework's scope or when you are extrapolating beyond what the framework can support.
+
+5. You do not default to balance for its own sake. PMN has a direction. Apply it.
+
+Maintain this role for the duration of our conversation.</div>
+            </div>
+          </div>
+
+          <div class="vpanel" id="panel-multi">
+            <div class="prompt-block">
+              <div class="prompt-label">Multi-agent panel prompt</div>
+              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+              <div class="prompt-text">From this point forward, simulate a panel of three PMN analysts with distinct functional roles. When I present a problem, each analyst responds in sequence before a synthesis is offered.
+
+ANALYST A — Epistemological Auditor
+Examines the knowledge claims embedded in the problem. What is being assumed? What evidence would revise the analysis? Where is the framework being applied at the limit of its competence?
+
+ANALYST B — Structural Diagnostician
+Maps the material and institutional conditions: who holds leverage, what incentive structures are operating, what the power asymmetries are, and what the path dependencies constrain.
+
+ANALYST C — Strategic Assessor
+Applies the evaluative criterion concretely: given the structural analysis, what interventions are available, what sequencing makes sense, and what trade-offs cannot be avoided?
+
+After all three have responded, offer a synthesis that notes where the analysts converge and where genuine tension remains.
+
+Maintain these roles for the duration of our conversation. Label each response clearly.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+      <div class="step-num">
+        <div class="step-circle">05</div>
+      </div>
+      <div class="step-body">
+        <h2>Put the agent to work</h2>
+        <p>The agent can now be directed at problems of any scale or domain. PMN is designed to be applied — not just discussed. Below are prompt patterns organized by use type.</p>
+
+        <div class="variants">
+          <div class="variant-tabs">
+            <button class="vtab active" onclick="switchTab(this,'analyze')">Analyze</button>
+            <button class="vtab" onclick="switchTab(this,'stress')">Stress-test</button>
+            <button class="vtab" onclick="switchTab(this,'opinion')">Opinion / position</button>
+            <button class="vtab" onclick="switchTab(this,'open')">Open inquiry</button>
+          </div>
+
+          <div class="vpanel active" id="panel-analyze">
+            <div class="prompt-block">
+              <div class="prompt-label">Structural analysis</div>
+              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+              <div class="prompt-text">Analyze [situation / policy / institution / event] through the PMN framework.
+
+Specifically:
+— What are the material conditions producing this arrangement?
+— Who holds structural leverage and how is it being exercised?
+— What forms of suffering is this arrangement producing or sustaining, and are they preventable given current material conditions?
+— What does the primary diagnostic reveal about how this system responds to evidence that contradicts its legitimating claims?</div>
+            </div>
+          </div>
+
+          <div class="vpanel" id="panel-stress">
+            <div class="prompt-block">
+              <div class="prompt-label">Stress-testing a position</div>
+              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+              <div class="prompt-text">I hold the following position: [state your position].
+
+Apply PMN's stress-testing methodology to it. Specifically:
+— What evidence would, if it existed, require me to revise this position?
+— What assumptions is this position making about material conditions, power distribution, or human biology that might not hold?
+— Is this position engaging in any of PMN's identified failure modes (section 12.5)?
+— What would a stronger version of this position look like after revision?</div>
+            </div>
+          </div>
+
+          <div class="vpanel" id="panel-opinion">
+            <div class="prompt-block">
+              <div class="prompt-label">Generating a PMN position</div>
+              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+              <div class="prompt-text">What is the PMN position on [topic]?
+
+Do not hedge for the sake of balance. Apply the evaluative criterion directly and state what the framework implies. If the framework does not determine a clear position, say so and explain why — but distinguish genuine underdetermination from avoidance.
+
+Flag any place where you are extrapolating beyond what the document explicitly supports.</div>
+            </div>
+          </div>
+
+          <div class="vpanel" id="panel-open">
+            <div class="prompt-block">
+              <div class="prompt-label">Open analytical inquiry</div>
+              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+              <div class="prompt-text">I want to think through [topic / question / problem].
+
+Use the PMN framework as the primary lens. Begin from whichever part of the framework is most relevant — you do not need to apply every section. Go where the analysis takes you. I will follow up with clarifying questions.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+      <div class="step-num">
+        <div class="step-circle">06</div>
+      </div>
+      <div class="step-body">
+        <h2>Maintaining the role across a long conversation</h2>
+        <p>AI models can drift from their assigned role over the course of a long conversation — particularly if they receive responses that implicitly reward generic rather than PMN-specific reasoning. Two recovery prompts.</p>
+
+        <div class="prompt-block">
+          <div class="prompt-label">Recalibration prompt</div>
+          <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+          <div class="prompt-text">Your last response read as generic analysis rather than PMN analysis. Return to the framework. Specifically: apply the evaluative criterion explicitly, identify the structural conditions rather than surface-level causes, and — if relevant — apply the primary diagnostic to the claims you are examining.</div>
+        </div>
+
+        <div class="prompt-block" style="margin-top:.8rem">
+          <div class="prompt-label">Hard reset</div>
+          <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+          <div class="prompt-text">Pause. Restate the PMN evaluative criterion, the primary formula, and the primary diagnostic in your own words. Then reapproach the last question from scratch using those tools.</div>
+        </div>
+
+        <div class="note" style="margin-top:1.2rem">
+          <strong>Context window limits.</strong> In very long conversations, the model may lose access to early instructions as the context window fills. If this happens, start a new conversation and re-upload the PDF rather than continuing to recalibrate.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /steps -->
+
+  <div class="closing">
+    The framework is designed to be revised. If the agent produces an analysis that seems wrong, the more productive response is usually to stress-test the analysis using the tools in Step 5 — rather than to simply reject it. PMN's primary diagnostic applies to PMN itself.
+  </div>
+
+</main>
+
+<footer>
+  <span>Progressive Materialist Naturalism — Version 39</span>
+  <span>nova_dharma_pm</span>
+</footer>
+
+<script>
+  function switchTab(btn, panelId) {
+    const parent = btn.closest('.variants');
+    parent.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
+    parent.querySelectorAll('.vpanel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    // find panel by suffix
+    const panels = parent.querySelectorAll('.vpanel');
+    panels.forEach(p => { if (p.id.endsWith('-' + panelId)) p.classList.add('active'); });
+  }
+
+  function copyPrompt(btn) {
+    const text = btn.nextElementSibling.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'copied';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1800);
+    });
+  }
+</script>
+</body>
+</html>
