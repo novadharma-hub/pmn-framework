@@ -299,6 +299,53 @@
   .dot.grey   { background: #555; }
 
   /* ── FINAL NOTE ── */
+  .ex-section {
+    margin-bottom: 3.5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ex-intro {
+    color: var(--mute);
+    font-style: italic;
+    font-size: .92rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+  }
+  .ex-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .ex-msg {
+    padding: 1.2rem 1.4rem;
+    border-left: 2px solid transparent;
+    margin-bottom: .3rem;
+  }
+  .ex-user {
+    border-left-color: var(--rule);
+    background: transparent;
+  }
+  .ex-agent {
+    border-left-color: var(--acc2);
+    background: var(--bg2);
+  }
+  .ex-role {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .65rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: .5rem;
+  }
+  .ex-agent .ex-role { color: var(--acc); }
+  .ex-body {
+    font-size: .92rem;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+  .ex-user .ex-body { color: var(--mute); font-style: italic; }
+  .ex-body p + p { margin-top: .8rem; }
+
   .closing {
     margin-top: 1rem;
     padding-top: 2.5rem;
@@ -329,6 +376,34 @@
     .step-circle { width: 2.2rem; height: 2.2rem; font-size: .72rem; }
     .step:not(:last-child) .step-num::after { left: 1.05rem; }
   }
+
+  .ex-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0 0;
+  }
+  .ex-divider::before, .ex-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  .ex-divider-lbl {
+    font-family: 'Source Code Pro', monospace;
+    font-size: .65rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--mute);
+    white-space: nowrap;
+  }
+
+/* Polish */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:3px}
+button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
+.copy-btn:active{opacity:.6}
 </style>
 </head>
 <body>
@@ -587,6 +662,98 @@ Use the PMN framework as the primary lens. Begin from whichever part of the fram
     </div>
 
   </div><!-- /steps -->
+
+
+  <!-- EXAMPLE CONVERSATION -->
+  <div class="ex-section">
+    <p class="toc-lbl" style="margin-bottom:1.8rem">Example: PMN Analyst in Action</p>
+    <p class="ex-intro">The following is an excerpt from an actual session using the single-agent setup. The topic: whether gig economy labor arrangements are a structural problem or a preference aggregation outcome.</p>
+
+    <div class="ex-thread">
+
+      <div class="ex-msg ex-user">
+        <div class="ex-role">User</div>
+        <div class="ex-body">Are gig economy arrangements like Gojek or Grab fundamentally exploitative, or do they just reflect what workers actually prefer — flexibility over security?</div>
+      </div>
+
+      <div class="ex-msg ex-agent">
+        <div class="ex-role">PMN Analyst</div>
+        <div class="ex-body">
+          <p>The preference framing needs structural interrogation before it can be used analytically. PMN's starting question is not "what do workers prefer?" but "what is the structure of the choice set within which that preference is expressed?"</p>
+          <p>The relevant material conditions: in labor markets with weak social floors — limited unemployment insurance, no universal healthcare, no portable benefits — the choice between gig flexibility and formal employment security is not made on equal terms. A worker without access to healthcare through any other channel who chooses gig work is not expressing a preference for flexibility. They are accepting the best available option within a constrained set. The preference data picks up the outcome of structural constraint, not a free disposition.</p>
+          <p>The primary diagnostic applies here: what does the framing "workers prefer flexibility" do when it encounters evidence that contradicts it? The evidence that gig workers disproportionately report income insecurity, work longer hours than formally employed counterparts to reach comparable earnings, and overwhelmingly support portable benefits when surveyed — this evidence is systematically reinterpreted as a preference for autonomy rather than as a signal that the structural floor is inadequate. That is the insulation response. The framing is unfalsifiable because any preference expression confirming it is taken as evidence, while any preference expression contradicting it is explained away.</p>
+          <p>Structurally: the arrangement produces a leverage asymmetry that benefits the platform. The platform externalizes wage risk, scheduling risk, equipment costs, and social insurance costs onto workers while retaining algorithmic control over access to work. This is not a bilateral negotiation between parties with comparable options — it is a structural position in which one party controls access to the market and the other does not.</p>
+          <p>PMN's evaluative criterion asks: is this arrangement producing preventable structural suffering? The answer is yes — not because flexibility is bad, but because the arrangement systematically produces income volatility and benefit gaps that are technically solvable given current material conditions and that the platform's revenue model would survive absorbing. The suffering is not inherent to the arrangement. It is a consequence of institutional decisions about who bears which costs.</p>
+        </div>
+      </div>
+
+      <div class="ex-msg ex-user">
+        <div class="ex-role">User</div>
+        <div class="ex-body">So what's the PMN position on regulation — should platforms be forced to reclassify workers as employees?</div>
+      </div>
+
+      <div class="ex-msg ex-agent">
+        <div class="ex-role">PMN Analyst</div>
+        <div class="ex-body">
+          <p>PMN does not determine a single regulatory instrument — it determines what any acceptable instrument must produce. The evaluative criterion requires that workers have access to an adequate social floor: income floor, healthcare access, protection against arbitrary removal from the platform. Whether that floor is delivered through employment reclassification, portable benefits attached to work units rather than employment relationships, sectoral collective bargaining, or public provision is a question of doctrinal configuration under specific material conditions — not something the framework settles in advance.</p>
+          <p>What the framework does settle: reclassification solves the problem only if it actually delivers the floor. The evidence from California's AB5 suggests that reclassification can produce perverse outcomes when platforms respond by reducing work availability or shifting to other contractual workarounds. A framework that insists on reclassification as the only legitimate instrument, regardless of whether it produces the floor in a given context, has made the instrument the goal rather than the outcome.</p>
+          <p>The stress-test question: what would falsify the case for reclassification in a given context? If reclassification reduces total work availability in ways that make previously gig-dependent workers worse off by the evaluative criterion — lower floor, not higher — then the argument for reclassification in that context fails by PMN's own criterion. That is not a reason for inaction. It is a reason to ensure the regulatory instrument actually delivers what it is supposed to deliver, rather than delivering institutional compliance while the structural problem persists in a new form.</p>
+        </div>
+      </div>
+
+    </div>
+  
+
+      <!-- Multi-agent example -->
+      <div class="ex-divider">
+        <span class="ex-divider-lbl">Multi-agent panel</span>
+      </div>
+      <p class="ex-intro" style="margin-top:1.4rem">The same question put to the three-analyst panel. Topic: whether universal basic income is consistent with PMN's evaluative criterion.</p>
+
+      <div class="ex-thread">
+
+        <div class="ex-msg ex-user">
+          <div class="ex-role">User</div>
+          <div class="ex-body">Is universal basic income consistent with PMN's evaluative criterion?</div>
+        </div>
+
+        <div class="ex-msg ex-agent" style="border-left-color:#6a7a5a">
+          <div class="ex-role" style="color:#8aaa6a">Analyst A — Epistemological Auditor</div>
+          <div class="ex-body">
+            <p>The question contains an embedded assumption that needs surfacing: "consistent with" can mean at least three different things — (1) not ruled out by the criterion, (2) positively supported by the criterion, or (3) derivable from the criterion as a doctrinal requirement. These are not equivalent, and conflating them produces confused analysis.</p>
+            <p>The epistemological prior question: what evidence would determine which of these three relationships holds? The framework's evaluative criterion operates on outcomes — does an arrangement reduce structural suffering and expand genuine becoming? Whether UBI produces those outcomes is an empirical question that varies by design, implementation context, and what it replaces or supplements. A UBI set at a floor adequate for subsistence, financed in ways that do not erode other social infrastructure, and implemented alongside rather than instead of in-kind provision, is a structurally different intervention than a UBI set below subsistence as a substitute for means-tested benefits. The criterion does not answer the question; it specifies the variables the answer must be measured against.</p>
+          </div>
+        </div>
+
+        <div class="ex-msg ex-agent" style="border-left-color:#5a6a8a">
+          <div class="ex-role" style="color:#7a9aaa">Analyst B — Structural Diagnostician</div>
+          <div class="ex-body">
+            <p>The structural question UBI proponents rarely answer directly: what is the leverage architecture? Who controls the level, the financing, and the conditionality of the transfer — and what are the incentives of those actors when conditions change?</p>
+            <p>The permanent conditions analysis is relevant here. UBI as a floor provision addresses resource deprivation (R) directly. But floor provisions that can be politically eroded are structurally different from those embedded in institutional frameworks that resist erosion — constitutional provisions, automatic indexing, cross-party consensus. A UBI that passes in one political cycle and gets cut in the next has a different structural character than one that becomes a permanent condition people organize around. The difference is not the policy design; it is the institutional embedding.</p>
+            <p>The power question: UBI has supporters across the political spectrum for structurally incompatible reasons. Silicon Valley accelerationists support it as a mechanism for absorbing the social costs of automation without disrupting the labor market discipline that keeps wages down. Social democrats support it as a floor that expands worker bargaining power. These coalitions cannot both be right about what UBI does structurally. The fact that the same policy instrument is supported by actors with opposing structural interests is a diagnostic signal, not a reason for optimism about the coalition's stability.</p>
+          </div>
+        </div>
+
+        <div class="ex-msg ex-agent" style="border-left-color:#8a6a5a">
+          <div class="ex-role" style="color:#aa8a6a">Analyst C — Strategic Assessor</div>
+          <div class="ex-body">
+            <p>Given Analysts A and B: the strategic question is not "is UBI good?" but "under what conditions, at what level, financed how, and replacing or supplementing what, does UBI move the evaluative criterion in the right direction in a specific institutional context?"</p>
+            <p>The sequencing problem is critical. In contexts where existing social insurance is weak and labor organizing is difficult, a floor-adequate UBI that is politically achievable may be the most tractable intervention available for reducing structural suffering in the short term — even if the long-term structural preference would be robust sectoral bargaining and comprehensive social insurance. The framework is not an alibi for refusing tractable improvements on the grounds that they fall short of structural transformation.</p>
+            <p>But the substitution risk Analyst B identifies requires a specific doctrinal position: UBI must be additive to existing social infrastructure, not substitutive. Any policy design or political coalition that proposes UBI as a replacement for healthcare, housing support, or disability provision is using the instrument in a way that moves the evaluative criterion in the wrong direction — regardless of the level set — because it trades rights-based entitlements with institutional permanence for a cash transfer whose level is subject to political revision.</p>
+          </div>
+        </div>
+
+        <div class="ex-msg ex-agent" style="border-left-color:var(--acc2);background:rgba(201,160,80,.06)">
+          <div class="ex-role">Synthesis</div>
+          <div class="ex-body">
+            <p>The analysts converge on three points: the criterion does not settle the question in the abstract; the answer is design- and context-dependent; and the substitution risk is the structural fault line that separates UBI configurations PMN can support from those it cannot.</p>
+            <p>The remaining tension is between Analysts B and C on coalition politics. Analyst B reads cross-ideological support as a diagnostic warning about structural incoherence. Analyst C reads tractability as a reason to work within available coalitions while maintaining doctrinal clarity about what the instrument must not be allowed to do. This is a genuine tension within the framework — not a contradiction, but a calibration question that depends on the specific political conditions of implementation. The framework does not resolve it in advance. It requires the configurability assessment of section 10.6 applied to the specific context.</p>
+          </div>
+        </div>
+
+      </div>
+
+</div>
 
   <div class="closing">
     The framework is designed to be revised. If the agent produces an analysis that seems wrong, the more productive response is usually to stress-test the analysis using the tools in Step 5 — rather than to simply reject it. PMN's primary diagnostic applies to PMN itself.
