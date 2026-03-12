@@ -1,231 +1,293 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>PMN v39 — Progressive Materialist Naturalism</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Code+Pro:wght@300;400;500&display=swap"/>
-<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root,[data-theme=light]{--bg:#faf7f2;--bg2:#f2ece0;--bg3:#e9e1d2;--ink:#2d2926;--ink2:#3d3530;--mute:#7d7168;--mute2:#a09285;--mute3:#c4b8ab;--acc:#7a5c1e;--acc2:#9b7828;--rule:#ddd5c8;--rule2:#ccc3b5;--sb:#f2ece0;--hdr:#faf7f2;--hs:rgba(45,41,38,.05);--ttbg:#2d2926;--ttink:#f2ece0}
-[data-theme=dark]{--bg:#1a1714;--bg2:#211e1a;--bg3:#2a2520;--ink:#e8e0d4;--ink2:#d4c9bb;--mute:#8a7f74;--mute2:#6a5f56;--mute3:#4a413a;--acc:#c9a050;--acc2:#e0b860;--rule:#2e2924;--rule2:#3a3028;--sb:#1e1b17;--hdr:#1a1714;--hs:rgba(0,0,0,.3);--ttbg:#0e0c0a;--ttink:#d4c9bb}
-html{font-size:19px}
-body{background:var(--bg);color:var(--ink);font-family:'Lora',Georgia,serif;line-height:1.75;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
-::selection{background:rgba(122,92,30,.25)}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:3px}
-button{cursor:pointer;background:none;border:none;font-family:inherit;color:inherit}
-button:disabled{opacity:.22!important;cursor:default}
-#topbar{height:3px;background:linear-gradient(90deg,transparent,var(--acc) 20%,var(--acc2) 50%,var(--acc) 80%,transparent)}
-#hdr{position:sticky;top:0;z-index:300;height:52px;background:var(--hdr);border-bottom:1px solid var(--rule);box-shadow:0 2px 12px var(--hs);display:flex;align-items:center;padding:0 1.8rem;gap:1.2rem;transition:background .25s,border-color .25s}
-#hdr-logo{font-family:'Libre Baskerville',serif;font-size:.8rem;font-weight:700;letter-spacing:.05em;color:var(--acc);flex-shrink:0;padding:0;transition:color .15s}
-#hdr-logo:hover{color:var(--acc2);opacity:1}
-#hdr-srch{flex:1;max-width:360px;position:relative;display:flex;align-items:center}
-#srch-part{height:28px;background:var(--bg2);color:var(--mute);border:1px solid var(--rule);border-radius:2px;font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.06em;padding:0 .5rem;cursor:pointer;outline:none;max-width:120px;margin-left:.3rem}
-#srch-icon{position:absolute;left:0;color:var(--mute3);font-size:.8rem;pointer-events:none}
-#srch-in{width:100%;background:transparent;border:none;border-bottom:1px solid var(--rule);color:var(--ink);font-family:'Lora',serif;font-size:.88rem;padding:.28rem .3rem .28rem 1.3rem;outline:none;transition:border-color .2s}
-#srch-in:focus{border-color:var(--acc)}
-#srch-in::placeholder{color:var(--mute3);font-style:italic}
-#srch-clr{position:absolute;right:0;color:var(--mute2);font-size:1rem;padding:0;display:none}
-#srch-clr:hover{color:var(--acc);opacity:1}
-#hdr-r{margin-left:auto;display:flex;align-items:center;gap:1.4rem;flex-shrink:0}
-.hbtn{font-family:'Source Code Pro',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:0;transition:color .15s}
-.hbtn:hover,.hbtn.on{color:var(--acc);opacity:1}
-#theme-tog{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.1em;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.35rem .7rem;transition:color .18s,border-color .18s}#theme-tog:hover{color:var(--acc);border-color:var(--acc)}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Progressive Materialist Naturalism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   PMN v39 — Master Stylesheet (clean rebuild)
+   ═══════════════════════════════════════════════════════ */
 
-[data-theme=dark] 
-#pip{display:flex;align-items:center}
-#pip-track{width:72px;height:2px;background:var(--rule2);position:relative;overflow:hidden;border-radius:1px}
-#pip-fill{position:absolute;inset:0;background:var(--acc);transition:width .6s cubic-bezier(.4,0,.2,1);border-radius:1px}
+/* ── Variables ── */
+:root {
+  --bg:#faf7f2; --bg2:#f3ede3; --bg3:#ece5d8;
+  --sb:#f3ede3; --ink:#2d2926; --ink2:#3d3530;
+  --acc:#7a5c1e; --acc2:#9a7030; --mute:#7a6a58; --mute2:#9a8a78; --mute3:#b0a090;
+  --rule:#d8cfc4; --rule2:#ccc4b8;
+  --hdr:#faf7f2;
+}
+[data-theme=dark] {
+  --bg:#1a1714; --bg2:#201d19; --bg3:#252119;
+  --sb:#1e1b17; --ink:#e8e0d4; --ink2:#d0c8bc;
+  --acc:#c9a050; --acc2:#d4a850; --mute:#8a7a68; --mute2:#6a5a48; --mute3:#504540;
+  --rule:#2e2a26; --rule2:#3a3530;
+  --hdr:#1a1714;
+}
+
+/* ── Reset ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;overflow:hidden;height:100vh}
+
+/* ── Header ── */
+#hdr{display:flex;align-items:center;gap:.8rem;padding:.55rem 1.2rem;background:var(--hdr);border-bottom:1px solid var(--rule);height:52px;position:sticky;top:0;z-index:100;flex-shrink:0}
+#hdr-logo{font-family:'Libre Baskerville',serif;font-weight:700;font-size:1.05rem;color:var(--acc);background:none;border:none;cursor:pointer;letter-spacing:.04em;flex-shrink:0}
+#hdr-srch{display:flex;align-items:center;gap:.4rem;background:var(--bg2);border:1px solid var(--rule);padding:.28rem .7rem;flex:1;max-width:380px}
+#srch-icon{color:var(--mute2);font-size:.75rem;flex-shrink:0}
+#srch-in{background:none;border:none;outline:none;color:var(--ink);font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.02em;width:100%}
+#srch-in::placeholder{color:var(--mute3)}
+#srch-clr{background:none;border:none;color:var(--mute2);cursor:pointer;font-size:.9rem;display:none;padding:0 .2rem;line-height:1;flex-shrink:0}
+#srch-part{height:26px;background:var(--bg2);color:var(--mute);border:1px solid var(--rule);font-family:'Source Code Pro',monospace;font-size:.58rem;padding:0 .4rem;cursor:pointer;outline:none;max-width:110px;margin-left:.2rem;flex-shrink:0}
+#hdr-r{display:flex;align-items:center;gap:.8rem;margin-left:auto;flex-shrink:0}
+#pip{display:flex;align-items:center;gap:.5rem}
+#pip-track{width:72px;height:2px;background:var(--rule2);border-radius:1px;overflow:hidden}
+#pip-fill{height:100%;background:var(--acc);border-radius:1px;transition:width .6s}
 #pip-num{display:none}
-.view{display:none}.view.on{display:block}#reader-view.on{display:flex}
-#home-view{max-width:1000px;margin:0 auto;padding:4.5rem 2.5rem 8rem}
-.hero{text-align:center;padding-bottom:4rem;margin-bottom:4rem;border-bottom:1px solid var(--rule);max-width:680px;margin-left:auto;margin-right:auto}
-.hero-orn{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acc);margin-bottom:1.8rem;display:flex;align-items:center;justify-content:center;gap:.7rem}
-.hero-orn::before,.hero-orn::after{content:'';display:block;width:22px;height:1px;background:var(--acc)}
+.hbtn{font-family:'Source Code Pro',monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;background:none;border:none;color:var(--mute);cursor:pointer;padding:.3rem .4rem;transition:color .15s}
+.hbtn:hover,.hbtn.on{color:var(--acc)}
+#theme-tog{font-family:'Source Code Pro',monospace;font-size:.6rem;letter-spacing:.1em;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.32rem .7rem;cursor:pointer;transition:color .18s,border-color .18s;white-space:nowrap;flex-shrink:0}
+#theme-tog:hover{color:var(--acc);border-color:var(--acc)}
+#topbar{height:0}
+
+/* ── Page shell: everything below header ── */
+.page-shell{display:flex;flex-direction:column;height:calc(100vh - 52px);overflow:hidden}
+
+/* ── Views ── */
+.view{display:none}
+.view.on{display:block}
+
+/* ── Home view ── */
+#home-view{overflow-y:auto;height:100%}
+#home-view > *{max-width:1000px;margin-left:auto;margin-right:auto;padding-left:2.5rem;padding-right:2.5rem}
+#home-view > .hero{padding-top:4.5rem;max-width:1000px}
+#home-view > .toc-lbl{padding-top:0;max-width:1000px}
+#home-view > .hero-suggestions{padding-top:0}
+#home-view > #toc-grid{padding-bottom:8rem;max-width:1000px}
+
+/* ── Hero ── */
+.hero{text-align:center;padding-bottom:3rem;margin-bottom:0;border-bottom:1px solid var(--rule)}
+.hero-orn{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mute2);display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:1.4rem}
+.hero-orn::before,.hero-orn::after{content:'';display:block;width:40px;height:1px;background:var(--acc);opacity:.4}
 .hero-h1{font-family:'Libre Baskerville',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;line-height:1.08;letter-spacing:-.02em;margin-bottom:.6rem}
-.hero-h1 em{font-style:italic;color:var(--acc)}
-.hero-sub{font-style:italic;font-size:1rem;color:var(--mute);margin-bottom:.8rem}
-.hero-quote{font-style:italic;font-size:.9rem;line-height:1.85;color:var(--mute2);margin-bottom:2rem;max-width:520px;margin-left:auto;margin-right:auto}
-.hero-stats{display:flex;justify-content:center;gap:3rem;padding:.8rem 0 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:2rem}
-.stat{display:flex;flex-direction:column;align-items:center;gap:.18rem}
-.stat-lbl{font-family:'Source Code Pro',monospace;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
-.stat-val{font-family:'Libre Baskerville',serif;font-size:.95rem;color:var(--ink2)}
-.hero-ctas{display:flex;flex-direction:column;align-items:center;gap:1rem}.cta-main{font-size:.68rem;letter-spacing:.2em;padding:.85rem 2.8rem;min-width:220px}.cta-row-s{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
-.cta-p{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;background:var(--acc);color:var(--bg);padding:.68rem 1.4rem;border:1px solid var(--acc);transition:background .18s,border-color .18s}
-.cta-p:hover{background:var(--acc2);border-color:var(--acc2);opacity:1}
-.cta-s{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;background:transparent;color:var(--mute);padding:.68rem 1.4rem;border:1px solid var(--rule2);transition:color .18s,border-color .18s}
-.cta-s:hover{color:var(--acc);border-color:var(--acc);opacity:1}
-.hero-panel{display:none}
-.toc-lbl{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mute2);margin-bottom:1.8rem}
-.toc-grid{display:grid;grid-template-columns:1fr 1fr}
-.toc-card{border-top:1px solid var(--rule);padding:1.4rem 0}
-.toc-card:nth-child(odd){padding-right:2.8rem}
-.toc-card:nth-child(even){padding-left:2.8rem;border-left:1px solid var(--rule)}
-.toc-ph{display:flex;gap:.6rem;align-items:baseline;margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:1px solid var(--rule);cursor:pointer;width:100%;text-align:left;background:none;border-right:none;border-top:none}
+.hero-h1 em{color:var(--acc);font-style:italic}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:1.05rem;color:var(--mute);margin-bottom:1rem}
+.hero-quote{font-family:'Lora',serif;font-style:italic;font-size:.9rem;color:var(--mute2);max-width:480px;margin:0 auto 2rem;line-height:1.65}
+.hero-stats{display:flex;justify-content:center;gap:3rem;padding:.9rem 0 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:2.2rem}
+.stat{text-align:center}
+.stat-lbl{display:block;font-family:'Source Code Pro',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute2);margin-bottom:.3rem}
+.stat-val{font-family:'Libre Baskerville',serif;font-size:1.1rem;color:var(--acc)}
+.hero-ctas{display:flex;flex-direction:column;align-items:center;gap:.9rem}
+.cta-p{font-family:'Source Code Pro',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;background:var(--acc);color:var(--bg);border:1px solid var(--acc);padding:.8rem 2.4rem;cursor:pointer;transition:background .18s,border-color .18s}
+.cta-p:hover{background:var(--acc2);border-color:var(--acc2)}
+.cta-main{min-width:220px}
+.cta-row-s{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.cta-s{font-family:'Source Code Pro',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.55rem 1rem;cursor:pointer;transition:color .15s,border-color .15s;text-decoration:none;display:inline-flex;align-items:center}
+.cta-s:hover{color:var(--acc);border-color:var(--acc)}
+
+/* ── Suggestions ── */
+.hero-suggestions{padding:1.5rem 2.5rem;display:none}
+.hero-suggestions-inner{background:var(--bg2);border:1px solid var(--rule);padding:1.2rem 1.4rem;border-radius:2px}
+.suggest-lbl{font-family:'Source Code Pro',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:.7rem;display:block;padding-bottom:.5rem;border-bottom:1px solid var(--rule)}
+.suggest-btn{background:none;border:none;border-bottom:1px solid var(--rule2);color:inherit;font-family:'Source Code Pro',monospace;font-size:.7rem;padding:.5rem .3rem;text-align:left;cursor:pointer;display:flex;align-items:center;gap:.7rem;width:100%;transition:background .12s;border-radius:0}
+.suggest-btn:last-child{border-bottom:none}
+.suggest-btn:hover{background:var(--bg3)}
+.suggest-sid{color:var(--acc);font-weight:500;flex-shrink:0;min-width:36px}
+.suggest-title{color:var(--ink2);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.suggest-why{font-size:.6rem;color:var(--mute2);flex-shrink:0}
+
+/* ── TOC ── */
+.toc-lbl{font-family:'Source Code Pro',monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink2);padding:2rem 2.5rem .8rem;border-bottom:1px solid var(--rule);display:block}
+.toc-grid{display:flex;flex-direction:column}
+.toc-part{border-bottom:1px solid var(--rule);padding:1.2rem 2.5rem 1rem}
+.toc-ph{display:flex;gap:.8rem;align-items:baseline;margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:1px solid var(--rule2);cursor:pointer;width:100%;text-align:left;background:none;border-top:none;border-left:none;border-right:none;color:inherit}
 .toc-ph:hover .toc-pname{color:var(--acc)}
-.toc-pnum{font-family:'Source Code Pro',monospace;font-size:.72rem;font-weight:500;letter-spacing:.08em;color:var(--acc);flex-shrink:0}
-.toc-pname{font-family:'Libre Baskerville',serif;font-size:1.05rem;font-weight:400;color:var(--ink);line-height:1.25;transition:color .15s}
-.toc-sub{display:flex;align-items:baseline;gap:.5rem;padding:.2rem 0 .2rem .25rem;width:100%;text-align:left;background:none;border:none;cursor:pointer}
-.toc-sub:hover .toc-sname{color:var(--acc);opacity:1}
-.toc-sub.intro{background:var(--bg2);border-left:2px solid var(--acc);padding-left:.6rem;margin:.3rem 0}
-.toc-sub.intro .toc-sname{font-style:normal;color:var(--ink2);font-size:.88rem}
-.toc-sid{font-family:'Source Code Pro',monospace;font-size:.62rem;font-weight:500;color:var(--mute2);min-width:46px;flex-shrink:0;letter-spacing:.04em;transition:color .15s}
-.toc-sid.r{color:var(--acc)}
-.toc-sname{font-family:'Lora',serif;font-style:italic;font-size:.9rem;color:var(--mute);line-height:1.3;transition:color .15s}
-.toc-sname.r{color:var(--mute2)}
-.toc-chk{font-size:.5rem;color:var(--acc);flex-shrink:0;margin-left:.08rem}
-#reader-view{height:calc(100vh - 52px);overflow:hidden}
-#sidebar{width:268px;min-width:268px;height:100%;overflow-y:auto;background:var(--sb);border-right:1px solid var(--rule);flex-shrink:0;transition:width .26s cubic-bezier(.4,0,.2,1),min-width .26s cubic-bezier(.4,0,.2,1),background .25s}
-#sidebar.closed{width:0;min-width:0;overflow:hidden}
-#sb-list{padding:1rem 0 3rem}
-.sb-plbl{padding:.85rem 1.1rem .2rem;font-family:'Source Code Pro',monospace;font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute2);border-top:1px solid var(--rule);margin-top:.4rem}
-.sb-plbl:first-child{border-top:none;margin-top:0}
+.toc-pnum{font-family:'Source Code Pro',monospace;font-size:.65rem;font-weight:500;letter-spacing:.1em;color:var(--acc);flex-shrink:0;min-width:55px;text-transform:uppercase}
+.toc-pname{font-family:'Libre Baskerville',serif;font-size:.95rem;font-weight:400;color:var(--ink);line-height:1.25;transition:color .15s}
+.toc-subs{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.toc-sub{display:flex;align-items:baseline;gap:.45rem;padding:.3rem .4rem;width:100%;text-align:left;background:none;border:none;cursor:pointer;transition:background .1s;color:inherit}
+.toc-sub:hover{background:var(--bg2)}
+.toc-sub:hover .toc-sname{color:var(--acc)}
+.toc-sub.intro{grid-column:1/-1;padding-left:0;opacity:.75}
+.toc-sub.intro .toc-sname{font-style:normal}
+.toc-sid{font-family:'Source Code Pro',monospace;font-size:.58rem;font-weight:500;color:var(--mute2);min-width:36px;flex-shrink:0;letter-spacing:.03em}
+.toc-sid.r{color:var(--acc2)}
+.toc-sname{font-family:'Lora',serif;font-style:italic;font-size:.85rem;color:var(--mute);line-height:1.3;transition:color .15s}
+.toc-sname.r{color:var(--ink2)}
+.toc-chk{font-size:.5rem;color:var(--acc);flex-shrink:0}
+.toc-prog{display:flex;align-items:center;gap:.6rem;margin-top:.9rem;padding-top:.7rem;border-top:1px solid var(--rule2)}
+.toc-prog-bar{flex:1;height:2px;background:var(--rule2);border-radius:1px;overflow:hidden}
+.toc-prog-fill{height:100%;background:var(--acc);border-radius:1px;transition:width .3s}
+.toc-prog-lbl{font-family:'Source Code Pro',monospace;font-size:.5rem;color:var(--mute2);letter-spacing:.08em;flex-shrink:0}
+
+/* ── Search/Glossary view ── */
+#srch-view{overflow-y:auto;height:100%;padding:3.5rem 2.5rem 8rem;max-width:720px;margin:0 auto}
+.sv-hdr{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute2);padding-bottom:1.2rem;margin-bottom:2rem;border-bottom:1px solid var(--rule)}
+.res{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--rule);padding:1.4rem 0;cursor:pointer;transition:padding-left .15s}
+.res:hover{padding-left:.5rem}
+.res-loc{font-family:'Source Code Pro',monospace;font-size:.55rem;color:var(--acc);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.3rem}
+.res-title{font-family:'Libre Baskerville',serif;font-size:1rem;color:var(--ink);margin-bottom:.4rem;line-height:1.3;font-weight:400}
+.res-snip{font-family:'Lora',serif;font-style:italic;font-size:.88rem;color:var(--mute);line-height:1.72}
+mark{background:transparent;color:var(--acc2);text-decoration:underline;text-decoration-color:rgba(201,160,80,.4);text-underline-offset:2px}
+.gl-grp-lbl{font-family:'Source Code Pro',monospace;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute2);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule)}
+.gl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-bottom:2rem}
+.gl-card{background:var(--bg2);border:1px solid var(--rule);padding:1rem 1.1rem}
+.gl-term{font-family:'Libre Baskerville',serif;font-size:.88rem;color:var(--acc);margin-bottom:.4rem;font-weight:700}
+.gl-def{font-family:'Lora',serif;font-style:italic;font-size:.82rem;color:var(--mute);line-height:1.6}
+.empty{font-family:'Lora',serif;font-style:italic;color:var(--mute2);padding:2rem 0}
+
+/* ── Reader view ── */
+#reader-view.on{display:flex!important;height:100%;overflow:hidden}
+
+/* ── Sidebar ── */
+#sidebar{width:268px;min-width:268px;height:100%;overflow-y:auto;background:var(--sb);border-right:1px solid var(--rule);flex-shrink:0;transition:width .26s cubic-bezier(.4,0,.2,1),min-width .26s;position:relative}
+#sidebar.closed{width:0!important;min-width:0!important;overflow:hidden}
+#sb-hist{border-bottom:1px solid var(--rule);padding-bottom:.3rem}
+.sb-hist-lbl{font-family:'Source Code Pro',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute2);padding:.7rem 1.1rem .3rem;display:block}
+.sb-hist-item{display:flex;align-items:baseline;gap:.5rem;padding:.3rem 1.1rem;cursor:pointer;transition:background .1s}
+.sb-hist-item:hover{background:var(--bg3)}
+.sb-hist-sid{font-family:'Source Code Pro',monospace;font-size:.62rem;color:var(--acc2);flex-shrink:0}
+.sb-hist-title{font-size:.78rem;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-plbl{font-family:'Source Code Pro',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute2);padding:.9rem 1.1rem .3rem;display:block}
 .sb-plbl.on{color:var(--acc)}
-.sb-item{display:flex;gap:.5rem;align-items:baseline;width:100%;text-align:left;padding:.32rem 1.1rem .32rem .9rem;border-left:2px solid transparent;background:none;border-right:none;border-top:none;border-bottom:none;cursor:pointer;transition:background .1s,border-color .12s}
-.sb-item:hover{background:var(--bg3)}
-.sb-item.on{background:var(--bg);border-left-color:var(--acc)}
-.sb-item.intro-sec{border-left-color:var(--acc);opacity:.7;background:var(--bg2)}
-.sb-iid{font-family:'Source Code Pro',monospace;font-size:.56rem;font-weight:500;color:var(--mute2);flex-shrink:0;min-width:36px;letter-spacing:.04em}
+.sb-item{display:flex;align-items:baseline;gap:.45rem;padding:.28rem 1.1rem;width:100%;text-align:left;background:none;border:none;cursor:pointer;transition:background .1s;color:inherit}
+.sb-item:hover,.sb-item.on{background:var(--bg3)}
+.sb-item.on{border-left:2px solid var(--acc)}
+.sb-iid{font-family:'Source Code Pro',monospace;font-size:.58rem;color:var(--mute2);flex-shrink:0;min-width:34px}
 .sb-iid.on{color:var(--acc)}
-.sb-iid.r{color:var(--acc);opacity:.5}
-.sb-ilbl{font-family:'Lora',serif;font-size:.8rem;color:var(--mute);line-height:1.3}
-.sb-ilbl.on{color:var(--ink2)}
-#sb-tog{position:fixed;top:50%;transform:translateY(-50%);width:16px;height:48px;background:var(--sb);border:1px solid var(--rule);color:var(--mute2);font-size:.6rem;display:flex;align-items:center;justify-content:center;z-index:100;cursor:pointer;transition:left .26s cubic-bezier(.4,0,.2,1)}
-#sb-tog:hover{background:var(--bg3);opacity:1}
-#reader-main{flex:1;overflow-y:auto;height:100%;scroll-behavior:smooth}
-#reader-col{max-width:65ch;margin:0 auto;padding:3.5rem 2.5rem 8rem}
-.bc{display:flex;align-items:center;gap:.5rem;margin-bottom:2.8rem;flex-wrap:wrap}
-.bc-btn{font-family:'Source Code Pro',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute2);padding:0;transition:color .15s}
-.bc-btn:hover{color:var(--acc);opacity:1}
-.bc-sep{color:var(--mute3);font-size:.75rem}
-.bc-part{font-family:'Source Code Pro',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
-.bc-sid{font-family:'Source Code Pro',monospace;font-size:.65rem;color:var(--mute2)}
-.sec-eye{font-family:'Source Code Pro',monospace;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute2);margin-bottom:.55rem;line-height:1.4}
-.sec-ttl{transition:color .2s;font-family:'Libre Baskerville',serif;font-weight:400;font-size:clamp(1.55rem,2.8vw,2.1rem);line-height:1.18;letter-spacing:-.01em;color:var(--ink);margin-bottom:2.6rem}
-.sec-id{font-family:'Source Code Pro',monospace;font-size:.9rem;color:var(--acc);vertical-align:baseline;margin-right:.5rem;opacity:.9}
-.sec-ttl.intro-ttl{font-size:clamp(1.2rem,2.2vw,1.6rem);color:var(--mute);border-left:3px solid var(--acc);padding-left:1rem;margin-left:-1rem}
-.sec-ttl.intro-ttl .sec-id{font-size:.75rem}
-.gl-hint{font-family:'Source Code Pro',monospace;font-size:.54rem;letter-spacing:.1em;color:var(--mute3);margin-bottom:2.4rem;padding-bottom:2.4rem;border-bottom:1px solid var(--rule)}
-.prose{font-size:1rem;line-height:1.82;color:var(--ink2)}
-.prose blockquote{margin:1.8rem 0;padding:.8rem 1.4rem;border-left:2px solid var(--acc);color:var(--mute);font-style:italic;font-size:.95rem;line-height:1.85}
-.prose blockquote em{font-style:normal}
-.prose hr{border:none;border-top:1px solid var(--rule);margin:2rem 0}
-.prose strong{font-weight:600;color:var(--ink)}
+.sb-iid.r{color:var(--acc2)}
+.sb-ilbl{font-family:'Lora',serif;font-style:italic;font-size:.8rem;color:var(--mute);line-height:1.3;text-align:left}
+.sb-ilbl.on{color:var(--ink);font-style:normal}
+.sb-item.intro-sec .sb-iid{opacity:.5}
+.sb-item.intro-sec .sb-ilbl{font-style:normal;font-size:.75rem;opacity:.7}
+
+/* ── Sidebar toggle ── */
+#sb-tog{position:absolute;right:-16px;top:50%;transform:translateY(-50%);z-index:10;background:var(--sb);border:1px solid var(--rule);border-left:none;color:var(--mute2);width:16px;height:48px;display:flex;align-items:center;justify-content:center;font-size:.65rem;cursor:pointer;transition:color .15s}
+#sb-tog:hover{color:var(--acc)}
+#sidebar.closed #sb-tog{right:-16px;border-left:1px solid var(--rule)}
+
+/* ── Reader main ── */
+#reader-main{flex:1;overflow-y:auto;height:100%;min-width:0}
+#reader-col{max-width:68ch;margin:0 auto;padding:3.5rem 2.5rem 8rem}
+
+/* ── Breadcrumb ── */
+.bc{display:flex;align-items:center;gap:.4rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.bc-btn{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;background:none;border:none;color:var(--acc);cursor:pointer;padding:0;transition:color .15s}
+.bc-btn:hover{color:var(--acc2)}
+.bc-sep{color:var(--mute2);font-size:.7rem}
+.bc-part{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);font-weight:600}
+.bc-sid{font-family:'Source Code Pro',monospace;font-size:.58rem;color:var(--mute2)}
+
+/* ── Section header ── */
+.sec-eye{font-family:'Source Code Pro',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin-bottom:.6rem;display:block}
+.sec-ttl{font-family:'Libre Baskerville',serif;font-weight:400;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.15;letter-spacing:-.02em;color:var(--ink);margin-bottom:2.2rem}
+.sec-id{font-family:'Source Code Pro',monospace;font-size:clamp(1rem,1.8vw,1.3rem);color:var(--acc);vertical-align:baseline;margin-right:.5rem;font-weight:500;opacity:1}
+.sec-ttl.intro-ttl .sec-id{display:none}
+#read-time{color:var(--mute3);font-size:.52rem;font-family:'Source Code Pro',monospace;letter-spacing:.08em;display:block;margin-bottom:2.4rem;padding-bottom:2.4rem;border-bottom:1px solid var(--rule)}
+
+/* ── Prose ── */
+.prose{font-size:1.1rem;line-height:1.88;color:var(--ink2)}
+.prose p{margin-bottom:1.5em;hyphens:auto;-webkit-hyphens:auto}
+.prose blockquote{border-left:2px solid var(--acc);margin:1.8em 0;padding:.5em 1.2em;font-style:italic;color:var(--mute)}
+.prose hr{border:none;border-top:1px solid var(--rule);margin:2em 0}
+.prose strong{color:var(--ink);font-weight:600}
+.prose.back-matter{font-size:1rem}
+
+/* ── Related sections ── */
+.related{margin:2.5rem 0 0;padding-top:1.4rem;border-top:1px solid var(--rule)}
+.related-lbl{font-family:'Source Code Pro',monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute2);display:block;margin-bottom:.8rem}
+.related-list{display:flex;flex-direction:column;gap:.3rem}
+.rel-btn{display:flex;align-items:baseline;gap:.6rem;background:none;border:none;cursor:pointer;padding:.35rem .4rem;text-align:left;color:inherit;width:100%;transition:background .1s}
+.rel-btn:hover{background:var(--bg2)}
+.rel-sid{font-family:'Source Code Pro',monospace;font-size:.58rem;color:var(--acc);flex-shrink:0;min-width:34px}
+.rel-stitle{font-family:'Lora',serif;font-style:italic;font-size:.88rem;color:var(--mute);flex:1}
+.rel-pt{font-family:'Source Code Pro',monospace;font-size:.5rem;color:var(--mute2);letter-spacing:.08em}
 
 /* ── Cited-in ── */
-.cited-in{margin:2rem 0 0;padding-top:1.4rem;border-top:1px solid var(--rule)}
-.cited-lbl{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2);display:block;margin-bottom:.7rem}
-.cited-list{display:flex;flex-wrap:wrap;gap:.4rem}
-.cited-btn{font-family:'Source Code Pro',monospace;font-size:.68rem;color:var(--mute);background:transparent;border:1px solid var(--rule2);padding:.28rem .65rem;cursor:pointer;transition:color .15s,border-color .15s;text-align:left}
+.cited-in{margin:1rem 0 0;padding-top:1.2rem;border-top:1px solid var(--rule2)}
+.cited-lbl{font-family:'Source Code Pro',monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute2);display:block;margin-bottom:.6rem}
+.cited-list{display:flex;flex-wrap:wrap;gap:.35rem}
+.cited-btn{font-family:'Source Code Pro',monospace;font-size:.65rem;color:var(--mute);background:transparent;border:1px solid var(--rule2);padding:.25rem .6rem;cursor:pointer;border-radius:2px;transition:color .15s,border-color .15s}
 .cited-btn:hover{color:var(--acc);border-color:var(--acc)}
 .cited-btn .cited-sid{color:var(--acc2);margin-right:.3rem}
 
 /* ── Annotations ── */
 .annot-block{margin:2rem 0 0;border-top:1px solid var(--rule);padding-top:1.4rem}
 .annot-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
-.annot-lbl{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
-.annot-actions{display:flex;gap:.5rem}
-.annot-btn{font-family:'Source Code Pro',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.28rem .7rem;cursor:pointer;transition:color .15s,border-color .15s}
+.annot-lbl{font-family:'Source Code Pro',monospace;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute2)}
+.annot-actions{display:flex;gap:.4rem}
+.annot-btn{font-family:'Source Code Pro',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.28rem .65rem;cursor:pointer;transition:color .15s,border-color .15s}
 .annot-btn:hover{color:var(--acc);border-color:var(--acc)}
-.annot-ta{width:100%;min-height:90px;background:var(--bg2);border:1px solid var(--rule);color:var(--ink);font-family:'Lora',Georgia,serif;font-size:.88rem;line-height:1.7;padding:.8rem 1rem;resize:vertical;outline:none;transition:border-color .15s}
+.annot-ta{width:100%;min-height:100px;background:var(--bg2);border:1px solid var(--rule);color:var(--ink);font-family:'Lora',Georgia,serif;font-size:.9rem;line-height:1.7;padding:.7rem 1rem;resize:vertical;outline:none;transition:border-color .15s}
 .annot-ta:focus{border-color:var(--acc2)}
-.annot-ta::placeholder{color:var(--mute2)}
-.annot-saved{font-family:'Source Code Pro',monospace;font-size:.6rem;color:var(--acc2);letter-spacing:.08em;display:block;margin-top:.4rem;min-height:1em;opacity:0;transition:opacity .3s}
+.annot-ta::placeholder{color:var(--mute3)}
+.annot-saved{font-family:'Source Code Pro',monospace;font-size:.58rem;color:var(--acc2);display:block;margin-top:.3rem;min-height:1em;opacity:0;transition:opacity .3s}
 .annot-saved.show{opacity:1}
 
-.gl-grp-lbl{font-family:'Source Code Pro',monospace;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);padding:.4rem 0;margin-top:2.2rem;margin-bottom:.5rem;border-bottom:1px solid var(--rule)}
-.gl-grp-lbl:first-child{margin-top:0}
-.gl-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:1px}
-.gl-card{background:var(--bg);padding:1rem 1.2rem;transition:background .15s}
-.gl-card:hover{background:var(--bg2)}
-.gl-term{font-family:'Source Code Pro',monospace;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:.4rem}
-.gl-def{font-family:'Lora',serif;font-size:.88rem;color:var(--mute);line-height:1.82;font-style:italic}
-.empty{font-family:'Lora',serif;font-style:italic;color:var(--mute2);padding:2rem 0}
-#tt{position:fixed;width:275px;background:var(--ttbg);padding:1rem 1.15rem;z-index:1000;display:none;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.25);transition:background .25s}
-#tt::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--acc)}
-#tt-term{font-family:'Source Code Pro',monospace;font-size:.54rem;letter-spacing:.16em;color:var(--acc);text-transform:uppercase;margin-bottom:.45rem}
-#tt-def{font-family:'Lora',serif;font-size:.86rem;color:var(--ttink);line-height:1.72;font-style:italic}
-@media(max-width:680px){#hdr{padding:.5rem .8rem;gap:.5rem}#hdr-srch{flex:1;min-width:0}#srch-in{font-size:.75rem}#srch-part{display:none}#hb-home{display:none}.hbtn.hsm{display:none}#reader-view{flex-direction:column}#sidebar{position:fixed;left:0;top:0;height:100%;z-index:200;transform:translateX(-100%);transition:transform .26s ease;width:280px!important;min-width:280px!important}#sidebar.mob-open{transform:translateX(0)}#sidebar.closed{transform:translateX(-100%)!important}#sb-tog{position:fixed;left:0;bottom:1.4rem;z-index:201;background:var(--acc);color:var(--bg);border:none;width:2.4rem;height:2.4rem;font-size:1rem;border-radius:0 4px 4px 0}#reader-main{width:100%;overflow-y:auto}#reader-col{padding:1.2rem 1rem 3rem}.rnav{flex-direction:column;gap:.6rem}.hero-h1{font-size:2rem}.hero-stats{gap:1.5rem}.cta-main{min-width:160px;padding:.75rem 1.6rem}.toc-grid{grid-template-columns:1fr}}@media(max-width:480px){.hero-orn{font-size:.52rem;letter-spacing:.16em}.hero-stats{gap:1rem;padding:.6rem 0 1.4rem}.stat-val{font-size:.85rem}}@media print{#hdr,#sidebar,#sb-tog,.rnav,.feedback-bar,.related,#tt{display:none!important}#reader-view{height:auto!important}#reader-main{overflow:visible!important}#reader-col{max-width:100%!important;padding:1rem!important}body{font-size:14px!important}}
-@media(max-width:820px){.hero{grid-template-columns:1fr;gap:2.5rem}.hero-panel{border-left:none;border-top:1px solid var(--rule);padding-left:0;padding-top:2rem}.toc-grid{grid-template-columns:1fr}.toc-card:nth-child(even){border-left:none;padding-left:0}.gl-grid{grid-template-columns:1fr}#reader-col{max-width:100%;padding:2.8rem 1.6rem 6rem}#home-view,#srch-view{padding:3rem 1.5rem 6rem}#pip{display:none}}
-@media(max-width:480px){html{font-size:17px}#hdr{padding:0 1rem;gap:.8rem}.hbtn.hsm{display:none}}
-mark{background:transparent;color:var(--acc2);text-decoration:underline;text-decoration-color:rgba(201,160,80,.5);text-decoration-thickness:1px;text-underline-offset:2px}
+/* ── Feedback ── */
+.feedback-bar{display:flex;align-items:center;justify-content:space-between;margin-top:2.5rem;padding-top:1.2rem;border-top:1px solid var(--rule2);flex-wrap:wrap;gap:.5rem}
+.feedback-lbl{font-family:'Source Code Pro',monospace;font-size:.55rem;color:var(--mute2);letter-spacing:.1em}
+.feedback-btn{font-family:'Source Code Pro',monospace;font-size:.6rem;color:var(--mute);background:none;border:1px solid var(--rule2);padding:.3rem .7rem;cursor:pointer;text-decoration:none;transition:color .15s,border-color .15s}
+.feedback-btn:hover{color:var(--acc);border-color:var(--acc)}
 
-/* ── Polish additions ── */
+/* ── Nav ── */
+.rnav{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:3.5rem;padding-top:1.8rem;border-top:1px solid var(--rule)}
+.rnav-btn{font-family:'Source Code Pro',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);background:transparent;border:1px solid var(--rule2);padding:.55rem 1.2rem;cursor:pointer;transition:color .15s,border-color .15s}
+.rnav-btn:hover:not(:disabled){color:var(--acc);border-color:var(--acc)}
+.rnav-btn:disabled{opacity:.25;cursor:default}
+.rnav-pos{font-family:'Source Code Pro',monospace;font-size:.55rem;color:var(--mute2);letter-spacing:.1em}
 
-/* Header — tighter logo kerning, pip alignment */
-#hdr-logo{letter-spacing:.12em}
-#pip{gap:.6rem}
-#pip-track{width:56px;height:2px;background:var(--rule2)}
+/* ── Footer ── */
+.doc-footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between}
+.doc-footer-lbl{font-family:'Source Code Pro',monospace;font-size:.5rem;color:var(--mute2);letter-spacing:.14em;text-transform:uppercase}
+.doc-footer-home{font-family:'Source Code Pro',monospace;font-size:.55rem;color:var(--mute);background:none;border:none;cursor:pointer;padding:0;transition:color .15s}
+.doc-footer-home:hover{color:var(--acc)}
 
-/* Sidebar — current item stronger accent */
-.sb-item.on{background:var(--bg2);border-left-color:var(--acc);font-weight:500}
-.sb-iid.on{color:var(--acc);opacity:1}
-.sb-ilbl.on{color:var(--ink);font-style:normal}
+/* ── Tooltip ── */
+#tt{display:none;position:fixed;background:var(--bg2);border:1px solid var(--rule);padding:.8rem 1rem;max-width:280px;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+#tt-term{font-family:'Libre Baskerville',serif;font-size:.82rem;color:var(--acc);margin-bottom:.3rem;font-weight:700}
+#tt-def{font-family:'Lora',serif;font-style:italic;font-size:.78rem;color:var(--mute);line-height:1.5}
 
-/* TOC cards — hover lift */
-.toc-card{transition:background .15s}
-.toc-ph:hover{background:var(--bg2);margin:0 -.5rem;padding-left:.5rem;padding-right:.5rem}
+/* ── Animations ── */
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fi .22s ease forwards}
 
-/* Breadcrumb — softer sep */
-.bc-sep{opacity:.45}
-
-/* Read-time — cleaner */
-#read-time{opacity:.7;letter-spacing:.1em}
-
-/* Section title — slightly more breathing room */
-.sec-ttl{margin-bottom:2.2rem}
-
-/* Prose — first paragraph drop-cap feel: just slightly larger, no font change */
-.prose > p:first-of-type{font-size:1.02rem}
-
-/* Related buttons — tighter radius */
-.rel-btn{border-radius:2px}
-.cited-btn{border-radius:2px}
-
-/* Annotation textarea — min-height increase */
-.annot-ta{min-height:110px;border-radius:2px}
-
-/* Rnav next button — slightly stronger */
-.rnav-btn.nxt{letter-spacing:.18em}
-
-/* Footer — lower contrast version label */
-.doc-footer-lbl{opacity:.6}
-
-/* Glossary grid — reduce cell padding slightly on wide screens */
-@media(min-width:900px){.gl-card{padding:.85rem 1rem}}
-
-/* Scrollbar — thinner */
-::-webkit-scrollbar{width:4px}
-
-/* Focus rings — accessible but minimal */
+/* ── Focus ── */
 button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
-a:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
-input:focus-visible{outline:none}
-textarea:focus-visible{outline:none}
 
-/* Suggest buttons — align title properly */
-.suggest-btn{align-items:center}
-.suggest-title{flex:1;min-width:0}
+/* ── Mobile ── */
 
-/* Topbar — slightly taller */
-#topbar{height:4px}
-
-/* ── Search results ── */
-#srch-view{max-width:720px;margin:0 auto;padding:3.5rem 2.5rem 8rem}
-.sv-hdr{font-family:'Source Code Pro',monospace;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute2);padding-bottom:1.2rem;margin-bottom:2rem;border-bottom:1px solid var(--rule)}
-.res{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--rule);padding:1.4rem 0;cursor:pointer;transition:padding-left .15s,background .15s}
-.res:first-of-type{border-top:1px solid var(--rule)}
-.res:hover{padding-left:.6rem;background:var(--bg2)}
-.res-loc{font-family:'Source Code Pro',monospace;font-size:.55rem;color:var(--acc);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem}
-.res-title{font-family:'Libre Baskerville',serif;font-size:1rem;color:var(--ink);margin-bottom:.4rem;line-height:1.3;font-weight:400}
-.res-snip{font-family:'Lora',serif;font-style:italic;font-size:.88rem;color:var(--mute);line-height:1.72;text-align:left}
-
-/* ── TOC Part progress bars ── */
-.toc-prog{display:flex;align-items:center;gap:.6rem;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--rule)}
-.toc-prog-bar{flex:1;height:2px;background:var(--rule2);border-radius:1px;overflow:hidden;position:relative}
-.toc-prog-fill{position:absolute;left:0;top:0;bottom:0;background:var(--acc);border-radius:1px;transition:width .5s cubic-bezier(.4,0,.2,1)}
-.toc-prog-lbl{font-family:'Source Code Pro',monospace;font-size:.5rem;color:var(--mute2);letter-spacing:.08em;flex-shrink:0;white-space:nowrap}
+/* ── Scrollbars ── */
+#sidebar::-webkit-scrollbar,#reader-main::-webkit-scrollbar,#home-view::-webkit-scrollbar,#srch-view::-webkit-scrollbar{width:4px}
+#sidebar::-webkit-scrollbar-track,#reader-main::-webkit-scrollbar-track,#home-view::-webkit-scrollbar-track,#srch-view::-webkit-scrollbar-track{background:transparent}
+#sidebar::-webkit-scrollbar-thumb,#reader-main::-webkit-scrollbar-thumb,#home-view::-webkit-scrollbar-thumb,#srch-view::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:2px}
+#sidebar::-webkit-scrollbar-thumb:hover,#reader-main::-webkit-scrollbar-thumb:hover{background:var(--mute2)}
+@media(max-width:680px){
+  body{overflow:auto}
+  .page-shell{height:auto;overflow:visible}
+  #home-view{height:auto;overflow:visible}
+  #home-view > *{padding-left:1.2rem;padding-right:1.2rem}
+  .hero-h1{font-size:2rem}
+  .hero-stats{gap:1.5rem}
+  .cta-main{min-width:160px;padding:.75rem 1.6rem}
+  .toc-subs{grid-template-columns:1fr 1fr}
+  #reader-view.on{flex-direction:column;height:auto;overflow:visible}
+  #sidebar{position:fixed;left:0;top:52px;height:calc(100% - 52px);z-index:200;transform:translateX(-100%);transition:transform .26s ease;width:280px!important;min-width:280px!important}
+  #sidebar.mob-open{transform:translateX(0)}
+  #sidebar.closed{transform:translateX(-100%)!important;width:280px!important;min-width:280px!important}
+  #sb-tog{position:fixed;left:0;bottom:1.2rem;top:auto;transform:none;width:2.2rem;height:2.2rem;right:auto;border-radius:0 4px 4px 0;z-index:201}
+  #reader-main{width:100%;height:auto;overflow:visible}
+  #reader-col{padding:1.5rem 1rem 4rem}
+  .rnav{flex-wrap:wrap;gap:.5rem}
+  #srch-part{display:none}
+  #hdr-srch{max-width:none}
+}
+@media(max-width:480px){
+  .toc-subs{grid-template-columns:1fr}
+  .hero-stats{gap:1rem}
+}
 </style>
 </head>
 <body>
@@ -235,6 +297,7 @@ textarea:focus-visible{outline:none}
 <script id="d-rel" type="application/json">{"preface":["how-to-read","14.1","14.2"],"how-to-read":["preface","12.4","14.1"],"1.1":["1.2","2.1","12.1"],"1.2":["1.1","6.5","12.5"],"1.3":["2.2","10.1","3.7"],"1.4":["2.2","9.4","3.6"],"1.5":["4.3","10.6","13.1"],"1.6":["4.4","8.4","1.6b"],"1.6b":["1.6","1.2","12.1"],"1.7":["6.3","1.9","8.4"],"1.8":["1.7","6.3","1.9"],"1.9":["6.2","6.3","8.4"],"1.10":["6.3","6.2","7.3b"],"1.11":["6.6","10.5","8.4"],"1.12":["8.4c","6.3","3.5"],"2.1":["1.1","3.1","2.2"],"2.2":["3.6","10.1","2.3"],"2.3":["5.2","5.3","2.2"],"3.1":["3.2","2.1","4.1"],"3.2":["3.3","4.1","3.1"],"3.3":["4.1","3.4","4.2"],"3.4":["3.3","3.5","4.2"],"3.4b":["3.4","3.5","15.3"],"3.4c":["3.4b","3.4d","4.5"],"3.4d":["3.4c","9.2c","4.5b"],"3.5":["3.4","10.2","15.3"],"3.6":["3.7","6.1","7.0"],"3.7":["3.6","3.8","6.2"],"3.8":["7.3","7.2","3.7"],"3.8b":["8.4b","3.8","10.7"],"3.9":["3.10","10.1","11.2"],"3.10":["3.9","11.2","9.0"],"3.11":["3.6","3.7","12.3"],"3.12":["3.8","7.2","6.5"],"4.1":["3.3","4.2","3.4"],"4.2":["4.1","4.3","3.5"],"4.3":["4.2","10.6","13.2"],"4.4":["1.6","7.3","6.3"],"4.5":["4.1","3.4c","4.5b"],"4.5b":["4.5","3.4d","13.2"],"5.1":["5.2","5.5","2.2"],"5.2":["5.3","2.3","5.1"],"5.3":["2.2","5.2","3.6"],"5.4":["1.2","5.3","12.1"],"5.5":["5.6","8.1","3.5","8.4"],"6.1":["6.2","3.6","7.1"],"6.2":["6.3","7.1","1.9"],"6.3":["1.10","6.2","7.3b"],"6.4":["7.2","4.4","7.3"],"6.5":["7.3","6.6","1.2"],"6.6":["6.7","10.5","10.6"],"6.7":["6.6","8.4","7.5"],"6.8":["6.5","7.6","10.8"],"7.0":["6.2","7.0b","3.6"],"7.0b":["7.0","12.2","15.0"],"7.1":["6.1","6.2","7.2"],"7.2":["7.1","7.3","6.4"],"7.3":["7.2","6.5","3.8"],"7.3b":["7.3","6.3","1.2"],"7.3c":["7.3b","7.3","3.12"],"7.4":["7.1","7.2","10.6"],"7.5":["8.4","6.7","1.6"],"7.6":["6.2","6.8","8.2"],"7.7":["CS.5","10.1","3.6"],"7.8":["7.1","7.2","9.1"],"8.1":["8.3","5.5","4.2"],"8.2":["8.2b","6.2","3.5"],"8.2b":["8.2","8.3","12.2"],"8.3":["8.5","4.2","8.2b"],"8.4":["8.4b","6.7","1.9"],"8.4b":["8.4","8.4c","3.8b"],"8.4c":["8.4","1.12","6.3"],"8.5":["8.3","9.4","4.2"],"8.6":["8.5","8.3","9.4"],"9.0":["9.1","6.1","3.10"],"9.0b":["9.0","7.7","8.5"],"9.1":["9.2","6.2","7.8"],"9.2":["9.1","6.1","10.5"],"9.2b":["9.2c","9.2","10.3"],"9.2c":["9.2b","3.4d","11.3b"],"9.3":["9.2","10.5","9.4"],"9.4":["8.5","9.3","7.8"],"10.1":["3.5","10.2","10.5"],"10.2":["3.5","15.3","6.6"],"10.3":["9.2b","2.2","10.1"],"10.4":["2.2","10.1","13.3"],"10.5":["CS.4","6.6","15.2"],"10.5b":["10.5","10.6","15.11"],"10.6":["10.5","10.7","4.3"],"10.7":["12.7","10.1","1.2"],"10.8":["10.7","6.8"],"10.9":["10.10","10.6","6.6"],"A.3":["10.7","10.8"],"A.4":["7.3b"],"A.5":["6.6"],"A.6":["7.3","4.4"],"11.0":["11.1","11.2","7.0b"],"11.0b":["11.0","7.3c","3.12"],"11.1":["11.2","1.1","4.2"],"11.2":["3.5","11.3","15.2"],"11.3":["11.2","7.4","10.6"],"11.3b":["11.3","9.2c","6.3"],"11.4":["11.3","12.3","7.8"],"12.1":["1.2","1.6b","12.5"],"12.2":["7.0b","12.1","12.6"],"12.3":["12.4","14.2","12.2"],"12.4":["14.1","14.2","12.3"],"12.5":["1.2","13.4","12.1"],"12.6":["12.2","7.7","12.7"],"12.7":["12.6","14.2","preface"],"13.1":["13.1b","13.1c","4.3"],"13.1b":["13.1","13.1c","10.5"],"13.1c":["13.1b","13.2","12.1"],"13.2":["13.1c","13.2b","4.3"],"13.2b":["13.2","13.3","10.5b"],"13.3":["13.2","10.4","13.4"],"13.4":["13.5","12.5","14.4"],"13.5":["14.4","13.4","coda"],"14.1":["14.2","12.4","2.2"],"14.2":["14.1","15.2","12.3"],"14.3":["14.2","13.4","14.4"],"14.4":["13.5","14.3","coda"],"15.0":["15.2","7.0b","15.1"],"15.1":["CS.1","15.0","15.2"],"CS.1":["CS.4","10.5","15.1"],"CS.2":["CS.3","6.5","15.1"],"CS.3":["CS.2","5.3","15.1"],"CS.4":["10.5","CS.1","15.2"],"CS.5":["7.7","10.1","15.1"],"CS.6":["15.13","CS.4","13.3"],"CS.7":["10.4","CS.2","15.5"],"CS.8":["15.1","15.2","12.2"],"15.2":["15.3","10.5","14.2"],"15.3":["3.5","10.2","15.4"],"15.4":["15.3","15.5","15.2"],"15.5":["15.6","15.4","6.6"],"15.6":["15.7","10.8","15.5"],"15.7":["6.6","6.7","15.6"],"15.8":["10.7","15.2","15.7"],"15.9":["15.2","15.8","12.3"],"15.10":["15.9","15.2","12.3"],"15.11":["10.5b","15.2","15.9"],"15.12":["15.9","15.14","12.3"],"15.13":["12.5","13.4","CS.6"],"15.14":["15.12","15.9","12.3"],"coda":["14.4","13.5","preface"],"intellectual-debts":["preface","coda","12.7"],"bibliography":["intellectual-debts","12.6","12.7"],"5.6":["5.5","3.5","4.5b"],"10.10":["10.9","6.8"],"10.11":["10.10","10.9","6.7"],"16.0":["9.2b","9.2c","10.3"],"16.1":["6.3","7.3","16.0"],"16.2":["9.2c","3.4d","16.1"],"16.3":["3.4d","3.4c","16.0"],"16.4":["8.4","5.6","16.2"],"2.4":["2.2","2.3","5.3"],"2.5":["2.4","2.2","3.1"],"3.5c":["3.5","3.4b","4.4"],"10.10b":["10.10","10.9","10.6"],"10.10c":["10.10b","10.10","6.8"],"10.12":["10.11","10.10","6.7"],"10.13":["10.12","10.7","1.2"],"10.14":["10.13","10.1","14.2"],"13.4b":["13.4","13.3","13.2"],"13.4c":["13.4b","13.4","12.5"],"13.4d":["13.4c","16.2","9.2c"],"13.4e":["13.4d","13.4","10.5"],"13.4f":["13.4e","8.3","4.4"],"13.4g":["13.4f","7.2","6.6"],"13.4h":["13.4g","13.5","14.4"]}</script>
 <script id="d-ci" type="application/json">{"how-to-read":["preface"],"14.1":["preface","how-to-read","12.4","14.2"],"14.2":["preface","12.3","12.4","12.7","14.1","14.3","15.2","10.14"],"preface":["how-to-read","12.7","coda","intellectual-debts"],"12.4":["how-to-read","12.3","14.1"],"1.2":["1.1","1.6b","5.4","6.5","7.3b","10.7","12.1","12.5","10.13"],"2.1":["1.1","3.1"],"12.1":["1.1","1.6b","5.4","12.2","12.5","13.1c"],"1.1":["1.2","2.1","11.1"],"6.5":["1.2","3.12","6.8","7.3","CS.2"],"12.5":["1.2","12.1","13.4","15.13","13.4c"],"2.2":["1.3","1.4","2.1","2.3","5.1","5.3","10.3","10.4","14.1","2.4","2.5"],"10.1":["1.3","2.2","3.9","7.7","10.3","10.4","10.7","CS.5","10.14"],"3.7":["1.3","3.6","3.8","3.11"],"9.4":["1.4","8.5","8.6","9.3"],"3.6":["1.4","2.2","3.7","3.11","5.3","6.1","7.0","7.7"],"4.3":["1.5","4.2","10.6","13.1","13.2"],"10.6":["1.5","4.3","6.6","7.4","10.5b","10.9","11.3","10.10b"],"13.1":["1.5","13.1b"],"4.4":["1.6","6.4","A.6","3.5c","13.4f"],"8.4":["1.6","1.7","1.9","1.11","5.5","6.7","7.5","8.4b","8.4c","16.4"],"1.6b":["1.6","12.1"],"1.6":["1.6b","4.4","7.5"],"6.3":["1.7","1.8","1.9","1.10","1.12","4.4","6.2","7.3b","8.4c","11.3b","16.1"],"1.9":["1.7","1.8","6.2","8.4"],"1.7":["1.8"],"6.2":["1.9","1.10","3.7","6.1","6.3","7.0","7.1","7.6","8.2","9.1"],"7.3b":["1.10","6.3","7.3c","A.4"],"6.6":["1.11","6.5","6.7","10.2","10.5","10.9","A.5","15.5","15.7","13.4g"],"10.5":["1.11","6.6","9.2","9.3","10.1","10.5b","10.6","13.1b","CS.1","CS.4","15.2","13.4e"],"8.4c":["1.12","8.4b"],"3.5":["1.12","3.4","3.4b","4.2","5.5","8.2","10.1","10.2","11.2","15.3","5.6","3.5c"],"3.1":["2.1","3.2","2.5"],"2.3":["2.2","5.2","2.4"],"5.2":["2.3","5.1","5.3"],"5.3":["2.3","5.2","5.4","CS.3","2.4"],"3.2":["3.1"],"4.1":["3.1","3.2","3.3","4.2","4.5"],"3.3":["3.2","3.4","4.1"],"3.4":["3.3","3.4b","3.5","4.1"],"4.2":["3.3","3.4","4.1","4.3","8.1","8.3","8.5","11.1"],"15.3":["3.4b","3.5","10.2","15.2","15.4"],"3.4b":["3.4c","3.5c"],"3.4d":["3.4c","4.5b","9.2c","16.2","16.3"],"4.5":["3.4c","4.5b"],"3.4c":["3.4d","4.5","16.3"],"9.2c":["3.4d","9.2b","11.3b","16.0","16.2","13.4d"],"4.5b":["3.4d","4.5","5.6"],"10.2":["3.5","10.1","15.3"],"6.1":["3.6","7.1","9.0","9.2"],"7.0":["3.6","7.0b"],"3.8":["3.7","3.8b","3.12","7.3"],"7.3":["3.8","4.4","6.4","6.5","7.2","7.3b","7.3c","A.6","16.1"],"7.2":["3.8","3.12","6.4","7.1","7.3","7.4","7.8","13.4g"],"8.4b":["3.8b","8.4"],"10.7":["3.8b","10.6","10.8","A.3","15.8","10.13"],"3.10":["3.9","9.0"],"11.2":["3.9","3.10","11.0","11.1","11.3"],"3.9":["3.10"],"9.0":["3.10","9.0b"],"12.3":["3.11","11.4","12.4","14.2","15.9","15.10","15.12","15.14"],"13.2":["4.3","4.5b","13.1c","13.2b","13.3","13.4b"],"5.5":["5.1","8.1","5.6"],"5.1":["5.2"],"5.6":["5.5","16.4"],"8.1":["5.5"],"7.1":["6.1","6.2","7.2","7.4","7.8"],"1.10":["6.3"],"6.7":["6.6","7.5","8.4","15.7","10.11","10.12"],"7.5":["6.7"],"7.6":["6.8"],"10.8":["6.8","A.3","15.6"],"7.0b":["7.0","11.0","12.2","15.0"],"12.2":["7.0b","8.2b","12.3","12.6","CS.8"],"15.0":["7.0b","15.1"],"6.4":["7.2"],"3.12":["7.3c","11.0b"],"6.8":["7.6","10.8","10.10","10.10c"],"8.2":["7.6","8.2b"],"CS.5":["7.7"],"9.1":["7.8","9.0","9.2"],"8.3":["8.1","8.2b","8.5","8.6","13.4f"],"8.2b":["8.2","8.3"],"8.5":["8.3","8.6","9.0b","9.4"],"3.8b":["8.4b"],"1.12":["8.4c"],"7.7":["9.0b","12.6","CS.5"],"9.2":["9.1","9.2b","9.3"],"7.8":["9.1","9.4","11.4"],"10.3":["9.2b","16.0"],"9.2b":["9.2c","10.3","16.0"],"11.3b":["9.2c"],"9.3":["9.4"],"13.3":["10.4","13.2b","CS.6","13.4b"],"CS.4":["10.5","CS.1","CS.6"],"15.2":["10.5","11.2","14.2","15.0","15.1","CS.4","CS.8","15.4","15.8","15.9","15.10","15.11"],"15.11":["10.5b"],"12.7":["10.7","12.6","intellectual-debts","bibliography"],"10.10":["10.9","10.11","10.10b","10.10c","10.12"],"11.1":["11.0"],"11.0":["11.0b"],"7.3c":["11.0b"],"11.3":["11.2","11.3b","11.4"],"7.4":["11.3"],"12.6":["12.2","12.7","bibliography"],"13.4":["12.5","13.3","13.5","14.3","15.13","13.4b","13.4c","13.4e"],"13.1b":["13.1","13.1c"],"13.1c":["13.1","13.1b","13.2"],"13.2b":["13.2"],"10.5b":["13.2b","15.11"],"10.4":["13.3","CS.7"],"13.5":["13.4","14.4","coda","13.4h"],"14.4":["13.4","13.5","14.3","coda","13.4h"],"coda":["13.5","14.4","intellectual-debts"],"14.3":["14.4"],"15.1":["15.0","CS.1","CS.2","CS.3","CS.5","CS.8"],"CS.1":["15.1","CS.4"],"CS.3":["CS.2"],"CS.2":["CS.3","CS.7"],"15.13":["CS.6"],"15.5":["CS.7","15.4","15.6"],"15.4":["15.3","15.5"],"15.6":["15.5","15.7"],"15.7":["15.6","15.8"],"15.8":["15.9"],"15.9":["15.10","15.11","15.12","15.14"],"15.14":["15.12"],"CS.6":["15.13"],"15.12":["15.14"],"intellectual-debts":["bibliography"],"10.9":["10.10","10.11","10.10b"],"16.0":["16.1","16.3"],"16.1":["16.2"],"16.2":["16.4","13.4d"],"2.4":["2.5"],"10.10b":["10.10c"],"10.11":["10.12"],"10.12":["10.13"],"10.13":["10.14"],"13.4b":["13.4c"],"13.4c":["13.4d"],"13.4d":["13.4e"],"13.4e":["13.4f"],"13.4f":["13.4g"],"13.4g":["13.4h"]}</script>
 <script id="d-look" type="application/json">{"preface":{"pi":0,"si":0,"title":"Preface","pt":"Preface","ptitle":"Preface"},"how-to-read":{"pi":0,"si":1,"title":"How to Read This Document: A Structural Map","pt":"Preface","ptitle":"Preface"},"1.1":{"pi":1,"si":0,"title":"The Prior Question","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.2":{"pi":1,"si":1,"title":"The Primary Diagnostic","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.3":{"pi":1,"si":2,"title":"Probabilistic Determinism","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.4":{"pi":1,"si":3,"title":"Convergence Under Material Pressure","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.5":{"pi":1,"si":4,"title":"Inaction and Its Costs","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.6":{"pi":1,"si":5,"title":"Truth, Communication, and the Management Problem","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.6b":{"pi":1,"si":6,"title":"Belief and Doubt: The Productive Equilibrium","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.7":{"pi":1,"si":7,"title":"Knowledge Production as a Material Process","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.8–1.12":{"pi":1,"si":8,"title":"Epistemic Infrastructure as Material Condition","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.8":{"pi":1,"si":9,"title":"The Social Architecture of What Can Be Known","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.9":{"pi":1,"si":10,"title":"Epistemic Authority: How Claims Acquire Social Standing","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.10":{"pi":1,"si":11,"title":"Information Asymmetry as Structural Power","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.11":{"pi":1,"si":12,"title":"Trust Infrastructure and Its Collapse","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"1.12":{"pi":1,"si":13,"title":"Epistemic Infrastructure and the Visibility Variable","pt":"I","ptitle":"How We Know: The Epistemological Foundation"},"2.1":{"pi":2,"si":0,"title":"Reality as Primary","pt":"II","ptitle":"What Exists: The Ontological Foundation"},"2.2":{"pi":2,"si":1,"title":"Adaptive Materialism","pt":"II","ptitle":"What Exists: The Ontological Foundation"},"2.3":{"pi":2,"si":2,"title":"On Necessary Being","pt":"II","ptitle":"What Exists: The Ontological Foundation"},"2.4":{"pi":2,"si":3,"title":"Social Ontology: The Reality of Emergent Structures","pt":"II","ptitle":"What Exists: The Ontological Foundation"},"2.5":{"pi":2,"si":4,"title":"Against Reductionism and Against Idealism: The Middle Position","pt":"II","ptitle":"What Exists: The Ontological Foundation"},"3.1":{"pi":3,"si":0,"title":"The Displacement That Matters","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.2":{"pi":3,"si":1,"title":"The Starting Point: Descriptive, Not Normative","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.3":{"pi":3,"si":2,"title":"From Description to Evaluation: The Is-Ought Bridge","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.4":{"pi":3,"si":3,"title":"The Minimal Anchor","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.4b":{"pi":3,"si":4,"title":"A Typology of Suffering","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.4c":{"pi":3,"si":5,"title":"The Scope of Moral Patienthood: Sentience, Becoming, and the Aggregation Problem","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.5c":{"pi":3,"si":6,"title":"The Dispositional Harm Prevention Problem: Institutional Design for Risk Before Action","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.4d":{"pi":3,"si":7,"title":"The Biological Foundation Under Technological Pressure: Augmentation, Transition, and the Post-Biological Horizon","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.5":{"pi":3,"si":8,"title":"Suffering as a System-Level Variable","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.6":{"pi":3,"si":9,"title":"The Arc from Physiology to Institution","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.7":{"pi":3,"si":10,"title":"The Causal Chain: From Self-Interest to Collective Structure","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.8":{"pi":3,"si":11,"title":"Cognitive Constraints and Institutional Limits","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.8b":{"pi":3,"si":12,"title":"Affective Mobilization and the Politics of Collective Emotion","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.9":{"pi":3,"si":13,"title":"Demographic Dynamics as Material Variables","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.10":{"pi":3,"si":14,"title":"Ecological Constraints: The Ground Beneath All Systems","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.11":{"pi":3,"si":15,"title":"Illustrative Cases: The Chain in Operation","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"3.12":{"pi":3,"si":16,"title":"Rational Micro, Problematic Macro","pt":"III","ptitle":"The Biological Foundation: From Physiology to Institution"},"4.1":{"pi":4,"si":0,"title":"The Foundation of Value","pt":"IV","ptitle":"What Matters: Ethics, Value, and the Evaluative Commitment"},"4.2":{"pi":4,"si":1,"title":"Better and Worse","pt":"IV","ptitle":"What Matters: Ethics, Value, and the Evaluative Commitment"},"4.3":{"pi":4,"si":2,"title":"On Progress","pt":"IV","ptitle":"What Matters: Ethics, Value, and the Evaluative Commitment"},"4.4":{"pi":4,"si":3,"title":"On Manipulation, Trust, and Structural Checks","pt":"IV","ptitle":"What Matters: Ethics, Value, and the Evaluative Commitment"},"4.5":{"pi":4,"si":4,"title":"Beyond the Minimal Anchor: Toward Genuine Becoming","pt":"IV","ptitle":"What Matters: Ethics, Value, and the Evaluative Commitment"},"4.5b":{"pi":4,"si":5,"title":"The Primacy of Becoming: Why Suffering Is a Derivative Variable","pt":"IV","ptitle":"What Matters: Ethics, Value, and the Evaluative Commitment"},"5.1":{"pi":5,"si":0,"title":"What the Materialist Tradition Got Wrong About Religion","pt":"V","ptitle":"The Metaphysical Dimension: Meaning, Religion, and Material Reality"},"5.2":{"pi":5,"si":1,"title":"Two Levels of the Same Question","pt":"V","ptitle":"The Metaphysical Dimension: Meaning, Religion, and Material Reality"},"5.3":{"pi":5,"si":2,"title":"Interface-Emergent Phenomena","pt":"V","ptitle":"The Metaphysical Dimension: Meaning, Religion, and Material Reality"},"5.4":{"pi":5,"si":3,"title":"The Evaluative Standard for Metaphysical Claims","pt":"V","ptitle":"The Metaphysical Dimension: Meaning, Religion, and Material Reality"},"5.5":{"pi":5,"si":4,"title":"Religion as Material Variable","pt":"V","ptitle":"The Metaphysical Dimension: Meaning, Religion, and Material Reality"},"5.6":{"pi":5,"si":5,"title":"Meaning as Material Condition","pt":"V","ptitle":"The Metaphysical Dimension: Meaning, Religion, and Material Reality"},"6.1":{"pi":6,"si":0,"title":"Why Power Must Be Named","pt":"VI","ptitle":"Power: The Variable That Cannot Be Left Implicit"},"6.2":{"pi":6,"si":1,"title":"Power as Structural Position","pt":"VI","ptitle":"Power: The Variable That Cannot Be Left Implicit"},"6.3":{"pi":6,"si":2,"title":"Asymmetry, Capture, and Information","pt":"VI","ptitle":"Power: The Variable That Cannot Be Left Implicit"},"6.4":{"pi":6,"si":3,"title":"The Anti-Technocratic Guardrail","pt":"VI","ptitle":"Power: The Variable That Cannot Be Left Implicit"},"6.5":{"pi":6,"si":4,"title":"How Institutions Preserve Themselves","pt":"VI","ptitle":"Power: The Variable That Cannot Be Left Implicit"},"6.6":{"pi":6,"si":5,"title":"Legitimacy Crisis: When Systems Lose the Consent That Sustains Them","pt":"VI","ptitle":"Power: The Variable That Cannot Be Left Implicit"},"6.7":{"pi":6,"si":6,"title":"Legitimacy Production: How Systems Build Consent","pt":"VI","ptitle":"Power: The Variable That Cannot Be Left Implicit"},"6.8":{"pi":6,"si":7,"title":"Elite Circulation and Structural Continuity","pt":"VI","ptitle":"Power: The Variable That Cannot Be Left Implicit"},"7.0":{"pi":7,"si":0,"title":"What We Mean by System","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.0b":{"pi":7,"si":1,"title":"Levels of Analysis","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.1":{"pi":7,"si":2,"title":"The State Problem","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.2":{"pi":7,"si":3,"title":"Progressive Institutionalism","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.3":{"pi":7,"si":4,"title":"The Custodian Problem","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.3b":{"pi":7,"si":5,"title":"Early Detection of Institutional Capture","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.3c":{"pi":7,"si":6,"title":"Incentive Architecture and Predictable Institutional Failure","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.4":{"pi":7,"si":7,"title":"The State and Long-Term Direction","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.5":{"pi":7,"si":8,"title":"Noble Lie: Fictions That Serve Power","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.6":{"pi":7,"si":9,"title":"Those Who Stand on Others: The Structural Analysis","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.7":{"pi":7,"si":10,"title":"Path Dependence: Why History Constrains the Present","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"7.8":{"pi":7,"si":11,"title":"Regime Types: A Comparative Diagnostic","pt":"VII","ptitle":"How to Organize: Politics, Institutions, and the State"},"8.1":{"pi":8,"si":0,"title":"Evaluating Cultural Practices","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"8.2":{"pi":8,"si":1,"title":"Marginalized Groups and the Material Frame","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"8.2b":{"pi":8,"si":2,"title":"Intersectional Analysis as Methodological Procedure","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"8.3":{"pi":8,"si":3,"title":"The Consistency Standard","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"8.4":{"pi":8,"si":4,"title":"Governing Narrative as Material Force: The Social Construction of Reality","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"8.4b":{"pi":8,"si":5,"title":"Narrative Typology: How Governing Narratives Structure Political Time","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"8.4c":{"pi":8,"si":6,"title":"Meritocracy as Visibility Suppression","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"8.5":{"pi":8,"si":7,"title":"Anti-Naïve Universalism: What the Universal Standard Actually Requires","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"8.6":{"pi":8,"si":8,"title":"Anti-Passive Multiculturalism: The Consistency Standard Applied","pt":"VIII","ptitle":"Society, Culture, and the Politics of Material Outcomes"},"9.0":{"pi":9,"si":0,"title":"The Material Basis of International Order","pt":"IX","ptitle":"The International Dimension: Geopolitics and Global Order"},"9.0b":{"pi":9,"si":1,"title":"The Historical Divergence: How the Distribution Was Produced","pt":"IX","ptitle":"The International Dimension: Geopolitics and Global Order"},"9.1":{"pi":9,"si":2,"title":"Realism and Direction","pt":"IX","ptitle":"The International Dimension: Geopolitics and Global Order"},"9.2":{"pi":9,"si":3,"title":"On Power Concentration","pt":"IX","ptitle":"The International Dimension: Geopolitics and Global Order"},"9.2b":{"pi":9,"si":4,"title":"Technology as Redistributor of Material Power","pt":"IX","ptitle":"The International Dimension: Geopolitics and Global Order"},"9.2c":{"pi":9,"si":5,"title":"Artificial Intelligence and the New Architecture of Institutional Power","pt":"IX","ptitle":"The International Dimension: Geopolitics and Global Order"},"9.3":{"pi":9,"si":6,"title":"Multipolarity as Transitional Arrangement","pt":"IX","ptitle":"The International Dimension: Geopolitics and Global Order"},"9.4":{"pi":9,"si":7,"title":"The Parallel Development Framework","pt":"IX","ptitle":"The International Dimension: Geopolitics and Global Order"},"10.1":{"pi":10,"si":0,"title":"Why Systems Change","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.2":{"pi":10,"si":1,"title":"Suffering as the Signal of System Stress","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.3":{"pi":10,"si":2,"title":"Technology and System Transition","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.4":{"pi":10,"si":3,"title":"Adaptation, Not Optimization","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.5":{"pi":10,"si":4,"title":"Thresholds and Non-Linearity","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.5b":{"pi":10,"si":5,"title":"Political Time: Windows, Conjunctures, and the Materiality of Timing","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.6":{"pi":10,"si":6,"title":"Reform, Revolution, and the Sequencing Problem","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.7":{"pi":10,"si":7,"title":"PMN and the Communist Traditions: A Diagnostic Engagement","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.9":{"pi":10,"si":8,"title":"How Counter-Power Accumulates","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.10":{"pi":10,"si":9,"title":"The Two Modes of Struggle","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.10b":{"pi":10,"si":10,"title":"Performative Hostility and Coordination Behind the Surface","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.10c":{"pi":10,"si":11,"title":"The Extended Agent Typology: Beyond the Hero-Vigilante Binary","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.11":{"pi":10,"si":12,"title":"Gradations Within the Ecosystem","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.12":{"pi":10,"si":13,"title":"Drift Mechanisms: How Actors Shift","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.13":{"pi":10,"si":14,"title":"Legitimacy as Function, Not Status","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"10.14":{"pi":10,"si":15,"title":"Who Watches the Watchers","pt":"X","ptitle":"How Systems Change: Adaptive Dynamics and Historical Transformation"},"11.0":{"pi":11,"si":0,"title":"Two Levels of Economic Analysis","pt":"XI","ptitle":"The Economic Doctrine"},"11.0b":{"pi":11,"si":1,"title":"Incentive Structures in Economic Arrangements","pt":"XI","ptitle":"The Economic Doctrine"},"11.1":{"pi":11,"si":2,"title":"Economics Without Prior Commitments","pt":"XI","ptitle":"The Economic Doctrine"},"11.2":{"pi":11,"si":3,"title":"The Permanent Conditions and Economic Doctrine","pt":"XI","ptitle":"The Economic Doctrine"},"11.3":{"pi":11,"si":4,"title":"Horizon and Instrument","pt":"XI","ptitle":"The Economic Doctrine"},"11.3b":{"pi":11,"si":5,"title":"Contemporary Capitalism as Terrain for the Seven Diagnostics","pt":"XI","ptitle":"The Economic Doctrine"},"11.4":{"pi":11,"si":6,"title":"What Doctrine Looks Like: A Contrastive Illustration","pt":"XI","ptitle":"The Economic Doctrine"},"12.1":{"pi":12,"si":0,"title":"The Methodology of Stress-Testing","pt":"XII","ptitle":"How This Framework Operates"},"12.2":{"pi":12,"si":1,"title":"Multi-Perspectival Analysis","pt":"XII","ptitle":"How This Framework Operates"},"12.3":{"pi":12,"si":2,"title":"Framework and Doctrine in Practice","pt":"XII","ptitle":"How This Framework Operates"},"12.4":{"pi":12,"si":3,"title":"The Architecture of the Framework: Parts I, II, and III in Sequence","pt":"XII","ptitle":"How This Framework Operates"},"12.5":{"pi":12,"si":4,"title":"When This Framework Fails: Specific Failure Modes","pt":"XII","ptitle":"How This Framework Operates"},"12.6":{"pi":12,"si":5,"title":"Genealogical Interrogation as Method","pt":"XII","ptitle":"How This Framework Operates"},"12.7":{"pi":12,"si":6,"title":"The Genealogy of This Framework","pt":"XII","ptitle":"How This Framework Operates"},"13.1":{"pi":13,"si":0,"title":"The Nature of Permanent Tension","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.1b":{"pi":13,"si":1,"title":"The Relationship Between Contradictions and Tensions","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.1c":{"pi":13,"si":2,"title":"Diagnostic: Is This a Tension or a Contradiction?","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.2":{"pi":13,"si":3,"title":"The Tensions","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.2b":{"pi":13,"si":4,"title":"Conditional Tensions: Present Under Specific Circumstances","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.3":{"pi":13,"si":5,"title":"Trade-offs as Permanent Features of Complex Systems","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.4":{"pi":13,"si":6,"title":"Limits of This Framework","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.4b":{"pi":13,"si":7,"title":"The Meaning Problem of Abundance: Becoming Without Constraint","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.4c":{"pi":13,"si":8,"title":"The Subject Boundary at the Horizon: PMN Without a Human Subject","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.4d":{"pi":13,"si":9,"title":"The Strategic Equilibrium Problem: Between Preservation and Transformation","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.5":{"pi":13,"si":10,"title":"Closing: The Framework That Must Be Surpassed","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.4e":{"pi":13,"si":11,"title":"The Variation-Deficit Tension: When Does Difference Become Deficiency?","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.4f":{"pi":13,"si":12,"title":"The Accommodation-Transformation Tension: Ramp or Redesign?","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.4g":{"pi":13,"si":13,"title":"The Agency-Structure Tension in Internalized Norms: The Apology Problem","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"13.4h":{"pi":13,"si":14,"title":"The Moral-Functional Tension: When Killing the Institution Kills What It Was Doing","pt":"XIII","ptitle":"Tensions That Cannot Be Resolved --- Only Managed"},"14.1":{"pi":14,"si":0,"title":"The Framework: Adaptive Naturalism","pt":"XIV","ptitle":"Summary: Framework, Doctrine, and What Remains Open"},"14.2":{"pi":14,"si":1,"title":"The Doctrine: Progressive Materialist Naturalism","pt":"XIV","ptitle":"Summary: Framework, Doctrine, and What Remains Open"},"14.3":{"pi":14,"si":2,"title":"Argument, Assumption, and Open Question","pt":"XIV","ptitle":"Summary: Framework, Doctrine, and What Remains Open"},"14.4":{"pi":14,"si":3,"title":"What Would Surpass This Framework","pt":"XIV","ptitle":"Summary: Framework, Doctrine, and What Remains Open"},"15.0":{"pi":15,"si":0,"title":"The Input Architecture of Predictive History","pt":"XV","ptitle":"The Formula Architecture"},"15.1":{"pi":15,"si":1,"title":"Complexity & Systems Dynamics: The Operator Decomposed","pt":"XV","ptitle":"The Formula Architecture"},"CS.1":{"pi":15,"si":2,"title":"Non-Linearity: The Rejection of Proportional Thinking","pt":"XV","ptitle":"The Formula Architecture"},"CS.2":{"pi":15,"si":3,"title":"Feedback Loops: How Systems Amplify and Stabilize Themselves","pt":"XV","ptitle":"The Formula Architecture"},"CS.3":{"pi":15,"si":4,"title":"Emergence: System-Level Properties Not Predictable from Components","pt":"XV","ptitle":"The Formula Architecture"},"CS.4":{"pi":15,"si":5,"title":"Threshold Effects and Phase Transitions","pt":"XV","ptitle":"The Formula Architecture"},"CS.5":{"pi":15,"si":6,"title":"Path Dependence: History as Structural Constraint","pt":"XV","ptitle":"The Formula Architecture"},"CS.6":{"pi":15,"si":7,"title":"Sensitive Dependence: The Limits of Precision","pt":"XV","ptitle":"The Formula Architecture"},"CS.7":{"pi":15,"si":8,"title":"Resilience and Brittleness: The System\\'s Relationship to Shock","pt":"XV","ptitle":"The Formula Architecture"},"CS.8":{"pi":15,"si":9,"title":"The Interaction of CS Principles: How the Operator Works as a Whole","pt":"XV","ptitle":"The Formula Architecture"},"15.2":{"pi":15,"si":10,"title":"The Primary Formula","pt":"XV","ptitle":"The Formula Architecture"},"15.3":{"pi":15,"si":11,"title":"The Suffering Variable: What Feeds Transformation Pressure","pt":"XV","ptitle":"The Formula Architecture"},"15.4":{"pi":15,"si":12,"title":"The Duration and Scale Multipliers","pt":"XV","ptitle":"The Formula Architecture"},"15.5":{"pi":15,"si":13,"title":"The Adaptive Capacity Formula","pt":"XV","ptitle":"The Formula Architecture"},"15.6":{"pi":15,"si":14,"title":"The Repressive Capacity Formula","pt":"XV","ptitle":"The Formula Architecture"},"15.7":{"pi":15,"si":15,"title":"The Legitimacy Formula","pt":"XV","ptitle":"The Formula Architecture"},"15.8":{"pi":15,"si":16,"title":"The Counter-Power Formula","pt":"XV","ptitle":"The Formula Architecture"},"15.9":{"pi":15,"si":17,"title":"The Predictive History Formula","pt":"XV","ptitle":"The Formula Architecture"},"15.10":{"pi":15,"si":18,"title":"Domain-Specific Formulas","pt":"XV","ptitle":"The Formula Architecture"},"15.11":{"pi":15,"si":19,"title":"The Time Variable: Windows and Cycles","pt":"XV","ptitle":"The Formula Architecture"},"15.12":{"pi":15,"si":20,"title":"Application: Reading Current Conditions","pt":"XV","ptitle":"The Formula Architecture"},"15.13":{"pi":15,"si":21,"title":"What the Formulas Cannot Do","pt":"XV","ptitle":"The Formula Architecture"},"15.14":{"pi":15,"si":22,"title":"Applied Cases: The Formulas in Operation","pt":"XV","ptitle":"The Formula Architecture"},"16.0":{"pi":16,"si":0,"title":"Technology as Constraint-Modifier, Not Tool","pt":"XVI","ptitle":"Technology as Structural Variable"},"16.1":{"pi":16,"si":1,"title":"The Capture Problem at Technological Leverage Points","pt":"XVI","ptitle":"Technology as Structural Variable"},"16.2":{"pi":16,"si":2,"title":"Artificial Intelligence as Institutional Architecture","pt":"XVI","ptitle":"Technology as Structural Variable"},"16.3":{"pi":16,"si":3,"title":"Biotechnology and the Biological Floor Under Institutional Pressure","pt":"XVI","ptitle":"Technology as Structural Variable"},"16.4":{"pi":16,"si":4,"title":"Technology, Meaning Infrastructure, and the Acceleration Problem","pt":"XVI","ptitle":"Technology as Structural Variable"},"coda":{"pi":17,"si":0,"title":"Coda","pt":"Coda","ptitle":"Coda"},"intellectual-debts":{"pi":18,"si":0,"title":"Intellectual Debts","pt":"Intellectual Debts","ptitle":"Intellectual Debts"},"bibliography":{"pi":19,"si":0,"title":"Bibliography","pt":"Bibliography","ptitle":"Bibliography"}}</script>
+<div class="page-shell">
 <div id="topbar"></div>
 <header id="hdr">
   <button id="hdr-logo">PMN</button>
@@ -248,16 +311,19 @@ textarea:focus-visible{outline:none}
     <div id="pip"><div id="pip-track"><div id="pip-fill"></div></div></div>
     <button class="hbtn" id="hb-home">Contents</button>
     <button class="hbtn hsm" id="hb-gl">Glossary</button>
-    <button id="theme-tog" title="Toggle dark/light mode" aria-label="Toggle theme"></button>
+    <button id="theme-tog" title="Toggle dark/light mode"></button>
   </div>
 </header>
+
+<div class="views-shell" style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+
 <div id="home-view" class="view on">
   <div class="hero">
     <div class="hero-orn">Adaptive Naturalism &middot; Nova Dharma</div>
     <h1 class="hero-h1">Progressive Materialist<br><em>Naturalism</em></h1>
     <p class="hero-sub">A Framework for Navigating Material Reality</p>
-    <p class="hero-quote">What follows is a first document, not a finished system &mdash;<br>
-      the starting point is the thing worth arguing about.</p>
+    <p class="hero-quote">What follows is a first document, not a finished system &mdash;
+      what matters is not its completeness but its direction.</p>
     <div class="hero-stats">
       <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">39</span></div>
       <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
@@ -269,7 +335,7 @@ textarea:focus-visible{outline:none}
       <button id="cta-resume" class="cta-p cta-main" style="display:none">Resume &rarr;</button>
       <div class="cta-row-s">
         <button id="cta-gl" class="cta-s">Key Terms</button>
-        <a href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" class="cta-s" target="_blank" style="text-decoration:none">Download PDF &darr;</a>
+        <a href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download PDF &darr;</a>
         <a href="pmn-agent-guide.html" class="cta-s" style="text-decoration:none">Use as AI Agent &rarr;</a>
         <button id="cta-notes" class="cta-s">My Notes</button>
       </div>
@@ -279,13 +345,21 @@ textarea:focus-visible{outline:none}
   <p class="toc-lbl">Contents</p>
   <div class="toc-grid" id="toc-grid"></div>
 </div>
+
 <div id="srch-view" class="view">
   <p class="sv-hdr" id="sv-hdr">Key Terms &mdash; Glossary</p>
   <div id="sv-body"></div>
 </div>
+
 <div id="reader-view" class="view">
-  <div id="sidebar"><div id="sb-hist" class="sb-hist" style="display:none"><div class="sb-hist-lbl">Recent</div><div id="sb-hist-list"></div></div><div id="sb-list"></div></div>
-  <button id="sb-tog">&#8249;</button>
+  <div id="sidebar">
+    <button id="sb-tog">&#8249;</button>
+    <div id="sb-hist" class="sb-hist" style="display:none">
+      <div class="sb-hist-lbl">Recent</div>
+      <div id="sb-hist-list"></div>
+    </div>
+    <div id="sb-list"></div>
+  </div>
   <div id="reader-main">
     <div id="reader-col">
       <nav class="bc">
@@ -312,7 +386,13 @@ textarea:focus-visible{outline:none}
         <textarea id="annot-ta" class="annot-ta" placeholder="Your notes on this section…"></textarea>
         <span id="annot-saved" class="annot-saved"></span>
       </div>
-      <div class="feedback-bar"><span class="feedback-lbl">Comments or suggestions?</span><div style="display:flex;gap:.6rem"><a id="feedback-link" class="feedback-btn" href="#">Email &rarr;</a><a id="twitter-link" class="feedback-btn" href="https://twitter.com/nova_dharma_pm" target="_blank" rel="noopener">Twitter &rarr;</a></div></div>
+      <div class="feedback-bar">
+        <span class="feedback-lbl">Komentar atau saran?</span>
+        <div style="display:flex;gap:.6rem">
+          <a id="feedback-link" class="feedback-btn" href="#">Email &rarr;</a>
+          <a id="twitter-link" class="feedback-btn" href="https://twitter.com/nova_dharma_pm" target="_blank" rel="noopener">Twitter &rarr;</a>
+        </div>
+      </div>
       <nav class="rnav">
         <button class="rnav-btn" id="rn-p">&larr; Previous</button>
         <span id="rn-pos" class="rnav-pos"></span>
@@ -320,13 +400,17 @@ textarea:focus-visible{outline:none}
       </nav>
       <footer class="doc-footer">
         <span class="doc-footer-lbl">PMN &mdash; Version 39</span>
-        <a href="pmn-agent-guide.html" class="doc-footer-home" style="text-decoration:none">Use as AI Agent</a>
         <button class="doc-footer-home" id="footer-home">Back to Contents &uarr;</button>
       </footer>
     </div>
   </div>
 </div>
+
+</div><!-- .views-shell -->
+</div><!-- .page-shell -->
+
 <div id="tt"><p id="tt-term"></p><p id="tt-def"></p></div>
+
 <script>
 (function() {
   // Load data from JSON script tags - completely safe, no escaping issues
@@ -351,9 +435,17 @@ textarea:focus-visible{outline:none}
   function plong(p){  return SPECIAL[p.part] ? '' : 'Part '+p.part; }
 
   // Theme
-  function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); }
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme',t);
+    try{ localStorage.setItem('pmn-theme',t); }catch(e){}
+    var tog=g('theme-tog');
+    if(tog) tog.textContent=(t==='dark'?'☀ Light':'☾ Dark');
+  }
   function initTheme(){ try{ applyTheme(localStorage.getItem('pmn-theme')||'light'); }catch(e){ applyTheme('light'); } }
-  function toggleTheme(){ var c=document.documentElement.getAttribute('data-theme'); var n=c==='dark'?'light':'dark'; applyTheme(n); try{localStorage.setItem('pmn-theme',n);}catch(e){} }
+  function toggleTheme(){
+    var cur=document.documentElement.getAttribute('data-theme')||'dark';
+    applyTheme(cur==='dark'?'light':'dark');
+  }
   initTheme();
 
   function pip(){
@@ -386,24 +478,22 @@ textarea:focus-visible{outline:none}
         var s=p.subs[si], r=isR(pi,si), intro=s.is_intro;
         if(r) done++;
         subs+='<button class="toc-sub'+(intro?' intro':'')+'" data-pi="'+pi+'" data-si="'+si+'">'
-          +'<span class="toc-sid'+(r?' r':'')+'">'+esc(s.id)+'</span>'
+          +(intro?''  :'<span class="toc-sid'+(r?' r':'')+'">'+esc(s.id)+'</span>')
           +'<span class="toc-sname'+(r?' r':'')+'">'+esc(s.title)+'</span>'
           +(r?'<span class="toc-chk">&#10003;</span>':'')
           +'</button>';
       }
       var pct=total?Math.round(done/total*100):0;
       var progBar=total>1
-        ? '<div class="toc-prog">'
-          +'<div class="toc-prog-bar"><div class="toc-prog-fill" style="width:'+pct+'%"></div></div>'
-          +'<span class="toc-prog-lbl">'+done+'\u2009/\u2009'+total+'</span>'
-          +'</div>'
+        ? '<div class="toc-prog"><div class="toc-prog-bar"><div class="toc-prog-fill" style="width:'+pct+'%"></div></div>'
+          +'<span class="toc-prog-lbl">'+done+'/'+total+'</span></div>'
         : '';
-      html+='<div class="toc-card">'
+      html+='<div class="toc-part">'
         +'<button class="toc-ph" data-pi="'+pi+'" data-si="0">'
         +(lbl?'<span class="toc-pnum">'+esc(lbl)+'</span>':'')
         +'<span class="toc-pname">'+esc(p.title)+'</span>'
         +'</button>'
-        +'<div>'+subs+'</div>'
+        +'<div class="toc-subs">'+subs+'</div>'
         +progBar
         +'</div>';
     }
@@ -441,29 +531,24 @@ textarea:focus-visible{outline:none}
 
   function toggleSB(){
     sbOpen=!sbOpen;
-    var sb=g('sidebar');
+    var sb=g('sidebar'), tog=g('sb-tog');
+    sb.classList.toggle('closed',!sbOpen);
     if(window.innerWidth<=680){
       sb.classList.toggle('mob-open',sbOpen);
-      sb.classList.toggle('closed',!sbOpen);
-    } else {
-      sb.classList.toggle('closed',!sbOpen);
     }
-    g('sb-tog').textContent=sbOpen?'‹':'›';
-    g('sb-tog').style.left=(window.innerWidth>680&&sbOpen)?'268px':'0px';
+    tog.textContent=sbOpen?'‹':'›';
+    tog.title=sbOpen?'Hide sidebar':'Show sidebar';
   }
 
   function openSec(pi,si,nohash){
     curP=pi; curS=si;
     markR(pi,si); savePos(pi,si); addHist(pi,si); buildSB(); renderSec(); nav('reader');
-    g('reader-main').scrollTop=0;
+    if(!nohash){ try{ history.pushState(null,'','#'+PARTS[pi].subs[si].id); }catch(e){} }
     if(window.innerWidth<=680){ var sb=g('sidebar'); sb.classList.remove('mob-open'); sb.classList.add('closed'); sbOpen=false; }
-    if(!nohash){ try{ var sid=PARTS[pi].subs[si].id; history.pushState(null,'','#'+sid); }catch(e){} }
+    g('reader-main').scrollTop=0;
     setTimeout(function(){ var a=g('sb-list').querySelector('.sb-item.on'); if(a) a.scrollIntoView({block:'nearest',behavior:'smooth'}); },60);
   }
-  function openById(sid){
-    var info=LOOK[sid]; if(!info) return false;
-    openSec(info.pi, info.si, true); return true;
-  }
+  function openById(sid){ var info=LOOK[sid]; if(!info) return false; openSec(info.pi,info.si,true); return true; }
 
   function clean(t){
     return t.replace(/\\'/g,"'").replace(/\\"/g,'"')
@@ -472,128 +557,69 @@ textarea:focus-visible{outline:none}
   }
 
 
-
-  // ── Session history ─────────────────────────────────────
-  var sessHist = []; // [{pi,si,id,title}] most recent first, max 12
-  function addHist(pi, si){
-    var s=PARTS[pi].subs[si];
-    var key=pi+'-'+si;
-    sessHist = sessHist.filter(function(h){ return h.pi+'-'+h.si !== key; });
-    sessHist.unshift({pi:pi, si:si, id:s.id, title:s.title});
+  // ── Session history
+  var sessHist=[];
+  function addHist(pi,si){
+    var s=PARTS[pi].subs[si],key=pi+'-'+si;
+    sessHist=sessHist.filter(function(h){return h.pi+'-'+h.si!==key;});
+    sessHist.unshift({pi:pi,si:si,id:s.id,title:s.title});
     if(sessHist.length>12) sessHist.pop();
     renderHist();
   }
   function renderHist(){
-    var wrap=g('sb-hist'), list=g('sb-hist-list'); if(!wrap||!list) return;
-    if(sessHist.length<2){ wrap.style.display='none'; return; }
+    var wrap=g('sb-hist'),list=g('sb-hist-list'); if(!wrap||!list) return;
+    if(sessHist.length<2){wrap.style.display='none';return;}
     wrap.style.display='';
     var h='';
     for(var i=1;i<sessHist.length;i++){
       var e=sessHist[i];
       h+='<div class="sb-hist-item" data-pi="'+e.pi+'" data-si="'+e.si+'">'
         +'<span class="sb-hist-sid">'+esc(e.id)+'</span>'
-        +'<span class="sb-hist-title">'+esc(e.title.length>32?e.title.slice(0,30)+'…':e.title)+'</span>'
+        +'<span class="sb-hist-title">'+esc(e.title.length>32?e.title.slice(0,30)+'\u2026':e.title)+'</span>'
         +'</div>';
     }
     list.innerHTML=h;
   }
-
-  // ── Start-here suggestions ──────────────────────────────
-  var SUGGEST_MAP = {
-    // entry points by reader intent — section IDs to suggest based on reading state
-    'unread':   [['1.1','Start at the beginning'],['3.4','The minimal anchor — core ethics'],['12.1','How to use the framework']],
-    'early':    [['1.3','Probabilistic determinism'],['4.1','Foundation of value'],['6.1','Why power must be named']],
-    'mid':      [['10.1','Why systems change'],['13.1','Permanent tensions'],['16.0','Technology as constraint-modifier']],
-    'late':     [['12.5','Framework failure modes'],['14.2','The doctrine'],['13.5','The framework that must be surpassed']]
-  };
+  // ── Suggestions
+  var SG={'unread':[['1.1','Start at beginning'],['3.4','Minimal anchor'],['12.1','How to use']],'early':[['1.3','Probabilistic determinism'],['4.1','Foundation of value'],['6.1','Power']],'mid':[['10.1','Systems change'],['13.1','Permanent tensions'],['16.0','Technology']],'late':[['12.5','Failure modes'],['14.2','The doctrine'],['13.5','Beyond the framework']]};
   function renderSuggestions(){
     var wrap=g('suggestions'); if(!wrap) return;
-    var total=0; for(var i=0;i<PARTS.length;i++) total+=PARTS[i].subs.length;
-    var done=Object.keys(readMap).length;
-    var pct=total?done/total:0;
-    var tier = pct===0?'unread':pct<0.15?'early':pct<0.5?'mid':'late';
-    var entries=SUGGEST_MAP[tier];
-    var html='<div class="suggest-lbl">Suggested entry points</div>';
-    var shown=0;
-    for(var i=0;i<entries.length;i++){
-      var sid=entries[i][0], why=entries[i][1];
-      var info=LOOK[sid]; if(!info) continue;
-      html+='<button class="suggest-btn" data-pi="'+info.pi+'" data-si="'+info.si+'">'
+    var tot=0; for(var i=0;i<PARTS.length;i++) tot+=PARTS[i].subs.length;
+    var done=Object.keys(readMap).length,pct=tot?done/tot:0;
+    var tier=pct===0?'unread':pct<0.15?'early':pct<0.5?'mid':'late';
+    var ents=SG[tier],h='<div class="suggest-lbl">Suggested entry points</div>',shown=0;
+    for(var i=0;i<ents.length;i++){
+      var sid=ents[i][0],why=ents[i][1],info=LOOK[sid]; if(!info) continue;
+      h+='<button class="suggest-btn" data-pi="'+info.pi+'" data-si="'+info.si+'">'
         +'<span class="suggest-sid">'+esc(sid)+'</span>'
         +'<span class="suggest-title">'+esc(PARTS[info.pi].subs[info.si].title)+'</span>'
         +'<span class="suggest-why">'+esc(why)+'</span>'
         +'</button>';
       shown++;
     }
-    if(shown>0){ wrap.innerHTML=html; wrap.style.display=''; }
+    if(shown>0){wrap.innerHTML=h;wrap.style.display='';}
   }
-
-  // ── Annotation summary page ──────────────────────────────
-  function openAnnotSummary(){
-    var entries=[];
-    for(var pi=0;pi<PARTS.length;pi++){
-      for(var si=0;si<PARTS[pi].subs.length;si++){
-        var s=PARTS[pi].subs[si];
-        var k='pmn-an-'+s.id;
-        var note='';
-        try{ note=localStorage.getItem(k)||''; }catch(e){}
-        if(note.trim()) entries.push({id:s.id,title:s.title,note:note.trim()});
-      }
-    }
-    var w=window.open('','_blank');
-    if(!w) return;
-    var rows=entries.map(function(e){
-      return '<div style="margin-bottom:2.5rem;border-left:2px solid #c9a050;padding-left:1.2rem">'
-        +'<div style="font-family:monospace;font-size:.75rem;color:#c9a050;margin-bottom:.3rem">'+esc(e.id)+'</div>'
-        +'<div style="font-size:.9rem;color:#a09080;margin-bottom:.6rem">'+esc(e.title)+'</div>'
-        +'<pre style="font:inherit;font-size:.95rem;line-height:1.75;white-space:pre-wrap;margin:0">'+esc(e.note)+'</pre>'
-        +'</div>';
-    }).join('');
-    var empty='<p style="color:#888;font-style:italic">No notes yet.</p>';
-    var plainAll=entries.map(function(e){ return e.id+' — '+e.title+'\n'+e.note; }).join('\n\n---\n\n');
-    w.document.write(
-      '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PMN — My Notes</title>'
-      +'<style>body{background:#1a1714;color:#e8e0d4;font-family:Georgia,serif;max-width:700px;margin:3rem auto;padding:0 1.5rem}'
-      +'h1{font-size:1.4rem;margin-bottom:.3rem;font-weight:400}.meta{font-family:monospace;font-size:.7rem;color:#a09080;margin-bottom:2rem}'
-      +'button{background:transparent;border:1px solid #3a3530;color:#a09080;font-family:monospace;font-size:.65rem;letter-spacing:.1em;padding:.4rem .9rem;cursor:pointer;margin-bottom:2.5rem}'
-      +'button:hover{border-color:#c9a050;color:#c9a050}</style></head><body>'
-      +'<h1>PMN — My Notes</h1>'
-      +'<p class="meta">'+entries.length+' section'+(entries.length!==1?'s':'')+' · PMN v39</p>'
-      +'<textarea id="ta-all" style="display:none">'+plainAll.replace(/</g,'&lt;')+'</textarea>'
-      +'<button id="cpbtn">Copy all notes</button>'
-      +(entries.length?rows:empty)
-      +'<script>document.getElementById("cpbtn").onclick=function(){'
-      +'var t=document.getElementById("ta-all").value;'
-      +'navigator.clipboard.writeText(t).then(function(){document.getElementById("cpbtn").textContent="Copied!";});'
-      +'};<\/script>'
-      +'</body></html>'
-    );
-    w.document.close();
-  }
-
-
-  // ── Cited-in ──────────────────────────────────────────────
+  // ── Cited-in
   function renderCitedIn(sid){
     var el=g('cited-sec'); if(!el) return;
     var refs=CITED[sid];
     if(!refs||!refs.length){el.innerHTML='';return;}
     var h='<span class="cited-lbl">Referenced in</span><div class="cited-list">';
     for(var i=0;i<refs.length;i++){
-      var r=refs[i], info=LOOK[r]; if(!info) continue;
+      var r=refs[i],info=LOOK[r]; if(!info) continue;
       h+='<button class="cited-btn" data-pi="'+info.pi+'" data-si="'+info.si+'">'
         +'<span class="cited-sid">'+esc(r)+'</span>'
-        +esc(info.title.length>40?info.title.slice(0,38)+'…':info.title)
+        +esc(info.title.length>40?info.title.slice(0,38)+'\u2026':info.title)
         +'</button>';
     }
     h+='</div>';
     el.innerHTML=h;
   }
-
-  // ── Annotations ───────────────────────────────────────────
-  function annotKey(pi,si){ return 'pmn-an-'+PARTS[pi].subs[si].id; }
+  // ── Annotations
+  function annotKey(pi,si){return 'pmn-an-'+PARTS[pi].subs[si].id;}
   function loadAnnot(pi,si){
     var ta=g('annot-ta'); if(!ta) return;
-    try{ ta.value=localStorage.getItem(annotKey(pi,si))||''; }catch(e){ ta.value=''; }
+    try{ta.value=localStorage.getItem(annotKey(pi,si))||'';}catch(e){ta.value='';}
   }
   function saveAnnot(){
     var ta=g('annot-ta'); if(!ta) return;
@@ -603,29 +629,66 @@ textarea:focus-visible{outline:none}
       else localStorage.removeItem(k);
       var msg=g('annot-saved');
       msg.textContent='Saved'; msg.classList.add('show');
-      setTimeout(function(){ msg.classList.remove('show'); },1600);
+      setTimeout(function(){msg.classList.remove('show');},1600);
     }catch(e){}
   }
-
-  // ── Export section ─────────────────────────────────────────
+  // ── Export
   function exportSec(){
     var s=PARTS[curP].subs[curS];
-    var plain=s.html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+    var plain=s.html.replace(/<[^>]+>/g,' ').replace(/[ \t]+/g,' ').trim();
     var annot=g('annot-ta')?g('annot-ta').value.trim():'';
-    var out='# '+s.id+' — '+s.title+'\n\n'+plain
-      +(annot?'\n\n---\nNotes:\n'+annot:'');
+    var out=['# '+s.id+' - '+s.title,'',plain];
+    if(annot) out.push('','---','Notes:',annot);
+    var txt=out.join('\n');
     try{
-      navigator.clipboard.writeText(out).then(function(){
-        var btn=g('export-btn');
-        var orig=btn.textContent; btn.textContent='Copied!';
-        setTimeout(function(){ btn.textContent=orig; },1800);
+      navigator.clipboard.writeText(txt).then(function(){
+        var btn=g('export-btn'),orig=btn.textContent;
+        btn.textContent='Copied!';
+        setTimeout(function(){btn.textContent=orig;},1800);
       });
     }catch(e){
       var w=window.open('','_blank');
-      w.document.write('<pre style="font:14px monospace;padding:2rem;white-space:pre-wrap">'+out+'</pre>');
+      w.document.write('<pre style="font:14px monospace;padding:2rem;white-space:pre-wrap">'+txt+'</pre>');
     }
   }
-
+  // ── Annotation summary
+  function openAnnotSummary(){
+    var entries=[];
+    for(var pi=0;pi<PARTS.length;pi++){
+      for(var si=0;si<PARTS[pi].subs.length;si++){
+        var s=PARTS[pi].subs[si],note='';
+        try{note=localStorage.getItem('pmn-an-'+s.id)||'';}catch(e){}
+        if(note.trim()) entries.push({id:s.id,title:s.title,note:note.trim()});
+      }
+    }
+    var w=window.open('','_blank'); if(!w) return;
+    var rows=entries.map(function(e){
+      return '<div style="margin-bottom:2.5rem;border-left:2px solid #c9a050;padding-left:1.2rem">'
+        +'<div style="font-family:monospace;font-size:.75rem;color:#c9a050">'+esc(e.id)+'</div>'
+        +'<div style="font-size:.9rem;color:#a09080;margin:.3rem 0">'+esc(e.title)+'</div>'
+        +'<pre style="font:inherit;font-size:.95rem;line-height:1.75;white-space:pre-wrap;margin:0">'+esc(e.note)+'</pre>'
+        +'</div>';
+    }).join('');
+    var allLines=entries.map(function(e){return e.id+' - '+e.title+'\n'+e.note;}).join('\n\n---\n\n');
+    var encoded=encodeURIComponent(allLines);
+    w.document.write(
+      '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>PMN Notes</title>'
+      +'<style>body{background:#1a1714;color:#e8e0d4;font-family:Georgia,serif;max-width:700px;margin:3rem auto;padding:0 1.5rem}'
+      +'h1{font-size:1.4rem;margin-bottom:.3rem;font-weight:400}'
+      +'.meta{font-family:monospace;font-size:.7rem;color:#a09080;margin-bottom:2rem}'
+      +'button{background:transparent;border:1px solid #3a3530;color:#a09080;font-family:monospace;'
+      +'font-size:.65rem;padding:.4rem .9rem;cursor:pointer;margin-bottom:2.5rem}'
+      +'button:hover{border-color:#c9a050;color:#c9a050}</style>'
+      +'</head><body>'
+      +'<h1>PMN &mdash; My Notes</h1>'
+      +'<p class="meta">'+entries.length+' section'+(entries.length!==1?'s':'')+' &middot; PMN v39</p>'
+      +'<button onclick="navigator.clipboard.writeText(decodeURIComponent(\''+encoded+'\'))'
+      +'.then(function(){event.target.textContent=\'Copied!\';});">Copy all notes</button>'
+      +(entries.length?rows:'<p style="color:#888;font-style:italic">No notes yet.</p>')
+      +'</body></html>'
+    );
+    w.document.close();
+  }
   function renderRelated(sid){
     var el=g('related-sec');
     var refs=REL[sid];
@@ -654,12 +717,13 @@ textarea:focus-visible{outline:none}
     g('bc-part').textContent=pshort(p);
     g('bc-sid').textContent=s.id;
     g('sec-eye').textContent=lbl;
-    g('sec-ttl').innerHTML='<span class="sec-id">'+esc(s.id)+'</span>'+esc(s.title);
-    g('sec-ttl').className=intro?'sec-ttl intro-ttl':'sec-ttl';
+    var isSpecialSec=SPECIAL[p.part]||s.id.indexOf('.')<0;
+    g('sec-ttl').innerHTML=(isSpecialSec?'':'<span class="sec-id">'+esc(s.id)+'</span>')+esc(s.title);
+    g('sec-ttl').className=isSpecialSec?'sec-ttl intro-ttl':'sec-ttl';
     var html=s.html||(s.text?'<p>'+esc(s.text)+'</p>':'');
-        var _srchHL=g('srch-in')?g('srch-in').value.trim():'';
-    if(_srchHL.length>2){
-      var _re=new RegExp('('+_srchHL.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+    var _sh=g('srch-in')?g('srch-in').value.trim():'';
+    if(_sh.length>2){
+      var _re=new RegExp('('+_sh.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
       html=html.replace(_re,'<mark>$1</mark>');
     }
     g('prose').innerHTML=html;
@@ -675,7 +739,6 @@ textarea:focus-visible{outline:none}
     g('rn-n').disabled=last;
     g('rn-n').className=last?'rnav-btn':'rnav-btn nxt';
     g('rn-pos').textContent=(curS+1)+'/'+p.subs.length;
-    g('sb-tog').style.left=sbOpen?'268px':'0px';
     // Back-matter styling
     var bm=['Coda','Intellectual Debts','Bibliography'];
     g('prose').className=bm.indexOf(p.part)>=0?'prose back-matter':'prose';
@@ -684,9 +747,9 @@ textarea:focus-visible{outline:none}
     renderCitedIn(s.id);
     loadAnnot(curP,curS);
     // Feedback mailto
-    var subj=encodeURIComponent('PMN v39 - Feedback: '+s.id+' '+s.title);
-    var body=encodeURIComponent('Section: '+s.id+' - '+s.title+'\nMy comments:\n');
-    var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:novadharma.pm@gmail.com?subject='+subj+'&body='+body);
+    var subj=encodeURIComponent('PMN v38 - Feedback: '+s.id+' '+s.title);
+    var body=encodeURIComponent('Section: '+s.id+' - '+s.title+'\nKomentar saya:\n');
+    var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7a9a8b1a6a3afa6b5aaa6e9b7aa87a0aaa6aeabe9a4a8aa">[email&#160;protected]</a>?subject='+subj+'&body='+body);
     var tweet=encodeURIComponent('Re: PMN v37 - '+s.id+' '+s.title+' @nova_dharma_pm');
     var tl=g('twitter-link'); if(tl) tl.setAttribute('href','https://twitter.com/intent/tweet?text='+tweet);
   }
@@ -744,8 +807,7 @@ textarea:focus-visible{outline:none}
   }
   function doSrch(q){
     var ql=q.toLowerCase().trim(), res=[];
-    var partFilter=g('srch-part')?g('srch-part').value:'';
-    // jump by section ID
+    var pf=g('srch-part')?g('srch-part').value:'';
     if(/^[0-9]+\.[0-9]+[a-z]?$/.test(ql)||/^a\.[0-9]+$/i.test(ql)){
       var info=LOOK[ql]; if(info){ openSec(info.pi,info.si); clrS(); return; }
     }
@@ -753,7 +815,7 @@ textarea:focus-visible{outline:none}
       var p=PARTS[pi];
       for(var si=0;si<p.subs.length;si++){
         var s=p.subs[si];
-        if(partFilter!==''&&pi!==+partFilter) continue;
+        if(pf!==''&&pi!==+pf) continue;
         var stxt=s.html?(s.html.replace(/<[^>]+>/g,' ')):s.text||'';
         if(ql&&s.title.toLowerCase().indexOf(ql)<0 && stxt.toLowerCase().indexOf(ql)<0) continue;
         var stxt2=stxt;
@@ -843,13 +905,14 @@ textarea:focus-visible{outline:none}
   // Init
   pip();
   buildTOC();
+  // Init sb-tog position
+  (function(){
+    var tog=g('sb-tog');
+    if(tog){ tog.textContent='‹'; tog.title='Hide sidebar'; }
+  })();
   populatePartFilter();
-  g('footer-home').addEventListener('click', function(){ nav('home'); });
   renderSuggestions();
-  g('annot-save').addEventListener('click', saveAnnot);
-  g('export-btn').addEventListener('click', exportSec);
-  g('cta-notes') && g('cta-notes').addEventListener('click', openAnnotSummary);
-  g('annot-ta').addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveAnnot();}});
+  g('footer-home').addEventListener('click', function(){ nav('home'); });
   // Resume reading
   var _pos=loadPos();
   if(_pos && _pos[0]<PARTS.length && _pos[1]<PARTS[_pos[0]].subs.length){
@@ -859,26 +922,37 @@ textarea:focus-visible{outline:none}
     _rb.style.display='';
     _rb.addEventListener('click',function(){ openSec(_pos[0],_pos[1]); });
   }
-  // Deep-link on load
-  (function(){
-    var h=location.hash.slice(1);
-    if(h && LOOK[h]){
-      var inf=LOOK[h]; openSec(inf.pi,inf.si,true);
-    }
-  })();
-  // Deep-link on hashchange (back/forward)
-  window.addEventListener('hashchange',function(){
-    var h=location.hash.slice(1); if(h && LOOK[h]){ var inf=LOOK[h]; openSec(inf.pi,inf.si,true); }
+  g('annot-save') && g('annot-save').addEventListener('click', saveAnnot);
+  g('export-btn') && g('export-btn').addEventListener('click', exportSec);
+  g('cta-notes') && g('cta-notes').addEventListener('click', openAnnotSummary);
+  g('annot-ta') && g('annot-ta').addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveAnnot();}
   });
-  // Mobile: tap outside sidebar closes it
+  g('sidebar').addEventListener('click',function(e){
+    var h=e.target.closest('.sb-hist-item');
+    if(h){openSec(+h.getAttribute('data-pi'),+h.getAttribute('data-si'));}
+  });
+  g('reader-col') && g('reader-col').addEventListener('click',function(e){
+    var cb=e.target.closest('.cited-btn');
+    if(cb){openSec(+cb.getAttribute('data-pi'),+cb.getAttribute('data-si'));}
+  });
+  g('suggestions') && g('suggestions').addEventListener('click',function(e){
+    var b=e.target.closest('.suggest-btn');
+    if(b){openSec(+b.getAttribute('data-pi'),+b.getAttribute('data-si'));}
+  });
+  (function(){var h=location.hash.slice(1);if(h&&LOOK[h]){var inf=LOOK[h];openSec(inf.pi,inf.si,true);}})();
+  window.addEventListener('hashchange',function(){
+    var h=location.hash.slice(1);if(h&&LOOK[h]){var inf=LOOK[h];openSec(inf.pi,inf.si,true);}
+  });
   document.addEventListener('click',function(e){
     if(window.innerWidth>680) return;
     var sb=g('sidebar');
-    if(sbOpen && !sb.contains(e.target) && e.target!==g('sb-tog')){
-      sb.classList.remove('mob-open'); sb.classList.add('closed'); sbOpen=false;
+    if(sbOpen&&!sb.contains(e.target)&&e.target!==g('sb-tog')){
+      sb.classList.remove('mob-open');sb.classList.add('closed');sbOpen=false;
     }
   });
 })();
+
 </script>
 </body>
 </html>
