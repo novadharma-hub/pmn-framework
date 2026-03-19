@@ -487,7 +487,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
     <p class="hero-sub">A Framework for Navigating Material Reality</p>
     <p class="hero-quote">Thinking about material reality without pretending the hard questions are easier than they are.</p>
     <div class="hero-stats">
-      <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">50</span></div>
+      <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">60</span></div>
       <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
       <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
       <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
@@ -635,7 +635,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   initTheme();
 
   function pip(){
-    var tot=0; for(var i=0;i<PARTS.length;i++) tot+=PARTS[i].subs.length;
+    var tot=0; for(var i=0;i<PARTS.length;i++){var ps=PARTS[i].subs;for(var j=0;j<ps.length;j++){tot++;if(ps[j].subs)for(var k=0;k<ps[j].subs.length;k++){tot++;if(ps[j].subs[k].subs)tot+=ps[j].subs[k].subs.length;}}}
     var done=Object.keys(readMap).length;
     var pct=tot?Math.round(done/tot*100):0;
     g('pip-fill').style.width=pct+'%';
@@ -770,7 +770,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   var SG={'unread':[['1.1','Start at beginning'],['3.4','Minimal anchor'],['12.1','How to use']],'early':[['1.3','Probabilistic determinism'],['4.1','Foundation of value'],['6.1','Power']],'mid':[['10.1','Systems change'],['13.1','Permanent tensions'],['16.0','Technology']],'late':[['12.5','Failure modes'],['14.2','The doctrine'],['13.5','Beyond the framework']]};
   function renderSuggestions(){
     var wrap=g('suggestions'); if(!wrap) return;
-    var tot=0; for(var i=0;i<PARTS.length;i++) tot+=PARTS[i].subs.length;
+    var tot=0; for(var i=0;i<PARTS.length;i++){var ps=PARTS[i].subs;for(var j=0;j<ps.length;j++){tot++;if(ps[j].subs)for(var k=0;k<ps[j].subs.length;k++){tot++;if(ps[j].subs[k].subs)tot+=ps[j].subs[k].subs.length;}}}
     var done=Object.keys(readMap).length,pct=tot?done/tot:0;
     var tier=pct===0?'unread':pct<0.15?'early':pct<0.5?'mid':'late';
     var ents=SG[tier],h='<div class="suggest-lbl">Suggested entry points</div>',shown=0;
