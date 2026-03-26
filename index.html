@@ -349,6 +349,23 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .hero-stats{gap:1rem}
 }
 
+/* ── Keyboard shortcut overlay ── */
+#kbd-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.65);overflow-y:auto}
+#kbd-panel{max-width:480px;margin:4rem auto;background:var(--bg);border:1px solid var(--rule);padding:2rem 2.2rem 2.4rem;position:relative}
+#kbd-close{position:absolute;top:.9rem;right:1rem;background:none;border:none;color:var(--mute2);cursor:pointer;font-size:1.1rem;line-height:1;padding:.2rem .5rem}
+#kbd-close:hover{color:var(--acc)}
+.kbd-title{font-family:'Libre Baskerville',serif;font-size:1rem;color:var(--ink);margin-bottom:1.4rem;padding-bottom:.8rem;border-bottom:1px solid var(--rule)}
+.kbd-section{margin-bottom:1.2rem}
+.kbd-section-lbl{font-family:'Source Code Pro',monospace;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute2);margin-bottom:.6rem;display:block}
+.kbd-row{display:flex;align-items:center;justify-content:space-between;padding:.28rem 0;border-bottom:1px solid var(--rule2)}
+.kbd-row:last-child{border-bottom:none}
+.kbd-desc{font-family:'Lora',serif;font-size:.82rem;color:var(--mute)}
+.kbd-keys{display:flex;gap:.3rem;align-items:center}
+.kbd-key{font-family:'Source Code Pro',monospace;font-size:.68rem;background:var(--bg2);border:1px solid var(--rule2);color:var(--ink2);padding:.18rem .5rem;border-radius:3px;white-space:nowrap}
+@media(max-width:680px){
+  #kbd-panel{margin:1.5rem auto;width:94vw;padding:1.4rem 1.2rem 2rem}
+}
+
 /* Blue box: theoretical distinctions */
 .box-blue {
   border-left: 3px solid #1D4ED8;
@@ -357,7 +374,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   margin: 1.25rem 0;
   border-radius: 0 4px 4px 0;
   font-size: .93em;
-  color: var(--fg);
+  color: var(--ink);
 }
 /* Red box: operational diagnostics */
 .box-red {
@@ -367,7 +384,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   margin: 1.25rem 0;
   border-radius: 0 4px 4px 0;
   font-size: .93em;
-  color: var(--fg);
+  color: var(--ink);
 }
 [data-theme=dark] .box-blue {
   background: rgba(29,78,216,.12);
@@ -380,7 +397,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
 
 /* Rotating quotes — homepage only, scoped inside #home-view */
 #home-view #quote-strip {
-  border-top: 1px solid var(--brd);
+  border-top: 1px solid var(--rule);
   padding: 1.25rem 0 3rem;
   margin-top: 0;
   box-sizing: border-box;
@@ -399,7 +416,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
 }
 #quote-tog {
   background: none;
-  border: 1px solid var(--brd);
+  border: 1px solid var(--rule);
   color: var(--mute);
   cursor: pointer;
   font-size: .82rem;
@@ -408,7 +425,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   border-radius: 3px;
   transition: opacity .15s;
 }
-#quote-tog:hover { color: var(--fg); border-color: var(--mute); }
+#quote-tog:hover { color: var(--ink); border-color: var(--mute); }
 #quote-inner {
   overflow: hidden;
   transition: max-height .4s ease, opacity .3s ease;
@@ -422,7 +439,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
 #quote-body {
   font-size: .88rem;
   line-height: 1.7;
-  color: var(--fg);
+  color: var(--ink2);
   opacity: 1;
   transition: opacity .6s ease;
   font-style: italic;
@@ -455,7 +472,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   background: var(--acc);
   border-color: var(--acc);
 }
-.quote-dot:hover { border-color: var(--fg); }
+.quote-dot:hover { border-color: var(--ink); }
 
 @media print {
   /* Hide all UI chrome */
@@ -526,6 +543,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
     <button class="hbtn" id="hb-home">Contents</button>
     <button class="hbtn hsm" id="hb-gl">Glossary</button>
     <button id="theme-tog" title="Toggle dark/light mode"></button>
+    <button class="hbtn hsm" id="hb-kbd" title="Keyboard shortcuts (?)">?</button>
   </div>
 </header>
 
@@ -645,6 +663,31 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   </div>
 </div>
 </div><!-- .page-shell -->
+
+<div id="kbd-modal">
+  <div id="kbd-panel">
+    <button id="kbd-close">&times;</button>
+    <p class="kbd-title">Keyboard Shortcuts</p>
+    <div class="kbd-section">
+      <span class="kbd-section-lbl">Navigation</span>
+      <div class="kbd-row"><span class="kbd-desc">Search / jump to section</span><span class="kbd-keys"><span class="kbd-key">/</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Glossary / key terms</span><span class="kbd-keys"><span class="kbd-key">?</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Next section</span><span class="kbd-keys"><span class="kbd-key">→</span><span class="kbd-key">↓</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Previous section</span><span class="kbd-keys"><span class="kbd-key">←</span><span class="kbd-key">↑</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Close / back to contents</span><span class="kbd-keys"><span class="kbd-key">Esc</span></span></div>
+    </div>
+    <div class="kbd-section">
+      <span class="kbd-section-lbl">Reader</span>
+      <div class="kbd-row"><span class="kbd-desc">Jump to section by ID (e.g. 3.4b)</span><span class="kbd-keys"><span class="kbd-key">type in search</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Save notes</span><span class="kbd-keys"><span class="kbd-key">Ctrl</span>+<span class="kbd-key">S</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Share section link</span><span class="kbd-keys"><span class="kbd-key">hover title</span></span></div>
+    </div>
+    <div class="kbd-section">
+      <span class="kbd-section-lbl">Tips</span>
+      <div class="kbd-row"><span class="kbd-desc">Highlight text to look up glossary</span><span class="kbd-keys"><span class="kbd-key">select</span></span></div>
+    </div>
+  </div>
+</div>
 
 <div id="tt"><p id="tt-term"></p><p id="tt-def"></p></div>
 
@@ -1048,10 +1091,10 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
     renderCitedIn(s.id);
     loadAnnot(curP,curS);
     // Feedback mailto
-    var subj=encodeURIComponent('PMN v38 - Feedback: '+s.id+' '+s.title);
+    var subj=encodeURIComponent('PMN v75 - Feedback: '+s.id+' '+s.title);
     var body=encodeURIComponent('Section: '+s.id+' - '+s.title+'\nKomentar saya:\n');
-    var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7a9a8b1a6a3afa6b5aaa6e9b7aa87a0aaa6aeabe9a4a8aa">[email&#160;protected]</a>?subject='+subj+'&body='+body);
-    var tweet=encodeURIComponent('Re: PMN v37 - '+s.id+' '+s.title+' @nova_dharma_pm');
+    var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:nova@novadharma.org?subject='+subj+'&body='+body);
+    var tweet=encodeURIComponent('Re: PMN v75 - '+s.id+' '+s.title+' @nova_dharma_pm');
     var tl=g('twitter-link'); if(tl) tl.setAttribute('href','https://twitter.com/intent/tweet?text='+tweet);
   }
 
@@ -1159,11 +1202,22 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   function hideTT(){ g('tt').style.display='none'; }
   document.addEventListener('click', hideTT);
 
+  function showKbd(){
+    var m=g('kbd-modal'); if(m){m.style.display='block'; document.body.style.overflow='hidden';}
+  }
+  function closeKbd(){
+    var m=g('kbd-modal'); if(m){m.style.display='none'; document.body.style.overflow='';}
+  }
+
   document.addEventListener('keydown',function(e){
-    if(document.activeElement.tagName==='INPUT') return;
-    if(e.key==='?'){ e.preventDefault(); showGL(); return; }
+    if(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='TEXTAREA') return;
+    if(e.key==='?'){ e.preventDefault(); showKbd(); return; }
     if(e.key==='/'){ e.preventDefault(); g('srch-in').focus(); return; }
-    if(e.key==='Escape'){ if(g('srch-view').classList.contains('on')){ clrS(); return; } }
+    if(e.key==='Escape'){
+      if(g('kbd-modal').style.display==='block'){ closeKbd(); return; }
+      if(g('notes-modal').style.display==='block'){ closeNotesModal(); return; }
+      if(g('srch-view').classList.contains('on')){ clrS(); return; }
+    }
     if(g('reader-view').classList.contains('on')){
       if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); navN(); }
       if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); navP(); }
@@ -1202,6 +1256,11 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   g('bc-home').addEventListener('click', function(){ nav('home'); });
   g('rn-p').addEventListener('click', navP);
   g('rn-n').addEventListener('click', navN);
+  g('hb-kbd') && g('hb-kbd').addEventListener('click', showKbd);
+  g('kbd-close') && g('kbd-close').addEventListener('click', closeKbd);
+  g('kbd-modal') && g('kbd-modal').addEventListener('click', function(e){
+    if(e.target===g('kbd-modal')) closeKbd();
+  });
 
   // Init
   pip();
