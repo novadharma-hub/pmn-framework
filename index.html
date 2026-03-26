@@ -269,21 +269,18 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
 #sidebar::-webkit-scrollbar-track,#reader-main::-webkit-scrollbar-track,#home-view::-webkit-scrollbar-track,#srch-view::-webkit-scrollbar-track{background:transparent}
 #sidebar::-webkit-scrollbar-thumb,#reader-main::-webkit-scrollbar-thumb,#home-view::-webkit-scrollbar-thumb,#srch-view::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:2px}
 #sidebar::-webkit-scrollbar-thumb:hover,#reader-main::-webkit-scrollbar-thumb:hover{background:var(--mute2)}
-@media(max-width:680px){
-  /* --- Layout --- */
+
+/* ── Mobile styles: triggered by screen size OR manual override ── */
+@media(max-width:680px), html[data-layout="mobile"] {
   body{overflow:auto}
   .page-shell{height:auto;overflow:visible}
   #home-view{height:auto;overflow:visible}
   #home-view > *{padding-left:1.1rem;padding-right:1.1rem}
-
-  /* --- Header --- */
   #hdr{padding:.55rem .9rem;gap:.5rem}
   #hdr-srch{max-width:none;flex:1}
   #srch-part{display:none}
   .hbtn{padding:.3rem .3rem;letter-spacing:.08em}
   #theme-tog{padding:.3rem .35rem}
-
-  /* --- Hero --- */
   .hero{padding-bottom:1.8rem}
   .hero-h1{font-size:1.7rem;line-height:1.2}
   .hero-sub{font-size:.95rem}
@@ -291,59 +288,58 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .stat-item{min-width:80px}
   .cta-main{min-width:0;width:100%;padding:.8rem 1.2rem;margin-bottom:.4rem}
   .cta-s{width:100%;justify-content:center}
-
-  /* --- TOC --- */
   .toc-lbl{padding:1.2rem 1.1rem .6rem}
   .toc-part{padding:.9rem 1.1rem .8rem}
   .toc-subs{grid-template-columns:1fr}
   .toc-sub{padding:.4rem .2rem}
   .toc-pname{font-size:.9rem}
   .toc-prog{margin-top:.6rem;padding-top:.5rem}
-
-  /* --- Quotes --- */
   #home-view #quote-strip{padding-top:1rem;padding-bottom:2rem}
   #quote-body{font-size:.85rem}
-
-  /* --- Reader layout --- */
   #reader-view.on{flex-direction:column;height:auto;overflow:visible}
   #reader-main{width:100%;height:auto;overflow:visible}
   #reader-col{padding:1.2rem 1.1rem 5rem;max-width:none}
-
-  /* --- Sidebar: slide-in drawer --- */
   #sidebar{position:fixed;left:0;top:52px;height:calc(100% - 52px);z-index:200;transform:translateX(-100%);transition:transform .26s ease;width:280px!important;min-width:280px!important}
   #sidebar.mob-open{transform:translateX(0)}
   #sidebar.closed{transform:translateX(-100%)!important;width:280px!important;min-width:280px!important}
   #sb-tog{position:fixed;left:0;bottom:1.5rem;top:auto;transform:none;width:2.4rem;height:2.4rem;right:auto;border-radius:0 6px 6px 0;z-index:201;font-size:1rem}
-
-  /* --- Reader header --- */
   .sec-eye{font-size:.68rem}
   .sec-ttl{font-size:1.6rem;margin-bottom:1.6rem}
   #read-time{margin-bottom:1.6rem;padding-bottom:1.6rem}
   #bc{padding:.45rem .9rem;gap:.3rem;flex-wrap:wrap}
   .bc-btn{font-size:.65rem}
-
-  /* --- Prose --- */
   .box-blue,.box-red{padding:.6rem .75rem;font-size:.85rem}
-
-  /* --- Bottom nav --- */
   .rnav{flex-direction:column;gap:.4rem}
   .rnav-btn{width:100%;text-align:center;padding:.65rem 1rem}
-
-  /* --- Related/Cited --- */
   .related,.cited{margin-top:1.8rem}
   .rel-btn,.annot-btn,.cited-btn{font-size:.8rem}
-
-  /* --- Footer --- */
   .doc-footer{flex-direction:column;gap:.6rem;align-items:flex-start}
-
-  /* --- Search --- */
   #srch-view{padding:1rem}
   .gl-grp-lbl{font-size:.68rem}
   .res-loc{font-size:.68rem}
-
-  /* --- Modal --- */
   #notes-modal > div{width:95vw;max-height:85vh;padding:1.2rem}
 }
+
+/* ── Force desktop layout override (manual, overrides media query) ── */
+html[data-layout="desktop"] body{overflow:hidden}
+html[data-layout="desktop"] .page-shell{height:calc(100vh - 52px);overflow:hidden}
+html[data-layout="desktop"] #home-view{height:100%;overflow-y:auto}
+html[data-layout="desktop"] #home-view > *{padding-left:2.5rem;padding-right:2.5rem}
+html[data-layout="desktop"] #hdr-srch{max-width:380px}
+html[data-layout="desktop"] #srch-part{display:block}
+html[data-layout="desktop"] .hbtn{padding:.3rem .4rem;letter-spacing:.14em}
+html[data-layout="desktop"] .toc-subs{grid-template-columns:repeat(3,1fr)}
+html[data-layout="desktop"] #reader-view.on{flex-direction:row;height:100%;overflow:hidden}
+html[data-layout="desktop"] #reader-main{width:auto;height:100%;overflow-y:auto}
+html[data-layout="desktop"] #reader-col{padding:3.5rem 2.5rem 8rem;max-width:68ch}
+html[data-layout="desktop"] #sidebar{position:relative;left:auto;top:auto;height:100%;transform:none!important;transition:width .26s cubic-bezier(.4,0,.2,1),min-width .26s}
+html[data-layout="desktop"] #sb-tog{position:absolute;right:-16px;top:50%;transform:translateY(-50%);width:16px;height:48px;bottom:auto;border-radius:0;font-size:.65rem}
+html[data-layout="desktop"] .rnav{flex-direction:row}
+html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 1.2rem}
+
+/* ── Layout toggle button label ── */
+#layout-tog{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.1em;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.32rem .7rem;cursor:pointer;transition:color .18s,border-color .18s;white-space:nowrap;flex-shrink:0}
+#layout-tog:hover{color:var(--acc);border-color:var(--acc)}
 @media(max-width:480px){
   .toc-subs{grid-template-columns:1fr}
   .hero-stats{gap:1rem}
@@ -543,7 +539,8 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
     <button class="hbtn" id="hb-home">Contents</button>
     <button class="hbtn hsm" id="hb-gl">Glossary</button>
     <button id="theme-tog" title="Toggle dark/light mode"></button>
-    <button class="hbtn hsm" id="hb-kbd" title="Keyboard shortcuts (?)">?</button>
+    <button id="layout-tog" title="Switch layout"></button>
+    <button class="hbtn hsm" id="hb-kbd" title="Keyboard shortcuts">Keys</button>
   </div>
 </header>
 
@@ -728,6 +725,54 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
     applyTheme(cur==='dark'?'light':'dark');
   }
   initTheme();
+
+  // ── Layout toggle (mobile/desktop override)
+  var isMobileScreen = window.innerWidth <= 680;
+  function isManualLayout(){ try{ return localStorage.getItem('pmn-layout'); }catch(e){ return null; } }
+  function applyLayout(mode){
+    var html=document.documentElement;
+    if(mode==='mobile'){ html.setAttribute('data-layout','mobile'); }
+    else if(mode==='desktop'){ html.setAttribute('data-layout','desktop'); }
+    else { html.removeAttribute('data-layout'); }
+    try{ if(mode) localStorage.setItem('pmn-layout',mode); else localStorage.removeItem('pmn-layout'); }catch(e){}
+    updateLayoutTog();
+    // Re-evaluate sidebar state when switching to desktop
+    if(mode==='desktop'&&!sbOpen){ var sb=g('sidebar'); sb.classList.remove('mob-open'); }
+  }
+  function currentEffectiveLayout(){
+    var manual=isManualLayout();
+    if(manual) return manual;
+    return isMobileScreen?'mobile':'desktop';
+  }
+  function updateLayoutTog(){
+    var btn=g('layout-tog'); if(!btn) return;
+    var eff=currentEffectiveLayout();
+    var manual=isManualLayout();
+    btn.textContent = eff==='mobile' ? '🖥 Desktop' : '📱 Mobile';
+    btn.title = manual ? 'Reset to auto ('+eff+')' : 'Switch to '+(eff==='mobile'?'desktop':'mobile')+' layout';
+  }
+  function toggleLayout(){
+    var manual=isManualLayout();
+    var eff=currentEffectiveLayout();
+    if(!manual){
+      // First click: override to opposite of current
+      applyLayout(eff==='mobile'?'desktop':'mobile');
+    } else if(manual===eff){
+      // Currently overriding to match auto — cycle to opposite override
+      applyLayout(eff==='mobile'?'desktop':'mobile');
+    } else {
+      // Already overriding to opposite — reset to auto
+      applyLayout(null);
+    }
+  }
+  // Init layout on load
+  (function(){
+    var saved=isManualLayout();
+    if(saved) applyLayout(saved);
+    else updateLayoutTog();
+  })();
+
+
 
   function pip(){
     var tot=0; for(var i=0;i<PARTS.length;i++){var ps=PARTS[i].subs;for(var j=0;j<ps.length;j++){tot++;if(ps[j].subs)for(var k=0;k<ps[j].subs.length;k++){tot++;if(ps[j].subs[k].subs)tot+=ps[j].subs[k].subs.length;}}}
@@ -1247,6 +1292,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   g('hb-home').addEventListener('click', function(){ nav('home'); });
   g('hb-gl').addEventListener('click', showGL);
   g('theme-tog').addEventListener('click', toggleTheme);
+  g('layout-tog') && g('layout-tog').addEventListener('click', toggleLayout);
   g('srch-clr').addEventListener('click', clrS);
   g('srch-in').addEventListener('input', function(){ onSI(this.value); });
   g('srch-in').addEventListener('focus', onSF);
