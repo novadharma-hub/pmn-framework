@@ -86,6 +86,10 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 .cta-row-s{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
 .cta-s{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.55rem 1rem;cursor:pointer;transition:color .15s,border-color .15s;text-decoration:none;display:inline-flex;align-items:center}
 .cta-s:hover{color:var(--acc);border-color:var(--acc)}
+.cta-row-util{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.2rem}
+.cta-util{font-family:'Source Code Pro',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.45rem .85rem;cursor:pointer;transition:color .15s,border-color .15s;white-space:nowrap}
+.cta-util:hover{color:var(--acc);border-color:var(--acc)}
+.cta-util-sep{color:var(--mute3);font-size:.65rem;user-select:none}
 
 /* ── Suggestions ── */
 .hero-suggestions{padding:1.5rem 2.5rem;display:none}
@@ -337,9 +341,6 @@ html[data-layout="desktop"] #sb-tog{position:absolute;right:-16px;top:50%;transf
 html[data-layout="desktop"] .rnav{flex-direction:row}
 html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 1.2rem}
 
-/* ── Layout toggle button label ── */
-#layout-tog{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.1em;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.32rem .7rem;cursor:pointer;transition:color .18s,border-color .18s;white-space:nowrap;flex-shrink:0}
-#layout-tog:hover{color:var(--acc);border-color:var(--acc)}
 @media(max-width:480px){
   .toc-subs{grid-template-columns:1fr}
   .hero-stats{gap:1rem}
@@ -539,7 +540,6 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     <button class="hbtn" id="hb-home">Contents</button>
     <button class="hbtn hsm" id="hb-gl">Glossary</button>
     <button id="theme-tog" title="Toggle dark/light mode"></button>
-    <button id="layout-tog" title="Switch layout"></button>
     <button class="hbtn hsm" id="hb-kbd" title="Keyboard shortcuts">Keys</button>
   </div>
 </header>
@@ -565,8 +565,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         <button id="cta-gl" class="cta-s">Key Terms</button>
         <a href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download PDF &darr;</a>
         <a href="https://drive.google.com/drive/folders/1l3LbgIpFuB_daDyW_tZIUYIGvEfflgw3?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download .md &darr;</a>
-        <a href="pmn-agent-guide.html" class="cta-s" style="text-decoration:none">Use as AI Agent &rarr;</a>
-        <button id="cta-notes" class="cta-s">My Notes</button>
+        <a href="pmn-agent-guide.html" class="cta-s" style="text-decoration:none">AI Agent &rarr;</a>
+      </div>
+      <div class="cta-row-util">
+        <button id="cta-notes" class="cta-util">My Notes</button>
+        <button id="layout-tog" class="cta-util"></button>
       </div>
     </div>
   </div>
@@ -748,8 +751,13 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var btn=g('layout-tog'); if(!btn) return;
     var eff=currentEffectiveLayout();
     var manual=isManualLayout();
-    btn.textContent = eff==='mobile' ? '🖥 Desktop' : '📱 Mobile';
-    btn.title = manual ? 'Reset to auto ('+eff+')' : 'Switch to '+(eff==='mobile'?'desktop':'mobile')+' layout';
+    if(manual==='mobile'){
+      btn.textContent='Layout: Mobile \u2192 switch to desktop';
+    } else if(manual==='desktop'){
+      btn.textContent='Layout: Desktop \u2192 reset to auto';
+    } else {
+      btn.textContent='Layout: Auto ('+(eff==='mobile'?'mobile':'desktop')+') \u2192 override';
+    }
   }
   function toggleLayout(){
     var manual=isManualLayout();
