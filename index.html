@@ -346,6 +346,37 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   .hero-stats{gap:1rem}
 }
 
+/* ── Mobile bottom nav bar (reader only) ── */
+#mob-nav{display:none}
+@media(max-width:680px), html[data-layout="mobile"]{
+  #mob-nav{
+    display:flex;
+    position:fixed;
+    bottom:0;left:0;right:0;
+    height:52px;
+    background:var(--bg);
+    border-top:1px solid var(--rule);
+    z-index:150;
+    align-items:stretch;
+  }
+  #mob-nav.hidden{display:none!important}
+  .mob-nav-btn{
+    flex:1;
+    display:flex;align-items:center;justify-content:center;
+    background:none;border:none;
+    font-family:'Source Code Pro',monospace;
+    font-size:.8rem;letter-spacing:.05em;
+    color:var(--mute);cursor:pointer;
+    transition:color .15s,background .15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .mob-nav-btn:active{color:var(--acc);background:var(--bg2)}
+  .mob-nav-btn:disabled{opacity:.22;cursor:default}
+  #mob-nav-mid{border-left:1px solid var(--rule);border-right:1px solid var(--rule);flex:1.4;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+  #reader-col{padding-bottom:80px}
+  .rnav{display:none}
+}
+
 /* ── Keyboard shortcut overlay ── */
 #kbd-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.65);overflow-y:auto}
 #kbd-panel{max-width:480px;margin:4rem auto;background:var(--bg);border:1px solid var(--rule);padding:2rem 2.2rem 2.4rem;position:relative}
@@ -650,6 +681,12 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 </div>
 
 </div><!-- .views-shell -->
+
+<nav id="mob-nav" class="hidden">
+  <button class="mob-nav-btn" id="mob-prev">&larr;</button>
+  <button class="mob-nav-btn" id="mob-mid">&#9776; Contents</button>
+  <button class="mob-nav-btn" id="mob-next">&rarr;</button>
+</nav>
 <div id="notes-modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);overflow-y:auto">
   <div style="max-width:680px;margin:3rem auto;background:var(--bg);border:1px solid var(--rule);padding:2.5rem 2.5rem 3rem;position:relative">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.8rem;border-bottom:1px solid var(--rule);padding-bottom:1rem">
@@ -800,6 +837,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var btns=document.querySelectorAll('.hbtn');
     for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
     if(v==='home'){ buildTOC(); pip(); g('hb-home').classList.add('on'); }
+    updateMobNav();
   }
 
   function buildTOC(){
@@ -1298,7 +1336,22 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   // Wire up static buttons (no inline onclick)
   g('hdr-logo').addEventListener('click', function(){ nav('home'); });
   g('hb-home').addEventListener('click', function(){ nav('home'); });
-  g('hb-gl').addEventListener('click', showGL);
+  // ── Mobile bottom nav
+  function updateMobNav(){
+    var bar=g('mob-nav'); if(!bar) return;
+    var inReader=g('reader-view').classList.contains('on');
+    if(inReader){ bar.classList.remove('hidden'); }
+    else { bar.classList.add('hidden'); }
+    // sync prev/next state
+    var pp=g('mob-prev'), nn=g('mob-next');
+    if(pp) pp.disabled=(curP===0&&curS===0);
+    if(nn) nn.disabled=(curP===PARTS.length-1&&curS===PARTS[curP].subs.length-1);
+  }
+  g('mob-prev') && g('mob-prev').addEventListener('click', function(){ navP(); updateMobNav(); });
+  g('mob-next') && g('mob-next').addEventListener('click', function(){ navN(); updateMobNav(); });
+  g('mob-mid')  && g('mob-mid').addEventListener('click',  function(){ nav('home'); });
+
+
   g('theme-tog').addEventListener('click', toggleTheme);
   g('layout-tog') && g('layout-tog').addEventListener('click', toggleLayout);
   g('srch-clr').addEventListener('click', clrS);
