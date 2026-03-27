@@ -365,14 +365,14 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     display:flex;align-items:center;justify-content:center;
     background:none;border:none;
     font-family:'Source Code Pro',monospace;
-    font-size:.8rem;letter-spacing:.05em;
+    font-size:1.3rem;
     color:var(--mute);cursor:pointer;
     transition:color .15s,background .15s;
     -webkit-tap-highlight-color:transparent;
   }
   .mob-nav-btn:active{color:var(--acc);background:var(--bg2)}
   .mob-nav-btn:disabled{opacity:.22;cursor:default}
-  #mob-nav-mid{border-left:1px solid var(--rule);border-right:1px solid var(--rule);flex:1.4;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+  #mob-nav-mid{border-left:1px solid var(--rule);border-right:1px solid var(--rule);flex:1.6;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase}
   #reader-col{padding-bottom:80px}
   .rnav{display:none}
 }
@@ -647,6 +647,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       <h1 id="sec-ttl" class="sec-ttl"></h1>
       <span id="read-time"></span>
       <div id="prose" class="prose"></div>
+      <nav class="rnav">
+        <button class="rnav-btn" id="rn-p">&larr; Previous</button>
+        <span id="rn-pos" class="rnav-pos"></span>
+        <button class="rnav-btn nxt" id="rn-n">Next &rarr;</button>
+      </nav>
       <div id="related-sec" class="related"></div>
       <div id="cited-sec" class="cited-in"></div>
       <div id="annot-sec" class="annot-block">
@@ -667,14 +672,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           <a id="twitter-link" class="feedback-btn" href="https://twitter.com/nova_dharma_pm" target="_blank" rel="noopener">Twitter &rarr;</a>
         </div>
       </div>
-      <nav class="rnav">
-        <button class="rnav-btn" id="rn-p">&larr; Previous</button>
-        <span id="rn-pos" class="rnav-pos"></span>
-        <button class="rnav-btn nxt" id="rn-n">Next &rarr;</button>
-      </nav>
       <footer class="doc-footer">
         <span class="doc-footer-lbl">PMN &mdash; Version 75</span>
-        <button class="doc-footer-home" id="footer-home">Back to Contents &uarr;</button>
+        <button class="doc-footer-home" id="footer-home">Back to Home &uarr;</button>
       </footer>
     </div>
   </div>
@@ -683,9 +683,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 </div><!-- .views-shell -->
 
 <nav id="mob-nav" class="hidden">
-  <button class="mob-nav-btn" id="mob-prev">&larr;</button>
-  <button class="mob-nav-btn" id="mob-mid">&#9776; Contents</button>
-  <button class="mob-nav-btn" id="mob-next">&rarr;</button>
+  <button class="mob-nav-btn" id="mob-prev">&#8592;</button>
+  <button class="mob-nav-btn" id="mob-mid" style="font-size:.65rem;letter-spacing:.1em">&#9776;&nbsp;HOME</button>
+  <button class="mob-nav-btn" id="mob-next">&#8594;</button>
 </nav>
 <div id="notes-modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);overflow-y:auto">
   <div style="max-width:680px;margin:3rem auto;background:var(--bg);border:1px solid var(--rule);padding:2.5rem 2.5rem 3rem;position:relative">
@@ -837,7 +837,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var btns=document.querySelectorAll('.hbtn');
     for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
     if(v==='home'){ buildTOC(); pip(); g('hb-home').classList.add('on'); }
-    updateMobNav();
+    if(typeof updateMobNav==='function') updateMobNav();
   }
 
   function buildTOC(){
@@ -1203,6 +1203,17 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   function navN(){ nextSec(curP,curS); }
   function navP(){ prevSec(curP,curS); }
 
+  // ── Mobile bottom nav
+  function updateMobNav(){
+    var bar=g('mob-nav'); if(!bar) return;
+    var inReader=g('reader-view').classList.contains('on');
+    if(inReader){ bar.classList.remove('hidden'); }
+    else { bar.classList.add('hidden'); }
+    var pp=g('mob-prev'), nn=g('mob-next');
+    if(pp) pp.disabled=(curP===0&&curS===0);
+    if(nn) nn.disabled=(curP===PARTS.length-1&&curS===PARTS[curP].subs.length-1);
+  }
+
   var _st=null;
   function onSI(v){
     g('srch-clr').style.display=v?'block':'none';
@@ -1336,19 +1347,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   // Wire up static buttons (no inline onclick)
   g('hdr-logo').addEventListener('click', function(){ nav('home'); });
   g('hb-home').addEventListener('click', function(){ nav('home'); });
-  // ── Mobile bottom nav
-  function updateMobNav(){
-    var bar=g('mob-nav'); if(!bar) return;
-    var inReader=g('reader-view').classList.contains('on');
-    if(inReader){ bar.classList.remove('hidden'); }
-    else { bar.classList.add('hidden'); }
-    // sync prev/next state
-    var pp=g('mob-prev'), nn=g('mob-next');
-    if(pp) pp.disabled=(curP===0&&curS===0);
-    if(nn) nn.disabled=(curP===PARTS.length-1&&curS===PARTS[curP].subs.length-1);
-  }
-  g('mob-prev') && g('mob-prev').addEventListener('click', function(){ navP(); updateMobNav(); });
-  g('mob-next') && g('mob-next').addEventListener('click', function(){ navN(); updateMobNav(); });
+  g('mob-prev') && g('mob-prev').addEventListener('click', function(){ navP(); });
+  g('mob-next') && g('mob-next').addEventListener('click', function(){ navN(); });
   g('mob-mid')  && g('mob-mid').addEventListener('click',  function(){ nav('home'); });
 
 
