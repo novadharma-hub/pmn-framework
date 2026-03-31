@@ -68,18 +68,53 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 #home-view > #toc-grid{padding-bottom:2rem;max-width:1000px}
 
 /* ── Hero ── */
-.hero{text-align:center;padding-bottom:3rem;margin-bottom:0}
-.hero-orn{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mute2);display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:1.4rem}
+.hero{text-align:center;padding-bottom:0;margin-bottom:0;position:relative;overflow:hidden;min-height:88vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:radial-gradient(ellipse at 50% 0%, var(--bg2) 0%, var(--bg) 65%)}
+#hero-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.7}
+.hero-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:4.5rem 2.5rem 3rem;max-width:860px;margin:0 auto}
+.hero-orn{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mute2);display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:1.8rem;opacity:0;animation:heroFadeUp .9s forwards .1s}
 .hero-orn::before,.hero-orn::after{content:'';display:block;width:40px;height:1px;background:var(--acc);opacity:.4}
-.hero-h1{font-family:'Libre Baskerville',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;line-height:1.08;letter-spacing:-.02em;margin-bottom:.6rem}
+.hero-h1{font-family:'Libre Baskerville',serif;font-size:clamp(2.8rem,6vw,4.8rem);font-weight:400;line-height:1.06;letter-spacing:-.025em;margin-bottom:.7rem;opacity:0;animation:heroFadeUp .9s forwards .3s}
 .hero-h1 em{color:var(--acc);font-style:italic}
-.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:1.05rem;color:var(--mute);margin-bottom:1rem}
-.hero-quote{font-family:'Lora',serif;font-style:italic;font-size:.9rem;color:var(--mute2);max-width:480px;margin:0 auto 2rem;line-height:1.65}
-.hero-stats{display:flex;justify-content:center;gap:3rem;padding:.9rem 0 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:2.2rem}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:1.1rem;color:var(--mute);margin-bottom:1.2rem;opacity:0;animation:heroFadeUp .9s forwards .5s}
+.hero-quote{font-family:'Lora',serif;font-style:italic;font-size:.92rem;color:var(--mute2);max-width:500px;margin:0 auto 2.5rem;line-height:1.7;opacity:0;animation:heroFadeUp .9s forwards .65s}
+.hero-stats{display:flex;justify-content:center;gap:3rem;padding:.9rem 0 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:2.4rem;width:100%;opacity:0;animation:heroFadeUp .9s forwards .75s}
 .stat{text-align:center}
 .stat-lbl{display:block;font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute2);margin-bottom:.3rem}
-.stat-val{font-family:'Libre Baskerville',serif;font-size:1.1rem;color:var(--acc)}
-.hero-ctas{display:flex;flex-direction:column;align-items:center;gap:.9rem;width:100%}
+.stat-val{font-family:'Libre Baskerville',serif;font-size:1.2rem;color:var(--acc)}
+.hero-ctas{display:flex;flex-direction:column;align-items:center;gap:.9rem;width:100%;opacity:0;animation:heroFadeUp .9s forwards .9s}
+/* ── Hero scroll hint ── */
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:0;animation:heroFadeUp .9s forwards 1.2s}
+.hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom, var(--acc), transparent);opacity:.5}
+.hero-scroll-lbl{font-family:'Source Code Pro',monospace;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute2)}
+
+/* ── Feature cards section ── */
+.feature-section{padding:5rem 2.5rem 4rem;max-width:1000px;margin:0 auto}
+.feature-section-lbl{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute2);text-align:center;display:block;margin-bottom:.8rem}
+.feature-section-title{font-family:'Libre Baskerville',serif;font-size:1.8rem;font-weight:400;text-align:center;color:var(--ink);margin-bottom:3rem;letter-spacing:-.01em}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.feature-card{padding:2rem 1.8rem;background:var(--bg);border:1px solid var(--rule);position:relative;overflow:hidden;cursor:default;transition:border-color .2s,transform .2s,box-shadow .2s}
+.feature-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:var(--bg2);z-index:0;transform:scaleY(0);transform-origin:bottom;transition:transform .35s cubic-bezier(.25,.8,.25,1)}
+.feature-card:hover::before{transform:scaleY(1)}
+.feature-card:hover{border-color:var(--acc);transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.07)}
+.feature-card > *{position:relative;z-index:1}
+.feature-num{font-family:'Libre Baskerville',serif;font-size:2.5rem;color:var(--acc);opacity:.35;margin-bottom:1rem;line-height:1;transition:opacity .2s}
+.feature-card:hover .feature-num{opacity:.8}
+.feature-name{font-family:'Libre Baskerville',serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.6rem}
+.feature-desc{font-family:'Lora',serif;font-style:italic;font-size:.85rem;color:var(--mute);line-height:1.65}
+
+/* ── Stats banner ── */
+.stats-banner{background:var(--ink);color:var(--bg);padding:5rem 2rem;text-align:center;position:relative;overflow:hidden}
+[data-theme=dark] .stats-banner{background:#0d0c0b;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stats-banner::after{content:'PMN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Libre Baskerville',serif;font-size:18vw;color:rgba(255,255,255,.025);pointer-events:none;line-height:1}
+.stats-banner-inner{position:relative;z-index:1;display:flex;justify-content:center;gap:5rem;flex-wrap:wrap;max-width:900px;margin:0 auto}
+.stats-banner-item h3{font-family:'Libre Baskerville',serif;font-size:3rem;color:var(--acc);margin-bottom:.4rem;line-height:1}
+.stats-banner-item p{font-family:'Source Code Pro',monospace;text-transform:uppercase;font-size:.72rem;letter-spacing:.18em;color:var(--bg);opacity:.7}
+[data-theme=dark] .stats-banner-item p{color:var(--ink2)}
+
+@keyframes heroFadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes statPulse{0%{text-shadow:0 0 4px rgba(139,107,35,.1)}100%{text-shadow:0 0 18px rgba(139,107,35,.35)}}
+[data-theme=dark] @keyframes statPulse{0%{text-shadow:0 0 4px rgba(212,167,71,.1)}100%{text-shadow:0 0 18px rgba(212,167,71,.4)}}
+.stats-banner-item h3{animation:statPulse 3.5s infinite alternate ease-in-out}
 .cta-p{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;background:var(--acc);color:var(--bg);border:1px solid var(--acc);padding:.8rem 2.4rem;cursor:pointer;transition:background .18s,border-color .18s}
 .cta-p:hover{background:var(--acc2);border-color:var(--acc2)}
 .cta-main{min-width:220px}
@@ -288,10 +323,15 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   #hb-gl{display:none}
   #hb-kbd{display:none}
   #theme-tog{padding:.3rem .5rem;font-size:.65rem}
-  .hero{padding-bottom:1.8rem}
-  .hero-h1{font-size:1.7rem;line-height:1.2}
+  .hero{min-height:auto;padding-bottom:2rem}
+  .hero-content{padding:3rem 1.4rem 2rem}
+  .hero-h1{font-size:1.9rem;line-height:1.15}
   .hero-sub{font-size:.95rem}
   .hero-stats{gap:1rem;flex-wrap:wrap;justify-content:center}
+  .hero-scroll{display:none}
+  .feature-grid{grid-template-columns:1fr}
+  .stats-banner-inner{gap:3rem}
+  .stats-banner-item h3{font-size:2.2rem}
   .stat-item{min-width:80px}
   .cta-main{min-width:0;width:100%;padding:.8rem 1.2rem;margin-bottom:.4rem}
   .cta-s{width:100%;justify-content:center}
@@ -591,31 +631,84 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
 <div id="home-view" class="view on">
   <div class="hero">
-    <div class="hero-orn">Adaptive Naturalism &middot; Nova Dharma</div>
-    <h1 class="hero-h1">Progressive Materialist<br><em>Naturalism</em></h1>
-    <p class="hero-sub">A Framework for Navigating Material Reality</p>
-    <p class="hero-quote">Thinking about material reality without pretending the hard questions are easier than they are.</p>
-    <div class="hero-stats">
-      <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">83</span></div>
-      <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
-      <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
-      <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
-    </div>
-    <div class="hero-ctas">
-      <button id="cta-begin" class="cta-p cta-main">Begin Reading</button>
-      <button id="cta-resume" class="cta-p cta-main" style="display:none">Resume &rarr;</button>
-      <div class="cta-row-s">
-        <button id="cta-gl" class="cta-s">Key Terms</button>
-        <a href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download PDF &darr;</a>
-        <a href="https://drive.google.com/drive/folders/1l3LbgIpFuB_daDyW_tZIUYIGvEfflgw3?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download .md &darr;</a>
-        <a href="pmn-agent-guide.html" class="cta-s" style="text-decoration:none">AI Agent &rarr;</a>
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-orn">Adaptive Naturalism &middot; Nova Dharma</div>
+      <h1 class="hero-h1">Progressive Materialist<br><em>Naturalism</em></h1>
+      <p class="hero-sub">A Framework for Navigating Material Reality</p>
+      <p class="hero-quote">Thinking about material reality without pretending the hard questions are easier than they are.</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">83</span></div>
+        <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
+        <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
+        <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
       </div>
-      <div class="cta-row-util">
-        <button id="cta-notes" class="cta-util">My Notes</button>
-        <button id="layout-tog" class="cta-util"></button>
+      <div class="hero-ctas">
+        <button id="cta-begin" class="cta-p cta-main">Begin Reading</button>
+        <button id="cta-resume" class="cta-p cta-main" style="display:none">Resume &rarr;</button>
+        <div class="cta-row-s">
+          <button id="cta-gl" class="cta-s">Key Terms</button>
+          <a href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download PDF &darr;</a>
+          <a href="https://drive.google.com/drive/folders/1l3LbgIpFuB_daDyW_tZIUYIGvEfflgw3?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download .md &darr;</a>
+          <a href="pmn-agent-guide.html" class="cta-s" style="text-decoration:none">AI Agent &rarr;</a>
+        </div>
+        <div class="cta-row-util">
+          <button id="cta-notes" class="cta-util">My Notes</button>
+          <button id="layout-tog" class="cta-util"></button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span class="hero-scroll-lbl">Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </div>
+
+  <!-- Feature Cards -->
+  <div class="feature-section">
+    <span class="feature-section-lbl">What this framework covers</span>
+    <p class="feature-section-title">The Architecture of PMN</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-num">I&ndash;V</div>
+        <div class="feature-name">Foundations</div>
+        <p class="feature-desc">Epistemology, ontology, biological grounding, ethics, and meaning infrastructure. Why analysis must begin from what organisms materially are.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">VI&ndash;XI</div>
+        <div class="feature-name">Power &amp; Systems</div>
+        <p class="feature-desc">How power operates through institutions, how systems change, and what political economy and economic doctrine follow from structural analysis.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">XII&ndash;XVII</div>
+        <div class="feature-name">Method &amp; Application</div>
+        <p class="feature-desc">How to use the framework, navigate its tensions, read the formula architecture, and apply it to technology, cases, and individual practice.</p>
       </div>
     </div>
   </div>
+
+  <!-- Stats Banner -->
+  <div class="stats-banner">
+    <div class="stats-banner-inner">
+      <div class="stats-banner-item">
+        <h3 id="sb-parts">&mdash;</h3>
+        <p>Parts</p>
+      </div>
+      <div class="stats-banner-item">
+        <h3 id="sb-sections">&mdash;</h3>
+        <p>Sections</p>
+      </div>
+      <div class="stats-banner-item">
+        <h3 id="sb-read">0%</h3>
+        <p>Read</p>
+      </div>
+      <div class="stats-banner-item">
+        <h3>83</h3>
+        <p>Version</p>
+      </div>
+    </div>
+  </div>
+
   <div id="suggestions" class="hero-suggestions" style="display:none"></div>
   <p class="toc-lbl">Contents</p>
   <div class="toc-grid" id="toc-grid"></div>
@@ -840,6 +933,10 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     g('st-p').textContent=PARTS.length;
     g('st-s').textContent=tot;
     g('st-r').textContent=pct+'%';
+    // Sync stats banner
+    if(g('sb-parts')) g('sb-parts').textContent=PARTS.length;
+    if(g('sb-sections')) g('sb-sections').textContent=tot;
+    if(g('sb-read')) g('sb-read').textContent=pct+'%';
   }
 
   function nav(v){
@@ -1500,6 +1597,92 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 })();
 
 })();
+
+// ── Particle system (hero canvas)
+(function(){
+  var canvas = document.getElementById('hero-canvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var w = 0, h = 0, animId = null;
+
+  function resize(){
+    var hero = document.querySelector('.hero');
+    if(!hero) return;
+    w = canvas.width = hero.offsetWidth;
+    h = canvas.height = hero.offsetHeight;
+  }
+
+  function getAlphaBase(){
+    return document.documentElement.getAttribute('data-theme')==='dark' ? '212,167,71,' : '139,107,35,';
+  }
+
+  function makeParticle(){
+    return {
+      x: Math.random()*w, y: Math.random()*h,
+      size: Math.random()*1.6+0.3,
+      vx: (Math.random()-0.5)*0.22,
+      vy: (Math.random()-0.5)*0.22,
+      alpha: Math.random()*0.35+0.08
+    };
+  }
+
+  function init(){
+    resize();
+    particles = [];
+    var n = Math.min(Math.floor(w/11), 85);
+    for(var i=0;i<n;i++) particles.push(makeParticle());
+  }
+
+  function frame(){
+    ctx.clearRect(0,0,w,h);
+    var c = getAlphaBase();
+    for(var i=0;i<particles.length;i++){
+      var p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0)p.x=w; if(p.x>w)p.x=0;
+      if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+      ctx.fillStyle='rgba('+c+p.alpha+')';
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.fill();
+    }
+    animId = requestAnimationFrame(frame);
+  }
+
+  // Pause when not on home view to save CPU
+  var homeView = document.getElementById('home-view');
+  if(homeView){
+    var obs = new MutationObserver(function(){
+      if(homeView.classList.contains('on')){
+        if(!animId){init();frame();}
+      } else {
+        if(animId){cancelAnimationFrame(animId);animId=null;}
+      }
+    });
+    obs.observe(homeView,{attributes:true,attributeFilter:['class']});
+  }
+
+  window.addEventListener('resize',function(){ if(animId){init();} });
+  init(); frame();
+})();
+
+// ── Parallax on hero scroll
+(function(){
+  var homeView = document.getElementById('home-view');
+  var heroContent = document.querySelector('.hero-content');
+  var heroCanvas = document.getElementById('hero-canvas');
+  if(!homeView||!heroContent) return;
+  homeView.addEventListener('scroll',function(){
+    var sy = homeView.scrollTop;
+    var hero = document.querySelector('.hero');
+    if(hero && sy < hero.offsetHeight){
+      heroContent.style.transform='translateY('+(sy*0.28)+'px)';
+      if(heroCanvas) heroCanvas.style.transform='translateY('+(sy*0.12)+'px)';
+    }
+  });
+})();
+
 
 </script>
 </body>
