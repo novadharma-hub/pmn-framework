@@ -13,19 +13,127 @@
 
 /* ── Variables ── */
 :root {
-  --bg:#faf7f2; --bg2:#f3ede3; --bg3:#ece5d8;
-  --sb:#f3ede3; --ink:#2d2926; --ink2:#3d3530;
-  --acc:#7a5c1e; --acc2:#9a7030; --mute:#7a6a58; --mute2:#9a8a78; --mute3:#b0a090;
-  --rule:#d8cfc4; --rule2:#ccc4b8;
-  --hdr:#faf7f2;
+  /* LIGHT: Deep Vintage Archive / Cottage Bookstore */
+  --bg:#efe6d5; --bg2:#e3d5be; --bg3:#d8c9ae;
+  --sb:#e3d5be; --ink:#362417; --ink2:#7a6352;
+  --acc:#ad341e; --acc2:#8a2a19; --mute:#948270; --mute2:#7a6a58; --mute3:#b0a090;
+  --rule:#cfbda9; --rule2:#c4b09a;
+  --hdr:#efe6d5;
+  --code-bg:#dfceb5;
+  --f-head:'Libre Baskerville',serif;
+  --f-body:'Lora',serif;
+  --f-mono:'Source Code Pro',monospace;
+  /* noise / vignette */
+  --noise-op:0.10;
+  --noise-blend:color-burn;
+  --vignette:inset 0 0 200px rgba(100,60,30,0.07);
 }
 [data-theme=dark] {
-  --bg:#1a1714; --bg2:#201d19; --bg3:#252119;
-  --sb:#1e1b17; --ink:#e8e0d4; --ink2:#d0c8bc;
-  --acc:#c9a050; --acc2:#d4a850; --mute:#8a7a68; --mute2:#6a5a48; --mute3:#504540;
-  --rule:#2e2a26; --rule2:#3a3530;
-  --hdr:#1a1714;
+  --bg:#0a0a0a; --bg2:#121212; --bg3:#1a1a1a;
+  --sb:#111111; --ink:#f0ebe1; --ink2:#a39c94;
+  --acc:#b91c1c; --acc2:#8b1515; --mute:#7a7068; --mute2:#5a5248; --mute3:#3a3530;
+  --rule:#2a2522; --rule2:#342e2a;
+  --hdr:#0a0a0a;
+  --code-bg:#161616;
+  --noise-op:0.05;
+  --noise-blend:screen;
+  --vignette:inset 0 0 250px rgba(0,0,0,0.85);
 }
+
+/* ── GLOBAL DECORATIVE OVERLAYS (v84) ── */
+.vignette-overlay {
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  pointer-events:none;z-index:9996;
+  box-shadow:var(--vignette);
+}
+body::before {
+  content:"";position:fixed;top:0;left:0;width:100vw;height:100vh;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:var(--noise-op);mix-blend-mode:var(--noise-blend);
+  pointer-events:none;z-index:9999;
+}
+.grid-overlay {
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  background-image:linear-gradient(var(--rule) 1px,transparent 1px),linear-gradient(90deg,var(--rule) 1px,transparent 1px);
+  background-size:40px 40px;opacity:0.06;pointer-events:none;z-index:0;
+}
+[data-theme=dark] .grid-overlay{opacity:0.07}
+.screen-frame {
+  position:fixed;top:14px;left:14px;right:14px;bottom:14px;
+  border:1px solid var(--rule);pointer-events:none;z-index:9997;opacity:0.35;
+}
+.screen-frame::before,.screen-frame::after{
+  content:'+';position:absolute;font-family:var(--f-mono);color:var(--acc);font-size:1.4rem;line-height:1;
+}
+.screen-frame::before{top:-13px;left:-7px}
+.screen-frame::after{bottom:-11px;right:-7px}
+
+/* ── Particle canvas ── */
+#particle-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1}
+
+/* ── Marquee ticker (home) ── */
+.marquee-wrap{background:var(--acc);color:var(--bg);font-family:var(--f-mono);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;padding:.7rem 0;overflow:hidden;border-bottom:1px solid var(--rule);white-space:nowrap;display:flex}
+[data-theme=dark] .marquee-wrap{color:#000}
+.marquee-track{display:inline-block;animation:pmn-marquee 28s linear infinite;padding-left:100%}
+.marquee-txt{margin-right:2.5rem}
+@keyframes pmn-marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
+/* ── Anatomy Terminal section (home) ── */
+.anatomy-section{padding:3rem 2.5rem 4rem;max-width:1000px;margin:0 auto;position:relative;z-index:2}
+.anatomy-section-hdr{margin-bottom:2rem;border-bottom:1px solid var(--rule);padding-bottom:.8rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:.5rem}
+.anatomy-section-hdr h2{font-family:var(--f-head);font-size:1.6rem;text-transform:uppercase;letter-spacing:.02em;color:var(--ink)}
+.anatomy-section-hdr span{font-family:var(--f-mono);color:var(--acc);font-weight:700;text-transform:uppercase;font-size:.7rem;letter-spacing:.1em}
+.anatomy-terminal{display:flex;border:1px solid var(--rule);background:var(--bg2);height:360px;box-shadow:6px 6px 0 var(--rule)}
+[data-theme=dark] .anatomy-terminal{background:#0a0a0a;box-shadow:6px 6px 0 #000}
+.anatomy-sidebar{width:33%;border-right:1px solid var(--rule);display:flex;flex-direction:column;overflow-y:auto;background:var(--bg)}
+[data-theme=dark] .anatomy-sidebar{background:#111}
+.anatomy-sidebar::-webkit-scrollbar{width:4px}
+.anatomy-sidebar::-webkit-scrollbar-thumb{background:var(--rule)}
+.anatomy-tab{background:transparent;border:none;border-bottom:1px solid var(--rule);padding:1rem 1.2rem;text-align:left;font-family:var(--f-mono);font-weight:700;font-size:.78rem;color:var(--mute);cursor:pointer;transition:all .18s;text-transform:uppercase;letter-spacing:.04em;display:flex;justify-content:space-between;align-items:center}
+.anatomy-tab::after{content:'→';opacity:0;transition:opacity .18s,transform .18s}
+.anatomy-tab:hover{background:var(--ink);color:var(--bg)}
+.anatomy-tab:hover::after{opacity:1;transform:translateX(4px)}
+.anatomy-tab.on{background:var(--acc);color:var(--bg);border-bottom-color:var(--acc)}
+.anatomy-tab.on::after{opacity:1;content:'■';transform:none}
+[data-theme=dark] .anatomy-tab.on{color:#000}
+.anatomy-content{width:67%;padding:2rem 2.5rem;overflow-y:auto}
+.anatomy-content::-webkit-scrollbar{width:4px}
+.anatomy-content::-webkit-scrollbar-thumb{background:var(--acc)}
+.anatomy-panel{display:none;animation:fi .25s ease forwards}
+.anatomy-panel.on{display:block}
+.anatomy-panel .ap-badge{font-family:var(--f-mono);font-size:1.2rem;font-weight:700;color:var(--bg);background:var(--ink);display:inline-block;padding:.1rem .9rem;margin-bottom:1.2rem}
+[data-theme=dark] .anatomy-panel .ap-badge{background:var(--rule);color:var(--ink)}
+.anatomy-panel h3{font-family:var(--f-head);font-size:1.6rem;margin-bottom:1rem;text-transform:uppercase;line-height:1.2;color:var(--ink)}
+[data-theme=dark] .anatomy-panel h3{color:var(--acc)}
+.anatomy-panel p{font-size:.95rem;line-height:1.7;color:var(--ink2)}
+.btn-anatomy-more{margin-top:1.2rem;background:transparent;border:1px solid var(--acc);color:var(--acc);font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:.5rem 1rem;cursor:pointer;transition:all .18s}
+.btn-anatomy-more:hover{background:var(--acc);color:var(--bg)}
+
+/* ── Home AI module ── */
+.home-ai-section{background:var(--ink);color:var(--bg);padding:3rem 2.5rem;position:relative;z-index:2}
+[data-theme=dark] .home-ai-section{background:#050505;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);color:var(--ink)}
+.home-ai-inner{max-width:1000px;margin:0 auto}
+.home-ai-hdr{font-family:var(--f-mono);color:var(--acc);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.2rem;font-weight:700;font-size:.8rem;display:flex;align-items:center;gap:.8rem}
+.home-ai-hdr::before{content:'■';animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.home-ai-desc{margin-bottom:1.5rem;opacity:.9;font-size:.95rem;font-family:var(--f-body)}
+[data-theme=dark] .home-ai-desc{color:var(--ink);opacity:.8}
+.home-ai-row{display:flex;gap:.8rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.home-ai-select{background:var(--bg);color:var(--ink);border:1px solid var(--acc);padding:.7rem .9rem;font-family:var(--f-mono);font-weight:700;text-transform:uppercase;outline:none;cursor:pointer;font-size:.75rem;min-width:220px}
+[data-theme=dark] .home-ai-select{background:#000;color:var(--acc);border-color:var(--rule)}
+.home-ai-input{flex-grow:1;background:transparent;border:1px solid var(--rule);color:var(--bg);padding:.7rem 1.1rem;font-family:var(--f-mono);font-size:.85rem;outline:none;transition:border-color .18s}
+[data-theme=dark] .home-ai-input{color:var(--ink);border-color:var(--rule)}
+.home-ai-input:focus{border-color:var(--acc)}
+.home-ai-input::placeholder{color:rgba(255,255,255,.35)}
+[data-theme=dark] .home-ai-input::placeholder{color:var(--mute)}
+.home-ai-btn{background:var(--acc);color:var(--bg);border:1px solid var(--acc);font-family:var(--f-mono);font-weight:700;text-transform:uppercase;padding:.7rem 1.5rem;cursor:pointer;transition:all .18s;white-space:nowrap;font-size:.75rem}
+[data-theme=dark] .home-ai-btn{color:#000}
+.home-ai-btn:hover{background:transparent;color:var(--acc)}
+.home-ai-btn:disabled{background:var(--mute);border-color:var(--mute);cursor:not-allowed;color:#000}
+.home-ai-terminal{background:var(--code-bg);border:1px solid var(--rule);padding:1.5rem;min-height:120px;font-family:var(--f-mono);font-size:.85rem;line-height:1.6;color:var(--ink);white-space:pre-wrap}
+[data-theme=dark] .home-ai-terminal{background:#000;border-color:var(--acc);color:#e05555;box-shadow:inset 0 0 15px rgba(185,28,28,.12)}
+.home-ai-placeholder{color:var(--mute);font-style:italic}
+[data-theme=dark] .home-ai-terminal .home-ai-placeholder{color:var(--acc);opacity:.7}
 
 /* ── Reset ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -66,6 +174,9 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 #home-view > .toc-lbl{padding-top:0;max-width:1000px}
 #home-view > .hero-suggestions{padding-top:0}
 #home-view > #toc-grid{padding-bottom:2rem;max-width:1000px}
+#home-view > .marquee-wrap{max-width:none;margin-left:0;margin-right:0;padding-left:0;padding-right:0}
+#home-view > .anatomy-section{max-width:1000px}
+#home-view > .home-ai-section{max-width:none;margin-left:0;margin-right:0}
 
 /* ── Hero ── */
 .hero{text-align:center;padding-bottom:3rem;margin-bottom:0}
@@ -303,6 +414,15 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .toc-prog{margin-top:.6rem;padding-top:.5rem}
   #home-view #quote-strip{padding-top:1rem;padding-bottom:2rem}
   #quote-body{font-size:.85rem}
+  /* v84 mobile */
+  .anatomy-terminal{flex-direction:column;height:auto}
+  .anatomy-sidebar{width:100%;border-right:none;border-bottom:1px solid var(--rule);height:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden;flex-shrink:0}
+  .anatomy-tab{border-bottom:none;border-right:1px solid var(--rule);white-space:nowrap;flex-shrink:0}
+  .anatomy-content{width:100%;padding:1.5rem;max-height:280px}
+  .anatomy-section{padding:2rem 1.4rem 3rem}
+  .home-ai-section{padding:2rem 1.4rem}
+  .home-ai-row{flex-direction:column}
+  .home-ai-select,.home-ai-input,.home-ai-btn{width:100%}
   #reader-view.on{flex-direction:column;height:auto;overflow:visible}
   #reader-main{width:100%;height:auto;overflow:visible}
   #reader-col{padding:1.4rem 1.4rem 5rem;max-width:none}
@@ -568,6 +688,12 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 <script id="d-rel" type="application/json">{"how-to-read":["11.4","15.13","11.0","12.7","10.7","17.5","4.2","7.3"],"1.3":["1.1","1.2"],"1.5":["1.2"],"1.7":["1.12","12.7","1.8","1.10","1.11","1.9","17.6"],"1.8":["8.4c"],"1.9":["11.0"],"1.10":["1.7","7.3","1.9","10.7"],"1.11":["6.6","4.3","10.7"],"1.12":["3.4c","8.4c"],"2.3":["1.9"],"2.4":["2.2","3.8","3.1","2.1"],"3.0":["4.5","4.1","2.5","3.3","4.3","2.4"],"3.2":["3.3","4.2","3.0"],"3.4b":["3.4c","5.6","4.5","7.3","10.6","3.5","15.3","3.4"],"3.4c":["3.4b"],"3.4d":["3.4c","3.5","3.4b","3.1","4.3"],"3.5":["15.14","15.4","15.3"],"3.8":["3.7","1.10"],"3.8b":["10.5b","8.4","3.8","10.7"],"3.10":["11.2"],"3.12":["10.5","3.7","3.6"],"4.1":["4.5"],"4.2":["3.4c"],"4.3":["5.5","10.6"],"4.5":["1.12","8.4c","5.5"],"4.5b":["3.4c","4.5","3.5","3.4b","3.3"],"5.3":["3.3"],"5.5":["5.6","4.5","8.4","3.4b"],"5.6":["4.5"],"6.1":["8.4"],"6.2":["7.3"],"6.4":["1.7","1.10"],"6.5":["7.3"],"6.6":["15.12","15.7"],"6.7":["8.4","6.6","8.4b","7.3"],"6.8":["10.5b","6.6","1.10"],"7.0":["7.3"],"7.1":["7.4","7.2","7.3b","7.3"],"7.2":["6.4","7.3"],"7.3b":["6.5","7.3","6.6"],"7.3c":["1.6b","7.3b","7.3"],"7.4":["10.6"],"7.5":["1.1","6.4","1.2"],"7.6":["10.9","17.5a"],"7.7":["10.5"],"8.1":["13.4h","8.5"],"8.3":["1.2"],"8.4b":["4.5","8.4"],"8.4c":["3.4c","8.4","3.4b"],"8.5":["5.6","5.5","3.4b","3.4","4.3"],"8.6":["8.5"],"9.0b":["9.0","9.1"],"9.2":["7.5","7.3"],"9.2b":["16.0","9.2c"],"9.2c":["9.1"],"9.4":["9.3","9.0"],"10.1":["15.4","10.4","15.3"],"10.3":["7.3c"],"10.4":["10.5"],"10.5":["10.5b","6.6"],"10.5b":["10.5"],"10.6":["11.2","4.3"],"10.7":["10.7b","10.6","1.2"],"10.7a":["5.4","4.5","5.6","10.9","10.6","10.5","10.10","11.2"],"10.7b":["5.6","1.12","4.5","7.3","10.9","12.1","7.3c","5.5"],"10.9":["10.5b","15.14","15.8","3.8b","6.6","15.11"],"10.10c":["10.10","10.10b"],"10.10c-i":["7.3"],"10.10c-ii":["10.14"],"10.10c-iii":["10.5b","10.9","10.14","1.8","10.10b","1.6b","10.10c","10.10"],"10.14":["17.5b"],"11.0":["10.4","3.10"],"11.0b":["7.3c","11.0","7.3b"],"11.1":["12.7","11.0"],"11.2":["2.2"],"11.3b":["10.5","11.0"],"11.4":["11.0"],"12.1":["12.5","1.5"],"12.2":["12.1"],"12.3":["11.4","11.0","1.5"],"12.5":["13.1c"],"12.6":["12.1","12.5"],"12.7":["15.14","1.9","12.6"],"13.1b":["13.2"],"13.2b":["13.2"],"13.4":["3.4c"],"13.4c":["3.4d"],"13.4d":["4.5","8.2","5.5","10.7","4.3"],"13.4e":["5.6","1.12","8.4c"],"13.4f":["10.6"],"13.4g":["5.6","1.12"],"13.4h":["13.4d"],"13.5":["13.4"],"14.1":["2.4","2.5"],"14.2":["7.3b"],"14.3":["3.4c","13.4c"],"15.0":["15.13"],"15.2":["15.14"],"15.3":["3.4b"],"15.6":["15.4"],"15.7":["6.6"],"15.9":["15.8"],"15.10":["7.3c"],"15.12":["3.1","3.3","6.6","6.4"],"15.14":["15.10"],"16.2":["16.1","1.11"],"16.3":["3.4d"],"16.4":["13.4d","4.3","5.5"],"17.0":["17.5","17.6"],"17.1":["1.2"],"17.2":["7.3c","7.3","10.12"],"17.3":["7.3"],"17.4":["7.3"],"17.5b":["13.1c"],"17.5c":["5.6"],"17.6":["17.5d"],"coda":["17.5"]}</script>
 <script id="d-ci" type="application/json">{"11.4":["how-to-read","12.3"],"15.13":["how-to-read","15.0"],"11.0":["how-to-read","1.9","11.0b","11.1","11.3b","11.4","12.3"],"12.7":["how-to-read","1.7","11.1"],"10.7":["how-to-read","1.10","1.11","3.8b","13.4d"],"17.5":["how-to-read","17.0","coda"],"4.2":["how-to-read","3.2"],"7.3":["how-to-read","1.10","3.4b","6.2","6.5","6.7","7.0","7.1","7.2","7.3b","7.3c","9.2","10.7b","10.10c-i","17.2","17.3","17.4"],"1.1":["1.3","7.5"],"1.2":["1.3","1.5","7.5","8.3","10.7","17.1"],"1.12":["1.7","4.5","10.7b","13.4e","13.4g"],"1.8":["1.7","10.10c-iii"],"1.10":["1.7","3.8","6.4","6.8"],"1.11":["1.7","16.2"],"1.9":["1.7","1.10","2.3","12.7"],"17.6":["1.7","17.0"],"8.4c":["1.8","1.12","4.5","13.4e"],"1.7":["1.10","6.4"],"6.6":["1.11","6.7","6.8","7.3b","10.5","10.9","15.7","15.12"],"4.3":["1.11","3.0","3.4d","8.5","10.6","13.4d","16.4"],"3.4c":["1.12","3.4b","3.4d","4.2","4.5b","8.4c","13.4","14.3"],"2.2":["2.4","11.2"],"3.8":["2.4","3.8b"],"3.1":["2.4","3.4d","15.12"],"2.1":["2.4"],"4.5":["3.0","3.4b","4.1","4.5b","5.5","5.6","8.4b","10.7a","10.7b","13.4d"],"4.1":["3.0"],"2.5":["3.0","14.1"],"3.3":["3.0","3.2","4.5b","5.3","15.12"],"2.4":["3.0","14.1"],"3.0":["3.2"],"5.6":["3.4b","5.5","8.5","10.7a","10.7b","13.4e","13.4g","17.5c"],"10.6":["3.4b","4.3","7.4","10.7","10.7a","13.4f"],"3.5":["3.4b","3.4d","4.5b"],"15.3":["3.4b","3.5","10.1"],"3.4":["3.4b","8.5"],"3.4b":["3.4c","3.4d","4.5b","5.5","8.4c","8.5","15.3"],"15.14":["3.5","10.9","12.7","15.2"],"15.4":["3.5","10.1","15.6"],"3.7":["3.8","3.12"],"10.5b":["3.8b","6.8","10.5","10.9","10.10c-iii"],"8.4":["3.8b","5.5","6.1","6.7","8.4b","8.4c"],"11.2":["3.10","10.6","10.7a"],"10.5":["3.12","7.7","10.4","10.5b","10.7a","11.3b"],"3.6":["3.12"],"5.5":["4.3","4.5","8.5","10.7b","13.4d","16.4"],"15.12":["6.6"],"15.7":["6.6"],"8.4b":["6.7"],"7.4":["7.1"],"7.2":["7.1"],"7.3b":["7.1","7.3c","11.0b","14.2"],"6.4":["7.2","7.5","15.12"],"6.5":["7.3b"],"1.6b":["7.3c","10.10c-iii"],"10.9":["7.6","10.7a","10.7b","10.10c-iii"],"17.5a":["7.6"],"13.4h":["8.1"],"8.5":["8.1","8.6"],"9.0":["9.0b","9.4"],"9.1":["9.0b","9.2c"],"7.5":["9.2"],"16.0":["9.2b"],"9.2c":["9.2b"],"9.3":["9.4"],"10.4":["10.1","11.0"],"7.3c":["10.3","10.7b","11.0b","15.10","17.2"],"10.7b":["10.7"],"5.4":["10.7a"],"10.10":["10.7a","10.10c","10.10c-iii"],"12.1":["10.7b","12.2","12.6"],"15.8":["10.9","15.9"],"3.8b":["10.9"],"15.11":["10.9"],"10.10b":["10.10c","10.10c-iii"],"10.14":["10.10c-ii","10.10c-iii"],"10.10c":["10.10c-iii"],"17.5b":["10.14"],"3.10":["11.0"],"12.5":["12.1","12.6"],"1.5":["12.1","12.3"],"13.1c":["12.5","17.5b"],"12.6":["12.7"],"13.2":["13.1b","13.2b"],"3.4d":["13.4c","16.3"],"8.2":["13.4d"],"13.4d":["13.4h","16.4"],"13.4":["13.5"],"13.4c":["14.3"],"15.10":["15.14"],"16.1":["16.2"],"10.12":["17.2"],"17.5d":["17.6"]}</script>
 <script id="d-look" type="application/json">{"preface":{"pi":0,"si":0,"title":"Preface","pt":"Preface"},"how-to-read":{"pi":0,"si":1,"title":"How to Read This Document","pt":"Preface"},"1.1":{"pi":1,"si":0,"title":"The Prior Question","pt":"I"},"1.2":{"pi":1,"si":1,"title":"The Primary Diagnostic","pt":"I"},"1.3":{"pi":1,"si":2,"title":"Probabilistic Determinism","pt":"I"},"1.4":{"pi":1,"si":3,"title":"Convergence Under Material Pressure","pt":"I"},"1.5":{"pi":1,"si":4,"title":"Inaction and Its Costs","pt":"I"},"1.6":{"pi":1,"si":5,"title":"Truth, Communication, and the Management Problem","pt":"I"},"1.6b":{"pi":1,"si":6,"title":"Belief and Doubt: The Productive Equilibrium","pt":"I"},"1.7":{"pi":1,"si":7,"title":"Knowledge Production as a Material Process","pt":"I"},"1.8":{"pi":1,"si":8,"title":"The Social Architecture of What Can Be Known","pt":"I"},"1.9":{"pi":1,"si":9,"title":"Epistemic Authority: How Claims Acquire Social Standing","pt":"I"},"1.10":{"pi":1,"si":10,"title":"Information Asymmetry as Structural Power","pt":"I"},"1.11":{"pi":1,"si":11,"title":"Trust Infrastructure and Its Collapse","pt":"I"},"1.12":{"pi":1,"si":12,"title":"Epistemic Infrastructure and the Visibility Variable","pt":"I"},"2.1":{"pi":2,"si":0,"title":"Reality as Primary","pt":"II"},"2.2":{"pi":2,"si":1,"title":"Adaptive Materialism","pt":"II"},"2.3":{"pi":2,"si":2,"title":"On Necessary Being","pt":"II"},"2.4":{"pi":2,"si":3,"title":"Social Ontology: The Reality of Emergent Structures","pt":"II"},"2.5":{"pi":2,"si":4,"title":"Against Reductionism and Against Idealism: The Middle Position","pt":"II"},"3.0":{"pi":3,"si":0,"title":"The Normative Status of Biological Constraints: Conditional, Not Derived","pt":"III"},"3.1":{"pi":3,"si":1,"title":"The Displacement That Matters","pt":"III"},"3.2":{"pi":3,"si":2,"title":"The Starting Point: Descriptive, Not Normative","pt":"III"},"3.3":{"pi":3,"si":3,"title":"From Description to Evaluation: The Is-Ought Bridge","pt":"III"},"3.4":{"pi":3,"si":4,"title":"The Minimal Anchor","pt":"III"},"3.4b":{"pi":3,"si":5,"title":"A Typology of Suffering","pt":"III"},"3.4c":{"pi":3,"si":6,"title":"The Dispositional Harm Prevention Problem: Institutional Design for Risk Before Action","pt":"III"},"3.4d":{"pi":3,"si":7,"title":"The Biological Foundation Under Technological Pressure: Augmentation, Transition, and the Post-Biological Horizon","pt":"III"},"3.4e":{"pi":3,"si":8,"title":"Suffering Comparison Under Trade-off Conditions","pt":"III"},"3.5":{"pi":3,"si":9,"title":"Suffering as a System-Level Variable","pt":"III"},"3.6":{"pi":3,"si":10,"title":"The Arc from Physiology to Institution","pt":"III"},"3.7":{"pi":3,"si":11,"title":"The Causal Chain: From Self-Interest to Collective Structure","pt":"III"},"3.8":{"pi":3,"si":12,"title":"Cognitive Constraints and Institutional Limits","pt":"III"},"3.8b":{"pi":3,"si":13,"title":"Affective Mobilization and the Politics of Collective Emotion","pt":"III"},"3.8c":{"pi":3,"si":14,"title":"Stable Irrationality as a Structural Variable","pt":"III"},"3.9":{"pi":3,"si":15,"title":"Demographic Dynamics as Material Variables","pt":"III"},"3.10":{"pi":3,"si":16,"title":"Ecological Constraints: The Ground Beneath All Systems","pt":"III"},"3.11":{"pi":3,"si":17,"title":"Illustrative Cases: The Chain in Operation","pt":"III"},"3.12":{"pi":3,"si":18,"title":"Rational Micro, Problematic Macro","pt":"III"},"4.1":{"pi":4,"si":0,"title":"The Foundation of Value","pt":"IV"},"4.2":{"pi":4,"si":1,"title":"Better and Worse","pt":"IV"},"4.3":{"pi":4,"si":2,"title":"On Progress","pt":"IV"},"4.4":{"pi":4,"si":3,"title":"On Manipulation, Trust, and Structural Checks","pt":"IV"},"4.5":{"pi":4,"si":4,"title":"Beyond the Minimal Anchor: Toward Genuine Becoming","pt":"IV"},"4.5b":{"pi":4,"si":5,"title":"The Primacy of Becoming: Why Suffering Is a Derivative Variable","pt":"IV"},"4.5c":{"pi":4,"si":6,"title":"The Procedural Account of Becoming","pt":"IV"},"5.1":{"pi":5,"si":0,"title":"What the Materialist Tradition Got Wrong About Religion","pt":"V"},"5.2":{"pi":5,"si":1,"title":"Two Levels of the Same Question","pt":"V"},"5.3":{"pi":5,"si":2,"title":"Interface-Emergent Phenomena","pt":"V"},"5.4":{"pi":5,"si":3,"title":"The Evaluative Standard for Metaphysical Claims","pt":"V"},"5.5":{"pi":5,"si":4,"title":"Religion as Material Variable","pt":"V"},"5.6":{"pi":5,"si":5,"title":"Meaning as Material Condition","pt":"V"},"5.6b":{"pi":5,"si":6,"title":"Measuring Meaning Infrastructure","pt":"V"},"5.6c":{"pi":5,"si":7,"title":"Operationalizing Meaning Infrastructure","pt":"V"},"5.7":{"pi":5,"si":8,"title":"Christian Political Theology: Augustine, Aquinas, and Catholic Social Teaching","pt":"V"},"5.8":{"pi":5,"si":9,"title":"Al-Farabi and the Islamic Political Philosophy Tradition","pt":"V"},"6.1":{"pi":6,"si":0,"title":"Why Power Must Be Named","pt":"VI"},"6.2":{"pi":6,"si":1,"title":"Power as Structural Position","pt":"VI"},"6.3":{"pi":6,"si":2,"title":"Asymmetry, Capture, and Information","pt":"VI"},"6.4":{"pi":6,"si":3,"title":"The Anti-Technocratic Guardrail","pt":"VI"},"6.5":{"pi":6,"si":4,"title":"How Institutions Preserve Themselves","pt":"VI"},"6.6":{"pi":6,"si":5,"title":"Legitimacy Crisis: When Systems Lose the Consent That Sustains Them","pt":"VI"},"6.7":{"pi":6,"si":6,"title":"Legitimacy Production: How Systems Build Consent","pt":"VI"},"6.8":{"pi":6,"si":7,"title":"Elite Circulation and Structural Continuity","pt":"VI"},"7.0":{"pi":7,"si":0,"title":"What We Mean by System","pt":"VII"},"7.0b":{"pi":7,"si":1,"title":"Levels of Analysis","pt":"VII"},"7.0c":{"pi":7,"si":2,"title":"Scale as a Structural Variable","pt":"VII"},"7.1":{"pi":7,"si":3,"title":"The State Problem","pt":"VII"},"7.2":{"pi":7,"si":4,"title":"Progressive Institutionalism","pt":"VII"},"7.3":{"pi":7,"si":5,"title":"The Custodian Problem","pt":"VII"},"7.3b":{"pi":7,"si":6,"title":"Early Detection of Institutional Capture","pt":"VII"},"7.3c":{"pi":7,"si":7,"title":"Incentive Architecture and Predictable Institutional Failure","pt":"VII"},"7.3d":{"pi":7,"si":8,"title":"Institutionalizing Anti-Capture","pt":"VII"},"7.4":{"pi":7,"si":9,"title":"The State and Long-Term Direction","pt":"VII"},"7.5":{"pi":7,"si":10,"title":"Noble Lie: Fictions That Serve Power","pt":"VII"},"7.6":{"pi":7,"si":11,"title":"Those Who Stand on Others: The Structural Analysis","pt":"VII"},"7.7":{"pi":7,"si":12,"title":"Path Dependence: Why History Constrains the Present","pt":"VII"},"7.8":{"pi":7,"si":13,"title":"Regime Types: A Comparative Diagnostic","pt":"VII"},"8.1":{"pi":8,"si":0,"title":"Evaluating Cultural Practices","pt":"VIII"},"8.2":{"pi":8,"si":1,"title":"Marginalized Groups and the Material Frame","pt":"VIII"},"8.2b":{"pi":8,"si":2,"title":"Intersectional Analysis as Methodological Procedure","pt":"VIII"},"8.3":{"pi":8,"si":3,"title":"The Consistency Standard","pt":"VIII"},"8.4":{"pi":8,"si":4,"title":"Governing Narrative as Material Force: The Social Construction of Reality","pt":"VIII"},"8.4b":{"pi":8,"si":5,"title":"Narrative Typology: How Governing Narratives Structure Political Time","pt":"VIII"},"8.4c":{"pi":8,"si":6,"title":"Meritocracy as Visibility Suppression","pt":"VIII"},"8.5":{"pi":8,"si":7,"title":"Anti-Naïve Universalism: What the Universal Standard Actually Requires","pt":"VIII"},"8.6":{"pi":8,"si":8,"title":"Anti-Passive Multiculturalism: The Consistency Standard Applied","pt":"VIII"},"8.7":{"pi":8,"si":9,"title":"Education as Structural Variable","pt":"VIII"},"9.0":{"pi":9,"si":0,"title":"The Material Basis of International Order","pt":"IX"},"9.0b":{"pi":9,"si":1,"title":"The Historical Divergence: How the Distribution Was Produced","pt":"IX"},"9.1":{"pi":9,"si":2,"title":"Realism and Direction","pt":"IX"},"9.2":{"pi":9,"si":3,"title":"On Power Concentration","pt":"IX"},"9.2b":{"pi":9,"si":4,"title":"Technology as Redistributor of Material Power","pt":"IX"},"9.2c":{"pi":9,"si":5,"title":"Artificial Intelligence and the New Architecture of Institutional Power","pt":"IX"},"9.3":{"pi":9,"si":6,"title":"Multipolarity as Transitional Arrangement","pt":"IX"},"9.4":{"pi":9,"si":7,"title":"The Parallel Development Framework","pt":"IX"},"9.5":{"pi":9,"si":8,"title":"Ecological Debt and Climate Justice","pt":"IX"},"10.1":{"pi":10,"si":0,"title":"Why Systems Change","pt":"X"},"10.2":{"pi":10,"si":1,"title":"Suffering as the Signal of System Stress","pt":"X"},"10.3":{"pi":10,"si":2,"title":"Technology and System Transition","pt":"X"},"10.4":{"pi":10,"si":3,"title":"Adaptation, Not Optimization","pt":"X"},"10.5":{"pi":10,"si":4,"title":"Thresholds and Non-Linearity","pt":"X"},"10.5b":{"pi":10,"si":5,"title":"Political Time: Windows, Conjunctures, and the Materiality of Timing","pt":"X"},"10.6":{"pi":10,"si":6,"title":"Reform, Revolution, and the Sequencing Problem","pt":"X"},"10.7":{"pi":10,"si":7,"title":"PMN and the Political Traditions: A Diagnostic Engagement","pt":"X"},"10.7b":{"pi":10,"si":8,"title":"Gramsci: Hegemony, Biological Floor, and the Level Relation","pt":"X"},"10.7c":{"pi":10,"si":9,"title":"Where PMN Is Architecturally More Advanced: Seven Dimensions","pt":"X"},"10.7d":{"pi":10,"si":10,"title":"PMN and the Right-Wing Intellectual Traditions","pt":"X"},"10.8":{"pi":10,"si":11,"title":"The Organizational Form Problem","pt":"X"},"10.9":{"pi":10,"si":12,"title":"How Counter-Power Accumulates","pt":"X"},"10.10":{"pi":10,"si":13,"title":"The Two Modes of Struggle","pt":"X"},"10.10b":{"pi":10,"si":14,"title":"Performative Hostility and Coordination Behind the Surface","pt":"X"},"10.10c":{"pi":10,"si":15,"title":"The Extended Agent Typology: Beyond the Hero-Vigilante Binary","pt":"X"},"10.11":{"pi":10,"si":16,"title":"Gradations Within the Ecosystem","pt":"X"},"10.12":{"pi":10,"si":17,"title":"Drift Mechanisms: How Actors Shift","pt":"X"},"10.13":{"pi":10,"si":18,"title":"Legitimacy as Function, Not Status","pt":"X"},"10.14":{"pi":10,"si":19,"title":"Who Watches the Watchers","pt":"X"},"10.15":{"pi":10,"si":20,"title":"Micro-Politics and Structural Transformation","pt":"X"},"11.0":{"pi":11,"si":0,"title":"Two Levels of Economic Analysis","pt":"XI"},"11.0b":{"pi":11,"si":1,"title":"Incentive Structures in Economic Arrangements","pt":"XI"},"11.1":{"pi":11,"si":2,"title":"Economics Without Prior Commitments","pt":"XI"},"11.2":{"pi":11,"si":3,"title":"The Permanent Conditions and Economic Doctrine","pt":"XI"},"11.3":{"pi":11,"si":4,"title":"Horizon and Instrument","pt":"XI"},"11.3b":{"pi":11,"si":5,"title":"Contemporary Capitalism as Terrain for the Seven Diagnostics","pt":"XI"},"11.4":{"pi":11,"si":6,"title":"What Doctrine Looks Like: A Contrastive Illustration","pt":"XI"},"11.5":{"pi":11,"si":7,"title":"Power Beyond Ownership: Expertise, Information, and Network Effects","pt":"XI"},"12.1":{"pi":12,"si":0,"title":"The Methodology of Stress-Testing","pt":"XII"},"12.2":{"pi":12,"si":1,"title":"Multi-Perspectival Analysis","pt":"XII"},"12.3":{"pi":12,"si":2,"title":"Framework and Doctrine in Practice","pt":"XII"},"12.4":{"pi":12,"si":3,"title":"The Architecture of the Framework: Parts I, II, and III in Sequence","pt":"XII"},"12.5":{"pi":12,"si":4,"title":"When This Framework Fails: Specific Failure Modes","pt":"XII"},"12.5b":{"pi":12,"si":5,"title":"Two Phrases That Foreclose Analysis: \"Essentially\" and \"Should\"","pt":"XII"},"12.5c":{"pi":12,"si":6,"title":"Engaging External Criticism: Substantive Critique vs. Misreading","pt":"XII"},"12.6":{"pi":12,"si":7,"title":"Genealogical Interrogation as Method","pt":"XII"},"12.7":{"pi":12,"si":8,"title":"The Genealogy of This Framework","pt":"XII"},"13.1":{"pi":13,"si":0,"title":"The Nature of Permanent Tension","pt":"XIII"},"13.1b":{"pi":13,"si":1,"title":"The Relationship Between Contradictions and Tensions","pt":"XIII"},"13.1c":{"pi":13,"si":2,"title":"Diagnostic: Is This a Tension or a Contradiction?","pt":"XIII"},"13.1d":{"pi":13,"si":3,"title":"When Tensions Become Contradictions: Condition-Dependent Categorical Shifts","pt":"XIII"},"13.2":{"pi":13,"si":4,"title":"The Tensions","pt":"XIII"},"13.2b":{"pi":13,"si":5,"title":"Conditional Tensions: Present Under Specific Circumstances","pt":"XIII"},"13.3":{"pi":13,"si":6,"title":"Trade-offs as Permanent Features of Complex Systems","pt":"XIII"},"13.4":{"pi":13,"si":7,"title":"Limits of This Framework","pt":"XIII"},"13.4b":{"pi":13,"si":8,"title":"The Meaning Problem of Abundance: Becoming Without Constraint","pt":"XIII"},"13.4c":{"pi":13,"si":9,"title":"The Subject Boundary at the Horizon: PMN Without a Human Subject","pt":"XIII"},"13.4d":{"pi":13,"si":10,"title":"The Strategic Equilibrium Problem: Between Preservation and Transformation","pt":"XIII"},"13.4e":{"pi":13,"si":11,"title":"The Variation-Deficit Tension: When Does Difference Become Deficiency?","pt":"XIII"},"13.4f":{"pi":13,"si":12,"title":"The Accommodation-Transformation Tension: Ramp or Redesign?","pt":"XIII"},"13.4g":{"pi":13,"si":13,"title":"The Agency-Structure Tension in Internalized Norms: The Apology Problem","pt":"XIII"},"13.4h":{"pi":13,"si":14,"title":"The Moral-Functional Tension: When Killing the Institution Kills What It Was Doing","pt":"XIII"},"13.5":{"pi":13,"si":15,"title":"Closing: The Framework That Must Be Surpassed","pt":"XIII"},"14.1":{"pi":14,"si":0,"title":"The Framework: Adaptive Naturalism","pt":"XIV"},"14.2":{"pi":14,"si":1,"title":"Current Analytical Positions: The Framework Applied","pt":"XIV"},"14.3":{"pi":14,"si":2,"title":"Argument, Assumption, and Open Question","pt":"XIV"},"14.4":{"pi":14,"si":3,"title":"What Would Surpass This Framework","pt":"XIV"},"15.0":{"pi":15,"si":0,"title":"The Input Architecture of Structural Tendency Analysis","pt":"XV"},"15.1":{"pi":15,"si":1,"title":"Complexity & Systems Dynamics: The Operator Decomposed","pt":"XV"},"15.2":{"pi":15,"si":2,"title":"The Primary Formula","pt":"XV"},"15.3":{"pi":15,"si":3,"title":"The Suffering Variable: What Feeds Transformation Pressure","pt":"XV"},"15.4":{"pi":15,"si":4,"title":"The Duration and Scale Multipliers","pt":"XV"},"15.5":{"pi":15,"si":5,"title":"The Adaptive Capacity Formula","pt":"XV"},"15.6":{"pi":15,"si":6,"title":"The Repressive Capacity Formula","pt":"XV"},"15.7":{"pi":15,"si":7,"title":"The Legitimacy Formula","pt":"XV"},"15.8":{"pi":15,"si":8,"title":"The Counter-Power Formula","pt":"XV"},"15.9":{"pi":15,"si":9,"title":"The Structural Tendency Analysis Formula","pt":"XV"},"15.10":{"pi":15,"si":10,"title":"Domain-Specific Formulas","pt":"XV"},"15.11":{"pi":15,"si":11,"title":"The Time Variable: Windows and Cycles","pt":"XV"},"15.12":{"pi":15,"si":12,"title":"Application: Reading Current Conditions","pt":"XV"},"15.13":{"pi":15,"si":13,"title":"What the Formulas Cannot Do","pt":"XV"},"15.14":{"pi":15,"si":14,"title":"Applied Cases: The Formulas in Operation","pt":"XV"},"15.15":{"pi":15,"si":15,"title":"The Compressed Core: PMN Without the Architecture","pt":"XV"},"16.0":{"pi":16,"si":0,"title":"Technology as Constraint-Modifier, Not Tool","pt":"XVI"},"16.1":{"pi":16,"si":1,"title":"The Capture Problem at Technological Leverage Points","pt":"XVI"},"16.2":{"pi":16,"si":2,"title":"Artificial Intelligence as Institutional Architecture","pt":"XVI"},"16.3":{"pi":16,"si":3,"title":"Biotechnology and the Biological Floor Under Institutional Pressure","pt":"XVI"},"16.4":{"pi":16,"si":4,"title":"Technology, Meaning Infrastructure, and the Acceleration Problem","pt":"XVI"},"16.5":{"pi":16,"si":5,"title":"Reproductive Technology and the Commodification Problem","pt":"XVI"},"17.0":{"pi":17,"si":0,"title":"Why Cases and Why the Individual","pt":"XVII"},"17.1":{"pi":17,"si":1,"title":"The Prohibition Case: When Moral Clarity Produces Structural Harm","pt":"XVII"},"17.2":{"pi":17,"si":2,"title":"The Labour Movement Case: Institutional Capture Through Incremental Drift","pt":"XVII"},"17.3":{"pi":17,"si":3,"title":"The Land Reform Case: Winning the Rule Without Changing the Relation","pt":"XVII"},"17.4":{"pi":17,"si":4,"title":"The Revolutionary Capture Case: When the Custodian Becomes What It Displaced","pt":"XVII"},"17.5":{"pi":17,"si":5,"title":"The Platform Governance Case: When Infrastructure Becomes Speech","pt":"XVII"},"17.6":{"pi":17,"si":6,"title":"The Nationalism Case: Counter-Power Vehicle or Exclusionary Mechanism?","pt":"XVII"},"17.7":{"pi":17,"si":7,"title":"PMN at the Level of the Individual: What the Framework Asks of the Person Who Holds It","pt":"XVII"},"17.8":{"pi":17,"si":8,"title":"How a Framework Travels: The Transmission Problem","pt":"XVII"},"coda":{"pi":18,"si":0,"title":"Coda","pt":"Coda"},"intellectual-debts":{"pi":19,"si":0,"title":"Intellectual Debts","pt":"Intellectual Debts"},"bibliography":{"pi":20,"si":0,"title":"Bibliography","pt":"Bibliography"}}</script>
+<!-- v84 Global Decorative Overlays -->
+<div class="vignette-overlay"></div>
+<div class="grid-overlay"></div>
+<div class="screen-frame"></div>
+<canvas id="particle-canvas"></canvas>
+
 <div class="page-shell">
 <div id="topbar"></div>
 <header id="hdr">
@@ -617,6 +743,18 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     </div>
   </div>
   <div id="suggestions" class="hero-suggestions" style="display:none"></div>
+
+  <!-- ── MARQUEE TICKER ── -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-txt">NO IDEALISM — NO REDUCTIONISM — MATERIAL REALITY IS PRIMARY</span>
+      <span class="marquee-txt">CONSTRUCT EPISTEMIC INFRASTRUCTURE — DISMANTLE STRUCTURAL VIOLENCE</span>
+      <span class="marquee-txt">CONDITIONAL BIOLOGICAL CONSTRAINTS — PROBABILISTIC DETERMINISM</span>
+      <span class="marquee-txt">THE CUSTODIAN PROBLEM — INFORMATION ASYMMETRY AS STRUCTURAL POWER</span>
+      <span class="marquee-txt">PMN v83 — NOVA DHARMA — FRAMEWORK FOR NAVIGATING MATERIAL REALITY</span>
+    </div>
+  </div>
+
   <p class="toc-lbl">Contents</p>
   <div class="toc-grid" id="toc-grid"></div>
 
@@ -630,8 +768,40 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       <div id="quote-title"></div>
       <div class="quote-dots" id="quote-dots"></div>
     </div>
+  </div><!-- /quote-strip -->
+
+  <!-- ── ANATOMY TERMINAL ── -->
+  <div class="anatomy-section">
+    <div class="anatomy-section-hdr">
+      <h2>Theoretical Anatomy</h2>
+      <span>Structural Log: Active</span>
+    </div>
+    <div class="anatomy-terminal">
+      <div class="anatomy-sidebar" id="anatomy-sidebar"></div>
+      <div class="anatomy-content" id="anatomy-content"></div>
+    </div>
   </div>
-</div>
+
+  <!-- ── HOME AI MODULE ── -->
+  <div class="home-ai-section">
+    <div class="home-ai-inner" style="max-width:1000px;margin:0 auto">
+      <div class="home-ai-hdr">Dialectical Synthesis Terminal (AI-Powered)</div>
+      <p class="home-ai-desc">Interrogate the manuscript. Select a mode and enter a concept from PMN v83.</p>
+      <div class="home-ai-row">
+        <select id="home-ai-mode" class="home-ai-select">
+          <option value="general">Mode: General Analysis</option>
+          <option value="oracle">Mode: PMN v83 Oracle</option>
+        </select>
+        <input type="text" id="home-ai-input" class="home-ai-input" placeholder="e.g. Probabilistic Determinism, Structural Violence…" autocomplete="off">
+        <button id="home-ai-btn" class="home-ai-btn">Execute ✦</button>
+      </div>
+      <div class="home-ai-terminal" id="home-ai-terminal">
+        <span class="home-ai-placeholder">&gt;&gt; STATUS: Awaiting log input…</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /home-view -->
 <div id="srch-view" class="view">
   <p class="sv-hdr" id="sv-hdr">Key Terms &mdash; Glossary</p>
   <div id="sv-body"></div>
@@ -1197,7 +1367,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var subj=encodeURIComponent('PMN v83 - Feedback: '+s.id+' '+s.title);
     var body=encodeURIComponent('Section: '+s.id+' - '+s.title+'\nKomentar saya:\n');
     var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:nova@novadharma.org?subject='+subj+'&body='+body);
-    var tweet=encodeURIComponent('Re: PMN v75 - '+s.id+' '+s.title+' @nova_dharma_pm');
+    var tweet=encodeURIComponent('Re: PMN v83 - '+s.id+' '+s.title+' @nova_dharma_pm');
     var tl=g('twitter-link'); if(tl) tl.setAttribute('href','https://twitter.com/intent/tweet?text='+tweet);
   }
 
@@ -1499,6 +1669,197 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   startTimer();
 })();
 
+})(); // end main IIFE
+
+// =====================================================================
+// v84 SYNTHESIS: ANATOMY TERMINAL
+// Builds tabbed panels from PARTS data — first 6 parts only
+// =====================================================================
+(function(){
+  var PARTS = (function(){ try{ return JSON.parse(document.getElementById('d-parts').textContent); }catch(e){ return []; } })();
+  var sb = document.getElementById('anatomy-sidebar');
+  var ac = document.getElementById('anatomy-content');
+  if(!sb || !ac || !PARTS.length) return;
+
+  // Show first 6 parts max (or all if fewer)
+  var display = PARTS.slice(0, Math.min(6, PARTS.length));
+
+  var tabsHtml = '', panelsHtml = '';
+  display.forEach(function(part, i){
+    var id = 'ap-' + i;
+    var partLabel = (['Preface','Coda','Intellectual Debts','Bibliography'].indexOf(part.part) >= 0)
+      ? part.part : 'Part ' + part.part;
+    tabsHtml += '<button class="anatomy-tab' + (i===0?' on':'') + '" data-target="' + id + '">' + partLabel + '</button>';
+    // Build section list from first 5 subs
+    var secList = '';
+    var subs = part.subs.slice(0,5);
+    subs.forEach(function(s){
+      if(s.is_intro) return;
+      secList += '<span style="display:block;font-family:var(--f-mono);font-size:.7rem;color:var(--acc);margin-bottom:.3rem">' + (s.id||'') + ' &mdash; ' + s.title + '</span>';
+    });
+    if(part.subs.length > 5) secList += '<span style="font-family:var(--f-mono);font-size:.65rem;color:var(--mute)">+ ' + (part.subs.length - 5) + ' more sections</span>';
+    panelsHtml += '<div class="anatomy-panel' + (i===0?' on':'') + '" id="' + id + '">'
+      + '<div class="ap-badge">' + partLabel.toUpperCase() + '</div>'
+      + '<h3>' + part.title + '</h3>'
+      + '<div style="margin-top:1rem">' + secList + '</div>'
+      + '</div>';
+  });
+
+  sb.innerHTML = tabsHtml;
+  ac.innerHTML = panelsHtml;
+
+  sb.querySelectorAll('.anatomy-tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      sb.querySelectorAll('.anatomy-tab').forEach(function(b){ b.classList.remove('on'); });
+      ac.querySelectorAll('.anatomy-panel').forEach(function(p){ p.classList.remove('on'); });
+      btn.classList.add('on');
+      var panel = document.getElementById(btn.getAttribute('data-target'));
+      if(panel){ panel.classList.add('on'); ac.scrollTop = 0; }
+    });
+  });
+})();
+
+// =====================================================================
+// v84 SYNTHESIS: HOME AI MODULE (Anthropic API)
+// =====================================================================
+(function(){
+  var btn = document.getElementById('home-ai-btn');
+  var inp = document.getElementById('home-ai-input');
+  var sel = document.getElementById('home-ai-mode');
+  var out = document.getElementById('home-ai-terminal');
+  if(!btn || !inp || !out) return;
+
+  function runAnalysis(){
+    var concept = inp.value.trim();
+    if(!concept) return;
+
+    inp.disabled = true; sel.disabled = true; btn.disabled = true;
+    btn.textContent = 'Processing…';
+    out.innerHTML = '&gt;&gt; ANALYZING: "' + concept.toUpperCase() + '"\n&gt;&gt; CONNECTING TO PROTOCOL [' + (sel.value||'general').toUpperCase() + ']...\n&gt;&gt; EXTRACTING FROM LLM CORE...';
+    out.style.color = '';
+
+    var mode = sel ? sel.value : 'general';
+    var sysPrompt = mode === 'oracle'
+      ? 'You are "Oracle PMN", a brutalist analytical AI holding the manuscript of "Progressive Materialist Naturalism v83" by Nova Dharma. Framework context: Epistemology (probabilistic determinism, information asymmetry as structural power). Ontology (adaptive materialism, emergent structures, rejects reductionism). Biology (conditional constraints, rejects naturalistic fallacy). Evaluative criterion: reduction of structural suffering and expansion of genuine becoming. Respond like a cold terminal data-analyzer: sharp, analytical, maximum 150 words. Format: [PMN v83 REFERENCE] — ... [DIALECTICAL SYNTHESIS] — ...'
+      : 'You are the dialectical computation system of the Progressive Materialist Naturalism (PMN) Collective. Provide sharp, academic, radical-materialist analysis. Reject all idealism or supernaturalism. Brutalist language. Max 150 words. Format: [MATERIAL DEFINITION] — ... [STRUCTURAL CONDITION] — ... [EVALUATIVE IMPLICATION] — ...';
+
+    fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 400,
+        system: sysPrompt,
+        messages: [{ role: 'user', content: 'Analyze concept: ' + concept }]
+      })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : JSON.stringify(data);
+      out.innerHTML = '&gt;&gt; ANALYSIS COMPLETE.\n&gt;&gt; ENTITY: ' + concept.toUpperCase() + '\n&gt;&gt; MODE: ' + mode.toUpperCase() + '\n\n' + text + '\n\n&gt;&gt; END OF LOG.';
+    })
+    .catch(function(err){
+      out.style.color = 'var(--acc)';
+      out.innerHTML = '&gt;&gt; ERR_CRITICAL: ' + err.message + '\n&gt;&gt; ABORTING.';
+    })
+    .finally(function(){
+      inp.disabled = false; sel.disabled = false; btn.disabled = false;
+      btn.textContent = 'Execute ✦';
+      inp.value = ''; inp.focus();
+    });
+  }
+
+  btn.addEventListener('click', runAnalysis);
+  inp.addEventListener('keypress', function(e){ if(e.key==='Enter') runAnalysis(); });
+})();
+
+// =====================================================================
+// v84 SYNTHESIS: INTERACTIVE PARTICLE CANVAS
+// =====================================================================
+(function(){
+  var canvas = document.getElementById('particle-canvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var w, h, particles = [];
+  var mouse = { x: null, y: null, radius: 130 };
+  var isHome = true; // Only animate on home view
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  window.addEventListener('mousemove', function(e){ mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('mouseout', function(){ mouse.x = null; mouse.y = null; });
+
+  function isDark(){ return document.documentElement.getAttribute('data-theme') === 'dark'; }
+
+  function Particle(){
+    this.x = Math.random() * w;
+    this.y = Math.random() * h;
+    this.size = Math.random() * 1.4 + 0.4;
+    this.vx = (Math.random() - 0.5) * 0.35;
+    this.vy = (Math.random() - 0.5) * 0.35;
+  }
+  Particle.prototype.update = function(){
+    this.x += this.vx; this.y += this.vy;
+    if(this.x > w || this.x < 0) this.vx = -this.vx;
+    if(this.y > h || this.y < 0) this.vy = -this.vy;
+    if(mouse.x != null){
+      var dx = mouse.x - this.x, dy = mouse.y - this.y;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < mouse.radius){
+        var force = (mouse.radius - dist) / mouse.radius;
+        this.x -= (dx/dist) * force * 1.8;
+        this.y -= (dy/dist) * force * 1.8;
+      }
+    }
+  };
+  Particle.prototype.draw = function(){
+    var dark = isDark();
+    var col = dark ? 'rgba(185,28,28,0.65)' : 'rgba(173,52,30,0.22)';
+    ctx.fillStyle = col;
+    ctx.fillRect(this.x, this.y, this.size, this.size);
+    if(mouse.x != null){
+      var dx = mouse.x - this.x, dy = mouse.y - this.y;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < mouse.radius){
+        ctx.save();
+        ctx.globalAlpha = (1 - dist/mouse.radius) * 0.4;
+        ctx.strokeStyle = col; ctx.lineWidth = 0.5;
+        ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+        ctx.restore();
+      }
+    }
+  };
+
+  function init(){
+    particles = [];
+    var n = Math.min(Math.floor(w / 9), 110);
+    for(var i=0; i<n; i++) particles.push(new Particle());
+  }
+  init();
+
+  // Watch for view changes — pause canvas when not on home
+  var views = document.querySelectorAll('.view');
+  function checkView(){
+    var hv = document.getElementById('home-view');
+    isHome = hv && hv.classList.contains('on');
+  }
+  // MutationObserver to detect view switches
+  var obs = new MutationObserver(checkView);
+  views.forEach(function(v){ obs.observe(v, { attributes:true, attributeFilter:['class'] }); });
+  checkView();
+
+  function animate(){
+    requestAnimationFrame(animate);
+    if(!isHome){ ctx.clearRect(0,0,w,h); return; }
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(function(p){ p.update(); p.draw(); });
+  }
+  animate();
 })();
 
 </script>
