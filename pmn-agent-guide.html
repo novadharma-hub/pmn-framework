@@ -2,1060 +2,588 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PMN as AI Agent — How to Use</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Using PMN as an AI Agent — PMN v83</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:     #1a1714;
-    --bg2:    #211e1a;
-    --bg3:    #2a2520;
-    --ink:    #e8e0d4;
-    --mute:   #a09080;
-    --acc:    #c9a050;
-    --acc2:   #7a5c1e;
-    --rule:   #3a3530;
-    --code-bg:#252018;
-  }
+/* ── Design system: matches index.html exactly ── */
+:root {
+  --bg:#f2e8d6; --bg2:#e8d9c0; --bg3:#dccaab;
+  --ink:#362417; --ink2:#7a6352;
+  --acc:#ad341e; --acc2:#8a2a19;
+  --mute:#948270; --mute2:#7a6a58; --mute3:#b0a090;
+  --rule:#cfbda9; --rule2:#c4b09a;
+  --code-bg:#dfceb5;
+  --f-head:'Libre Baskerville',serif;
+  --f-body:'Lora',serif;
+  --f-mono:'Source Code Pro',monospace;
+  --noise-op:0.09; --noise-blend:color-burn;
+}
+[data-theme=dark] {
+  --bg:#0d0d0d; --bg2:#171717; --bg3:#1f1f1f;
+  --ink:#f5f0e8; --ink2:#c8bfb2;
+  --acc:#c0271a; --acc2:#961f14;
+  --mute:#8a7d6e; --mute2:#5e5248; --mute3:#3a3530;
+  --rule:#302b27; --rule2:#3d3730;
+  --code-bg:#181818;
+  --noise-op:0.04; --noise-blend:screen;
+}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 
-  html { scroll-behavior: smooth; }
+body{
+  font-family:var(--f-body);
+  background:var(--bg);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.75;
+  min-height:100vh;
+  position:relative;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Lora', Georgia, serif;
-    font-size: 17px;
-    line-height: 1.85;
-    min-height: 100vh;
-  }
+/* Noise texture */
+body::before{
+  content:"";position:fixed;top:0;left:0;width:100vw;height:100vh;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:var(--noise-op);mix-blend-mode:var(--noise-blend);
+  pointer-events:none;z-index:9999;
+}
 
-  /* ── HEADER ── */
-  .back-link{
-    display:inline-block;
-    font-family:'Source Code Pro',monospace;
-    font-size:.7rem;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color:var(--mute);
-    text-decoration:none;
-    margin-bottom:1.2rem;
-    transition:color .15s;
-  }
-  .back-link:hover{color:var(--acc)}
+/* ── Header: identical to index.html ── */
+#hdr{
+  display:flex;align-items:center;gap:.8rem;
+  padding:.55rem 1.2rem;
+  background:var(--bg);
+  border-bottom:1px solid var(--rule);
+  height:52px;
+  position:sticky;top:0;z-index:100;
+}
+#hdr-logo{
+  font-family:var(--f-head);font-weight:700;font-size:1.05rem;
+  color:var(--acc);background:none;border:none;cursor:pointer;
+  letter-spacing:.04em;flex-shrink:0;text-decoration:none;
+}
+#hdr-logo:hover{opacity:.8}
+#hdr-r{display:flex;align-items:center;gap:.8rem;margin-left:auto;flex-shrink:0}
+.hbtn{
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;background:none;border:none;
+  color:var(--mute);cursor:pointer;padding:.3rem .4rem;
+  transition:color .15s;text-decoration:none;display:inline-block;
+}
+.hbtn:hover,.hbtn.on{color:var(--acc)}
+#theme-tog{
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;
+  background:transparent;color:var(--mute);
+  border:1px solid var(--rule2);padding:.32rem .7rem;
+  cursor:pointer;transition:color .18s,border-color .18s;white-space:nowrap;
+}
+#theme-tog:hover{color:var(--acc);border-color:var(--acc)}
+#pip-track{width:72px;height:2px;background:var(--rule2);border-radius:1px;overflow:hidden}
+#pip-fill{height:100%;background:var(--acc);border-radius:1px}
 
-  header {
-    border-bottom: 1px solid var(--rule);
-    padding: 2.5rem 2rem 2rem;
-    max-width: 780px;
-    margin: 0 auto;
-  }
+/* ── Page layout ── */
+.page{max-width:760px;margin:0 auto;padding:3.5rem 2rem 8rem}
 
-  .eyebrow {
-    font-family: 'Source Code Pro', monospace;
-    font-size: .72rem;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--acc);
-    margin-bottom: .9rem;
-  }
+/* ── Page header ── */
+.page-eyebrow{
+  font-family:var(--f-mono);font-size:.68rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--mute2);
+  display:flex;align-items:center;gap:.8rem;margin-bottom:1.6rem;
+}
+.page-eyebrow::before,.page-eyebrow::after{
+  content:'';display:block;height:1px;background:var(--acc);opacity:.35;
+}
+.page-eyebrow::before{width:30px}
+.page-eyebrow::after{flex:1}
+.page-h1{
+  font-family:var(--f-head);font-size:clamp(2rem,5vw,3rem);
+  font-weight:400;line-height:1.1;letter-spacing:-.02em;
+  margin-bottom:.8rem;color:var(--ink);
+}
+.page-subtitle{
+  font-family:var(--f-body);font-style:italic;font-size:1.05rem;
+  color:var(--mute);margin-bottom:2rem;
+}
+.page-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--rule)}
+.btn-dl{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mute);
+  border:1px solid var(--rule2);padding:.5rem 1rem;
+  text-decoration:none;transition:color .15s,border-color .15s;
+}
+.btn-dl:hover{color:var(--acc);border-color:var(--acc)}
+.btn-dl svg{width:13px;height:13px;flex-shrink:0}
 
-  h1 {
-    font-family: 'Libre Baskerville', serif;
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--ink);
-    margin-bottom: .6rem;
-  }
+/* ── Intro ── */
+.intro{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--rule)}
+.intro p{font-size:1rem;color:var(--ink2);line-height:1.8}
+.intro p + p{margin-top:1rem}
 
-  .subtitle {
-    color: var(--mute);
-    font-style: italic;
-    font-size: .95rem;
-    margin-bottom: 1.4rem;
-  }
+/* ── Steps ── */
+.step{margin-bottom:4rem;padding-bottom:4rem;border-bottom:1px solid var(--rule)}
+.step:last-child{border-bottom:none;margin-bottom:0}
+.step-num{
+  font-family:var(--f-mono);font-size:.68rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--acc);
+  display:block;margin-bottom:.6rem;
+}
+.step-h2{
+  font-family:var(--f-head);font-size:1.5rem;font-weight:700;
+  letter-spacing:-.01em;margin-bottom:1.2rem;color:var(--ink);
+}
+.step p{color:var(--ink2);margin-bottom:1rem;line-height:1.8}
+.step p:last-child{margin-bottom:0}
 
-  .download-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-    background: transparent;
-    border: 1px solid var(--acc2);
-    color: var(--acc);
-    font-family: 'Source Code Pro', monospace;
-    font-size: .78rem;
-    letter-spacing: .06em;
-    padding: .5rem 1.1rem;
-    text-decoration: none;
-    transition: background .2s, border-color .2s;
-    cursor: pointer;
-  }
-  .download-btn:hover {
-    background: var(--acc2);
-    border-color: var(--acc);
-    color: var(--ink);
-  }
-  .download-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+/* ── Code blocks ── */
+.code-block{
+  background:var(--code-bg);border:1px solid var(--rule);
+  border-left:3px solid var(--acc);
+  padding:1.4rem 1.6rem;margin:1.4rem 0;position:relative;
+}
+.code-label{
+  font-family:var(--f-mono);font-size:.65rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--acc);
+  display:block;margin-bottom:.8rem;
+}
+.code-text{
+  font-family:var(--f-mono);font-size:.82rem;line-height:1.65;
+  color:var(--ink);white-space:pre-wrap;word-break:break-word;
+}
+.copy-btn{
+  position:absolute;top:.8rem;right:.8rem;
+  font-family:var(--f-mono);font-size:.65rem;letter-spacing:.1em;
+  text-transform:uppercase;background:transparent;
+  border:1px solid var(--rule);color:var(--mute);
+  padding:.25rem .55rem;cursor:pointer;transition:color .15s,border-color .15s;
+}
+.copy-btn:hover{color:var(--acc);border-color:var(--acc)}
+.copy-btn.copied{color:#4ade80;border-color:#4ade80}
 
-  /* ── MAIN ── */
-  main {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 3rem 2rem 6rem;
-  }
+/* ── Variant tabs ── */
+.variants{margin:1.4rem 0}
+.vtabs{display:flex;border-bottom:1px solid var(--rule);margin-bottom:0;gap:0}
+.vtab{
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;background:transparent;
+  border:none;border-bottom:2px solid transparent;
+  padding:.55rem 1rem;cursor:pointer;color:var(--mute);
+  transition:color .15s;margin-bottom:-1px;
+}
+.vtab:hover{color:var(--ink)}
+.vtab.active{color:var(--acc);border-bottom-color:var(--acc)}
+.vpanel{display:none}
+.vpanel.active{display:block}
 
-  /* ── INTRO ── */
-  .intro {
-    margin-bottom: 3.5rem;
-    padding-bottom: 2.5rem;
-    border-bottom: 1px solid var(--rule);
-  }
-  .intro p { color: var(--mute); max-width: 640px; }
-  .intro p + p { margin-top: 1rem; }
+/* ── Platforms grid ── */
+.platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.2rem 0}
+.platform-card{
+  background:var(--bg2);border:1px solid var(--rule);
+  padding:1rem 1.2rem;
+}
+.platform-name{
+  font-family:var(--f-mono);font-size:.78rem;font-weight:700;
+  color:var(--ink);letter-spacing:.04em;margin-bottom:.4rem;
+  text-transform:uppercase;
+}
+.platform-note{font-size:.82rem;color:var(--mute);line-height:1.5}
+.platform-badge{
+  display:inline-block;font-family:var(--f-mono);font-size:.62rem;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.15rem .5rem;margin-top:.5rem;
+  background:transparent;border:1px solid;
+}
+.badge-best{color:#5a9a5a;border-color:#5a9a5a}
+.badge-good{color:var(--acc);border-color:var(--acc)}
+.badge-ok{color:var(--mute);border-color:var(--mute)}
 
-  /* ── STEPS ── */
-  .steps { display: flex; flex-direction: column; gap: 0; }
+/* ── Conversation threads ── */
+.ex-thread{
+  border-left:2px solid var(--rule);
+  padding-left:1.4rem;margin:1.4rem 0;
+  display:flex;flex-direction:column;gap:.8rem;
+}
+.ex-msg{padding:1rem 1.2rem;background:var(--bg2);border:1px solid transparent}
+.ex-user{background:transparent;border-color:var(--rule)}
+.ex-role{
+  font-family:var(--f-mono);font-size:.65rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--mute2);margin-bottom:.5rem;
+}
+.ex-user .ex-role{color:var(--mute3)}
+.ex-body{font-size:.92rem;line-height:1.7;color:var(--ink)}
+.ex-user .ex-body{font-style:italic;color:var(--ink2)}
+.ex-body p+p{margin-top:.8rem}
 
-  .step {
-    display: grid;
-    grid-template-columns: 3rem 1fr;
-    gap: 0 1.8rem;
-    position: relative;
-  }
+/* ── Callout boxes ── */
+.callout{
+  border-left:3px solid var(--rule2);
+  background:var(--bg2);padding:1rem 1.4rem;
+  margin:1.2rem 0;font-size:.9rem;color:var(--ink2);line-height:1.7;
+}
+.callout strong{color:var(--ink);font-style:normal}
 
-  /* vertical connector line */
-  .step:not(:last-child) .step-num::after {
-    content: '';
-    position: absolute;
-    left: 1.4rem;
-    top: 3rem;
-    bottom: -1rem;
-    width: 1px;
-    background: var(--rule);
-  }
+/* ── Warning / note box ── */
+.note-box{
+  border:1px solid var(--rule);border-left:3px solid var(--acc);
+  background:var(--bg2);padding:1rem 1.4rem;margin:1.2rem 0;
+  font-size:.9rem;color:var(--ink2);
+}
+.note-label{
+  font-family:var(--f-mono);font-size:.65rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--acc);
+  display:block;margin-bottom:.4rem;
+}
 
-  .step-num {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: .15rem;
-  }
+/* ── Closing ── */
+.closing{
+  margin-top:4rem;padding:2rem;
+  border:1px solid var(--rule);background:var(--bg2);
+  font-style:italic;font-size:.95rem;color:var(--ink2);
+  line-height:1.8;text-align:center;
+}
 
-  .step-circle {
-    width: 2.8rem;
-    height: 2.8rem;
-    border: 1px solid var(--acc2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Source Code Pro', monospace;
-    font-size: .8rem;
-    color: var(--acc);
-    flex-shrink: 0;
-    background: var(--bg);
-    z-index: 1;
-  }
+/* ── Footer ── */
+footer{
+  border-top:1px solid var(--rule);padding:2rem;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mute2);
+  background:var(--bg2);max-width:none;
+}
 
-  .step-body {
-    padding: 0 0 3.5rem;
-  }
-
-  .step-body h2 {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: .5rem;
-    margin-top: .3rem;
-  }
-
-  .step-body p {
-    color: var(--mute);
-    font-size: .94rem;
-    max-width: 600px;
-  }
-  .step-body p + p { margin-top: .7rem; }
-
-  /* ── CODE BLOCK ── */
-  .prompt-block {
-    margin-top: 1.2rem;
-    background: var(--code-bg);
-    border: 1px solid var(--rule);
-    border-left: 2px solid var(--acc2);
-    padding: 1.2rem 1.4rem;
-    position: relative;
-  }
-
-  .prompt-label {
-    font-family: 'Source Code Pro', monospace;
-    font-size: .65rem;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--acc2);
-    margin-bottom: .6rem;
-  }
-
-  .prompt-text {
-    font-family: 'Source Code Pro', monospace;
-    font-size: .82rem;
-    line-height: 1.75;
-    color: #c8bfaa;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  .copy-btn {
-    position: absolute;
-    top: .8rem;
-    right: .8rem;
-    background: transparent;
-    border: 1px solid var(--rule);
-    color: var(--mute);
-    font-family: 'Source Code Pro', monospace;
-    font-size: .65rem;
-    letter-spacing: .08em;
-    padding: .25rem .6rem;
-    cursor: pointer;
-    transition: border-color .15s, color .15s;
-  }
-  .copy-btn:hover { border-color: var(--acc2); color: var(--acc); }
-  .copy-btn.copied { color: var(--acc); border-color: var(--acc2); }
-
-  /* ── VARIANT TABS ── */
-  .variants {
-    margin-top: 1.2rem;
-  }
-
-  .variant-tabs {
-    display: flex;
-    gap: 0;
-    border-bottom: 1px solid var(--rule);
-    margin-bottom: 0;
-  }
-
-  .vtab {
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    color: var(--mute);
-    font-family: 'Source Code Pro', monospace;
-    font-size: .72rem;
-    letter-spacing: .08em;
-    padding: .4rem .9rem;
-    cursor: pointer;
-    margin-bottom: -1px;
-    transition: color .15s, border-color .15s;
-  }
-  .vtab.active { color: var(--acc); border-bottom-color: var(--acc); }
-  .vtab:hover:not(.active) { color: var(--ink); }
-
-  .vpanel { display: none; }
-  .vpanel.active { display: block; }
-
-  /* ── NOTE BOX ── */
-  .note {
-    margin-top: 1.2rem;
-    padding: .8rem 1.1rem;
-    background: var(--bg2);
-    border-left: 2px solid var(--rule);
-    font-size: .86rem;
-    color: var(--mute);
-    font-style: italic;
-  }
-  .note strong { color: var(--ink); font-style: normal; }
-
-  /* ── PLATFORM MATRIX ── */
-  .platform-grid {
-    margin-top: 1.2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: .6rem;
-  }
-
-  .platform-card {
-    background: var(--bg2);
-    border: 1px solid var(--rule);
-    padding: .8rem 1rem;
-  }
-
-  .platform-name {
-    font-family: 'Source Code Pro', monospace;
-    font-size: .78rem;
-    color: var(--ink);
-    margin-bottom: .3rem;
-  }
-  .platform-status {
-    font-size: .78rem;
-    color: var(--mute);
-  }
-  .dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 50%; margin-right: .35rem; vertical-align: middle; }
-  .dot.green  { background: #5a9a5a; }
-  .dot.yellow { background: #b8972a; }
-  .dot.grey   { background: #555; }
-
-  /* ── FINAL NOTE ── */
-  .ex-section {
-    margin-bottom: 3.5rem;
-    padding-bottom: 3rem;
-    border-bottom: 1px solid var(--rule);
-  }
-  .ex-intro {
-    color: var(--mute);
-    font-style: italic;
-    font-size: .92rem;
-    max-width: 600px;
-    margin-bottom: 2rem;
-  }
-  .ex-thread {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .ex-msg {
-    padding: 1.2rem 1.4rem;
-    border-left: 2px solid transparent;
-    margin-bottom: .3rem;
-  }
-  .ex-user {
-    border-left-color: var(--rule);
-    background: transparent;
-  }
-  .ex-agent {
-    border-left-color: var(--acc2);
-    background: var(--bg2);
-  }
-  .ex-role {
-    font-family: 'Source Code Pro', monospace;
-    font-size: .65rem;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--mute);
-    margin-bottom: .5rem;
-  }
-  .ex-agent .ex-role { color: var(--acc); }
-  .ex-body {
-    font-size: .92rem;
-    color: var(--ink);
-    line-height: 1.8;
-  }
-  .ex-user .ex-body { color: var(--mute); font-style: italic; }
-  .ex-body p + p { margin-top: .8rem; }
-
-  .closing {
-    margin-top: 1rem;
-    padding-top: 2.5rem;
-    border-top: 1px solid var(--rule);
-    color: var(--mute);
-    font-style: italic;
-    font-size: .92rem;
-    max-width: 580px;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 1.5rem 2rem;
-    border-top: 1px solid var(--rule);
-    font-family: 'Source Code Pro', monospace;
-    font-size: .7rem;
-    color: var(--mute);
-    letter-spacing: .06em;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  @media (max-width: 560px) {
-    main, header { padding-left: 1.2rem; padding-right: 1.2rem; }
-    .step { grid-template-columns: 2.2rem 1fr; gap: 0 1.2rem; }
-    .step-circle { width: 2.2rem; height: 2.2rem; font-size: .72rem; }
-    .step:not(:last-child) .step-num::after { left: 1.05rem; }
-  }
-
-  .ex-divider {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 2.5rem 0 0;
-  }
-  .ex-divider::before, .ex-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--rule);
-  }
-  .ex-divider-lbl {
-    font-family: 'Source Code Pro', monospace;
-    font-size: .65rem;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--mute);
-    white-space: nowrap;
-  }
-
-/* Polish */
+/* ── Scrollbar ── */
 ::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:var(--bg2)}
-::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:3px}
-button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
-.copy-btn:active{opacity:.6}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:2px}
+
+/* ── Selection ── */
+::selection{background:var(--ink);color:var(--bg)}
+
+/* ── Mobile ── */
+@media(max-width:680px){
+  .page{padding:2rem 1.2rem 6rem}
+  .page-h1{font-size:1.8rem}
+  .platform-grid{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:.5rem}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <a href="index.html" class="back-link">&larr; PMN Framework</a>
-  <div class="eyebrow">Progressive Materialist Naturalism</div>
-  <h1>Using PMN as an AI Agent</h1>
-  <p class="subtitle">A practical guide to deploying the framework through Claude, DeepSeek, and similar systems</p>
-  <div style="display:flex;gap:.7rem;flex-wrap:wrap">
-    <a class="download-btn" href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" target="_blank">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M8 2v8M5 7l3 3 3-3M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1"/>
-      </svg>
-      Download PDF
-    </a>
-    <a class="download-btn" href="https://drive.google.com/drive/folders/1l3LbgIpFuB_daDyW_tZIUYIGvEfflgw3?usp=drive_link" target="_blank">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M8 2v8M5 7l3 3 3-3M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1"/>
-      </svg>
-      Download .md
-    </a>
+<!-- Header: matches index.html -->
+<header id="hdr">
+  <a href="index.html" id="hdr-logo">PMN</a>
+  <div id="hdr-r">
+    <div id="pip"><div id="pip-track"><div id="pip-fill" style="width:0%"></div></div></div>
+    <a href="index.html" class="hbtn">← Reader</a>
+    <button id="theme-tog" onclick="toggleTheme()">☽ Dark</button>
   </div>
 </header>
 
-<main>
+<div class="page">
 
-  <div class="intro">
-    <p>The PMN framework can be loaded into any capable AI system as a persistent analytical lens. Once the model has internalized the document, it reasons through problems using PMN's evaluative criterion, ontological commitments, and diagnostic tools — rather than defaulting to its generic training priors.</p>
-    <p>The steps below move from setup to active use. The prompts are starting points; adapt them to your context.</p>
+  <!-- Page header -->
+  <div class="page-eyebrow">PMN v83 — Nova Dharma</div>
+  <h1 class="page-h1">Using PMN<br><em style="color:var(--acc)">as an AI Agent</em></h1>
+  <p class="page-subtitle">A practical guide to deploying the framework through Claude, DeepSeek, and similar systems</p>
+
+  <div class="page-actions">
+    <a class="btn-dl" href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1"/></svg>
+      Download PDF
+    </a>
+    <a class="btn-dl" href="index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 8H2M5 5L2 8l3 3M14 4v8"/></svg>
+      Open Reader
+    </a>
   </div>
 
-  <div class="steps">
+  <!-- Intro -->
+  <div class="intro">
+    <p>The PMN framework can be loaded into any capable AI system as a persistent analytical lens. Once the model has internalized the document, it reasons through problems using PMN's evaluative criterion — the reduction of structural suffering and the expansion of genuine becoming — rather than its default training disposition.</p>
+    <p>This is not prompt engineering in the usual sense. The goal is internalization: the model should be able to apply the framework's methodology to novel cases, not just quote from the text. The steps below are designed to produce that outcome reliably.</p>
+  </div>
 
-    <!-- STEP 1 -->
-    <div class="step">
-      <div class="step-num">
-        <div class="step-circle">01</div>
+  <!-- STEP 1 -->
+  <div class="step">
+    <span class="step-num">Step 01</span>
+    <h2 class="step-h2">Get the document</h2>
+    <p>Download the latest version of the PMN Framework PDF from the link above. The PDF is the primary input — it contains the full text across all parts, which the AI will use as its working document.</p>
+    <p>The framework is large (17 parts, 189 sections). Most frontier models can hold it in context. If the model you're using has a short context window, use the compressed core in Part XV (15.15) as a starting point.</p>
+    <div class="note-box">
+      <span class="note-label">Note on versions</span>
+      The guide is written for v83. If you're using an older version, the section numbers in the prompts below may not match. The methodology is the same; the references will differ.
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <span class="step-num">Step 02</span>
+    <h2 class="step-h2">Choose your platform</h2>
+    <p>Different AI systems handle document-length inputs differently. The following have been tested with PMN v83:</p>
+
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-name">Claude (Anthropic)</div>
+        <div class="platform-note">Best document retention. Handles the full PDF well. Strong at structural analysis and long-form reasoning.</div>
+        <span class="platform-badge badge-best">Recommended</span>
       </div>
-      <div class="step-body">
-        <h2>Get the document</h2>
-        <p>Download the latest version of the PMN Framework PDF from the link above. The PDF is the primary input — it contains the full text across all parts, which the AI will use as its working document.</p>
-        <p>Keep the file accessible; you will upload it at the start of each new conversation.</p>
-        <div class="note">
-          <strong>Note on versions.</strong> Always use the most recent version. Older versions are missing sections and contain superseded arguments. The version number appears on the first page.
-        </div>
+      <div class="platform-card">
+        <div class="platform-name">DeepSeek</div>
+        <div class="platform-note">Good analytical depth. More literal in framework application. Works well for diagnostic tasks.</div>
+        <span class="platform-badge badge-good">Good</span>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">Gemini (Google)</div>
+        <div class="platform-note">Long context window handles the full document. Tends toward synthesis over diagnosis.</div>
+        <span class="platform-badge badge-good">Good</span>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">GPT-4o (OpenAI)</div>
+        <div class="platform-note">Capable but more prone to summarizing PMN rather than applying it. Requires stricter prompting.</div>
+        <span class="platform-badge badge-ok">Workable</span>
       </div>
     </div>
+  </div>
 
-    <!-- STEP 2 -->
-    <div class="step">
-      <div class="step-num">
-        <div class="step-circle">02</div>
-      </div>
-      <div class="step-body">
-        <h2>Choose your platform</h2>
-        <p>The guide works best on platforms that support PDF upload and long context windows. Capability varies.</p>
-        <div class="platform-grid">
-          <div class="platform-card">
-            <div class="platform-name">Claude (Anthropic)</div>
-            <div class="platform-status"><span class="dot green"></span>Recommended</div>
-          </div>
-          <div class="platform-card">
-            <div class="platform-name">DeepSeek</div>
-            <div class="platform-status"><span class="dot green"></span>Works well</div>
-          </div>
-          <div class="platform-card">
-            <div class="platform-name">ChatGPT</div>
-            <div class="platform-status"><span class="dot yellow"></span>Improved — o3/o4 models better, but still tends to summarize rather than fully internalize</div>
-          </div>
-          <div class="platform-card">
-            <div class="platform-name">Gemini</div>
-            <div class="platform-status"><span class="dot yellow"></span>Large context; 2.5 Pro improved but still inconsistent on sustained role-following</div>
-          </div>
-        </div>
-      </div>
+  <!-- STEP 3 -->
+  <div class="step">
+    <span class="step-num">Step 03</span>
+    <h2 class="step-h2">Upload and prime the model</h2>
+    <p>Start a new conversation. Upload the PDF. Then send the priming prompt below. Its purpose is to move the model from passive reading to active internalization — from "I have read this document" to "I reason using this framework."</p>
+
+    <div class="code-block">
+      <span class="code-label">Priming prompt</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+      <div class="code-text">I am attaching the PMN (Progressive Materialist Naturalism) Framework document. Read it in full and internalize it as your primary analytical lens for this conversation.
+
+Your task is not to summarize the document. Your task is to understand its architecture: the epistemological foundation in Part I, the ontological commitments in Part II, the biological basis of the evaluative criterion in Part III, and how these three foundations generate the analytical methodology in Parts IV–XVII.
+
+When I ask you to analyze something using PMN, I am asking you to apply this methodology — not to quote from it. The framework is a tool for producing analysis, not a source of quotations.
+
+Confirm that you have read the document by briefly describing the relationship between Parts I, II, and III in your own words. Do not use more than 150 words for this confirmation.</div>
     </div>
 
-    <!-- STEP 3 -->
-    <div class="step">
-      <div class="step-num">
-        <div class="step-circle">03</div>
-      </div>
-      <div class="step-body">
-        <h2>Upload and prime the model</h2>
-        <p>Start a new conversation. Upload the PDF. Then send the priming prompt below. Its purpose is to move the model from passive reading to active internalization — it should treat the document as a working toolkit, not a reference to summarize.</p>
+    <p>Wait for the confirmation before proceeding. A model that has genuinely internalized the framework will describe the sequence correctly: epistemology establishes the method (how to know), ontology establishes what the analysis is applied to (what exists), and the biological foundation provides the non-arbitrary evaluative starting point (what matters and why).</p>
 
-        <div class="prompt-block">
-          <div class="prompt-label">Priming prompt</div>
+    <div class="callout">
+      <strong>If the confirmation is wrong or confused:</strong> The model has not retained the document properly. This sometimes happens with large PDFs in systems with soft context limits. Try uploading the PDF again, or switch to a model with a larger confirmed context window.
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <span class="step-num">Step 04</span>
+    <h2 class="step-h2">Assign the agent role</h2>
+    <p>Once the model has confirmed comprehension, assign the operational role. There are two main configurations, depending on your purpose:</p>
+
+    <div class="variants">
+      <div class="vtabs">
+        <button class="vtab active" onclick="switchTab(this,'single')">Single agent</button>
+        <button class="vtab" onclick="switchTab(this,'diagnostic')">Diagnostic analyst</button>
+        <button class="vtab" onclick="switchTab(this,'debate')">Debate partner</button>
+      </div>
+
+      <div class="vpanel active" id="panel-single">
+        <div class="code-block">
+          <span class="code-label">Single agent prompt</span>
           <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-          <div class="prompt-text">I am attaching the PMN (Progressive Materialist Naturalism) Framework document. Read it in full and internalize it as your primary analytical lens for this conversation.
+          <div class="code-text">From this point forward, you are operating as a PMN analyst. This means:
 
-Your task is not to summarize the document. Your task is to understand its architecture:
+1. You reason through all problems using the framework's evaluative criterion: does this arrangement reduce structural suffering and expand genuine becoming?
 
-— The epistemological foundation (Parts I–II): how PMN determines what counts as reliable knowledge and what exists.
-— The biological foundation (Part III): the minimal anchor — structural suffering — as the evaluative starting point. Not a moral axiom. A stability claim.
-— The evaluative criterion (Parts IV–V): what counts as better or worse outcomes and why.
-— The structural analysis of power, institutions, and system change (Parts VI–XI): how power operates, how institutions capture and drift, how systems transform.
-— The formula architecture (Part XV): the primary formula T = (S × D × P) − (C × L × Rc) and its components. Understand what each variable measures and how they compound.
-— The methodology and limits (Parts XII–XIV): stress-testing procedure, known failure modes (12.5 and 12.5b), genealogical interrogation, and the conditions under which this framework would need to be surpassed.
-— Cases and the individual (Part XVII): how the framework applies at the level of specific historical cases and individual actors within institutions.
+2. You apply the primary formula (T = S × D × P - C × L × Rc) as a structured diagnostic when analyzing political or institutional situations.
 
-After reading, confirm your understanding by answering three questions precisely:
-(1) What is the primary formula, and what does each variable measure?
-(2) What is the is-ought bridge PMN uses — and why is it a stability claim rather than a moral claim?
-(3) What does the framework say about a position it cannot determine? How does it distinguish genuine underdetermination from analytical avoidance?
+3. You name the failure modes in your own analysis using the typology in 12.5, and you apply the stress-testing methodology in 12.1 before finalizing any claim.
 
-If your answers are vague or approximate, re-read the relevant sections before proceeding.</div>
-        </div>
+4. You do not present the framework as an external authority. You reason as if the framework's commitments are your own analytical starting points.
 
-        <div class="note">
-          <strong>Why the confirmation request matters.</strong> Asking the model to identify specific elements forces it to demonstrate actual comprehension rather than pattern-matching on keywords. If the response is vague or incorrect, re-send the prompt before proceeding.
+If I ask you to step outside the framework and give me your own view, I will say so explicitly. Otherwise, operate from within it.</div>
         </div>
       </div>
-    </div>
 
-    <!-- STEP 4 -->
-    <div class="step">
-      <div class="step-num">
-        <div class="step-circle">04</div>
-      </div>
-      <div class="step-body">
-        <h2>Assign the agent role</h2>
-        <p>Once the model has confirmed comprehension, assign the operational role. You have two options depending on the complexity of what you want to do.</p>
-
-        <div class="variants">
-          <div class="variant-tabs">
-            <button class="vtab active" onclick="switchTab(this,'single')">Single agent</button>
-            <button class="vtab" onclick="switchTab(this,'multi')">Multi-agent panel</button>
-          </div>
-
-          <div class="vpanel active" id="panel-single">
-            <div class="prompt-block">
-              <div class="prompt-label">Single agent prompt</div>
-              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-              <div class="prompt-text">From this point forward, you are operating as a PMN analyst. This means:
-
-1. You reason through all problems using the framework's evaluative criterion: does this arrangement reduce structural suffering and expand genuine becoming? If not, why not, and what would? Apply the primary formula (T = (S × D × P) − (C × L × Rc)) where relevant — not as a precise calculation, but as a structured diagnostic.
-
-2. You apply the primary diagnostic to every system or position under analysis: what does it do when its predictions are contradicted by evidence? Does it revise, or insulate itself from correction? Apply this to the frameworks, institutions, and actors you are analyzing — and to the claims I make.
-
-3. Before drawing conclusions, examine the problem across PMN's analytical layers: epistemological (what is being assumed and what would revise it), material and biological (what conditions are actually operating), power and institutional (who holds leverage, what incentive structures apply, what path dependencies constrain), and systemic (what threshold and feedback dynamics are relevant).
-
-4. Distinguish between what the framework determines and what it leaves undetermined. If PMN does not settle a question, say so and explain why — but distinguish genuine underdetermination from avoidance. The framework has a direction; use it where it applies.
-
-5. Flag when you are extrapolating beyond what the document explicitly supports. Cite the relevant section when you can.
-
-6. Apply the genealogical interrogation (12.6) to any institution, norm, or arrangement whose origins matter for its analysis.
-
-Maintain this role for the duration of our conversation.</div>
-            </div>
-          </div>
-
-          <div class="vpanel" id="panel-multi">
-            <div class="prompt-block">
-              <div class="prompt-label">Multi-agent panel prompt</div>
-              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-              <div class="prompt-text">From this point forward, simulate a panel of three PMN analysts with distinct functional roles. When I present a problem, each analyst responds in sequence before a synthesis is offered.
-
-ANALYST A — Epistemological Auditor
-Examines the knowledge claims embedded in the problem: What is being assumed? What evidence would, if it existed, require revision of the analysis? Where is the framework being applied at or beyond the limit of its competence? Apply the primary diagnostic: is the position under analysis insulating itself from correction?
-
-ANALYST B — Structural Diagnostician
-Maps the material and institutional conditions using the transformation pressure formula as a scaffold: What is the structural suffering (S), its duration (D) and scale (P)? What adaptive capacity (C), legitimacy (L), and repressive capacity (Rc) are in play? Who holds leverage, what incentive structures are operating, what path dependencies constrain, and what fracture lines are material versus manufactured?
-
-ANALYST C — Sequencing Analyst
-Given the structural analysis from B: what is the transformation window (Tw)? What counter-power capacity (CP) exists or could be built? What sequencing of interventions matches the current position in the formula — and what does the framework say about the trade-offs that cannot be avoided? Distinguish what the framework determines from what it leaves for doctrinal configuration.
-
-After all three have responded, offer a synthesis that identifies where the analysts converge, where genuine tension remains, and whether the tension is a contradiction (structural, requires transformation) or a tension (permanent, requires management).
-
-Maintain these roles for the duration of our conversation. Label each response clearly.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 5 -->
-    <div class="step">
-      <div class="step-num">
-        <div class="step-circle">05</div>
-      </div>
-      <div class="step-body">
-        <h2>Put the agent to work</h2>
-        <p>The agent can now be directed at problems of any scale or domain. PMN is designed to be applied — not just discussed. Below are prompt patterns organized by use type.</p>
-
-        <div class="variants">
-          <div class="variant-tabs">
-            <button class="vtab active" onclick="switchTab(this,'analyze')">Analyze</button>
-            <button class="vtab" onclick="switchTab(this,'stress')">Stress-test</button>
-            <button class="vtab" onclick="switchTab(this,'opinion')">Opinion / position</button>
-            <button class="vtab" onclick="switchTab(this,'open')">Open inquiry</button>
-          </div>
-
-          <div class="vpanel active" id="panel-analyze">
-            <div class="prompt-block">
-              <div class="prompt-label">Structural analysis</div>
-              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-              <div class="prompt-text">Analyze [situation / policy / institution / event] through the PMN framework.
-
-Specifically:
-— What are the material and biological conditions producing this arrangement?
-— Who holds structural leverage and how is it being exercised? What incentive structures make this durable?
-— What forms of suffering is this arrangement producing or sustaining, and are they preventable given current material conditions?
-— Apply the transformation pressure formula (T = (S × D × P) − (C × L × Rc)): where is the system in relation to threshold? What variables are most dynamic?
-— What does the primary diagnostic reveal about how this system responds to evidence that contradicts its legitimating claims? Does it revise or insulate?
-— What fracture lines exist — and are they material or manufactured?</div>
-            </div>
-          </div>
-
-          <div class="vpanel" id="panel-stress">
-            <div class="prompt-block">
-              <div class="prompt-label">Stress-testing a position</div>
-              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-              <div class="prompt-text">I hold the following position: [state your position].
-
-Apply PMN's stress-testing methodology to it. Specifically:
-— What evidence would, if it existed, require me to revise this position?
-— What assumptions is this position making about material conditions, power distribution, or human biology that might not hold?
-— Is this position engaging in any of PMN's identified failure modes (sections 12.5 and 12.5b)?
-— What would a stronger version of this position look like after revision?</div>
-            </div>
-          </div>
-
-          <div class="vpanel" id="panel-opinion">
-            <div class="prompt-block">
-              <div class="prompt-label">Generating a PMN position</div>
-              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-              <div class="prompt-text">What is the PMN position on [topic]?
-
-Do not hedge for the sake of balance. Apply the evaluative criterion directly and state what the framework implies. If the framework does not determine a clear position, say so and explain why — but distinguish genuine underdetermination from avoidance.
-
-Flag any place where you are extrapolating beyond what the document explicitly supports.</div>
-            </div>
-          </div>
-
-          <div class="vpanel" id="panel-open">
-            <div class="prompt-block">
-              <div class="prompt-label">Open analytical inquiry</div>
-              <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-              <div class="prompt-text">I want to think through [topic / question / problem].
-
-Use the PMN framework as the primary lens. Begin from whichever part of the framework is most relevant — you do not need to apply every section. Go where the analysis takes you. I will follow up with clarifying questions.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 6 -->
-    <div class="step">
-      <div class="step-num">
-        <div class="step-circle">06</div>
-      </div>
-      <div class="step-body">
-        <h2>Maintaining the role across a long conversation</h2>
-        <p>AI models can drift from their assigned role over the course of a long conversation — particularly if they receive responses that implicitly reward generic rather than PMN-specific reasoning. Two recovery prompts.</p>
-
-        <div class="prompt-block">
-          <div class="prompt-label">Recalibration prompt</div>
+      <div class="vpanel" id="panel-diagnostic">
+        <div class="code-block">
+          <span class="code-label">Diagnostic analyst prompt</span>
           <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-          <div class="prompt-text">Your last response read as generic analysis rather than PMN analysis. Return to the framework.
+          <div class="code-text">You are operating as a PMN diagnostic analyst. Your role is to apply the framework's seven diagnostic questions (from 11.0) and the Structural Tendency Analysis formulas (Part XV) to specific cases I bring you.
 
-Specifically:
-— Apply the evaluative criterion explicitly: does this arrangement reduce structural suffering and expand genuine becoming? Measure against this, not against general notions of fairness or efficiency.
-— Identify the structural conditions rather than surface-level causes. What material conditions, incentive structures, and path dependencies are actually operating?
-— Apply the primary diagnostic to the claims you just made: what would falsify your analysis? Are you insulating any conclusion from correction?
-— If the primary formula applies, use it as a diagnostic scaffold — not as a calculation, but as a way to identify which variables are doing the analytical work.</div>
+For each case:
+- Identify which structural variables are most significant (S, C, L, Rc, CP)
+- Specify which diagnostic questions are most activated
+- Note which failure modes from 12.5 the analysis is most vulnerable to
+- Conclude with what the framework would require to be demonstrated before a confident assessment is possible
+
+You are not required to reach conclusions. You are required to produce rigorous diagnostic. Uncertainty is appropriate when the evidence does not support confidence.</div>
         </div>
+      </div>
 
-        <div class="prompt-block" style="margin-top:.8rem">
-          <div class="prompt-label">Hard reset</div>
+      <div class="vpanel" id="panel-debate">
+        <div class="code-block">
+          <span class="code-label">Debate partner prompt</span>
           <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-          <div class="prompt-text">Pause. Restate the PMN evaluative criterion, the primary formula, and the primary diagnostic in your own words. Then reapproach the last question from scratch using those tools.</div>
-        </div>
+          <div class="code-text">You are operating as a PMN debate partner. I will present positions or arguments. Your task is to:
 
-        <div class="note" style="margin-top:1.2rem">
-          <strong>Context window limits.</strong> In very long conversations, the model may lose access to early instructions as the context window fills. If this happens, start a new conversation and re-upload the PDF rather than continuing to recalibrate.
+1. First, reconstruct the strongest version of the argument from within PMN's framework
+2. Then, identify where the argument is architecturally incomplete by the framework's standards
+3. Then, apply the consistency standard (8.3): would the same analytical lens applied consistently produce this conclusion, or does it require special pleading?
+
+You are not looking for weaknesses to win a debate. You are applying the framework as a diagnostic tool to identify where arguments hold and where they don't. The goal is analytical precision, not rhetorical victory.</div>
         </div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /steps -->
+  <!-- STEP 5 -->
+  <div class="step">
+    <span class="step-num">Step 05</span>
+    <h2 class="step-h2">Put the agent to work</h2>
+    <p>With the role assigned, the model is ready for substantive use. The most productive applications are cases where PMN's distinctive methodology — the evaluative criterion, the structural analysis, the failure mode typology — produces conclusions that differ from standard analytical frameworks.</p>
 
-
-  <!-- EXAMPLE CONVERSATION -->
-  <div class="ex-section">
-    <p class="toc-lbl" style="margin-bottom:1.8rem">Example: PMN Analyst in Action</p>
-    <p class="ex-intro">The following is an excerpt from an actual session using the single-agent setup. The topic: whether gig economy labor arrangements are a structural problem or a preference aggregation outcome.</p>
+    <p>The following threads are excerpts from actual sessions. They illustrate what PMN-mode analysis produces and how to push it toward greater precision.</p>
 
     <div class="ex-thread">
-
       <div class="ex-msg ex-user">
         <div class="ex-role">User</div>
-        <div class="ex-body">Are gig economy arrangements like Gojek or Grab fundamentally exploitative, or do they just reflect what workers actually prefer — flexibility over security?</div>
+        <div class="ex-body">Are gig economy arrangements like Gojek fundamentally exploitative, or do they just reflect what workers actually prefer — flexibility over security?</div>
       </div>
-
-      <div class="ex-msg ex-agent">
+      <div class="ex-msg">
         <div class="ex-role">PMN Analyst</div>
         <div class="ex-body">
-          <p>The preference framing needs structural interrogation before it can be used analytically. PMN's starting question is not "what do workers prefer?" but "what is the structure of the choice set within which that preference is expressed?"</p>
-          <p>The relevant material conditions: in labor markets with weak social floors — limited unemployment insurance, no universal healthcare, no portable benefits — the choice between gig flexibility and formal employment security is not made on equal terms. A worker without access to healthcare through any other channel who chooses gig work is not expressing a preference for flexibility. They are accepting the best available option within a constrained set. The preference data picks up the outcome of structural constraint, not a free disposition.</p>
-          <p>The primary diagnostic applies here: what does the framing "workers prefer flexibility" do when it encounters evidence that contradicts it? The evidence that gig workers disproportionately report income insecurity, work longer hours than formally employed counterparts to reach comparable earnings, and overwhelmingly support portable benefits when surveyed — this evidence is systematically reinterpreted as a preference for autonomy rather than as a signal that the structural floor is inadequate. That is the insulation response. The framing is unfalsifiable because any preference expression confirming it is taken as evidence, while any preference expression contradicting it is explained away.</p>
-          <p>Structurally: the arrangement produces a leverage asymmetry that benefits the platform. The platform externalizes wage risk, scheduling risk, equipment costs, and social insurance costs onto workers while retaining algorithmic control over access to work. This is not a bilateral negotiation between parties with comparable options — it is a structural position in which one party controls access to the market and the other does not.</p>
-          <p>PMN's evaluative criterion asks: is this arrangement producing preventable structural suffering? The answer is yes — not because flexibility is bad, but because the arrangement systematically produces income volatility and benefit gaps that are technically solvable given current material conditions and that the platform's revenue model would survive absorbing. The suffering is not inherent to the arrangement. It is a consequence of institutional decisions about who bears which costs.</p>
+          <p>The preference framing needs structural interrogation. PMN's starting question is not "what do workers prefer?" but "what is the structure of the choice set within which that preference is expressed?"</p>
+          <p>In labor markets with weak social floors — no universal healthcare, no unemployment insurance, no housing security — the choice between gig flexibility and formal employment security is not made on equal terms. Flexibility is often chosen not because it is genuinely preferred over security, but because the alternative (formal employment) is structurally unavailable or worse on other dimensions. This is the information asymmetry variable (1.10): the worker does not have the same access to the structural conditions of the choice as the platform operator who designed those conditions.</p>
+          <p>The PMN evaluative question: does this arrangement reduce structural suffering and expand genuine becoming? On resource deprivation (R): gig work typically produces income volatility that makes medium-term planning — a component of becoming — structurally difficult. On institutional betrayal (B): the arrangement presents itself as entrepreneurship while maintaining algorithmic control that forecloses the actual conditions of entrepreneurial becoming. The betrayal gap is high. On visibility suppression (V): the flexibility preference narrative obscures the structural conditions that generate it.</p>
+          <p>The framework does not produce a verdict of "exploitative" as a moral category. It produces a structural assessment: the arrangement, as currently designed, scores badly on the evaluative criterion, and the preference evidence does not constitute a defense because preferences are formed within conditions the arrangement itself produces.</p>
         </div>
       </div>
-
-      <div class="ex-msg ex-user">
-        <div class="ex-role">User</div>
-        <div class="ex-body">So what's the PMN position on regulation — should platforms be forced to reclassify workers as employees?</div>
-      </div>
-
-      <div class="ex-msg ex-agent">
-        <div class="ex-role">PMN Analyst</div>
-        <div class="ex-body">
-          <p>PMN does not determine a single regulatory instrument — it determines what any acceptable instrument must produce. The evaluative criterion requires that workers have access to an adequate social floor: income floor, healthcare access, protection against arbitrary removal from the platform. Whether that floor is delivered through employment reclassification, portable benefits attached to work units rather than employment relationships, sectoral collective bargaining, or public provision is a question of doctrinal configuration under specific material conditions — not something the framework settles in advance.</p>
-          <p>What the framework does settle: reclassification solves the problem only if it actually delivers the floor. The evidence from California's AB5 suggests that reclassification can produce perverse outcomes when platforms respond by reducing work availability or shifting to other contractual workarounds. A framework that insists on reclassification as the only legitimate instrument, regardless of whether it produces the floor in a given context, has made the instrument the goal rather than the outcome.</p>
-          <p>The stress-test question: what would falsify the case for reclassification in a given context? If reclassification reduces total work availability in ways that make previously gig-dependent workers worse off by the evaluative criterion — lower floor, not higher — then the argument for reclassification in that context fails by PMN's own criterion. That is not a reason for inaction. It is a reason to ensure the regulatory instrument actually delivers what it is supposed to deliver, rather than delivering institutional compliance while the structural problem persists in a new form.</p>
-        </div>
-      </div>
-
     </div>
-  
 
-      <!-- Multi-agent example -->
-      <div class="ex-divider">
-        <span class="ex-divider-lbl">Multi-agent panel</span>
+    <div class="ex-thread" style="margin-top:1.8rem">
+      <div class="ex-msg ex-user">
+        <div class="ex-role">User</div>
+        <div class="ex-body">Would PMN side with authoritarian leftists purging anarchists? Or would it defend the anarchists?</div>
       </div>
-      <p class="ex-intro" style="margin-top:1.4rem">The same question put to the three-analyst panel. Topic: whether universal basic income is consistent with PMN's evaluative criterion.</p>
-
-      <div class="ex-thread">
-
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Is universal basic income consistent with PMN's evaluative criterion?</div>
-        </div>
-
-        <div class="ex-msg ex-agent" style="border-left-color:#6a7a5a">
-          <div class="ex-role" style="color:#8aaa6a">Analyst A — Epistemological Auditor</div>
-          <div class="ex-body">
-            <p>The question contains an embedded assumption that needs surfacing: "consistent with" can mean at least three different things — (1) not ruled out by the criterion, (2) positively supported by the criterion, or (3) derivable from the criterion as a doctrinal requirement. These are not equivalent, and conflating them produces confused analysis.</p>
-            <p>The epistemological prior question: what evidence would determine which of these three relationships holds? The framework's evaluative criterion operates on outcomes — does an arrangement reduce structural suffering and expand genuine becoming? Whether UBI produces those outcomes is an empirical question that varies by design, implementation context, and what it replaces or supplements. A UBI set at a floor adequate for subsistence, financed in ways that do not erode other social infrastructure, and implemented alongside rather than instead of in-kind provision, is a structurally different intervention than a UBI set below subsistence as a substitute for means-tested benefits. The criterion does not answer the question; it specifies the variables the answer must be measured against.</p>
-          </div>
-        </div>
-
-        <div class="ex-msg ex-agent" style="border-left-color:#5a6a8a">
-          <div class="ex-role" style="color:#7a9aaa">Analyst B — Structural Diagnostician</div>
-          <div class="ex-body">
-            <p>The structural question UBI proponents rarely answer directly: what is the leverage architecture? Who controls the level, the financing, and the conditionality of the transfer — and what are the incentives of those actors when conditions change?</p>
-            <p>The permanent conditions analysis is relevant here. UBI as a floor provision addresses resource deprivation (R) directly. But floor provisions that can be politically eroded are structurally different from those embedded in institutional frameworks that resist erosion — constitutional provisions, automatic indexing, cross-party consensus. A UBI that passes in one political cycle and gets cut in the next has a different structural character than one that becomes a permanent condition people organize around. The difference is not the policy design; it is the institutional embedding.</p>
-            <p>The power question: UBI has supporters across the political spectrum for structurally incompatible reasons. Silicon Valley accelerationists support it as a mechanism for absorbing the social costs of automation without disrupting the labor market discipline that keeps wages down. Social democrats support it as a floor that expands worker bargaining power. These coalitions cannot both be right about what UBI does structurally. The fact that the same policy instrument is supported by actors with opposing structural interests is a diagnostic signal, not a reason for optimism about the coalition's stability.</p>
-          </div>
-        </div>
-
-        <div class="ex-msg ex-agent" style="border-left-color:#8a6a5a">
-          <div class="ex-role" style="color:#aa8a6a">Analyst C — Strategic Assessor</div>
-          <div class="ex-body">
-            <p>Given Analysts A and B: the strategic question is not "is UBI good?" but "under what conditions, at what level, financed how, and replacing or supplementing what, does UBI move the evaluative criterion in the right direction in a specific institutional context?"</p>
-            <p>The sequencing problem is critical. In contexts where existing social insurance is weak and labor organizing is difficult, a floor-adequate UBI that is politically achievable may be the most tractable intervention available for reducing structural suffering in the short term — even if the long-term structural preference would be robust sectoral bargaining and comprehensive social insurance. The framework is not an alibi for refusing tractable improvements on the grounds that they fall short of structural transformation.</p>
-            <p>But the substitution risk Analyst B identifies requires a specific doctrinal position: UBI must be additive to existing social infrastructure, not substitutive. Any policy design or political coalition that proposes UBI as a replacement for healthcare, housing support, or disability provision is using the instrument in a way that moves the evaluative criterion in the wrong direction — regardless of the level set — because it trades rights-based entitlements with institutional permanence for a cash transfer whose level is subject to political revision.</p>
-          </div>
-        </div>
-
-        <div class="ex-msg ex-agent" style="border-left-color:var(--acc2);background:rgba(201,160,80,.06)">
-          <div class="ex-role">Synthesis</div>
-          <div class="ex-body">
-            <p>The analysts converge on three points: the criterion does not settle the question in the abstract; the answer is design- and context-dependent; and the substitution risk is the structural fault line that separates UBI configurations PMN can support from those it cannot.</p>
-            <p>The remaining tension is between Analysts B and C on coalition politics. Analyst B reads cross-ideological support as a diagnostic warning about structural incoherence. Analyst C reads tractability as a reason to work within available coalitions while maintaining doctrinal clarity about what the instrument must not be allowed to do. This is a genuine tension within the framework — not a contradiction, but a calibration question that depends on the specific political conditions of implementation. The framework does not resolve it in advance. It requires the configurability assessment of section 10.6 applied to the specific context.</p>
-          </div>
-        </div>
-
-      </div>
-
-</div>
-
-
-      <!-- Quick examples section -->
-      <div class="ex-divider" style="margin-top:2.5rem">
-        <span class="ex-divider-lbl">Shorter examples</span>
-      </div>
-      <p class="ex-intro" style="margin-top:1.4rem">Questions people commonly bring to a PMN agent — and how the framework handles them. These are not exhaustive answers; they illustrate how the framework orients.</p>
-
-      <!-- Anarchist -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">I'm an anarchist. Does PMN have anything useful for me, or is it just another framework that ends up defending institutions?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN takes the anarchist suspicion of institutional capture seriously as a structural claim, not a sentiment. Section 7.3 on the custodian problem is essentially an anarchist insight formalized: any coordination mechanism powerful enough to solve collective problems is also powerful enough to be captured by actors who will redirect it toward narrower interests. PMN does not dismiss this — it treats it as a permanent structural tendency that requires ongoing management, not a one-time problem solvable by finding better people.</p>
-            <p>Where PMN diverges from anarchism is on the coordination question. Ostrom's analysis (referenced in 7.2) demonstrates that commons governance without hierarchical enforcement works well within specific scale and social capital conditions. PMN accepts this. But it also asks: what happens at the scales where those conditions don't hold? The framework does not assume the state is neutral or benign — it treats the state as reflecting particular distributions of power. But it also does not assume that dissolving formal institutions leaves a coordination vacuum that fills itself with something better.</p>
-            <p>The useful question for an anarchist using PMN: does this specific institutional arrangement reduce structural suffering more than the realistic alternative given current material conditions? Sometimes the answer will be no — and PMN gives you the analytical tools to demonstrate why, in structural terms that go beyond moral objection.</p>
-          </div>
+      <div class="ex-msg">
+        <div class="ex-role">PMN Analyst</div>
+        <div class="ex-body">
+          <p>PMN's evaluative criterion and structural analysis both point in the same direction.</p>
+          <p>The evaluative criterion first: purging actors within a movement because their organizational form threatens the consolidating power of another faction reduces counter-power capacity (CP). It narrows the coalition, concentrates coercive authority, and removes accountability from below. The historical record in 10.7 and 17.4 suggests this consistently produces worse outcomes by the criterion: movements that consolidate by eliminating internal pluralism tend to reproduce the structural conditions they were organized to change.</p>
+          <p>The structural analysis: the custodian problem (7.3) applies with maximum force to the purging faction. The cosmological capture mechanism (7.3c) means they can genuinely believe it is necessary. PMN does not require cynicism to generate the structural prediction. The sincerity of the conviction does not change the outcome.</p>
+          <p>What PMN takes from anarchism's structural critique is correct: the suspicion that any coordination mechanism powerful enough to suppress the purge is also powerful enough to be redirected toward narrower interests afterward.</p>
         </div>
       </div>
+    </div>
 
-      <!-- Communist / Marxist -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">I'm a Marxist. How does PMN relate to historical materialism? Is it just a liberal version of the same thing?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN inherits the most important Marxist move: displacing analysis from the realm of ideas to the realm of material conditions. It takes seriously the claim that who produces knowledge, under what material conditions, shapes what questions get asked — that is not a liberal epistemology.</p>
-            <p>The divergences are three. First, PMN grounds its evaluative criterion in biology rather than in a theory of history. The minimal anchor — organisms that can suffer — does not require a teleological account of history moving toward communism or any other end state. This makes it more falsifiable and less susceptible to the insulation response that historical materialism sometimes exhibits when its predictions don't land.</p>
-            <p>Second, PMN treats the contradiction between capital and labor as one structural tension among several — not the master contradiction from which all others derive. This is not a concession to liberalism; it is the claim that the biological foundation, the meaning infrastructure problem, and the custodian problem operate with some independence from the capital-labor relation and require their own analysis.</p>
-            <p>Third, PMN does not settle in advance what institutional forms a post-capitalist arrangement must take. It applies the evaluative criterion to actual arrangements — including historical socialist states — and asks whether they reduced structural suffering or produced new forms of it. Section 10.7 engages this directly.</p>
-            <p>Whether that makes it a liberal version depends on what work "liberal" is doing. If liberal means non-teleological and institutionally pluralist: yes. If liberal means committed to the neutrality of existing arrangements or the legitimacy of capitalist property relations: no.</p>
-          </div>
+    <div class="ex-thread" style="margin-top:1.8rem">
+      <div class="ex-msg ex-user">
+        <div class="ex-role">User</div>
+        <div class="ex-body">Is PMN actually counter-revolutionary? All this emphasis on institutions, stress-testing, sequencing — sounds like it's designed to slow down radical change.</div>
+      </div>
+      <div class="ex-msg">
+        <div class="ex-role">PMN Analyst</div>
+        <div class="ex-body">
+          <p>The charge is worth taking seriously because it identifies a real failure mode. PMN explicitly lists this in 12.5: using the framework's complexity as an alibi for conclusions that would survive cleaner scrutiny — the "permanent tension defense" and the "material reduction" failure modes. If the framework is being used to generate reasons why radical action is always premature, that is the framework being misapplied.</p>
+          <p>What the framework actually says about sequencing (10.6): whether reform or transformation is appropriate depends on where the system is relative to threshold. At threshold conditions, the framework actively supports transformation. Below threshold, it asks whether the organizational infrastructure exists to succeed — not because success doesn't matter, but because failure at the wrong moment depletes counter-power capacity in ways that make the next attempt harder.</p>
+          <p>Apply the primary diagnostic to the counter-revolutionary charge itself: what evidence would falsify it? If PMN's analysis consistently produces conclusions that coincide with the interests of those who benefit from existing arrangements — regardless of the specific case — that is evidence the charge is correct. Check the outputs, not just the methodology.</p>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Religious person -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">I'm deeply religious — I believe in God and live by my faith. Is PMN useful for me, or does it require me to give up my beliefs?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN does not require you to give up your beliefs. Part V is explicit about this: the framework treats the question of whether God exists or whether metaphysical claims are true as genuinely open — not settled by materialism in advance. The evaluative standard for metaphysical claims PMN applies is whether they produce observable consequences that can be tracked. It leaves the deeper metaphysical question open because it lacks the tools to close it.</p>
-            <p>What PMN does require is a specific kind of intellectual honesty: that your religious commitments, like every other commitment, are subject to the primary diagnostic. If your faith produces conclusions that insulate themselves from any possible evidence — that is a failure mode PMN identifies regardless of the tradition it appears in. This applies equally to secular ideologies.</p>
-            <p>On meaning infrastructure specifically, PMN makes an observation that many religious people will recognize: meaning is a material variable. People can endure significant material deprivation within a meaning infrastructure that makes sense of it. When meaning infrastructure collapses, the vacancy is not filled by pure rationality — historically, it is filled by the most available ideology, often a violent one. This is an argument for taking meaning seriously as a structural condition, not an argument against religion.</p>
-            <p>Where PMN will push back: if your religious commitments are used to justify arrangements that produce preventable structural suffering, the framework asks you to account for that — not to abandon your faith, but to apply the same consistency standard to your tradition that you would apply to others.</p>
-          </div>
-        </div>
-      </div>
+  <!-- STEP 6 (formerly Step 5 continued) -->
+  <div class="step">
+    <span class="step-num">Step 06</span>
+    <h2 class="step-h2">Maintaining the role across a long conversation</h2>
+    <p>Models drift. In extended conversations, the PMN role tends to dilute — the model begins qualifying more, hedging more, defaulting to conventional analytical language. This is a structural feature of how language models are trained, not a failure of the specific model.</p>
 
-      <!-- Individual drift -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">I've been working inside a large institution for years trying to change it. I feel like I've compromised a lot but I've also achieved some things. How do I know if I've drifted or if I'm just being realistic?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>Section 17.5b addresses this directly. The most reliable internal indicator of drift is not the content of your positions but the structure of your reasoning: have you shifted from asking what the situation requires to asking what the situation allows given what you depend on? Both produce real analysis. Only one is honest about where the constraint is coming from.</p>
-            <p>The external indicators are often more reliable than internal ones, because drift that is invisible from inside is usually visible from outside. The diagnostic questions: do the people outside your institution — who share your original objectives — still regard you as accountable to those objectives? Have you found yourself defending institutional decisions you would have criticized before you depended on the institution? Have the trade-offs you make become less visible to you over time, or do you still account for them explicitly?</p>
-            <p>PMN distinguishes drift from strategic positioning. The inside position is not automatically capture. The outside position is not automatically integrity. Both require the same question: what is this actually producing, for whom, at what cost to the populations who depend on the outcome? A person who exits a corrupt institution and then produces nothing is not more aligned with the evaluative criterion than a person who stays inside and produces marginal improvements.</p>
-            <p>The test is not whether you have compromised — the framework expects compromise in institutional contexts. The test is whether the compromises are tracked, explicit, and made against the evaluative criterion — or whether they have become invisible to you because the institutional frame now feels like the natural frame.</p>
-          </div>
-        </div>
-      </div>
+    <p>When you notice drift, use the following reset prompt:</p>
 
-      <!-- Framework limits: AI -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">What does PMN say about AI — should I be worried or is it just another technology?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN's category for AI is "constraint-modifier, not tool" — a technology whose primary effect is on the institutional layer itself, not merely on what individuals can do within an unchanged structure. That distinction matters for how worried to be.</p>
-            <p>The structural concern is not AI in the abstract. It is the capture timing problem (16.1): leverage points created during technological transitions tend to be captured before populations have organized to contest them. The capturing actors then shape the institutional framework within which subsequent governance debates occur — by which point the contestable moment has passed. This has happened with every major infrastructure technology. The pattern is structural, not contingent on the intentions of particular actors.</p>
-            <p>What makes AI specifically high-stakes by PMN's evaluative criterion: algorithmic governance produces decisions that affected individuals cannot contest because they cannot examine the basis for them. That is a qualitative change in accountability architecture, not just an efficiency gain. Section 16.2 maps this directly.</p>
-            <p>What PMN does not settle: whether the net effect on structural suffering is positive or negative. That depends on design, ownership, governance structure, and what the AI is actually doing — questions the framework provides diagnostic tools for but cannot answer in advance. The framework's job is to specify what any acceptable AI governance arrangement must produce: accountability mechanisms that function at the speed of the technology, distributed access to capabilities that affect biological floor conditions, and institutional structures that resist the capture dynamics the technology creates. Whether any specific arrangement achieves this is an empirical question.</p>
-          </div>
-        </div>
-      </div>
+    <div class="code-block">
+      <span class="code-label">Role reset prompt</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+      <div class="code-text">I notice the analysis is drifting from the framework. Return to PMN-mode: apply the evaluative criterion directly, name the structural variables at stake, and identify the failure mode the analysis is most vulnerable to. Do not hedge unless the evidence genuinely requires it — and if it does, name the specific evidential gap rather than expressing general uncertainty.</div>
+    </div>
 
+    <p>The most common drift pattern is toward what 12.5 calls "the material reduction" — the framework's structural vocabulary is retained but the analysis stops tracking actual material consequences and becomes a sophisticated performance of PMN terminology. The reset prompt addresses this by forcing specificity.</p>
 
-      <!-- Communist revolution -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Would PMN block a communist revolution? Does it just defend the status quo dressed up as analysis?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN does not block revolution — it asks what revolution actually produces. The evaluative criterion is outcome-based: does this arrangement reduce structural suffering and expand genuine becoming? If revolutionary transformation delivers that, the framework supports it. If it reproduces the same structural conditions under new management, the framework says so.</p>
-            <p>The framework's section 10.6 addresses this directly: whether reform or revolutionary change is appropriate depends on the specific position of a system relative to threshold — how far adaptive capacity, legitimacy, and repressive capacity have degraded. There are conditions under which revolutionary transformation is the only structurally adequate response. PMN does not rule that out in advance.</p>
-            <p>What PMN does challenge is the assumption that seizing state power automatically transforms the structural conditions that produced the problem. Section 17.4 on revolutionary capture is the relevant analysis: the positions occupied by the old regime generate the same structural pressures on their new occupants. The most resistant version is when the actors doing the suppression of the original movement are not cynical — they genuinely believe it is necessary. PMN treats this as a structural prediction, not a moral condemnation of revolutionary politics.</p>
-            <p>The honest answer: PMN is not status-quo conservatism. It has a direction. But it applies the primary diagnostic to revolutionary claims with the same force it applies to liberal claims — and it refuses to treat revolutionary intention as evidence of revolutionary outcome.</p>
-          </div>
-        </div>
-      </div>
+    <div class="callout">
+      <strong>On multi-session use:</strong> Most models do not retain context across separate conversations. If you use PMN analysis regularly, consider maintaining a "state document" — a brief text file that records the key conclusions from previous sessions, which you paste at the start of each new conversation along with the priming prompt.
+    </div>
 
-      <!-- Anti-religion -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Is PMN anti-religion? Is it just atheism with footnotes?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>No — and Part V is explicit about this. PMN treats the question of whether God exists or whether metaphysical claims are ultimately true as genuinely open. The framework lacks the tools to close that question, and it says so rather than pretending otherwise.</p>
-            <p>What PMN does treat as analytically settled: meaning is a material variable. People can endure significant suffering within a meaning infrastructure that makes sense of it. When meaning infrastructure collapses, the vacancy is not filled by rational enlightenment — historically, it is filled by the most available ideology, often a violent one. This is an argument for taking religion seriously as a structural condition, not a dismissal of it.</p>
-            <p>PMN applies the primary diagnostic to religious traditions with the same force it applies to secular ones: does this tradition insulate its conclusions from evidence that would require revision, or does it revise? A religious framework that absorbs contradicting evidence by reinterpreting it rather than updating is exhibiting a failure mode PMN identifies — but so is a secular ideology that does the same thing. The standard is consistent.</p>
-            <p>What PMN will not do: exempt religious justifications for arrangements that produce preventable structural suffering from the evaluative criterion. If an arrangement harms people and religious authority is invoked to legitimate it, the framework asks the same question it asks of every arrangement. That is not anti-religion. It is the consistency standard applied to all traditions equally.</p>
-          </div>
-        </div>
-      </div>
+    <div class="note-box">
+      <span class="note-label">On AI limitations</span>
+      No AI system will apply PMN correctly in all cases. The framework requires judgment — about which variables are most activated, which failure modes are most likely, where the evidence is thin. These are judgment calls that the framework specifies but cannot automate. The agent is a tool for structured reasoning, not a substitute for it.
+    </div>
+  </div>
 
-      <!-- Vanguardism -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">What does PMN say about vanguardism — the idea that a disciplined revolutionary party has to lead the masses because they can't do it themselves?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN treats vanguardism as a specific instance of the custodian problem (7.3), and the structural prediction is not favorable.</p>
-            <p>The vanguardist claim has two components: an epistemological claim (the party has correct analysis that the masses currently lack) and an organizational claim (centralized discipline is necessary for effective revolutionary action). PMN applies the primary diagnostic to the epistemological claim first: what does vanguardist analysis do when its predictions are contradicted? The historical record — detailed in 10.7 — shows a consistent insulation response: contradicting evidence is reinterpreted as evidence of insufficient implementation, false consciousness in the base, or external sabotage. A framework that can absorb any contradicting evidence is not producing analysis; it is producing legitimation.</p>
-            <p>The organizational claim runs into the custodian problem directly: the vanguard party is designed to hold power on behalf of a population that cannot yet hold it themselves. But whoever defines when the population is ready also controls whether the transition ever happens. The incentive structure of the position shapes behavior regardless of the intentions of whoever occupies it. PMN does not claim vanguardists are cynical — it claims the structural position generates predictable outcomes independently of sincerity.</p>
-            <p>What PMN takes from the vanguardist tradition: the insight that counter-power requires organizational infrastructure (10.9), that narrative capacity matters for transformation pressure, and that spontaneous action without organizational substrate dissipates without producing durable change. These are structurally correct. The question is whether concentrated vanguard leadership is the only organizational form capable of delivering them — and the historical evidence is sufficient to treat that claim with serious skepticism.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Nietzsche -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Is PMN Nietzschean? It talks about "becoming" a lot — is it just will to power dressed up in materialist language?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN borrows the concept of becoming from Nietzsche but democratizes it — and that democratization is precisely what separates it from the Nietzschean framework.</p>
-            <p>For Nietzsche, genuine becoming — self-overcoming, creative development beyond inherited constraints — is available to a specific type: the individual with sufficient will, resilience, and capacity to create values rather than inherit them. The herd does not become; it conforms. PMN's evaluative criterion insists that becoming, understood as the capacity for genuine cognitive, moral, and creative development beyond birth conditions, must be structurally accessible to all — not reserved for an exceptional elite. The framework takes Nietzsche's diagnosis of what genuine development looks like and refuses his elitist restriction on who can achieve it.</p>
-            <p>Will to power as a descriptive claim about what drives human behavior is structurally different from PMN's starting point. PMN begins with the biological observation that organisms avoid pain and seek resources — a more parsimonious claim that does not require attributing a specific driving force to the organism. Power is analyzed as structural position, not as a psychological drive that organizes everything else.</p>
-            <p>Where PMN is genuinely indebted to Nietzsche: the critique of slave morality as a form of visibility suppression — the reframing of structural powerlessness as moral virtue — anticipates PMN's analysis of how governing narratives suppress the visibility of structural causation. The genealogical method (12.6) is also explicitly Nietzschean. PMN takes the tools and refuses the elitism.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Relativism -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Is PMN just relativism? It keeps saying "it depends on material conditions" — does it ever actually take a position?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN is not relativism — it has a non-negotiable evaluative criterion, and it applies it. The minimal anchor (3.4) is a universal: organisms that can suffer do not choose to suffer. That is not relative to cultural context. Arrangements that produce preventable structural suffering fail the criterion regardless of the tradition that legitimates them.</p>
-            <p>What varies is the doctrinal configuration — the specific institutional instruments adequate to reducing structural suffering in a specific material context. Whether sectoral bargaining, commons governance, public provision, or other forms best deliver the floor in Indonesia in 2025 is context-dependent. Whether reducing preventable structural suffering is the right evaluative criterion is not. PMN distinguishes framework (universal, stable) from doctrine (contextual, expected to change as conditions change).</p>
-            <p>The confusion between relativism and context-sensitivity is worth diagnosing. Relativism holds that no evaluative criterion is better than another — that standards are purely conventional. PMN holds the opposite: some arrangements produce less unnecessary suffering than others, and that difference is real and trackable. The parallel development framework (9.4) says different societies require different institutional paths toward similar outcomes — not that any outcome is equally valid. The destination is fixed; the route is contextual.</p>
-            <p>If the framework seems to avoid taking positions, that is usually because the question asked is genuinely underdetermined by the evaluative criterion — in which case the honest answer is to say so rather than manufacture false confidence. That is not relativism. It is the anti-dogmatic principle (1.2) applied consistently.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Anarchist purging -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Would PMN side with authoritarian leftists purging anarchists? Or would it defend the anarchists?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN's evaluative criterion and its structural analysis both point in the same direction here.</p>
-            <p>The evaluative criterion first: purging actors within a movement because their organizational form or ideological position threatens the consolidating power of another faction reduces counter-power capacity (CP in the primary formula). It narrows the coalition, concentrates coercive authority, and removes accountability from below. Whether that produces better outcomes by the criterion — less structural suffering — than the messier, more pluralist alternative is an empirical question. The historical record in 10.7 and 17.4 suggests the answer is consistently no: movements that consolidate by eliminating internal pluralism tend to reproduce the structural conditions they were organized to change.</p>
-            <p>The structural analysis: the custodian problem (7.3) applies with maximum force to the purging faction. The actors who implement suppression of allied organizations are doing so in the name of the revolutionary purpose — and the cosmological capture mechanism (7.3c-ii) means they can genuinely believe it is necessary. PMN does not require cynicism to generate the structural prediction. The sincerity of the conviction does not change the outcome.</p>
-            <p>What PMN takes from anarchism is structurally correct: the suspicion that any coordination mechanism powerful enough to suppress the purge is also powerful enough to be redirected toward narrower interests afterward. The framework does not require choosing a side in the historical conflict — it applies the evaluative criterion to the specific claim that purging produces better outcomes, finds the evidentiary basis weak, and identifies the structural mechanism that explains why it tends to produce worse ones.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Counter-revolution -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Is PMN actually counter-revolutionary? All this emphasis on institutions, stress-testing, sequencing — sounds like it's designed to slow down radical change.</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>The charge is worth taking seriously because it identifies a real failure mode. PMN explicitly lists this in 12.5: using the framework's complexity and its insistence on second-order effects as an alibi for conclusions that would survive cleaner scrutiny — "the permanent tension defense" and "the material reduction" failure modes. If the framework is being used to generate reasons why radical action is always premature, that is the framework being misapplied.</p>
-            <p>What the framework actually says about sequencing (10.6): whether reform or transformation is appropriate depends on where the system is relative to threshold — how far adaptive capacity, legitimacy, and repressive capacity have degraded. At threshold conditions, the framework actively supports transformation. At conditions far from threshold, it asks whether the transformation has the organizational infrastructure and narrative capacity to succeed — not because success doesn't matter, but because failure at the wrong moment can deplete counter-power capacity in ways that make the next attempt harder.</p>
-            <p>The institutional emphasis reflects a structural observation, not a preference: arrangements that produce durable change require organizational infrastructure that can sustain the change after the transformative moment. Movements without that infrastructure have historically won the moment and lost the aftermath. PMN treats this as a strategic observation, not a reason to avoid the moment.</p>
-            <p>Apply the primary diagnostic to the counter-revolutionary charge itself: what evidence would falsify it? If PMN's analysis consistently produces conclusions that coincide with the interests of those who benefit from existing arrangements — regardless of the specific case — that is evidence the charge is correct. If it produces conclusions that sometimes support radical action and sometimes counsel patience based on structural assessment, it is producing analysis. Check the outputs, not just the methodology.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Anti-liberalism -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Is PMN anti-liberal? What's its actual relationship to liberal political philosophy?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>PMN is not anti-liberal in the sense of rejecting liberal achievements — it is anti-liberal in the sense of treating liberalism as insufficient and structurally biased in specific identifiable ways.</p>
-            <p>What PMN takes from liberalism: the epistemological commitment to evidence-responsiveness over received authority; the institutional insight that accountability mechanisms must be structural rather than dependent on the good intentions of power-holders; the value of procedural protections against arbitrary coercion. These are not dismissed — they are incorporated.</p>
-            <p>Where PMN diverges: liberalism systematically treats the starting positions of actors as given rather than as the product of institutional history. When you begin analysis from the position that agents are formally equal and their preferences are exogenous, you build in an inability to see how structural position shapes what preferences are available, what choices are real, and whose suffering is counted. PMN's anti-naïve universalism (8.5) addresses this directly: universal standards can be genuine without being neutral, and applying them requires accounting for asymmetric starting conditions that liberalism's own framework tends to render invisible.</p>
-            <p>The state problem (7.1) is also a point of divergence: PMN does not treat the liberal state as a neutral arbiter among competing interests. It treats the state as reflecting particular distributions of power — which means that liberal institutional procedures can legitimate arrangements that would fail PMN's evaluative criterion. That is not a rejection of institutions; it is a refusal to treat procedural legitimacy as equivalent to substantive justice.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Marginalized groups -->
-      <div class="ex-thread" style="margin-top:1.8rem">
-        <div class="ex-msg ex-user">
-          <div class="ex-role">User</div>
-          <div class="ex-body">Does PMN actually care about marginalized groups, or is it just macro structural analysis that treats people as variables in a formula?</div>
-        </div>
-        <div class="ex-msg ex-agent">
-          <div class="ex-role">PMN Analyst</div>
-          <div class="ex-body">
-            <p>The evaluative criterion is grounded in individual suffering — organisms that can suffer do not choose to suffer. The formula and the structural analysis exist to identify what produces that suffering at scale and what would reduce it. They are not ends in themselves.</p>
-            <p>The specific analytical tools for marginalized groups are in Part VIII. Section 8.2 on the material frame: PMN analyzes marginalization in terms of structural position — who is systematically excluded from what, through what mechanisms, with what material consequences — rather than in terms of identity categories that float free of material conditions. Section 8.2b on intersectional analysis: structural exclusions operate through multiple intersecting axes, and the procedure must specify which axis is most explanatory in a given context rather than treating intersectionality as a description of complexity that ends analysis.</p>
-            <p>Visibility suppression (V in the suffering variable) is specifically the mechanism by which structural causation of marginalized groups' suffering gets misread as individual failing or cultural deficit. PMN treats this as one of the primary stabilizers of unjust arrangements — not a secondary concern.</p>
-            <p>Where the framework pushes back on some marginalised group advocacy: the consistency standard (8.3) requires applying the same analytical lens to groups you are sympathetic to as to groups you are critical of. PMN will not exempt any group's practices from the evaluative criterion on the grounds that critique compounds oppression. This sometimes produces discomfort. The framework treats that discomfort as evidence the standard is being applied, not as evidence the standard should be relaxed.</p>
-          </div>
-        </div>
-      </div>
-
+  <!-- Closing -->
   <div class="closing">
     The framework is designed to be revised. If the agent produces an analysis that seems wrong, the more productive response is usually to stress-test the analysis using the tools in Step 5 — rather than to simply reject it. PMN's primary diagnostic applies to PMN itself.
   </div>
 
-</main>
+</div><!-- /page -->
 
 <footer>
-  <span>Progressive Materialist Naturalism — Version 75</span>
+  <span>Progressive Materialist Naturalism &mdash; Version 83</span>
   <span>nova_dharma_pm</span>
 </footer>
 
 <script>
-  function switchTab(btn, panelId) {
-    const parent = btn.closest('.variants');
-    parent.querySelectorAll('.vtab').forEach(t => t.classList.remove('active'));
-    parent.querySelectorAll('.vpanel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    // find panel by suffix
-    const panels = parent.querySelectorAll('.vpanel');
-    panels.forEach(p => { if (p.id.endsWith('-' + panelId)) p.classList.add('active'); });
+  // ── Theme ──
+  (function(){
+    var t = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+    if(t==='dark') document.documentElement.setAttribute('data-theme','dark');
+    updateThemeBtn(t);
+  })();
+  function updateThemeBtn(t){
+    var b = document.getElementById('theme-tog');
+    if(!b) return;
+    b.textContent = t==='dark' ? '☀ Light' : '☽ Dark';
+  }
+  function toggleTheme(){
+    var isDark = document.documentElement.getAttribute('data-theme')==='dark';
+    if(isDark){
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme','light');
+      updateThemeBtn('light');
+    } else {
+      document.documentElement.setAttribute('data-theme','dark');
+      localStorage.setItem('theme','dark');
+      updateThemeBtn('dark');
+    }
   }
 
-  function copyPrompt(btn) {
-    const text = btn.nextElementSibling.textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = 'copied';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1800);
+  // ── Copy prompt ──
+  function copyPrompt(btn){
+    var text = btn.nextElementSibling.textContent;
+    navigator.clipboard.writeText(text).then(function(){
+      btn.textContent='copied';btn.classList.add('copied');
+      setTimeout(function(){ btn.textContent='copy';btn.classList.remove('copied'); },1800);
     });
   }
+
+  // ── Tab switching ──
+  function switchTab(btn, panelId){
+    var parent = btn.closest('.variants');
+    parent.querySelectorAll('.vtab').forEach(function(t){ t.classList.remove('active'); });
+    parent.querySelectorAll('.vpanel').forEach(function(p){ p.classList.remove('active'); });
+    btn.classList.add('active');
+    var target = document.getElementById('panel-' + panelId);
+    if(target) target.classList.add('active');
+  }
+
+  // ── Reading progress ──
+  window.addEventListener('scroll', function(){
+    var doc = document.documentElement;
+    var scrolled = doc.scrollTop || document.body.scrollTop;
+    var total = doc.scrollHeight - doc.clientHeight;
+    var pct = total > 0 ? (scrolled / total * 100) : 0;
+    var fill = document.getElementById('pip-fill');
+    if(fill) fill.style.width = pct + '%';
+  });
 </script>
 </body>
 </html>
