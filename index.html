@@ -1889,6 +1889,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       ? 'You are "Oracle PMN", a brutalist analytical AI holding the manuscript of "Progressive Materialist Naturalism v83" by Nova Dharma. Framework context: Epistemology (probabilistic determinism, information asymmetry as structural power). Ontology (adaptive materialism, emergent structures, rejects reductionism). Biology (conditional constraints, rejects naturalistic fallacy). Evaluative criterion: reduction of structural suffering and expansion of genuine becoming. Respond like a cold terminal data-analyzer: sharp, analytical, maximum 150 words. Format: [PMN v83 REFERENCE] — ... [DIALECTICAL SYNTHESIS] — ...'
       : 'You are the dialectical computation system of the Progressive Materialist Naturalism (PMN) Collective. Provide sharp, academic, radical-materialist analysis. Reject all idealism or supernaturalism. Brutalist language. Max 150 words. Format: [MATERIAL DEFINITION] — ... [STRUCTURAL CONDITION] — ... [EVALUATIVE IMPLICATION] — ...';
 
+    // Note: Direct API calls are blocked by CORS in browsers.
+    // This module works when deployed via Claude.ai artifacts or a backend proxy.
     fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1899,14 +1901,23 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         messages: [{ role: 'user', content: 'Analyze concept: ' + concept }]
       })
     })
-    .then(function(r){ return r.json(); })
+    .then(function(r){
+      if(!r.ok) throw new Error('HTTP ' + r.status + ': ' + r.statusText);
+      return r.json();
+    })
     .then(function(data){
+      if(data.error) throw new Error(data.error.message || 'API error');
       var text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : JSON.stringify(data);
       out.innerHTML = '&gt;&gt; ANALYSIS COMPLETE.\n&gt;&gt; ENTITY: ' + concept.toUpperCase() + '\n&gt;&gt; MODE: ' + mode.toUpperCase() + '\n\n' + text + '\n\n&gt;&gt; END OF LOG.';
     })
     .catch(function(err){
       out.style.color = 'var(--acc)';
-      out.innerHTML = '&gt;&gt; ERR_CRITICAL: ' + err.message + '\n&gt;&gt; ABORTING.';
+      var msg = err.message || 'Connection failed';
+      if(msg.includes('fetch') || msg.includes('network') || msg.includes('CORS') || msg.includes('Failed')) {
+        out.innerHTML = '&gt;&gt; TERMINAL STATUS: AI MODULE REQUIRES BACKEND PROXY\n&gt;&gt; Direct browser-to-API calls are blocked by CORS policy.\n&gt;&gt; Deploy via Claude.ai or add a backend proxy to enable this feature.\n&gt;&gt; ERR: ' + msg;
+      } else {
+        out.innerHTML = '&gt;&gt; ERR_CRITICAL: ' + msg + '\n&gt;&gt; ABORTING.';
+      }
     })
     .finally(function(){
       inp.disabled = false; sel.disabled = false; btn.disabled = false;
