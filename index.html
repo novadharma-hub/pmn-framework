@@ -14,7 +14,7 @@
 /* ── Variables ── */
 :root {
   /* LIGHT: Deep Vintage Archive / Cottage Bookstore */
-  --bg:#efe6d5; --bg2:#e3d5be; --bg3:#d8c9ae;
+  --bg:#f2e8d6; --bg2:#e8d9c0; --bg3:#dccaab;
   --sb:#e3d5be; --ink:#362417; --ink2:#7a6352;
   --acc:#ad341e; --acc2:#8a2a19; --mute:#948270; --mute2:#7a6a58; --mute3:#b0a090;
   --rule:#cfbda9; --rule2:#c4b09a;
@@ -29,15 +29,15 @@
   --vignette:inset 0 0 200px rgba(100,60,30,0.07);
 }
 [data-theme=dark] {
-  --bg:#0a0a0a; --bg2:#121212; --bg3:#1a1a1a;
-  --sb:#111111; --ink:#f0ebe1; --ink2:#a39c94;
-  --acc:#b91c1c; --acc2:#8b1515; --mute:#7a7068; --mute2:#5a5248; --mute3:#3a3530;
-  --rule:#2a2522; --rule2:#342e2a;
-  --hdr:#0a0a0a;
-  --code-bg:#161616;
-  --noise-op:0.05;
+  --bg:#0d0d0d; --bg2:#171717; --bg3:#1f1f1f;
+  --sb:#141414; --ink:#f5f0e8; --ink2:#c8bfb2;
+  --acc:#c0271a; --acc2:#961f14; --mute:#8a7d6e; --mute2:#5e5248; --mute3:#3a3530;
+  --rule:#302b27; --rule2:#3d3730;
+  --hdr:#0d0d0d;
+  --code-bg:#181818;
+  --noise-op:0.04;
   --noise-blend:screen;
-  --vignette:inset 0 0 250px rgba(0,0,0,0.85);
+  --vignette:inset 0 0 300px rgba(0,0,0,0.7);
 }
 
 /* ── GLOBAL DECORATIVE OVERLAYS (v84) ── */
@@ -58,17 +58,28 @@ body::before {
   background-size:40px 40px;opacity:0.06;pointer-events:none;z-index:0;
 }
 [data-theme=dark] .grid-overlay{opacity:0.07}
-.screen-frame {
-  position:fixed;top:14px;left:14px;right:14px;bottom:14px;
-  border:1px solid var(--rule);pointer-events:none;z-index:9997;opacity:0.35;
-}
-.screen-frame::before,.screen-frame::after{
-  content:'+';position:absolute;font-family:var(--f-mono);color:var(--acc);font-size:1.4rem;line-height:1;
-}
-.screen-frame::before{top:-13px;left:-7px}
-.screen-frame::after{bottom:-11px;right:-7px}
+/* screen-frame removed */
 
-/* ── Particle canvas ── */
+/* ── Theses section (home) ── */
+.theses-section{background:var(--bg2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:4rem 2.5rem;position:relative;z-index:2}
+[data-theme=dark] .theses-section{background:#141414;border-color:var(--rule)}
+.theses-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:start}
+.theses-lead h2{font-family:var(--f-head);font-size:3rem;text-transform:uppercase;line-height:1.1;color:var(--ink)}
+[data-theme=dark] .theses-lead h2{color:var(--acc)}
+.theses-list{display:flex;flex-direction:column;gap:0}
+.thesis-item{padding-bottom:2rem;margin-bottom:2rem;border-bottom:1px solid var(--rule)}
+.thesis-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.thesis-num{font-family:var(--f-mono);color:var(--acc);font-weight:700;font-size:1rem;margin-bottom:.5rem;display:block}
+.thesis-item h4{font-family:var(--f-head);font-size:1.25rem;margin-bottom:.6rem;text-transform:uppercase;color:var(--ink)}
+.thesis-item p{font-size:.95rem;color:var(--ink2);line-height:1.7}
+/* ── Home footer bar ── */
+.home-footer-bar{padding:2rem 2.5rem;background:var(--bg2);border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.75rem;text-transform:uppercase;font-weight:700;flex-wrap:wrap;gap:1rem;color:var(--ink2)}
+[data-theme=dark] .home-footer-bar{background:#0d0d0d;border-top-color:var(--rule)}
+/* ── Srch-view (contents + glossary + search) ── */
+#srch-view{flex-direction:column;height:100%;overflow:hidden}
+.sv-hdr{font-family:'Libre Baskerville',serif;font-size:1.6rem;font-weight:400;color:var(--ink);padding:2rem 2.5rem 1.2rem;border-bottom:1px solid var(--rule);display:block;flex-shrink:0;margin-bottom:0;letter-spacing:-.01em}
+#toc-panel{overflow-y:auto;flex:1}
+#sv-body{overflow-y:auto;flex:1;padding:2rem 2.5rem 8rem}
 #particle-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1}
 
 /* ── Marquee ticker (home) ── */
@@ -83,7 +94,7 @@ body::before {
 .anatomy-section-hdr{margin-bottom:2rem;border-bottom:1px solid var(--rule);padding-bottom:.8rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:.5rem}
 .anatomy-section-hdr h2{font-family:var(--f-head);font-size:1.6rem;text-transform:uppercase;letter-spacing:.02em;color:var(--ink)}
 .anatomy-section-hdr span{font-family:var(--f-mono);color:var(--acc);font-weight:700;text-transform:uppercase;font-size:.7rem;letter-spacing:.1em}
-.anatomy-terminal{display:flex;border:1px solid var(--rule);background:var(--bg2);height:360px;box-shadow:6px 6px 0 var(--rule)}
+.anatomy-terminal{display:flex;border:1px solid var(--rule);background:var(--bg2);height:480px;box-shadow:6px 6px 0 var(--rule)}
 [data-theme=dark] .anatomy-terminal{background:#0a0a0a;box-shadow:6px 6px 0 #000}
 .anatomy-sidebar{width:33%;border-right:1px solid var(--rule);display:flex;flex-direction:column;overflow-y:auto;background:var(--bg)}
 [data-theme=dark] .anatomy-sidebar{background:#111}
@@ -103,7 +114,7 @@ body::before {
 .anatomy-panel.on{display:block}
 .anatomy-panel .ap-badge{font-family:var(--f-mono);font-size:1.2rem;font-weight:700;color:var(--bg);background:var(--ink);display:inline-block;padding:.1rem .9rem;margin-bottom:1.2rem}
 [data-theme=dark] .anatomy-panel .ap-badge{background:var(--rule);color:var(--ink)}
-.anatomy-panel h3{font-family:var(--f-head);font-size:1.6rem;margin-bottom:1rem;text-transform:uppercase;line-height:1.2;color:var(--ink)}
+.anatomy-panel h3{font-family:var(--f-head);font-size:1.4rem;margin-bottom:.8rem;text-transform:uppercase;line-height:1.2;color:var(--ink)}
 [data-theme=dark] .anatomy-panel h3{color:var(--acc)}
 .anatomy-panel p{font-size:.95rem;line-height:1.7;color:var(--ink2)}
 .btn-anatomy-more{margin-top:1.2rem;background:transparent;border:1px solid var(--acc);color:var(--acc);font-family:var(--f-mono);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:.5rem 1rem;cursor:pointer;transition:all .18s}
@@ -161,22 +172,36 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 #topbar{height:0}
 
 /* ── Page shell: everything below header ── */
-.page-shell{display:flex;flex-direction:column;height:calc(100vh - 52px);overflow:hidden}
+.page-shell{display:flex;flex-direction:column;height:calc(100vh - 52px);overflow:hidden;position:relative}
 
-/* ── Views ── */
+/* ── Views: flex fill approach ── */
 .view{display:none}
-.view.on{display:block}
 
-/* ── Home view ── */
-#home-view{overflow-y:auto;height:100%}
+/* Each active view fills views-shell completely */
+#home-view.on,
+#srch-view.on,
+#reader-view.on{
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+}
+
+/* srch-view: flex column (header + scrollable body) */
+#srch-view.on{display:flex;flex-direction:column;overflow:hidden}
+
+/* reader-view: flex row (sidebar + main) on desktop */
+#reader-view.on{display:flex;flex-direction:row;overflow:hidden}
+
+/* home-view: scrollable block */
+#home-view.on{display:block;overflow-y:auto}
+
 #home-view > *{max-width:1000px;margin-left:auto;margin-right:auto;padding-left:2.5rem;padding-right:2.5rem}
 #home-view > .hero{padding-top:4.5rem;max-width:1000px}
-#home-view > .toc-lbl{padding-top:0;max-width:1000px}
 #home-view > .hero-suggestions{padding-top:0}
-#home-view > #toc-grid{padding-bottom:2rem;max-width:1000px}
 #home-view > .marquee-wrap{max-width:none;margin-left:0;margin-right:0;padding-left:0;padding-right:0}
 #home-view > .anatomy-section{max-width:1000px}
+#home-view > .theses-section{max-width:none;margin-left:0;margin-right:0;padding-left:0;padding-right:0}
 #home-view > .home-ai-section{max-width:none;margin-left:0;margin-right:0}
+#home-view > .home-footer-bar{max-width:none;margin-left:0;margin-right:0}
 
 /* ── Hero ── */
 .hero{text-align:center;padding-bottom:3rem;margin-bottom:0}
@@ -237,9 +262,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 .toc-prog-fill{height:100%;background:var(--acc);border-radius:1px;transition:width .3s}
 .toc-prog-lbl{font-family:'Source Code Pro',monospace;font-size:.72rem;color:var(--mute2);letter-spacing:.08em;flex-shrink:0}
 
-/* ── Search/Glossary view ── */
-#srch-view{overflow-y:auto;height:100%;padding:3.5rem 2.5rem 8rem;max-width:720px;margin:0 auto}
-.sv-hdr{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute2);padding-bottom:1.2rem;margin-bottom:2rem;border-bottom:1px solid var(--rule)}
+/* ── Search results and glossary cards ── */
 .res{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--rule);padding:1.4rem 0;cursor:pointer;transition:padding-left .15s}
 .res:hover{padding-left:.5rem}
 .res-loc{font-family:'Source Code Pro',monospace;font-size:.72rem;color:var(--acc);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.3rem}
@@ -248,13 +271,12 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 mark{background:transparent;color:var(--acc2);text-decoration:underline;text-decoration-color:rgba(201,160,80,.4);text-underline-offset:2px}
 .gl-grp-lbl{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute2);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule)}
 .gl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-bottom:2rem}
-.gl-card{background:var(--bg2);border:1px solid var(--rule);padding:1rem 1.1rem}
+.gl-card{background:var(--bg2);border:1px solid var(--rule);padding:1rem 1.1rem;transition:border-color .15s,background .15s;cursor:pointer;text-align:left;width:100%;display:block}.gl-card:hover{border-color:var(--acc);background:var(--bg3)}.gl-card:hover .gl-term{color:var(--acc2)}
 .gl-term{font-family:'Libre Baskerville',serif;font-size:.95rem;color:var(--acc);margin-bottom:.4rem;font-weight:700}
 .gl-def{font-family:'Lora',serif;font-style:italic;font-size:.88rem;color:var(--mute);line-height:1.6}
 .empty{font-family:'Lora',serif;font-style:italic;color:var(--mute2);padding:2rem 0}
 
 /* ── Reader view ── */
-#reader-view.on{display:flex!important;height:100%;overflow:hidden}
 
 /* ── Sidebar ── */
 #sidebar{width:268px;min-width:268px;height:100%;overflow-y:auto;background:var(--sb);border-right:1px solid var(--rule);flex-shrink:0;transition:width .26s cubic-bezier(.4,0,.2,1),min-width .26s;position:relative}
@@ -387,9 +409,9 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
 
 /* ── Mobile styles: triggered by screen size OR manual override ── */
 @media(max-width:680px), html[data-layout="mobile"] {
-  body{overflow:auto}
-  .page-shell{height:auto;overflow:visible}
-  #home-view{height:auto;overflow:visible}
+  body{overflow:hidden}
+  .page-shell{height:calc(100vh - 52px);overflow:hidden}
+  #home-view{overflow-y:auto}
   #home-view > *{padding-left:1.4rem;padding-right:1.4rem}
   #hdr{padding:.55rem .75rem;gap:.4rem}
   #hdr-srch{max-width:none;flex:1;min-width:0}
@@ -423,7 +445,10 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .home-ai-section{padding:2rem 1.4rem}
   .home-ai-row{flex-direction:column}
   .home-ai-select,.home-ai-input,.home-ai-btn{width:100%}
-  #reader-view.on{flex-direction:column;height:auto;overflow:visible}
+  .theses-inner{grid-template-columns:1fr;gap:2rem;padding:2rem 1.4rem}
+  .theses-lead h2{font-size:2rem}
+  .home-footer-bar{padding:1.5rem 1.4rem;flex-direction:column;gap:.5rem}
+  #reader-view.on{flex-direction:column;overflow-y:auto}
   #reader-main{width:100%;height:auto;overflow:visible}
   #reader-col{padding:1.4rem 1.4rem 5rem;max-width:none}
   #sidebar{position:fixed;left:0;top:52px;height:calc(100% - 52px);z-index:200;transform:translateX(-100%);transition:transform .26s ease;width:280px!important;min-width:280px!important}
@@ -441,7 +466,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .related,.cited{margin-top:1.8rem}
   .rel-btn,.annot-btn,.cited-btn{font-size:.8rem}
   .doc-footer{flex-direction:column;gap:.6rem;align-items:flex-start}
-  #srch-view{padding:1rem}
+  #sv-body{padding:1rem}
   .gl-grp-lbl{font-size:.68rem}
   .res-loc{font-size:.68rem}
   #notes-modal > div{width:95vw;max-height:85vh;padding:1.2rem}
@@ -456,7 +481,6 @@ html[data-layout="desktop"] #hdr-srch{max-width:380px}
 html[data-layout="desktop"] #srch-part{display:block}
 html[data-layout="desktop"] .hbtn{padding:.3rem .4rem;letter-spacing:.14em}
 html[data-layout="desktop"] .toc-subs{grid-template-columns:repeat(3,1fr)}
-html[data-layout="desktop"] #reader-view.on{flex-direction:row;height:100%;overflow:hidden}
 html[data-layout="desktop"] #reader-main{width:auto;height:100%;overflow-y:auto}
 html[data-layout="desktop"] #reader-col{padding:3.5rem 2.5rem 8rem;max-width:68ch}
 html[data-layout="desktop"] #sidebar{position:relative;left:auto;top:auto;height:100%;transform:none!important;transition:width .26s cubic-bezier(.4,0,.2,1),min-width .26s}
@@ -554,6 +578,16 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   background: rgba(248,113,113,.10);
   border-color: #FCA5A5;
 }
+
+/* Rotating quotes — scoped inside toc-panel and home-view */
+#toc-panel #quote-strip {
+  border-bottom: 1px solid var(--rule);
+  padding: 1.25rem 2.5rem 1.5rem;
+  margin: 0;
+}
+#toc-panel .toc-lbl { padding: 1.6rem 2.5rem .6rem; }
+#toc-panel .toc-part { padding: 1.2rem 2.5rem 1rem; }
+#toc-panel #toc-grid { max-width: 1000px; }
 
 /* Rotating quotes — homepage only, scoped inside #home-view */
 #home-view #quote-strip {
@@ -691,7 +725,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 <!-- v84 Global Decorative Overlays -->
 <div class="vignette-overlay"></div>
 <div class="grid-overlay"></div>
-<div class="screen-frame"></div>
+<!-- screen-frame removed -->
 <canvas id="particle-canvas"></canvas>
 
 <div class="page-shell">
@@ -713,7 +747,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   </div>
 </header>
 
-<div class="views-shell" style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+<div class="views-shell" style="flex:1;overflow:hidden;position:relative;min-height:0">
 
 <div id="home-view" class="view on">
   <div class="hero">
@@ -733,7 +767,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       <div class="cta-row-s">
         <button id="cta-gl" class="cta-s">Key Terms</button>
         <a href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download PDF &darr;</a>
-        <a href="https://drive.google.com/drive/folders/1l3LbgIpFuB_daDyW_tZIUYIGvEfflgw3?usp=drive_link" class="cta-s" target="_blank" rel="noopener" style="text-decoration:none">Download .md &darr;</a>
+        
         <a href="pmn-agent-guide.html" class="cta-s" style="text-decoration:none">AI Agent &rarr;</a>
       </div>
       <div class="cta-row-util">
@@ -755,21 +789,6 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     </div>
   </div>
 
-  <p class="toc-lbl">Contents</p>
-  <div class="toc-grid" id="toc-grid"></div>
-
-  <div id="quote-strip">
-    <div id="quote-strip-hdr">
-      <span id="quote-strip-lbl">— PMN —</span>
-      <button id="quote-tog" title="Hide quotes">&#8722;</button>
-    </div>
-    <div id="quote-inner">
-      <div id="quote-body"></div>
-      <div id="quote-title"></div>
-      <div class="quote-dots" id="quote-dots"></div>
-    </div>
-  </div><!-- /quote-strip -->
-
   <!-- ── ANATOMY TERMINAL ── -->
   <div class="anatomy-section">
     <div class="anatomy-section-hdr">
@@ -779,6 +798,50 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     <div class="anatomy-terminal">
       <div class="anatomy-sidebar" id="anatomy-sidebar"></div>
       <div class="anatomy-content" id="anatomy-content"></div>
+    </div>
+  </div>
+
+  <!-- ── CORE THESES ── -->
+  <div class="theses-section">
+    <div class="theses-inner">
+      <div class="theses-lead"><h2>Core<br>Theses</h2></div>
+      <div class="theses-list">
+        <div class="thesis-item">
+          <span class="thesis-num">THESIS 01.</span>
+          <h4>Material Reality is Primary</h4>
+          <p>Reality exists independently of perception. Ideas do not govern material conditions — conditions shape what ideas can be held. Analysis must begin from what organisms materially are, not from prior normative commitments.</p>
+        </div>
+        <div class="thesis-item">
+          <span class="thesis-num">THESIS 02.</span>
+          <h4>Knowledge is a Material Product</h4>
+          <p>Knowledge is the physical output of biological entities interacting with their environment under conditions of scarcity. Information Asymmetry is inherently a form of structural power — not merely a market failure.</p>
+        </div>
+        <div class="thesis-item">
+          <span class="thesis-num">THESIS 03.</span>
+          <h4>Rejection of Absolute Free Will</h4>
+          <p>We operate under Probabilistic Determinism — nodes of probability in a material network. This prevents designing institutions that punish individuals for outcomes determined by structural conditions.</p>
+        </div>
+        <div class="thesis-item">
+          <span class="thesis-num">THESIS 04.</span>
+          <h4>Emergent Structures are Real</h4>
+          <p>Against reductionism: complex material systems generate emergent properties irreducible to their components. A corporation is not just employees — it is a structure with its own survival incentives independent of any individual's intentions.</p>
+        </div>
+        <div class="thesis-item">
+          <span class="thesis-num">THESIS 05.</span>
+          <h4>The Minimal Anchor: Suffering as Evaluative Foundation</h4>
+          <p>Organisms that can suffer do not choose to suffer. This biological fact — not moral philosophy — grounds the framework's evaluative criterion. Arrangements are assessed by whether they reduce unnecessary structural suffering.</p>
+        </div>
+        <div class="thesis-item">
+          <span class="thesis-num">THESIS 06.</span>
+          <h4>Institutional Capture is Structural, Not Moral</h4>
+          <p>Institutions consistently drift toward serving those who control them — not through conspiracy or betrayal, but through structural incentives. The custodian problem cannot be solved by finding better people; it requires accountability mechanisms that function independently of intentions.</p>
+        </div>
+        <div class="thesis-item">
+          <span class="thesis-num">THESIS 07.</span>
+          <h4>Becoming Beyond the Floor</h4>
+          <p>Beyond eliminating unnecessary suffering lies the horizon: genuine becoming — the expansion of what is possible for organisms when the biological floor is secured. A framework adequate to material reality must hold both the floor and the ceiling simultaneously.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -801,10 +864,32 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     </div>
   </div>
 
+  <!-- ── HOME FOOTER ── -->
+  <div class="home-footer-bar">
+    <span>[C] 2026 NOVA DHARMA // PMN COLLECTIVE</span>
+    <span>V83 MANUSCRIPT — PRESS <kbd style="font-family:var(--f-mono);border:1px solid var(--rule);padding:.1rem .4rem;font-size:.7rem">?</kbd> FOR GLOSSARY — <kbd style="font-family:var(--f-mono);border:1px solid var(--rule);padding:.1rem .4rem;font-size:.7rem">K</kbd> FOR KEYS</span>
+  </div>
+
 </div><!-- /home-view -->
 <div id="srch-view" class="view">
   <p class="sv-hdr" id="sv-hdr">Key Terms &mdash; Glossary</p>
   <div id="sv-body"></div>
+  <!-- TOC panel — shown when Contents is active -->
+  <div id="toc-panel" style="display:none">
+    <div id="quote-strip">
+      <div id="quote-strip-hdr">
+        <span id="quote-strip-lbl">— PMN —</span>
+        <button id="quote-tog" title="Hide quotes">&#8722;</button>
+      </div>
+      <div id="quote-inner">
+        <div id="quote-body"></div>
+        <div id="quote-title"></div>
+        <div class="quote-dots" id="quote-dots"></div>
+      </div>
+    </div>
+    <p class="toc-lbl">Contents</p>
+    <div class="toc-grid" id="toc-grid"></div>
+  </div>
 </div>
 
 <div id="reader-view" class="view">
@@ -1018,8 +1103,40 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     g(v+'-view').classList.add('on');
     var btns=document.querySelectorAll('.hbtn');
     for(var i=0;i<btns.length;i++) btns[i].classList.remove('on');
-    if(v==='home'){ buildTOC(); pip(); g('hb-home').classList.add('on'); }
+    // Manage toc-panel vs sv-body visibility in srch-view
+    var tocPanel = g('toc-panel');
+    var svBody = g('sv-body');
+    if(v==='home'){
+      pip();
+      g('hb-home').classList.add('on');
+      if(tocPanel) tocPanel.style.display='none';
+    }
+    if(v==='srch'){
+      // If showing TOC (not a search query active), show toc-panel
+      var q = g('srch-in') ? g('srch-in').value.trim() : '';
+      if(!q){ showContentsPanel(); }
+    }
     if(typeof updateMobNav==='function') updateMobNav();
+  }
+
+  function showContentsPanel(){
+    var tocPanel = g('toc-panel');
+    var svBody = g('sv-body');
+    if(tocPanel){ tocPanel.style.display='block'; tocPanel.scrollTop=0; }
+    if(svBody){ svBody.innerHTML=''; svBody.style.display='none'; }
+    var hdr = g('sv-hdr');
+    if(hdr) hdr.textContent = 'Contents';
+    var si = g('srch-in'); if(si) si.value='';
+    var sc = g('srch-clr'); if(sc) sc.style.display='none';
+    buildTOC(); pip();
+    g('hb-home').classList.add('on');
+  }
+
+  function hideContentsPanel(){
+    var tocPanel = g('toc-panel');
+    var svBody = g('sv-body');
+    if(tocPanel) tocPanel.style.display='none';
+    if(svBody) svBody.style.display='';
   }
 
   function buildTOC(){
@@ -1400,16 +1517,20 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   function onSI(v){
     g('srch-clr').style.display=v?'block':'none';
     clearTimeout(_st);
+    hideContentsPanel();
     if(v.length>=3){ nav('srch'); _st=setTimeout(function(){doSrch(v);},180); }
     else if(!v){ nav('home'); }
     else{ nav('srch'); renderGL(); }
   }
-  function onSF(){ var v=g('srch-in').value; if(v.length>=3){nav('srch');doSrch(v);}else{nav('srch');renderGL();} }
+  function onSF(){ var v=g('srch-in').value; if(v.length>=3){nav('srch');hideContentsPanel();doSrch(v);}else{nav('srch');renderGL();} }
   function clrS(){ g('srch-in').value=''; g('srch-clr').style.display='none'; nav('home'); }
-  function showGL(){ g('srch-in').value=''; nav('srch'); renderGL(); g('hb-gl').classList.add('on'); }
+  function showGL(){ g('srch-in').value=''; nav('srch'); hideContentsPanel(); renderGL(); g('hb-gl').classList.add('on'); }
 
   function renderGL(){
-    g('sv-hdr').textContent='Key Terms — Glossary';
+    hideContentsPanel();
+    var svBody = g('sv-body');
+    if(svBody) svBody.style.display='';
+    g('sv-hdr').textContent='Lexicon — Key Terms';
     var h='';
     var grps=Object.keys(GLG);
     for(var i=0;i<grps.length;i++){
@@ -1417,7 +1538,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       h+='<div class="gl-grp-lbl">'+esc(grp)+'</div><div class="gl-grid">';
       for(var j=0;j<terms.length;j++){
         var t=terms[j], d=GL[t]||'';
-        h+='<div class="gl-card"><p class="gl-term">'+esc(t)+'</p><p class="gl-def">'+esc(d)+'</p></div>';
+        h+='<button class="gl-card" data-term="'+esc(t)+'" title="Search sections mentioning this term"><p class="gl-term">'+esc(t)+'</p><p class="gl-def">'+esc(d)+'</p></button>';
       }
       h+='</div>';
     }
@@ -1434,6 +1555,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     sel.addEventListener('change',function(){ doSrch(g('srch-in').value); });
   }
   function doSrch(q){
+    hideContentsPanel();
+    var svBody = g('sv-body');
+    if(svBody) svBody.style.display='';
     var ql=q.toLowerCase().trim(), res=[];
     var pf=g('srch-part')?g('srch-part').value:'';
     if(/^[0-9]+\.[0-9]+[a-z]?$/.test(ql)||/^a\.[0-9]+$/i.test(ql)){
@@ -1510,6 +1634,16 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
   // Event delegation
   g('sv-body').addEventListener('click', function(e){
+    // Glossary card click → search that term
+    var card=e.target.closest('.gl-card[data-term]');
+    if(card){
+      var term = card.getAttribute('data-term');
+      g('srch-in').value = term;
+      g('srch-clr').style.display = 'block';
+      doSrch(term);
+      return;
+    }
+    // Search result click → open section
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
     openSec(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
     if(g('srch-view').classList.contains('on')) clrS();
@@ -1528,21 +1662,20 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   });
   // Wire up static buttons (no inline onclick)
   g('hdr-logo').addEventListener('click', function(){ nav('home'); });
-  g('hb-home').addEventListener('click', function(){ nav('home'); });
+  g('hb-home').addEventListener('click', function(){ nav('srch'); showContentsPanel(); });
   g('mob-prev') && g('mob-prev').addEventListener('click', function(){ navP(); });
   g('mob-next') && g('mob-next').addEventListener('click', function(){ navN(); });
-  g('mob-mid')  && g('mob-mid').addEventListener('click',  function(){ nav('home'); });
-
+  g('mob-mid')  && g('mob-mid').addEventListener('click',  function(){ nav('srch'); showContentsPanel(); });
 
   g('theme-tog').addEventListener('click', toggleTheme);
   g('layout-tog') && g('layout-tog').addEventListener('click', toggleLayout);
   g('srch-clr').addEventListener('click', clrS);
   g('srch-in').addEventListener('input', function(){ onSI(this.value); });
   g('srch-in').addEventListener('focus', onSF);
-  g('cta-begin').addEventListener('click', function(){ openSec(0,0); });
+  g('cta-begin').addEventListener('click', function(){ nav('srch'); showContentsPanel(); });
   g('cta-gl').addEventListener('click', showGL);
   g('sb-tog').addEventListener('click', toggleSB);
-  g('bc-home').addEventListener('click', function(){ nav('home'); });
+  g('bc-home').addEventListener('click', function(){ nav('srch'); showContentsPanel(); });
   g('rn-p').addEventListener('click', navP);
   g('rn-n').addEventListener('click', navN);
   g('hb-kbd') && g('hb-kbd').addEventListener('click', showKbd);
@@ -1595,7 +1728,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   });
   (function(){var h=location.hash.slice(1);if(h&&LOOK[h]){var inf=LOOK[h];openSec(inf.pi,inf.si,true);}})();
   window.addEventListener('hashchange',function(){
-    var h=location.hash.slice(1);if(h&&LOOK[h]){var inf=LOOK[h];openSec(inf.pi,inf.si,true);}
+    var h=location.hash.slice(1);
+    if(h&&LOOK[h]){ var inf=LOOK[h]; openSec(inf.pi,inf.si,true); }
+    else if(!h){ nav('home'); }
   });
   document.addEventListener('click',function(e){
     if(window.innerWidth>680) return;
@@ -1681,14 +1816,14 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   var ac = document.getElementById('anatomy-content');
   if(!sb || !ac || !PARTS.length) return;
 
-  // Show first 6 parts max (or all if fewer)
-  var display = PARTS.slice(0, Math.min(6, PARTS.length));
+  // Show all main parts (exclude backmatter)
+  var SPECIAL_PARTS = ['Preface','Coda','Intellectual Debts','Bibliography'];
+  var display = PARTS.filter(function(p){ return SPECIAL_PARTS.indexOf(p.part) < 0; });
 
   var tabsHtml = '', panelsHtml = '';
   display.forEach(function(part, i){
     var id = 'ap-' + i;
-    var partLabel = (['Preface','Coda','Intellectual Debts','Bibliography'].indexOf(part.part) >= 0)
-      ? part.part : 'Part ' + part.part;
+    var partLabel = 'Part ' + part.part;
     tabsHtml += '<button class="anatomy-tab' + (i===0?' on':'') + '" data-target="' + id + '">' + partLabel + '</button>';
     // Build section list from first 5 subs
     var secList = '';
@@ -1698,10 +1833,21 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       secList += '<span style="display:block;font-family:var(--f-mono);font-size:.7rem;color:var(--acc);margin-bottom:.3rem">' + (s.id||'') + ' &mdash; ' + s.title + '</span>';
     });
     if(part.subs.length > 5) secList += '<span style="font-family:var(--f-mono);font-size:.65rem;color:var(--mute)">+ ' + (part.subs.length - 5) + ' more sections</span>';
+    // Get a short description from the first real section's text
+    var descText = '';
+    for(var di=0; di<part.subs.length; di++){
+      var ds = part.subs[di];
+      if(!ds.is_intro && ds.html){
+        var plain = ds.html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+        descText = plain.slice(0,200) + (plain.length>200?'…':'');
+        break;
+      }
+    }
     panelsHtml += '<div class="anatomy-panel' + (i===0?' on':'') + '" id="' + id + '">'
       + '<div class="ap-badge">' + partLabel.toUpperCase() + '</div>'
       + '<h3>' + part.title + '</h3>'
-      + '<div style="margin-top:1rem">' + secList + '</div>'
+      + (descText ? '<p style="font-size:.9rem;color:var(--ink2);line-height:1.65;margin-bottom:1.2rem">' + descText + '</p>' : '')
+      + '<div style="margin-top:.8rem">' + secList + '</div>'
       + '</div>';
   });
 
@@ -1844,20 +1990,26 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
   // Watch for view changes — pause canvas when not on home
   var views = document.querySelectorAll('.view');
+  var animId = null;
+
   function checkView(){
     var hv = document.getElementById('home-view');
+    var wasHome = isHome;
     isHome = hv && hv.classList.contains('on');
+    // Restart loop if we just came back to home
+    if(isHome && !wasHome && animId===null){ animate(); }
   }
+
   // MutationObserver to detect view switches
   var obs = new MutationObserver(checkView);
   views.forEach(function(v){ obs.observe(v, { attributes:true, attributeFilter:['class'] }); });
   checkView();
 
   function animate(){
-    requestAnimationFrame(animate);
-    if(!isHome){ ctx.clearRect(0,0,w,h); return; }
     ctx.clearRect(0,0,w,h);
+    if(!isHome){ animId=null; return; }
     particles.forEach(function(p){ p.update(); p.draw(); });
+    animId = requestAnimationFrame(animate);
   }
   animate();
 })();
