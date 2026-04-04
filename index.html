@@ -60,18 +60,35 @@ body::before {
 [data-theme=dark] .grid-overlay{opacity:0.07}
 /* screen-frame removed */
 
-/* ── Theses section (home) ── */
-.theses-section{background:var(--bg2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:4rem 2.5rem;position:relative;z-index:2}
+/* ── Theses section (home) — accordion ── */
+.theses-section{background:var(--bg2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:3rem 2.5rem;position:relative;z-index:2}
 [data-theme=dark] .theses-section{background:#141414;border-color:var(--rule)}
-.theses-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:start}
-.theses-lead h2{font-family:var(--f-head);font-size:3rem;text-transform:uppercase;line-height:1.1;color:var(--ink)}
+.theses-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 2.5fr;gap:4rem;align-items:start}
+.theses-lead h2{font-family:var(--f-head);font-size:2.8rem;text-transform:uppercase;line-height:1.1;color:var(--ink);position:sticky;top:1rem}
 [data-theme=dark] .theses-lead h2{color:var(--acc)}
+.theses-lead-sub{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-top:.8rem;line-height:1.6}
 .theses-list{display:flex;flex-direction:column;gap:0}
-.thesis-item{padding-bottom:2rem;margin-bottom:2rem;border-bottom:1px solid var(--rule)}
-.thesis-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.thesis-num{font-family:var(--f-mono);color:var(--acc);font-weight:700;font-size:1rem;margin-bottom:.5rem;display:block}
-.thesis-item h4{font-family:var(--f-head);font-size:1.25rem;margin-bottom:.6rem;text-transform:uppercase;color:var(--ink)}
-.thesis-item p{font-size:.95rem;color:var(--ink2);line-height:1.7}
+/* Accordion item */
+.thesis-item{border-bottom:1px solid var(--rule)}
+.thesis-item:first-child{border-top:1px solid var(--rule)}
+.thesis-toggle{
+  display:flex;align-items:baseline;gap:1rem;width:100%;
+  background:none;border:none;cursor:pointer;
+  padding:1.1rem 0;text-align:left;
+  transition:background .12s;
+}
+.thesis-toggle:hover{background:rgba(0,0,0,.02)}
+[data-theme=dark] .thesis-toggle:hover{background:rgba(255,255,255,.02)}
+.thesis-num{font-family:var(--f-mono);color:var(--acc);font-weight:700;font-size:.75rem;flex-shrink:0;letter-spacing:.08em}
+.thesis-title{font-family:var(--f-head);font-size:1rem;color:var(--ink);text-transform:uppercase;letter-spacing:.01em;flex:1;text-align:left}
+.thesis-arrow{font-family:var(--f-mono);font-size:.75rem;color:var(--mute);flex-shrink:0;transition:transform .2s;display:block}
+.thesis-item.open .thesis-arrow{transform:rotate(90deg);color:var(--acc)}
+.thesis-body{
+  display:none;padding:0 0 1.4rem 2.8rem;
+  font-size:.93rem;color:var(--ink2);line-height:1.75;
+  font-family:var(--f-body);
+}
+.thesis-item.open .thesis-body{display:block}
 /* ── Home footer bar ── */
 .home-footer-bar{padding:2rem 2.5rem;background:var(--bg2);border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.75rem;text-transform:uppercase;font-weight:700;flex-wrap:wrap;gap:1rem;color:var(--ink2)}
 [data-theme=dark] .home-footer-bar{background:#0d0d0d;border-top-color:var(--rule)}
@@ -80,7 +97,7 @@ body::before {
 .sv-hdr{font-family:'Libre Baskerville',serif;font-size:1.6rem;font-weight:400;color:var(--ink);padding:2rem 2.5rem 1.2rem;border-bottom:1px solid var(--rule);display:block;flex-shrink:0;margin-bottom:0;letter-spacing:-.01em}
 #toc-panel{overflow-y:auto;flex:1}
 #sv-body{overflow-y:auto;flex:1;padding:2rem 2.5rem 8rem}
-#particle-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1}
+#particle-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
 
 /* ── Marquee ticker (home) ── */
 .marquee-wrap{background:var(--acc);color:var(--bg);font-family:var(--f-mono);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;padding:.7rem 0;overflow:hidden;border-bottom:1px solid var(--rule);white-space:nowrap;display:flex}
@@ -210,7 +227,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 .hero{
   position:relative;
   text-align:center;
-  padding:7rem 2.5rem 5rem;
+  padding:2rem 2.5rem;
   margin-bottom:0;
   overflow:hidden;
   min-height:100vh;
@@ -219,12 +236,13 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   justify-content:center;
   align-items:center;
 
-  /* Light mode: warm radial glow from center */
+  /* Light mode: rich warm parchment with centered warm glow */
   background:
-    radial-gradient(ellipse 90% 70% at 50% 40%,
-      rgba(173,52,30,.07) 0%,
-      rgba(173,52,30,.03) 35%,
-      transparent 70%),
+    radial-gradient(ellipse 100% 80% at 50% 45%,
+      rgba(242,232,214,1) 0%,
+      rgba(232,217,192,1) 40%,
+      rgba(210,185,150,1) 70%,
+      rgba(185,155,110,1) 100%),
     var(--bg);
 }
 [data-theme=dark] .hero{
@@ -270,7 +288,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 /* Will-change for parallax */
 .hero-parallax{
   will-change:transform;
-  transition:transform .1s linear;
+  /* No transition — raw scroll feel for true parallax lag */
 }
 
 .hero-orn{
@@ -292,8 +310,9 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   color:var(--ink);
   text-transform:uppercase;
 }
+.hero-h1{text-shadow:0 1px 0 rgba(255,255,255,.5)}
 [data-theme=dark] .hero-h1{
-  text-shadow:0 2px 40px rgba(180,20,20,.25);
+  text-shadow:0 2px 40px rgba(180,20,20,.3),0 1px 0 rgba(0,0,0,.5);
 }
 .hero-h1 em{
   color:var(--acc);
@@ -309,19 +328,19 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 .hero-sub{
   font-family:'Lora',serif;font-style:italic;
   font-size:clamp(.95rem,2vw,1.15rem);
-  color:var(--ink2);margin-bottom:1.2rem;
-  opacity:.9;
+  color:var(--ink);margin-bottom:1.2rem;
+  opacity:.85;
 }
 .hero-quote{
   font-family:'Lora',serif;font-style:italic;
-  font-size:.9rem;color:var(--mute);
+  font-size:.9rem;color:var(--ink2);
   max-width:520px;margin:0 auto 2.5rem;
   line-height:1.7;
   padding:.8rem 1.5rem;
-  border-top:1px solid var(--acc);border-bottom:1px solid var(--acc);
-  opacity:.7;
+  border-top:1px solid rgba(173,52,30,.4);border-bottom:1px solid rgba(173,52,30,.4);
+  opacity:1;
 }
-[data-theme=dark] .hero-quote{opacity:.6}
+[data-theme=dark] .hero-quote{color:var(--ink2);opacity:.75}
 
 /* Stats row */
 .hero-stats{
@@ -635,8 +654,8 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .home-ai-section{padding:2rem 1.4rem}
   .home-ai-row{flex-direction:column}
   .home-ai-select,.home-ai-input,.home-ai-btn{width:100%}
-  .theses-inner{grid-template-columns:1fr;gap:2rem;padding:2rem 1.4rem}
-  .theses-lead h2{font-size:2rem}
+  .theses-inner{grid-template-columns:1fr;gap:1.5rem;padding:0}
+  .theses-lead h2{font-size:2rem;position:static}
   .home-footer-bar{padding:1.5rem 1.4rem;flex-direction:column;gap:.5rem}
   #reader-view.on{flex-direction:column;overflow-y:auto}
   #reader-main{width:100%;height:auto;overflow:visible}
@@ -777,7 +796,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 }
 #toc-panel .toc-lbl { padding: 1.6rem 2.5rem .6rem; }
 #toc-panel .toc-part { padding: 1.2rem 2.5rem 1rem; }
-#toc-panel #toc-grid { max-width: 1000px; }
+#toc-panel #toc-grid { max-width: 1100px; margin: 0 auto; }
+#toc-panel { padding-bottom: 4rem; }
+.sv-hdr { max-width: 1100px; margin-left: auto; margin-right: auto; padding-left: 2.5rem; padding-right: 2.5rem; box-sizing: border-box; width: 100%; }
+#toc-panel .toc-lbl { max-width: 1100px; margin: 0 auto; }
+#sv-body { max-width: 860px; margin: 0 auto; }
 
 /* Rotating quotes — homepage only, scoped inside #home-view */
 #home-view #quote-strip {
@@ -916,7 +939,6 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 <div class="vignette-overlay"></div>
 <div class="grid-overlay"></div>
 <!-- screen-frame removed -->
-<canvas id="particle-canvas"></canvas>
 
 <div class="page-shell">
 <div id="topbar"></div>
@@ -941,6 +963,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
 <div id="home-view" class="view on">
   <div class="hero">
+    <canvas id="particle-canvas"></canvas>
     <div class="hero-inner hero-parallax" id="hero-parallax">
       <div class="hero-orn">A Framework for Navigating Material Reality</div>
       <h1 class="hero-h1">Progressive<br>Materialist<br><em>Naturalism</em></h1>
@@ -995,47 +1018,106 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     </div>
   </div>
 
-  <!-- ── CORE THESES ── -->
+  <!-- ── CORE THESES: ACCORDION ── -->
   <div class="theses-section">
     <div class="theses-inner">
-      <div class="theses-lead"><h2>Core<br>Theses</h2></div>
-      <div class="theses-list">
-        <div class="thesis-item">
-          <span class="thesis-num">THESIS 01.</span>
-          <h4>Material Reality is Primary</h4>
-          <p>Reality exists independently of perception. Ideas do not govern material conditions — conditions shape what ideas can be held. Analysis must begin from what organisms materially are, not from prior normative commitments.</p>
-        </div>
-        <div class="thesis-item">
-          <span class="thesis-num">THESIS 02.</span>
-          <h4>Knowledge is a Material Product</h4>
-          <p>Knowledge is the physical output of biological entities interacting with their environment under conditions of scarcity. Information Asymmetry is inherently a form of structural power — not merely a market failure.</p>
-        </div>
-        <div class="thesis-item">
-          <span class="thesis-num">THESIS 03.</span>
-          <h4>Rejection of Absolute Free Will</h4>
-          <p>We operate under Probabilistic Determinism — nodes of probability in a material network. This prevents designing institutions that punish individuals for outcomes determined by structural conditions.</p>
-        </div>
-        <div class="thesis-item">
-          <span class="thesis-num">THESIS 04.</span>
-          <h4>Emergent Structures are Real</h4>
-          <p>Against reductionism: complex material systems generate emergent properties irreducible to their components. A corporation is not just employees — it is a structure with its own survival incentives independent of any individual's intentions.</p>
-        </div>
-        <div class="thesis-item">
-          <span class="thesis-num">THESIS 05.</span>
-          <h4>The Minimal Anchor: Suffering as Evaluative Foundation</h4>
-          <p>Organisms that can suffer do not choose to suffer. This biological fact — not moral philosophy — grounds the framework's evaluative criterion. Arrangements are assessed by whether they reduce unnecessary structural suffering.</p>
-        </div>
-        <div class="thesis-item">
-          <span class="thesis-num">THESIS 06.</span>
-          <h4>Institutional Capture is Structural, Not Moral</h4>
-          <p>Institutions consistently drift toward serving those who control them — not through conspiracy or betrayal, but through structural incentives. The custodian problem cannot be solved by finding better people; it requires accountability mechanisms that function independently of intentions.</p>
-        </div>
-        <div class="thesis-item">
-          <span class="thesis-num">THESIS 07.</span>
-          <h4>Becoming Beyond the Floor</h4>
-          <p>Beyond eliminating unnecessary suffering lies the horizon: genuine becoming — the expansion of what is possible for organisms when the biological floor is secured. A framework adequate to material reality must hold both the floor and the ceiling simultaneously.</p>
-        </div>
+      <div class="theses-lead">
+        <h2>Core<br>Axioms</h2>
+        <p class="theses-lead-sub">Click to expand.<br>These are the load-bearing<br>commitments of PMN.</p>
       </div>
+      <div class="theses-list" id="theses-list">
+
+        <div class="thesis-item open">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·01</span>
+            <span class="thesis-title">Material Reality is Primary</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Reality exists independently of perception. Conditions are not the product of ideas — ideas are the product of conditions. Analysis must begin from what organisms materially are, not from prior normative commitments. This is the ground-clearing move: any framework that begins with values or norms before establishing what is materially the case has built on sand.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·02</span>
+            <span class="thesis-title">Epistemology is the First Problem</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Before asking what is real, we must ask how we can know anything at all. Knowledge is a material product — the physical output of biological entities interacting with their environment under conditions of scarcity and interest. Information Asymmetry is therefore not a market failure but a structural form of power. Whoever controls what is knowable controls what is possible.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·03</span>
+            <span class="thesis-title">Probabilistic Determinism, Not Free Will</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Agents are nodes of probability in material networks, not free-floating will-bearers. Choices are real but structurally shaped — available options, cognitive architecture, dependency conditions all constrain and channel what can be chosen. This is not nihilism: it prevents moral frameworks from punishing individuals for outcomes produced by structural conditions, and redirects analysis toward the conditions themselves.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·04</span>
+            <span class="thesis-title">Emergent Structures are Causally Real</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Against reductionism: complex material systems generate emergent properties irreducible to their components. A state is not just people with weapons. A corporation is not just employees with shared goals. These structures develop their own survival logic, which shapes the behavior of the agents within them independently of those agents' intentions. The structure is causally real — it must be analyzed as a structure, not dissolved into individual actors.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·05</span>
+            <span class="thesis-title">The Biological Floor: Suffering as Evaluative Anchor</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">The framework requires a non-arbitrary evaluative starting point that does not smuggle in prior normative commitments. That anchor is biological: organisms capable of suffering do not choose to suffer. This is a fact about what organisms are, not a value judgment imposed from outside. From this floor, arrangements can be assessed by whether they produce unnecessary structural suffering — suffering that is causally produced by how things are organized rather than by unavoidable material constraint.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·06</span>
+            <span class="thesis-title">The Custodian Problem is Structural</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">All coordination mechanisms require agents to administer them. Those agents develop interests in the mechanism's continuation and in shaping its outputs toward their own benefit — not necessarily through corruption or bad faith, but through the structural logic of occupying a position with concentrated power and reduced accountability. This is the custodian problem: the mechanism that coordinates against exploitation becomes a vehicle for exploitation. It cannot be solved by finding better custodians; it requires accountability mechanisms that function independently of their custodians' intentions.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·07</span>
+            <span class="thesis-title">Anti-Naïve Universalism</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Universal standards can be genuine without being neutral. Applying identical rules to agents with structurally unequal starting positions systematically advantages those whose position was produced by prior arrangements. The framework accepts universalism at the level of the evaluative criterion — the same standard applies to all — while insisting that applying that standard correctly requires accounting for asymmetric structural conditions. Formal equality without material accounting is a mechanism for reproducing inequality.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·08</span>
+            <span class="thesis-title">Power is the Variable That Cannot Be Left Implicit</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Any analysis that does not explicitly account for differential power across actors will systematically misread structural causation as individual behavior. Who controls what information, what coercive capacity, what institutional access — these are not background conditions but primary analytical variables. Making power explicit is not a political choice; it is an epistemic requirement for producing accurate analysis.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·09</span>
+            <span class="thesis-title">The Consistency Standard</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">The same analytical lens applied to actors the framework is sympathetic to must produce the same analytical conclusions as when applied to actors it is critical of. This is not a demand for false neutrality — the framework has an evaluative criterion and applies it. It is a demand for analytical integrity: conclusions must follow from the framework's method, not from prior sympathies. A framework that produces convenient conclusions is not a framework; it is a rationalization machine.</div>
+        </div>
+
+        <div class="thesis-item">
+          <button class="thesis-toggle">
+            <span class="thesis-num">A·10</span>
+            <span class="thesis-title">Becoming Beyond the Floor</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">The elimination of unnecessary structural suffering is the floor, not the ceiling. Beyond it lies genuine becoming: the expansion of what is materially possible for organisms when biological constraint is met. A framework adequate to material reality must hold both simultaneously — the urgency of the floor and the horizon of becoming. To focus only on the floor produces a politics of permanent emergency. To focus only on the horizon produces a politics that ignores who is currently being destroyed by the floor's absence.</div>
+        </div>
+
+      </div><!-- /theses-list -->
     </div>
   </div>
 
@@ -1903,7 +1985,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         requestAnimationFrame(function(){
           var scrollY = homeView.scrollTop;
           // Parallax: move inner content up at 30% scroll speed (lag effect)
-          var translateY = scrollY * 0.3;
+          var translateY = scrollY * 0.55;
           parallaxEl.style.transform = 'translateY(' + translateY + 'px)';
           // Fade scroll indicator
           if(scrollIndicator){
@@ -2151,62 +2233,103 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   inp.addEventListener('keypress', function(e){ if(e.key==='Enter') runAnalysis(); });
 })();
 
-// =====================================================================
-// v84 SYNTHESIS: INTERACTIVE PARTICLE CANVAS
+  // ── Core Axioms accordion ──
+  (function(){
+    var list = document.getElementById('theses-list');
+    if(!list) return;
+    list.addEventListener('click', function(e){
+      var toggle = e.target.closest('.thesis-toggle');
+      if(!toggle) return;
+      var item = toggle.closest('.thesis-item');
+      if(!item) return;
+      var isOpen = item.classList.contains('open');
+      // Close all
+      list.querySelectorAll('.thesis-item').forEach(function(i){ i.classList.remove('open'); });
+      // Open clicked if it was closed
+      if(!isOpen) item.classList.add('open');
+    });
+  })();
+
+
 // =====================================================================
 (function(){
   var canvas = document.getElementById('particle-canvas');
   if(!canvas) return;
   var ctx = canvas.getContext('2d');
-  var w, h, particles = [];
-  var mouse = { x: null, y: null, radius: 130 };
-  var isHome = true; // Only animate on home view
+  var w = 0, h = 0, particles = [];
+  var mouse = { x: null, y: null, radius: 120 };
+  var isHome = true;
+  var animId = null;
+
+  function getHero(){ return document.querySelector('.hero'); }
 
   function resize(){
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
+    var hero = getHero();
+    if(hero && hero.offsetWidth > 0){
+      w = canvas.width = hero.offsetWidth;
+      h = canvas.height = hero.offsetHeight;
+    } else {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    // Reinit particles on resize so they fill new dimensions
+    if(particles.length > 0) init();
   }
-  window.addEventListener('resize', resize);
-  resize();
 
-  window.addEventListener('mousemove', function(e){ mouse.x = e.clientX; mouse.y = e.clientY; });
-  window.addEventListener('mouseout', function(){ mouse.x = null; mouse.y = null; });
+  window.addEventListener('resize', resize);
+
+  // Mouse coords relative to hero canvas
+  canvas.addEventListener('mousemove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  canvas.addEventListener('mouseleave', function(){ mouse.x = null; mouse.y = null; });
 
   function isDark(){ return document.documentElement.getAttribute('data-theme') === 'dark'; }
 
   function Particle(){
     this.x = Math.random() * w;
     this.y = Math.random() * h;
-    this.size = Math.random() * 1.4 + 0.4;
-    this.vx = (Math.random() - 0.5) * 0.35;
-    this.vy = (Math.random() - 0.5) * 0.35;
+    this.size = Math.random() * 2.2 + 0.6;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.baseX = this.x;
+    this.baseY = this.y;
   }
   Particle.prototype.update = function(){
     this.x += this.vx; this.y += this.vy;
-    if(this.x > w || this.x < 0) this.vx = -this.vx;
-    if(this.y > h || this.y < 0) this.vy = -this.vy;
+    // Bounce off canvas edges
+    if(this.x > w){ this.x = w; this.vx = -Math.abs(this.vx); }
+    if(this.x < 0){ this.x = 0; this.vx = Math.abs(this.vx); }
+    if(this.y > h){ this.y = h; this.vy = -Math.abs(this.vy); }
+    if(this.y < 0){ this.y = 0; this.vy = Math.abs(this.vy); }
+    // Mouse repulsion
     if(mouse.x != null){
       var dx = mouse.x - this.x, dy = mouse.y - this.y;
       var dist = Math.sqrt(dx*dx + dy*dy);
-      if(dist < mouse.radius){
+      if(dist < mouse.radius && dist > 0){
         var force = (mouse.radius - dist) / mouse.radius;
-        this.x -= (dx/dist) * force * 1.8;
-        this.y -= (dy/dist) * force * 1.8;
+        this.x -= (dx/dist) * force * 2.2;
+        this.y -= (dy/dist) * force * 2.2;
       }
     }
   };
   Particle.prototype.draw = function(){
     var dark = isDark();
-    var col = dark ? 'rgba(185,28,28,0.65)' : 'rgba(173,52,30,0.22)';
+    var col = dark ? 'rgba(210,30,30,0.8)' : 'rgba(160,50,25,0.4)';
     ctx.fillStyle = col;
-    ctx.fillRect(this.x, this.y, this.size, this.size);
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
+    ctx.fill();
+    // Connect to nearby mouse
     if(mouse.x != null){
       var dx = mouse.x - this.x, dy = mouse.y - this.y;
       var dist = Math.sqrt(dx*dx + dy*dy);
-      if(dist < mouse.radius){
+      if(dist < mouse.radius * 0.7){
         ctx.save();
-        ctx.globalAlpha = (1 - dist/mouse.radius) * 0.4;
-        ctx.strokeStyle = col; ctx.lineWidth = 0.5;
+        ctx.globalAlpha = (1 - dist/(mouse.radius*0.7)) * 0.25;
+        ctx.strokeStyle = col; ctx.lineWidth = 0.6;
         ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
         ctx.restore();
       }
@@ -2215,27 +2338,10 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
   function init(){
     particles = [];
-    var n = Math.min(Math.floor(w / 9), 110);
+    var n = Math.min(Math.floor((w * h) / 6000), 200);
+    n = Math.max(n, 80); // minimum 80 particles
     for(var i=0; i<n; i++) particles.push(new Particle());
   }
-  init();
-
-  // Watch for view changes — pause canvas when not on home
-  var views = document.querySelectorAll('.view');
-  var animId = null;
-
-  function checkView(){
-    var hv = document.getElementById('home-view');
-    var wasHome = isHome;
-    isHome = hv && hv.classList.contains('on');
-    // Restart loop if we just came back to home
-    if(isHome && !wasHome && animId===null){ animate(); }
-  }
-
-  // MutationObserver to detect view switches
-  var obs = new MutationObserver(checkView);
-  views.forEach(function(v){ obs.observe(v, { attributes:true, attributeFilter:['class'] }); });
-  checkView();
 
   function animate(){
     ctx.clearRect(0,0,w,h);
@@ -2243,7 +2349,30 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     particles.forEach(function(p){ p.update(); p.draw(); });
     animId = requestAnimationFrame(animate);
   }
-  animate();
+
+  function checkView(){
+    var hv = document.getElementById('home-view');
+    var wasHome = isHome;
+    isHome = !!(hv && hv.classList.contains('on'));
+    if(isHome && !wasHome && animId===null){
+      resize(); // Recalculate canvas size when returning to home
+      animate();
+    }
+  }
+
+  // MutationObserver to detect view switches
+  var obs = new MutationObserver(checkView);
+  document.querySelectorAll('.view').forEach(function(v){
+    obs.observe(v, { attributes:true, attributeFilter:['class'] });
+  });
+
+  // Defer initial setup until DOM is fully rendered
+  setTimeout(function(){
+    resize();
+    init();
+    checkView();
+    if(isHome) animate();
+  }, 100);
 })();
 
 </script>
