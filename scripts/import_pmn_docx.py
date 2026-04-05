@@ -302,6 +302,36 @@ def build_parts(paragraphs: list[Paragraph], toc_headings: list[str], body_start
     return parts
 
 
+def merge_case_d_into_compressed_core(parts: list[dict]) -> list[dict]:
+    compressed_core: dict | None = None
+    case_d_part: dict | None = None
+    case_d_index: int | None = None
+    case_d_section: dict | None = None
+
+    for part in parts:
+        for sub in part["subs"]:
+            if part["part"] == "XV" and sub["id"] == "15.15":
+                compressed_core = sub
+            if "Case D: Indonesia 1997–1998" in sub["title"]:
+                case_d_part = part
+                case_d_section = sub
+                case_d_index = part["subs"].index(sub)
+
+    if not compressed_core or not case_d_part or case_d_index is None or not case_d_section:
+        return parts
+
+    case_heading = (
+        "<p><strong>Case D: Indonesia 1997–1998 — Reformasi and the Limits of "
+        "Developmental Authoritarianism</strong></p>"
+    )
+    compressed_core["html"] = (
+        compressed_core["html"].rstrip() + "\n" + case_heading + "\n" + case_d_section["html"].lstrip()
+    )
+
+    del case_d_part["subs"][case_d_index]
+    return parts
+
+
 def replace_d_parts(index_html: str, parts: list[dict]) -> str:
     payload = json.dumps(parts, ensure_ascii=False, separators=(",", ":"))
     replacement = f'<script id="d-parts" type="application/json">{payload}</script>'
@@ -373,6 +403,7 @@ def main() -> int:
     paragraphs = extract_paragraphs(docx_path)
     toc_headings, body_start = find_body_start(paragraphs)
     parts = build_parts(paragraphs, toc_headings, body_start)
+    parts = merge_case_d_into_compressed_core(parts)
 
     html_text = index_path.read_text(encoding="utf-8")
     html_text = replace_d_parts(html_text, parts)
