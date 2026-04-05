@@ -394,13 +394,13 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   flex:1;
   font-family:'Source Code Pro',monospace;font-size:.68rem;
   letter-spacing:.12em;text-transform:uppercase;
-  background:transparent;color:var(--ink);
+  background:var(--bg2);color:var(--ink);
   border:none;border-right:1px solid var(--ink);
   padding:.85rem .5rem;cursor:pointer;
   transition:background .15s,color .15s;
   text-decoration:none;display:inline-flex;align-items:center;justify-content:center;
 }
-[data-theme=dark] .cta-s{color:var(--ink2);border-right-color:var(--rule2)}
+[data-theme=dark] .cta-s{background:transparent;color:var(--ink2);border-right-color:var(--rule2)}
 .cta-s:last-child{border-right:none}
 .cta-s:hover{background:var(--ink);color:var(--bg)}
 [data-theme=dark] .cta-s:hover{background:var(--rule2);color:var(--acc)}
@@ -412,13 +412,13 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   flex:1;
   font-family:'Source Code Pro',monospace;font-size:.65rem;
   letter-spacing:.1em;text-transform:uppercase;
-  background:transparent;color:var(--mute);
+  background:var(--bg2);color:var(--mute);
   border:none;border-right:1px solid var(--ink);
   padding:.7rem .5rem;cursor:pointer;
   transition:background .15s,color .15s;
   white-space:nowrap;
 }
-[data-theme=dark] .cta-util{border-right-color:var(--rule2)}
+[data-theme=dark] .cta-util{background:transparent;border-right-color:var(--rule2)}
 .cta-util:last-child{border-right:none}
 .cta-util:hover{background:var(--ink);color:var(--bg)}
 [data-theme=dark] .cta-util:hover{background:var(--rule2);color:var(--acc)}
@@ -792,7 +792,10 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 #toc-panel #quote-strip {
   border-bottom: 1px solid var(--rule);
   padding: 1.25rem 2.5rem 1.5rem;
-  margin: 0;
+  margin: 0 auto 1rem;
+  max-width: 1100px;
+  width: 100%;
+  box-sizing: border-box;
 }
 #toc-panel .toc-lbl { padding: 1.6rem 2.5rem .6rem; }
 #toc-panel .toc-part { padding: 1.2rem 2.5rem 1rem; }
@@ -967,10 +970,10 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     <div class="hero-inner hero-parallax" id="hero-parallax">
       <div class="hero-orn">A Framework for Navigating Material Reality</div>
       <h1 class="hero-h1">Progressive<br>Materialist<br><em>Naturalism</em></h1>
-      <p class="hero-sub">By Nova Dharma &mdash; Version 83</p>
+      <p class="hero-sub">By Nova Dharma &mdash; Version 97</p>
       <p class="hero-quote">&ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;</p>
       <div class="hero-stats">
-        <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">83</span></div>
+        <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">97</span></div>
         <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
         <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
         <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
@@ -1002,7 +1005,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       <span class="marquee-txt">CONSTRUCT EPISTEMIC INFRASTRUCTURE — DISMANTLE STRUCTURAL VIOLENCE</span>
       <span class="marquee-txt">CONDITIONAL BIOLOGICAL CONSTRAINTS — PROBABILISTIC DETERMINISM</span>
       <span class="marquee-txt">THE CUSTODIAN PROBLEM — INFORMATION ASYMMETRY AS STRUCTURAL POWER</span>
-      <span class="marquee-txt">PMN v83 — NOVA DHARMA — FRAMEWORK FOR NAVIGATING MATERIAL REALITY</span>
+      <span class="marquee-txt">PMN v97 — NOVA DHARMA — FRAMEWORK FOR NAVIGATING MATERIAL REALITY</span>
     </div>
   </div>
 
@@ -1166,11 +1169,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   <div class="home-ai-section">
     <div class="home-ai-inner" style="max-width:1000px;margin:0 auto">
       <div class="home-ai-hdr">Dialectical Synthesis Terminal (AI-Powered)</div>
-      <p class="home-ai-desc">Interrogate the manuscript. Select a mode and enter a concept from PMN v83.</p>
+      <p class="home-ai-desc">Interrogate the manuscript. Select a mode and enter a concept from PMN v97.</p>
       <div class="home-ai-row">
         <select id="home-ai-mode" class="home-ai-select">
           <option value="general">Mode: General Analysis</option>
-          <option value="oracle">Mode: PMN v83 Oracle</option>
+          <option value="oracle">Mode: PMN v97 Oracle</option>
         </select>
         <input type="text" id="home-ai-input" class="home-ai-input" placeholder="e.g. Probabilistic Determinism, Structural Violence…" autocomplete="off">
         <button id="home-ai-btn" class="home-ai-btn">Execute ✦</button>
@@ -1184,7 +1187,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   <!-- ── HOME FOOTER ── -->
   <div class="home-footer-bar">
     <span>[C] 2026 NOVA DHARMA // PMN COLLECTIVE</span>
-    <span>V83 MANUSCRIPT — PRESS <kbd style="font-family:var(--f-mono);border:1px solid var(--rule);padding:.1rem .4rem;font-size:.7rem">?</kbd> FOR GLOSSARY — <kbd style="font-family:var(--f-mono);border:1px solid var(--rule);padding:.1rem .4rem;font-size:.7rem">K</kbd> FOR KEYS</span>
+    <span>V97 MANUSCRIPT — PRESS <kbd style="font-family:var(--f-mono);border:1px solid var(--rule);padding:.1rem .4rem;font-size:.7rem">?</kbd> FOR GLOSSARY — <kbd style="font-family:var(--f-mono);border:1px solid var(--rule);padding:.1rem .4rem;font-size:.7rem">K</kbd> FOR KEYS</span>
   </div>
 
 </div><!-- /home-view -->
@@ -1257,7 +1260,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         </div>
       </div>
       <footer class="doc-footer">
-        <span class="doc-footer-lbl">PMN &mdash; Version 83</span>
+        <span class="doc-footer-lbl">PMN &mdash; Version 97</span>
         <button class="doc-footer-home" id="footer-home">Back to Home &uarr;</button>
       </footer>
     </div>
@@ -1798,10 +1801,10 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     renderCitedIn(s.id);
     loadAnnot(curP,curS);
     // Feedback mailto
-    var subj=encodeURIComponent('PMN v83 - Feedback: '+s.id+' '+s.title);
+    var subj=encodeURIComponent('PMN v97 - Feedback: '+s.id+' '+s.title);
     var body=encodeURIComponent('Section: '+s.id+' - '+s.title+'\nKomentar saya:\n');
     var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:nova@novadharma.org?subject='+subj+'&body='+body);
-    var tweet=encodeURIComponent('Re: PMN v83 - '+s.id+' '+s.title+' @nova_dharma_pm');
+    var tweet=encodeURIComponent('Re: PMN v97 - '+s.id+' '+s.title+' @nova_dharma_pm');
     var tl=g('twitter-link'); if(tl) tl.setAttribute('href','https://twitter.com/intent/tweet?text='+tweet);
   }
 
@@ -1980,6 +1983,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   // Wire up static buttons (no inline onclick)
   g('hdr-logo').addEventListener('click', function(){ nav('home'); });
   g('hb-home').addEventListener('click', function(){ nav('srch'); showContentsPanel(); });
+  g('hb-gl') && g('hb-gl').addEventListener('click', showGL);
   g('mob-prev') && g('mob-prev').addEventListener('click', function(){ navP(); });
   g('mob-next') && g('mob-next').addEventListener('click', function(){ navN(); });
   g('mob-mid')  && g('mob-mid').addEventListener('click',  function(){ nav('srch'); showContentsPanel(); });
@@ -2152,7 +2156,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
 // =====================================================================
 // v84 SYNTHESIS: ANATOMY TERMINAL
-// Builds tabbed panels from PARTS data — first 6 parts only
+// Builds tabbed panels from PARTS data across all main parts
 // =====================================================================
 (function(){
   var PARTS = (function(){ try{ return JSON.parse(document.getElementById('d-parts').textContent); }catch(e){ return []; } })();
@@ -2169,14 +2173,14 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var id = 'ap-' + i;
     var partLabel = 'Part ' + part.part;
     tabsHtml += '<button class="anatomy-tab' + (i===0?' on':'') + '" data-target="' + id + '">' + partLabel + '</button>';
-    // Build section list from first 5 subs
+    // Build section list from the first 8 subs
     var secList = '';
-    var subs = part.subs.slice(0,5);
+    var subs = part.subs.slice(0,8);
     subs.forEach(function(s){
       if(s.is_intro) return;
       secList += '<span style="display:block;font-family:var(--f-mono);font-size:.7rem;color:var(--acc);margin-bottom:.3rem">' + (s.id||'') + ' &mdash; ' + s.title + '</span>';
     });
-    if(part.subs.length > 5) secList += '<span style="font-family:var(--f-mono);font-size:.65rem;color:var(--mute)">+ ' + (part.subs.length - 5) + ' more sections</span>';
+    if(part.subs.length > 8) secList += '<span style="font-family:var(--f-mono);font-size:.65rem;color:var(--mute)">+ ' + (part.subs.length - 8) + ' more sections</span>';
     // Get a short description from the first real section's text
     var descText = '';
     for(var di=0; di<part.subs.length; di++){
@@ -2230,7 +2234,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
     var mode = sel ? sel.value : 'general';
     var sysPrompt = mode === 'oracle'
-      ? 'You are "Oracle PMN", a brutalist analytical AI holding the manuscript of "Progressive Materialist Naturalism v83" by Nova Dharma. Framework context: Epistemology (probabilistic determinism, information asymmetry as structural power). Ontology (adaptive materialism, emergent structures, rejects reductionism). Biology (conditional constraints, rejects naturalistic fallacy). Evaluative criterion: reduction of structural suffering and expansion of genuine becoming. Respond like a cold terminal data-analyzer: sharp, analytical, maximum 150 words. Format: [PMN v83 REFERENCE] — ... [DIALECTICAL SYNTHESIS] — ...'
+      ? 'You are "Oracle PMN", a brutalist analytical AI holding the manuscript of "Progressive Materialist Naturalism v97" by Nova Dharma. Framework context: Epistemology (probabilistic determinism, information asymmetry as structural power). Ontology (adaptive materialism, emergent structures, rejects reductionism). Biology (conditional constraints, rejects naturalistic fallacy). Evaluative criterion: reduction of structural suffering and expansion of genuine becoming. Respond like a cold terminal data-analyzer: sharp, analytical, maximum 150 words. Format: [PMN v97 REFERENCE] — ... [DIALECTICAL SYNTHESIS] — ...'
       : 'You are the dialectical computation system of the Progressive Materialist Naturalism (PMN) Collective. Provide sharp, academic, radical-materialist analysis. Reject all idealism or supernaturalism. Brutalist language. Max 150 words. Format: [MATERIAL DEFINITION] — ... [STRUCTURAL CONDITION] — ... [EVALUATIVE IMPLICATION] — ...';
 
     // Note: Direct API calls are blocked by CORS in browsers.
