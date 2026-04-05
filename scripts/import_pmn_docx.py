@@ -326,6 +326,17 @@ def replace_version_labels(index_html: str, version_label: str) -> str:
     ]
     for pattern, repl in replacements:
         index_html = re.sub(pattern, repl, index_html, flags=re.IGNORECASE)
+
+    version_number = version_label.lstrip("vV")
+    direct_replacements = {
+        "Version 83": f"Version {version_number}",
+        "PMN v83": f"PMN {version_label}",
+        "V83 MANUSCRIPT": f"V{version_number} MANUSCRIPT",
+        "Progressive Materialist Naturalism v83": f"Progressive Materialist Naturalism {version_label}",
+        "[PMN v83 REFERENCE]": f"[PMN {version_label} REFERENCE]",
+    }
+    for old, new in direct_replacements.items():
+        index_html = index_html.replace(old, new)
     return index_html
 
 
