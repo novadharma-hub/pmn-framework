@@ -20,6 +20,7 @@
   --rule:#cfbda9; --rule2:#c4b09a;
   --hdr:#efe6d5;
   --code-bg:#dfceb5;
+  --reader-scale:1;
   --f-head:'Libre Baskerville',serif;
   --f-body:'Lora',serif;
   --f-mono:'Source Code Pro',monospace;
@@ -66,8 +67,24 @@ body::before {
 .theses-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 2.5fr;gap:4rem;align-items:start}
 .theses-lead h2{font-family:var(--f-head);font-size:2.8rem;text-transform:uppercase;line-height:1.1;color:var(--ink);position:sticky;top:1rem}
 [data-theme=dark] .theses-lead h2{color:var(--acc)}
-.theses-lead-sub{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-top:.8rem;line-height:1.6}
+.theses-lead-sub{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute2);margin-top:.8rem;line-height:1.7}
+.theses-tier-list{margin-top:1.5rem;display:flex;flex-direction:column;gap:.55rem}
+.theses-tier-chip{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.theses-tier-chip.tier-1{color:var(--acc)}
+.theses-tier-chip.tier-2{color:var(--ink2)}
+.theses-tier-chip.tier-3{color:var(--mute2)}
+[data-theme=dark] .theses-tier-chip.tier-2{color:#d4c4b4}
+[data-theme=dark] .theses-tier-chip.tier-3{color:#b9aa9c}
 .theses-list{display:flex;flex-direction:column;gap:0}
+.thesis-tier-hdr{padding:.7rem 0;font-family:var(--f-mono);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid var(--rule);margin-top:.5rem;font-weight:700}
+.thesis-tier-hdr.tier-1{color:var(--acc)}
+.thesis-tier-hdr.tier-2{color:var(--ink2)}
+.thesis-tier-hdr.tier-3{color:var(--mute2)}
+.thesis-tier-hdr.first{margin-top:0}
+[data-theme=dark] .thesis-tier-hdr.tier-2{color:#d4c4b4}
+[data-theme=dark] .thesis-tier-hdr.tier-3{color:#b9aa9c}
+.thesis-tier-note{display:inline-block;margin-left:.35rem;font-size:.82em;letter-spacing:.08em;color:var(--mute2);opacity:.9}
+[data-theme=dark] .thesis-tier-note{color:#bdaa9a}
 /* Accordion item */
 .thesis-item{border-bottom:1px solid var(--rule)}
 .thesis-item:first-child{border-top:1px solid var(--rule)}
@@ -79,8 +96,8 @@ body::before {
 }
 .thesis-toggle:hover{background:rgba(0,0,0,.02)}
 [data-theme=dark] .thesis-toggle:hover{background:rgba(255,255,255,.02)}
-.thesis-num{font-family:var(--f-mono);color:var(--acc);font-weight:700;font-size:.75rem;flex-shrink:0;letter-spacing:.08em}
-.thesis-title{font-family:var(--f-head);font-size:1rem;color:var(--ink);text-transform:uppercase;letter-spacing:.01em;flex:1;text-align:left}
+.thesis-num{font-family:var(--f-mono);color:var(--acc);font-weight:700;font-size:.8rem;flex-shrink:0;letter-spacing:.08em}
+.thesis-title{font-family:var(--f-head);font-size:1.06rem;color:var(--ink);text-transform:uppercase;letter-spacing:.01em;flex:1;text-align:left;line-height:1.35}
 .thesis-arrow{font-family:var(--f-mono);font-size:.75rem;color:var(--mute);flex-shrink:0;transition:transform .2s;display:block}
 .thesis-item.open .thesis-arrow{transform:rotate(90deg);color:var(--acc)}
 .thesis-body{
@@ -89,6 +106,21 @@ body::before {
   font-family:var(--f-body);
 }
 .thesis-item.open .thesis-body{display:block}
+
+/* â”€â”€ Reading paths â”€â”€ */
+.reading-paths{padding:3rem 2.5rem 4rem;max-width:1000px;margin:0 auto;position:relative;z-index:2}
+.reading-paths-hdr{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem;padding-bottom:.8rem;border-bottom:1px solid var(--rule)}
+.reading-paths-hdr h2{font-family:var(--f-head);font-size:1.6rem;text-transform:uppercase;letter-spacing:.02em;color:var(--ink)}
+.reading-paths-hdr p{max-width:620px;font-family:var(--f-body);font-size:.98rem;line-height:1.7;color:var(--ink2)}
+.reading-paths-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.path-card{border:1px solid var(--rule);background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 70%),var(--bg2);padding:1.3rem 1.35rem 1.45rem;box-shadow:5px 5px 0 rgba(122,106,88,.13)}
+[data-theme=dark] .path-card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 70%),#121212;box-shadow:5px 5px 0 rgba(0,0,0,.35)}
+.path-kicker{display:block;margin-bottom:.5rem;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+.path-card h3{font-family:var(--f-head);font-size:1.08rem;line-height:1.3;color:var(--ink);margin-bottom:.6rem}
+.path-card p{font-family:var(--f-body);font-size:.94rem;line-height:1.72;color:var(--ink2);margin-bottom:1rem}
+.path-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:transparent;border:1px solid var(--rule2);padding:.55rem .95rem;cursor:pointer;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.11em;text-transform:uppercase;color:var(--mute);transition:color .15s,border-color .15s,background .15s}
+.path-btn:hover{color:var(--acc);border-color:var(--acc);background:rgba(0,0,0,.02)}
+[data-theme=dark] .path-btn:hover{background:rgba(255,255,255,.03)}
 /* ── Home footer bar ── */
 .home-footer-bar{padding:2rem 2.5rem;background:var(--bg2);border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.75rem;text-transform:uppercase;font-weight:700;flex-wrap:wrap;gap:1rem;color:var(--ink2)}
 [data-theme=dark] .home-footer-bar{background:#0d0d0d;border-top-color:var(--rule)}
@@ -162,6 +194,9 @@ body::before {
 [data-theme=dark] .home-ai-terminal{background:#000;border-color:var(--acc);color:#e05555;box-shadow:inset 0 0 15px rgba(185,28,28,.12)}
 .home-ai-placeholder{color:var(--mute);font-style:italic}
 [data-theme=dark] .home-ai-terminal .home-ai-placeholder{color:var(--acc);opacity:.7}
+.home-ai-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.9rem}
+.home-ai-note{margin-top:1rem;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;line-height:1.7;color:rgba(255,255,255,.7)}
+[data-theme=dark] .home-ai-note{color:#b39b8d}
 
 /* ── Reset ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -536,18 +571,33 @@ mark{background:transparent;color:var(--acc2);text-decoration:underline;text-dec
 .sec-ttl{font-family:'Libre Baskerville',serif;font-weight:400;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.15;letter-spacing:-.02em;color:var(--ink);margin-bottom:2.2rem}
 .sec-id{font-family:'Source Code Pro',monospace;font-size:clamp(.9rem,1.6vw,1.15rem);color:var(--acc);vertical-align:baseline;margin-right:.5rem;font-weight:500;opacity:.95}
 .sec-ttl.intro-ttl .sec-id{display:none}
-#read-time{color:var(--mute);font-size:.72rem;font-family:'Source Code Pro',monospace;letter-spacing:.08em;display:block;margin-bottom:2.4rem;padding-bottom:2.4rem;border-bottom:1px solid var(--rule)}
+.reader-meta{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:2.4rem;padding-bottom:2.4rem;border-bottom:1px solid var(--rule)}
+#read-time{color:var(--mute);font-size:.72rem;font-family:'Source Code Pro',monospace;letter-spacing:.08em;display:block}
+.reader-tools{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;flex-wrap:wrap}
+.reader-tools-lbl{font-family:'Source Code Pro',monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
+.font-controls{display:flex;align-items:center;gap:.35rem;padding:.25rem;border:1px solid var(--rule2);background:var(--bg2)}
+[data-theme=dark] .font-controls{background:#111}
+.font-btn{min-width:2.2rem;background:transparent;border:1px solid transparent;color:var(--mute);padding:.3rem .55rem;cursor:pointer;font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;transition:color .15s,border-color .15s,background .15s}
+.font-btn:hover{color:var(--acc);border-color:var(--acc)}
+.font-btn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+[data-theme=dark] .font-btn.on{background:var(--acc);color:#000;border-color:var(--acc)}
 
 /* ── Prose ── */
-.prose{font-size:1.1rem;line-height:1.88;color:var(--ink2)}
+.prose{font-size:calc(1.1rem * var(--reader-scale));line-height:1.88;color:var(--ink2)}
 .prose p{margin-bottom:1.5em;hyphens:none;-webkit-hyphens:none}
 .prose blockquote{border-left:2px solid var(--acc);margin:1.8em 0;padding:.5em 1.2em;font-style:italic;color:var(--mute)}
 .prose hr{border:none;border-top:1px solid var(--rule);margin:2em 0}
 .prose strong{color:var(--ink);font-weight:600}
-.prose.back-matter{font-size:1rem}
+.prose.back-matter{font-size:calc(1rem * var(--reader-scale))}
 
 /* ── Related sections ── */
-.related{margin:2.5rem 0 0;padding-top:1.4rem;border-top:1px solid var(--rule)}
+.reader-endcap{margin-top:2.4rem;padding:1.4rem 1.45rem 1.55rem;border:1px solid var(--rule);background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 72%),var(--bg2);box-shadow:8px 8px 0 rgba(122,106,88,.12)}
+[data-theme=dark] .reader-endcap{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 72%),#101010;box-shadow:8px 8px 0 rgba(0,0,0,.35)}
+.reader-endcap-hdr{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:.9rem;border-bottom:1px solid var(--rule)}
+.reader-endcap-kicker{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);display:block;margin-bottom:.3rem}
+.reader-endcap-title{font-family:'Libre Baskerville',serif;font-size:1.15rem;line-height:1.3;color:var(--ink)}
+.reader-endcap-desc{max-width:420px;font-family:'Lora',serif;font-size:.92rem;line-height:1.65;color:var(--ink2)}
+.related{margin:0;padding-top:0;border-top:none}
 .related-lbl{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute2);display:block;margin-bottom:.8rem}
 .related-list{display:flex;flex-direction:column;gap:.3rem}
 .rel-btn{display:flex;align-items:baseline;gap:.6rem;background:none;border:none;cursor:pointer;padding:.35rem .4rem;text-align:left;color:inherit;width:100%;transition:background .1s}
@@ -565,7 +615,7 @@ mark{background:transparent;color:var(--acc2);text-decoration:underline;text-dec
 .cited-btn .cited-sid{color:var(--acc2);margin-right:.3rem}
 
 /* ── Annotations ── */
-.annot-block{margin:2rem 0 0;border-top:1px solid var(--rule);padding-top:1.4rem}
+.annot-block{margin:1.4rem 0 0;border-top:1px solid var(--rule);padding-top:1.4rem}
 .annot-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
 .annot-lbl{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute2)}
 .annot-actions{display:flex;gap:.4rem}
@@ -578,10 +628,25 @@ mark{background:transparent;color:var(--acc2);text-decoration:underline;text-dec
 .annot-saved.show{opacity:1}
 
 /* ── Feedback ── */
-.feedback-bar{display:flex;align-items:center;justify-content:space-between;margin-top:2.5rem;padding-top:1.2rem;border-top:1px solid var(--rule2);flex-wrap:wrap;gap:.5rem}
+.feedback-bar{display:flex;align-items:center;justify-content:space-between;margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--rule2);flex-wrap:wrap;gap:.7rem}
 .feedback-lbl{font-family:'Source Code Pro',monospace;font-size:.72rem;color:var(--mute2);letter-spacing:.1em}
+.feedback-actions{display:flex;gap:.6rem;flex-wrap:wrap}
 .feedback-btn{font-family:'Source Code Pro',monospace;font-size:.72rem;color:var(--mute);background:none;border:1px solid var(--rule2);padding:.3rem .7rem;cursor:pointer;text-decoration:none;transition:color .15s,border-color .15s}
 .feedback-btn:hover{color:var(--acc);border-color:var(--acc)}
+
+.pmn-agent-card{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--rule)}
+.pmn-agent-kicker{display:block;margin-bottom:.35rem;font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+.pmn-agent-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.pmn-agent-title{font-family:'Libre Baskerville',serif;font-size:1.05rem;line-height:1.35;color:var(--ink)}
+.pmn-agent-desc{font-family:'Lora',serif;font-size:.92rem;line-height:1.7;color:var(--ink2);margin-top:.45rem}
+.pmn-agent-status{margin-top:.9rem;padding:.85rem 1rem;border:1px solid var(--rule2);background:rgba(255,255,255,.18);font-family:'Source Code Pro',monospace;font-size:.72rem;line-height:1.7;color:var(--mute);white-space:pre-wrap}
+[data-theme=dark] .pmn-agent-status{background:rgba(255,255,255,.02)}
+.pmn-agent-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.9rem}
+.pmn-agent-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:transparent;border:1px solid var(--rule2);padding:.55rem .9rem;cursor:pointer;font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.11em;text-transform:uppercase;color:var(--mute);transition:color .15s,border-color .15s,background .15s}
+.pmn-agent-btn:hover{color:var(--acc);border-color:var(--acc)}
+.pmn-agent-btn.primary{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+[data-theme=dark] .pmn-agent-btn.primary{color:#000}
+.pmn-agent-btn.primary:hover{background:transparent;color:var(--acc)}
 
 /* ── Nav ── */
 .rnav{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:3.5rem;padding-top:1.8rem;border-top:1px solid var(--rule)}
@@ -654,8 +719,12 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .home-ai-section{padding:2rem 1.4rem}
   .home-ai-row{flex-direction:column}
   .home-ai-select,.home-ai-input,.home-ai-btn{width:100%}
+  .home-ai-actions{flex-direction:column}
   .theses-inner{grid-template-columns:1fr;gap:1.5rem;padding:0}
   .theses-lead h2{font-size:2rem;position:static}
+  .theses-tier-chip,.thesis-tier-hdr{font-size:.72rem}
+  .reading-paths{padding:2rem 1.4rem 3rem}
+  .reading-paths-grid{grid-template-columns:1fr}
   .home-footer-bar{padding:1.5rem 1.4rem;flex-direction:column;gap:.5rem}
   #reader-view.on{flex-direction:column;overflow-y:auto}
   #reader-main{width:100%;height:auto;overflow:visible}
@@ -666,14 +735,20 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   #sb-tog{position:fixed;left:0;bottom:1.5rem;top:auto;transform:none;width:2.4rem;height:2.4rem;right:auto;border-radius:0 6px 6px 0;z-index:201;font-size:1rem}
   .sec-eye{font-size:.68rem}
   .sec-ttl{font-size:1.6rem;margin-bottom:1.6rem}
-  #read-time{margin-bottom:1.6rem;padding-bottom:1.6rem}
+  .reader-meta{align-items:flex-start;flex-direction:column;gap:.8rem;margin-bottom:1.6rem;padding-bottom:1.6rem}
+  .reader-tools{width:100%;justify-content:space-between}
+  .font-controls{width:100%;justify-content:space-between}
+  .font-btn{flex:1}
   #bc{padding:.45rem .9rem;gap:.3rem;flex-wrap:wrap}
   .bc-btn{font-size:.65rem}
   .box-blue,.box-red{padding:.6rem .75rem;font-size:.85rem}
   .rnav{flex-direction:column;gap:.4rem}
   .rnav-btn{width:100%;text-align:center;padding:.65rem 1rem}
-  .related,.cited{margin-top:1.8rem}
+  .reader-endcap{padding:1.1rem}
+  .related,.cited,.cited-in{margin-top:1.1rem}
   .rel-btn,.annot-btn,.cited-btn{font-size:.8rem}
+  .feedback-actions,.pmn-agent-actions{flex-direction:column;width:100%}
+  .feedback-actions .feedback-btn,.pmn-agent-btn,.path-btn{width:100%;justify-content:center}
   .doc-footer{flex-direction:column;gap:.6rem;align-items:flex-start}
   #sv-body{padding:1rem}
   .gl-grp-lbl{font-size:.68rem}
@@ -887,7 +962,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 @media print {
   /* Hide all UI chrome */
   #hdr, #sidebar, #home-view, #srch-view, #gl-view, #an-view,
-  .bc, .rnav, #read-time, .rel-wrap, .cited-wrap,
+  .bc, .rnav, #read-time, .reader-tools, .pmn-agent-card, .rel-wrap, .cited-wrap,
   .annot-wrap, #footer-home, .feedback-wrap, #quote-strip,
   .share-btn, .sec-eye { display: none !important; }
 
@@ -1232,15 +1307,46 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       </nav>
       <p id="sec-eye" class="sec-eye"></p>
       <h1 id="sec-ttl" class="sec-ttl"></h1>
-      <span id="read-time"></span>
+      <div class="reader-meta">
+        <span id="read-time"></span>
+        <div class="reader-tools">
+          <span class="reader-tools-lbl">Reader font</span>
+          <div class="font-controls" role="group" aria-label="Reader font size">
+            <button class="font-btn" id="font-sm" type="button">A-</button>
+            <button class="font-btn" id="font-md" type="button">A</button>
+            <button class="font-btn" id="font-lg" type="button">A+</button>
+          </div>
+        </div>
+      </div>
       <div id="prose" class="prose"></div>
       <nav class="rnav">
         <button class="rnav-btn" id="rn-p">&larr; Previous</button>
         <span id="rn-pos" class="rnav-pos"></span>
         <button class="rnav-btn nxt" id="rn-n">Next &rarr;</button>
       </nav>
-      <div id="related-sec" class="related"></div>
+      <div class="reader-endcap">
+        <div class="reader-endcap-hdr">
+          <div>
+            <span class="reader-endcap-kicker">Continue the inquiry</span>
+            <div class="reader-endcap-title">Trace the section outward</div>
+          </div>
+          <div class="reader-endcap-desc">Use related sections, cited links, notes, and PMN Agent handoff without losing the thread of the current page.</div>
+        </div>
+        <div id="related-sec" class="related"></div>
       <div id="cited-sec" class="cited-in"></div>
+      <div class="pmn-agent-card">
+        <span class="pmn-agent-kicker">PMN Agent handoff</span>
+        <div class="pmn-agent-head">
+          <div class="pmn-agent-title">Open ChatGPT or Gemini with the active PMN section already packaged as context.</div>
+        </div>
+        <p class="pmn-agent-desc">The site prepares the prompt, copies it to your clipboard, and opens the target AI in a new tab. Paste once there to continue.</p>
+        <div id="reader-agent-status" class="pmn-agent-status">Preparing section context...</div>
+        <div class="pmn-agent-actions">
+          <button id="reader-chatgpt-btn" class="pmn-agent-btn primary" type="button">Open ChatGPT</button>
+          <button id="reader-gemini-btn" class="pmn-agent-btn" type="button">Open Gemini</button>
+          <button id="reader-copy-btn" class="pmn-agent-btn" type="button">Copy prompt only</button>
+        </div>
+      </div>
       <div id="annot-sec" class="annot-block">
         <div class="annot-header">
           <span class="annot-lbl">Notes</span>
@@ -1254,10 +1360,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       </div>
       <div class="feedback-bar">
         <span class="feedback-lbl">Feedback or suggestions?</span>
-        <div style="display:flex;gap:.6rem">
+        <div class="feedback-actions">
           <a id="feedback-link" class="feedback-btn" href="#">Email &rarr;</a>
           <a id="twitter-link" class="feedback-btn" href="https://twitter.com/nova_dharma_pm" target="_blank" rel="noopener">Twitter &rarr;</a>
         </div>
+      </div>
       </div>
       <footer class="doc-footer">
         <span class="doc-footer-lbl">PMN &mdash; Version 97</span>
@@ -1327,7 +1434,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   var CITED = JSON.parse(document.getElementById('d-ci').textContent);
   var SPECIAL = {Preface:1,Coda:1,'Intellectual Debts':1,Bibliography:1};
 
-  var curP=0, curS=0, sbOpen=true, readMap={};
+  var curP=0, curS=0, sbOpen=true, readMap={}, readerScale=1;
   try { readMap = JSON.parse(localStorage.getItem('pmn-read') || '{}'); } catch(e){}
 
   function g(id){ return document.getElementById(id); }
@@ -1403,6 +1510,255 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     if(saved) applyLayout(saved);
     else updateLayoutTog();
   })();
+
+  function applyReaderScale(scale){
+    readerScale=scale;
+    document.documentElement.style.setProperty('--reader-scale', String(scale));
+    var ids={0.92:'font-sm',1:'font-md',1.08:'font-lg'};
+    ['font-sm','font-md','font-lg'].forEach(function(id){
+      var btn=g(id);
+      if(btn) btn.classList.toggle('on', id===ids[scale]);
+    });
+  }
+  function initReaderScale(){
+    var saved=1;
+    try{
+      var raw=parseFloat(localStorage.getItem('pmn-reader-scale')||'1');
+      if(raw===0.92||raw===1||raw===1.08) saved=raw;
+    }catch(e){}
+    applyReaderScale(saved);
+  }
+  function setReaderScale(scale){
+    applyReaderScale(scale);
+    try{ localStorage.setItem('pmn-reader-scale', String(scale)); }catch(e){}
+  }
+
+  function plainTextFromHtml(html){
+    return String(html||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  }
+  function truncateText(txt,max){
+    txt=String(txt||'').trim();
+    if(txt.length<=max) return txt;
+    return txt.slice(0,max).replace(/\s+\S*$/,'')+'...';
+  }
+  function copyText(text){
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function(resolve,reject){
+      try{
+        var ta=document.createElement('textarea');
+        ta.value=text;
+        ta.setAttribute('readonly','readonly');
+        ta.style.position='fixed';
+        ta.style.top='-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        resolve();
+      }catch(err){ reject(err); }
+    });
+  }
+  function providerUrl(target){
+    return target==='gemini' ? 'https://gemini.google.com/app' : 'https://chatgpt.com/';
+  }
+  function providerLabel(target){
+    return target==='gemini' ? 'Gemini' : 'ChatGPT';
+  }
+  function findPartIndex(partLabel){
+    for(var i=0;i<PARTS.length;i++){
+      if(String(PARTS[i].part)===String(partLabel)) return i;
+    }
+    return -1;
+  }
+  function openPartStart(partLabel){
+    var idx=findPartIndex(partLabel);
+    if(idx>=0){ openSec(idx,0); return true; }
+    nav('srch'); showContentsPanel();
+    return false;
+  }
+  function setStatus(id,msg){
+    var el=g(id);
+    if(el) el.textContent=msg;
+  }
+  function buildReaderAgentPrompt(question){
+    var p=PARTS[curP], s=p.subs[curS];
+    var excerpt=truncateText(plainTextFromHtml(s.html||s.text||''),2800);
+    var related=(REL[s.id]||[]).slice(0,4).map(function(r){
+      var info=LOOK[r];
+      return info ? (r+' - '+info.title) : r;
+    });
+    var neighbors=p.subs.slice(Math.max(0,curS-1),Math.min(p.subs.length,curS+2)).map(function(sub){
+      return sub.id+' - '+sub.title;
+    });
+    return [
+      'You are acting as PMN Agent for Progressive Materialist Naturalism (PMN) v97 by Nova Dharma.',
+      'Use the supplied PMN context as the primary source.',
+      'When something is explicit in the PMN material, say so and cite the section ID.',
+      'When you infer beyond the text, label it as inference.',
+      'Prefer concise but rigorous answers.',
+      '',
+      'USER QUESTION:',
+      question||'Explain this section and its role in the wider PMN architecture.',
+      '',
+      'ACTIVE SECTION:',
+      s.id+' - '+s.title,
+      'PART:',
+      (SPECIAL[p.part]?p.title:('Part '+p.part+' - '+p.title)),
+      '',
+      'SECTION EXCERPT:',
+      excerpt,
+      '',
+      'NEARBY SECTIONS:',
+      neighbors.join('\n'),
+      '',
+      'RELATED SECTIONS:',
+      related.length?related.join('\n'):'None surfaced by the current relation map.',
+      '',
+      'RESPONSE GOAL:',
+      'Answer the user from PMN, connect to adjacent sections when helpful, and suggest where to read next if the answer depends on surrounding architecture.'
+    ].join('\n');
+  }
+  function buildHomeAgentPrompt(question){
+    var landmarks=['I','III','VI','X','XV','XVII'].map(function(partLabel){
+      var idx=findPartIndex(partLabel);
+      if(idx<0) return null;
+      return 'Part '+PARTS[idx].part+' - '+PARTS[idx].title;
+    }).filter(Boolean);
+    return [
+      'You are acting as PMN Agent for Progressive Materialist Naturalism (PMN) v97 by Nova Dharma.',
+      'Use the supplied PMN context as the primary source.',
+      'When something is explicit in PMN, say so. When you infer, label it as inference.',
+      'Treat this as a reader asking for help inside the PMN manuscript.',
+      '',
+      'USER QUESTION:',
+      question||'Give me a strong orientation to PMN and tell me where to start.',
+      '',
+      'MANUSCRIPT OVERVIEW:',
+      'PMN is a large framework spanning epistemology, ontology, biological foundations, ethics, meaning, power, institutions, culture, geopolitics, systems change, economics, formula architecture, technology, and applied cases.',
+      'Core evaluative orientation: reduce unnecessary structural suffering and expand genuine becoming.',
+      'Core methodological orientation: material reality is primary, doctrine is revisable, and analysis must remain self-correcting under evidence.',
+      '',
+      'KEY LANDMARKS:',
+      landmarks.join('\n'),
+      'How to Read This Document',
+      '15.15 - The Compressed Core: PMN Without the Architecture',
+      '',
+      'RESPONSE GOAL:',
+      'Answer as a PMN guide, name the most relevant parts or sections, and point the reader to the best next step in the manuscript.'
+    ].join('\n');
+  }
+  function updateReaderAgentStatus(){
+    var p=PARTS[curP], s=p.subs[curS];
+    var rel=(REL[s.id]||[]).slice(0,3).join(', ');
+    var msg='Current packet: '+s.id+' - '+s.title+'\nPart: '+(SPECIAL[p.part]?p.title:('Part '+p.part+' - '+p.title));
+    if(rel) msg+='\nRelated: '+rel;
+    setStatus('reader-agent-status', msg);
+  }
+  function launchAgent(target, source, question, copyOnly){
+    var prompt=source==='reader' ? buildReaderAgentPrompt(question) : buildHomeAgentPrompt(question);
+    var dest=providerLabel(target);
+    var win=null;
+    if(!copyOnly){
+      try{ win=window.open(providerUrl(target),'_blank','noopener'); }catch(e){}
+    }
+    copyText(prompt).then(function(){
+      if(source==='reader'){
+        setStatus('reader-agent-status', copyOnly
+          ? 'Prompt copied. Paste it into any AI workspace.'
+          : 'Prompt copied. '+dest+' opened in a new tab. Paste there to continue.');
+      } else {
+        setStatus('home-ai-terminal', copyOnly
+          ? '>> PROMPT COPIED.\n>> PASTE IT INTO ANY AI WORKSPACE.'
+          : '>> PROMPT COPIED.\n>> '+dest.toUpperCase()+' OPENED IN A NEW TAB.\n>> PASTE TO CONTINUE WITH PMN CONTEXT.');
+      }
+      if(source==='home'&&g('home-ai-input')) g('home-ai-input').value='';
+    }).catch(function(){
+      if(source==='reader'){
+        setStatus('reader-agent-status','Copy failed in-browser. Select and copy manually after reopening the handoff.');
+      } else {
+        setStatus('home-ai-terminal','>> COPY FAILED IN BROWSER.\n>> TRY AGAIN OR COPY MANUALLY AFTER REOPENING THE HANDOFF.');
+      }
+    });
+    if(!copyOnly&&source==='home'&&!win){
+      setStatus('home-ai-terminal','>> PROMPT COPIED IF ALLOWED.\n>> POP-UP BLOCKED, SO OPEN '+dest.toUpperCase()+' MANUALLY AND PASTE.');
+    }
+  }
+  function upgradeThesisSection(){
+    var lead=document.querySelector('.theses-lead');
+    if(lead){
+      var legacy=lead.querySelector('div[style*="margin-top:1.5rem"]');
+      if(legacy){
+        legacy.className='theses-tier-list';
+        legacy.removeAttribute('style');
+        var labels=[
+          '&#9679; Tier 1 &mdash; Foundational',
+          '&#9679; Tier 2 &mdash; Structural',
+          '&#9679; Tier 3 &mdash; Empirical'
+        ];
+        Array.prototype.forEach.call(legacy.children,function(node,idx){
+          node.className='theses-tier-chip tier-'+(idx+1);
+          node.removeAttribute('style');
+          node.innerHTML=labels[idx]||node.innerHTML;
+        });
+      }
+    }
+    var list=g('theses-list');
+    if(list){
+      var hdrs=Array.prototype.filter.call(list.children,function(node){
+        return node.classList && !node.classList.contains('thesis-item');
+      });
+      var meta=[
+        ['tier-1 first','Tier 1 &mdash; Foundational Axioms','(adopted as starting points)'],
+        ['tier-2','Tier 2 &mdash; Structural Commitments','(revisable only by architectural failure)'],
+        ['tier-3','Tier 3 &mdash; Empirical Hypotheses','(explicitly revisable)']
+      ];
+      hdrs.forEach(function(node,idx){
+        if(!meta[idx]) return;
+        node.className='thesis-tier-hdr '+meta[idx][0];
+        node.removeAttribute('style');
+        node.innerHTML=meta[idx][1]+' <span class="thesis-tier-note">'+meta[idx][2]+'</span>';
+      });
+    }
+  }
+  function injectReadingPaths(){
+    if(document.querySelector('.reading-paths')) return;
+    var ai=document.querySelector('.home-ai-section');
+    if(!ai||!ai.parentNode) return;
+    var wrap=document.createElement('section');
+    wrap.className='reading-paths';
+    wrap.innerHTML=
+      '<div class="reading-paths-hdr">'
+      +'<h2>Reading Paths</h2>'
+      +'<p>Not every reader needs to start the same way. These entry paths give faster on-ramps into PMN depending on whether you want foundations, power analysis, formula compression, or applied cases.</p>'
+      +'</div>'
+      +'<div class="reading-paths-grid">'
+      +'<article class="path-card"><span class="path-kicker">Path 01</span><h3>Foundation First</h3><p>Start with epistemology, ontology, and the biological floor before touching doctrine or applied cases.</p><button class="path-btn" type="button" data-open-part="I">Open Part I</button></article>'
+      +'<article class="path-card"><span class="path-kicker">Path 02</span><h3>Power and Institutions</h3><p>Jump straight into how power, legitimacy, and institutional capture shape the arrangement beneath the narrative.</p><button class="path-btn" type="button" data-open-part="VI">Open Part VI</button></article>'
+      +'<article class="path-card"><span class="path-kicker">Path 03</span><h3>Compressed Core</h3><p>Use the short-form PMN core when you need the framework fast before going back for the full architecture.</p><button class="path-btn" type="button" data-open-id="15.15">Open 15.15</button></article>'
+      +'<article class="path-card"><span class="path-kicker">Path 04</span><h3>Cases and the Individual</h3><p>Move from abstract structure into historical cases and the practical demands PMN places on a person who holds it.</p><button class="path-btn" type="button" data-open-part="XVII">Open Part XVII</button></article>'
+      +'</div>';
+    ai.parentNode.insertBefore(wrap, ai);
+  }
+  function upgradeHomeAi(){
+    var inner=document.querySelector('.home-ai-section .home-ai-inner');
+    if(!inner||g('home-ai-copy')) return;
+    inner.innerHTML=
+      '<div class="home-ai-hdr">Dialectical Synthesis Terminal (AI-Powered)</div>'
+      +'<p class="home-ai-desc">Ask a PMN question here, choose your target AI, then let the site prepare a clean PMN context packet before opening ChatGPT or Gemini.</p>'
+      +'<div class="home-ai-row">'
+      +'<select id="home-ai-mode" class="home-ai-select">'
+      +'<option value="chatgpt">Target: ChatGPT</option>'
+      +'<option value="gemini">Target: Gemini</option>'
+      +'</select>'
+      +'<input type="text" id="home-ai-input" class="home-ai-input" placeholder="e.g. Explain PMN on institutional betrayal, or where should a new reader start?" autocomplete="off">'
+      +'<button id="home-ai-btn" class="home-ai-btn" type="button">Open handoff</button>'
+      +'</div>'
+      +'<div class="home-ai-terminal" id="home-ai-terminal">&gt;&gt; PMN AGENT READY\n&gt;&gt; HOME MODE PACKAGES A MANUSCRIPT-LEVEL CONTEXT SUMMARY.\n&gt;&gt; ASK A QUESTION, THEN OPEN CHATGPT OR GEMINI.</div>'
+      +'<div class="home-ai-actions"><button id="home-ai-copy" class="pmn-agent-btn" type="button">Copy prompt only</button></div>'
+      +'<p class="home-ai-note">This avoids a private API requirement. The site prepares PMN context locally, copies it, and hands you off to your own AI workspace.</p>';
+  }
 
 
 
@@ -1799,6 +2155,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     // Related sections
     renderRelated(s.id);
     renderCitedIn(s.id);
+    updateReaderAgentStatus();
     loadAnnot(curP,curS);
     // Feedback mailto
     var subj=encodeURIComponent('PMN v97 - Feedback: '+s.id+' '+s.title);
@@ -2006,6 +2363,10 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   });
 
   // Init
+  upgradeThesisSection();
+  injectReadingPaths();
+  upgradeHomeAi();
+  initReaderScale();
   pip();
   buildTOC();
   // Init sb-tog position
@@ -2016,6 +2377,28 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   populatePartFilter();
   renderSuggestions();
   g('footer-home').addEventListener('click', function(){ nav('home'); });
+  g('font-sm') && g('font-sm').addEventListener('click', function(){ setReaderScale(0.92); });
+  g('font-md') && g('font-md').addEventListener('click', function(){ setReaderScale(1); });
+  g('font-lg') && g('font-lg').addEventListener('click', function(){ setReaderScale(1.08); });
+  g('reader-chatgpt-btn') && g('reader-chatgpt-btn').addEventListener('click', function(){ launchAgent('chatgpt','reader'); });
+  g('reader-gemini-btn') && g('reader-gemini-btn').addEventListener('click', function(){ launchAgent('gemini','reader'); });
+  g('reader-copy-btn') && g('reader-copy-btn').addEventListener('click', function(){ launchAgent('chatgpt','reader','',true); });
+  g('home-ai-btn') && g('home-ai-btn').addEventListener('click', function(){
+    var target=g('home-ai-mode') ? g('home-ai-mode').value : 'chatgpt';
+    var question=g('home-ai-input') ? g('home-ai-input').value.trim() : '';
+    launchAgent(target,'home',question,false);
+  });
+  g('home-ai-copy') && g('home-ai-copy').addEventListener('click', function(){
+    var question=g('home-ai-input') ? g('home-ai-input').value.trim() : '';
+    launchAgent('chatgpt','home',question,true);
+  });
+  g('home-ai-input') && g('home-ai-input').addEventListener('keypress', function(e){
+    if(e.key==='Enter'){
+      e.preventDefault();
+      var target=g('home-ai-mode') ? g('home-ai-mode').value : 'chatgpt';
+      launchAgent(target,'home',this.value.trim(),false);
+    }
+  });
 
   // ── Parallax scroll on hero (sticky slow scroll effect) ──
   (function(){
@@ -2073,6 +2456,14 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   g('suggestions') && g('suggestions').addEventListener('click',function(e){
     var b=e.target.closest('.suggest-btn');
     if(b){openSec(+b.getAttribute('data-pi'),+b.getAttribute('data-si'));}
+  });
+  g('home-view') && g('home-view').addEventListener('click',function(e){
+    var b=e.target.closest('.path-btn');
+    if(!b) return;
+    var sid=b.getAttribute('data-open-id');
+    var part=b.getAttribute('data-open-part');
+    if(sid&&LOOK[sid]) openSec(LOOK[sid].pi,LOOK[sid].si);
+    else if(part) openPartStart(part);
   });
   (function(){var h=location.hash.slice(1);if(h&&LOOK[h]){var inf=LOOK[h];openSec(inf.pi,inf.si,true);}})();
   window.addEventListener('hashchange',function(){
@@ -2217,6 +2608,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 // v84 SYNTHESIS: HOME AI MODULE (Anthropic API)
 // =====================================================================
 (function(){
+  return;
   var btn = document.getElementById('home-ai-btn');
   var inp = document.getElementById('home-ai-input');
   var sel = document.getElementById('home-ai-mode');
