@@ -1,17 +1,246 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // ─── Storage ──────────────────────────────────────────────────────────────────
 const VERSIONS_KEY = 'pmn-versions'
 const CREDS_KEY    = 'pmn-creds'
+const SESSION_KEY  = 'pmn-admin-session'
+const AUDIT_KEY    = 'pmn-audit-log'
+
+function readJson(storage, key, fallback) {
+  try {
+    const raw = storage.getItem(key)
+    return raw ? JSON.parse(raw) : fallback
+  } catch {
+    return fallback
+  }
+}
+
+function writeJson(storage, key, value) {
+  storage.setItem(key, JSON.stringify(value))
+}
 
 function loadVersions() {
-  try { return JSON.parse(localStorage.getItem(VERSIONS_KEY) || '[]') } catch { return [] }
+  return readJson(localStorage, VERSIONS_KEY, [])
 }
-function saveVersions(v) { localStorage.setItem(VERSIONS_KEY, JSON.stringify(v)) }
+function saveVersions(v) { writeJson(localStorage, VERSIONS_KEY, v) }
 function loadCreds() {
-  try { return JSON.parse(localStorage.getItem(CREDS_KEY)) } catch { return null }
+  return readJson(localStorage, CREDS_KEY, null)
 }
-function saveCreds(c) { localStorage.setItem(CREDS_KEY, JSON.stringify(c)) }
+function saveCreds(c) { writeJson(localStorage, CREDS_KEY, c) }
+function loadAuditLog() {
+  return readJson(localStorage, AUDIT_KEY, [])
+}
+function saveAuditLog(entries) {
+  writeJson(localStorage, AUDIT_KEY, entries.slice(0, 120))
+}
+function getAdminSession() {
+  return readJson(sessionStorage, SESSION_KEY, null)
+}
+function setAdminSession(user) { writeJson(sessionStorage, SESSION_KEY, { user, ts: Date.now() }) }
+function clearAdminSession() { sessionStorage.removeItem(SESSION_KEY) }
+function hasAdminSession() { return !!getAdminSession() }
+
+function stripTags(value) {
+  return String(value ?? '').replace(/<[^>]*>/g, '')
+}
+
+function sanitizeInline(value, max = 240) {
+  return stripTags(value)
+    .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, max)
+}
+
+function appendAudit(action, details = '') {
+  const entry = {
+    id: `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
+    at: new Date().toISOString(),
+    actor: sanitizeInline(getAdminSession()?.user || 'local-admin', 80),
+    action: sanitizeInline(action, 80),
+    details: sanitizeInline(details, 220),
+  }
+  saveAuditLog([entry, ...loadAuditLog()])
+  return entry
+}
+
+function sanitizeMultiline(value, max = 5000) {
+  return stripTags(value)
+    .replace(/\r\n/g, '\n')
+    .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, '')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+    .slice(0, max)
+}
+
+function normalizeVersion(value) {
+  return sanitizeInline(value, 40).replace(/^v/i, '')
+}
+
+function parseVersionTokens(value) {
+  return normalizeVersion(value).toLowerCase().match(/\d+|[a-z]+/g) || []
+}
+
+function compareVersions(a, b) {
+  const left = parseVersionTokens(a)
+  const right = parseVersionTokens(b)
+  const len = Math.max(left.length, right.length)
+  for (let i = 0; i < len; i += 1) {
+    const l = left[i]
+    const r = right[i]
+    if (l == null) return -1
+    if (r == null) return 1
+    const ln = /^\d+$/.test(l)
+    const rn = /^\d+$/.test(r)
+    if (ln && rn) {
+      const diff = Number(l) - Number(r)
+      if (diff !== 0) return diff > 0 ? 1 : -1
+    } else {
+      const diff = l.localeCompare(r, undefined, { numeric: true, sensitivity: 'base' })
+      if (diff !== 0) return diff
+    }
+  }
+  return 0
+}
+
+function sortVersions(versions) {
+  return [...versions].sort((a, b) => {
+    const versionDiff = compareVersions(b.version, a.version)
+    if (versionDiff !== 0) return versionDiff
+    return String(b.date || '').localeCompare(String(a.date || ''))
+  })
+}
+
+function isHttpUrl(value) {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+function normalizePdfUrl(value) {
+  const trimmed = sanitizeInline(value, 1200)
+  if (!trimmed) return ''
+  return isHttpUrl(trimmed) ? trimmed : null
+}
+
+function analyzePdfUrl(value) {
+  const normalized = normalizePdfUrl(value)
+  if (normalized == null) {
+    return { directUrl: null, embedUrl: null, helper: 'URL PDF harus diawali http:// atau https://.' }
+  }
+  if (!normalized) {
+    return { directUrl: '', embedUrl: '', helper: 'URL PDF belum diisi untuk versi ini.' }
+  }
+
+  const url = new URL(normalized)
+  const host = url.hostname.replace(/^www\./, '')
+
+  if (host === 'drive.google.com') {
+    const fileMatch = url.pathname.match(/\/file\/d\/([^/]+)/)
+    const openId = url.searchParams.get('id')
+    const fileId = fileMatch?.[1] || openId
+    if (fileId) {
+      return {
+        directUrl: `https://drive.google.com/file/d/${fileId}/view`,
+        embedUrl: `https://drive.google.com/file/d/${fileId}/preview`,
+        helper: 'Preview Google Drive aktif jika file dibagikan ke siapa saja yang punya link.',
+      }
+    }
+  }
+
+  if (host === 'dropbox.com') {
+    url.searchParams.delete('dl')
+    url.searchParams.delete('raw')
+    const direct = new URL(url.toString())
+    direct.searchParams.set('raw', '1')
+    return {
+      directUrl: direct.toString(),
+      embedUrl: direct.toString(),
+      helper: 'Dropbox preview memakai file raw. Jika iframe diblokir, gunakan tombol unduh/buka langsung.',
+    }
+  }
+
+  if (/\.pdf($|\?)/i.test(url.pathname + url.search)) {
+    return {
+      directUrl: normalized,
+      embedUrl: normalized,
+      helper: 'Direct PDF link detected. Preview bergantung pada kebijakan host file tersebut.',
+    }
+  }
+
+  return {
+    directUrl: normalized,
+    embedUrl: normalized,
+    helper: 'Link non-Google-Drive akan dicoba apa adanya. Jika preview gagal, buka file langsung.',
+  }
+}
+
+function toHex(buffer) {
+  return Array.from(new Uint8Array(buffer))
+    .map(byte => byte.toString(16).padStart(2, '0'))
+    .join('')
+}
+
+function randomHex(bytes = 16) {
+  const arr = new Uint8Array(bytes)
+  crypto.getRandomValues(arr)
+  return Array.from(arr).map(byte => byte.toString(16).padStart(2, '0')).join('')
+}
+
+async function sha256(text) {
+  const data = new TextEncoder().encode(text)
+  const digest = await crypto.subtle.digest('SHA-256', data)
+  return toHex(digest)
+}
+
+async function createStoredCreds(user, pass) {
+  const cleanUser = sanitizeInline(user, 80)
+  const salt = randomHex()
+  const passwordHash = await sha256(`${cleanUser}\n${salt}\n${pass}`)
+  return { user: cleanUser, salt, passwordHash, createdAt: new Date().toISOString() }
+}
+
+async function verifyStoredCreds(stored, user, pass) {
+  const cleanUser = sanitizeInline(user, 80)
+  if (!stored) return false
+  if (stored.user !== cleanUser) return false
+  if (stored.passwordHash && stored.salt) {
+    const candidate = await sha256(`${cleanUser}\n${stored.salt}\n${pass}`)
+    return candidate === stored.passwordHash
+  }
+  return stored.pass === pass
+}
+
+function normalizeVersionRecord(record, existingId) {
+  const version = normalizeVersion(record?.version || '')
+  const summary = sanitizeMultiline(record?.summary || '', 1200)
+  const subtitle = sanitizeInline(record?.subtitle || '', 240)
+  const changelog = sanitizeMultiline(record?.changelog || '', 5000)
+  const pdfUrl = normalizePdfUrl(record?.pdfUrl || '')
+
+  if (!version) throw new Error('Nomor versi wajib diisi.')
+  if (!summary) throw new Error('Ringkasan wajib diisi.')
+  if (pdfUrl === null) throw new Error('URL PDF tidak valid. Gunakan http:// atau https://')
+
+  const isoDate = String(record?.date || '').slice(0, 10)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) throw new Error('Tanggal rilis tidak valid.')
+
+  return {
+    id: existingId || String(record?.id || Date.now()),
+    version,
+    date: isoDate,
+    subtitle,
+    summary,
+    changelog,
+    pdfUrl,
+    createdAt: record?.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+}
 
 // ─── Theme ────────────────────────────────────────────────────────────────────
 const T = {
@@ -361,18 +590,20 @@ function TableOfContents({ onBack }) {
 // ─── PDF Viewer Page ──────────────────────────────────────────────────────────
 function PdfViewer({ version, onBack }) {
   const [loaded, setLoaded] = useState(false)
+  const [previewIssue, setPreviewIssue] = useState('')
+  const pdfInfo = analyzePdfUrl(version.pdfUrl)
+  const embedUrl = pdfInfo.embedUrl
+  const directUrl = pdfInfo.directUrl
 
-  // Convert Google Drive share link to embed link
-  function toEmbedUrl(url) {
-    if (!url) return null
-    // https://drive.google.com/file/d/FILE_ID/view?usp=sharing
-    const match = url.match(/\/file\/d\/([^/]+)/)
-    if (match) return `https://drive.google.com/file/d/${match[1]}/preview`
-    // Already an embed or direct link — use as-is
-    return url
-  }
-
-  const embedUrl = toEmbedUrl(version.pdfUrl)
+  useEffect(() => {
+    setLoaded(false)
+    setPreviewIssue('')
+    if (!embedUrl) return undefined
+    const timer = window.setTimeout(() => {
+      setPreviewIssue('Preview butuh waktu terlalu lama atau diblokir oleh host file. Coba buka file langsung.')
+    }, 9000)
+    return () => window.clearTimeout(timer)
+  }, [embedUrl])
 
   return (
     <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 2rem' }}>
@@ -396,8 +627,8 @@ function PdfViewer({ version, onBack }) {
                 color: T.mute }}>{fmtDate(version.date)}</span>
             </div>
           </div>
-          {version.pdfUrl && (
-            <a href={version.pdfUrl} target="_blank" rel="noopener noreferrer"
+          {directUrl && (
+            <a href={directUrl} target="_blank" rel="noopener noreferrer"
               style={S.btn()}>
               <DownloadIcon /> Unduh PDF
             </a>
@@ -418,7 +649,7 @@ function PdfViewer({ version, onBack }) {
             )}
             <iframe
               src={embedUrl}
-              onLoad={() => setLoaded(true)}
+              onLoad={() => { setLoaded(true); setPreviewIssue('') }}
               style={{ width: '100%', height: '80vh', border: 'none',
                 display: 'block', minHeight: 500 }}
               title={`PMN v${version.version}`}
@@ -434,9 +665,15 @@ function PdfViewer({ version, onBack }) {
 
         <p style={{ fontFamily: T.mono, fontSize: '0.6rem', color: T.mute,
           marginTop: '1rem', lineHeight: 1.7 }}>
-          Jika preview tidak muncul, pastikan link Google Drive sudah diset ke
-          "Siapa saja dengan link dapat melihat". Atau gunakan tombol Unduh PDF di atas.
+          {pdfInfo.helper}
         </p>
+        {previewIssue && (
+          <div style={{ marginTop: '0.9rem', border: `1px solid ${T.border}`,
+            padding: '0.9rem 1rem', color: '#e6b35a', fontFamily: T.mono,
+            fontSize: '0.68rem', lineHeight: 1.7, background: '#1b1610' }}>
+            {previewIssue}
+          </div>
+        )}
       </section>
     </div>
   )
@@ -445,6 +682,7 @@ function PdfViewer({ version, onBack }) {
 // ─── Public: Home ─────────────────────────────────────────────────────────────
 function PublicHome({ versions, onView, onToc, onPdfView }) {
   const latest = versions[0]
+  const latestPdf = latest ? analyzePdfUrl(latest.pdfUrl) : null
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 2rem' }}>
@@ -472,7 +710,7 @@ function PublicHome({ versions, onView, onToc, onPdfView }) {
           <button onClick={onToc} style={S.btn()}>
             Lihat Daftar Isi →
           </button>
-          {latest?.pdfUrl && (
+          {latestPdf?.directUrl && (
             <button onClick={() => onPdfView(latest)}
               style={S.btn(T.surface, T.text)}>
               Baca PDF Online
@@ -506,14 +744,14 @@ function PublicHome({ versions, onView, onToc, onPdfView }) {
             <p style={{ color: T.mute, fontSize: '0.97rem', marginBottom: '1.8rem',
               lineHeight: 1.8, maxWidth: 560 }}>{latest.summary}</p>
             <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
-              {latest.pdfUrl && (
-                <a href={latest.pdfUrl} target="_blank" rel="noopener noreferrer"
+              {latestPdf?.directUrl && (
+                <a href={latestPdf.directUrl} target="_blank" rel="noopener noreferrer"
                   style={S.btn()}>
                   <DownloadIcon /> Unduh PDF
                 </a>
               )}
               <button style={S.btn(T.surface, T.text)}
-                onClick={() => latest.pdfUrl && onPdfView(latest)}>
+                onClick={() => latestPdf?.directUrl && onPdfView(latest)}>
                 Baca Online
               </button>
               <button style={S.btn(T.surface, T.text)} onClick={() => onView(latest)}>
@@ -559,7 +797,7 @@ function PublicHome({ versions, onView, onToc, onPdfView }) {
                     <td style={{ padding: '0.7rem 0.5rem', fontFamily: T.mono,
                       fontSize: '0.65rem', color: T.mute }}>{fmtDate(v.date)}</td>
                     <td style={{ padding: '0.7rem 0' }}>
-                      {v.pdfUrl
+                      {analyzePdfUrl(v.pdfUrl).directUrl
                         ? <button onClick={() => onPdfView(v)}
                             style={{ background: 'none', border: 'none',
                               fontFamily: T.mono, fontSize: '0.63rem', color: T.mute,
@@ -625,6 +863,7 @@ function VersionDetail({ version, versions, onBack, onView, onPdfView }) {
   const idx  = versions.findIndex(v => v.id === version.id)
   const prev = versions[idx + 1]
   const next = versions[idx - 1]
+  const pdfInfo = analyzePdfUrl(version.pdfUrl)
 
   return (
     <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 2rem' }}>
@@ -657,13 +896,13 @@ function VersionDetail({ version, versions, onBack, onView, onPdfView }) {
 
         <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap',
           marginBottom: '3rem' }}>
-          {version.pdfUrl && (
-            <a href={version.pdfUrl} target="_blank" rel="noopener noreferrer"
+          {pdfInfo.directUrl && (
+            <a href={pdfInfo.directUrl} target="_blank" rel="noopener noreferrer"
               style={S.btn()}>
               <DownloadIcon /> Unduh PDF
             </a>
           )}
-          {version.pdfUrl && (
+          {pdfInfo.directUrl && (
             <button style={S.btn(T.surface, T.text)} onClick={() => onPdfView(version)}>
               Baca Online
             </button>
@@ -713,15 +952,38 @@ function AdminLogin({ onLogin, onBack }) {
   const [user, setUser] = useState('')
   const [pass, setPass] = useState('')
   const [err, setErr]   = useState('')
+  const [busy, setBusy] = useState(false)
   const isSetup = !loadCreds()
 
-  function submit() {
-    if (!user.trim() || !pass.trim()) { setErr('Username dan password wajib diisi.'); return }
-    if (isSetup) { saveCreds({ user: user.trim(), pass }); onLogin() }
-    else {
-      const c = loadCreds()
-      if (c?.user === user.trim() && c?.pass === pass) onLogin()
-      else setErr('Username atau password salah.')
+  async function submit() {
+    const cleanUser = sanitizeInline(user, 80)
+    if (!cleanUser || !pass.trim()) { setErr('Username dan password wajib diisi.'); return }
+    setBusy(true)
+    try {
+      if (isSetup) {
+        const stored = await createStoredCreds(cleanUser, pass)
+        saveCreds(stored)
+        setAdminSession(cleanUser)
+        appendAudit('setup-admin', `Akun admin lokal dibuat untuk ${cleanUser}.`)
+        onLogin()
+        return
+      }
+
+      const stored = loadCreds()
+      const ok = await verifyStoredCreds(stored, cleanUser, pass)
+      if (!ok) {
+        setErr('Username atau password salah.')
+        return
+      }
+
+      if (stored?.pass) {
+        saveCreds(await createStoredCreds(cleanUser, pass))
+      }
+      setAdminSession(cleanUser)
+      appendAudit('login', `Admin ${cleanUser} masuk ke panel.`)
+      onLogin()
+    } finally {
+      setBusy(false)
     }
   }
 
@@ -738,7 +1000,8 @@ function AdminLogin({ onLogin, onBack }) {
       {isSetup && (
         <p style={{ color: T.mute, fontSize: '0.88rem', marginBottom: '1.5rem',
           lineHeight: 1.7 }}>
-          Buat username dan password. Kredensial tersimpan di browser ini saja.
+          Buat username dan password. Login ini tetap local-only, tetapi password tidak lagi
+          disimpan polos dan sesi admin hanya bertahan di tab/browser saat ini.
         </p>
       )}
       <input style={S.input} placeholder="Username" value={user}
@@ -750,8 +1013,8 @@ function AdminLogin({ onLogin, onBack }) {
       {err && <p style={{ color: '#c0392b', fontFamily: T.mono, fontSize: '0.68rem',
         marginBottom: '1rem' }}>{err}</p>}
       <button style={{ ...S.btn(), width: '100%', justifyContent: 'center' }}
-        onClick={submit}>
-        {isSetup ? 'Buat & Masuk' : 'Masuk'}
+        onClick={submit} disabled={busy}>
+        {busy ? 'Memproses...' : (isSetup ? 'Buat & Masuk' : 'Masuk')}
       </button>
     </div>
   )
@@ -762,16 +1025,26 @@ function AdminDashboard({ versions, onSave, onLogout }) {
   const [view, setView]     = useState('list')
   const [target, setTarget] = useState(null)
   const [toast, setToast]   = useState('')
+  const [auditEntries, setAuditEntries] = useState(() => loadAuditLog())
+  const fileRef = useRef(null)
 
   function showToast(msg) { setToast(msg); setTimeout(() => setToast(''), 3000) }
+  function recordAudit(action, details) {
+    appendAudit(action, details)
+    setAuditEntries(loadAuditLog())
+  }
 
   function handleSave(data) {
     let updated
-    if (target) updated = versions.map(v => v.id === target.id ? { ...v, ...data } : v)
-    else updated = [{ id: Date.now().toString(), ...data }, ...versions]
-    updated.sort((a, b) => parseFloat(b.version) - parseFloat(a.version))
+    if (target) {
+      updated = versions.map(v => (v.id === target.id ? normalizeVersionRecord(data, v.id) : v))
+    } else {
+      updated = [normalizeVersionRecord(data), ...versions]
+    }
+    updated = sortVersions(updated)
     saveVersions(updated)
     onSave(updated)
+    recordAudit(target ? 'update-version' : 'create-version', `v${data.version} disimpan ke arsip lokal.`)
     setView('list')
     showToast(target ? 'Versi diperbarui.' : 'Versi baru dipublikasikan.')
     setTarget(null)
@@ -779,10 +1052,58 @@ function AdminDashboard({ versions, onSave, onLogout }) {
 
   function handleDelete(id) {
     if (!confirm('Hapus versi ini?')) return
+    const doomed = versions.find(v => v.id === id)
     const updated = versions.filter(v => v.id !== id)
     saveVersions(updated)
     onSave(updated)
+    recordAudit('delete-version', doomed ? `v${doomed.version} dihapus dari arsip lokal.` : 'Satu versi dihapus dari arsip lokal.')
     showToast('Versi dihapus.')
+  }
+
+  function handleExport() {
+    const payload = JSON.stringify({
+      exportedAt: new Date().toISOString(),
+      appVersion: '1.0.0',
+      versions,
+    }, null, 2)
+    const blob = new Blob([payload], { type: 'application/json' })
+    const href = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = href
+    a.download = `pmn-versions-backup-${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(href)
+    recordAudit('export-backup', `${versions.length} versi diexport ke backup JSON.`)
+    showToast('Backup JSON diunduh.')
+  }
+
+  function handleImportClick() {
+    fileRef.current?.click()
+  }
+
+  function handleImportFile(event) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(String(reader.result || '{}'))
+        const rawList = Array.isArray(parsed) ? parsed : parsed.versions
+        if (!Array.isArray(rawList)) throw new Error('Format backup tidak dikenali.')
+        const imported = sortVersions(rawList.map(item => normalizeVersionRecord(item, item?.id)))
+        saveVersions(imported)
+        onSave(imported)
+        recordAudit('import-backup', `${imported.length} versi diimpor dari backup JSON.`)
+        setView('list')
+        setTarget(null)
+        showToast(`Backup diimpor: ${imported.length} versi.`)
+      } catch (error) {
+        showToast(error.message || 'Gagal mengimpor backup.')
+      }
+    }
+    reader.readAsText(file)
   }
 
   return (
@@ -822,9 +1143,24 @@ function AdminDashboard({ versions, onSave, onLogout }) {
             <div style={{ display: 'flex', justifyContent: 'space-between',
               alignItems: 'center', marginBottom: '2rem' }}>
               <span style={S.label}>Semua Versi ({versions.length})</span>
-              <button style={S.btn()} onClick={() => { setTarget(null); setView('add') }}>
-                + Publikasikan Versi Baru
-              </button>
+              <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                <button style={S.btn(T.surface, T.text)} onClick={handleImportClick}>
+                  Import Backup
+                </button>
+                <button style={S.btn(T.surface, T.text)} onClick={handleExport}>
+                  Export JSON
+                </button>
+                <button style={S.btn()} onClick={() => { setTarget(null); setView('add') }}>
+                  + Publikasikan Versi Baru
+                </button>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="application/json"
+                  onChange={handleImportFile}
+                  style={{ display: 'none' }}
+                />
+              </div>
             </div>
             {versions.length === 0 && (
               <div style={{ border: `1px solid ${T.border}`, padding: '2.5rem',
@@ -846,6 +1182,12 @@ function AdminDashboard({ versions, onSave, onLogout }) {
                       {i === 0 && <Tag>Terkini</Tag>}
                       <span style={{ fontFamily: T.mono, fontSize: '0.63rem',
                         color: T.mute }}>{fmtDate(v.date)}</span>
+                      {v.updatedAt && (
+                        <span style={{ fontFamily: T.mono, fontSize: '0.58rem',
+                          color: T.mute }}>
+                          diperbarui {fmtDate(v.updatedAt)}
+                        </span>
+                      )}
                     </div>
                     {v.subtitle && (
                       <p style={{ fontStyle: 'italic', color: T.mute,
@@ -869,6 +1211,54 @@ function AdminDashboard({ versions, onSave, onLogout }) {
                 </div>
               </div>
             ))}
+            <section style={{ marginTop: '2.5rem', borderTop: `1px solid ${T.border}`, paddingTop: '1.6rem' }}>
+              <span style={S.label}>Aktivitas Lokal Terakhir</span>
+              <div style={{ display: 'grid', gap: '0.8rem' }}>
+                {auditEntries.length ? auditEntries.slice(0, 8).map(entry => (
+                  <div key={entry.id} style={{
+                    border: `1px solid ${T.border}`,
+                    background: T.card,
+                    padding: '0.9rem 1rem',
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      gap: '1rem',
+                      flexWrap: 'wrap',
+                      marginBottom: '0.35rem',
+                    }}>
+                      <strong style={{
+                        color: T.text,
+                        fontFamily: T.mono,
+                        fontSize: '0.66rem',
+                        letterSpacing: '0.12em',
+                        textTransform: 'uppercase',
+                      }}>
+                        {entry.action}
+                      </strong>
+                      <span style={{ color: T.mute, fontFamily: T.mono, fontSize: '0.64rem' }}>
+                        {fmtDate(entry.at)}
+                      </span>
+                    </div>
+                    <div style={{ color: T.text, fontSize: '0.95rem', marginBottom: '0.2rem' }}>
+                      {entry.details || 'Perubahan lokal dicatat tanpa detail tambahan.'}
+                    </div>
+                    <div style={{ color: T.mute, fontFamily: T.mono, fontSize: '0.64rem' }}>
+                      oleh {entry.actor}
+                    </div>
+                  </div>
+                )) : (
+                  <div style={{
+                    border: `1px dashed ${T.border}`,
+                    background: T.card,
+                    padding: '0.9rem 1rem',
+                    color: T.mute,
+                  }}>
+                    Belum ada aktivitas yang tercatat di browser ini.
+                  </div>
+                )}
+              </div>
+            </section>
           </>
         )}
         {(view === 'add' || view === 'edit') && (
@@ -889,12 +1279,23 @@ function VersionForm({ initial, onSave, onCancel }) {
   const [log,  setLog]  = useState(initial?.changelog || '')
   const [pdf,  setPdf]  = useState(initial?.pdfUrl    || '')
   const [err,  setErr]  = useState('')
+  const pdfInfo = analyzePdfUrl(pdf)
 
   function submit() {
-    if (!ver.trim()) { setErr('Nomor versi wajib diisi.'); return }
-    if (!sum.trim()) { setErr('Ringkasan wajib diisi.'); return }
-    onSave({ version: ver.trim(), date, subtitle: sub.trim(),
-             summary: sum.trim(), changelog: log.trim(), pdfUrl: pdf.trim() })
+    try {
+      const normalized = normalizeVersionRecord({
+        ...initial,
+        version: ver,
+        date,
+        subtitle: sub,
+        summary: sum,
+        changelog: log,
+        pdfUrl: pdf,
+      }, initial?.id)
+      onSave(normalized)
+    } catch (error) {
+      setErr(error.message || 'Form tidak valid.')
+    }
   }
 
   const lbl = { ...S.label, marginBottom: '0.35rem', display: 'block' }
@@ -905,7 +1306,7 @@ function VersionForm({ initial, onSave, onCancel }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
         <div>
           <label style={lbl}>Nomor Versi</label>
-          <input style={S.input} placeholder="contoh: 36" value={ver}
+          <input style={S.input} placeholder="contoh: 97 atau 1.0.0" value={ver}
             onChange={e => { setVer(e.target.value); setErr('') }} />
         </div>
         <div>
@@ -916,7 +1317,7 @@ function VersionForm({ initial, onSave, onCancel }) {
       </div>
       <label style={lbl}>Subjudul (opsional)</label>
       <input style={S.input} placeholder="A Framework for Navigating Material Reality"
-        value={sub} onChange={e => setSub(e.target.value)} />
+        value={sub} onChange={e => { setSub(e.target.value); setErr('') }} />
       <label style={lbl}>Ringkasan Singkat</label>
       <textarea style={S.textarea}
         placeholder="Apa yang berubah di versi ini secara keseluruhan?"
@@ -924,15 +1325,13 @@ function VersionForm({ initial, onSave, onCancel }) {
       <label style={lbl}>Detail Changelog (opsional)</label>
       <textarea style={{ ...S.textarea, minHeight: 130 }}
         placeholder={"Contoh:\n- Tambah subbab 9.2c: AI dan Kekuasaan\n- Revisi Part VI\n- Koreksi bibliografi"}
-        value={log} onChange={e => setLog(e.target.value)} />
+        value={log} onChange={e => { setLog(e.target.value); setErr('') }} />
       <label style={lbl}>URL PDF (Google Drive / Dropbox / dll)</label>
       <input style={S.input}
         placeholder="https://drive.google.com/file/d/..."
-        value={pdf} onChange={e => setPdf(e.target.value)} />
+        value={pdf} onChange={e => { setPdf(e.target.value); setErr('') }} />
       <p style={{ color: T.mute, fontSize: '0.82rem', marginBottom: '1.5rem', lineHeight: 1.7 }}>
-        <strong style={{ color: T.text }}>Tip:</strong> Upload PDF ke Google Drive →
-        klik kanan → Bagikan → "Siapa saja dengan link" → copy link.
-        Preview otomatis akan muncul di halaman "Baca Online".
+        <strong style={{ color: T.text }}>Tip:</strong> {pdfInfo.helper}
       </p>
       {err && <p style={{ color: '#c0392b', fontFamily: T.mono, fontSize: '0.68rem',
         marginBottom: '1rem' }}>{err}</p>}
@@ -948,8 +1347,8 @@ function VersionForm({ initial, onSave, onCancel }) {
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [versions, setVersions] = useState(() => loadVersions())
-  const [page, setPage]         = useState('public')
+  const [versions, setVersions] = useState(() => sortVersions(loadVersions()))
+  const [page, setPage]         = useState(() => (hasAdminSession() ? 'admin' : 'public'))
   const [detail, setDetail]     = useState(null)
   const [pdfVer, setPdfVer]     = useState(null)
   const [showToc, setShowToc]   = useState(false)
@@ -965,6 +1364,8 @@ export default function App() {
         * { box-sizing: border-box; margin: 0; padding: 0; }
         ::selection { background: #c9a84c33; }
         button:hover { opacity: 0.78; }
+        button:disabled { opacity: 0.55; cursor: not-allowed; }
+        button:disabled:hover { opacity: 0.55; }
         input:focus, textarea:focus { border-color: ${T.accent} !important; outline: none; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); }
       `}</style>
@@ -1026,7 +1427,11 @@ export default function App() {
 
       {page === 'admin' &&
         <AdminDashboard versions={versions} onSave={setVersions}
-          onLogout={() => setPage('public')} />}
+          onLogout={() => {
+            appendAudit('logout', `Admin ${(getAdminSession()?.user || 'local-admin')} keluar dari panel.`)
+            clearAdminSession()
+            setPage('public')
+          }} />}
 
       {/* Footer */}
       {isPublic && !pdfVer && (
