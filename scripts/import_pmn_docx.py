@@ -424,11 +424,28 @@ def resolve_docx_path(value: str | None) -> Path:
         if candidate.exists():
             return candidate
 
-    attempted = "\n".join(f"- {path}" for path in seen)
+    attempted = "\n".join(f"- {mask_local_path(path)}" for path in seen)
     raise ValueError(
         "Could not locate the PMN DOCX source. Provide --docx, set PMN_DOCX, "
         f"or place PMN_Framework_v97.docx in a nearby folder.\nTried:\n{attempted}"
     )
+
+
+def mask_local_path(path: Path) -> str:
+    try:
+        resolved = path.resolve()
+    except OSError:
+        resolved = path
+
+    text = str(resolved)
+    cwd = str(Path.cwd().resolve())
+    home = str(Path.home().resolve())
+
+    if text.startswith(cwd):
+        return text.replace(cwd, "<cwd>", 1)
+    if text.startswith(home):
+        return text.replace(home, "<home>", 1)
+    return resolved.name or text
 
 
 def main() -> int:
