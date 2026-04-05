@@ -1541,6 +1541,191 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     if(txt.length<=max) return txt;
     return txt.slice(0,max).replace(/\s+\S*$/,'')+'...';
   }
+  function normalizeSearchText(txt){
+    return String(txt||'')
+      .toLowerCase()
+      .replace(/[–—]/g,' ')
+      .replace(/[^a-z0-9.\-]+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+  }
+  function uniqueTokens(tokens){
+    var out=[], seen={};
+    tokens.forEach(function(token){
+      if(!token || seen[token]) return;
+      seen[token]=1;
+      out.push(token);
+    });
+    return out;
+  }
+  function tokenizeSearch(txt){
+    return uniqueTokens(normalizeSearchText(txt).split(' ').filter(function(token){
+      return token && (token.length>2 || /\d/.test(token) || token==='pmn');
+    }));
+  }
+  function escapeRegExp(txt){
+    return String(txt||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  }
+  function countTokenHits(text, token){
+    if(!text || !token) return 0;
+    var match=text.match(new RegExp(escapeRegExp(token),'g'));
+    return match ? match.length : 0;
+  }
+  function partDisplay(part){
+    return SPECIAL[part.part] ? part.title : ('Part '+part.part+' - '+part.title);
+  }
+  var PMN_SEARCH=null;
+  function ensurePmnSearchIndex(){
+    if(PMN_SEARCH) return PMN_SEARCH;
+    var byCategory={};
+    Object.keys(GLG||{}).forEach(function(category){
+      (GLG[category]||[]).forEach(function(term){
+        byCategory[term]=category;
+      });
+    });
+    PMN_SEARCH={
+      sections:[],
+      glossary:[],
+      sectionById:{}
+    };
+    PARTS.forEach(function(part,pi){
+      part.subs.forEach(function(sub,si){
+        var text=plainTextFromHtml(sub.html||sub.text||'');
+        var rec={
+          pi:pi,
+          si:si,
+          id:sub.id,
+          title:sub.title,
+          part:partDisplay(part),
+          excerpt:truncateText(text,1200),
+          titleNorm:normalizeSearchText(sub.id+' '+sub.title),
+          partNorm:normalizeSearchText(partDisplay(part)),
+          textNorm:normalizeSearchText(text.slice(0,7000))
+        };
+        PMN_SEARCH.sections.push(rec);
+        PMN_SEARCH.sectionById[sub.id]=rec;
+      });
+    });
+    Object.keys(GL||{}).forEach(function(term){
+      PMN_SEARCH.glossary.push({
+        term:term,
+        definition:GL[term],
+        category:byCategory[term]||'Glossary',
+        termNorm:normalizeSearchText(term),
+        defNorm:normalizeSearchText(GL[term]||'')
+      });
+    });
+    return PMN_SEARCH;
+  }
+  function scoreSectionRecord(rec,tokens,phraseNorm,opts){
+    var score=0, matched=[];
+    if(phraseNorm){
+      if(rec.titleNorm.indexOf(phraseNorm)>=0) score+=18;
+      if(rec.textNorm.indexOf(phraseNorm)>=0) score+=10;
+    }
+    tokens.forEach(function(token){
+      var local=0;
+      if(rec.id===token) local+=18;
+      if(rec.titleNorm.indexOf(token)>=0) local+=8;
+      if(rec.partNorm.indexOf(token)>=0) local+=4;
+      local+=Math.min(countTokenHits(rec.textNorm,token),4);
+      if(local){ matched.push(token); score+=local; }
+    });
+    if(opts&&opts.activeId===rec.id) score+=16;
+    if(opts&&opts.relatedIds&&opts.relatedIds.indexOf(rec.id)>=0) score+=7;
+    return { score:score, matched:uniqueTokens(matched) };
+  }
+  function getTopSections(query,opts){
+    var idx=ensurePmnSearchIndex();
+    var phraseNorm=normalizeSearchText(query);
+    var tokens=tokenizeSearch(query);
+    var scored=idx.sections.map(function(rec){
+      var res=scoreSectionRecord(rec,tokens,phraseNorm,opts||{});
+      return {
+        score:res.score,
+        matched:res.matched,
+        rec:rec
+      };
+    }).filter(function(item){ return item.score>0; });
+    scored.sort(function(a,b){
+      if(b.score!==a.score) return b.score-a.score;
+      return a.rec.id.localeCompare(b.rec.id,undefined,{numeric:true,sensitivity:'base'});
+    });
+    var seen={}, out=[];
+    scored.forEach(function(item){
+      if(out.length>=(opts&&opts.maxSections||4)) return;
+      if(seen[item.rec.id]) return;
+      seen[item.rec.id]=1;
+      out.push(item);
+    });
+    ((opts&&opts.fallbackIds)||[]).forEach(function(id){
+      if(out.length>=(opts&&opts.maxSections||4)) return;
+      if(seen[id]||!idx.sectionById[id]) return;
+      seen[id]=1;
+      out.push({ score:0, matched:[], rec:idx.sectionById[id] });
+    });
+    return out;
+  }
+  function scoreGlossaryRecord(rec,tokens,phraseNorm,sections){
+    var score=0, matched=[];
+    if(phraseNorm){
+      if(rec.termNorm.indexOf(phraseNorm)>=0) score+=16;
+      if(rec.defNorm.indexOf(phraseNorm)>=0) score+=7;
+    }
+    tokens.forEach(function(token){
+      var local=0;
+      if(rec.termNorm.indexOf(token)>=0) local+=8;
+      local+=Math.min(countTokenHits(rec.defNorm,token),2);
+      if(local){ matched.push(token); score+=local; }
+    });
+    (sections||[]).forEach(function(section){
+      if(section && section.rec && rec.termNorm && section.rec.textNorm.indexOf(rec.termNorm)>=0) score+=4;
+      if(section && section.rec && rec.termNorm && section.rec.titleNorm.indexOf(rec.termNorm)>=0) score+=5;
+    });
+    return { score:score, matched:uniqueTokens(matched) };
+  }
+  function getTopGlossary(query,sections,maxGlossary){
+    var idx=ensurePmnSearchIndex();
+    var phraseNorm=normalizeSearchText(query);
+    var tokens=tokenizeSearch(query);
+    var scored=idx.glossary.map(function(rec){
+      var res=scoreGlossaryRecord(rec,tokens,phraseNorm,sections);
+      return { score:res.score, matched:res.matched, rec:rec };
+    }).filter(function(item){ return item.score>0; });
+    scored.sort(function(a,b){
+      if(b.score!==a.score) return b.score-a.score;
+      return a.rec.term.localeCompare(b.rec.term,undefined,{numeric:true,sensitivity:'base'});
+    });
+    return scored.slice(0,maxGlossary||5);
+  }
+  function buildContextPack(query,opts){
+    opts=opts||{};
+    var combinedQuery=[query||'', opts.querySeed||''].join(' ').trim();
+    var sections=getTopSections(combinedQuery,opts);
+    var glossary=getTopGlossary(combinedQuery,sections,opts.maxGlossary||5);
+    return {
+      query:combinedQuery,
+      sections:sections,
+      glossary:glossary
+    };
+  }
+  function formatSectionPacket(sections){
+    return sections.map(function(item,idx){
+      var bits=[
+        (idx+1)+'. '+item.rec.id+' - '+item.rec.title,
+        'Part: '+item.rec.part
+      ];
+      if(item.matched&&item.matched.length) bits.push('Matched: '+item.matched.join(', '));
+      bits.push('Excerpt: '+truncateText(item.rec.excerpt,540));
+      return bits.join('\n');
+    }).join('\n\n');
+  }
+  function formatGlossaryPacket(glossary){
+    if(!glossary.length) return 'None surfaced by the local PMN glossary retrieval.';
+    return glossary.map(function(item,idx){
+      return (idx+1)+'. '+item.rec.term+' ['+item.rec.category+'] - '+truncateText(item.rec.definition,240);
+    }).join('\n');
+  }
   function copyText(text){
     if(navigator.clipboard&&navigator.clipboard.writeText){
       return navigator.clipboard.writeText(text);
@@ -1582,19 +1767,24 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var el=g(id);
     if(el) el.textContent=msg;
   }
-  function buildReaderAgentPrompt(question){
+  function buildReaderAgentPrompt(question,pack){
     var p=PARTS[curP], s=p.subs[curS];
-    var excerpt=truncateText(plainTextFromHtml(s.html||s.text||''),2800);
-    var related=(REL[s.id]||[]).slice(0,4).map(function(r){
+    var relatedIds=(REL[s.id]||[]).slice(0,4);
+    var related=relatedIds.map(function(r){
       var info=LOOK[r];
       return info ? (r+' - '+info.title) : r;
     });
-    var neighbors=p.subs.slice(Math.max(0,curS-1),Math.min(p.subs.length,curS+2)).map(function(sub){
-      return sub.id+' - '+sub.title;
+    pack=pack||buildContextPack(question,{
+      activeId:s.id,
+      relatedIds:relatedIds,
+      fallbackIds:[s.id].concat(relatedIds.slice(0,2)),
+      maxSections:4,
+      maxGlossary:5,
+      querySeed:[s.id,s.title,p.title].join(' ')
     });
     return [
       'You are acting as PMN Agent for Progressive Materialist Naturalism (PMN) v97 by Nova Dharma.',
-      'Use the supplied PMN context as the primary source.',
+      'Use the supplied PMN context pack as the primary source.',
       'When something is explicit in the PMN material, say so and cite the section ID.',
       'When you infer beyond the text, label it as inference.',
       'Prefer concise but rigorous answers.',
@@ -1605,45 +1795,42 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       'ACTIVE SECTION:',
       s.id+' - '+s.title,
       'PART:',
-      (SPECIAL[p.part]?p.title:('Part '+p.part+' - '+p.title)),
+      partDisplay(p),
       '',
-      'SECTION EXCERPT:',
-      excerpt,
-      '',
-      'NEARBY SECTIONS:',
-      neighbors.join('\n'),
+      'RETRIEVED PMN PASSAGES:',
+      formatSectionPacket(pack.sections),
       '',
       'RELATED SECTIONS:',
       related.length?related.join('\n'):'None surfaced by the current relation map.',
+      '',
+      'GLOSSARY TERMS:',
+      formatGlossaryPacket(pack.glossary),
       '',
       'RESPONSE GOAL:',
       'Answer the user from PMN, connect to adjacent sections when helpful, and suggest where to read next if the answer depends on surrounding architecture.'
     ].join('\n');
   }
-  function buildHomeAgentPrompt(question){
-    var landmarks=['I','III','VI','X','XV','XVII'].map(function(partLabel){
-      var idx=findPartIndex(partLabel);
-      if(idx<0) return null;
-      return 'Part '+PARTS[idx].part+' - '+PARTS[idx].title;
-    }).filter(Boolean);
+  function buildHomeAgentPrompt(question,pack){
+    pack=pack||buildContextPack(question,{
+      fallbackIds:['how-to-read-this-document','3.0','6.0','10.0','15.15','17.0'],
+      maxSections:5,
+      maxGlossary:6,
+      querySeed:'PMN orientation manuscript architecture foundations power formula cases glossary'
+    });
     return [
       'You are acting as PMN Agent for Progressive Materialist Naturalism (PMN) v97 by Nova Dharma.',
-      'Use the supplied PMN context as the primary source.',
+      'Use the supplied PMN context pack as the primary source.',
       'When something is explicit in PMN, say so. When you infer, label it as inference.',
       'Treat this as a reader asking for help inside the PMN manuscript.',
       '',
       'USER QUESTION:',
       question||'Give me a strong orientation to PMN and tell me where to start.',
       '',
-      'MANUSCRIPT OVERVIEW:',
-      'PMN is a large framework spanning epistemology, ontology, biological foundations, ethics, meaning, power, institutions, culture, geopolitics, systems change, economics, formula architecture, technology, and applied cases.',
-      'Core evaluative orientation: reduce unnecessary structural suffering and expand genuine becoming.',
-      'Core methodological orientation: material reality is primary, doctrine is revisable, and analysis must remain self-correcting under evidence.',
+      'RETRIEVED PMN PASSAGES:',
+      formatSectionPacket(pack.sections),
       '',
-      'KEY LANDMARKS:',
-      landmarks.join('\n'),
-      'How to Read This Document',
-      '15.15 - The Compressed Core: PMN Without the Architecture',
+      'GLOSSARY TERMS:',
+      formatGlossaryPacket(pack.glossary),
       '',
       'RESPONSE GOAL:',
       'Answer as a PMN guide, name the most relevant parts or sections, and point the reader to the best next step in the manuscript.'
@@ -1651,27 +1838,59 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   }
   function updateReaderAgentStatus(){
     var p=PARTS[curP], s=p.subs[curS];
-    var rel=(REL[s.id]||[]).slice(0,3).join(', ');
-    var msg='Current packet: '+s.id+' - '+s.title+'\nPart: '+(SPECIAL[p.part]?p.title:('Part '+p.part+' - '+p.title));
-    if(rel) msg+='\nRelated: '+rel;
+    var pack=buildContextPack('',{
+      activeId:s.id,
+      relatedIds:(REL[s.id]||[]).slice(0,4),
+      fallbackIds:[s.id].concat((REL[s.id]||[]).slice(0,2)),
+      maxSections:3,
+      maxGlossary:3,
+      querySeed:[s.id,s.title,p.title].join(' ')
+    });
+    var retrieved=pack.sections.map(function(item){ return item.rec.id; }).join(', ');
+    var terms=pack.glossary.map(function(item){ return item.rec.term; }).join(', ');
+    var msg='Current packet: '+s.id+' - '+s.title+'\nPart: '+partDisplay(p);
+    if(retrieved) msg+='\nRetrieved passages: '+retrieved;
+    if(terms) msg+='\nGlossary: '+terms;
     setStatus('reader-agent-status', msg);
   }
   function launchAgent(target, source, question, copyOnly){
-    var prompt=source==='reader' ? buildReaderAgentPrompt(question) : buildHomeAgentPrompt(question);
+    var pack=source==='reader'
+      ? buildContextPack(question,{
+          activeId:PARTS[curP].subs[curS].id,
+          relatedIds:(REL[PARTS[curP].subs[curS].id]||[]).slice(0,4),
+          fallbackIds:[PARTS[curP].subs[curS].id].concat((REL[PARTS[curP].subs[curS].id]||[]).slice(0,2)),
+          maxSections:4,
+          maxGlossary:5,
+          querySeed:[PARTS[curP].subs[curS].id,PARTS[curP].subs[curS].title,PARTS[curP].title].join(' ')
+        })
+      : buildContextPack(question,{
+          fallbackIds:['how-to-read-this-document','3.0','6.0','10.0','15.15','17.0'],
+          maxSections:5,
+          maxGlossary:6,
+          querySeed:'PMN orientation manuscript architecture foundations power formula cases glossary'
+        });
+    var prompt=source==='reader' ? buildReaderAgentPrompt(question,pack) : buildHomeAgentPrompt(question,pack);
     var dest=providerLabel(target);
     var win=null;
+    var refs=pack.sections.map(function(item){ return item.rec.id; }).join(', ');
+    var gloss=pack.glossary.map(function(item){ return item.rec.term; }).slice(0,3).join(', ');
     if(!copyOnly){
       try{ win=window.open(providerUrl(target),'_blank','noopener'); }catch(e){}
     }
     copyText(prompt).then(function(){
       if(source==='reader'){
         setStatus('reader-agent-status', copyOnly
-          ? 'Prompt copied. Paste it into any AI workspace.'
-          : 'Prompt copied. '+dest+' opened in a new tab. Paste there to continue.');
+          ? 'Grounded prompt copied with '+pack.sections.length+' PMN passages. Paste it into any AI workspace.'
+          : 'Grounded prompt copied. '+dest+' opened in a new tab with '+pack.sections.length+' PMN passages ready to paste.'
+        );
       } else {
         setStatus('home-ai-terminal', copyOnly
-          ? '>> PROMPT COPIED.\n>> PASTE IT INTO ANY AI WORKSPACE.'
-          : '>> PROMPT COPIED.\n>> '+dest.toUpperCase()+' OPENED IN A NEW TAB.\n>> PASTE TO CONTINUE WITH PMN CONTEXT.');
+          ? '>> GROUNDED PROMPT COPIED.\n>> RETRIEVED SECTIONS: '+(refs||'NONE')+'.\n>> PASTE IT INTO ANY AI WORKSPACE.'
+          : '>> GROUNDED PROMPT COPIED.\n>> '+dest.toUpperCase()+' OPENED IN A NEW TAB.\n>> RETRIEVED SECTIONS: '+(refs||'NONE')+'.\n>> PASTE TO CONTINUE WITH PMN CONTEXT.'
+        );
+        if(gloss){
+          setStatus('home-ai-terminal', g('home-ai-terminal').textContent+'\n>> GLOSSARY: '+gloss+'.');
+        }
       }
       if(source==='home'&&g('home-ai-input')) g('home-ai-input').value='';
     }).catch(function(){
@@ -1746,7 +1965,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     if(!inner||g('home-ai-copy')) return;
     inner.innerHTML=
       '<div class="home-ai-hdr">Dialectical Synthesis Terminal (AI-Powered)</div>'
-      +'<p class="home-ai-desc">Ask a PMN question here, choose your target AI, then let the site prepare a clean PMN context packet before opening ChatGPT or Gemini.</p>'
+      +'<p class="home-ai-desc">Ask a PMN question here, choose your target AI, then let the site retrieve relevant PMN passages and glossary terms before opening ChatGPT or Gemini.</p>'
       +'<div class="home-ai-row">'
       +'<select id="home-ai-mode" class="home-ai-select">'
       +'<option value="chatgpt">Target: ChatGPT</option>'
