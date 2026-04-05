@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import os
 import re
 import sys
 import zipfile
@@ -42,8 +43,21 @@ def slugify(text: str) -> str:
 
 
 def extract_paragraphs(docx_path: Path) -> list[Paragraph]:
-    with zipfile.ZipFile(docx_path) as archive:
-        root = ET.fromstring(archive.read("word/document.xml"))
+    try:
+        with zipfile.ZipFile(docx_path) as archive:
+            try:
+                document_xml = archive.read("word/document.xml")
+            except KeyError as exc:
+                raise ValueError(f"Missing word/document.xml inside {docx_path}") from exc
+    except FileNotFoundError as exc:
+        raise ValueError(f"DOCX file not found: {docx_path}") from exc
+    except zipfile.BadZipFile as exc:
+        raise ValueError(f"Invalid DOCX/ZIP file: {docx_path}") from exc
+
+    try:
+        root = ET.fromstring(document_xml)
+    except ET.ParseError as exc:
+        raise ValueError(f"Could not parse XML inside {docx_path}") from exc
 
     paragraphs: list[Paragraph] = []
     for para in root.findall(".//w:p", NS):
@@ -55,7 +69,10 @@ def extract_paragraphs(docx_path: Path) -> list[Paragraph]:
 
 
 def find_body_start(paragraphs: list[Paragraph]) -> tuple[list[str], int]:
-    contents_idx = next(i for i, para in enumerate(paragraphs) if para.text == "Contents")
+    try:
+        contents_idx = next(i for i, para in enumerate(paragraphs) if para.text == "Contents")
+    except StopIteration as exc:
+        raise ValueError("Could not find a 'Contents' heading in the DOCX.") from exc
     preface_indices = [i for i, para in enumerate(paragraphs) if para.text == "Preface"]
     if len(preface_indices) < 2:
         raise ValueError("Could not locate the start of the body after the contents list.")
@@ -378,12 +395,48 @@ def summarize(parts: list[dict]) -> str:
     return f"Imported {len(parts)} part groups and {section_count} sections ({part_labels})"
 
 
+def resolve_docx_path(value: str | None) -> Path:
+    candidates: list[Path] = []
+    if value:
+        candidates.append(Path(value))
+
+    env_docx = os.environ.get("PMN_DOCX")
+    if env_docx:
+        candidates.append(Path(env_docx))
+
+    cwd = Path.cwd()
+    script_dir = Path(__file__).resolve().parent
+    candidates.extend(
+        [
+            cwd / "PMN_Framework_v97.docx",
+            cwd / "Framework docx" / "PMN_Framework_v97.docx",
+            cwd.parent / "Framework docx" / "PMN_Framework_v97.docx",
+            script_dir.parent / "Framework docx" / "PMN_Framework_v97.docx",
+        ]
+    )
+
+    seen: set[Path] = set()
+    for candidate in candidates:
+        candidate = candidate.expanduser()
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        if candidate.exists():
+            return candidate
+
+    attempted = "\n".join(f"- {path}" for path in seen)
+    raise ValueError(
+        "Could not locate the PMN DOCX source. Provide --docx, set PMN_DOCX, "
+        f"or place PMN_Framework_v97.docx in a nearby folder.\nTried:\n{attempted}"
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Import PMN .docx content into index.html")
     parser.add_argument(
         "--docx",
-        default=r"C:\Users\Ali Ikhsan\Downloads\Framework docx\PMN_Framework_v97.docx",
-        help="Path to the PMN .docx source",
+        default=None,
+        help="Path to the PMN .docx source. Optional if PMN_DOCX is set or the file is in a nearby folder.",
     )
     parser.add_argument(
         "--index",
@@ -397,8 +450,10 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    docx_path = Path(args.docx)
+    docx_path = resolve_docx_path(args.docx)
     index_path = Path(args.index)
+    if not index_path.exists():
+        raise ValueError(f"Target index.html not found: {index_path}")
 
     paragraphs = extract_paragraphs(docx_path)
     toc_headings, body_start = find_body_start(paragraphs)
