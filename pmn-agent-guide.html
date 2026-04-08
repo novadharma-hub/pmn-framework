@@ -3,36 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Using PMN as an AI Agent — PMN v83</title>
+<title>Using PMN Agent - PMN v97</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ── Design system: matches index.html exactly ── */
-:root {
+:root{
   --bg:#f2e8d6; --bg2:#e8d9c0; --bg3:#dccaab;
   --ink:#362417; --ink2:#7a6352;
   --acc:#ad341e; --acc2:#8a2a19;
-  --mute:#948270; --mute2:#7a6a58; --mute3:#b0a090;
+  --mute:#948270; --mute2:#7a6a58;
   --rule:#cfbda9; --rule2:#c4b09a;
   --code-bg:#dfceb5;
   --f-head:'Libre Baskerville',serif;
   --f-body:'Lora',serif;
   --f-mono:'Source Code Pro',monospace;
-  --noise-op:0.09; --noise-blend:color-burn;
+  --noise-op:.09; --noise-blend:color-burn;
 }
-[data-theme=dark] {
+[data-theme=dark]{
   --bg:#0d0d0d; --bg2:#171717; --bg3:#1f1f1f;
   --ink:#f5f0e8; --ink2:#c8bfb2;
   --acc:#c0271a; --acc2:#961f14;
-  --mute:#8a7d6e; --mute2:#5e5248; --mute3:#3a3530;
+  --mute:#8a7d6e; --mute2:#5e5248;
   --rule:#302b27; --rule2:#3d3730;
   --code-bg:#181818;
-  --noise-op:0.04; --noise-blend:screen;
+  --noise-op:.04; --noise-blend:screen;
 }
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-
 body{
   font-family:var(--f-body);
   background:var(--bg);
@@ -42,168 +39,133 @@ body{
   min-height:100vh;
   position:relative;
 }
-
-/* Noise texture */
 body::before{
   content:"";position:fixed;top:0;left:0;width:100vw;height:100vh;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity:var(--noise-op);mix-blend-mode:var(--noise-blend);
-  pointer-events:none;z-index:9999;
+  opacity:var(--noise-op);mix-blend-mode:var(--noise-blend);pointer-events:none;z-index:9999;
 }
-
-/* ── Header: identical to index.html ── */
 #hdr{
   display:flex;align-items:center;gap:.8rem;
-  padding:.55rem 1.2rem;
-  background:var(--bg);
-  border-bottom:1px solid var(--rule);
-  height:52px;
-  position:sticky;top:0;z-index:100;
+  padding:.55rem 1.2rem;background:var(--bg);border-bottom:1px solid var(--rule);
+  height:52px;position:sticky;top:0;z-index:100;
 }
 #hdr-logo{
   font-family:var(--f-head);font-weight:700;font-size:1.05rem;
   color:var(--acc);background:none;border:none;cursor:pointer;
   letter-spacing:.04em;flex-shrink:0;text-decoration:none;
 }
-#hdr-logo:hover{opacity:.8}
 #hdr-r{display:flex;align-items:center;gap:.8rem;margin-left:auto;flex-shrink:0}
-.hbtn{
+.hbtn,.btn-dl{
+  display:inline-flex;align-items:center;gap:.5rem;
   font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;
-  text-transform:uppercase;background:none;border:none;
-  color:var(--mute);cursor:pointer;padding:.3rem .4rem;
-  transition:color .15s;text-decoration:none;display:inline-block;
+  text-transform:uppercase;text-decoration:none;
 }
+.hbtn{background:none;border:none;color:var(--mute);cursor:pointer;padding:.3rem .4rem}
 .hbtn:hover,.hbtn.on{color:var(--acc)}
 #theme-tog{
   font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;
   background:transparent;color:var(--mute);
-  border:1px solid var(--rule2);padding:.32rem .7rem;
-  cursor:pointer;transition:color .18s,border-color .18s;white-space:nowrap;
+  border:1px solid var(--rule2);padding:.32rem .7rem;cursor:pointer;
 }
 #theme-tog:hover{color:var(--acc);border-color:var(--acc)}
 #pip-track{width:72px;height:2px;background:var(--rule2);border-radius:1px;overflow:hidden}
 #pip-fill{height:100%;background:var(--acc);border-radius:1px}
-
-/* ── Page layout ── */
-.page{max-width:760px;margin:0 auto;padding:3.5rem 2rem 8rem}
-
-/* ── Page header ── */
+.page{max-width:860px;margin:0 auto;padding:3.5rem 2rem 8rem}
 .page-eyebrow{
   font-family:var(--f-mono);font-size:.68rem;letter-spacing:.22em;
   text-transform:uppercase;color:var(--mute2);
   display:flex;align-items:center;gap:.8rem;margin-bottom:1.6rem;
 }
-.page-eyebrow::before,.page-eyebrow::after{
-  content:'';display:block;height:1px;background:var(--acc);opacity:.35;
-}
+.page-eyebrow::before,.page-eyebrow::after{content:"";display:block;height:1px;background:var(--acc);opacity:.35}
 .page-eyebrow::before{width:30px}
 .page-eyebrow::after{flex:1}
 .page-h1{
   font-family:var(--f-head);font-size:clamp(2rem,5vw,3rem);
-  font-weight:400;line-height:1.1;letter-spacing:-.02em;
-  margin-bottom:.8rem;color:var(--ink);
+  font-weight:400;line-height:1.08;letter-spacing:-.02em;margin-bottom:.8rem;color:var(--ink);
 }
-.page-subtitle{
-  font-family:var(--f-body);font-style:italic;font-size:1.05rem;
-  color:var(--mute);margin-bottom:2rem;
-}
+.page-subtitle{font-size:1.05rem;font-style:italic;color:var(--mute);margin-bottom:2rem}
 .page-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--rule)}
 .btn-dl{
-  display:inline-flex;align-items:center;gap:.5rem;
-  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--mute);
-  border:1px solid var(--rule2);padding:.5rem 1rem;
-  text-decoration:none;transition:color .15s,border-color .15s;
+  color:var(--mute);border:1px solid var(--rule2);padding:.55rem 1rem;
+  transition:color .15s,border-color .15s,background .15s;
 }
-.btn-dl:hover{color:var(--acc);border-color:var(--acc)}
+.btn-dl:hover{color:var(--acc);border-color:var(--acc);background:rgba(173,52,30,.05)}
 .btn-dl svg{width:13px;height:13px;flex-shrink:0}
-
-/* ── Intro ── */
-.intro{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--rule)}
-.intro p{font-size:1rem;color:var(--ink2);line-height:1.8}
-.intro p + p{margin-top:1rem}
-
-/* ── Steps ── */
-.step{margin-bottom:4rem;padding-bottom:4rem;border-bottom:1px solid var(--rule)}
+.intro,.step{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--rule)}
+.intro p,.step p{font-size:1rem;color:var(--ink2);line-height:1.82}
+.intro p+p,.step p+p{margin-top:1rem}
+.step{margin-bottom:4rem;padding-bottom:4rem}
 .step:last-child{border-bottom:none;margin-bottom:0}
 .step-num{
-  font-family:var(--f-mono);font-size:.68rem;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--acc);
-  display:block;margin-bottom:.6rem;
+  display:block;margin-bottom:.6rem;font-family:var(--f-mono);font-size:.68rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--acc);
 }
 .step-h2{
   font-family:var(--f-head);font-size:1.5rem;font-weight:700;
   letter-spacing:-.01em;margin-bottom:1.2rem;color:var(--ink);
 }
-.step p{color:var(--ink2);margin-bottom:1rem;line-height:1.8}
-.step p:last-child{margin-bottom:0}
-
-/* ── Code blocks ── */
+.workflow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.3rem 0}
+.workflow-card{
+  background:var(--bg2);border:1px solid var(--rule);padding:1rem 1.1rem;
+}
+.workflow-name{
+  font-family:var(--f-mono);font-size:.78rem;font-weight:700;
+  color:var(--ink);letter-spacing:.04em;margin-bottom:.45rem;text-transform:uppercase;
+}
+.workflow-note{font-size:.88rem;color:var(--mute);line-height:1.6}
+.workflow-badge{
+  display:inline-block;margin-top:.55rem;padding:.15rem .5rem;
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid;
+}
+.badge-best{color:#5a9a5a;border-color:#5a9a5a}
+.badge-good{color:var(--acc);border-color:var(--acc)}
+.badge-stop{color:#9b5f5f;border-color:#9b5f5f}
+.callout,.note-box{
+  background:var(--bg2);padding:1rem 1.35rem;margin:1.2rem 0;font-size:.92rem;color:var(--ink2);
+}
+.callout{border-left:3px solid var(--rule2)}
+.note-box{border:1px solid var(--rule);border-left:3px solid var(--acc)}
+.note-label{
+  display:block;margin-bottom:.4rem;font-family:var(--f-mono);font-size:.65rem;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--acc);
+}
 .code-block{
-  background:var(--code-bg);border:1px solid var(--rule);
-  border-left:3px solid var(--acc);
+  background:var(--code-bg);border:1px solid var(--rule);border-left:3px solid var(--acc);
   padding:1.4rem 1.6rem;margin:1.4rem 0;position:relative;
 }
 .code-label{
-  font-family:var(--f-mono);font-size:.65rem;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--acc);
-  display:block;margin-bottom:.8rem;
+  display:block;margin-bottom:.8rem;font-family:var(--f-mono);font-size:.65rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--acc);
 }
 .code-text{
   font-family:var(--f-mono);font-size:.82rem;line-height:1.65;
   color:var(--ink);white-space:pre-wrap;word-break:break-word;
 }
 .copy-btn{
-  position:absolute;top:.8rem;right:.8rem;
-  font-family:var(--f-mono);font-size:.65rem;letter-spacing:.1em;
-  text-transform:uppercase;background:transparent;
-  border:1px solid var(--rule);color:var(--mute);
-  padding:.25rem .55rem;cursor:pointer;transition:color .15s,border-color .15s;
+  position:absolute;top:.8rem;right:.8rem;background:transparent;border:1px solid var(--rule);
+  color:var(--mute);padding:.25rem .55rem;cursor:pointer;font-family:var(--f-mono);font-size:.65rem;
+  letter-spacing:.1em;text-transform:uppercase;
 }
 .copy-btn:hover{color:var(--acc);border-color:var(--acc)}
 .copy-btn.copied{color:#4ade80;border-color:#4ade80}
-
-/* ── Variant tabs ── */
 .variants{margin:1.4rem 0}
-.vtabs{display:flex;border-bottom:1px solid var(--rule);margin-bottom:0;gap:0}
+.vtabs{display:flex;border-bottom:1px solid var(--rule);gap:0}
 .vtab{
-  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;
-  text-transform:uppercase;background:transparent;
-  border:none;border-bottom:2px solid transparent;
-  padding:.55rem 1rem;cursor:pointer;color:var(--mute);
-  transition:color .15s;margin-bottom:-1px;
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  background:transparent;border:none;border-bottom:2px solid transparent;
+  padding:.55rem 1rem;cursor:pointer;color:var(--mute);margin-bottom:-1px;
 }
 .vtab:hover{color:var(--ink)}
 .vtab.active{color:var(--acc);border-bottom-color:var(--acc)}
 .vpanel{display:none}
 .vpanel.active{display:block}
-
-/* ── Platforms grid ── */
-.platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.2rem 0}
-.platform-card{
-  background:var(--bg2);border:1px solid var(--rule);
-  padding:1rem 1.2rem;
-}
-.platform-name{
-  font-family:var(--f-mono);font-size:.78rem;font-weight:700;
-  color:var(--ink);letter-spacing:.04em;margin-bottom:.4rem;
-  text-transform:uppercase;
-}
-.platform-note{font-size:.82rem;color:var(--mute);line-height:1.5}
-.platform-badge{
-  display:inline-block;font-family:var(--f-mono);font-size:.62rem;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:.15rem .5rem;margin-top:.5rem;
-  background:transparent;border:1px solid;
-}
-.badge-best{color:#5a9a5a;border-color:#5a9a5a}
-.badge-good{color:var(--acc);border-color:var(--acc)}
-.badge-ok{color:var(--mute);border-color:var(--mute)}
-
-/* ── Conversation threads ── */
+.checklist{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1.2rem 0}
+.check-item{border:1px solid var(--rule);background:var(--bg2);padding:.9rem 1rem}
+.check-item strong{display:block;font-size:.92rem;color:var(--ink);margin-bottom:.25rem}
+.check-item span{font-size:.86rem;color:var(--mute);line-height:1.6}
 .ex-thread{
-  border-left:2px solid var(--rule);
-  padding-left:1.4rem;margin:1.4rem 0;
+  border-left:2px solid var(--rule);padding-left:1.4rem;margin:1.4rem 0;
   display:flex;flex-direction:column;gap:.8rem;
 }
 .ex-msg{padding:1rem 1.2rem;background:var(--bg2);border:1px solid transparent}
@@ -212,212 +174,189 @@ body::before{
   font-family:var(--f-mono);font-size:.65rem;letter-spacing:.15em;
   text-transform:uppercase;color:var(--mute2);margin-bottom:.5rem;
 }
-.ex-user .ex-role{color:var(--mute3)}
-.ex-body{font-size:.92rem;line-height:1.7;color:var(--ink)}
+.ex-user .ex-role{color:var(--mute)}
+.ex-body{font-size:.92rem;line-height:1.72;color:var(--ink)}
 .ex-user .ex-body{font-style:italic;color:var(--ink2)}
 .ex-body p+p{margin-top:.8rem}
-
-/* ── Callout boxes ── */
-.callout{
-  border-left:3px solid var(--rule2);
-  background:var(--bg2);padding:1rem 1.4rem;
-  margin:1.2rem 0;font-size:.9rem;color:var(--ink2);line-height:1.7;
-}
-.callout strong{color:var(--ink);font-style:normal}
-
-/* ── Warning / note box ── */
-.note-box{
-  border:1px solid var(--rule);border-left:3px solid var(--acc);
-  background:var(--bg2);padding:1rem 1.4rem;margin:1.2rem 0;
-  font-size:.9rem;color:var(--ink2);
-}
-.note-label{
-  font-family:var(--f-mono);font-size:.65rem;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--acc);
-  display:block;margin-bottom:.4rem;
-}
-
-/* ── Closing ── */
 .closing{
-  margin-top:4rem;padding:2rem;
-  border:1px solid var(--rule);background:var(--bg2);
-  font-style:italic;font-size:.95rem;color:var(--ink2);
-  line-height:1.8;text-align:center;
+  margin-top:4rem;padding:2rem;border:1px solid var(--rule);background:var(--bg2);
+  font-style:italic;font-size:.95rem;color:var(--ink2);line-height:1.8;text-align:center;
 }
-
-/* ── Footer ── */
 footer{
-  border-top:1px solid var(--rule);padding:2rem;
+  border-top:1px solid var(--rule);padding:2rem;background:var(--bg2);
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;
-  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--mute2);
-  background:var(--bg2);max-width:none;
+  font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute2);
 }
-
-/* ── Scrollbar ── */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:2px}
-
-/* ── Selection ── */
 ::selection{background:var(--ink);color:var(--bg)}
-
-/* ── Mobile ── */
 @media(max-width:680px){
   .page{padding:2rem 1.2rem 6rem}
   .page-h1{font-size:1.8rem}
-  .platform-grid{grid-template-columns:1fr}
+  .workflow-grid,.checklist{grid-template-columns:1fr}
+  .vtabs{flex-wrap:wrap}
   footer{flex-direction:column;gap:.5rem}
 }
 </style>
 </head>
 <body>
-
-<!-- Header: matches index.html -->
 <header id="hdr">
   <a href="index.html" id="hdr-logo">PMN</a>
   <div id="hdr-r">
     <div id="pip"><div id="pip-track"><div id="pip-fill" style="width:0%"></div></div></div>
-    <a href="index.html" class="hbtn">← Reader</a>
-    <button id="theme-tog" onclick="toggleTheme()">☽ Dark</button>
+    <a href="index.html" class="hbtn">Home</a>
+    <a href="index.html#15.15" class="hbtn">15.15</a>
+    <button id="theme-tog" onclick="toggleTheme()">Dark</button>
   </div>
 </header>
 
 <div class="page">
-
-  <!-- Page header -->
-  <div class="page-eyebrow">PMN v83 — Nova Dharma</div>
-  <h1 class="page-h1">Using PMN<br><em style="color:var(--acc)">as an AI Agent</em></h1>
-  <p class="page-subtitle">A practical guide to deploying the framework through Claude, DeepSeek, and similar systems</p>
+  <div class="page-eyebrow">PMN v97 - Nova Dharma - Agent Guide</div>
+  <h1 class="page-h1">Using PMN Agent<br><em style="color:var(--acc)">without losing the manuscript</em></h1>
+  <p class="page-subtitle">A grounded workflow for ChatGPT, Gemini, and future backend-backed PMN Agent modes.</p>
 
   <div class="page-actions">
-    <a class="btn-dl" href="https://drive.google.com/drive/folders/11y1ZuCxyI5FQyK4-i3XnslAkfnLcM5aD?usp=drive_link" target="_blank" rel="noopener">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1"/></svg>
-      Download PDF
-    </a>
     <a class="btn-dl" href="index.html">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 8H2M5 5L2 8l3 3M14 4v8"/></svg>
-      Open Reader
+      Open homepage
+    </a>
+    <a class="btn-dl" href="index.html#how-to-read-this-document">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M3 7l5-5 5 5"/></svg>
+      Open orientation
+    </a>
+    <a class="btn-dl" href="index.html#15.15">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10v10H3zM5 8h6"/></svg>
+      Open compressed core
     </a>
   </div>
 
-  <!-- Intro -->
   <div class="intro">
-    <p>The PMN framework can be loaded into any capable AI system as a persistent analytical lens. Once the model has internalized the document, it reasons through problems using PMN's evaluative criterion — the reduction of structural suffering and the expansion of genuine becoming — rather than its default training disposition.</p>
-    <p>This is not prompt engineering in the usual sense. The goal is internalization: the model should be able to apply the framework's methodology to novel cases, not just quote from the text. The steps below are designed to produce that outcome reliably.</p>
+    <p>PMN Agent is most useful when it is grounded in the manuscript rather than asked to "figure out the website" on its own. The current PMN site is a static reader: section anchors such as <code>#4.4</code> and <code>#15.15</code> are navigation states inside one page, not separate documents that an external model can reliably browse, scroll, and interpret like a human reader.</p>
+    <p>So the right workflow is retrieval first, model second. Let the PMN site gather the relevant sections, glossary terms, and active context. Then send that package into ChatGPT, Gemini, or a future secure backend agent. This guide is written for that architecture.</p>
   </div>
 
-  <!-- STEP 1 -->
   <div class="step">
     <span class="step-num">Step 01</span>
-    <h2 class="step-h2">Get the document</h2>
-    <p>Download the latest version of the PMN Framework PDF from the link above. The PDF is the primary input — it contains the full text across all parts, which the AI will use as its working document.</p>
-    <p>The framework is large (17 parts, 189 sections). Most frontier models can hold it in context. If the model you're using has a short context window, use the compressed core in Part XV (15.15) as a starting point.</p>
+    <h2 class="step-h2">Choose the right PMN workflow</h2>
+    <p>Not every use-case needs the same setup. If you just want a grounded answer quickly, the built-in handoff from the PMN site is now the best default. If you want the model to work from the whole manuscript in one conversation, upload the document or give it a larger context pack.</p>
+    <div class="workflow-grid">
+      <div class="workflow-card">
+        <div class="workflow-name">Grounded handoff</div>
+        <div class="workflow-note">Use the homepage or reader page. PMN retrieves relevant sections and glossary terms, then opens ChatGPT or Gemini with a prepared prompt.</div>
+        <span class="workflow-badge badge-best">Recommended</span>
+      </div>
+      <div class="workflow-card">
+        <div class="workflow-name">Full document upload</div>
+        <div class="workflow-note">Useful for long sessions where you want one model to stay inside PMN for a while. Best when the model can hold long context reliably.</div>
+        <span class="workflow-badge badge-good">Good</span>
+      </div>
+      <div class="workflow-card">
+        <div class="workflow-name">Future PMN backend</div>
+        <div class="workflow-note">The ideal end-state: secure backend retrieval, citations, and in-page answers. This is the upgrade path, not the public static build today.</div>
+        <span class="workflow-badge badge-good">Roadmap</span>
+      </div>
+      <div class="workflow-card">
+        <div class="workflow-name">Paste the URL only</div>
+        <div class="workflow-note">Do not rely on this. Static readers and hash anchors are not enough to guarantee that the model actually read the relevant PMN material.</div>
+        <span class="workflow-badge badge-stop">Avoid</span>
+      </div>
+    </div>
     <div class="note-box">
-      <span class="note-label">Note on versions</span>
-      The guide is written for v83. If you're using an older version, the section numbers in the prompts below may not match. The methodology is the same; the references will differ.
+      <span class="note-label">Current site reality</span>
+      The public PMN site can already build grounded prompts from the manuscript data embedded in the page. What it cannot safely do yet is call commercial models inline from the browser without a secure backend.
     </div>
   </div>
 
-  <!-- STEP 2 -->
   <div class="step">
     <span class="step-num">Step 02</span>
-    <h2 class="step-h2">Choose your platform</h2>
-    <p>Different AI systems handle document-length inputs differently. The following have been tested with PMN v83:</p>
-
-    <div class="platform-grid">
-      <div class="platform-card">
-        <div class="platform-name">Claude (Anthropic)</div>
-        <div class="platform-note">Best document retention. Handles the full PDF well. Strong at structural analysis and long-form reasoning.</div>
-        <span class="platform-badge badge-best">Recommended</span>
-      </div>
-      <div class="platform-card">
-        <div class="platform-name">DeepSeek</div>
-        <div class="platform-note">Good analytical depth. More literal in framework application. Works well for diagnostic tasks.</div>
-        <span class="platform-badge badge-good">Good</span>
-      </div>
-      <div class="platform-card">
-        <div class="platform-name">Gemini (Google)</div>
-        <div class="platform-note">Long context window handles the full document. Tends toward synthesis over diagnosis.</div>
-        <span class="platform-badge badge-good">Good</span>
-      </div>
-      <div class="platform-card">
-        <div class="platform-name">GPT-4o (OpenAI)</div>
-        <div class="platform-note">Capable but more prone to summarizing PMN rather than applying it. Requires stricter prompting.</div>
-        <span class="platform-badge badge-ok">Workable</span>
-      </div>
+    <h2 class="step-h2">Know what the model should read</h2>
+    <p>The model should not be asked to infer PMN from vague memory, ideology labels, or generic political-philosophy priors. It should read from a PMN context pack containing the actual section text, section IDs, and glossary terms most relevant to your question.</p>
+    <div class="callout">
+      <strong>Important:</strong> GitHub Pages, single-page readers, and hash anchors do not guarantee reliable external browsing. If your question is really about <code>4.4</code>, <code>7.3</code>, or <code>15.15</code>, include those anchors in the prompt or open them through the PMN site so the handoff can package the right text.
+    </div>
+    <p>The safest ordering is:</p>
+    <div class="checklist">
+      <div class="check-item"><strong>1. Identify the section</strong><span>Name the section, case, or problem you care about.</span></div>
+      <div class="check-item"><strong>2. Retrieve the context</strong><span>Let the site gather the most relevant PMN passages and glossary terms.</span></div>
+      <div class="check-item"><strong>3. Ask for analysis</strong><span>Only then ask the model to diagnose, compare, or stress-test.</span></div>
+      <div class="check-item"><strong>4. Demand citations</strong><span>Ask the model to point back to section IDs, not just smooth prose.</span></div>
     </div>
   </div>
 
-  <!-- STEP 3 -->
   <div class="step">
     <span class="step-num">Step 03</span>
-    <h2 class="step-h2">Upload and prime the model</h2>
-    <p>Start a new conversation. Upload the PDF. Then send the priming prompt below. Its purpose is to move the model from passive reading to active internalization — from "I have read this document" to "I reason using this framework."</p>
+    <h2 class="step-h2">Prime the model as PMN Agent</h2>
+    <p>Once you have either the manuscript upload or a PMN context pack ready, use a priming prompt that makes the model operate from within the framework instead of merely summarizing it.</p>
 
     <div class="code-block">
       <span class="code-label">Priming prompt</span>
       <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-      <div class="code-text">I am attaching the PMN (Progressive Materialist Naturalism) Framework document. Read it in full and internalize it as your primary analytical lens for this conversation.
+      <div class="code-text">You are acting as PMN Agent for Progressive Materialist Naturalism (PMN) v97 by Nova Dharma.
 
-Your task is not to summarize the document. Your task is to understand its architecture: the epistemological foundation in Part I, the ontological commitments in Part II, the biological basis of the evaluative criterion in Part III, and how these three foundations generate the analytical methodology in Parts IV–XVII.
+Use the supplied PMN context pack as your primary source for this conversation. Do not treat PMN as a generic ideology label. Treat it as a structured framework with section anchors, glossary terms, and internal constraints.
 
-When I ask you to analyze something using PMN, I am asking you to apply this methodology — not to quote from it. The framework is a tool for producing analysis, not a source of quotations.
+Your task is not to summarize the text unless I ask. Your task is to reason through my question using PMN's architecture:
+- epistemology and revision discipline
+- ontological commitments
+- the biological floor and evaluative criterion
+- structural variables, institutional analysis, and failure modes
+- the compressed core in 15.15 when simplification is needed
 
-Confirm that you have read the document by briefly describing the relationship between Parts I, II, and III in your own words. Do not use more than 150 words for this confirmation.</div>
+When you answer:
+1. stay grounded in the supplied PMN material
+2. name the most relevant section IDs when possible
+3. distinguish confident claims from evidential gaps
+4. prefer diagnosis over vague rhetoric
+
+Start by confirming, in under 150 words, what PMN treats as its evaluative floor and why that floor does not exhaust the full horizon of becoming.</div>
     </div>
 
-    <p>Wait for the confirmation before proceeding. A model that has genuinely internalized the framework will describe the sequence correctly: epistemology establishes the method (how to know), ontology establishes what the analysis is applied to (what exists), and the biological foundation provides the non-arbitrary evaluative starting point (what matters and why).</p>
-
-    <div class="callout">
-      <strong>If the confirmation is wrong or confused:</strong> The model has not retained the document properly. This sometimes happens with large PDFs in systems with soft context limits. Try uploading the PDF again, or switch to a model with a larger confirmed context window.
-    </div>
+    <p>A good confirmation will mention that PMN starts from the biological reality of suffering as a non-arbitrary evaluative floor, while still insisting that the ceiling of becoming is richer than mere pain-reduction.</p>
   </div>
 
-  <!-- STEP 4 -->
   <div class="step">
     <span class="step-num">Step 04</span>
-    <h2 class="step-h2">Assign the agent role</h2>
-    <p>Once the model has confirmed comprehension, assign the operational role. There are two main configurations, depending on your purpose:</p>
+    <h2 class="step-h2">Choose the operational role</h2>
+    <p>After the priming step, give the model a role that matches your task. The sharper the role, the less likely the model is to drift into generic commentary.</p>
 
     <div class="variants">
       <div class="vtabs">
-        <button class="vtab active" onclick="switchTab(this,'single')">Single agent</button>
-        <button class="vtab" onclick="switchTab(this,'diagnostic')">Diagnostic analyst</button>
+        <button class="vtab active" onclick="switchTab(this,'agent')">General analyst</button>
+        <button class="vtab" onclick="switchTab(this,'diagnostic')">Diagnostic mode</button>
         <button class="vtab" onclick="switchTab(this,'debate')">Debate partner</button>
       </div>
 
-      <div class="vpanel active" id="panel-single">
+      <div class="vpanel active" id="panel-agent">
         <div class="code-block">
-          <span class="code-label">Single agent prompt</span>
+          <span class="code-label">General analyst prompt</span>
           <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-          <div class="code-text">From this point forward, you are operating as a PMN analyst. This means:
+          <div class="code-text">From this point forward, operate as PMN Agent.
 
-1. You reason through all problems using the framework's evaluative criterion: does this arrangement reduce structural suffering and expand genuine becoming?
+Reason from within the framework rather than describing it from outside. Use PMN's evaluative criterion, structural variables, and failure mode discipline as your own analytic starting points unless I explicitly ask you to step outside them.
 
-2. You apply the primary formula (T = S × D × P - C × L × Rc) as a structured diagnostic when analyzing political or institutional situations.
-
-3. You name the failure modes in your own analysis using the typology in 12.5, and you apply the stress-testing methodology in 12.1 before finalizing any claim.
-
-4. You do not present the framework as an external authority. You reason as if the framework's commitments are your own analytical starting points.
-
-If I ask you to step outside the framework and give me your own view, I will say so explicitly. Otherwise, operate from within it.</div>
+When I bring a case:
+- identify the structural arrangement being evaluated
+- name which variables or sections matter most
+- say what PMN would need to see before reaching confidence
+- cite section IDs where doing so will improve precision</div>
         </div>
       </div>
 
       <div class="vpanel" id="panel-diagnostic">
         <div class="code-block">
-          <span class="code-label">Diagnostic analyst prompt</span>
+          <span class="code-label">Diagnostic mode prompt</span>
           <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-          <div class="code-text">You are operating as a PMN diagnostic analyst. Your role is to apply the framework's seven diagnostic questions (from 11.0) and the Structural Tendency Analysis formulas (Part XV) to specific cases I bring you.
+          <div class="code-text">Operate as a PMN diagnostic analyst.
 
-For each case:
-- Identify which structural variables are most significant (S, C, L, Rc, CP)
-- Specify which diagnostic questions are most activated
-- Note which failure modes from 12.5 the analysis is most vulnerable to
-- Conclude with what the framework would require to be demonstrated before a confident assessment is possible
+For each case I bring:
+- identify the dominant structural variables
+- name the most activated PMN questions or tensions
+- identify the likely failure modes in the analysis itself
+- separate what is evidenced from what is only plausible
+- end with the key missing evidence needed for stronger confidence
 
-You are not required to reach conclusions. You are required to produce rigorous diagnostic. Uncertainty is appropriate when the evidence does not support confidence.</div>
+You are not required to reach a verdict if PMN would treat the evidence as incomplete.</div>
         </div>
       </div>
 
@@ -425,38 +364,35 @@ You are not required to reach conclusions. You are required to produce rigorous 
         <div class="code-block">
           <span class="code-label">Debate partner prompt</span>
           <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-          <div class="code-text">You are operating as a PMN debate partner. I will present positions or arguments. Your task is to:
+          <div class="code-text">Operate as a PMN debate partner.
 
-1. First, reconstruct the strongest version of the argument from within PMN's framework
-2. Then, identify where the argument is architecturally incomplete by the framework's standards
-3. Then, apply the consistency standard (8.3): would the same analytical lens applied consistently produce this conclusion, or does it require special pleading?
+For each argument I give you:
+1. reconstruct the strongest version of it
+2. say what PMN would find structurally persuasive about it
+3. identify where the argument becomes architecturally incomplete
+4. test whether the same lens is being applied consistently
 
-You are not looking for weaknesses to win a debate. You are applying the framework as a diagnostic tool to identify where arguments hold and where they don't. The goal is analytical precision, not rhetorical victory.</div>
+The goal is not rhetorical victory. The goal is analytical honesty and pressure-testing.</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- STEP 5 -->
   <div class="step">
     <span class="step-num">Step 05</span>
-    <h2 class="step-h2">Put the agent to work</h2>
-    <p>With the role assigned, the model is ready for substantive use. The most productive applications are cases where PMN's distinctive methodology — the evaluative criterion, the structural analysis, the failure mode typology — produces conclusions that differ from standard analytical frameworks.</p>
-
-    <p>The following threads are excerpts from actual sessions. They illustrate what PMN-mode analysis produces and how to push it toward greater precision.</p>
+    <h2 class="step-h2">Ask questions that pull real PMN analysis out of the model</h2>
+    <p>Weak prompts ask whether PMN is "for" or "against" something. Strong prompts name the arrangement, the claimed justification, and the section or variable that should govern the analysis.</p>
 
     <div class="ex-thread">
       <div class="ex-msg ex-user">
         <div class="ex-role">User</div>
-        <div class="ex-body">Are gig economy arrangements like Gojek fundamentally exploitative, or do they just reflect what workers actually prefer — flexibility over security?</div>
+        <div class="ex-body">Using PMN, analyze whether a platform-labor arrangement can be defended by worker "preference" when the wider choice set is structurally degraded. Anchor your answer in the relevant sections and tell me what evidence would change the assessment.</div>
       </div>
       <div class="ex-msg">
-        <div class="ex-role">PMN Analyst</div>
+        <div class="ex-role">PMN Agent</div>
         <div class="ex-body">
-          <p>The preference framing needs structural interrogation. PMN's starting question is not "what do workers prefer?" but "what is the structure of the choice set within which that preference is expressed?"</p>
-          <p>In labor markets with weak social floors — no universal healthcare, no unemployment insurance, no housing security — the choice between gig flexibility and formal employment security is not made on equal terms. Flexibility is often chosen not because it is genuinely preferred over security, but because the alternative (formal employment) is structurally unavailable or worse on other dimensions. This is the information asymmetry variable (1.10): the worker does not have the same access to the structural conditions of the choice as the platform operator who designed those conditions.</p>
-          <p>The PMN evaluative question: does this arrangement reduce structural suffering and expand genuine becoming? On resource deprivation (R): gig work typically produces income volatility that makes medium-term planning — a component of becoming — structurally difficult. On institutional betrayal (B): the arrangement presents itself as entrepreneurship while maintaining algorithmic control that forecloses the actual conditions of entrepreneurial becoming. The betrayal gap is high. On visibility suppression (V): the flexibility preference narrative obscures the structural conditions that generate it.</p>
-          <p>The framework does not produce a verdict of "exploitative" as a moral category. It produces a structural assessment: the arrangement, as currently designed, scores badly on the evaluative criterion, and the preference evidence does not constitute a defense because preferences are formed within conditions the arrangement itself produces.</p>
+          <p>This is a stronger PMN question because it does not ask for a vibes-level judgment. It identifies the contested justification, names the structural issue, and invites an evidence-sensitive answer.</p>
+          <p>A grounded response should bring in the architecture around structural suffering, institutional betrayal, visibility, and the problem of preferences formed inside constrained choice sets. It should also state what evidence would weaken the criticism: real exit options, durable protections, and materially different bargaining conditions.</p>
         </div>
       </div>
     </div>
@@ -464,125 +400,119 @@ You are not looking for weaknesses to win a debate. You are applying the framewo
     <div class="ex-thread" style="margin-top:1.8rem">
       <div class="ex-msg ex-user">
         <div class="ex-role">User</div>
-        <div class="ex-body">Would PMN side with authoritarian leftists purging anarchists? Or would it defend the anarchists?</div>
+        <div class="ex-body">Read 15.15 as the compressed core, then explain PMN to a new reader in plain language without flattening the difference between the minimum anchor and the horizon of becoming.</div>
       </div>
       <div class="ex-msg">
-        <div class="ex-role">PMN Analyst</div>
+        <div class="ex-role">PMN Agent</div>
         <div class="ex-body">
-          <p>PMN's evaluative criterion and structural analysis both point in the same direction.</p>
-          <p>The evaluative criterion first: purging actors within a movement because their organizational form threatens the consolidating power of another faction reduces counter-power capacity (CP). It narrows the coalition, concentrates coercive authority, and removes accountability from below. The historical record in 10.7 and 17.4 suggests this consistently produces worse outcomes by the criterion: movements that consolidate by eliminating internal pluralism tend to reproduce the structural conditions they were organized to change.</p>
-          <p>The structural analysis: the custodian problem (7.3) applies with maximum force to the purging faction. The cosmological capture mechanism (7.3c) means they can genuinely believe it is necessary. PMN does not require cynicism to generate the structural prediction. The sincerity of the conviction does not change the outcome.</p>
-          <p>What PMN takes from anarchism's structural critique is correct: the suspicion that any coordination mechanism powerful enough to suppress the purge is also powerful enough to be redirected toward narrower interests afterward.</p>
+          <p>This is high-yield because it tells the model exactly which PMN compression layer to use and which conceptual distinction must survive simplification.</p>
+          <p>Without that instruction, many models collapse PMN into "reduce suffering" only. The prompt prevents that flattening by explicitly protecting the larger developmental horizon.</p>
         </div>
       </div>
-    </div>
-
-    <div class="ex-thread" style="margin-top:1.8rem">
-      <div class="ex-msg ex-user">
-        <div class="ex-role">User</div>
-        <div class="ex-body">Is PMN actually counter-revolutionary? All this emphasis on institutions, stress-testing, sequencing — sounds like it's designed to slow down radical change.</div>
-      </div>
-      <div class="ex-msg">
-        <div class="ex-role">PMN Analyst</div>
-        <div class="ex-body">
-          <p>The charge is worth taking seriously because it identifies a real failure mode. PMN explicitly lists this in 12.5: using the framework's complexity as an alibi for conclusions that would survive cleaner scrutiny — the "permanent tension defense" and the "material reduction" failure modes. If the framework is being used to generate reasons why radical action is always premature, that is the framework being misapplied.</p>
-          <p>What the framework actually says about sequencing (10.6): whether reform or transformation is appropriate depends on where the system is relative to threshold. At threshold conditions, the framework actively supports transformation. Below threshold, it asks whether the organizational infrastructure exists to succeed — not because success doesn't matter, but because failure at the wrong moment depletes counter-power capacity in ways that make the next attempt harder.</p>
-          <p>Apply the primary diagnostic to the counter-revolutionary charge itself: what evidence would falsify it? If PMN's analysis consistently produces conclusions that coincide with the interests of those who benefit from existing arrangements — regardless of the specific case — that is evidence the charge is correct. Check the outputs, not just the methodology.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- STEP 6 (formerly Step 5 continued) -->
-  <div class="step">
-    <span class="step-num">Step 06</span>
-    <h2 class="step-h2">Maintaining the role across a long conversation</h2>
-    <p>Models drift. In extended conversations, the PMN role tends to dilute — the model begins qualifying more, hedging more, defaulting to conventional analytical language. This is a structural feature of how language models are trained, not a failure of the specific model.</p>
-
-    <p>When you notice drift, use the following reset prompt:</p>
-
-    <div class="code-block">
-      <span class="code-label">Role reset prompt</span>
-      <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-      <div class="code-text">I notice the analysis is drifting from the framework. Return to PMN-mode: apply the evaluative criterion directly, name the structural variables at stake, and identify the failure mode the analysis is most vulnerable to. Do not hedge unless the evidence genuinely requires it — and if it does, name the specific evidential gap rather than expressing general uncertainty.</div>
-    </div>
-
-    <p>The most common drift pattern is toward what 12.5 calls "the material reduction" — the framework's structural vocabulary is retained but the analysis stops tracking actual material consequences and becomes a sophisticated performance of PMN terminology. The reset prompt addresses this by forcing specificity.</p>
-
-    <div class="callout">
-      <strong>On multi-session use:</strong> Most models do not retain context across separate conversations. If you use PMN analysis regularly, consider maintaining a "state document" — a brief text file that records the key conclusions from previous sessions, which you paste at the start of each new conversation along with the priming prompt.
     </div>
 
     <div class="note-box">
-      <span class="note-label">On AI limitations</span>
-      No AI system will apply PMN correctly in all cases. The framework requires judgment — about which variables are most activated, which failure modes are most likely, where the evidence is thin. These are judgment calls that the framework specifies but cannot automate. The agent is a tool for structured reasoning, not a substitute for it.
+      <span class="note-label">Better prompt pattern</span>
+      Use this template: "Using PMN, analyze <em>arrangement or case</em>. Name the most relevant section IDs, say which structural variables matter most, and identify what evidence would most likely change the conclusion."
     </div>
   </div>
 
-  <!-- Closing -->
-  <div class="closing">
-    The framework is designed to be revised. If the agent produces an analysis that seems wrong, the more productive response is usually to stress-test the analysis using the tools in Step 5 — rather than to simply reject it. PMN's primary diagnostic applies to PMN itself.
+  <div class="step">
+    <span class="step-num">Step 06</span>
+    <h2 class="step-h2">Manage drift, overconfidence, and false smoothness</h2>
+    <p>Even strong models drift. Over time they may revert to generic political language, compress distinctions they should preserve, or answer too fluently for the evidence actually available.</p>
+
+    <div class="code-block">
+      <span class="code-label">Reset prompt</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+      <div class="code-text">Return to PMN mode.
+
+Re-ground the answer in the supplied PMN material, name the most relevant section IDs, identify the structural variables at stake, and say what the main evidential gap is before acting more confident than the evidence allows.
+
+If you are simplifying, do not collapse the difference between the minimum anchor and the fuller horizon of becoming.</div>
+    </div>
+
+    <div class="checklist">
+      <div class="check-item"><strong>Ask for citations</strong><span>If the model cannot point back to PMN sections, it is probably freelancing.</span></div>
+      <div class="check-item"><strong>Ask what would falsify it</strong><span>This is the fastest way to detect fake confidence.</span></div>
+      <div class="check-item"><strong>Check the missing evidence</strong><span>A PMN answer should tell you what it still does not know.</span></div>
+      <div class="check-item"><strong>Compare against the reader</strong><span>Open the cited sections and see whether the answer preserved the actual PMN distinction.</span></div>
+    </div>
+
+    <div class="callout">
+      <strong>Static build limitation:</strong> the public site can prepare excellent PMN context packs, but it is not yet the final in-page agent architecture. Secure inline answers need a backend retrieval layer. Until then, the best public workflow is grounded handoff, not pretending the model read the URL by itself.
+    </div>
   </div>
 
-</div><!-- /page -->
+  <div class="step">
+    <span class="step-num">Step 07</span>
+    <h2 class="step-h2">For builders: what the PMN Agent should eventually become</h2>
+    <p>If you are improving the PMN site itself, the correct direction is to move from browser-only prompting toward backend retrieval. The model should read the PMN database, not the URL.</p>
+    <div class="checklist">
+      <div class="check-item"><strong>Store sections</strong><span>Each section should be queryable by ID, title, body, and relations.</span></div>
+      <div class="check-item"><strong>Store glossary terms</strong><span>Terms should link back to the sections that define and use them.</span></div>
+      <div class="check-item"><strong>Build context packs server-side</strong><span>Retrieve relevant passages before the model answers.</span></div>
+      <div class="check-item"><strong>Return citations</strong><span>Every answer should be able to point back to section IDs that justify it.</span></div>
+    </div>
+    <p>That is how PMN Agent stops being a prompt launcher and becomes a real framework-specific assistant.</p>
+  </div>
+
+  <div class="closing">
+    PMN should make the model more disciplined, not merely more confident. If the answer becomes smoother while the manuscript disappears, the workflow has failed. Keep the text in view, keep the section IDs alive, and make the model earn its certainty.
+  </div>
+</div>
 
 <footer>
-  <span>Progressive Materialist Naturalism &mdash; Version 83</span>
-  <span>nova_dharma_pm</span>
+  <span>Progressive Materialist Naturalism - Version 97</span>
+  <span>PMN Agent Guide</span>
 </footer>
 
 <script>
-  // ── Theme ──
   (function(){
-    var t = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+    var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
     if(t==='dark') document.documentElement.setAttribute('data-theme','dark');
     updateThemeBtn(t);
   })();
   function updateThemeBtn(t){
-    var b = document.getElementById('theme-tog');
+    var b=document.getElementById('theme-tog');
     if(!b) return;
-    b.textContent = t==='dark' ? '☀ Light' : '☽ Dark';
+    b.textContent=t==='dark'?'Light':'Dark';
   }
   function toggleTheme(){
-    var isDark = document.documentElement.getAttribute('data-theme')==='dark';
+    var isDark=document.documentElement.getAttribute('data-theme')==='dark';
     if(isDark){
       document.documentElement.removeAttribute('data-theme');
       localStorage.setItem('theme','light');
       updateThemeBtn('light');
-    } else {
+    }else{
       document.documentElement.setAttribute('data-theme','dark');
       localStorage.setItem('theme','dark');
       updateThemeBtn('dark');
     }
   }
-
-  // ── Copy prompt ──
   function copyPrompt(btn){
-    var text = btn.nextElementSibling.textContent;
+    var text=btn.nextElementSibling.textContent;
     navigator.clipboard.writeText(text).then(function(){
-      btn.textContent='copied';btn.classList.add('copied');
-      setTimeout(function(){ btn.textContent='copy';btn.classList.remove('copied'); },1800);
+      btn.textContent='copied';
+      btn.classList.add('copied');
+      setTimeout(function(){ btn.textContent='copy'; btn.classList.remove('copied'); },1800);
     });
   }
-
-  // ── Tab switching ──
-  function switchTab(btn, panelId){
-    var parent = btn.closest('.variants');
+  function switchTab(btn,panelId){
+    var parent=btn.closest('.variants');
     parent.querySelectorAll('.vtab').forEach(function(t){ t.classList.remove('active'); });
     parent.querySelectorAll('.vpanel').forEach(function(p){ p.classList.remove('active'); });
     btn.classList.add('active');
-    var target = document.getElementById('panel-' + panelId);
+    var target=document.getElementById('panel-'+panelId);
     if(target) target.classList.add('active');
   }
-
-  // ── Reading progress ──
-  window.addEventListener('scroll', function(){
-    var doc = document.documentElement;
-    var scrolled = doc.scrollTop || document.body.scrollTop;
-    var total = doc.scrollHeight - doc.clientHeight;
-    var pct = total > 0 ? (scrolled / total * 100) : 0;
-    var fill = document.getElementById('pip-fill');
-    if(fill) fill.style.width = pct + '%';
+  window.addEventListener('scroll',function(){
+    var doc=document.documentElement;
+    var scrolled=doc.scrollTop||document.body.scrollTop;
+    var total=doc.scrollHeight-doc.clientHeight;
+    var pct=total>0?(scrolled/total*100):0;
+    var fill=document.getElementById('pip-fill');
+    if(fill) fill.style.width=pct+'%';
   });
 </script>
 </body>

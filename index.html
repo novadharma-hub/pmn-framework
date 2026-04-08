@@ -124,6 +124,22 @@ body::before {
 /* ── Home footer bar ── */
 .home-footer-bar{padding:2rem 2.5rem;background:var(--bg2);border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:.75rem;text-transform:uppercase;font-weight:700;flex-wrap:wrap;gap:1rem;color:var(--ink2)}
 [data-theme=dark] .home-footer-bar{background:#0d0d0d;border-top-color:var(--rule)}
+.home-bottom{padding:3rem 2.5rem;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,0) 70%),var(--bg2);border-top:1px solid var(--rule);position:relative;z-index:2}
+[data-theme=dark] .home-bottom{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 70%),#121212}
+.home-bottom-inner{max-width:1100px;margin:0 auto}
+.home-bottom-hdr{display:flex;justify-content:space-between;align-items:flex-end;gap:1.2rem;flex-wrap:wrap;margin-bottom:1.6rem}
+.home-bottom-kicker{display:block;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);margin-bottom:.45rem}
+.home-bottom-title{font-family:var(--f-head);font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.08;letter-spacing:-.02em;color:var(--ink)}
+.home-bottom-desc{max-width:460px;font-size:.95rem;line-height:1.75;color:var(--ink2)}
+.home-bottom-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
+.home-bottom-card{border:1px solid var(--rule);background:rgba(255,255,255,.34);padding:1.2rem 1.15rem 1.25rem;min-height:100%;display:flex;flex-direction:column;gap:.75rem}
+[data-theme=dark] .home-bottom-card{background:rgba(255,255,255,.03)}
+.home-bottom-card h3{font-family:var(--f-head);font-size:1.05rem;line-height:1.28;color:var(--ink)}
+.home-bottom-card p{font-size:.9rem;line-height:1.68;color:var(--ink2)}
+.home-bottom-list{display:flex;flex-direction:column;gap:.45rem;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;color:var(--mute)}
+.home-bottom-list span{display:block}
+.home-bottom-link{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.72rem .95rem;border:1px solid var(--rule2);font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:transparent;transition:border-color .15s,color .15s,background .15s}
+.home-bottom-link:hover{border-color:var(--acc);color:var(--acc);background:rgba(173,52,30,.06)}
 /* ── Srch-view (contents + glossary + search) ── */
 #srch-view{flex-direction:column;height:100%;overflow:hidden}
 .sv-hdr{font-family:'Libre Baskerville',serif;font-size:1.6rem;font-weight:400;color:var(--ink);padding:2rem 2.5rem 1.2rem;border-bottom:1px solid var(--rule);display:block;flex-shrink:0;margin-bottom:0;letter-spacing:-.01em}
@@ -575,6 +591,13 @@ mark{background:transparent;color:var(--acc2);text-decoration:underline;text-dec
 #read-time{color:var(--mute);font-size:.72rem;font-family:'Source Code Pro',monospace;letter-spacing:.08em;display:block}
 .reader-tools{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;flex-wrap:wrap}
 .reader-tools-lbl{font-family:'Source Code Pro',monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
+.reader-jumpbar{display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin:-1rem 0 2rem;padding:.85rem 1rem;border:1px solid var(--rule2);background:var(--bg2)}
+[data-theme=dark] .reader-jumpbar{background:#121212}
+.reader-jumpmeta{display:flex;flex-direction:column;gap:.18rem}
+.reader-jumpmeta span{font-family:'Source Code Pro',monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+.reader-jumpmeta strong{font-family:'Lora',serif;font-size:.92rem;font-weight:500;color:var(--ink2)}
+.reader-jumpback{display:inline-flex;align-items:center;gap:.55rem;padding:.65rem .9rem;border:1px solid var(--rule2);background:transparent;color:var(--ink);font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+.reader-jumpback:hover{border-color:var(--acc);color:var(--acc);background:rgba(173,52,30,.06)}
 .font-controls{display:flex;align-items:center;gap:.35rem;padding:.25rem;border:1px solid var(--rule2);background:var(--bg2)}
 [data-theme=dark] .font-controls{background:#111}
 .font-btn{min-width:2.2rem;background:transparent;border:1px solid transparent;color:var(--mute);padding:.3rem .55rem;cursor:pointer;font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;transition:color .15s,border-color .15s,background .15s}
@@ -725,6 +748,8 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .theses-tier-chip,.thesis-tier-hdr{font-size:.72rem}
   .reading-paths{padding:2rem 1.4rem 3rem}
   .reading-paths-grid{grid-template-columns:1fr}
+  .home-bottom{padding:2rem 1.4rem}
+  .home-bottom-grid{grid-template-columns:1fr}
   .home-footer-bar{padding:1.5rem 1.4rem;flex-direction:column;gap:.5rem}
   #reader-view.on{flex-direction:column;overflow-y:auto}
   #reader-main{width:100%;height:auto;overflow:visible}
@@ -737,6 +762,8 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .sec-ttl{font-size:1.6rem;margin-bottom:1.6rem}
   .reader-meta{align-items:flex-start;flex-direction:column;gap:.8rem;margin-bottom:1.6rem;padding-bottom:1.6rem}
   .reader-tools{width:100%;justify-content:space-between}
+  .reader-jumpbar{align-items:flex-start;margin:-.6rem 0 1.4rem}
+  .reader-jumpback{width:100%;justify-content:center}
   .font-controls{width:100%;justify-content:space-between}
   .font-btn{flex:1}
   #bc{padding:.45rem .9rem;gap:.3rem;flex-wrap:wrap}
@@ -996,7 +1023,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 }
 
   /* ── Cross-reference links ── */
-  .xref{color:var(--acc);border-bottom:1px dotted var(--acc2);cursor:pointer;font-family:'Source Code Pro',monospace;font-size:.85em;padding:0 .1em;transition:color .12s}
+  .xref{color:var(--acc);border-bottom:1px dotted var(--acc2);cursor:pointer;font-family:'Source Code Pro',monospace;font-size:.85em;padding:0 .1em;transition:color .12s;text-decoration:none}
   .xref:hover{color:var(--ink);border-bottom-color:var(--acc)}
   .xref.copied{color:#4ade80}
   /* ── Share button ── */
@@ -1182,11 +1209,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   <!-- ── MARQUEE TICKER ── -->
   <div class="marquee-wrap">
     <div class="marquee-track">
-      <span class="marquee-txt">NO IDEALISM — NO REDUCTIONISM — MATERIAL REALITY IS PRIMARY</span>
-      <span class="marquee-txt">CONSTRUCT EPISTEMIC INFRASTRUCTURE — DISMANTLE STRUCTURAL VIOLENCE</span>
-      <span class="marquee-txt">CONDITIONAL BIOLOGICAL CONSTRAINTS — PROBABILISTIC DETERMINISM</span>
+      <span class="marquee-txt">MATERIAL REALITY IS PRIMARY — EMERGENT AND INTERFACE PHENOMENA REMAIN REAL</span>
+      <span class="marquee-txt">ANTI-DOGMATIC BY DESIGN — DOCTRINE REVISABLE UNDER EVIDENCE AND FAILURE</span>
+      <span class="marquee-txt">CONDITIONAL BIOLOGICAL CONSTRAINTS — PROBABILISTIC DETERMINISM — LAYERED ANALYSIS</span>
       <span class="marquee-txt">THE CUSTODIAN PROBLEM — INFORMATION ASYMMETRY AS STRUCTURAL POWER</span>
-      <span class="marquee-txt">PMN v97 — NOVA DHARMA — FRAMEWORK FOR NAVIGATING MATERIAL REALITY</span>
+      <span class="marquee-txt">REDUCE STRUCTURAL SUFFERING — EXPAND GENUINE BECOMING — PMN v97</span>
     </div>
   </div>
 
@@ -1350,11 +1377,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   <div class="home-ai-section">
     <div class="home-ai-inner" style="max-width:1000px;margin:0 auto">
       <div class="home-ai-hdr">PMN Agent Terminal ✦</div>
-      <p class="home-ai-desc">Tanya apa saja tentang PMN v97 — dijawab langsung oleh Claude dengan konteks manuscript, atau kirim ke ChatGPT/Gemini dengan prompt yang sudah di-ground.</p>
+      <p class="home-ai-desc">Build a PMN v97 context pack from the manuscript, glossary, and related sections, then send it to ChatGPT or Gemini. Inline provider mode still needs a secure backend before it can be fully enabled.</p>
 
       <!-- Mode tabs -->
       <div class="hai-tabs" id="hai-tabs">
-        <button class="hai-tab active" data-mode="claude">Claude ✦ (inline)</button>
+        <button class="hai-tab active" data-mode="claude">Inline backend</button>
         <button class="hai-tab" data-mode="chatgpt">ChatGPT ↗</button>
         <button class="hai-tab" data-mode="gemini">Gemini ↗</button>
       </div>
@@ -1362,11 +1389,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       <!-- Claude inline chat -->
       <div id="hai-panel-claude" class="hai-panel">
         <div id="home-chat-log" class="home-chat-log" aria-live="polite">
-          <div class="hcl-placeholder">&gt;&gt; PMN AGENT ACTIVE — Claude-powered, context-grounded.<br>&gt;&gt; Ask a question about any concept, section, or structural argument in PMN v97.</div>
+          <div class="hcl-placeholder">&gt;&gt; STATIC BUILD DETECTED — inline provider is parked until a secure backend is connected.<br>&gt;&gt; Use ChatGPT/Gemini tabs for grounded handoff, or open the PMN Agent Guide below.</div>
         </div>
         <div class="home-ai-row" style="margin-top:.8rem">
-          <input type="text" id="home-ai-input" class="home-ai-input" placeholder="e.g. Jelaskan custodian problem dan bagaimana cara mendeteksinya…" autocomplete="off">
-          <button id="home-ai-btn" class="home-ai-btn">Ask ✦</button>
+          <input type="text" id="home-ai-input" class="home-ai-input" placeholder="e.g. Explain the custodian problem and how PMN would detect it…" autocomplete="off">
+          <button id="home-ai-btn" class="home-ai-btn">Test inline</button>
         </div>
         <div class="home-ai-actions">
           <button id="home-chat-clear" class="pmn-agent-btn" type="button">Clear chat</button>
@@ -1376,7 +1403,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
       <!-- ChatGPT handoff panel -->
       <div id="hai-panel-chatgpt" class="hai-panel" style="display:none">
-        <p class="hai-redirect-desc">PMN akan menyiapkan prompt yang sudah di-ground dengan konteks manuscript, lalu membuka ChatGPT. Tinggal paste.</p>
+        <p class="hai-redirect-desc">PMN will prepare a grounded prompt from the manuscript context, then open ChatGPT. Just paste it there.</p>
         <div class="hai-redirect-config">
           <select id="hai-chatgpt-mode" class="home-ai-select" style="min-width:200px">
             <option value="agent">Mode: PMN Analyst</option>
@@ -1386,7 +1413,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           </select>
         </div>
         <div class="home-ai-row" style="margin-top:.8rem">
-          <input type="text" id="hai-chatgpt-q" class="home-ai-input" placeholder="Pertanyaan kamu untuk ChatGPT + PMN context…" autocomplete="off">
+          <input type="text" id="hai-chatgpt-q" class="home-ai-input" placeholder="Your question for ChatGPT with PMN context…" autocomplete="off">
           <button id="hai-chatgpt-btn" class="home-ai-btn">Open ChatGPT ↗</button>
         </div>
         <div class="home-ai-actions">
@@ -1397,7 +1424,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
       <!-- Gemini handoff panel -->
       <div id="hai-panel-gemini" class="hai-panel" style="display:none">
-        <p class="hai-redirect-desc">PMN akan menyiapkan prompt yang sudah di-ground dengan konteks manuscript, lalu membuka Gemini. Tinggal paste.</p>
+        <p class="hai-redirect-desc">PMN will prepare a grounded prompt from the manuscript context, then open Gemini. Just paste it there.</p>
         <div class="hai-redirect-config">
           <select id="hai-gemini-mode" class="home-ai-select" style="min-width:200px">
             <option value="agent">Mode: PMN Analyst</option>
@@ -1407,7 +1434,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           </select>
         </div>
         <div class="home-ai-row" style="margin-top:.8rem">
-          <input type="text" id="hai-gemini-q" class="home-ai-input" placeholder="Pertanyaan kamu untuk Gemini + PMN context…" autocomplete="off">
+          <input type="text" id="hai-gemini-q" class="home-ai-input" placeholder="Your question for Gemini with PMN context…" autocomplete="off">
           <button id="hai-gemini-btn" class="home-ai-btn">Open Gemini ↗</button>
         </div>
         <div class="home-ai-actions">
@@ -1418,6 +1445,55 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
     </div>
   </div>
+
+  <section class="home-bottom">
+    <div class="home-bottom-inner">
+      <div class="home-bottom-hdr">
+        <div>
+          <span class="home-bottom-kicker">After the terminal</span>
+          <h2 class="home-bottom-title">Keep the inquiry grounded, not just accelerated.</h2>
+        </div>
+        <p class="home-bottom-desc">The strongest PMN sessions happen when the model gets architecture, section anchors, and explicit questions at the same time. Use this zone as the bridge between reading, asking, and checking whether the answer stayed faithful to the manuscript.</p>
+      </div>
+      <div class="home-bottom-grid">
+        <article class="home-bottom-card">
+          <h3>PMN Agent Guide</h3>
+          <p>Use the updated guide when you want a cleaner workflow for ChatGPT, Gemini, or future backend-backed PMN Agent deployments.</p>
+          <a class="home-bottom-link" href="pmn-agent-guide.html">Open guide</a>
+        </article>
+        <article class="home-bottom-card">
+          <h3>Fastest entry points</h3>
+          <p>For orientation, compressed architecture, and operational use, jump straight into the sections that stabilize the rest of the framework.</p>
+          <div class="home-bottom-list">
+            <span>Orientation: how-to-read-this-document</span>
+            <span>Compressed core: 15.15</span>
+            <span>Operational cases: 17.0</span>
+          </div>
+          <button class="home-bottom-link path-btn" type="button" data-open-id="how-to-read-this-document">Open orientation</button>
+        </article>
+        <article class="home-bottom-card">
+          <h3>Ask better PMN questions</h3>
+          <p>High-yield prompts name the arrangement, the structural variable, and the evidential gap instead of asking for generic ideology summaries.</p>
+          <div class="home-bottom-list">
+            <span>Name the section or case.</span>
+            <span>Ask for variables, failure modes, and counter-evidence.</span>
+            <span>Demand citations back into the manuscript.</span>
+          </div>
+          <button class="home-bottom-link path-btn" type="button" data-open-id="15.15">Open compressed core</button>
+        </article>
+        <article class="home-bottom-card">
+          <h3>Check the answer against PMN</h3>
+          <p>Do not trust smooth answers by default. Compare them against glossary terms, cited sections, and the local notes you build while reading.</p>
+          <div class="home-bottom-list">
+            <span>Open glossary for term discipline.</span>
+            <span>Use notes to track unresolved tensions.</span>
+            <span>Cross-check with related sections.</span>
+          </div>
+          <button class="home-bottom-link" type="button" id="home-bottom-glossary">Open glossary</button>
+        </article>
+      </div>
+    </div>
+  </section>
 
   <!-- ── HOME FOOTER ── -->
   <div class="home-footer-bar">
@@ -1478,6 +1554,13 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           </div>
         </div>
       </div>
+      <div id="reader-jumpbar" class="reader-jumpbar">
+        <div class="reader-jumpmeta">
+          <span>Cross-reference jump</span>
+          <strong id="reader-jumpmeta">You arrived here from another section.</strong>
+        </div>
+        <button id="reader-jumpback" class="reader-jumpback" type="button">Back to previous section</button>
+      </div>
       <div id="prose" class="prose"></div>
       <nav class="rnav">
         <button class="rnav-btn" id="rn-p">&larr; Previous</button>
@@ -1501,13 +1584,13 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         </div>
         <!-- Reader mode tabs -->
         <div class="hai-tabs" id="reader-hai-tabs" style="margin-bottom:.8rem">
-          <button class="hai-tab active" data-rmode="claude">Claude ✦</button>
+          <button class="hai-tab active" data-rmode="claude">Inline backend</button>
           <button class="hai-tab" data-rmode="chatgpt">ChatGPT ↗</button>
           <button class="hai-tab" data-rmode="gemini">Gemini ↗</button>
         </div>
         <!-- Claude inline -->
         <div id="reader-panel-claude">
-          <div id="pmn-chat-log" class="pmn-chat-log" aria-live="polite"></div>
+          <div id="pmn-chat-log" class="pmn-chat-log" aria-live="polite">&gt;&gt; INLINE BACKEND MODE IS NOT LIVE IN THIS STATIC BUILD.<br>&gt;&gt; Use ChatGPT/Gemini handoff for grounded answers, or connect a secure backend for in-page replies.</div>
           <div class="pmn-chat-input-row">
             <input type="text" id="pmn-chat-in" class="pmn-chat-in" placeholder="e.g. How does this connect to the custodian problem?" autocomplete="off" />
             <button id="pmn-chat-send" class="pmn-chat-send" type="button">Ask</button>
@@ -1520,14 +1603,14 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         </div>
         <!-- ChatGPT redirect -->
         <div id="reader-panel-chatgpt" style="display:none">
-          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">Prompt sudah di-ground dengan konteks section aktif + related sections. Tinggal paste ke ChatGPT.</p>
+          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">This prompt is grounded in the active section plus related sections. Paste it into ChatGPT.</p>
           <select id="reader-chatgpt-mode" class="home-ai-select" style="width:100%;margin-bottom:.7rem;font-size:.72rem">
             <option value="agent">Mode: PMN Analyst</option>
             <option value="diagnostic">Mode: Diagnostic Only</option>
             <option value="debate">Mode: Debate Partner</option>
           </select>
           <div class="pmn-chat-input-row" style="margin-bottom:.6rem">
-            <input type="text" id="reader-chatgpt-q" class="pmn-chat-in" placeholder="Pertanyaan spesifik (opsional)…" autocomplete="off"/>
+            <input type="text" id="reader-chatgpt-q" class="pmn-chat-in" placeholder="Specific question (optional)..." autocomplete="off"/>
             <button id="reader-chatgpt-btn" class="pmn-chat-send" type="button">Open ↗</button>
           </div>
           <div class="pmn-agent-actions">
@@ -1537,14 +1620,14 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         </div>
         <!-- Gemini redirect -->
         <div id="reader-panel-gemini" style="display:none">
-          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">Prompt sudah di-ground dengan konteks section aktif + related sections. Tinggal paste ke Gemini.</p>
+          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">This prompt is grounded in the active section plus related sections. Paste it into Gemini.</p>
           <select id="reader-gemini-mode" class="home-ai-select" style="width:100%;margin-bottom:.7rem;font-size:.72rem">
             <option value="agent">Mode: PMN Analyst</option>
             <option value="diagnostic">Mode: Diagnostic Only</option>
             <option value="debate">Mode: Debate Partner</option>
           </select>
           <div class="pmn-chat-input-row" style="margin-bottom:.6rem">
-            <input type="text" id="reader-gemini-q" class="pmn-chat-in" placeholder="Pertanyaan spesifik (opsional)…" autocomplete="off"/>
+            <input type="text" id="reader-gemini-q" class="pmn-chat-in" placeholder="Specific question (optional)..." autocomplete="off"/>
             <button id="reader-gemini-btn" class="pmn-chat-send" type="button">Open ↗</button>
           </div>
           <div class="pmn-agent-actions">
@@ -1964,7 +2047,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   }
   function openPartStart(partLabel){
     var idx=findPartIndex(partLabel);
-    if(idx>=0){ openSec(idx,0); return true; }
+    if(idx>=0){ jumpToSection(idx,0); return true; }
     nav('srch'); showContentsPanel();
     return false;
   }
@@ -2329,6 +2412,34 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
   // ── Cross-reference linking ──────────────────────────
   var XREF_IDS=["intellectual-debts", "bibliography", "how-to-read", "10.10c-iii", "10.10c-ii", "10.10c-i", "preface", "7.3c-ii", "7.3c-i", "10.10b", "10.10c", "10.5b", "10.7a", "10.7b", "10.7c", "10.10", "10.11", "10.12", "10.13", "10.14", "11.0b", "11.3b", "12.1a", "12.5b", "13.1b", "13.1c", "13.2b", "13.4b", "13.4c", "13.4d", "13.4e", "13.4f", "13.4g", "13.4h", "15.10", "15.11", "15.12", "15.13", "15.14", "17.5a", "17.5b", "17.5c", "17.5d", "1.6b", "1.10", "1.11", "1.12", "3.0a", "3.0b", "3.0c", "3.0d", "3.0e", "3.2b", "3.4b", "3.4c", "3.4d", "3.8b", "3.10", "3.11", "3.12", "4.1b", "4.5b", "5.6a", "7.0b", "7.2b", "7.3b", "7.3c", "8.2b", "8.4b", "8.4c", "9.0b", "9.2b", "9.2c", "10.1", "10.2", "10.3", "10.4", "10.5", "10.6", "10.7", "10.9", "11.0", "11.1", "11.2", "11.3", "11.4", "12.1", "12.2", "12.3", "12.4", "12.5", "12.6", "12.7", "13.1", "13.2", "13.3", "13.4", "13.5", "14.1", "14.2", "14.3", "14.4", "15.0", "15.1", "15.2", "15.3", "15.4", "15.5", "15.6", "15.7", "15.8", "15.9", "16.0", "16.1", "16.2", "16.3", "16.4", "17.0", "17.1", "17.2", "17.3", "17.4", "17.5", "17.6", "coda", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.1", "2.2", "2.3", "2.4", "2.5", "3.0", "3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9", "4.1", "4.2", "4.3", "4.4", "4.5", "5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8", "7.0", "7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "9.0", "9.1", "9.2", "9.3", "9.4"];
+  var sectionJumpMeta=null;
+  var xrefBack=null;
+  function getSectionMeta(pi,si){
+    if(typeof pi!=='number'||typeof si!=='number'||!PARTS[pi]||!PARTS[pi].subs[si]) return null;
+    var s=PARTS[pi].subs[si];
+    return {pi:pi,si:si,id:s.id,title:s.title};
+  }
+  function updateJumpBack(){
+    var wrap=g('reader-jumpbar'),meta=g('reader-jumpmeta'),btn=g('reader-jumpback');
+    if(!wrap||!meta||!btn) return;
+    if(!xrefBack||xrefBack.pi===curP&&xrefBack.si===curS){
+      wrap.style.display='none';
+      return;
+    }
+    wrap.style.display='flex';
+    meta.textContent='Jumped here from '+xrefBack.id+' — '+xrefBack.title;
+    btn.textContent='Back to '+xrefBack.id;
+  }
+  function jumpToSection(pi,si,opts){
+    sectionJumpMeta=opts||{};
+    openSec(pi,si,!!(opts&&opts.nohash));
+  }
+  function jumpToSectionById(sid,opts){
+    var info=LOOK[sid];
+    if(!info) return false;
+    jumpToSection(info.pi,info.si,opts);
+    return true;
+  }
   function linkXrefs(container){
     var pat=XREF_IDS.map(function(id){return id.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}).join('|');
     var re=new RegExp('(?<![\\w.])('+pat+')(?![\\w.])','g');
@@ -2342,14 +2453,15 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           var sid=m[1];
           if(!LOOK[sid])continue;
           if(last<m.index)frag.appendChild(document.createTextNode(txt.slice(last,m.index)));
-          var sp=document.createElement('span');
+          var sp=document.createElement('a');
           sp.className='xref';sp.textContent=sid;
+          sp.href='#'+sid;
           sp.title=(LOOK[sid].title||sid).slice(0,60);
           sp.setAttribute('data-sid',sid);
           sp.addEventListener('click',function(e){
+            e.preventDefault();
             e.stopPropagation();
-            var d=LOOK[this.getAttribute('data-sid')];
-            if(d)openSec(d.pi,d.si,false);
+            jumpToSectionById(this.getAttribute('data-sid'),{trackBack:true});
           });
           frag.appendChild(sp);
           last=m.index+m[0].length;
@@ -2368,14 +2480,20 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   }
 
   function openSec(pi,si,nohash){
+    var meta=sectionJumpMeta||{};
+    sectionJumpMeta=null;
+    var prev=getSectionMeta(curP,curS);
+    if(meta.trackBack&&prev&&!(prev.pi===pi&&prev.si===si)) xrefBack=prev;
+    else if(!meta.keepBack) xrefBack=null;
     curP=pi; curS=si;
     markR(pi,si); savePos(pi,si); addHist(pi,si); buildSB(); renderSec(); nav('reader'); if(typeof window._afterOpenSec==='function') window._afterOpenSec(pi,si);
     if(!nohash){ try{ history.pushState(null,'','#'+PARTS[pi].subs[si].id); }catch(e){} }
     if(window.innerWidth<=680){ var sb=g('sidebar'); sb.classList.remove('mob-open'); sb.classList.add('closed'); sbOpen=false; }
     g('reader-main').scrollTop=0;
+    updateJumpBack();
     setTimeout(function(){ var a=g('sb-list').querySelector('.sb-item.on'); if(a) a.scrollIntoView({block:'nearest',behavior:'smooth'}); },60);
   }
-  function openById(sid){ var info=LOOK[sid]; if(!info) return false; openSec(info.pi,info.si,true); return true; }
+  function openById(sid){ return jumpToSectionById(sid,{nohash:true}); }
 
   function clean(t){
     return t.replace(/\\'/g,"'").replace(/\\"/g,'"')
@@ -2583,7 +2701,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     loadAnnot(curP,curS);
     // Feedback mailto
     var subj=encodeURIComponent('PMN v97 - Feedback: '+s.id+' '+s.title);
-    var body=encodeURIComponent('Section: '+s.id+' - '+s.title+'\nKomentar saya:\n');
+    var body=encodeURIComponent('Section: '+s.id+' - '+s.title+'\nMy comment:\n');
     var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:nova@novadharma.org?subject='+subj+'&body='+body);
     var tweet=encodeURIComponent('Re: PMN v97 - '+s.id+' '+s.title+' @nova_dharma_pm');
     var tl=g('twitter-link'); if(tl) tl.setAttribute('href','https://twitter.com/intent/tweet?text='+tweet);
@@ -2662,7 +2780,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var ql=q.toLowerCase().trim(), res=[];
     var pf=g('srch-part')?g('srch-part').value:'';
     if(/^[0-9]+\.[0-9]+[a-z]?$/.test(ql)||/^a\.[0-9]+$/i.test(ql)){
-      var info=LOOK[ql]; if(info){ openSec(info.pi,info.si); clrS(); return; }
+      var info=LOOK[ql]; if(info){ jumpToSection(info.pi,info.si); clrS(); return; }
     }
     for(var pi=0;pi<PARTS.length;pi++){
       var p=PARTS[pi];
@@ -2746,20 +2864,20 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     }
     // Search result click → open section
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
-    openSec(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
+    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
     if(g('srch-view').classList.contains('on')) clrS();
   });
   g('related-sec').addEventListener('click', function(e){
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
-    openSec(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
+    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'),{trackBack:true});
   });
   g('toc-grid').addEventListener('click', function(e){
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
-    openSec(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
+    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
   });
   g('sb-list').addEventListener('click', function(e){
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
-    openSec(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
+    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
   });
   // Wire up static buttons (no inline onclick)
   g('hdr-logo').addEventListener('click', function(){ nav('home'); });
@@ -2801,9 +2919,14 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   populatePartFilter();
   renderSuggestions();
   g('footer-home').addEventListener('click', function(){ nav('home'); });
+  g('home-bottom-glossary') && g('home-bottom-glossary').addEventListener('click', showGL);
   g('font-sm') && g('font-sm').addEventListener('click', function(){ setReaderScale(0.92); });
   g('font-md') && g('font-md').addEventListener('click', function(){ setReaderScale(1); });
   g('font-lg') && g('font-lg').addEventListener('click', function(){ setReaderScale(1.08); });
+  g('reader-jumpback') && g('reader-jumpback').addEventListener('click', function(){
+    if(!xrefBack) return;
+    jumpToSection(xrefBack.pi,xrefBack.si,{keepBack:false});
+  });
   // reader chat handled by initReaderChat() in AI engine
   if(!g('hai-tabs')){
     g('home-ai-btn') && g('home-ai-btn').addEventListener('click', function(){
@@ -2857,7 +2980,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var _rb=g('cta-resume');
     _rb.textContent='Resume: '+_rs.id+' →';
     _rb.style.display='';
-    _rb.addEventListener('click',function(){ openSec(_pos[0],_pos[1]); });
+    _rb.addEventListener('click',function(){ jumpToSection(_pos[0],_pos[1]); });
   }
   g('annot-save') && g('annot-save').addEventListener('click', saveAnnot);
   g('export-btn') && g('export-btn').addEventListener('click', exportSec);
@@ -2871,22 +2994,22 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   });
   g('sidebar').addEventListener('click',function(e){
     var h=e.target.closest('.sb-hist-item');
-    if(h){openSec(+h.getAttribute('data-pi'),+h.getAttribute('data-si'));}
+    if(h){jumpToSection(+h.getAttribute('data-pi'),+h.getAttribute('data-si'));}
   });
   g('reader-col') && g('reader-col').addEventListener('click',function(e){
     var cb=e.target.closest('.cited-btn');
-    if(cb){openSec(+cb.getAttribute('data-pi'),+cb.getAttribute('data-si'));}
+    if(cb){jumpToSection(+cb.getAttribute('data-pi'),+cb.getAttribute('data-si'),{trackBack:true});}
   });
   g('suggestions') && g('suggestions').addEventListener('click',function(e){
     var b=e.target.closest('.suggest-btn');
-    if(b){openSec(+b.getAttribute('data-pi'),+b.getAttribute('data-si'));}
+    if(b){jumpToSection(+b.getAttribute('data-pi'),+b.getAttribute('data-si'));}
   });
   g('home-view') && g('home-view').addEventListener('click',function(e){
     var b=e.target.closest('.path-btn');
     if(!b) return;
     var sid=b.getAttribute('data-open-id');
     var part=b.getAttribute('data-open-part');
-    if(sid&&LOOK[sid]) openSec(LOOK[sid].pi,LOOK[sid].si);
+    if(sid&&LOOK[sid]) jumpToSection(LOOK[sid].pi,LOOK[sid].si);
     else if(part) openPartStart(part);
   });
   (function(){var h=location.hash.slice(1);if(h&&LOOK[h]){var inf=LOOK[h];openSec(inf.pi,inf.si,true);}})();
@@ -3100,7 +3223,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
   // ── Shared: Claude API call ──
   function callClaude(messages, sysPrompt, onDone, onError) {
-    var msg='Inline Claude is disabled in this static build. Use the ChatGPT/Gemini handoff, or add a secure backend proxy before re-enabling provider-side calls.';
+    var msg='Inline provider mode is parked in this static build. Use the ChatGPT/Gemini handoff with PMN context packs, or connect a secure backend before re-enabling in-page answers.';
     if(onError) onError(msg);
     else if(onDone) onDone(msg);
   }
@@ -3324,11 +3447,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       callClaude(msgs,SYS,function(text){
         thinkEl.className='hcl-body'; thinkEl.textContent=text;
         history.push({role:'assistant',content:text});
-        if(btn){btn.disabled=false;btn.textContent='Ask ✦';}
+        if(btn){btn.disabled=false;btn.textContent='Test inline';}
         chatLog.scrollTop=chatLog.scrollHeight;
       },function(err){
         thinkEl.className='hcl-body'; thinkEl.textContent='Error: '+err;
-        if(btn){btn.disabled=false;btn.textContent='Ask ✦';}
+        if(btn){btn.disabled=false;btn.textContent='Test inline';}
       });
     }
 
@@ -3336,7 +3459,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     if(inp) inp.addEventListener('keypress',function(e){if(e.key==='Enter'){e.preventDefault();ask();}});
     if(clearBtn) clearBtn.addEventListener('click',function(){
       history=[];
-      if(chatLog) chatLog.innerHTML='<div class="hcl-placeholder">&gt;&gt; PMN AGENT ACTIVE — Claude-powered, context-grounded.<br>&gt;&gt; Ask a question about any concept, section, or structural argument in PMN v97.</div>';
+      if(chatLog) chatLog.innerHTML='<div class="hcl-placeholder">&gt;&gt; STATIC BUILD DETECTED — inline provider is parked until a secure backend is connected.<br>&gt;&gt; Use ChatGPT/Gemini tabs for grounded handoff, or open the PMN Agent Guide below.</div>';
     });
     if(exportBtn) exportBtn.addEventListener('click',function(){
       if(!history.length) return;
@@ -3437,7 +3560,10 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
     if(sendBtn) sendBtn.addEventListener('click',ask);
     if(chatIn) chatIn.addEventListener('keypress',function(e){if(e.key==='Enter'){e.preventDefault();ask();}});
-    if(clearBtn) clearBtn.addEventListener('click',function(){rHistory=[];if(chatLog)chatLog.innerHTML='';});
+    if(clearBtn) clearBtn.addEventListener('click',function(){
+      rHistory=[];
+      if(chatLog)chatLog.innerHTML='&gt;&gt; INLINE BACKEND MODE IS NOT LIVE IN THIS STATIC BUILD.<br>&gt;&gt; Use ChatGPT/Gemini handoff for grounded answers, or connect a secure backend for in-page replies.';
+    });
 
     // Reader ChatGPT/Gemini — embeds full active section text, no URL needed
     function setupReaderRedirect(qId,btnId,cpyId,statId,modeId,url){
