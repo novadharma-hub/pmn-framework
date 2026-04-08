@@ -3119,7 +3119,14 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     }
   }
 
-  function truncate(str,n){ return (str||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,n); }
+  // Strip HTML tags, collapse whitespace, keep meaningful text
+  function stripHtml(str){ return (str||'').replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ').replace(/&#x27;/g,"'").replace(/&quot;/g,'"').replace(/&mdash;/g,'—').replace(/&ldquo;/g,'"').replace(/&rdquo;/g,'"').replace(/\s{2,}/g,' ').trim(); }
+  function truncate(str,n){ return stripHtml(str).slice(0,n); }
+
+  // Extract full section text (used for redirect prompts — more content = better AI results)
+  function fullText(s,maxChars){
+    return stripHtml(s.html||s.text||'').slice(0,maxChars||3000);
+  }
 
   function buildContextPack(query,opts){
     ensureData();
@@ -3131,7 +3138,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       for(var si=0;si<p.subs.length;si++){
         var s=p.subs[si];
         var score=0;
-        var blob=((s.title||'')+' '+(s.html||'')).toLowerCase();
+        var blob=((s.title||'')+' '+stripHtml(s.html||'')).toLowerCase();
         if(q.length>2&&blob.indexOf(q)>=0) score+=3;
         q.split(/\s+/).filter(function(w){return w.length>3;}).forEach(function(w){if(blob.indexOf(w)>=0)score++;});
         if(opts.activeId&&s.id===opts.activeId) score+=5;
@@ -3141,31 +3148,92 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       }
     }
     scored.sort(function(a,b){return b.score-a.score;});
-    var sections=scored.slice(0,opts.maxSections||5).map(function(item){
-      return {id:item.s.id,title:item.s.title,part:'Part '+item.p.part,excerpt:truncate(item.s.html,500)};
+    var maxSec=opts.maxSections||5;
+    var sections=scored.slice(0,maxSec).map(function(item){
+      return {
+        id:item.s.id,
+        title:item.s.title,
+        part:'Part '+item.p.part,
+        // Short excerpt for inline Claude (token-efficient)
+        excerpt:truncate(item.s.html,600),
+        // Full text for redirect prompts (AI needs real content, not URLs)
+        fullText:fullText(item.s, opts.fullTextChars||2000)
+      };
     });
     var glossary=[];
     if(q.length>2){
       Object.keys(GL||{}).forEach(function(term){
         if(term.toLowerCase().indexOf(q)>=0||q.indexOf(term.toLowerCase())>=0)
-          glossary.push({term:term,def:(GL[term]||'').slice(0,200)});
+          glossary.push({term:term,def:(GL[term]||'').slice(0,240)});
       });
       glossary=glossary.slice(0,opts.maxGlossary||4);
     }
     return {sections:sections,glossary:glossary};
   }
 
+  // formatPack for inline Claude — concise excerpts
   function formatPack(pack){
     var lines=['--- PMN CONTEXT ---'];
     (pack.sections||[]).forEach(function(s,i){
-      lines.push((i+1)+'. ['+s.id+'] '+s.title+' ('+s.part+')');
-      lines.push('   '+s.excerpt);
+      lines.push('\n['+s.id+'] '+s.title+' ('+s.part+')');
+      lines.push(s.excerpt);
     });
     if(pack.glossary&&pack.glossary.length){
-      lines.push('\nGLOSSARY:');
+      lines.push('\n--- GLOSSARY ---');
       pack.glossary.forEach(function(g){lines.push('• '+g.term+': '+g.def);});
     }
-    lines.push('--- END ---');
+    lines.push('\n--- END OF CONTEXT ---');
+    return lines.join('\n');
+  }
+
+  // formatPackFull — full text for redirect prompts (ChatGPT/Gemini can't open URLs)
+  function formatPackFull(pack, activeSec){
+    var lines=[];
+    lines.push('================================================================');
+    lines.push('PMN v97 — MANUSCRIPT EXTRACTS (Progressive Materialist Naturalism)');
+    lines.push('Author: Nova Dharma | Framework: Adaptive Naturalism');
+    lines.push('================================================================');
+    lines.push('');
+    lines.push('NOTE: The text below is extracted directly from the PMN v97 manuscript.');
+    lines.push('Do NOT attempt to open URLs or anchors — read the text provided here.');
+    lines.push('');
+
+    // If there's an active section, put its FULL text first and prominently
+    if(activeSec&&activeSec.fullText){
+      lines.push('━━━ CURRENT SECTION (full text) ━━━');
+      lines.push('['+activeSec.id+'] '+activeSec.title);
+      lines.push('─────────────────────────────────────');
+      lines.push(activeSec.fullText);
+      lines.push('');
+    }
+
+    // Related sections
+    var others = activeSec
+      ? pack.sections.filter(function(s){return s.id!==activeSec.id;})
+      : pack.sections;
+
+    if(others.length){
+      lines.push('━━━ RELATED SECTIONS ━━━');
+      others.forEach(function(s){
+        lines.push('');
+        lines.push('['+s.id+'] '+s.title+' ('+s.part+')');
+        lines.push('─────────────────────────────────────');
+        lines.push(s.fullText||s.excerpt);
+      });
+    }
+
+    if(pack.glossary&&pack.glossary.length){
+      lines.push('');
+      lines.push('━━━ KEY TERMS ━━━');
+      pack.glossary.forEach(function(g){
+        lines.push('• '+g.term+': '+g.def);
+      });
+    }
+
+    lines.push('');
+    lines.push('================================================================');
+    lines.push('END OF MANUSCRIPT EXTRACTS');
+    lines.push('================================================================');
     return lines.join('\n');
   }
 
@@ -3181,6 +3249,35 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   function buildPrompt(mode,question,pack,activeSec){
     var secInfo=activeSec?'\nACTIVE SECTION: '+activeSec.id+' — '+activeSec.title:'';
     return ['MODE: '+(MODES[mode]||MODES.agent),secInfo,'','USER QUESTION:',question||'Explain this section.','',formatPack(pack)].join('\n');
+  }
+
+  // Build self-contained redirect prompt — no URLs, full text embedded
+  function buildRedirectPrompt(mode,question,pack,activeSec){
+    var modeLabel = MODES[mode]||MODES.agent;
+    var lines=[
+      '# PMN Agent — Manuscript-Grounded Prompt',
+      '',
+      '## Your Role',
+      'You are PMN Agent for Progressive Materialist Naturalism (PMN) v97 by Nova Dharma.',
+      'The manuscript text is provided below. Read it directly — do NOT open links or URLs.',
+      'When answering: cite section IDs (e.g. "[7.3]"), label inferences, be analytically precise.',
+      '',
+      '## Mode: '+modeLabel,
+      '',
+      '## Question',
+      question||'Explain this section and its role in the PMN architecture.',
+      '',
+      '## Manuscript Text',
+      formatPackFull(pack, activeSec),
+      '',
+      '## Instructions',
+      '- Answer using ONLY the manuscript text above as your source.',
+      '- Cite section IDs when making claims (e.g. "as [3.4] states...").',
+      '- If the answer requires a section not provided, say so explicitly.',
+      '- Label speculative extensions as "inference beyond the provided text".',
+      activeSec?'- The user is currently reading ['+activeSec.id+']: '+activeSec.title+'. Address this section first, then connect to others.':''
+    ];
+    return lines.filter(function(l){return l!==false&&l!==undefined;}).join('\n');
   }
 
   // ──────────────────────────────────────────────────────────────────
@@ -3249,29 +3346,26 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       navigator.clipboard.writeText(txt).then(function(){var o=exportBtn.textContent;exportBtn.textContent='Copied!';setTimeout(function(){exportBtn.textContent=o;},1800);});
     });
 
-    // ChatGPT / Gemini redirect setup
+    // ChatGPT / Gemini redirect — full manuscript text embedded, no URL dependency
     function setupRedirect(qId,btnId,cpyId,statId,modeId,url){
       var qEl=document.getElementById(qId),rbtn=document.getElementById(btnId),cpyBtn=document.getElementById(cpyId),stat=document.getElementById(statId),modeSel=document.getElementById(modeId);
       if(!rbtn) return;
       function go(openWin){
         var q=(qEl&&qEl.value.trim())||'Give me an orientation to PMN and tell me where to start.';
         var mode=modeSel?modeSel.value:'agent';
-        var pack=buildContextPack(q,{maxSections:6,maxGlossary:6,fallbackIds:['how-to-read-this-document','3.0','6.1','10.9','15.15','17.0']});
-        var full=[
-          '# PMN Agent Prompt — grounded in manuscript context\n',
-          'MODE: '+(MODES[mode]||MODES.agent),
-          '\nQUESTION: '+q,'',
-          formatPack(pack),'',
-          '--- INSTRUCTIONS ---',
-          'You are PMN Agent for Progressive Materialist Naturalism v97. Use the context pack above as primary source. Cite section IDs when relevant. Label inferences clearly.'
-        ].join('\n');
+        // fullTextChars: more text per section so AI has real content to work with
+        var pack=buildContextPack(q,{maxSections:5,maxGlossary:6,fullTextChars:2500,fallbackIds:['how-to-read-this-document','3.0','6.1','10.9','15.15','17.0']});
+        var full=buildRedirectPrompt(mode,q,pack,null);
         var win=openWin?window.open(url,'_blank','noopener'):null;
         navigator.clipboard.writeText(full).then(function(){
-          var n=pack.sections.length;
-          if(stat) stat.textContent=openWin?'Prompt copied ('+n+' sections). Paste into '+url.split('/')[2]+'.':'Grounded prompt copied ('+n+' PMN sections).';
+          var chars=full.length;
+          var kb=Math.round(chars/1024);
+          if(stat) stat.textContent=openWin
+            ?'Prompt copied ('+pack.sections.length+' sections, ~'+kb+'KB of manuscript text). Paste into '+url.split('/')[2]+'.'
+            :'Copied ('+pack.sections.length+' sections, ~'+kb+'KB). Paste into any AI.';
           if(qEl) qEl.value='';
         }).catch(function(){if(stat) stat.textContent='Clipboard blocked. Try copy-only.';});
-        if(openWin&&!win&&stat) stat.textContent='Pop-up blocked. Open manually and paste.';
+        if(openWin&&!win&&stat) stat.textContent='Pop-up blocked. Open the site manually and paste.';
       }
       rbtn.addEventListener('click',function(){go(true);});
       if(cpyBtn) cpyBtn.addEventListener('click',function(){go(false);});
@@ -3346,6 +3440,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     if(chatIn) chatIn.addEventListener('keypress',function(e){if(e.key==='Enter'){e.preventDefault();ask();}});
     if(clearBtn) clearBtn.addEventListener('click',function(){rHistory=[];if(chatLog)chatLog.innerHTML='';});
 
+    // Reader ChatGPT/Gemini — embeds full active section text, no URL needed
     function setupReaderRedirect(qId,btnId,cpyId,statId,modeId,url){
       var qEl=document.getElementById(qId),rbtn=document.getElementById(btnId),cpyBtn=document.getElementById(cpyId),stat=document.getElementById(statId),modeSel=document.getElementById(modeId);
       if(!rbtn) return;
@@ -3354,20 +3449,30 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         var relIds=activeSec?(window._pmnRel&&window._pmnRel[activeSec.id]||[]).slice(0,4):[];
         var q=(qEl&&qEl.value.trim())||'Explain this section and its role in PMN.';
         var mode=modeSel?modeSel.value:'agent';
-        var pack=buildContextPack(q,{activeId:activeSec&&activeSec.id,relatedIds:relIds,maxSections:5,maxGlossary:5});
-        var full=[
-          '# PMN Agent Prompt — Reader Mode\n',
-          'MODE: '+(MODES[mode]||MODES.agent),
-          activeSec?'\nACTIVE SECTION: '+activeSec.id+' — '+activeSec.title:'',
-          '\nQUESTION: '+q,'',
-          formatPack(pack),'',
-          '--- INSTRUCTIONS ---',
-          'You are PMN Agent for PMN v97. Use the context pack. Cite section IDs. Label inferences clearly.'
-        ].join('\n');
+        // Build active section object with full text
+        var activeSecFull=null;
+        if(activeSec){
+          activeSecFull={
+            id:activeSec.id,
+            title:activeSec.title,
+            fullText:fullText(activeSec,4000) // Full active section up to 4000 chars
+          };
+        }
+        var pack=buildContextPack(q,{
+          activeId:activeSec&&activeSec.id,
+          relatedIds:relIds,
+          maxSections:4,
+          maxGlossary:5,
+          fullTextChars:2000
+        });
+        var full=buildRedirectPrompt(mode,q,pack,activeSecFull);
         var win=openWin?window.open(url,'_blank','noopener'):null;
         navigator.clipboard.writeText(full).then(function(){
-          var n=pack.sections.length;
-          if(stat) stat.textContent=openWin?'Prompt copied ('+n+' sections). Paste into '+url.split('/')[2]+'.':'Grounded prompt copied ('+n+' sections).';
+          var chars=full.length;
+          var kb=Math.round(chars/1024);
+          if(stat) stat.textContent=openWin
+            ?'Prompt copied (~'+kb+'KB with full section text). Paste into '+url.split('/')[2]+'.'
+            :'Copied (~'+kb+'KB of manuscript text). Paste into any AI.';
           if(qEl) qEl.value='';
         }).catch(function(){if(stat) stat.textContent='Clipboard blocked.';});
         if(openWin&&!win&&stat) stat.textContent='Pop-up blocked. Open manually and paste.';
