@@ -2167,7 +2167,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   }
   function upgradeHomeAi(){
     var inner=document.querySelector('.home-ai-section .home-ai-inner');
-    if(!inner||g('home-ai-copy')) return;
+    if(!inner||g('home-ai-copy')||document.getElementById('hai-tabs')) return;
     inner.innerHTML=
       '<div class="home-ai-hdr">Dialectical Synthesis Terminal (AI-Powered)</div>'
       +'<p class="home-ai-desc">Ask a PMN question here, choose your target AI, then let the site retrieve relevant PMN passages and glossary terms before opening ChatGPT or Gemini.</p>'
@@ -2805,22 +2805,24 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   g('font-md') && g('font-md').addEventListener('click', function(){ setReaderScale(1); });
   g('font-lg') && g('font-lg').addEventListener('click', function(){ setReaderScale(1.08); });
   // reader chat handled by initReaderChat() in AI engine
-  g('home-ai-btn') && g('home-ai-btn').addEventListener('click', function(){
-    var target=g('home-ai-mode') ? g('home-ai-mode').value : 'chatgpt';
-    var question=g('home-ai-input') ? g('home-ai-input').value.trim() : '';
-    launchAgent(target,'home',question,false);
-  });
-  g('home-ai-copy') && g('home-ai-copy').addEventListener('click', function(){
-    var question=g('home-ai-input') ? g('home-ai-input').value.trim() : '';
-    launchAgent('chatgpt','home',question,true);
-  });
-  g('home-ai-input') && g('home-ai-input').addEventListener('keypress', function(e){
-    if(e.key==='Enter'){
-      e.preventDefault();
+  if(!g('hai-tabs')){
+    g('home-ai-btn') && g('home-ai-btn').addEventListener('click', function(){
       var target=g('home-ai-mode') ? g('home-ai-mode').value : 'chatgpt';
-      launchAgent(target,'home',this.value.trim(),false);
-    }
-  });
+      var question=g('home-ai-input') ? g('home-ai-input').value.trim() : '';
+      launchAgent(target,'home',question,false);
+    });
+    g('home-ai-copy') && g('home-ai-copy').addEventListener('click', function(){
+      var question=g('home-ai-input') ? g('home-ai-input').value.trim() : '';
+      launchAgent('chatgpt','home',question,true);
+    });
+    g('home-ai-input') && g('home-ai-input').addEventListener('keypress', function(e){
+      if(e.key==='Enter'){
+        e.preventDefault();
+        var target=g('home-ai-mode') ? g('home-ai-mode').value : 'chatgpt';
+        launchAgent(target,'home',this.value.trim(),false);
+      }
+    });
+  }
 
   // ── Parallax scroll on hero (sticky slow scroll effect) ──
   (function(){
@@ -3098,14 +3100,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
   // ── Shared: Claude API call ──
   function callClaude(messages, sysPrompt, onDone, onError) {
-    fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sysPrompt,messages:messages})
-    })
-    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(function(data){ var t=(data.content&&data.content[0]&&data.content[0].text)||''; onDone(t); })
-    .catch(function(err){ if(onError) onError(err.message||'Error'); });
+    var msg='Inline Claude is disabled in this static build. Use the ChatGPT/Gemini handoff, or add a secure backend proxy before re-enabling provider-side calls.';
+    if(onError) onError(msg);
+    else if(onDone) onDone(msg);
   }
 
   // ── Shared: get data ──
@@ -3292,6 +3289,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       Object.keys(panels).forEach(function(k){if(panels[k])panels[k].style.display=k===mode?'':'none';});
     }
     tabs.forEach(function(btn){btn.addEventListener('click',function(){switchTab(btn.getAttribute('data-mode'));});});
+    switchTab('chatgpt');
 
     // Claude inline
     var chatLog=document.getElementById('home-chat-log');
@@ -3387,6 +3385,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       Object.keys(panels).forEach(function(k){if(panels[k])panels[k].style.display=k===mode?'':'none';});
     }
     tabs.forEach(function(btn){btn.addEventListener('click',function(){switchTab(btn.getAttribute('data-rmode'));});});
+    switchTab('chatgpt');
 
     var chatLog=document.getElementById('pmn-chat-log');
     var chatIn=document.getElementById('pmn-chat-in');

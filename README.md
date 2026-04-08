@@ -56,6 +56,20 @@ git push origin main
 
 ---
 
+## Backend Migration
+
+Scaffold Phase 1 untuk migrasi ke Supabase sudah ditambahkan:
+
+- `.env.example`
+- `src/lib/supabase.js`
+- `src/lib/pmn-backend.js`
+- `supabase/schema.sql`
+- `docs/supabase-phase1.md`
+
+App saat ini masih berjalan dengan mode lokal yang lama. Scaffold ini disiapkan supaya migrasi ke backend bisa dilakukan bertahap tanpa mematahkan flow yang sudah ada.
+
+---
+
 ## Development Lokal
 
 ```bash
