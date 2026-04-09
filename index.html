@@ -804,8 +804,8 @@ html[data-layout="desktop"] .hbtn{padding:.3rem .4rem;letter-spacing:.14em}
 html[data-layout="desktop"] .toc-subs{grid-template-columns:repeat(3,1fr)}
 html[data-layout="desktop"] #reader-main{width:auto;height:100%;overflow-y:auto}
 html[data-layout="desktop"] #reader-col{padding:3.5rem 2.5rem 8rem;max-width:68ch}
-html[data-layout="desktop"] #sidebar{position:relative;left:auto;top:auto;height:100%;transform:none!important;transition:width .26s cubic-bezier(.4,0,.2,1),min-width .26s}
-html[data-layout="desktop"] #sb-tog{position:absolute;right:-16px;top:50%;transform:translateY(-50%);width:16px;height:48px;bottom:auto;border-radius:0;font-size:.65rem}
+html[data-layout="desktop"] #sidebar{display:block!important;position:relative;left:auto;top:auto;height:100%;transform:none!important;transition:width .26s cubic-bezier(.4,0,.2,1),min-width .26s}
+html[data-layout="desktop"] #sb-tog{display:flex!important;position:absolute;right:-16px;top:50%;transform:translateY(-50%);width:16px;height:48px;bottom:auto;border-radius:0;font-size:.65rem}
 html[data-layout="desktop"] .rnav{flex-direction:row}
 html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 1.2rem}
 
@@ -843,7 +843,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   }
   .mob-nav-btn:active{color:var(--acc);background:var(--bg2)}
   .mob-nav-btn:disabled{opacity:.22;cursor:default}
-  #mob-nav-mid{
+  #mob-mid{
     border-left:1px solid var(--rule);
     border-right:1px solid var(--rule);
     flex:1.4;
@@ -852,6 +852,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   }
   #reader-col{padding-bottom:80px}
   .rnav{display:none}
+  #sidebar{display:none!important}
+  #sb-tog{display:none!important}
 }
 
 /* ── Keyboard shortcut overlay ── */
@@ -1674,9 +1676,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 </div><!-- .views-shell -->
 
 <nav id="mob-nav" class="hidden">
-  <button class="mob-nav-btn" id="mob-prev">&#8592;</button>
-  <button class="mob-nav-btn" id="mob-mid">&#9776;&nbsp;Home</button>
-  <button class="mob-nav-btn" id="mob-next">&#8594;</button>
+  <button class="mob-nav-btn" id="mob-prev" type="button" aria-label="Previous section">&#8592;</button>
+  <button class="mob-nav-btn" id="mob-mid" type="button" aria-label="Open contents">&#9776;&nbsp;Contents</button>
+  <button class="mob-nav-btn" id="mob-next" type="button" aria-label="Next section">&#8594;</button>
 </nav>
 <div id="notes-modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);overflow-y:auto">
   <div style="max-width:680px;margin:3rem auto;background:var(--bg);border:1px solid var(--rule);padding:2.5rem 2.5rem 3rem;position:relative">
@@ -2054,9 +2056,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     }
     return -1;
   }
-  function openPartStart(partLabel){
+  function openPartStart(partLabel,opts){
     var idx=findPartIndex(partLabel);
-    if(idx>=0){ jumpToSection(idx,0); return true; }
+    if(idx>=0){ jumpToSection(idx,0,opts); return true; }
     nav('srch'); showContentsPanel();
     return false;
   }
@@ -2437,19 +2439,40 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   });
   var sectionJumpMeta=null;
   var xrefBack=null;
+  function getActiveViewId(){
+    var active=document.querySelector('.view.on');
+    if(!active||!active.id) return 'home';
+    return active.id.replace(/-view$/,'');
+  }
   function getSectionMeta(pi,si){
     if(typeof pi!=='number'||typeof si!=='number'||!PARTS[pi]||!PARTS[pi].subs[si]) return null;
     var s=PARTS[pi].subs[si];
-    return {pi:pi,si:si,id:s.id,title:s.title};
+    return {kind:'section',pi:pi,si:si,id:s.id,title:s.title};
+  }
+  function getJumpOrigin(){
+    var view=getActiveViewId();
+    if(view==='reader') return getSectionMeta(curP,curS);
+    if(view==='srch'){
+      var q=g('srch-in') ? g('srch-in').value.trim() : '';
+      var tocPanel=g('toc-panel');
+      var showingContents=!!(tocPanel&&tocPanel.style.display!=='none'&&!q);
+      return {kind:'view',view:'srch',panel:showingContents?'contents':'search',label:showingContents?'Contents':'Search'};
+    }
+    return {kind:'view',view:'home',panel:'home',label:'Home'};
   }
   function updateJumpBack(){
     var wrap=g('reader-jumpbar'),meta=g('reader-jumpmeta'),btn=g('reader-jumpback');
     if(!wrap||!meta||!btn) return;
-    if(!xrefBack||xrefBack.pi===curP&&xrefBack.si===curS){
+    if(!xrefBack||(xrefBack.kind==='section'&&xrefBack.pi===curP&&xrefBack.si===curS)){
       wrap.style.display='none';
       return;
     }
     wrap.style.display='flex';
+    if(xrefBack.kind==='view'){
+      meta.textContent='Opened from '+xrefBack.label;
+      btn.textContent='Back to '+xrefBack.label;
+      return;
+    }
     meta.textContent='Jumped here from '+xrefBack.id+' — '+xrefBack.title;
     btn.textContent='Back to '+xrefBack.id;
   }
@@ -2491,7 +2514,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           sp.addEventListener('click',function(e){
             e.preventDefault();
             e.stopPropagation();
-            jumpToSectionById(this.getAttribute('data-sid'),{trackBack:true});
+            jumpToSectionById(this.getAttribute('data-sid'),{origin:getJumpOrigin()});
           });
           frag.appendChild(sp);
           last=m.index+m[0].length;
@@ -2513,7 +2536,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var meta=sectionJumpMeta||{};
     sectionJumpMeta=null;
     var prev=getSectionMeta(curP,curS);
-    if(meta.trackBack&&prev&&!(prev.pi===pi&&prev.si===si)) xrefBack=prev;
+    if(meta.origin&&!(meta.origin.kind==='section'&&meta.origin.pi===pi&&meta.origin.si===si)) xrefBack=meta.origin;
+    else if(meta.trackBack&&prev&&!(prev.pi===pi&&prev.si===si)) xrefBack=prev;
     else if(!meta.keepBack) xrefBack=null;
     curP=pi; curS=si;
     markR(pi,si); savePos(pi,si); addHist(pi,si); buildSB(); renderSec(); nav('reader'); if(typeof window._afterOpenSec==='function') window._afterOpenSec(pi,si);
@@ -2844,8 +2868,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     if(svBody) svBody.style.display='';
     var ql=q.toLowerCase().trim(), res=[];
     var pf=g('srch-part')?g('srch-part').value:'';
-    if(/^[0-9]+\.[0-9]+[a-z]?$/.test(ql)||/^a\.[0-9]+$/i.test(ql)){
-      var info=LOOK[resolveSectionId(ql)]; if(info){ jumpToSection(info.pi,info.si); clrS(); return; }
+      if(/^[0-9]+\.[0-9]+[a-z]?$/.test(ql)||/^a\.[0-9]+$/i.test(ql)){
+      var info=LOOK[resolveSectionId(ql)]; if(info){ jumpToSection(info.pi,info.si,{origin:getJumpOrigin()}); clrS(); return; }
     }
     for(var pi=0;pi<PARTS.length;pi++){
       var p=PARTS[pi];
@@ -2929,20 +2953,20 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     }
     // Search result click → open section
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
-    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
+    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'),{origin:getJumpOrigin()});
     if(g('srch-view').classList.contains('on')) clrS();
   });
   g('related-sec').addEventListener('click', function(e){
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
-    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'),{trackBack:true});
+    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'),{origin:getJumpOrigin()});
   });
   g('toc-grid').addEventListener('click', function(e){
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
-    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
+    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'),{origin:getJumpOrigin()});
   });
   g('sb-list').addEventListener('click', function(e){
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
-    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'));
+    jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'),{origin:getJumpOrigin()});
   });
   // Wire up static buttons (no inline onclick)
   g('hdr-logo').addEventListener('click', function(){ nav('home'); });
@@ -2994,6 +3018,15 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   g('font-lg') && g('font-lg').addEventListener('click', function(){ setReaderScale(1.08); });
   g('reader-jumpback') && g('reader-jumpback').addEventListener('click', function(){
     if(!xrefBack) return;
+    if(xrefBack.kind==='view'){
+      var back=xrefBack;
+      xrefBack=null;
+      if(back.panel==='search') nav('srch');
+      else if(back.panel==='contents'){ nav('srch'); showContentsPanel(); }
+      else nav('home');
+      updateJumpBack();
+      return;
+    }
     jumpToSection(xrefBack.pi,xrefBack.si,{keepBack:false});
   });
   // reader chat handled by initReaderChat() in AI engine
@@ -3063,15 +3096,15 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   });
   g('sidebar').addEventListener('click',function(e){
     var h=e.target.closest('.sb-hist-item');
-    if(h){jumpToSection(+h.getAttribute('data-pi'),+h.getAttribute('data-si'));}
+    if(h){jumpToSection(+h.getAttribute('data-pi'),+h.getAttribute('data-si'),{origin:getJumpOrigin()});}
   });
   g('reader-col') && g('reader-col').addEventListener('click',function(e){
     var cb=e.target.closest('.cited-btn');
-    if(cb){jumpToSection(+cb.getAttribute('data-pi'),+cb.getAttribute('data-si'),{trackBack:true});}
+    if(cb){jumpToSection(+cb.getAttribute('data-pi'),+cb.getAttribute('data-si'),{origin:getJumpOrigin()});}
   });
   g('suggestions') && g('suggestions').addEventListener('click',function(e){
     var b=e.target.closest('.suggest-btn');
-    if(b){jumpToSection(+b.getAttribute('data-pi'),+b.getAttribute('data-si'));}
+    if(b){jumpToSection(+b.getAttribute('data-pi'),+b.getAttribute('data-si'),{origin:getJumpOrigin()});}
   });
   g('home-view') && g('home-view').addEventListener('click',function(e){
     var b=e.target.closest('.path-btn');
@@ -3079,8 +3112,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var sid=b.getAttribute('data-open-id');
     var part=b.getAttribute('data-open-part');
     var resolvedId=resolveSectionId(sid);
-    if(resolvedId&&LOOK[resolvedId]) jumpToSection(LOOK[resolvedId].pi,LOOK[resolvedId].si);
-    else if(part) openPartStart(part);
+    if(resolvedId&&LOOK[resolvedId]) jumpToSection(LOOK[resolvedId].pi,LOOK[resolvedId].si,{origin:getJumpOrigin()});
+    else if(part) openPartStart(part,{origin:getJumpOrigin()});
   });
   (function(){
     var h=resolveSectionId(location.hash.slice(1));
