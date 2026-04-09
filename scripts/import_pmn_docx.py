@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 from __future__ import annotations
 
 import argparse
@@ -265,12 +265,13 @@ def build_parts(paragraphs: list[Paragraph], toc_headings: list[str], body_start
         section_id, _ = parse_section_heading(text)
         if section_id in toc_by_id:
             return toc_by_id[section_id]
-        for heading in toc_full:
-            if text.startswith(f"{heading} —") or text.startswith(f"{heading}: "):
-                return heading
-        for title, heading in toc_by_title.items():
-            if text.startswith(f"{title} —") or text.startswith(f"{title}: "):
-                return heading
+        if re.match(r"^\d", text):
+            for heading in toc_full:
+                if text.startswith(f"{heading} —") or text.startswith(f"{heading}: "):
+                    return heading
+            for title, heading in toc_by_title.items():
+                if text.startswith(f"{title} —") or text.startswith(f"{title}: "):
+                    return heading
         return None
 
     for para in body:
@@ -300,6 +301,18 @@ def build_parts(paragraphs: list[Paragraph], toc_headings: list[str], body_start
             continue
 
         if expected_heading is not None:
+            expected_id, _ = parse_section_heading(expected_heading)
+            is_title_only_repeat = (
+                current_part is not None
+                and not re.match(r"^\d", heading)
+                and any(sub["id"] == expected_id for sub in current_part["subs"])
+            )
+            if is_title_only_repeat:
+                rendered = paragraph_html(para.element)
+                if rendered:
+                    current_html.append(rendered)
+                continue
+
             flush_sub()
             if current_part is None:
                 raise ValueError(f"Encountered section before any part: {heading}")
@@ -349,19 +362,81 @@ def merge_case_d_into_compressed_core(parts: list[dict]) -> list[dict]:
     return parts
 
 
-def replace_d_parts(index_html: str, parts: list[dict]) -> str:
-    payload = json.dumps(parts, ensure_ascii=False, separators=(",", ":"))
-    replacement = f'<script id="d-parts" type="application/json">{payload}</script>'
+def strip_html_tags(raw_html: str) -> str:
+    text = re.sub(r"<br\s*/?>", "\n", raw_html, flags=re.IGNORECASE)
+    text = re.sub(r"</p\s*>", "\n", text, flags=re.IGNORECASE)
+    text = re.sub(r"<[^>]+>", " ", text)
+    return normalize_space(html.unescape(strip_control_chars(text)))
+
+
+def build_look(parts: list[dict]) -> dict[str, dict[str, str | int]]:
+    look: dict[str, dict[str, str | int]] = {}
+    for pi, part in enumerate(parts):
+        for si, sub in enumerate(part["subs"]):
+            look[sub["id"]] = {
+                "pi": pi,
+                "si": si,
+                "title": sub["title"],
+                "pt": str(part["part"]),
+            }
+    return look
+
+
+def build_rel_and_cited(parts: list[dict]) -> tuple[dict[str, list[str]], dict[str, list[str]]]:
+    section_ids = [sub["id"] for part in parts for sub in part["subs"]]
+    if not section_ids:
+        return {}, {}
+
+    ordered_ids = sorted(section_ids, key=lambda value: (-len(value), value))
+    pattern = re.compile(
+        r"(?<![\w.])(" + "|".join(re.escape(section_id) for section_id in ordered_ids) + r")(?![\w.])"
+    )
+
+    related: dict[str, list[str]] = {}
+    cited: dict[str, list[str]] = {}
+
+    for part in parts:
+        for sub in part["subs"]:
+            plain_text = strip_html_tags(sub["html"])
+            refs: list[str] = []
+            seen: set[str] = set()
+            for match in pattern.finditer(plain_text):
+                section_id = match.group(1)
+                if section_id == sub["id"] or section_id in seen:
+                    continue
+                seen.add(section_id)
+                refs.append(section_id)
+
+            if refs:
+                related[sub["id"]] = refs
+                for ref in refs:
+                    cited.setdefault(ref, []).append(sub["id"])
+
+    return related, cited
+
+
+def replace_json_script(index_html: str, script_id: str, payload: object) -> str:
+    serialized = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    replacement = f'<script id="{script_id}" type="application/json">{serialized}</script>'
     updated, count = re.subn(
-        r'<script id="d-parts" type="application/json">.*?</script>',
+        rf'<script id="{re.escape(script_id)}" type="application/json">.*?</script>',
         lambda _: replacement,
         index_html,
         count=1,
         flags=re.DOTALL,
     )
     if count != 1:
-        raise ValueError("Could not replace the d-parts payload in index.html.")
+        raise ValueError(f"Could not replace the {script_id} payload in index.html.")
     return updated
+
+
+def replace_derived_structures(index_html: str, parts: list[dict]) -> str:
+    look = build_look(parts)
+    related, cited = build_rel_and_cited(parts)
+    index_html = replace_json_script(index_html, "d-look", look)
+    index_html = replace_json_script(index_html, "d-rel", related)
+    index_html = replace_json_script(index_html, "d-ci", cited)
+    return index_html
 
 
 def replace_version_labels(index_html: str, version_label: str) -> str:
@@ -375,15 +450,18 @@ def replace_version_labels(index_html: str, version_label: str) -> str:
         index_html = re.sub(pattern, repl, index_html, flags=re.IGNORECASE)
 
     version_number = version_label.lstrip("vV")
-    direct_replacements = {
-        "Version 83": f"Version {version_number}",
-        "PMN v83": f"PMN {version_label}",
-        "V83 MANUSCRIPT": f"V{version_number} MANUSCRIPT",
-        "Progressive Materialist Naturalism v83": f"Progressive Materialist Naturalism {version_label}",
-        "[PMN v83 REFERENCE]": f"[PMN {version_label} REFERENCE]",
-    }
-    for old, new in direct_replacements.items():
-        index_html = index_html.replace(old, new)
+    generic_replacements = [
+        (r"\bVersion\s+\d+(?:\.\d+)?\b", f"Version {version_number}"),
+        (r"\bPMN v\d+(?:\.\d+)?\b", f"PMN {version_label}"),
+        (r"\bV\d+(?:\.\d+)?\s+MANUSCRIPT\b", f"V{version_number} MANUSCRIPT"),
+        (
+            r"\bProgressive Materialist Naturalism v\d+(?:\.\d+)?\b",
+            f"Progressive Materialist Naturalism {version_label}",
+        ),
+        (r"\[PMN v\d+(?:\.\d+)? REFERENCE\]", f"[PMN {version_label} REFERENCE]"),
+    ]
+    for pattern, replacement in generic_replacements:
+        index_html = re.sub(pattern, replacement, index_html)
     return index_html
 
 
@@ -393,6 +471,34 @@ def summarize(parts: list[dict]) -> str:
     if len(parts) > 6:
         part_labels += ", ..."
     return f"Imported {len(parts)} part groups and {section_count} sections ({part_labels})"
+
+
+def infer_public_version_label(index_html: str) -> str | None:
+    patterns = [
+        r"By Nova Dharma[^<]{0,80}Version\s+(\d+(?:\.\d+)?)",
+        r"PMN\s*&mdash;\s*Version\s+(\d+(?:\.\d+)?)",
+        r"Progressive Materialist Naturalism\s*-\s*Version\s+(\d+(?:\.\d+)?)",
+        r"\bPMN v(\d+(?:\.\d+)?)\b",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, index_html, flags=re.IGNORECASE)
+        if match:
+            return f"v{match.group(1)}"
+    return None
+
+
+def version_key(path: Path) -> tuple[int, ...]:
+    match = re.search(r"PMN_Framework_v(\d+(?:\.\d+)*)\.docx$", path.name, flags=re.IGNORECASE)
+    if not match:
+        return ()
+    return tuple(int(part) for part in match.group(1).split("."))
+
+
+def infer_version_label_from_docx(docx_path: Path) -> str | None:
+    match = re.search(r"PMN_Framework_v(\d+(?:\.\d+)*)\.docx$", docx_path.name, flags=re.IGNORECASE)
+    if not match:
+        return None
+    return f"v{match.group(1)}"
 
 
 def resolve_docx_path(value: str | None) -> Path:
@@ -406,14 +512,17 @@ def resolve_docx_path(value: str | None) -> Path:
 
     cwd = Path.cwd()
     script_dir = Path(__file__).resolve().parent
-    candidates.extend(
-        [
-            cwd / "PMN_Framework_v97.docx",
-            cwd / "Framework docx" / "PMN_Framework_v97.docx",
-            cwd.parent / "Framework docx" / "PMN_Framework_v97.docx",
-            script_dir.parent / "Framework docx" / "PMN_Framework_v97.docx",
-        ]
-    )
+    search_roots = [
+        cwd,
+        cwd / "Framework docx",
+        cwd.parent / "Framework docx",
+        script_dir.parent / "Framework docx",
+    ]
+    for root in search_roots:
+        if not root.exists():
+            continue
+        matches = sorted(root.glob("PMN_Framework_v*.docx"), key=version_key, reverse=True)
+        candidates.extend(matches)
 
     seen: set[Path] = set()
     for candidate in candidates:
@@ -427,7 +536,7 @@ def resolve_docx_path(value: str | None) -> Path:
     attempted = "\n".join(f"- {mask_local_path(path)}" for path in seen)
     raise ValueError(
         "Could not locate the PMN DOCX source. Provide --docx, set PMN_DOCX, "
-        f"or place PMN_Framework_v97.docx in a nearby folder.\nTried:\n{attempted}"
+        f"or place a PMN_Framework_v*.docx file in a nearby folder.\nTried:\n{attempted}"
     )
 
 
@@ -462,8 +571,8 @@ def main() -> int:
     )
     parser.add_argument(
         "--version-label",
-        default="v97",
-        help="Public-facing version label to keep in the site UI",
+        default=None,
+        help="Public-facing version label to keep in the site UI. Defaults to the current label already present in index.html.",
     )
     args = parser.parse_args()
 
@@ -478,8 +587,15 @@ def main() -> int:
     parts = merge_case_d_into_compressed_core(parts)
 
     html_text = index_path.read_text(encoding="utf-8")
-    html_text = replace_d_parts(html_text, parts)
-    html_text = replace_version_labels(html_text, args.version_label)
+    version_label = (
+        args.version_label
+        or infer_version_label_from_docx(docx_path)
+        or infer_public_version_label(html_text)
+        or "v97"
+    )
+    html_text = replace_json_script(html_text, "d-parts", parts)
+    html_text = replace_derived_structures(html_text, parts)
+    html_text = replace_version_labels(html_text, version_label)
     index_path.write_text(html_text, encoding="utf-8")
 
     print(summarize(parts))
@@ -492,3 +608,4 @@ if __name__ == "__main__":
     except Exception as exc:
         print(f"Import failed: {exc}", file=sys.stderr)
         raise
+

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Using PMN Agent - PMN v97</title>
+<title>Using PMN as an AI Agent - PMN v102</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -70,7 +70,7 @@ body::before{
 #theme-tog:hover{color:var(--acc);border-color:var(--acc)}
 #pip-track{width:72px;height:2px;background:var(--rule2);border-radius:1px;overflow:hidden}
 #pip-fill{height:100%;background:var(--acc);border-radius:1px}
-.page{max-width:860px;margin:0 auto;padding:3.5rem 2rem 8rem}
+.page{max-width:920px;margin:0 auto;padding:3.5rem 2rem 8rem}
 .page-eyebrow{
   font-family:var(--f-mono);font-size:.68rem;letter-spacing:.22em;
   text-transform:uppercase;color:var(--mute2);
@@ -83,7 +83,7 @@ body::before{
   font-family:var(--f-head);font-size:clamp(2rem,5vw,3rem);
   font-weight:400;line-height:1.08;letter-spacing:-.02em;margin-bottom:.8rem;color:var(--ink);
 }
-.page-subtitle{font-size:1.05rem;font-style:italic;color:var(--mute);margin-bottom:2rem}
+.page-subtitle{font-size:1.05rem;font-style:italic;color:var(--mute);margin-bottom:2rem;max-width:760px}
 .page-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--rule)}
 .btn-dl{
   color:var(--mute);border:1px solid var(--rule2);padding:.55rem 1rem;
@@ -104,22 +104,25 @@ body::before{
   font-family:var(--f-head);font-size:1.5rem;font-weight:700;
   letter-spacing:-.01em;margin-bottom:1.2rem;color:var(--ink);
 }
-.workflow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.3rem 0}
-.workflow-card{
+.workflow-grid,.platform-grid,.question-grid,.mode-grid,.advice-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.3rem 0;
+}
+.workflow-card,.platform-card,.question-card,.advice-card{
   background:var(--bg2);border:1px solid var(--rule);padding:1rem 1.1rem;
 }
-.workflow-name{
+.workflow-name,.platform-name,.question-name,.advice-name{
   font-family:var(--f-mono);font-size:.78rem;font-weight:700;
   color:var(--ink);letter-spacing:.04em;margin-bottom:.45rem;text-transform:uppercase;
 }
-.workflow-note{font-size:.88rem;color:var(--mute);line-height:1.6}
-.workflow-badge{
+.workflow-note,.platform-note,.question-note,.advice-note{font-size:.88rem;color:var(--mute);line-height:1.6}
+.workflow-badge,.platform-badge{
   display:inline-block;margin-top:.55rem;padding:.15rem .5rem;
   font-family:var(--f-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
   border:1px solid;
 }
 .badge-best{color:#5a9a5a;border-color:#5a9a5a}
 .badge-good{color:var(--acc);border-color:var(--acc)}
+.badge-ok{color:var(--mute2);border-color:var(--mute2)}
 .badge-stop{color:#9b5f5f;border-color:#9b5f5f}
 .callout,.note-box{
   background:var(--bg2);padding:1rem 1.35rem;margin:1.2rem 0;font-size:.92rem;color:var(--ink2);
@@ -150,7 +153,7 @@ body::before{
 .copy-btn:hover{color:var(--acc);border-color:var(--acc)}
 .copy-btn.copied{color:#4ade80;border-color:#4ade80}
 .variants{margin:1.4rem 0}
-.vtabs{display:flex;border-bottom:1px solid var(--rule);gap:0}
+.vtabs{display:flex;border-bottom:1px solid var(--rule);gap:0;flex-wrap:wrap}
 .vtab{
   font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
   background:transparent;border:none;border-bottom:2px solid transparent;
@@ -194,8 +197,7 @@ footer{
 @media(max-width:680px){
   .page{padding:2rem 1.2rem 6rem}
   .page-h1{font-size:1.8rem}
-  .workflow-grid,.checklist{grid-template-columns:1fr}
-  .vtabs{flex-wrap:wrap}
+  .workflow-grid,.platform-grid,.question-grid,.mode-grid,.advice-grid,.checklist{grid-template-columns:1fr}
   footer{flex-direction:column;gap:.5rem}
 }
 </style>
@@ -205,158 +207,179 @@ footer{
   <a href="index.html" id="hdr-logo">PMN</a>
   <div id="hdr-r">
     <div id="pip"><div id="pip-track"><div id="pip-fill" style="width:0%"></div></div></div>
-    <a href="index.html" class="hbtn">Home</a>
+    <a href="index.html" class="hbtn">Reader</a>
     <a href="index.html#15.15" class="hbtn">15.15</a>
     <button id="theme-tog" onclick="toggleTheme()">Dark</button>
   </div>
 </header>
 
 <div class="page">
-  <div class="page-eyebrow">PMN v97 - Nova Dharma - Agent Guide</div>
-  <h1 class="page-h1">Using PMN Agent<br><em style="color:var(--acc)">without losing the manuscript</em></h1>
-  <p class="page-subtitle">A grounded workflow for ChatGPT, Gemini, and future backend-backed PMN Agent modes.</p>
+  <div class="page-eyebrow">PMN v102 - Nova Dharma</div>
+  <h1 class="page-h1">Using PMN<br><em style="color:var(--acc)">as an AI Agent</em></h1>
+  <p class="page-subtitle">A practical guide to deploying the framework through Claude, DeepSeek, ChatGPT, Gemini, and similar systems without letting the manuscript dissolve into generic ideology talk.</p>
 
   <div class="page-actions">
+    <a class="btn-dl" href="https://drive.google.com/drive/folders/1y1c7XCnYGLAydALvTTAR5EQeUrz4zCjS?usp=sharing" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1"/></svg>
+      Download PDF
+    </a>
     <a class="btn-dl" href="index.html">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 8H2M5 5L2 8l3 3M14 4v8"/></svg>
-      Open homepage
-    </a>
-    <a class="btn-dl" href="index.html#how-to-read-this-document">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M3 7l5-5 5 5"/></svg>
-      Open orientation
+      Open Reader
     </a>
     <a class="btn-dl" href="index.html#15.15">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10v10H3zM5 8h6"/></svg>
-      Open compressed core
+      Open 15.15
     </a>
   </div>
 
   <div class="intro">
-    <p>PMN Agent is most useful when it is grounded in the manuscript rather than asked to "figure out the website" on its own. The current PMN site is a static reader: section anchors such as <code>#4.4</code> and <code>#15.15</code> are navigation states inside one page, not separate documents that an external model can reliably browse, scroll, and interpret like a human reader.</p>
-    <p>So the right workflow is retrieval first, model second. Let the PMN site gather the relevant sections, glossary terms, and active context. Then send that package into ChatGPT, Gemini, or a future secure backend agent. This guide is written for that architecture.</p>
+    <p>PMN works best in AI when the model is made to reason from the framework's architecture rather than merely summarize it. That means giving the system real manuscript text, assigning an operational role, and checking whether it preserves the distinction between the biological floor, structural diagnosis, and the fuller horizon of becoming.</p>
+    <p>This guide is for practical deployment, not abstract commentary. It compares major systems, tells you when to use the reader versus a full upload, gives concrete prompts, and explains how to keep the model from sliding back into generic political-philosophy prose.</p>
   </div>
 
   <div class="step">
     <span class="step-num">Step 01</span>
-    <h2 class="step-h2">Choose the right PMN workflow</h2>
-    <p>Not every use-case needs the same setup. If you just want a grounded answer quickly, the built-in handoff from the PMN site is now the best default. If you want the model to work from the whole manuscript in one conversation, upload the document or give it a larger context pack.</p>
+    <h2 class="step-h2">Choose the deployment mode</h2>
+    <p>There are three useful ways to run PMN through AI, and they are not interchangeable.</p>
     <div class="workflow-grid">
       <div class="workflow-card">
-        <div class="workflow-name">Grounded handoff</div>
-        <div class="workflow-note">Use the homepage or reader page. PMN retrieves relevant sections and glossary terms, then opens ChatGPT or Gemini with a prepared prompt.</div>
-        <span class="workflow-badge badge-best">Recommended</span>
+        <div class="workflow-name">Full manuscript upload</div>
+        <div class="workflow-note">Best for long sessions, repeated case analysis, and debates where the model needs to hold the architecture in working memory.</div>
+        <span class="workflow-badge badge-best">Best depth</span>
       </div>
       <div class="workflow-card">
-        <div class="workflow-name">Full document upload</div>
-        <div class="workflow-note">Useful for long sessions where you want one model to stay inside PMN for a while. Best when the model can hold long context reliably.</div>
-        <span class="workflow-badge badge-good">Good</span>
+        <div class="workflow-name">Reader-grounded context pack</div>
+        <div class="workflow-note">Best for targeted questions. Use the PMN site to surface the relevant sections first, then paste the prepared context into your AI system.</div>
+        <span class="workflow-badge badge-good">Best precision</span>
       </div>
       <div class="workflow-card">
-        <div class="workflow-name">Future PMN backend</div>
-        <div class="workflow-note">The ideal end-state: secure backend retrieval, citations, and in-page answers. This is the upgrade path, not the public static build today.</div>
-        <span class="workflow-badge badge-good">Roadmap</span>
+        <div class="workflow-name">Chunked upload</div>
+        <div class="workflow-note">Use when the platform struggles with the whole PDF. Load the framework in stages and keep a short state memo between turns.</div>
+        <span class="workflow-badge badge-good">Best fallback</span>
       </div>
       <div class="workflow-card">
-        <div class="workflow-name">Paste the URL only</div>
-        <div class="workflow-note">Do not rely on this. Static readers and hash anchors are not enough to guarantee that the model actually read the relevant PMN material.</div>
+        <div class="workflow-name">URL only</div>
+        <div class="workflow-note">Do not rely on this. A static reader plus hash anchors is not enough to guarantee that the model actually read the relevant PMN text.</div>
         <span class="workflow-badge badge-stop">Avoid</span>
       </div>
     </div>
     <div class="note-box">
-      <span class="note-label">Current site reality</span>
-      The public PMN site can already build grounded prompts from the manuscript data embedded in the page. What it cannot safely do yet is call commercial models inline from the browser without a secure backend.
+      <span class="note-label">Practical recommendation</span>
+      If you want durable PMN-mode reasoning, start with the full PDF or a Markdown export. If you want a narrower answer about one issue, section, or case, the reader-grounded context pack is faster and usually safer.
     </div>
   </div>
 
   <div class="step">
     <span class="step-num">Step 02</span>
-    <h2 class="step-h2">Know what the model should read</h2>
-    <p>The model should not be asked to infer PMN from vague memory, ideology labels, or generic political-philosophy priors. It should read from a PMN context pack containing the actual section text, section IDs, and glossary terms most relevant to your question.</p>
-    <div class="callout">
-      <strong>Important:</strong> GitHub Pages, single-page readers, and hash anchors do not guarantee reliable external browsing. If your question is really about <code>4.4</code>, <code>7.3</code>, or <code>15.15</code>, include those anchors in the prompt or open them through the PMN site so the handoff can package the right text.
+    <h2 class="step-h2">Choose the system deliberately</h2>
+    <p>Different platforms fail in different ways. The best choice depends on whether you need document retention, diagnostic rigidity, synthesis, or translation for a new reader.</p>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-name">Claude</div>
+        <div class="platform-note">Usually the strongest for full-manuscript retention, long-form reasoning, and preserving architectural distinctions across a long thread.</div>
+        <span class="platform-badge badge-best">Best for full-PMN mode</span>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">DeepSeek</div>
+        <div class="platform-note">Often strong for narrower diagnostics, adversarial pressure-testing, and explicit structural reasoning. Good value for tighter workflows.</div>
+        <span class="platform-badge badge-good">Best for diagnostics</span>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">ChatGPT</div>
+        <div class="platform-note">Good generalist, especially with reader-grounded context packs, but more likely to smooth PMN into generic explanation unless prompted firmly.</div>
+        <span class="platform-badge badge-good">Best with context packs</span>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">Gemini</div>
+        <div class="platform-note">Useful for broad synthesis and long inputs, but sometimes too eager to harmonize tensions that PMN wants to keep analytically alive.</div>
+        <span class="platform-badge badge-ok">Best for synthesis</span>
+      </div>
     </div>
-    <p>The safest ordering is:</p>
-    <div class="checklist">
-      <div class="check-item"><strong>1. Identify the section</strong><span>Name the section, case, or problem you care about.</span></div>
-      <div class="check-item"><strong>2. Retrieve the context</strong><span>Let the site gather the most relevant PMN passages and glossary terms.</span></div>
-      <div class="check-item"><strong>3. Ask for analysis</strong><span>Only then ask the model to diagnose, compare, or stress-test.</span></div>
-      <div class="check-item"><strong>4. Demand citations</strong><span>Ask the model to point back to section IDs, not just smooth prose.</span></div>
+    <div class="callout">
+      <strong>On plans and tiers:</strong> plan names and limits change often, so this guide does not hard-code them. For a full ~600-page PMN workflow, use the highest-context upload tier available on the platform you choose. Lower or free tiers are better suited to chunked input or reader-generated context packs. DeepSeek can still be very useful for narrower diagnostic passes even when you are not using a premium workflow.
     </div>
   </div>
 
   <div class="step">
     <span class="step-num">Step 03</span>
-    <h2 class="step-h2">Prime the model as PMN Agent</h2>
-    <p>Once you have either the manuscript upload or a PMN context pack ready, use a priming prompt that makes the model operate from within the framework instead of merely summarizing it.</p>
+    <h2 class="step-h2">Load the manuscript the right way</h2>
+    <p>If the model is going to reason as PMN, it needs the framework as text, not just the brand name. The loading strategy should match the size of the session you want.</p>
+    <div class="checklist">
+      <div class="check-item"><strong>Full PDF route</strong><span>Upload the current PDF, then use a priming prompt that asks for architecture, not summary.</span></div>
+      <div class="check-item"><strong>Markdown route</strong><span>If your platform handles plain text more reliably than PDF, use a Markdown export or extracted text file.</span></div>
+      <div class="check-item"><strong>Chunked route</strong><span>Load Part I-III first, then the relevant later Parts, and keep a short state note between turns.</span></div>
+      <div class="check-item"><strong>Reader route</strong><span>Use the PMN site to retrieve the exact sections and glossary terms first, then paste those into the model.</span></div>
+    </div>
 
     <div class="code-block">
       <span class="code-label">Priming prompt</span>
       <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-      <div class="code-text">You are acting as PMN Agent for Progressive Materialist Naturalism (PMN) v97 by Nova Dharma.
+      <div class="code-text">I am attaching PMN (Progressive Materialist Naturalism) v102 by Nova Dharma. Read it as a framework to reason with, not as a document to summarize.
 
-Use the supplied PMN context pack as your primary source for this conversation. Do not treat PMN as a generic ideology label. Treat it as a structured framework with section anchors, glossary terms, and internal constraints.
-
-Your task is not to summarize the text unless I ask. Your task is to reason through my question using PMN's architecture:
+Your task is to internalize its architecture:
 - epistemology and revision discipline
-- ontological commitments
+- ontology and material commitments
 - the biological floor and evaluative criterion
-- structural variables, institutional analysis, and failure modes
-- the compressed core in 15.15 when simplification is needed
+- structural analysis, failure modes, and institutional diagnosis
+- the compressed core in 15.15 when simplification is required
 
-When you answer:
-1. stay grounded in the supplied PMN material
-2. name the most relevant section IDs when possible
-3. distinguish confident claims from evidential gaps
-4. prefer diagnosis over vague rhetoric
+When I ask you to analyze something using PMN, reason from within the framework rather than describing it from outside.
 
-Start by confirming, in under 150 words, what PMN treats as its evaluative floor and why that floor does not exhaust the full horizon of becoming.</div>
+Do not rely on URL browsing assumptions if manuscript text is already supplied directly.
+
+Confirm comprehension in under 150 words by explaining how Parts I, II, and III generate the framework's evaluative starting point.</div>
     </div>
 
-    <p>A good confirmation will mention that PMN starts from the biological reality of suffering as a non-arbitrary evaluative floor, while still insisting that the ceiling of becoming is richer than mere pain-reduction.</p>
+    <div class="note-box">
+      <span class="note-label">What to check</span>
+      A good confirmation should preserve the sequence: epistemology establishes how claims are disciplined, ontology establishes what kind of reality is being analyzed, and Part III provides the non-arbitrary evaluative floor rooted in the biology of suffering without collapsing PMN into pain-reduction alone.
+    </div>
   </div>
 
   <div class="step">
     <span class="step-num">Step 04</span>
-    <h2 class="step-h2">Choose the operational role</h2>
-    <p>After the priming step, give the model a role that matches your task. The sharper the role, the less likely the model is to drift into generic commentary.</p>
+    <h2 class="step-h2">Assign the operating role</h2>
+    <p>After the load step, tell the model what kind of PMN work you want. The sharper the role, the less likely it is to drift into vague explanation.</p>
 
     <div class="variants">
       <div class="vtabs">
-        <button class="vtab active" onclick="switchTab(this,'agent')">General analyst</button>
-        <button class="vtab" onclick="switchTab(this,'diagnostic')">Diagnostic mode</button>
+        <button class="vtab active" onclick="switchTab(this,'general')">General analyst</button>
+        <button class="vtab" onclick="switchTab(this,'diagnostic')">Diagnostic analyst</button>
         <button class="vtab" onclick="switchTab(this,'debate')">Debate partner</button>
       </div>
 
-      <div class="vpanel active" id="panel-agent">
+      <div class="vpanel active" id="panel-general">
         <div class="code-block">
           <span class="code-label">General analyst prompt</span>
           <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
-          <div class="code-text">From this point forward, operate as PMN Agent.
+          <div class="code-text">From this point forward, operate as a PMN analyst.
 
-Reason from within the framework rather than describing it from outside. Use PMN's evaluative criterion, structural variables, and failure mode discipline as your own analytic starting points unless I explicitly ask you to step outside them.
+Reason from within the framework rather than describing it from outside.
 
-When I bring a case:
+For each case:
 - identify the structural arrangement being evaluated
-- name which variables or sections matter most
-- say what PMN would need to see before reaching confidence
-- cite section IDs where doing so will improve precision</div>
+- name the most relevant PMN sections or variables
+- distinguish what the text states from what must be inferred
+- preserve the difference between the minimal anchor and the fuller horizon of becoming
+- cite section IDs when doing so improves precision</div>
         </div>
       </div>
 
       <div class="vpanel" id="panel-diagnostic">
         <div class="code-block">
-          <span class="code-label">Diagnostic mode prompt</span>
+          <span class="code-label">Diagnostic analyst prompt</span>
           <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
           <div class="code-text">Operate as a PMN diagnostic analyst.
 
 For each case I bring:
 - identify the dominant structural variables
-- name the most activated PMN questions or tensions
+- name the most activated PMN tensions or diagnostics
 - identify the likely failure modes in the analysis itself
 - separate what is evidenced from what is only plausible
-- end with the key missing evidence needed for stronger confidence
+- end with the missing evidence PMN would need for stronger confidence
 
-You are not required to reach a verdict if PMN would treat the evidence as incomplete.</div>
+You are not required to reach a verdict when the evidence is incomplete.</div>
         </div>
       </div>
 
@@ -367,12 +390,12 @@ You are not required to reach a verdict if PMN would treat the evidence as incom
           <div class="code-text">Operate as a PMN debate partner.
 
 For each argument I give you:
-1. reconstruct the strongest version of it
-2. say what PMN would find structurally persuasive about it
+1. reconstruct the strongest PMN-readable version of it
+2. identify what PMN would find structurally persuasive
 3. identify where the argument becomes architecturally incomplete
 4. test whether the same lens is being applied consistently
 
-The goal is not rhetorical victory. The goal is analytical honesty and pressure-testing.</div>
+The goal is analytical pressure-testing, not rhetorical victory.</div>
         </div>
       </div>
     </div>
@@ -380,91 +403,136 @@ The goal is not rhetorical victory. The goal is analytical honesty and pressure-
 
   <div class="step">
     <span class="step-num">Step 05</span>
-    <h2 class="step-h2">Ask questions that pull real PMN analysis out of the model</h2>
-    <p>Weak prompts ask whether PMN is "for" or "against" something. Strong prompts name the arrangement, the claimed justification, and the section or variable that should govern the analysis.</p>
+    <h2 class="step-h2">Ask better PMN questions</h2>
+    <p>Most weak sessions fail because the question is underspecified. Good PMN prompts name the arrangement, the structural tension, and the standard the model should use.</p>
+
+    <div class="question-grid">
+      <div class="question-card">
+        <div class="question-name">Case analysis</div>
+        <div class="question-note">Using PMN, analyze whether a labor platform can be defended by worker preference when the wider choice set is structurally degraded. Name the most relevant section IDs and what evidence would change the assessment.</div>
+      </div>
+      <div class="question-card">
+        <div class="question-name">Explanation for newcomers</div>
+        <div class="question-note">Read 15.15 as the compressed core, then explain PMN in plain language without flattening the difference between the minimum anchor and the horizon of becoming.</div>
+      </div>
+      <div class="question-card">
+        <div class="question-name">Comparative diagnosis</div>
+        <div class="question-note">Using PMN, compare liberal-democratic and authoritarian responses to a legitimacy crisis. Keep the floor/ceiling distinction explicit and identify the institutional failure modes in each.</div>
+      </div>
+      <div class="question-card">
+        <div class="question-name">Self-critique</div>
+        <div class="question-note">Apply PMN to PMN itself. Which failure modes from 12.5 are most likely to distort this analysis, and what evidence would show that the framework is drifting into self-protective closure?</div>
+      </div>
+    </div>
 
     <div class="ex-thread">
       <div class="ex-msg ex-user">
         <div class="ex-role">User</div>
-        <div class="ex-body">Using PMN, analyze whether a platform-labor arrangement can be defended by worker "preference" when the wider choice set is structurally degraded. Anchor your answer in the relevant sections and tell me what evidence would change the assessment.</div>
+        <div class="ex-body">Using PMN, analyze whether gig-work flexibility is a genuine preference or a preference formed inside a structurally degraded labor market. Cite the most relevant sections and say what evidence would change the answer.</div>
       </div>
       <div class="ex-msg">
         <div class="ex-role">PMN Agent</div>
         <div class="ex-body">
-          <p>This is a stronger PMN question because it does not ask for a vibes-level judgment. It identifies the contested justification, names the structural issue, and invites an evidence-sensitive answer.</p>
-          <p>A grounded response should bring in the architecture around structural suffering, institutional betrayal, visibility, and the problem of preferences formed inside constrained choice sets. It should also state what evidence would weaken the criticism: real exit options, durable protections, and materially different bargaining conditions.</p>
+          <p>A strong PMN answer should not stop at reported preference. It should ask how the choice set is structured, whether the arrangement degrades medium-term becoming capacity, and whether the preference itself is being formed under conditions of institutional betrayal or visibility suppression.</p>
+          <p>It should also tell you what would weaken the critique: durable protections, real exit options, bargaining power, and evidence that the flexibility is not merely compensation for a degraded alternative.</p>
         </div>
       </div>
     </div>
 
-    <div class="ex-thread" style="margin-top:1.8rem">
-      <div class="ex-msg ex-user">
-        <div class="ex-role">User</div>
-        <div class="ex-body">Read 15.15 as the compressed core, then explain PMN to a new reader in plain language without flattening the difference between the minimum anchor and the horizon of becoming.</div>
-      </div>
-      <div class="ex-msg">
-        <div class="ex-role">PMN Agent</div>
-        <div class="ex-body">
-          <p>This is high-yield because it tells the model exactly which PMN compression layer to use and which conceptual distinction must survive simplification.</p>
-          <p>Without that instruction, many models collapse PMN into "reduce suffering" only. The prompt prevents that flattening by explicitly protecting the larger developmental horizon.</p>
-        </div>
-      </div>
-    </div>
+    <div class="code-block">
+      <span class="code-label">Reusable question template</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
+      <div class="code-text">Using PMN, analyze [arrangement, doctrine, case, or policy].
 
-    <div class="note-box">
-      <span class="note-label">Better prompt pattern</span>
-      Use this template: "Using PMN, analyze <em>arrangement or case</em>. Name the most relevant section IDs, say which structural variables matter most, and identify what evidence would most likely change the conclusion."
+Do not answer at the level of slogans.
+
+Instead:
+- identify the structural arrangement being evaluated
+- name the most relevant section IDs
+- say which variables or diagnostics matter most
+- identify the likely failure mode in the analysis itself
+- end with the evidence that would most likely change the conclusion</div>
     </div>
   </div>
 
   <div class="step">
     <span class="step-num">Step 06</span>
-    <h2 class="step-h2">Manage drift, overconfidence, and false smoothness</h2>
-    <p>Even strong models drift. Over time they may revert to generic political language, compress distinctions they should preserve, or answer too fluently for the evidence actually available.</p>
+    <h2 class="step-h2">Know what each system is good and bad at</h2>
+    <p>The point is not to find one perfect platform. It is to know how to use each one without mistaking fluency for fidelity.</p>
+
+    <div class="advice-grid">
+      <div class="advice-card">
+        <div class="advice-name">Claude</div>
+        <div class="advice-note">Use for full-manuscript internalization, long architectural conversations, and careful reconstruction of tensions across Parts.</div>
+      </div>
+      <div class="advice-card">
+        <div class="advice-name">DeepSeek</div>
+        <div class="advice-note">Use for explicit diagnostics, challenge passes, and narrower case work where you want the model to stay literal and structurally disciplined.</div>
+      </div>
+      <div class="advice-card">
+        <div class="advice-name">ChatGPT</div>
+        <div class="advice-note">Use when the PMN site has already done the retrieval work. It performs better when the relevant sections and glossary terms are already in the prompt.</div>
+      </div>
+      <div class="advice-card">
+        <div class="advice-name">Gemini</div>
+        <div class="advice-note">Use for long inputs and broad synthesis, but watch for over-smoothing or premature reconciliation of tensions that PMN wants to hold open.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Do not over-read a smooth answer.</strong> A weak PMN session often sounds persuasive. The actual test is whether the model names relevant sections, preserves distinctions, and tells you what evidence it does not yet have.
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">Step 07</span>
+    <h2 class="step-h2">Reset drift before it hardens</h2>
+    <p>Over time the model will drift toward generic rhetoric, summary language, or false confidence. When that starts happening, reset it explicitly.</p>
 
     <div class="code-block">
       <span class="code-label">Reset prompt</span>
       <button class="copy-btn" onclick="copyPrompt(this)">copy</button>
       <div class="code-text">Return to PMN mode.
 
-Re-ground the answer in the supplied PMN material, name the most relevant section IDs, identify the structural variables at stake, and say what the main evidential gap is before acting more confident than the evidence allows.
+Re-ground the answer in the supplied PMN material.
 
-If you are simplifying, do not collapse the difference between the minimum anchor and the fuller horizon of becoming.</div>
+Before answering:
+- name the most relevant section IDs
+- identify the structural variables or diagnostics at stake
+- state the main evidential gap
+- preserve the difference between the biological floor and the fuller horizon of becoming
+
+Do not become smoother than the evidence allows.</div>
     </div>
 
     <div class="checklist">
-      <div class="check-item"><strong>Ask for citations</strong><span>If the model cannot point back to PMN sections, it is probably freelancing.</span></div>
-      <div class="check-item"><strong>Ask what would falsify it</strong><span>This is the fastest way to detect fake confidence.</span></div>
-      <div class="check-item"><strong>Check the missing evidence</strong><span>A PMN answer should tell you what it still does not know.</span></div>
+      <div class="check-item"><strong>Ask for section IDs</strong><span>If the model cannot point back to sections, it is probably freelancing.</span></div>
+      <div class="check-item"><strong>Ask what would falsify it</strong><span>This exposes fake confidence fast.</span></div>
       <div class="check-item"><strong>Compare against the reader</strong><span>Open the cited sections and see whether the answer preserved the actual PMN distinction.</span></div>
-    </div>
-
-    <div class="callout">
-      <strong>Static build limitation:</strong> the public site can prepare excellent PMN context packs, but it is not yet the final in-page agent architecture. Secure inline answers need a backend retrieval layer. Until then, the best public workflow is grounded handoff, not pretending the model read the URL by itself.
+      <div class="check-item"><strong>Keep a state memo</strong><span>For long projects, maintain a short running note of established conclusions and unresolved tensions.</span></div>
     </div>
   </div>
 
   <div class="step">
-    <span class="step-num">Step 07</span>
-    <h2 class="step-h2">For builders: what the PMN Agent should eventually become</h2>
-    <p>If you are improving the PMN site itself, the correct direction is to move from browser-only prompting toward backend retrieval. The model should read the PMN database, not the URL.</p>
+    <span class="step-num">Step 08</span>
+    <h2 class="step-h2">Use the PMN site for what it is actually good at</h2>
+    <p>The public PMN site is already useful, but its strength is manuscript-grounded retrieval, not magical URL comprehension by an external model.</p>
     <div class="checklist">
-      <div class="check-item"><strong>Store sections</strong><span>Each section should be queryable by ID, title, body, and relations.</span></div>
-      <div class="check-item"><strong>Store glossary terms</strong><span>Terms should link back to the sections that define and use them.</span></div>
-      <div class="check-item"><strong>Build context packs server-side</strong><span>Retrieve relevant passages before the model answers.</span></div>
-      <div class="check-item"><strong>Return citations</strong><span>Every answer should be able to point back to section IDs that justify it.</span></div>
+      <div class="check-item"><strong>Use the reader</strong><span>Open the relevant section, related sections, and glossary terms before asking the model to analyze.</span></div>
+      <div class="check-item"><strong>Use the handoff honestly</strong><span>The static build prepares prompts and context packs. It does not claim secure in-browser provider execution.</span></div>
+      <div class="check-item"><strong>Prefer text over assumptions</strong><span>If the manuscript text is in the prompt, the model should use that text rather than guess from the URL.</span></div>
+      <div class="check-item"><strong>Build backend retrieval later</strong><span>The long-term upgrade path is citation-backed retrieval, not pretending static pages are a full agent backend.</span></div>
     </div>
-    <p>That is how PMN Agent stops being a prompt launcher and becomes a real framework-specific assistant.</p>
   </div>
 
   <div class="closing">
-    PMN should make the model more disciplined, not merely more confident. If the answer becomes smoother while the manuscript disappears, the workflow has failed. Keep the text in view, keep the section IDs alive, and make the model earn its certainty.
+    The right PMN-AI workflow makes the model more disciplined, not just more articulate. If the answer gets smoother while the manuscript disappears, the deployment has failed. Keep the text present, keep the section IDs alive, and make the model earn every conclusion.
   </div>
 </div>
 
 <footer>
-  <span>Progressive Materialist Naturalism - Version 97</span>
-  <span>PMN Agent Guide</span>
+  <span>Progressive Materialist Naturalism - Version 102</span>
+  <span>AI Agent Guide</span>
 </footer>
 
 <script>
