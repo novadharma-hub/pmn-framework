@@ -140,6 +140,15 @@ body::before {
 .home-bottom-list span{display:block}
 .home-bottom-link{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.72rem .95rem;border:1px solid var(--rule2);font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:transparent;transition:border-color .15s,color .15s,background .15s}
 .home-bottom-link:hover{border-color:var(--acc);color:var(--acc);background:rgba(173,52,30,.06)}
+.home-bottom-card.notes-card{grid-column:span 2}
+.home-bottom-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:auto}
+.home-bottom-notes{width:100%;min-height:150px;background:var(--bg);border:1px solid var(--rule);color:var(--ink);font-family:var(--f-body);font-size:.92rem;line-height:1.72;padding:.8rem 1rem;resize:vertical;outline:none;transition:border-color .15s,background .15s}
+[data-theme=dark] .home-bottom-notes{background:#0f0f0f}
+.home-bottom-notes:focus{border-color:var(--acc2)}
+.home-bottom-notes::placeholder{color:var(--mute3)}
+.home-bottom-status{font-family:var(--f-mono);font-size:.72rem;color:var(--acc2);display:block;min-height:1em;opacity:0;transition:opacity .3s}
+.home-bottom-status.show{opacity:1}
+.home-bottom-actions .home-bottom-link{flex:1;min-width:140px}
 /* ── Srch-view (contents + glossary + search) ── */
 #srch-view{flex-direction:column;height:100%;overflow:hidden}
 .sv-hdr{font-family:'Libre Baskerville',serif;font-size:1.6rem;font-weight:400;color:var(--ink);padding:2rem 2.5rem 1.2rem;border-bottom:1px solid var(--rule);display:block;flex-shrink:0;margin-bottom:0;letter-spacing:-.01em}
@@ -750,6 +759,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .reading-paths-grid{grid-template-columns:1fr}
   .home-bottom{padding:2rem 1.4rem}
   .home-bottom-grid{grid-template-columns:1fr}
+  .home-bottom-card.notes-card{grid-column:auto}
   .home-footer-bar{padding:1.5rem 1.4rem;flex-direction:column;gap:.5rem}
   #reader-view.on{flex-direction:column;overflow-y:auto}
   #reader-main{width:100%;height:auto;overflow:visible}
@@ -1450,46 +1460,42 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     <div class="home-bottom-inner">
       <div class="home-bottom-hdr">
         <div>
-          <span class="home-bottom-kicker">After the terminal</span>
-          <h2 class="home-bottom-title">Keep the inquiry grounded, not just accelerated.</h2>
+          <span class="home-bottom-kicker">Reader Desk</span>
+          <h2 class="home-bottom-title">Keep notes, prompts, and feedback near the manuscript.</h2>
         </div>
-        <p class="home-bottom-desc">The strongest PMN sessions happen when the model gets architecture, section anchors, and explicit questions at the same time. Use this zone as the bridge between reading, asking, and checking whether the answer stayed faithful to the manuscript.</p>
+        <p class="home-bottom-desc">Use this space like a working margin for the site itself: save a line of inquiry, leave feedback, then jump back into the reader or the compressed core without losing your place.</p>
       </div>
       <div class="home-bottom-grid">
-        <article class="home-bottom-card">
-          <h3>PMN Agent Guide</h3>
-          <p>Use the updated guide when you want a cleaner workflow for ChatGPT, Gemini, or future backend-backed PMN Agent deployments.</p>
-          <a class="home-bottom-link" href="pmn-agent-guide.html">Open guide</a>
+        <article class="home-bottom-card notes-card">
+          <div class="annot-header">
+            <span class="annot-lbl">Notes</span>
+            <div class="annot-actions">
+              <button id="home-notes-save" class="annot-btn" type="button">Save</button>
+            </div>
+          </div>
+          <textarea id="home-notes-ta" class="home-bottom-notes" placeholder="Your notes on this section, manuscript thread, or PMN question…"></textarea>
+          <span id="home-notes-saved" class="home-bottom-status"></span>
         </article>
         <article class="home-bottom-card">
-          <h3>Fastest entry points</h3>
-          <p>For orientation, compressed architecture, and operational use, jump straight into the sections that stabilize the rest of the framework.</p>
+          <h3>Feedback or suggestions?</h3>
+          <p>If something is unclear, broken, or worth revising, send it directly instead of letting it disappear into a tab graveyard.</p>
+          <div class="home-bottom-actions">
+            <a id="home-feedback-link" class="home-bottom-link" href="mailto:novadharma.pm@gmail.com?subject=PMN%20Site%20Feedback">Email &rarr;</a>
+            <a id="home-twitter-link" class="home-bottom-link" href="https://twitter.com/intent/tweet?text=Feedback%20for%20PMN%20Reader%20%40nova_dharma_pm" target="_blank" rel="noopener">Twitter &rarr;</a>
+          </div>
+        </article>
+        <article class="home-bottom-card">
+          <h3>Useful next moves</h3>
+          <p>Keep one foot in the manuscript while you move between orientation, compression, and deployment guidance.</p>
           <div class="home-bottom-list">
             <span>Orientation: how-to-read-this-document</span>
             <span>Compressed core: 15.15</span>
-            <span>Operational cases: 17.0</span>
+            <span>Agent workflow: PMN Agent Guide</span>
           </div>
-          <button class="home-bottom-link path-btn" type="button" data-open-id="how-to-read-this-document">Open orientation</button>
-        </article>
-        <article class="home-bottom-card">
-          <h3>Ask better PMN questions</h3>
-          <p>High-yield prompts name the arrangement, the structural variable, and the evidential gap instead of asking for generic ideology summaries.</p>
-          <div class="home-bottom-list">
-            <span>Name the section or case.</span>
-            <span>Ask for variables, failure modes, and counter-evidence.</span>
-            <span>Demand citations back into the manuscript.</span>
+          <div class="home-bottom-actions">
+            <button class="home-bottom-link path-btn" type="button" data-open-id="how-to-read-this-document">Open orientation</button>
+            <button class="home-bottom-link path-btn" type="button" data-open-id="15.15">Open 15.15</button>
           </div>
-          <button class="home-bottom-link path-btn" type="button" data-open-id="15.15">Open compressed core</button>
-        </article>
-        <article class="home-bottom-card">
-          <h3>Check the answer against PMN</h3>
-          <p>Do not trust smooth answers by default. Compare them against glossary terms, cited sections, and the local notes you build while reading.</p>
-          <div class="home-bottom-list">
-            <span>Open glossary for term discipline.</span>
-            <span>Use notes to track unresolved tensions.</span>
-            <span>Cross-check with related sections.</span>
-          </div>
-          <button class="home-bottom-link" type="button" id="home-bottom-glossary">Open glossary</button>
         </article>
       </div>
     </div>
@@ -2598,6 +2604,23 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       setTimeout(function(){msg.classList.remove('show');},1600);
     }catch(e){}
   }
+  function loadHomeNotes(){
+    var ta=g('home-notes-ta'); if(!ta) return;
+    try{ta.value=localStorage.getItem('pmn-home-notes')||'';}catch(e){ta.value='';}
+  }
+  function saveHomeNotes(){
+    var ta=g('home-notes-ta'); if(!ta) return;
+    try{
+      if(ta.value.trim()) localStorage.setItem('pmn-home-notes',ta.value);
+      else localStorage.removeItem('pmn-home-notes');
+      var msg=g('home-notes-saved');
+      if(msg){
+        msg.textContent='Saved';
+        msg.classList.add('show');
+        setTimeout(function(){msg.classList.remove('show');},1600);
+      }
+    }catch(e){}
+  }
   // ── Export
   function exportSec(){
     var s=PARTS[curP].subs[curS];
@@ -2723,7 +2746,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     // Feedback mailto
     var subj=encodeURIComponent('PMN Reader - Feedback: '+s.id+' '+s.title);
     var body=encodeURIComponent('Section: '+s.id+' - '+s.title+'\nMy comment:\n');
-    var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:nova@novadharma.org?subject='+subj+'&body='+body);
+    var fl=g('feedback-link'); if(fl) fl.setAttribute('href','mailto:novadharma.pm@gmail.com?subject='+subj+'&body='+body);
     var tweet=encodeURIComponent('Re: PMN Reader - '+s.id+' '+s.title+' @nova_dharma_pm');
     var tl=g('twitter-link'); if(tl) tl.setAttribute('href','https://twitter.com/intent/tweet?text='+tweet);
   }
@@ -2930,6 +2953,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   injectReadingPaths();
   upgradeHomeAi();
   initReaderScale();
+  loadHomeNotes();
   pip();
   buildTOC();
   // Init sb-tog position
@@ -2941,6 +2965,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   renderSuggestions();
   g('footer-home').addEventListener('click', function(){ nav('home'); });
   g('home-bottom-glossary') && g('home-bottom-glossary').addEventListener('click', showGL);
+  g('home-notes-save') && g('home-notes-save').addEventListener('click', saveHomeNotes);
   g('font-sm') && g('font-sm').addEventListener('click', function(){ setReaderScale(0.92); });
   g('font-md') && g('font-md').addEventListener('click', function(){ setReaderScale(1); });
   g('font-lg') && g('font-lg').addEventListener('click', function(){ setReaderScale(1.08); });
