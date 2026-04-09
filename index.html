@@ -1191,7 +1191,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 <p class="hero-sub">By Nova Dharma &mdash; Version 102</p>
       <p class="hero-quote">&ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;</p>
       <div class="hero-stats">
-        <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">97</span></div>
+        <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">102</span></div>
         <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
         <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
         <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
@@ -1470,6 +1470,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           <div class="annot-header">
             <span class="annot-lbl">Notes</span>
             <div class="annot-actions">
+              <button id="home-notes-copy" class="annot-btn" type="button">Copy</button>
+              <button id="home-notes-clear" class="annot-btn" type="button">Clear</button>
               <button id="home-notes-save" class="annot-btn" type="button">Save</button>
             </div>
           </div>
@@ -1495,6 +1497,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           <div class="home-bottom-actions">
             <button class="home-bottom-link path-btn" type="button" data-open-id="how-to-read-this-document">Open orientation</button>
             <button class="home-bottom-link path-btn" type="button" data-open-id="15.15">Open 15.15</button>
+            <a class="home-bottom-link" href="pmn-agent-guide.html">Open guide</a>
           </div>
         </article>
       </div>
@@ -2613,13 +2616,31 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     try{
       if(ta.value.trim()) localStorage.setItem('pmn-home-notes',ta.value);
       else localStorage.removeItem('pmn-home-notes');
-      var msg=g('home-notes-saved');
-      if(msg){
-        msg.textContent='Saved';
-        msg.classList.add('show');
-        setTimeout(function(){msg.classList.remove('show');},1600);
-      }
+      showHomeNotesStatus('Saved');
     }catch(e){}
+  }
+  function showHomeNotesStatus(text){
+    var msg=g('home-notes-saved');
+    if(!msg) return;
+    msg.textContent=text;
+    msg.classList.add('show');
+    setTimeout(function(){msg.classList.remove('show');},1600);
+  }
+  function clearHomeNotes(){
+    var ta=g('home-notes-ta'); if(!ta) return;
+    ta.value='';
+    try{localStorage.removeItem('pmn-home-notes');}catch(e){}
+    showHomeNotesStatus('Cleared');
+  }
+  function copyHomeNotes(){
+    var ta=g('home-notes-ta'); if(!ta) return;
+    var text=ta.value.trim();
+    if(!text){ showHomeNotesStatus('Nothing to copy'); return; }
+    navigator.clipboard.writeText(text).then(function(){
+      showHomeNotesStatus('Copied');
+    }).catch(function(){
+      showHomeNotesStatus('Copy blocked');
+    });
   }
   // ── Export
   function exportSec(){
@@ -2965,6 +2986,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   renderSuggestions();
   g('footer-home').addEventListener('click', function(){ nav('home'); });
   g('home-bottom-glossary') && g('home-bottom-glossary').addEventListener('click', showGL);
+  g('home-notes-copy') && g('home-notes-copy').addEventListener('click', copyHomeNotes);
+  g('home-notes-clear') && g('home-notes-clear').addEventListener('click', clearHomeNotes);
   g('home-notes-save') && g('home-notes-save').addEventListener('click', saveHomeNotes);
   g('font-sm') && g('font-sm').addEventListener('click', function(){ setReaderScale(0.92); });
   g('font-md') && g('font-md').addEventListener('click', function(){ setReaderScale(1); });
