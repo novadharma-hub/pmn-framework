@@ -272,7 +272,8 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 #home-view.on{display:block;overflow-y:auto}
 
 #home-view > *{max-width:1000px;margin-left:auto;margin-right:auto;padding-left:2.5rem;padding-right:2.5rem}
-#home-view > .hero{padding-top:0;max-width:none;margin-left:0;margin-right:0;padding-left:0;padding-right:0}
+#home-view > .hero-stage{padding-top:0;max-width:none;margin-left:0;margin-right:0;padding-left:0;padding-right:0}
+#home-view > .hero-stage > .hero{padding-top:0;max-width:none;margin-left:0;margin-right:0;padding-left:0;padding-right:0}
 #home-view > .hero-suggestions{padding-top:0}
 #home-view > .marquee-wrap{max-width:none;margin-left:0;margin-right:0;padding-left:0;padding-right:0}
 #home-view > .anatomy-section{max-width:1000px}
@@ -284,17 +285,27 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 
 /* Radial glow background — dark mode: deep + warm red orb */
 /* Light mode: soft warm parchment with centered glow */
+.hero-stage{
+  position:relative;
+  min-height:165vh;
+  max-width:none;
+  --cover-progress:0;
+}
 .hero{
   position:relative;
   text-align:center;
   padding:2rem 2.5rem;
   margin-bottom:0;
   overflow:hidden;
-  min-height:100vh;
+  min-height:calc(100vh - 52px);
+  height:calc(100vh - 52px);
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  position:sticky;
+  top:0;
+  isolation:isolate;
 
   /* Light mode: rich warm parchment with centered warm glow */
   background:
@@ -345,10 +356,14 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   max-width:820px;width:100%;margin:0 auto;
 }
 
-/* Will-change for parallax */
 .hero-parallax{
-  will-change:transform;
-  /* No transition — raw scroll feel for true parallax lag */
+  will-change:transform,opacity,filter;
+  transform-origin:50% 38%;
+  transform:
+    translate3d(0,calc(var(--cover-progress,0) * -11vh),0)
+    scale(calc(1 - var(--cover-progress,0) * 0.055));
+  opacity:calc(1 - var(--cover-progress,0) * 0.22);
+  filter:blur(calc(var(--cover-progress,0) * 1.35px));
 }
 
 .hero-orn{
@@ -495,6 +510,21 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 }
 .hero-scroll::after{content:'↓';font-size:1rem;color:var(--acc)}
 @keyframes hero-pulse{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}50%{opacity:.8;transform:translateX(-50%) translateY(5px)}}
+.hero-stage.cover-active .hero-scroll{
+  opacity:calc(.7 - var(--cover-progress,0) * .95);
+}
+.hero-stage.cover-active::after{
+  content:'';
+  position:absolute;
+  inset:auto 0 0;
+  height:22vh;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(54,36,23,.08));
+  opacity:calc(.2 + var(--cover-progress,0) * .8);
+}
+[data-theme=dark] .hero-stage.cover-active::after{
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.35));
+}
 
 /* ── Suggestions ── */
 .hero-suggestions{padding:1.5rem 2.5rem;display:none}
@@ -727,7 +757,8 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   #hb-gl{display:none}
   #hb-kbd{display:none}
   #theme-tog{padding:.3rem .5rem;font-size:.65rem}
-  .hero{padding-bottom:1.8rem}
+  .hero-stage{min-height:128svh}
+  .hero{padding-bottom:1.8rem;min-height:calc(100svh - 52px);height:calc(100svh - 52px)}
   .hero-h1{font-size:1.7rem;line-height:1.2}
   .hero-sub{font-size:.95rem}
   .hero-stats{gap:1rem;flex-wrap:wrap;justify-content:center}
@@ -1185,36 +1216,38 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 <div class="views-shell" style="flex:1;overflow:hidden;position:relative;min-height:0">
 
 <div id="home-view" class="view on">
-  <div class="hero">
-    <canvas id="particle-canvas"></canvas>
-    <div class="hero-inner hero-parallax" id="hero-parallax">
-      <div class="hero-orn">A Framework for Navigating Material Reality</div>
-      <h1 class="hero-h1">Progressive<br>Materialist<br><em>Naturalism</em></h1>
-<p class="hero-sub">By Nova Dharma &mdash; Version 102</p>
-      <p class="hero-quote">&ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;</p>
-      <div class="hero-stats">
-        <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">102</span></div>
-        <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
-        <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
-        <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
+  <div class="hero-stage cover-active" id="hero-stage">
+    <div class="hero">
+      <canvas id="particle-canvas"></canvas>
+      <div class="hero-inner hero-parallax" id="hero-parallax">
+        <div class="hero-orn">A Framework for Navigating Material Reality</div>
+        <h1 class="hero-h1">Progressive<br>Materialist<br><em>Naturalism</em></h1>
+  <p class="hero-sub">By Nova Dharma &mdash; Version 102</p>
+        <p class="hero-quote">&ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;</p>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">102</span></div>
+          <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
+          <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
+          <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
+        </div>
+        <div class="hero-ctas">
+          <div class="cta-row-main">
+            <button id="cta-begin" class="cta-p cta-main">Contents / Index <span style="opacity:.55;font-size:.65rem">[C]</span></button>
+            <button id="cta-resume" class="cta-p secondary" style="display:none">Resume &rarr; <span style="opacity:.55;font-size:.65rem">[R]</span></button>
+          </div>
+          <div class="cta-row-s">
+            <button id="cta-gl" class="cta-s">Key Terms <span style="opacity:.5;font-size:.62rem">[?]</span></button>
+  <a href="https://drive.google.com/drive/folders/1y1c7XCnYGLAydALvTTAR5EQeUrz4zCjS?usp=sharing" class="cta-s" target="_blank" rel="noopener">Download PDF &darr;</a>
+            <a href="pmn-agent-guide.html" class="cta-s">AI Agent &rarr; <span style="opacity:.5;font-size:.62rem">[A]</span></a>
+          </div>
+          <div class="cta-row-util">
+            <button id="cta-notes" class="cta-util">My Notes</button>
+            <button id="layout-tog" class="cta-util"></button>
+          </div>
+        </div>
       </div>
-      <div class="hero-ctas">
-        <div class="cta-row-main">
-          <button id="cta-begin" class="cta-p cta-main">Contents / Index <span style="opacity:.55;font-size:.65rem">[C]</span></button>
-          <button id="cta-resume" class="cta-p secondary" style="display:none">Resume &rarr; <span style="opacity:.55;font-size:.65rem">[R]</span></button>
-        </div>
-        <div class="cta-row-s">
-          <button id="cta-gl" class="cta-s">Key Terms <span style="opacity:.5;font-size:.62rem">[?]</span></button>
-<a href="https://drive.google.com/drive/folders/1y1c7XCnYGLAydALvTTAR5EQeUrz4zCjS?usp=sharing" class="cta-s" target="_blank" rel="noopener">Download PDF &darr;</a>
-          <a href="pmn-agent-guide.html" class="cta-s">AI Agent &rarr; <span style="opacity:.5;font-size:.62rem">[A]</span></a>
-        </div>
-        <div class="cta-row-util">
-          <button id="cta-notes" class="cta-util">My Notes</button>
-          <button id="layout-tog" class="cta-util"></button>
-        </div>
-      </div>
+      <div class="hero-scroll">Scroll</div>
     </div>
-    <div class="hero-scroll">Scroll</div>
   </div>
   <div id="suggestions" class="hero-suggestions" style="display:none"></div>
 
@@ -3049,31 +3082,49 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     });
   }
 
-  // ── Parallax scroll on hero (sticky slow scroll effect) ──
+  // ── Homepage cover hold: sticky stage with eased release ──
   (function(){
-    var homeView = g('home-view');
-    var parallaxEl = document.getElementById('hero-parallax');
-    var scrollIndicator = document.querySelector('.hero-scroll');
-    if(!homeView || !parallaxEl) return;
+    var homeView=g('home-view');
+    var stage=g('hero-stage');
+    if(!homeView||!stage) return;
 
-    var ticking = false;
-    function onScroll(){
-      if(!ticking){
-        requestAnimationFrame(function(){
-          var scrollY = homeView.scrollTop;
-          // Parallax: move inner content up at 30% scroll speed (lag effect)
-          var translateY = scrollY * 0.55;
-          parallaxEl.style.transform = 'translateY(' + translateY + 'px)';
-          // Fade scroll indicator
-          if(scrollIndicator){
-            scrollIndicator.style.opacity = Math.max(0, 0.7 - scrollY / 150);
-          }
-          ticking = false;
-        });
-        ticking = true;
+    var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current=0;
+    var target=0;
+    var rafId=0;
+
+    function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+    function easeOutCubic(v){ return 1-Math.pow(1-v,3); }
+
+    function computeTarget(){
+      var releaseRange=Math.max(stage.offsetHeight-homeView.clientHeight,1);
+      target=clamp((homeView.scrollTop-stage.offsetTop)/releaseRange,0,1);
+      if(reduceMotion) current=target;
+    }
+
+    function paint(){
+      if(!reduceMotion){
+        current += (target-current)*0.12;
+        if(Math.abs(target-current)<0.001) current=target;
+      }
+      var eased=easeOutCubic(current);
+      stage.style.setProperty('--cover-progress', eased.toFixed(4));
+      if(!reduceMotion&&current!==target){
+        rafId=requestAnimationFrame(paint);
+      } else {
+        rafId=0;
       }
     }
-    homeView.addEventListener('scroll', onScroll, { passive: true });
+
+    function syncCover(){
+      computeTarget();
+      if(rafId) return;
+      rafId=requestAnimationFrame(paint);
+    }
+
+    homeView.addEventListener('scroll', syncCover, { passive:true });
+    window.addEventListener('resize', syncCover);
+    syncCover();
   })();
   // Resume reading
   var _pos=loadPos();
@@ -4193,4 +4244,3 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 </div>
 </body>
 </html>
-
