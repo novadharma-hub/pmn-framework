@@ -704,6 +704,34 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   color:var(--acc);
 }
 .toc-intro-copy p{font-size:.95rem;line-height:1.72;color:var(--ink2)}
+.toc-intro-actions{
+  display:flex;
+  gap:.65rem;
+  flex-wrap:wrap;
+  margin-top:1rem;
+}
+.toc-intro-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.4rem;
+  min-height:40px;
+  padding:.6rem .95rem;
+  border:1px solid var(--rule2);
+  background:transparent;
+  cursor:pointer;
+  font-family:var(--f-mono);
+  font-size:.68rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--mute);
+  transition:color .15s,border-color .15s,background .15s;
+}
+.toc-intro-link:hover{color:var(--acc);border-color:var(--acc);background:rgba(255,255,255,.18)}
+[data-theme=dark] .toc-intro-link:hover{background:rgba(255,255,255,.03)}
+.toc-intro-link.primary{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+[data-theme=dark] .toc-intro-link.primary{color:#000}
+.toc-intro-link.primary:hover{background:transparent;color:var(--acc)}
 .toc-intro-stats{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -993,6 +1021,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .reading-paths-grid{grid-template-columns:1fr}
   .reading-paths-meta{display:grid;grid-template-columns:1fr}
   .toc-intro{grid-template-columns:1fr;padding:1rem 1.1rem .5rem}
+  .toc-intro-actions{display:grid;grid-template-columns:1fr}
   .toc-intro-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
   .home-bottom{padding:2rem 1.4rem}
   .home-bottom-grid{grid-template-columns:1fr}
@@ -1757,7 +1786,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
 </div><!-- /home-view -->
 <div id="srch-view" class="view">
-  <p class="sv-hdr" id="sv-hdr">Key Terms &mdash; Glossary</p>
+  <p class="sv-hdr" id="sv-hdr">Contents &mdash; Manuscript Map</p>
   <div id="sv-body"></div>
   <!-- TOC panel — shown when Contents is active -->
   <div id="toc-panel" style="display:none">
@@ -1776,6 +1805,12 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       <div class="toc-intro-copy">
         <strong>Reading room</strong>
         <p>Use Contents as an editorial map rather than a raw index: open a part from the top, scan section IDs at speed, or jump straight from foundations into formulas, institutions, and cases.</p>
+        <div class="toc-intro-actions">
+          <button class="toc-intro-link primary" type="button" data-toc-open-id="how-to-read-this-document">Start with orientation</button>
+          <button class="toc-intro-link" type="button" data-toc-open-part="I">Open foundations</button>
+          <button class="toc-intro-link" type="button" data-toc-open-id="15.15">Open 15.15</button>
+          <button class="toc-intro-link" type="button" data-toc-open-glossary="1">Open glossary</button>
+        </div>
       </div>
       <div class="toc-intro-stats">
         <div class="toc-stat"><strong>Part groups</strong><span id="toc-stat-parts">—</span></div>
@@ -2584,7 +2619,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     if(tocPanel){ tocPanel.style.display='block'; tocPanel.scrollTop=0; }
     if(svBody){ svBody.innerHTML=''; svBody.style.display='none'; }
     var hdr = g('sv-hdr');
-    if(hdr) hdr.textContent = 'Contents';
+    if(hdr) hdr.textContent = 'Contents — Manuscript Map';
     var si = g('srch-in'); if(si) si.value='';
     var sc = g('srch-clr'); if(sc) sc.style.display='none';
     buildTOC(); pip();
@@ -3226,6 +3261,22 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   g('toc-grid').addEventListener('click', function(e){
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
     jumpToSection(+btn.getAttribute('data-pi'),+btn.getAttribute('data-si'),{origin:getJumpOrigin()});
+  });
+  g('toc-panel').addEventListener('click', function(e){
+    var btn=e.target.closest('[data-toc-open-id],[data-toc-open-part],[data-toc-open-glossary]');
+    if(!btn) return;
+    if(btn.hasAttribute('data-toc-open-glossary')){
+      showGL();
+      return;
+    }
+    var sid=btn.getAttribute('data-toc-open-id');
+    var part=btn.getAttribute('data-toc-open-part');
+    if(sid){
+      var resolvedId=resolveSectionId(sid);
+      if(LOOK[resolvedId]) jumpToSection(LOOK[resolvedId].pi,LOOK[resolvedId].si,{origin:getJumpOrigin()});
+      return;
+    }
+    if(part) openPartStart(part,{origin:getJumpOrigin()});
   });
   g('sb-list').addEventListener('click', function(e){
     var btn=e.target.closest('[data-pi]'); if(!btn) return;
@@ -4231,11 +4282,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     var svBody=document.getElementById('sv-body');
     if(!srchIn||!svBody) return;
 
-    // Inject semantic badge into header
+    // Inject local ranking badge into header
     var badge=document.createElement('button');
     badge.id='semantic-badge';
-    badge.textContent='Semantic ✦';
-    badge.title='Toggle AI-powered semantic search (re-ranks results with Claude)';
+    badge.textContent='Deep scan ✦';
+    badge.title='Toggle deeper local ranking for manuscript search';
     var hdrR=document.getElementById('hdr-r');
     if(hdrR) hdrR.insertBefore(badge,hdrR.firstChild);
 
@@ -4243,7 +4294,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     badge.addEventListener('click',function(){
       semanticOn=!semanticOn;
       badge.classList.toggle('active',semanticOn);
-      badge.textContent=semanticOn?'Semantic ✦ ON':'Semantic ✦';
+      badge.textContent=semanticOn?'Deep scan ✦ ON':'Deep scan ✦';
     });
 
     // Inject semantic bar above sv-body
@@ -4257,7 +4308,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       var q=srchIn.value.trim();
       if(!semanticOn||q.length<4){ semBar.classList.remove('visible'); return; }
       clearTimeout(semTimer);
-      semBar.textContent='✦ Semantic: analyzing "'+q+'"…';
+      semBar.textContent='✦ Deep scan: locally ranking "'+q+'"…';
       semBar.classList.add('visible');
       semTimer=setTimeout(function(){ doSemantic(q); }, 700);
     });
@@ -4284,31 +4335,15 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       scored.sort(function(a,b){return b.score-a.score;});
       var top=scored.slice(0,8);
       if(!top.length){semBar.textContent='No results for "'+q+'"';return;}
-      semBar.innerHTML='✦ Semantic: <strong>'+top.length+'</strong> candidates — asking Claude to rank…';
-
-      var ctx=top.map(function(t,i){return (i+1)+'. ['+t.s.id+'] '+t.s.title+' — '+truncate(t.s.html,180);}).join('\n');
-      var prompt='User searches PMN for: "'+q+'"\n\nCandidates:\n'+ctx+'\n\nReturn ONLY a JSON array of section IDs, most relevant first. Example: ["7.3","6.3"]. No other text.';
-
-      callClaude([{role:'user',content:prompt}],'You are a search ranking assistant for the PMN manuscript. Return ONLY a JSON array of section IDs.',
-        function(text){
-          try{
-            var ids=JSON.parse(text.replace(/```json|```/g,'').trim());
-            var reordered=[];
-            ids.forEach(function(id){var m=top.find(function(t){return t.s.id===id;});if(m)reordered.push(m);});
-            top.forEach(function(t){if(!reordered.find(function(r){return r.s.id===t.s.id;}))reordered.push(t);});
-            semBar.innerHTML='✦ Semantic: <strong>'+reordered.length+'</strong> results ranked by Claude';
-            renderSemantic(q,reordered);
-          }catch(ex){ semBar.innerHTML='✦ Semantic (keyword): <strong>'+top.length+'</strong> results'; renderSemantic(q,top); }
-        },
-        function(){ semBar.innerHTML='✦ Semantic (keyword): <strong>'+top.length+'</strong> results'; renderSemantic(q,top); }
-      );
+      semBar.innerHTML='✦ Deep scan: <strong>'+top.length+'</strong> locally ranked matches';
+      renderSemantic(q,top);
     }
 
     function renderSemantic(q,results){
       var tocPanel=document.getElementById('toc-panel');
       if(tocPanel) tocPanel.style.display='none';
       svBody.style.display='';
-      if(svHdr) svHdr.textContent='Semantic: "'+q+'"';
+      if(svHdr) svHdr.textContent='Deep scan: "'+q+'"';
       var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
       var h=results.map(function(item){
         var snip=truncate(item.s.html,200).replace(re,'<mark>$1</mark>');
@@ -4499,11 +4534,5 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
 </script>
 
-<!-- ── Highlight toolbar ── -->
-<div id="hl-toolbar" class="hl-toolbar" role="toolbar" aria-label="Text actions">
-  <span class="hl-toolbar-label">▌</span>
-  <button class="hl-toolbar-btn" id="hl-btn-save" type="button">Highlight</button>
-  <button class="hl-toolbar-btn" id="hl-btn-ask" type="button">Ask Claude</button>
-</div>
 </body>
 </html>
