@@ -62,10 +62,41 @@ body::before {
 /* screen-frame removed */
 
 /* ── Theses section (home) — accordion ── */
-.theses-section{background:var(--bg2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:3rem 2.5rem;position:relative;z-index:2}
-[data-theme=dark] .theses-section{background:#141414;border-color:var(--rule)}
-.theses-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 2.5fr;gap:4rem;align-items:start}
-.theses-lead h2{font-family:var(--f-head);font-size:2.8rem;text-transform:uppercase;line-height:1.1;color:var(--ink);position:sticky;top:1rem}
+.theses-section{
+  background:
+    radial-gradient(circle at 18% 18%,rgba(173,52,30,.08),transparent 34%),
+    linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 28%),
+    var(--bg2);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:3rem 2.5rem;position:relative;z-index:2
+}
+[data-theme=dark] .theses-section{
+  background:
+    radial-gradient(circle at 18% 18%,rgba(192,39,26,.12),transparent 34%),
+    linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0) 28%),
+    #141414;
+  border-color:var(--rule)
+}
+.theses-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:minmax(250px,.95fr) minmax(0,2.35fr);gap:2.6rem;align-items:start}
+.theses-lead{
+  position:relative;
+  padding:1.35rem 1.4rem 1.45rem;
+  border:1px solid var(--rule);
+  background:rgba(255,255,255,.26);
+  box-shadow:10px 10px 0 rgba(122,106,88,.08);
+}
+[data-theme=dark] .theses-lead{background:rgba(255,255,255,.02);box-shadow:10px 10px 0 rgba(0,0,0,.28)}
+.theses-lead::before{
+  content:'Axiom map';
+  display:inline-block;
+  margin-bottom:1rem;
+  font-family:var(--f-mono);
+  font-size:.68rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--acc);
+}
+.theses-lead h2{font-family:var(--f-head);font-size:3rem;text-transform:uppercase;line-height:1.02;color:var(--ink);position:static;margin-bottom:.7rem}
 [data-theme=dark] .theses-lead h2{color:var(--acc)}
 .theses-lead-sub{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute2);margin-top:.8rem;line-height:1.7}
 .theses-tier-list{margin-top:1.5rem;display:flex;flex-direction:column;gap:.55rem}
@@ -108,15 +139,62 @@ body::before {
 .thesis-item.open .thesis-body{display:block}
 
 /* â”€â”€ Reading paths â”€â”€ */
-.reading-paths{padding:3rem 2.5rem 4rem;max-width:1000px;margin:0 auto;position:relative;z-index:2}
+.reading-paths{
+  padding:3rem 2.5rem 4rem;max-width:1080px;margin:0 auto;position:relative;z-index:2;
+  background:
+    linear-gradient(180deg,rgba(173,52,30,.05),rgba(173,52,30,0) 22%),
+    transparent;
+}
 .reading-paths-hdr{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem;padding-bottom:.8rem;border-bottom:1px solid var(--rule)}
-.reading-paths-hdr h2{font-family:var(--f-head);font-size:1.6rem;text-transform:uppercase;letter-spacing:.02em;color:var(--ink)}
+.reading-paths-hdr h2{font-family:var(--f-head);font-size:1.9rem;text-transform:uppercase;letter-spacing:.02em;color:var(--ink);line-height:1.05}
 .reading-paths-hdr p{max-width:620px;font-family:var(--f-body);font-size:.98rem;line-height:1.7;color:var(--ink2)}
+.reading-paths-meta{display:flex;gap:.8rem;flex-wrap:wrap;margin:0 0 1.4rem}
+.reading-stat{
+  min-width:150px;
+  padding:.8rem .95rem;
+  border:1px solid var(--rule);
+  background:rgba(255,255,255,.22);
+  font-family:var(--f-mono);
+  text-transform:uppercase;
+}
+[data-theme=dark] .reading-stat{background:rgba(255,255,255,.02)}
+.reading-stat strong{display:block;font-size:.72rem;letter-spacing:.14em;color:var(--mute2);margin-bottom:.25rem}
+.reading-stat span{font-size:.74rem;letter-spacing:.08em;color:var(--ink)}
 .reading-paths-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-.path-card{border:1px solid var(--rule);background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 70%),var(--bg2);padding:1.3rem 1.35rem 1.45rem;box-shadow:5px 5px 0 rgba(122,106,88,.13)}
-[data-theme=dark] .path-card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 70%),#121212;box-shadow:5px 5px 0 rgba(0,0,0,.35)}
+.path-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--rule);
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 72%),var(--bg2);
+  padding:1.4rem 1.45rem 1.55rem;
+  box-shadow:8px 8px 0 rgba(122,106,88,.11);
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+[data-theme=dark] .path-card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 70%),#121212;box-shadow:8px 8px 0 rgba(0,0,0,.32)}
+.path-card::before{
+  content:'';
+  position:absolute;
+  inset:0 auto auto 0;
+  width:100%;
+  height:3px;
+  background:linear-gradient(90deg,var(--acc),transparent 70%);
+}
+.path-card::after{
+  content:attr(data-ghost);
+  position:absolute;
+  right:.9rem;
+  top:.7rem;
+  font-family:var(--f-head);
+  font-size:2.6rem;
+  line-height:1;
+  color:rgba(173,52,30,.12);
+  pointer-events:none;
+}
+[data-theme=dark] .path-card::after{color:rgba(192,39,26,.18)}
+.path-card:hover{transform:translateY(-4px);box-shadow:12px 12px 0 rgba(122,106,88,.14);border-color:rgba(173,52,30,.45)}
+[data-theme=dark] .path-card:hover{box-shadow:12px 12px 0 rgba(0,0,0,.4)}
 .path-kicker{display:block;margin-bottom:.5rem;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
-.path-card h3{font-family:var(--f-head);font-size:1.08rem;line-height:1.3;color:var(--ink);margin-bottom:.6rem}
+.path-card h3{font-family:var(--f-head);font-size:1.16rem;line-height:1.24;color:var(--ink);margin-bottom:.6rem;max-width:16ch}
 .path-card p{font-family:var(--f-body);font-size:.94rem;line-height:1.72;color:var(--ink2);margin-bottom:1rem}
 .path-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:transparent;border:1px solid var(--rule2);padding:.55rem .95rem;cursor:pointer;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.11em;text-transform:uppercase;color:var(--mute);transition:color .15s,border-color .15s,background .15s}
 .path-btn:hover{color:var(--acc);border-color:var(--acc);background:rgba(0,0,0,.02)}
@@ -151,8 +229,22 @@ body::before {
 .home-bottom-actions .home-bottom-link{flex:1;min-width:140px}
 /* ── Srch-view (contents + glossary + search) ── */
 #srch-view{flex-direction:column;height:100%;overflow:hidden}
-.sv-hdr{font-family:'Libre Baskerville',serif;font-size:1.6rem;font-weight:400;color:var(--ink);padding:2rem 2.5rem 1.2rem;border-bottom:1px solid var(--rule);display:block;flex-shrink:0;margin-bottom:0;letter-spacing:-.01em}
-#toc-panel{overflow-y:auto;flex:1}
+.sv-hdr{
+  font-family:'Libre Baskerville',serif;font-size:1.7rem;font-weight:400;color:var(--ink);
+  padding:2rem 2.5rem 1.15rem;border-bottom:1px solid var(--rule);display:block;flex-shrink:0;margin-bottom:0;letter-spacing:-.01em;
+  background:linear-gradient(180deg,rgba(173,52,30,.06),rgba(173,52,30,0));
+}
+#toc-panel{
+  overflow-y:auto;flex:1;
+  background:
+    radial-gradient(circle at 92% 6%,rgba(173,52,30,.06),transparent 25%),
+    linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 24%);
+}
+[data-theme=dark] #toc-panel{
+  background:
+    radial-gradient(circle at 92% 6%,rgba(192,39,26,.08),transparent 25%),
+    linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0) 24%);
+}
 #sv-body{overflow-y:auto;flex:1;padding:2rem 2.5rem 8rem}
 #particle-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
 
@@ -287,7 +379,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 /* Light mode: soft warm parchment with centered glow */
 .hero-stage{
   position:relative;
-  min-height:190vh;
+  min-height:212vh;
   max-width:none;
   --cover-progress:0;
 }
@@ -516,17 +608,23 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 
 /* Scroll indicator */
 .hero-scroll{
-  position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);
-  font-family:'Source Code Pro',monospace;font-size:.6rem;
+  position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);
+  font-family:'Source Code Pro',monospace;font-size:.66rem;
   letter-spacing:.2em;text-transform:uppercase;color:var(--mute2);
   display:flex;flex-direction:column;align-items:center;gap:.55rem;
   animation:hero-pulse 2.5s ease-in-out infinite;
-  z-index:1;opacity:.82;
+  z-index:1;opacity:.96;
+  padding:.7rem .95rem .8rem;
+  border:1px solid rgba(173,52,30,.25);
+  background:rgba(242,232,214,.72);
+  backdrop-filter:blur(8px);
 }
-.hero-scroll-label{white-space:nowrap}
+.hero-scroll-label{white-space:nowrap;color:var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.45)}
+[data-theme=dark] .hero-scroll{background:rgba(0,0,0,.45);border-color:rgba(192,39,26,.35)}
+[data-theme=dark] .hero-scroll-label{color:var(--ink)}
 .hero-scroll-line{
-  width:88px;height:1px;position:relative;overflow:hidden;
-  background:rgba(122,99,82,.22);
+  width:112px;height:2px;position:relative;overflow:hidden;
+  background:rgba(122,99,82,.34);
 }
 [data-theme=dark] .hero-scroll-line{background:rgba(200,191,178,.16)}
 .hero-scroll-line::after{
@@ -546,7 +644,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 }
 @keyframes hero-pulse{0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}50%{opacity:.8;transform:translateX(-50%) translateY(5px)}}
 .hero-stage.cover-active .hero-scroll{
-  opacity:calc(.7 - var(--cover-progress,0) * .95);
+  opacity:calc(.96 - var(--cover-progress,0) * .98);
 }
 .hero-stage.cover-active::after{
   content:'';
@@ -581,14 +679,77 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 /* ── TOC ── */
 .toc-lbl{font-family:'Source Code Pro',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink2);padding:1.6rem 2.5rem .6rem;border-bottom:1px solid var(--rule);display:block}
 .toc-grid{display:flex;flex-direction:column}
-.toc-part{border-bottom:1px solid var(--rule);padding:1.2rem 2.5rem 1rem}
+.toc-intro{
+  max-width:1100px;
+  margin:0 auto;
+  padding:1.4rem 2.5rem .8rem;
+  display:grid;
+  grid-template-columns:minmax(0,1.6fr) minmax(280px,.9fr);
+  gap:1rem 1.3rem;
+  align-items:start;
+}
+.toc-intro-copy{
+  padding:1rem 1.1rem 1.15rem;
+  border-left:3px solid var(--acc);
+  background:rgba(255,255,255,.22);
+}
+[data-theme=dark] .toc-intro-copy{background:rgba(255,255,255,.03)}
+.toc-intro-copy strong{
+  display:block;
+  margin-bottom:.45rem;
+  font-family:var(--f-mono);
+  font-size:.7rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--acc);
+}
+.toc-intro-copy p{font-size:.95rem;line-height:1.72;color:var(--ink2)}
+.toc-intro-stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:.6rem;
+}
+.toc-stat{
+  border:1px solid var(--rule);
+  background:rgba(255,255,255,.18);
+  padding:.85rem .8rem;
+}
+[data-theme=dark] .toc-stat{background:rgba(255,255,255,.02)}
+.toc-stat strong{
+  display:block;
+  font-family:var(--f-mono);
+  font-size:.64rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--mute2);
+  margin-bottom:.25rem;
+}
+.toc-stat span{
+  font-family:var(--f-head);
+  font-size:1.05rem;
+  color:var(--acc);
+}
+.toc-part{
+  border-bottom:1px solid var(--rule);
+  padding:1.2rem 2.5rem 1.1rem;
+  position:relative;
+}
+.toc-part::before{
+  content:'';
+  position:absolute;
+  left:2.5rem;
+  top:1.15rem;
+  bottom:1rem;
+  width:1px;
+  background:linear-gradient(180deg,rgba(173,52,30,.26),rgba(173,52,30,0));
+}
 .toc-ph{display:flex;gap:.8rem;align-items:baseline;margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:1px solid var(--rule2);cursor:pointer;width:100%;text-align:left;background:none;border-top:none;border-left:none;border-right:none;color:inherit}
 .toc-ph:hover .toc-pname{color:var(--acc)}
 .toc-pnum{font-family:'Source Code Pro',monospace;font-size:.72rem;font-weight:500;letter-spacing:.1em;color:var(--acc);flex-shrink:0;min-width:55px;text-transform:uppercase}
-.toc-pname{font-family:'Libre Baskerville',serif;font-size:.95rem;font-weight:400;color:var(--ink);line-height:1.25;transition:color .15s}
+.toc-pname{font-family:'Libre Baskerville',serif;font-size:1.02rem;font-weight:400;color:var(--ink);line-height:1.22;transition:color .15s}
 .toc-subs{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-.toc-sub{display:flex;align-items:baseline;gap:.45rem;padding:.3rem .4rem;width:100%;text-align:left;background:none;border:none;cursor:pointer;transition:background .1s;color:inherit}
-.toc-sub:hover{background:var(--bg2)}
+.toc-sub{display:flex;align-items:baseline;gap:.45rem;padding:.4rem .55rem .4rem .4rem;width:100%;text-align:left;background:none;border:none;cursor:pointer;transition:background .1s,transform .12s;color:inherit;border-radius:2px}
+.toc-sub:hover{background:var(--bg2);transform:translateX(4px)}
 .toc-sub:hover .toc-sname{color:var(--acc)}
 .toc-sub.intro{grid-column:1/-1;padding-left:0;opacity:.75}
 .toc-sub.intro .toc-sname{font-style:normal}
@@ -798,7 +959,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   #hb-gl{display:none}
   #hb-kbd{display:none}
   #theme-tog{padding:.3rem .5rem;font-size:.65rem}
-  .hero-stage{min-height:146svh}
+  .hero-stage{min-height:156svh}
   .hero{padding-bottom:1.8rem;min-height:calc(100svh - 52px);height:calc(100svh - 52px)}
   .hero-h1{font-size:1.7rem;line-height:1.2}
   .hero-sub{font-size:.95rem}
@@ -826,9 +987,13 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .home-ai-actions{flex-direction:column}
   .theses-inner{grid-template-columns:1fr;gap:1.5rem;padding:0}
   .theses-lead h2{font-size:2rem;position:static}
+  .theses-lead{padding:1.15rem 1.1rem 1.2rem;box-shadow:none}
   .theses-tier-chip,.thesis-tier-hdr{font-size:.72rem}
   .reading-paths{padding:2rem 1.4rem 3rem}
   .reading-paths-grid{grid-template-columns:1fr}
+  .reading-paths-meta{display:grid;grid-template-columns:1fr}
+  .toc-intro{grid-template-columns:1fr;padding:1rem 1.1rem .5rem}
+  .toc-intro-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
   .home-bottom{padding:2rem 1.4rem}
   .home-bottom-grid{grid-template-columns:1fr}
   .home-bottom-card.notes-card{grid-column:auto}
@@ -1324,7 +1489,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       <div class="theses-lead">
         <h2>Axiom<br>Structure</h2>
         <p class="theses-lead-sub">PMN operates on three tiers. Tier 1 axioms are design choices defended by argument. Tier 2 are structural commitments revisable only by architectural failure. Tier 3 are empirical hypotheses explicitly revisable.</p>
-        <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:.5rem">
+        <div class="theses-tier-list" style="margin-top:1.5rem;display:flex;flex-direction:column;gap:.5rem">
           <div style="font-family:var(--f-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)">● Tier 1 — Foundational</div>
           <div style="font-family:var(--f-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)">● Tier 2 — Structural</div>
           <div style="font-family:var(--f-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)">● Tier 3 — Empirical</div>
@@ -1466,11 +1631,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   <div class="home-ai-section">
     <div class="home-ai-inner" style="max-width:1000px;margin:0 auto">
       <div class="home-ai-hdr">PMN Agent Terminal ✦</div>
-<p class="home-ai-desc">Build a PMN manuscript context pack from the reader, glossary, and related sections, then send it to ChatGPT or Gemini. Inline provider mode still needs a secure backend before it can be fully enabled.</p>
+<p class="home-ai-desc">Build a PMN manuscript context pack from the reader, glossary, and related sections, then send it to ChatGPT or Gemini. In this static build, grounded handoff is the working path; inline answers still need a secure backend.</p>
 
       <!-- Mode tabs -->
       <div class="hai-tabs" id="hai-tabs">
-        <button class="hai-tab active" data-mode="claude">Inline backend</button>
+        <button class="hai-tab active" data-mode="claude">Backend required</button>
         <button class="hai-tab" data-mode="chatgpt">ChatGPT ↗</button>
         <button class="hai-tab" data-mode="gemini">Gemini ↗</button>
       </div>
@@ -1481,12 +1646,13 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
           <div class="hcl-placeholder">&gt;&gt; STATIC BUILD DETECTED — inline provider is parked until a secure backend is connected.<br>&gt;&gt; Use ChatGPT/Gemini tabs for grounded handoff, or open the PMN Agent Guide below.</div>
         </div>
         <div class="home-ai-row" style="margin-top:.8rem">
-          <input type="text" id="home-ai-input" class="home-ai-input" placeholder="e.g. Explain the custodian problem and how PMN would detect it…" autocomplete="off">
-          <button id="home-ai-btn" class="home-ai-btn">Test inline</button>
+          <input type="text" id="home-ai-input" class="home-ai-input" placeholder="Inline answers need a secure backend in this build." autocomplete="off" disabled>
+          <button id="home-ai-btn" class="home-ai-btn" disabled>Backend required</button>
         </div>
         <div class="home-ai-actions">
-          <button id="home-chat-clear" class="pmn-agent-btn" type="button">Clear chat</button>
-          <button id="home-ai-export" class="pmn-agent-btn" type="button">Export chat</button>
+          <button id="home-chatgpt-switch" class="pmn-agent-btn primary" type="button">Use ChatGPT handoff</button>
+          <button id="home-gemini-switch" class="pmn-agent-btn" type="button">Use Gemini handoff</button>
+          <a class="pmn-agent-btn" href="pmn-agent-guide.html">Open guide</a>
         </div>
       </div>
 
@@ -1606,6 +1772,17 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         <div class="quote-dots" id="quote-dots"></div>
       </div>
     </div>
+    <div class="toc-intro">
+      <div class="toc-intro-copy">
+        <strong>Reading room</strong>
+        <p>Use Contents as an editorial map rather than a raw index: open a part from the top, scan section IDs at speed, or jump straight from foundations into formulas, institutions, and cases.</p>
+      </div>
+      <div class="toc-intro-stats">
+        <div class="toc-stat"><strong>Part groups</strong><span id="toc-stat-parts">—</span></div>
+        <div class="toc-stat"><strong>Sections</strong><span id="toc-stat-sections">—</span></div>
+        <div class="toc-stat"><strong>Read</strong><span id="toc-stat-read">0%</span></div>
+      </div>
+    </div>
     <p class="toc-lbl">Contents</p>
     <div class="toc-grid" id="toc-grid"></div>
   </div>
@@ -1672,7 +1849,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         </div>
         <!-- Reader mode tabs -->
         <div class="hai-tabs" id="reader-hai-tabs" style="margin-bottom:.8rem">
-          <button class="hai-tab active" data-rmode="claude">Inline backend</button>
+          <button class="hai-tab active" data-rmode="claude">Backend required</button>
           <button class="hai-tab" data-rmode="chatgpt">ChatGPT ↗</button>
           <button class="hai-tab" data-rmode="gemini">Gemini ↗</button>
         </div>
@@ -1680,18 +1857,19 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         <div id="reader-panel-claude">
           <div id="pmn-chat-log" class="pmn-chat-log" aria-live="polite">&gt;&gt; INLINE BACKEND MODE IS NOT LIVE IN THIS STATIC BUILD.<br>&gt;&gt; Use ChatGPT/Gemini handoff for grounded answers, or connect a secure backend for in-page replies.</div>
           <div class="pmn-chat-input-row">
-            <input type="text" id="pmn-chat-in" class="pmn-chat-in" placeholder="e.g. How does this connect to the custodian problem?" autocomplete="off" />
-            <button id="pmn-chat-send" class="pmn-chat-send" type="button">Ask</button>
+            <input type="text" id="pmn-chat-in" class="pmn-chat-in" placeholder="Inline answers need a secure backend in this build." autocomplete="off" disabled />
+            <button id="pmn-chat-send" class="pmn-chat-send" type="button" disabled>Backend required</button>
           </div>
           <div id="pmn-chat-status" class="pmn-agent-status"></div>
           <div class="pmn-agent-actions" style="margin-top:.6rem">
-            <button id="pmn-chat-clear" class="pmn-agent-btn" type="button">Clear chat</button>
+            <button id="reader-chatgpt-switch" class="pmn-agent-btn primary" type="button">Use ChatGPT handoff</button>
+            <button id="reader-gemini-switch" class="pmn-agent-btn" type="button">Use Gemini handoff</button>
             <button id="export-btn" class="pmn-agent-btn" type="button">Export section</button>
           </div>
         </div>
         <!-- ChatGPT redirect -->
         <div id="reader-panel-chatgpt" style="display:none">
-          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">This prompt is grounded in the active section plus related sections. Paste it into ChatGPT.</p>
+          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">This prompt is grounded in the active section plus related sections, so ChatGPT receives manuscript context immediately instead of a bare question.</p>
           <select id="reader-chatgpt-mode" class="home-ai-select" style="width:100%;margin-bottom:.7rem;font-size:.72rem">
             <option value="agent">Mode: PMN Analyst</option>
             <option value="diagnostic">Mode: Diagnostic Only</option>
@@ -1708,7 +1886,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
         </div>
         <!-- Gemini redirect -->
         <div id="reader-panel-gemini" style="display:none">
-          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">This prompt is grounded in the active section plus related sections. Paste it into Gemini.</p>
+          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">This prompt is grounded in the active section plus related sections, so Gemini receives manuscript context immediately instead of a bare question.</p>
           <select id="reader-gemini-mode" class="home-ai-select" style="width:100%;margin-bottom:.7rem;font-size:.72rem">
             <option value="agent">Mode: PMN Analyst</option>
             <option value="diagnostic">Mode: Diagnostic Only</option>
@@ -2330,11 +2508,16 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       +'<h2>Reading Paths</h2>'
       +'<p>Not every reader needs to start the same way. These entry paths give faster on-ramps into PMN depending on whether you want foundations, power analysis, formula compression, or applied cases.</p>'
       +'</div>'
+      +'<div class="reading-paths-meta">'
+      +'<div class="reading-stat"><strong>Entry logic</strong><span>Choose by task, not by obligation.</span></div>'
+      +'<div class="reading-stat"><strong>Fastest route</strong><span>15.15 for compression, then backfill.</span></div>'
+      +'<div class="reading-stat"><strong>Best for first pass</strong><span>Start with foundations, not slogans.</span></div>'
+      +'</div>'
       +'<div class="reading-paths-grid">'
-      +'<article class="path-card"><span class="path-kicker">Path 01</span><h3>Foundation First</h3><p>Start with epistemology, ontology, and the biological floor before touching doctrine or applied cases.</p><button class="path-btn" type="button" data-open-part="I">Open Part I</button></article>'
-      +'<article class="path-card"><span class="path-kicker">Path 02</span><h3>Power and Institutions</h3><p>Jump straight into how power, legitimacy, and institutional capture shape the arrangement beneath the narrative.</p><button class="path-btn" type="button" data-open-part="VI">Open Part VI</button></article>'
-      +'<article class="path-card"><span class="path-kicker">Path 03</span><h3>Compressed Core</h3><p>Use the short-form PMN core when you need the framework fast before going back for the full architecture.</p><button class="path-btn" type="button" data-open-id="15.15">Open 15.15</button></article>'
-      +'<article class="path-card"><span class="path-kicker">Path 04</span><h3>Cases and the Individual</h3><p>Move from abstract structure into historical cases and the practical demands PMN places on a person who holds it.</p><button class="path-btn" type="button" data-open-part="XVII">Open Part XVII</button></article>'
+      +'<article class="path-card" data-ghost="01"><span class="path-kicker">Path 01</span><h3>Foundation First</h3><p>Start with epistemology, ontology, and the biological floor before touching doctrine or applied cases.</p><button class="path-btn" type="button" data-open-part="I">Open Part I</button></article>'
+      +'<article class="path-card" data-ghost="02"><span class="path-kicker">Path 02</span><h3>Power and Institutions</h3><p>Jump straight into how power, legitimacy, and institutional capture shape the arrangement beneath the narrative.</p><button class="path-btn" type="button" data-open-part="VI">Open Part VI</button></article>'
+      +'<article class="path-card" data-ghost="03"><span class="path-kicker">Path 03</span><h3>Compressed Core</h3><p>Use the short-form PMN core when you need the framework fast before going back for the full architecture.</p><button class="path-btn" type="button" data-open-id="15.15">Open 15.15</button></article>'
+      +'<article class="path-card" data-ghost="04"><span class="path-kicker">Path 04</span><h3>Cases and the Individual</h3><p>Move from abstract structure into historical cases and the practical demands PMN places on a person who holds it.</p><button class="path-btn" type="button" data-open-part="XVII">Open Part XVII</button></article>'
       +'</div>';
     ai.parentNode.insertBefore(wrap, ai);
   }
@@ -2368,6 +2551,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     g('st-p').textContent=PARTS.length;
     g('st-s').textContent=tot;
     g('st-r').textContent=pct+'%';
+    if(g('toc-stat-parts')) g('toc-stat-parts').textContent=PARTS.length;
+    if(g('toc-stat-sections')) g('toc-stat-sections').textContent=tot;
+    if(g('toc-stat-read')) g('toc-stat-read').textContent=pct+'%';
   }
 
   function nav(v){
@@ -3140,11 +3326,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
     function easeOutCubic(v){ return 1-Math.pow(1-v,3); }
     function smoothStep(v){ return v*v*(3-2*v); }
-    function holdRatio(){ return window.innerWidth<=680 ? 0.12 : 0.22; }
+    function holdRatio(){ return window.innerWidth<=680 ? 0.18 : 0.3; }
     function shapeProgress(raw){
       var hold=holdRatio();
-      if(raw<=hold) return raw*0.08;
-      return 0.018 + smoothStep((raw-hold)/(1-hold))*0.982;
+      if(raw<=hold) return raw*0.05;
+      return 0.015 + smoothStep((raw-hold)/(1-hold))*0.985;
     }
 
     function computeTarget(){
@@ -3156,7 +3342,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
     function paint(){
       if(!reduceMotion){
-        current += (target-current)*0.1;
+        current += (target-current)*0.075;
         if(Math.abs(target-current)<0.001) current=target;
       }
       var eased=easeOutCubic(current);
@@ -3623,6 +3809,18 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     }
     tabs.forEach(function(btn){btn.addEventListener('click',function(){switchTab(btn.getAttribute('data-mode'));});});
     switchTab('chatgpt');
+    var homeChatgptSwitch=document.getElementById('home-chatgpt-switch');
+    var homeGeminiSwitch=document.getElementById('home-gemini-switch');
+    if(homeChatgptSwitch) homeChatgptSwitch.addEventListener('click',function(){
+      switchTab('chatgpt');
+      var q=document.getElementById('hai-chatgpt-q');
+      if(q) q.focus();
+    });
+    if(homeGeminiSwitch) homeGeminiSwitch.addEventListener('click',function(){
+      switchTab('gemini');
+      var q=document.getElementById('hai-gemini-q');
+      if(q) q.focus();
+    });
 
     // Claude inline
     var chatLog=document.getElementById('home-chat-log');
@@ -3657,11 +3855,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       callClaude(msgs,SYS,function(text){
         thinkEl.className='hcl-body'; thinkEl.textContent=text;
         history.push({role:'assistant',content:text});
-        if(btn){btn.disabled=false;btn.textContent='Test inline';}
+        if(btn){btn.disabled=true;btn.textContent='Backend required';}
         chatLog.scrollTop=chatLog.scrollHeight;
       },function(err){
         thinkEl.className='hcl-body'; thinkEl.textContent='Error: '+err;
-        if(btn){btn.disabled=false;btn.textContent='Test inline';}
+        if(btn){btn.disabled=true;btn.textContent='Backend required';}
       });
     }
 
@@ -3719,6 +3917,18 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     }
     tabs.forEach(function(btn){btn.addEventListener('click',function(){switchTab(btn.getAttribute('data-rmode'));});});
     switchTab('chatgpt');
+    var readerChatgptSwitch=document.getElementById('reader-chatgpt-switch');
+    var readerGeminiSwitch=document.getElementById('reader-gemini-switch');
+    if(readerChatgptSwitch) readerChatgptSwitch.addEventListener('click',function(){
+      switchTab('chatgpt');
+      var q=document.getElementById('reader-chatgpt-q');
+      if(q) q.focus();
+    });
+    if(readerGeminiSwitch) readerGeminiSwitch.addEventListener('click',function(){
+      switchTab('gemini');
+      var q=document.getElementById('reader-gemini-q');
+      if(q) q.focus();
+    });
 
     var chatLog=document.getElementById('pmn-chat-log');
     var chatIn=document.getElementById('pmn-chat-in');
@@ -3760,11 +3970,11 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       callClaude(msgs,SYS,function(text){
         thinkEl.className='pmn-chat-body'; thinkEl.textContent=text;
         rHistory.push({role:'assistant',content:text});
-        if(sendBtn){sendBtn.disabled=false;sendBtn.textContent='Ask';}
+        if(sendBtn){sendBtn.disabled=true;sendBtn.textContent='Backend required';}
         chatLog.scrollTop=chatLog.scrollHeight;
       },function(err){
         thinkEl.className='pmn-chat-body'; thinkEl.textContent='Error: '+err;
-        if(sendBtn){sendBtn.disabled=false;sendBtn.textContent='Ask';}
+        if(sendBtn){sendBtn.disabled=true;sendBtn.textContent='Backend required';}
       });
     }
 
