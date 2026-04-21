@@ -455,6 +455,10 @@ def replace_version_labels(index_html: str, version_label: str) -> str:
         (r"\bPMN v\d+(?:\.\d+)?\b", f"PMN {version_label}"),
         (r"\bV\d+(?:\.\d+)?\s+MANUSCRIPT\b", f"V{version_number} MANUSCRIPT"),
         (
+            r'(<span class="stat-lbl">Version</span><span class="stat-val">)\d+(?:\.\d+)?(</span>)',
+            rf"\g<1>{version_number}\g<2>",
+        ),
+        (
             r"\bProgressive Materialist Naturalism v\d+(?:\.\d+)?\b",
             f"Progressive Materialist Naturalism {version_label}",
         ),
