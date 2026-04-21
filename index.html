@@ -435,26 +435,33 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   top:0;
   isolation:isolate;
 
-  /* Light mode: rich warm parchment with centered warm glow */
+  /* Light mode: premium modern dynamic aesthetic */
   background:
-    radial-gradient(ellipse 100% 80% at 50% 45%,
-      rgba(242,232,214,1) 0%,
-      rgba(232,217,192,1) 40%,
-      rgba(210,185,150,1) 70%,
-      rgba(185,155,110,1) 100%),
+    radial-gradient(ellipse 120% 120% at 50% -20%, 
+      rgba(255, 255, 255, 0.95) 0%, 
+      rgba(248, 244, 238, 0.85) 30%, 
+      rgba(235, 225, 210, 0.6) 70%,
+      rgba(215, 200, 180, 0.3) 100%),
+    radial-gradient(circle at 15% 50%, 
+      rgba(230, 200, 160, 0.25) 0%, 
+      transparent 50%),
+    radial-gradient(circle at 85% 30%, 
+      rgba(200, 170, 140, 0.2) 0%, 
+      transparent 50%),
     var(--bg);
 }
 [data-theme=dark] .hero{
+  /* Dark mode: Smoother gradients to prevent color banding (patah-patah) */
   background:
-    radial-gradient(ellipse 72% 52% at 50% 32%,
-      rgba(180,20,20,.16) 0%,
-      rgba(120,10,10,.09) 34%,
-      transparent 68%),
-    radial-gradient(ellipse 82% 62% at 50% 54%,
-      rgba(24,0,0,.22) 0%,
-      rgba(10,0,0,.12) 54%,
-      transparent 78%),
-    linear-gradient(180deg,rgba(255,255,255,.012),rgba(255,255,255,0) 24%),
+    radial-gradient(ellipse 100% 100% at 50% -10%,
+      rgba(40, 10, 10, 0.9) 0%,
+      rgba(20, 5, 5, 0.7) 40%,
+      transparent 100%),
+    radial-gradient(ellipse 70% 70% at 50% 40%,
+      rgba(150, 15, 15, 0.12) 0%,
+      rgba(80, 5, 5, 0.05) 50%,
+      transparent 80%),
+    linear-gradient(180deg, rgba(255,255,255,.015) 0%, transparent 20%),
     var(--bg);
 }
 
@@ -462,24 +469,27 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 .hero::before{
   content:'';position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(ellipse 120% 100% at 50% 50%,
-    transparent 40%,
-    rgba(100,60,30,.06) 70%,
-    rgba(80,40,20,.12) 100%);
+    transparent 50%,
+    rgba(140, 100, 70, 0.08) 80%,
+    rgba(100, 60, 40, 0.15) 100%);
 }
 [data-theme=dark] .hero::before{
   background:radial-gradient(ellipse 120% 100% at 50% 50%,
-    transparent 40%,
-    rgba(0,0,0,.24) 72%,
-    rgba(0,0,0,.52) 100%);
+    transparent 50%,
+    rgba(0,0,0,.3) 75%,
+    rgba(0,0,0,.65) 100%);
 }
 
-/* Grain texture overlay */
+/* Grain texture overlay (Dithering to reduce banding) */
 .hero::after{
   content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
-  opacity:.04;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.05;mix-blend-mode:multiply;
 }
-[data-theme=dark] .hero::after{opacity:.035;mix-blend-mode:soft-light}
+[data-theme=dark] .hero::after{
+  opacity:.06; /* Slightly increased opacity to mask gradient banding */
+  mix-blend-mode:overlay;
+}
 
 .hero-inner{
   position:relative;z-index:1;
@@ -1485,6 +1495,125 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 .hl-meta{font-family:'Source Code Pro',monospace;font-size:.62rem;color:var(--mute);letter-spacing:.08em}
 .hl-del{position:absolute;top:.4rem;right:.5rem;background:none;border:none;color:var(--mute);cursor:pointer;font-size:.8rem;line-height:1;padding:.15rem .3rem}
 .hl-del:hover{color:var(--acc)}
+/* --- VISUAL & FEATURE UPGRADES --- */
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); border-left: 1px solid var(--rule); }
+::-webkit-scrollbar-thumb { background: var(--rule2); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--acc); }
+
+/* Smooth View Transitions */
+@keyframes viewFadeIn {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+#home-view.on, #srch-view.on, #reader-view.on {
+  animation: viewFadeIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Drop Caps for Reader View */
+#prose > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--f-head);
+  font-size: 3.8em;
+  line-height: 0.8;
+  padding-top: 0.1em;
+  padding-right: 0.1em;
+  padding-left: 0.05em;
+  color: var(--acc);
+  text-transform: uppercase;
+}
+
+/* Glassmorphism Header */
+#hdr {
+  background: color-mix(in srgb, var(--hdr) 80%, transparent) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+[data-theme=dark] #hdr {
+  background: color-mix(in srgb, #0d0d0d 80%, transparent) !important;
+}
+
+/* Glossary Tooltips CSS */
+.glossary-term {
+  border-bottom: 1px dashed var(--acc);
+  cursor: help;
+  position: relative;
+  transition: color 0.2s, background 0.2s;
+}
+.glossary-term:hover {
+  color: var(--acc);
+  background: color-mix(in srgb, var(--acc) 10%, transparent);
+}
+.glossary-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0.7rem 1rem;
+  border-radius: 2px;
+  font-family: var(--f-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  width: max-content;
+  max-width: 260px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+  z-index: 9999;
+  text-transform: none;
+  text-align: left;
+}
+[data-theme=dark] .glossary-tooltip { background: var(--rule); color: var(--ink); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+.glossary-term:hover .glossary-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Focus Mode CSS */
+.focus-mode #sidebar { display: none !important; }
+.focus-mode #reader-col { margin: 0 auto; max-width: 800px; }
+.focus-mode #hdr { transform: translateY(-100%); transition: transform 0.3s; }
+.focus-mode-btn {
+  font-family: var(--f-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em;
+  background: transparent; border: 1px solid var(--rule); color: var(--mute);
+  padding: 0.3rem 0.6rem; cursor: pointer; transition: all 0.2s; margin-left: auto;
+}
+.focus-mode-btn:hover { color: var(--acc); border-color: var(--acc); }
+.focus-mode-btn.on { background: var(--acc); color: var(--bg); border-color: var(--acc); }
+
+/* Reading Progress Bar */
+#reading-progress {
+  position: fixed;
+  top: 52px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--acc);
+  z-index: 99;
+  transition: width 0.1s;
+  pointer-events: none;
+}
+.focus-mode #reading-progress { top: 0; }
+
+/* Copy Link Anchor */
+.copy-anchor {
+  opacity: 0;
+  margin-left: 0.5rem;
+  color: var(--mute);
+  text-decoration: none;
+  font-size: 0.8em;
+  transition: opacity 0.2s, color 0.2s;
+  cursor: pointer;
+  user-select: none;
+}
+#prose h2:hover .copy-anchor, #prose h3:hover .copy-anchor { opacity: 1; }
+.copy-anchor:hover { color: var(--acc); }
 </style>
 </head>
 <body>
@@ -1501,6 +1630,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
 <div class="page-shell">
 <div id="topbar"></div>
+<div id="reading-progress"></div>
 <header id="hdr">
   <button id="hdr-logo">PMN</button>
   <div id="hdr-srch">
@@ -1510,6 +1640,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     <button id="srch-clr">&times;</button>
   </div>
   <div id="hdr-r">
+    <button id="focus-btn" class="focus-mode-btn desktop-only" title="Toggle Focus Mode">Focus</button>
     <div id="pip"><div id="pip-track"><div id="pip-fill"></div></div></div>
     <button class="hbtn" id="hb-home">Contents</button>
     <button class="hbtn hsm" id="hb-gl">Glossary</button>
@@ -4733,6 +4864,146 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     checkView();
     if(isHome) animate();
   }, 100);
+
+  // --- PMN Custom UI Enhancements ---
+  // 1. Reading Progress Bar
+  const progressBar = document.getElementById('reading-progress');
+  const readerMain = document.getElementById('reader-main');
+  function updateProgress() {
+    if (!progressBar) return;
+    let scrollPos = 0, totalHeight = 0;
+    if (readerMain && readerMain.scrollHeight > readerMain.clientHeight) {
+       scrollPos = readerMain.scrollTop;
+       totalHeight = readerMain.scrollHeight - readerMain.clientHeight;
+    } else {
+       scrollPos = window.scrollY;
+       totalHeight = document.body.scrollHeight - window.innerHeight;
+    }
+    progressBar.style.width = totalHeight > 0 ? ((scrollPos / totalHeight) * 100) + '%' : '0%';
+  }
+  window.addEventListener('scroll', updateProgress, {passive: true});
+  if (readerMain) readerMain.addEventListener('scroll', updateProgress, {passive: true});
+
+  // 2. Focus Mode Toggle
+  const focusBtn = document.getElementById('focus-btn');
+  if (focusBtn) {
+    focusBtn.addEventListener('click', function() {
+      document.body.classList.toggle('focus-mode-active');
+      if (document.body.classList.contains('focus-mode-active')) {
+        focusBtn.textContent = 'Exit Focus';
+        focusBtn.classList.add('active');
+      } else {
+        focusBtn.textContent = 'Focus';
+        focusBtn.classList.remove('active');
+      }
+      setTimeout(() => { if (typeof resize === 'function') resize(); }, 300);
+    });
+  }
+
+  // 3. Glossary Tooltips (Inject dynamically)
+  function injectGlossaryTooltips() {
+    const prose = document.getElementById('prose');
+    const glScript = document.getElementById('d-gl');
+    if (!prose || !glScript) return;
+    
+    let glData = null;
+    try { glData = JSON.parse(glScript.textContent); } catch(e) { return; }
+    if (!glData) return;
+    
+    const terms = Object.keys(glData).sort((a,b) => b.length - a.length);
+    if (!terms.length) return;
+    
+    const escapedTerms = terms.map(t => t.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
+    const termRegex = new RegExp(`\\b(${escapedTerms.join('|')})\\b`, 'gi');
+
+    prose.querySelectorAll('p').forEach(p => {
+       if (p.hasAttribute('data-glossary-processed')) return;
+       const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, null, false);
+       const nodesToReplace = [];
+       while (walker.nextNode()) {
+         const node = walker.currentNode;
+         let parent = node.parentNode, skip = false;
+         while(parent && parent !== p) {
+           if (parent.tagName === 'A' || parent.classList.contains('glossary-term')) { skip = true; break; }
+           parent = parent.parentNode;
+         }
+         if (!skip && node.nodeValue.match(termRegex)) nodesToReplace.push(node);
+       }
+       nodesToReplace.forEach(node => {
+         const fragment = document.createDocumentFragment();
+         let lastIndex = 0, text = node.nodeValue;
+         text.replace(termRegex, (match, p1, offset) => {
+            if (offset > lastIndex) fragment.appendChild(document.createTextNode(text.substring(lastIndex, offset)));
+            const termKey = terms.find(t => t.toLowerCase() === match.toLowerCase());
+            if (termKey && glData[termKey]) {
+                const termSpan = document.createElement('span');
+                termSpan.className = 'glossary-term';
+                termSpan.textContent = match;
+                const tooltipSpan = document.createElement('span');
+                tooltipSpan.className = 'glossary-tooltip';
+                tooltipSpan.textContent = glData[termKey].length > 120 ? glData[termKey].substring(0, 120) + '...' : glData[termKey];
+                termSpan.appendChild(tooltipSpan);
+                fragment.appendChild(termSpan);
+            } else {
+                fragment.appendChild(document.createTextNode(match));
+            }
+            lastIndex = offset + match.length;
+            return match;
+         });
+         if (lastIndex < text.length) fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+         node.parentNode.replaceChild(fragment, node);
+       });
+       p.setAttribute('data-glossary-processed', 'true');
+    });
+  }
+
+  // 4. Copy Link Anchors
+  function injectCopyAnchors() {
+    const prose = document.getElementById('prose');
+    if (!prose) return;
+    prose.querySelectorAll('h2[id], h3[id], h4[id]').forEach(heading => {
+      if (heading.querySelector('.copy-anchor')) return;
+      const anchor = document.createElement('span');
+      anchor.className = 'copy-anchor';
+      anchor.innerHTML = '&#128279;';
+      anchor.title = 'Copy link to this section';
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const url = window.location.href.split('#')[0] + '#' + heading.id;
+        navigator.clipboard.writeText(url).then(() => {
+          anchor.innerHTML = '&#10003;'; anchor.classList.add('copied');
+          setTimeout(() => { anchor.innerHTML = '&#128279;'; anchor.classList.remove('copied'); }, 2000);
+        });
+      });
+      heading.appendChild(anchor);
+    });
+  }
+
+  // 5. Ctrl+K Search Command Palette
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      const searchInput = document.getElementById('srch-part');
+      if (searchInput) {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+        searchInput.focus();
+      }
+    }
+  });
+
+  const proseObserver = new MutationObserver((mutations) => {
+    let shouldUpdate = false;
+    mutations.forEach(m => { if (m.addedNodes.length > 0) shouldUpdate = true; });
+    if (shouldUpdate) {
+      injectCopyAnchors();
+      clearTimeout(window._glTimeout);
+      window._glTimeout = setTimeout(injectGlossaryTooltips, 300);
+      updateProgress();
+    }
+  });
+  const proseEl = document.getElementById('prose');
+  if (proseEl) proseObserver.observe(proseEl, { childList: true, subtree: false });
+
 })();
 
 </script>
