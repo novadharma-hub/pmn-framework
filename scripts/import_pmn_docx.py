@@ -514,8 +514,14 @@ def resolve_docx_path(value: str | None) -> Path:
     script_dir = Path(__file__).resolve().parent
     search_roots = [
         cwd,
+        cwd / "Docx",
+        cwd / "docx",
         cwd / "Framework docx",
+        cwd.parent / "Docx",
+        cwd.parent / "docx",
         cwd.parent / "Framework docx",
+        script_dir.parent / "Docx",
+        script_dir.parent / "docx",
         script_dir.parent / "Framework docx",
     ]
     for root in search_roots:
