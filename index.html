@@ -451,17 +451,12 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
     var(--bg);
 }
 [data-theme=dark] .hero{
-  /* Dark mode: Smoother gradients to prevent color banding (patah-patah) */
+  /* Dark mode: Smooth central circular glow to eliminate banding */
   background:
-    radial-gradient(ellipse 100% 100% at 50% -10%,
-      rgba(40, 10, 10, 0.9) 0%,
-      rgba(20, 5, 5, 0.7) 40%,
+    radial-gradient(circle at 50% 45%,
+      rgba(120, 10, 10, 0.15) 0%,
+      rgba(40, 5, 5, 0.05) 60%,
       transparent 100%),
-    radial-gradient(ellipse 70% 70% at 50% 40%,
-      rgba(150, 15, 15, 0.12) 0%,
-      rgba(80, 5, 5, 0.05) 50%,
-      transparent 80%),
-    linear-gradient(180deg, rgba(255,255,255,.015) 0%, transparent 20%),
     var(--bg);
 }
 
@@ -474,10 +469,10 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
     rgba(100, 60, 40, 0.15) 100%);
 }
 [data-theme=dark] .hero::before{
-  background:radial-gradient(ellipse 120% 100% at 50% 50%,
-    transparent 50%,
-    rgba(0,0,0,.3) 75%,
-    rgba(0,0,0,.65) 100%);
+  background:radial-gradient(circle at 50% 50%,
+    transparent 55%,
+    rgba(0,0,0,.15) 80%,
+    rgba(0,0,0,.7) 100%);
 }
 
 /* Grain texture overlay (Dithering to reduce banding) */
