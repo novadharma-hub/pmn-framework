@@ -300,3 +300,80 @@ All 17 Parts + Part XIV (final position) + Coda + Preface + How to Read + Intell
 | Priority | Location | Change Needed |
 |----------|----------|---------------|
 | Low | Any new session | Continue monitoring for issues as framework develops |
+
+---
+
+## v114 (May 2026)
+**Source:** v113 → v114
+**Session:** Major architectural revision — becoming reframe (loop model + anti-foreclosure)
+
+### Conceptual change
+Previous versions positioned becoming as the "evaluative ceiling" — an independent positive criterion complementing suffering as the floor. This created an inversion problem: 4.5b explicitly stated "becoming is primary. Suffering matters because and insofar as it forecloses becoming." This framing made suffering derivative of becoming rather than primary, enabling the idealism the framework was designed to prevent.
+
+The revision: **becoming is not an independent evaluative criterion. It is the floor criterion applied temporally.** Foreclosing adaptive response capacity is a form of structural suffering imposed on future populations — same criterion, different timescale. The moral force of becoming comes entirely from the floor criterion, not from becoming as a positive aspiration.
+
+The sentient-material response loop model (developed in discussion of the ChatGPT becoming document) replaces the teleological account: suffering triggers responses → responses encode into patterns → patterns generate new capacities and new vulnerabilities → becoming emerges from this loop, not from a teleological destination.
+
+### Changes Made
+| # | Location | Change |
+|---|----------|--------|
+| 1 | **4.5b (full rewrite)** | Previous: ~57k chars, "becoming is primary / suffering is derivative." New: ~19k chars, loop model (sentient-material response dynamics), anti-foreclosure criterion, rejection of becoming-for-its-own-sake, functional/disfunctional distinction regrounded in suffering, distributional requirement regrounded. New paraIds: `2A45B001–2A45B015` |
+| 2 | **4.5b terminological note** | Added `2A45B015`: "Throughout this document, 'becoming' functions as shorthand for the anti-foreclosure criterion" — defines the shorthand for remainder of document |
+| 3 | 3.3 is-ought bridge | Revised ceiling language: "floor and ceiling are not two separate normative commitments" → "floor criterion and anti-foreclosure criterion are not two separate normative commitments." Multiple ceiling references reframed as temporal floor |
+| 4 | 3.0 two-level architecture | "life is ontological foundation, suffering is evaluative criterion, becoming is evaluative ceiling" → suffering as evaluative criterion, anti-foreclosure criterion as temporal extension |
+| 5 | How to Read Level 2 | "becoming is the evaluative ceiling (what counts as good)" → "becoming is shorthand for the anti-foreclosure criterion: what the floor criterion requires when traced temporally" |
+| 6 | 4.2 Better and Worse | "expand becoming for majority" → "preserve and expand adaptive response capacity across population" |
+| 7 | 14.3 axiom hierarchy | "suffering as evaluative criterion; becoming as evaluative ceiling" → anti-foreclosure framing |
+| 8 | Preface | Ceiling language in Preface fixed |
+| 9 | All callout boxes | "The evaluative ceiling:" → "The anti-foreclosure criterion (temporal extension of the floor):" |
+| 10 | Terminology throughout | 60+ replacements: evaluative ceiling → anti-foreclosure criterion; ceiling criterion → anti-foreclosure criterion; ceiling failure → anti-foreclosure failure; ceiling-level → anti-foreclosure level |
+
+### Terminology introduced
+- **anti-foreclosure criterion**: the floor criterion applied temporally — institutional arrangements must not foreclose adaptive response capacity in future populations
+- **sentient-material response loop**: the causal structure from which becoming emerges (suffering → response → encoded pattern → new capacity + new vulnerability → loop)
+
+### What did NOT change
+- S, R, B, V, E, W, If variable definitions (formula architecture unchanged)
+- Floor criterion definition (unchanged — 'becoming' was the problem, not 'suffering')
+- Applied analysis in Parts VII–XVII (ceiling shorthand acceptable there, now defined by 4.5b)
+- Anti-aggregation principle (unchanged, regrounded)
+- 4.5c Procedural Account of Becoming (already consistent with reformulation)
+- 4.5d Becoming as Epistemic Capacity (already consistent — temporal floor argument)
+
+### Key insight from ChatGPT discussion
+Becoming and suffering are co-constitutive, not opposite axes. Becoming can produce suffering (more awareness → more existential suffering capacity; deeper relations → more vulnerability to loss). "Becoming for its own sake" is not a PMN value. The loop produces becoming as a pattern, not as a destination. Evaluation runs through suffering, not through becoming.
+
+### Paragraph count
+v113: 3380 → v114: 3354 (−26: 4.5b rewritten more concisely, replaced verbose idealist framing with tighter loop model account)
+
+### New Para IDs (v114 — 4.5b rewrite)
+| Para ID | Content |
+|---------|---------|
+| `2A45B001` | Subhead: "How Becoming Emerges: The Sentient-Material Response Loop" |
+| `2A45B002` | Loop model — structure and mechanism |
+| `2A45B003` | Food example — illustrates loop without romanticizing |
+| `2A45B004` | Becoming produces suffering — co-constitutive, not opposite axes |
+| `2A45B005` | Subhead: "The Evaluative Criterion Remains Suffering: Why Becoming Matters" |
+| `2A45B006` | Anti-foreclosure argument — foreclosing response capacity = temporal floor violation |
+| `2A45B007` | "Becoming" shorthand clarification — what earlier versions got wrong |
+| `2A45B008` | Subhead: "Against Becoming for Its Own Sake" |
+| `2A45B009` | Rejection of progress-for-its-own-sake — historical record of becoming-without-evaluation |
+| `2A45B010` | Subhead: "Functional and Disfunctional Suffering: Regrounded" |
+| `2A45B011` | Functional/disfunctional regrounded in suffering criterion, not becoming criterion |
+| `2A45B012` | Subhead: "The Distributional Requirement" |
+| `2A45B013` | Distributional requirement — colonialism as temporal floor violation, not ceiling trade-off |
+| `2A45B014` | Relationship to capabilities tradition (Sen, Nussbaum) — PMN more minimal, more structurally demanding |
+| `2A45B015` | Terminological note — "becoming" = anti-foreclosure shorthand throughout document |
+
+### pmn-check audit
+0 errors, 12 warnings (expected baseline), 0 missing citations, 0 AI-ish phrases in new content
+
+---
+
+## Pending / Backlog
+*(No known gaps. Framework is substantively complete and internally consistent.)*
+
+Monitoring notes:
+- "becoming" appears 469x as shorthand — all defined by 2A45B015
+- 66x "anti-foreclosure" — new term introduced in v114
+- Next session: consider whether 4.5c and 4.5d need minor language updates to fully reflect loop model
