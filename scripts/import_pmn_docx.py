@@ -518,15 +518,18 @@ def resolve_docx_path(value: str | None) -> Path:
     script_dir = Path(__file__).resolve().parent
     search_roots = [
         cwd,
+        cwd / "docs",
         cwd / "Docx",
         cwd / "docx",
         cwd / "Framework docx",
         cwd.parent / "Docx",
         cwd.parent / "docx",
         cwd.parent / "Framework docx",
+        cwd.parent / "docs",
         script_dir.parent / "Docx",
         script_dir.parent / "docx",
         script_dir.parent / "Framework docx",
+        script_dir.parent / "docs",
     ]
     for root in search_roots:
         if not root.exists():
@@ -584,6 +587,11 @@ def main() -> int:
         default=None,
         help="Public-facing version label to keep in the site UI. Defaults to the current label already present in index.html.",
     )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Parse and summarize the DOCX without writing changes to index.html.",
+    )
     args = parser.parse_args()
 
     docx_path = resolve_docx_path(args.docx)
@@ -603,6 +611,13 @@ def main() -> int:
         or infer_public_version_label(html_text)
         or "v97"
     )
+    if args.dry_run:
+        print(f"Resolved DOCX: {mask_local_path(docx_path)}")
+        print(f"Target index: {mask_local_path(index_path)}")
+        print(f"Version label: {version_label}")
+        print(summarize(parts))
+        return 0
+
     html_text = replace_json_script(html_text, "d-parts", parts)
     html_text = replace_derived_structures(html_text, parts)
     html_text = replace_version_labels(html_text, version_label)
