@@ -11,7 +11,10 @@
 | v104 | PMN_Framework_v104.docx | Formula closure, live case update, structural fix |
 | v105 | PMN_Framework_v105.docx | Applied cases, practice architecture, non-Western counter-power, E variable integration |
 | v106 | PMN_Framework_v106.docx | High-priority additions + audit |
-| v107 | PMN_Framework_v107.docx | Current latest |
+| v107 | PMN_Framework_v107.docx | Language audit |
+| v108–v112 | (see changelog) | Structural fixes, formatting, hard read complete |
+| v113 | PMN_Framework_v113.docx | 4.1b Maqasid, 4.2 Better/Worse, Epicurean clarification |
+| v114 | PMN_Framework_v114.docx | Current latest — becoming reframe (loop model + anti-foreclosure) |
 
 ---
 
@@ -25,7 +28,7 @@ All line numbers refer to `word/document.xml` after unpacking.
 | Title | ~89 | Progressive Materialist Naturalism |
 | Subtitle | ~91 | A Framework for Navigating Material Reality |
 | Author | ~92 | Nova Dharma |
-| Version | 93 | Version 107 • 2026 |
+| Version | 93 | Version 114 • 2026 |
 
 ### Table of Contents
 - TOC paragraphs: lines ~95–480 (Normal style, not body content)
@@ -160,7 +163,7 @@ These are stable across repacks — use for targeted edits.
 | XI | 11.0–11.5 | Economics |
 | XII | 12.1–12.9 | Methodology |
 | XIII | 13.1–13.5 | Tensions |
-| XIV | 14.1–14.6 | Summary |
+| XIV | 14.1–14.6 | Summary (final Part — living document, positioned after XVII) |
 | XV | 15.0–15.15 | Formula Architecture |
 | XVI | 16.0–16.5 | Technology |
 | XVII | 17.0–17.8 | Cases + Individual |
@@ -266,5 +269,37 @@ grep -n "paraId=\"34415D7C\"" PMN_unpacked/word/document.xml
 | `1E111001` | Bibliography | Evans 1995 — *Embedded Autonomy* |
 | `1E111002` | Bibliography | Machiavelli 1513 — *The Prince* |
 
+
+## New Para IDs (v113)
+| Para ID | Location | Content |
+|---------|----------|---------|
+| `1E141B01`–`1E141B02` | 4.1b | Maqasid al-Shariah — convergent floor/becoming derivation |
+| `1E142001`–`1E142002` | 4.2 | Better and Worse + Epicurean clarification |
+
+## New Para IDs (v114 — becoming reframe)
+| Para ID | Location | Content |
+|---------|----------|---------|
+| `2A45B001` | 4.5b | Subhead: sentient-material response loop |
+| `2A45B002` | 4.5b | Loop model structure |
+| `2A45B003` | 4.5b | Food example |
+| `2A45B004` | 4.5b | Becoming produces suffering — co-constitutive |
+| `2A45B005` | 4.5b | Subhead: evaluative criterion remains suffering |
+| `2A45B006` | 4.5b | Anti-foreclosure argument |
+| `2A45B007` | 4.5b | Shorthand clarification |
+| `2A45B008` | 4.5b | Subhead: against becoming for its own sake |
+| `2A45B009` | 4.5b | Rejection of progress-for-its-own-sake |
+| `2A45B010` | 4.5b | Subhead: functional/disfunctional regrounded |
+| `2A45B011` | 4.5b | Functional/disfunctional regrounded |
+| `2A45B012` | 4.5b | Subhead: distributional requirement |
+| `2A45B013` | 4.5b | Distributional — colonialism as temporal floor |
+| `2A45B014` | 4.5b | Relationship to capabilities tradition |
+| `2A45B015` | 4.5b | Terminological note: becoming = anti-foreclosure shorthand |
+
+## Key new term (v114)
+**anti-foreclosure criterion**: the floor criterion applied temporally — institutional arrangements must not foreclose adaptive response capacity of future populations. Used 66x. "Becoming" (469x) is shorthand for this criterion throughout the document.
+
+## Part order (post-v108)
+Parts I–XIII → XV → XVI → XVII → **XIV** → Coda → Intellectual Debts → Bibliography
+
 ## Current version
-**v107** — PMN_Framework_v107.docx
+**v114** — PMN_Framework_v114.docx
