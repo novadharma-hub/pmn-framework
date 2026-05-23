@@ -109,10 +109,12 @@ def print_dashboard():
     
     # Premium Menu Option Rows
     print(" \033[97m[COMMAND MENU - SELECT ACTION]\033[0m")
-    print("  \033[92m[1]\033[0m LIGHTNING COMPILE  \033[90m(Rebuild index.html + Backup + AI Corpus)\033[0m")
-    print("  \033[92m[2]\033[0m LAUNCH DEV SERVER \033[90m(Run simple HTTP server + Browser preview)\033[0m")
-    print("  \033[92m[3]\033[0m EXTRACT TO CHUNKS  \033[90m(Split monolithic data into 21 edit JSONs)\033[0m")
-    print("  \033[92m[4]\033[0m SYSTEM BLUEPRINT  \033[90m(Print master AI.md system architecture)\033[0m")
+    print("  \033[92m[1]\033[0m LIGHTNING COMPILE    \033[90m(Rebuild index.html with Safety Checklist)\033[0m")
+    print("  \033[92m[2]\033[0m LAUNCH DEV SERVER   \033[90m(Run simple HTTP server + Browser preview)\033[0m")
+    print("  \033[92m[3]\033[0m IMPORT WORD NASKAH  \033[90m(Select & import .docx from docx_source/ folder)\033[0m")
+    print("  \033[92m[4]\033[0m SPLIT MONOLITH TO JSON\033[90m(Split data/parts.json into 21 edit JSONs)\033[0m")
+    print("  \033[92m[5]\033[0m RESTORE STABLE BACKUP\033[90m(Rollback index.html to stable index.html.bak)\033[0m")
+    print("  \033[92m[6]\033[0m SYSTEM BLUEPRINT    \033[90m(Print master AI.md system architecture)\033[0m")
     print("  \033[91m[0]\033[0m EXIT TERMINAL")
     print("\033[96m" + "=" * 65 + "\033[0m")
 
@@ -154,12 +156,26 @@ def main():
         print_dashboard()
         
         try:
-            choice = input(" \033[93mEnter choice [0-4]: \033[0m").strip()
+            choice = input(" \033[93mEnter choice [0-6]: \033[0m").strip()
         except KeyboardInterrupt:
             print("\n\n  Exiting control dashboard. Sampai jumpa, Komandan!")
             break
             
         if choice == "1":
+            print("\n\033[93m[SAFETY CHECK - PEMASANGAN NASKAH / UI]\033[0m")
+            q1 = input("  Apakah Komandan sudah menyinkronkan naskah Word baru atau mengedit file UI? (y/n): ").strip().lower()
+            if q1 != 'y':
+                print("  [INFO] Silakan lengkapi berkas naskah/UI Anda terlebih dahulu. Kompilasi dibatalkan.")
+                input("\n  Press Enter to continue...")
+                continue
+                
+            q2 = input("  Apakah naskah tersebut sudah dipecah menjadi berkas JSON modular (Opsi 3/4)? (y/n): ").strip().lower()
+            if q2 != 'y':
+                print("\n  [TIPS] Sistem merekomendasikan untuk memecah naskah terlebih dahulu agar data terbarukan.")
+                confirm = input("  Apakah Komandan tetap ingin mem-compile dengan database JSON yang ada sekarang? (y/n): ").strip().lower()
+                if confirm != 'y':
+                    continue
+
             print("\n\033[96m[RUNNING] Compiling all modular segments...\033[0m")
             time.sleep(0.5)
             # Run modularizer compile mode
@@ -183,7 +199,46 @@ def main():
             input("\n  Press Enter to return to dashboard...")
             
         elif choice == "3":
-            confirm = input("\n  \033[91m[WARNING]\033[0m This will split parts.json and overwrite modular chunks. Proceed? (y/n): ").strip().lower()
+            print("\n\033[96m[RUNNING] Scanning docx_source/ folder for manuscripts...\033[0m")
+            docx_folder = "docx_source"
+            if not os.path.exists(docx_folder):
+                try:
+                    os.makedirs(docx_folder)
+                except:
+                    pass
+            
+            docx_files = []
+            if os.path.exists(docx_folder):
+                docx_files = [f for f in os.listdir(docx_folder) if f.endswith(".docx") and not f.startswith("~$")]
+            
+            if not docx_files:
+                print("\n  \033[91m[WARNING] Tidak ada file Word (.docx) aktif ditemukan di folder: docx_source/\033[0m")
+                print("  Silakan taruh manuskrip Word (.docx) baru Anda di folder tersebut terlebih dahulu!")
+            else:
+                print("\n  Berkas naskah Word (.docx) yang tersedia:")
+                for idx, fn in enumerate(docx_files):
+                    print(f"    \033[92m[{idx + 1}]\033[0m {fn}")
+                print("    \033[91m[n]\033[0m Batal")
+                
+                try:
+                    sel = input(f"\n  Pilih naskah untuk diimpor [1-{len(docx_files)}] (atau 'n'): ").strip().lower()
+                    if sel.isdigit() and 1 <= int(sel) <= len(docx_files):
+                        selected_file = os.path.join(docx_folder, docx_files[int(sel) - 1])
+                        print(f"\n\033[96m[IMPORTING]\033[0m Memproses naskah: {selected_file}...")
+                        subprocess.run([sys.executable, "scripts/import_pmn_docx.py", "--docx", selected_file], check=True)
+                        
+                        # Automatically run compiler after successful import
+                        print("\n\033[92m[COMPILED]\033[0m Merajut visual web dengan naskah hasil impor baru...")
+                        subprocess.run([sys.executable, "modularizer.py", "compile"], check=True)
+                    else:
+                        print("\n  Operasi impor dibatalkan.")
+                except Exception as e:
+                    print(f"\n  \033[91m[ERROR] Proses impor atau kompilasi gagal: {e}\033[0m")
+            
+            input("\n  Press Enter to continue...")
+            
+        elif choice == "4":
+            confirm = input("\n  \033[91m[WARNING]\033[0m Tindakan ini akan memotong parts.json monolithic dan menimpa folder modular. Lanjutkan? (y/n): ").strip().lower()
             if confirm == 'y':
                 print("\n\033[96m[RUNNING] Splitting monolithic parts.json...\033[0m")
                 try:
@@ -194,7 +249,27 @@ def main():
                 print("\n  Operation canceled.")
             input("\n  Press Enter to continue...")
             
-        elif choice == "4":
+        elif choice == "5":
+            backup_path = "index.html.bak"
+            compiled_path = "index.html"
+            if not os.path.exists(backup_path):
+                print("\n  \033[91m[ERROR] Tidak ditemukan berkas cadangan stabil index.html.bak!\033[0m")
+                print("  Pastikan Komandan sudah pernah melakukan kompilasi minimal satu kali sebelumnya.")
+            else:
+                print("\n  \033[93m[ROLLBACK SYSTEM]\033[0m")
+                confirm = input("  Apakah Komandan yakin ingin membatalkan rilis naskah/UI saat ini\n  dan memulihkan website index.html dari cadangan stabil (index.html.bak)? (y/n): ").strip().lower()
+                if confirm == 'y':
+                    try:
+                        import shutil
+                        shutil.copy2(backup_path, compiled_path)
+                        print("\n  \033[92m[SUCCESS] Website index.html BERHASIL dikembalikan ke cadangan stabil!\033[0m")
+                    except Exception as e:
+                        print(f"\n  \033[91m[ERROR] Gagal memulihkan berkas cadangan: {e}\033[0m")
+                else:
+                    print("\n  Pemulihan cadangan dibatalkan.")
+            input("\n  Press Enter to continue...")
+            
+        elif choice == "6":
             show_blueprint()
             
         elif choice == "0":
@@ -202,7 +277,7 @@ def main():
             time.sleep(1)
             break
         else:
-            print("\n  \033[91mInvalid option. Please input 0, 1, 2, 3, or 4.\033[0m")
+            print("\n  \033[91mPilihan tidak valid. Silakan masukkan angka 0 s.d 6.\033[0m")
             time.sleep(1.5)
 
 if __name__ == "__main__":
