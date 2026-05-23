@@ -152,7 +152,7 @@ body::before {
   padding:1.1rem 0;text-align:left;
   transition:background .12s;
 }
-.thesis-toggle:hover{background:rgba(0,0,0,.02)}
+.thesis-toggle:hover{background:rgba(173,52,30,.035)}
 [data-theme=dark] .thesis-toggle:hover{background:rgba(255,255,255,.02)}
 .thesis-num{font-family:var(--f-mono);color:var(--acc);font-weight:700;font-size:.8rem;flex-shrink:0;letter-spacing:.08em}
 .thesis-title{font-family:var(--f-head);font-size:1.06rem;color:var(--ink);text-transform:uppercase;letter-spacing:.01em;flex:1;text-align:left;line-height:1.35}
