@@ -993,6 +993,7 @@ mark{background:transparent;color:var(--acc2);text-decoration:underline;text-dec
 .reader-endcap-toolbar .reader-tools-lbl{color:var(--acc)}
 .reader-endcap-actions{display:flex;gap:.55rem;flex-wrap:wrap}
 .reader-endcap-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:1rem;align-items:start}
+.reader-endcap-grid.single-panel{grid-template-columns:1fr}
 .reader-panel{border:1px solid var(--rule2);background:rgba(255,255,255,.22);padding:1rem 1rem 1.05rem}
 [data-theme=dark] .reader-panel{background:rgba(255,255,255,.025)}
 .related{margin:0;padding-top:0;border-top:none}
