@@ -871,6 +871,21 @@
     // Related sections
     renderRelated(s.id);
     renderCitedIn(s.id);
+    
+    // Dynamically show/hide meta-links-panel based on reference presence
+    var hasRefs = (REL[s.id] && REL[s.id].length > 0) || (CITED[s.id] && CITED[s.id].length > 0);
+    var metaPanel = g('meta-links-panel');
+    if (metaPanel) {
+      metaPanel.style.display = hasRefs ? '' : 'none';
+      if (metaPanel.parentNode) {
+        if (!hasRefs) {
+          metaPanel.parentNode.classList.add('single-panel');
+        } else {
+          metaPanel.parentNode.classList.remove('single-panel');
+        }
+      }
+    }
+    
     updateReaderAgentStatus();
     loadAnnot(curP,curS);
     // Feedback mailto
@@ -1599,7 +1614,9 @@
 #hl-toolbar-note-in{width:130px;font-family:var(--f-mono);font-size:.68rem;background:var(--bg2);border:1px solid var(--rule);color:var(--ink);padding:.2rem .4rem;outline:none;min-width:0}
 #hl-toolbar-note-in:focus{border-color:var(--acc)}
 .hl-save-note{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;background:var(--acc);color:var(--bg);border:none;padding:.22rem .55rem;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.hl-count-badge{font-family:var(--f-mono);font-size:.62rem;color:var(--acc);background:rgba(173,52,30,.1);border:1px solid rgba(173,52,30,.25);padding:.18rem .45rem;border-radius:2px;cursor:pointer}
+.hl-count-badge{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);background:var(--bg2);border:1px solid var(--rule2);padding:.25rem .6rem;border-radius:0;cursor:pointer;transition:color .15s,border-color .15s,background .15s;white-space:nowrap}
+.hl-count-badge:hover{color:var(--ink);border-color:var(--acc);background:rgba(173,52,30,.06)}
+[data-theme=dark] .hl-count-badge{background:#111}
 /* Semantic search */
 #semantic-badge{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);background:var(--bg2);border:1px solid var(--rule);padding:.2rem .5rem;cursor:pointer;transition:color .15s,border-color .15s;white-space:nowrap}
 #semantic-badge:hover,#semantic-badge.active{color:var(--acc);border-color:var(--acc)}
@@ -2312,13 +2329,20 @@
     // Add badge to reader tools
     var readerTools=document.querySelector('.reader-tools');
     if(readerTools){
+      var group=document.createElement('div');
+      group.className='reader-tools-group';
+      var lbl=document.createElement('span');
+      lbl.className='reader-tools-lbl';
+      lbl.textContent='Highlights';
       var badge=document.createElement('button');
       badge.id='hl-count-badge';
       badge.className='hl-count-badge';
       badge.textContent='Highlights';
       badge.title='View highlights for this section';
       badge.addEventListener('click',function(){showHlModal();});
-      readerTools.insertBefore(badge,readerTools.firstChild);
+      group.appendChild(lbl);
+      group.appendChild(badge);
+      readerTools.insertBefore(group,readerTools.firstChild);
     }
 
     function updateBadge(secId){
