@@ -78,18 +78,27 @@ def compile_mode():
     parts_dir = os.path.join("data", "parts")
     manifest_path = os.path.join(parts_dir, "manifest.json")
 
-    # Verification
+    print("[INFO] Initiating structural diagnostic check...")
+    
+    # 1. Check if files exist
     files_to_check = [clean_html_path, style_css_path, app_js_path, manifest_path]
     missing_files = [f for f in files_to_check if not os.path.exists(f)]
     if missing_files:
-        print(f"[ERROR] Required files are missing: {', '.join(missing_files)}")
+        print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Required files are missing:\n   -> {', '.join(missing_files)}")
+        print("[SUGGESTION] Restore these files before attempting to compile.")
         return
 
-    print("[INFO] Stitching modular parts back into a single PARTS array...")
-    # Load manifest
-    with open(manifest_path, "r", encoding="utf-8") as f:
-        manifest = json.load(f)
+    # 2. Check JSON validity of manifest.json
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+    except json.JSONDecodeError as je:
+        print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Syntax error in {manifest_path}!")
+        print(f"   -> Error details: {je}")
+        print("[SUGGESTION] Fix the syntax error in manifest.json before compiling.")
+        return
 
+    # 3. Check JSON validity of every single part chunk
     full_parts = []
     for part in manifest:
         part_id = part.get("part", "")
@@ -98,11 +107,19 @@ def compile_mode():
         part_filepath = os.path.join(parts_dir, part_filename)
 
         if not os.path.exists(part_filepath):
-            print(f"[ERROR] Modular part file {part_filepath} not found!")
+            print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Part file referenced in manifest is missing!")
+            print(f"   -> Missing file: {part_filepath}")
             return
 
-        with open(part_filepath, "r", encoding="utf-8") as pf:
-            part_subs = json.load(pf)
+        try:
+            with open(part_filepath, "r", encoding="utf-8") as pf:
+                part_subs = json.load(pf)
+        except json.JSONDecodeError as je:
+            print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Syntax error in naskah JSON!")
+            print(f"   -> Corrupted file: {part_filepath}")
+            print(f"   -> Error details: {je}")
+            print(f"[SUGGESTION] Open the file in an editor to fix the JSON syntax, or ask an AI to repair {part_filename}.")
+            return
 
         # Merge the full subs containing HTML back into the part definition
         full_part = {
@@ -111,6 +128,23 @@ def compile_mode():
             "subs": part_subs
         }
         full_parts.append(full_part)
+
+    # 4. Check HTML structural containers in index_bersih.html
+    try:
+        with open(clean_html_path, "r", encoding="utf-8") as f:
+            html_content = f.read()
+            
+        required_containers = ["id=\"prose\"", "id=\"sidebar\"", "id=\"home-view\"", "id=\"reader-view\""]
+        missing_containers = [c for c in required_containers if c not in html_content]
+        if missing_containers:
+            print(f"\n[WARN] DIAGNOSTIC WARNING: Core UI layout containers might be missing from {clean_html_path}:")
+            print(f"   -> Missing: {', '.join(missing_containers)}")
+            print("[SUGGESTION] Make sure you didn't accidentally delete critical DOM target containers.")
+    except Exception as e:
+        print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Unable to read {clean_html_path} ({e})")
+        return
+
+    print("   [OK] Structural diagnostic passed. No corrupted JSON or missing files found.")
 
     print("[INFO] Compiling monolithic index.html...")
     # Load cleaner HTML skeleton

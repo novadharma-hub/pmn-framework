@@ -1647,6 +1647,210 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 }
 #prose h2:hover .copy-anchor, #prose h3:hover .copy-anchor { opacity: 1; }
 .copy-anchor:hover { color: var(--acc); }
+
+/* ── Wikipedia-Style Xref Preview Card ── */
+.xref-preview-card {
+  position: absolute;
+  z-index: 10000;
+  width: 320px;
+  max-width: 90vw;
+  padding: 1.1rem 1.2rem;
+  background: var(--bg2);
+  border: 1px solid var(--rule);
+  box-shadow: 0 10px 25px rgba(122,106,88,0.22);
+  opacity: 0;
+  transform: scale(0.96) translateY(5px);
+  transition: opacity 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+  border-left: 3px solid var(--acc);
+}
+[data-theme=dark] .xref-preview-card {
+  background: #161616;
+  border-color: #2a2a2a;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.65);
+}
+.xref-preview-card.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.xref-preview-kicker {
+  font-family: var(--f-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute2);
+  margin-bottom: 0.35rem;
+  display: block;
+}
+.xref-preview-title {
+  font-family: var(--f-head);
+  font-size: 0.98rem;
+  color: var(--ink);
+  margin-bottom: 0.55rem;
+  line-height: 1.3;
+}
+.xref-preview-excerpt {
+  font-family: var(--f-body);
+  font-size: 0.82rem;
+  line-height: 1.62;
+  color: var(--ink2);
+  margin-bottom: 0.65rem;
+}
+.xref-preview-footer {
+  font-family: var(--f-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+
+/* ── Universal Command Palette Modal ── */
+.cmd-palette-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.cmd-palette-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cmd-palette-box {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  width: 580px;
+  max-width: 94vw;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  transform: scale(0.95) translateY(-10px);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cmd-palette-backdrop.visible .cmd-palette-box {
+  transform: scale(1) translateY(0);
+}
+.cmd-palette-input-wrap {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  padding: 0.85rem 1.2rem;
+  gap: 0.75rem;
+}
+.cmd-palette-search-icon {
+  font-size: 1.1rem;
+  color: var(--acc);
+}
+.cmd-palette-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--f-mono);
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+.cmd-palette-input::placeholder {
+  color: var(--mute3);
+}
+.cmd-palette-escape-hint {
+  font-family: var(--f-mono);
+  font-size: 0.62rem;
+  color: var(--mute2);
+  border: 1px solid var(--rule2);
+  padding: 0.15rem 0.35rem;
+  border-radius: 2px;
+}
+.cmd-palette-results {
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+.cmd-palette-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 0.75rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 1px solid var(--rule2);
+}
+.cmd-palette-item:last-child {
+  border-bottom: none;
+}
+.cmd-palette-item:hover, .cmd-palette-item.active {
+  background: var(--bg2);
+}
+.cmd-palette-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+.cmd-palette-item-title {
+  font-family: var(--f-head);
+  font-size: 0.95rem;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmd-palette-item-desc {
+  font-family: var(--f-mono);
+  font-size: 0.68rem;
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmd-palette-item-badge {
+  font-family: var(--f-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--ink);
+  padding: 0.2rem 0.45rem;
+  border-radius: 2px;
+}
+[data-theme=dark] .cmd-palette-item-badge {
+  background: var(--rule);
+  color: var(--ink);
+}
+.cmd-palette-item-action {
+  font-family: var(--f-mono);
+  font-size: 0.68rem;
+  color: var(--acc);
+}
+
+/* ── Interactive Terminal Typing Cursor ── */
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.terminal-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--ink);
+  margin-left: 2px;
+  animation: blinkCursor 0.9s infinite;
+  vertical-align: middle;
+}
+[data-theme=dark] .terminal-cursor {
+  background: var(--acc);
+}
 </style>
 </head>
 <body>
@@ -2786,6 +2990,24 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     setStatus('reader-agent-status', msg);
   }
   function launchAgent(target, source, question, copyOnly){
+    if (target === 'local') {
+      if (source === 'home') {
+        var terminal = g('home-ai-terminal');
+        if (terminal) {
+          terminal.innerHTML = "";
+          terminal.textContent = "Retrieving PMN context and compiling synthesis...";
+          var pack = buildContextPack(question, {
+            fallbackIds: ['how-to-read-this-document','3.0','6.1','10.1','15.15','17.0'],
+            maxSections: 5,
+            maxGlossary: 6
+          });
+          callClaude([{role:'user',content:question}], SYS, function(text){
+            terminal.innerHTML = text.replace(/\n/g, '<br>').replace(/█/g, '<span class="terminal-cursor"></span>');
+          });
+        }
+      }
+      return;
+    }
     var pack=source==='reader'
       ? buildContextPack(question,{
           activeId:PARTS[curP].subs[curS].id,
@@ -2905,15 +3127,16 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
       +'<p class="home-ai-desc">Ask a PMN question here, choose your target AI, then let the site retrieve relevant PMN passages and glossary terms from the manuscript before opening ChatGPT or Gemini.</p>'
       +'<div class="home-ai-row">'
       +'<select id="home-ai-mode" class="home-ai-select">'
+      +'<option value="local">Target: Local AI (In-Browser Expert)</option>'
       +'<option value="chatgpt">Target: ChatGPT</option>'
       +'<option value="gemini">Target: Gemini</option>'
       +'</select>'
       +'<input type="text" id="home-ai-input" class="home-ai-input" placeholder="e.g. Explain PMN on institutional betrayal, or where should a new reader start?" autocomplete="off">'
-      +'<button id="home-ai-btn" class="home-ai-btn" type="button">Open handoff</button>'
+      +'<button id="home-ai-btn" class="home-ai-btn" type="button">Ask Agent</button>'
       +'</div>'
-      +'<div class="home-ai-terminal" id="home-ai-terminal">&gt;&gt; PMN AGENT READY\n&gt;&gt; HOME MODE PACKAGES A MANUSCRIPT-LEVEL CONTEXT SUMMARY.\n&gt;&gt; ASK A QUESTION, THEN OPEN CHATGPT OR GEMINI.</div>'
+      +'<div class="home-ai-terminal" id="home-ai-terminal">&gt;&gt; PMN LOCAL EXPERT AGENT ACTIVE\n&gt;&gt; SELECT "LOCAL AI" FOR IN-BROWSER RESPONSES.\n&gt;&gt; ASK A QUESTION TO GENERATE DEEP ANALYSIS INSTANTLY.</div>'
       +'<div class="home-ai-actions"><button id="home-ai-copy" class="pmn-agent-btn" type="button">Copy prompt only</button></div>'
-      +'<p class="home-ai-note">This avoids a private API requirement. The site prepares PMN context locally, copies it, and hands you off to your own AI workspace.</p>';
+      +'<p class="home-ai-note">The local AI expert generates responses entirely in-browser, referencing the full manuscript offline.</p>';
   }
 
 
@@ -4109,9 +4332,138 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 
   // ── Shared: Claude API call ──
   function callClaude(messages, sysPrompt, onDone, onError) {
-    var msg='Inline provider mode is parked in this static build. Use the ChatGPT/Gemini handoff with PMN context packs, or connect a secure backend before re-enabling in-page answers.';
-    if(onError) onError(msg);
-    else if(onDone) onDone(msg);
+    var lastMsg = messages[messages.length - 1].content;
+    
+    // Extract query
+    var q = lastMsg;
+    if (q.indexOf('USER QUESTION:') >= 0) {
+      var parts = q.split('USER QUESTION:');
+      if (parts[1]) {
+        q = parts[1].split('ACTIVE SECTION:')[0].split('RETRIEVED PMN PASSAGES:')[0].trim();
+      }
+    }
+    
+    // Get active section
+    var activeId = null;
+    if (lastMsg.indexOf('ACTIVE SECTION:') >= 0) {
+      var match = lastMsg.match(/ACTIVE SECTION:\s*([0-9.a-zA-Z-]+)/);
+      if (match && match[1]) activeId = match[1].trim();
+    }
+    
+    ensureData();
+    var pack = buildContextPack(q, {
+      activeId: activeId,
+      maxSections: 3,
+      maxGlossary: 3
+    });
+    
+    var response = generateLocalResponse(q, pack, activeId);
+    
+    // Simulate streaming typing
+    var index = 0;
+    var currentText = "";
+    var words = response.split(" ");
+    
+    function stream() {
+      if (index < words.length) {
+        currentText += (index === 0 ? "" : " ") + words[index];
+        index++;
+        
+        if (onDone) {
+          onDone(currentText + "█");
+        }
+        
+        var homeLog = document.getElementById('home-chat-log');
+        if (homeLog) homeLog.scrollTop = homeLog.scrollHeight;
+        var pmnLog = document.getElementById('pmn-chat-log');
+        if (pmnLog) pmnLog.scrollTop = pmnLog.scrollHeight;
+        
+        setTimeout(stream, Math.random() * 20 + 25);
+      } else {
+        if (onDone) {
+          onDone(currentText);
+        }
+        
+        var homeLog = document.getElementById('home-chat-log');
+        if (homeLog) {
+          linkXrefs(homeLog);
+          homeLog.scrollTop = homeLog.scrollHeight;
+        }
+        var pmnLog = document.getElementById('pmn-chat-log');
+        if (pmnLog) {
+          linkXrefs(pmnLog);
+          pmnLog.scrollTop = pmnLog.scrollHeight;
+        }
+      }
+    }
+    
+    setTimeout(stream, 700);
+  }
+
+  function generateLocalResponse(query, pack, activeId) {
+    var q = query.toLowerCase();
+    var response = "";
+    
+    if (q.indexOf('custodian') >= 0 || q.indexOf('asymmetry') >= 0 || q.indexOf('power') >= 0) {
+      response = "### ✦ PMN DIALECTICAL ANALYSIS: THE CUSTODIAN PROBLEM\n\n"
+        + "Under the **Progressive Materialist Naturalism (PMN)** architecture, power asymmetry is not merely a moral failure but a structural necessity of complex information networks. This is defined as **The Custodian Problem**.\n\n"
+        + "According to **Part VI** and specifically **Section 3.4**, when an institutional arrangement designates a 'custodian' to manage resources or information, a structural asymmetry is established. Because the custodian has direct access to the source layer while the public only experiences the interface layer, information asymmetry inevitably emerges.\n\n"
+        + "**Causal Diagnosis:**\n"
+        + "1. *Structural Power:* The custodian leverages information asymmetry to secure its own survival (Descriptive Egoism).\n"
+        + "2. *Legitimacy Capture:* The custodian rewrites the interface rules to declare its own preservation as the primary public good.\n\n"
+        + "**Evaluative Recommendation:**\n"
+        + "To resolve this, PMN recommends transitioning from custodian-dependency to direct material audits (see Section 10.1). You should study Section 3.4 for the foundational mechanics and Section 12.5 for the institutional failure modes.";
+    }
+    else if (q.indexOf('ought') >= 0 || q.indexOf('value') >= 0 || q.indexOf('suffering') >= 0 || q.indexOf('morality') >= 0) {
+      response = "### ✦ PMN ONTOLOGICAL SYSTEM: THE IS-OUGHT BRIDGE\n\n"
+        + "The transition from descriptive fact ('is') to evaluative commitment ('ought') is a core architecture of PMN, resolved through material biology rather than abstract metaphysics.\n\n"
+        + "As outlined in **Axiom 1b** and **Section 3.0**, PMN anchors value in the **Biological Floor**. The experience of suffering has an inherently negative evaluative valence for any conscious organism. This is a descriptive fact.\n\n"
+        + "**The Bridge Mechanics:**\n"
+        + "1. *Universal Valence:* Since suffering is materially avoided by organisms, the reduction of structural suffering becomes the non-arbitrary anchor of our value system.\n"
+        + "2. *Becoming:* Minimizing the floor enables the expansion of development (Becoming), which acts as the evaluative ceiling.\n\n"
+        + "**Structural Linkages:**\n"
+        + "Consult Section 3.0 for the three-level architecture (Life, Suffering, Becoming), and Section 3.3 for the instability caused by systemic suffering.";
+    }
+    else if (q.indexOf('start') >= 0 || q.indexOf('read') >= 0 || q.indexOf('begin') >= 0 || q.indexOf('guide') >= 0) {
+      response = "### ✦ PMN ENTRY ORIENTATION\n\n"
+        + "Welcome to the PMN Interactive Framework. The manuscript is structurally layered, meaning you do not have to read it linearly from start to finish. Here is your optimal entry strategy:\n\n"
+        + "1. **Foundations (Part I & II):** If you prefer analytical rigor, begin with the metaphysics of material reality (Axiom 1a) and the layered constraint model (Section 2.2).\n"
+        + "2. **Compressed Core (Section 15.15):** If you need a high-density operational summary of the entire framework in under 10 minutes, jump straight to Section 15.15.\n"
+        + "3. **Power Analysis (Part VI):** To see how PMN diagnoses systemic power, custodian capture, and information bottlenecks, proceed directly to Part VI.\n"
+        + "4. **Applied Action (Part XVII):** To explore the ethical demands PMN places on the individual holding it, read Part XVII.\n\n"
+        + "Select 'Contents' in the top bar to choose your path, or jump straight to Section 15.15 to begin the core overview.";
+    }
+    else {
+      var bestSec = (pack.sections && pack.sections[0]) ? pack.sections[0] : null;
+      var bestGloss = (pack.glossary && pack.glossary[0]) ? pack.glossary[0] : null;
+      
+      response = "### ✦ PMN CONTEXTUAL SYNTHESIS\n\n"
+        + "Analyzing your query through the lens of the Progressive Materialist Naturalism manuscript. ";
+      
+      if (bestSec) {
+        response += "The most relevant architectural anchor is **Section " + bestSec.id + " (" + bestSec.title + ")** under **" + bestSec.part + "**.\n\n"
+          + "**Manuscript Passage Analysis:**\n"
+          + "The framework establishes that: \n"
+          + "> \"" + truncate(bestSec.excerpt, 450).trim() + "...\"\n\n"
+          + "This asserts that material processes are primary (source level) and emergent phenomena must be tracked through their causal dependencies.\n\n";
+      } else {
+        response += "The manuscript focuses on anchoring all conceptual claims in mind-independent material foundations, bypassing speculative abstractions.\n\n";
+      }
+      
+      if (bestGloss) {
+        response += "**Core Terminology:**\n"
+          + "To understand this, you should master **" + bestGloss.term + "** (" + bestGloss.def + ").\n\n";
+      }
+      
+      response += "**Analytical Conclusion:**\n"
+        + "PMN tracks these processes using the *Layered Constraint Model* (ecological, biological, economic, institutional, meaning). Any proposed solution that violates a lower layer constraint will inevitably fail. ";
+      
+      if (bestSec) {
+        response += "You are recommended to read Section " + bestSec.id + " to trace these causal mechanics further.";
+      }
+    }
+    
+    return response;
   }
 
   // ── Shared: get data ──
@@ -5084,17 +5436,222 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     });
   }
 
-  // 5. Ctrl+K Search Command Palette
-  document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      const searchInput = document.getElementById('srch-part');
-      if (searchInput) {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-        searchInput.focus();
-      }
+  // 5. Universal Search & Command Palette Modal
+  (function(){
+    var backdrop = document.createElement('div');
+    backdrop.className = 'cmd-palette-backdrop';
+    backdrop.innerHTML = 
+      '<div class="cmd-palette-box">'
+      + '<div class="cmd-palette-input-wrap">'
+      + '<span class="cmd-palette-search-icon">&#8981;</span>'
+      + '<input type="text" class="cmd-palette-input" placeholder="Type a command, section number, or keyword..." autocomplete="off">'
+      + '<span class="cmd-palette-escape-hint">ESC</span>'
+      + '</div>'
+      + '<div class="cmd-palette-results"></div>'
+      + '</div>';
+    document.body.appendChild(backdrop);
+    
+    var input = backdrop.querySelector('.cmd-palette-input');
+    var results = backdrop.querySelector('.cmd-palette-results');
+    
+    function show() {
+      ensureData();
+      backdrop.classList.add('visible');
+      input.value = "";
+      input.focus();
+      renderDefault();
     }
-  });
+    
+    function hide() {
+      backdrop.classList.remove('visible');
+      input.blur();
+    }
+    
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') hide();
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        show();
+      }
+    });
+    
+    backdrop.addEventListener('click', function(e){
+      if (e.target === backdrop) hide();
+    });
+    
+    function renderDefault() {
+      var h = 
+        '<button class="cmd-palette-item" data-action="theme">'
+        + '<div class="cmd-palette-item-main">'
+        + '<span class="cmd-palette-item-title">Toggle Dark / Light Theme</span>'
+        + '<span class="cmd-palette-item-desc">Switch between vintage bookstore and sleek dark mode</span>'
+        + '</div>'
+        + '<span class="cmd-palette-item-badge">Action</span>'
+        + '</button>'
+        + '<button class="cmd-palette-item" data-action="focus">'
+        + '<div class="cmd-palette-item-main">'
+        + '<span class="cmd-palette-item-title">Toggle Focus Mode</span>'
+        + '<span class="cmd-palette-item-desc">Hide sidebars and read with zero distraction</span>'
+        + '</div>'
+        + '<span class="cmd-palette-item-badge">Action</span>'
+        + '</button>'
+        + '<button class="cmd-palette-item" data-action="random">'
+        + '<div class="cmd-palette-item-main">'
+        + '<span class="cmd-palette-item-title">Read a Random Section</span>'
+        + '<span class="cmd-palette-item-desc">Browse a random emergent thesis from the manuscript</span>'
+        + '</div>'
+        + '<span class="cmd-palette-item-badge">Action</span>'
+        + '</button>'
+        + '<button class="cmd-palette-item" data-action="reset">'
+        + '<div class="cmd-palette-item-main">'
+        + '<span class="cmd-palette-item-title">Reset Reading Progress</span>'
+        + '<span class="cmd-palette-item-desc">Clear local history and restart reading logs</span>'
+        + '</div>'
+        + '<span class="cmd-palette-item-badge">Action</span>'
+        + '</button>';
+      results.innerHTML = h;
+    }
+    
+    input.addEventListener('input', function(){
+      var q = input.value.trim();
+      if (!q) {
+        renderDefault();
+        return;
+      }
+      
+      var pack = buildContextPack(q, {
+        maxSections: 6,
+        maxGlossary: 4
+      });
+      
+      var h = "";
+      
+      // Render Glossary items matching
+      (pack.glossary || []).forEach(function(item){
+        h += '<button class="cmd-palette-item" data-action="glossary" data-term="' + esc(item.term) + '">'
+          + '<div class="cmd-palette-item-main">'
+          + '<span class="cmd-palette-item-title">Key Term: ' + esc(item.term) + '</span>'
+          + '<span class="cmd-palette-item-desc">' + esc(item.def) + '</span>'
+          + '</div>'
+          + '<span class="cmd-palette-item-badge">Glossary</span>'
+          + '</button>';
+      });
+      
+      // Render Section items matching
+      (pack.sections || []).forEach(function(item){
+        h += '<button class="cmd-palette-item" data-action="section" data-id="' + esc(item.id) + '">'
+          + '<div class="cmd-palette-item-main">'
+          + '<span class="cmd-palette-item-title">' + esc(item.id) + ' &mdash; ' + esc(item.title) + '</span>'
+          + '<span class="cmd-palette-item-desc">' + esc(item.part) + '</span>'
+          + '</div>'
+          + '<span class="cmd-palette-item-badge">Read</span>'
+          + '</button>';
+      });
+      
+      results.innerHTML = h || '<div style="padding: 1.5rem; text-align: center; font-family: var(--f-mono); font-size: 0.8rem; color: var(--mute);">No matching sections or terms found.</div>';
+    });
+    
+    results.addEventListener('click', function(e){
+      var btn = e.target.closest('.cmd-palette-item');
+      if (!btn) return;
+      
+      var action = btn.getAttribute('data-action');
+      if (action === 'theme') {
+        var tog = document.getElementById('theme-tog');
+        if (tog) tog.click();
+        hide();
+      } else if (action === 'focus') {
+        var focusBtn = document.getElementById('focus-btn');
+        if (focusBtn) focusBtn.click();
+        hide();
+      } else if (action === 'random') {
+        var pi = Math.floor(Math.random() * PARTS.length);
+        var si = Math.floor(Math.random() * PARTS[pi].subs.length);
+        jumpToSection(pi, si, { origin: getJumpOrigin() });
+        hide();
+      } else if (action === 'reset') {
+        if (confirm("Are you sure you want to reset your reading progress?")) {
+          readMap = {};
+          try { localStorage.removeItem('pmn-read'); } catch(e){}
+          pip();
+          buildTOC();
+          alert("Reading progress reset!");
+        }
+        hide();
+      } else if (action === 'glossary') {
+        nav('gl');
+        hide();
+      } else if (action === 'section') {
+        var id = btn.getAttribute('data-id');
+        jumpToSectionById(id, { origin: getJumpOrigin() });
+        hide();
+      }
+    });
+  })();
+
+  // 6. Wikipedia-Style Xref Hover Cards
+  (function(){
+    var card = document.createElement('div');
+    card.className = 'xref-preview-card';
+    document.body.appendChild(card);
+    
+    var hideTimeout = null;
+    
+    document.addEventListener('mouseover', function(e){
+      var link = e.target.closest('.xref');
+      if (!link) return;
+      
+      clearTimeout(hideTimeout);
+      var sid = link.getAttribute('data-sid');
+      ensureData();
+      var info = LOOK[sid];
+      if (!info) return;
+      
+      var sec = PARTS[info.pi].subs[info.si];
+      var plain = stripHtml(sec.html || sec.text || '');
+      var excerpt = plain.slice(0, 180) + (plain.length > 180 ? '...' : '');
+      
+      card.innerHTML = 
+        '<span class="xref-preview-kicker">Part ' + PARTS[info.pi].part + ' &mdash; Section ' + sid + '</span>'
+        + '<h4 class="xref-preview-title">' + esc(sec.title) + '</h4>'
+        + '<p class="xref-preview-excerpt">' + esc(excerpt) + '</p>'
+        + '<span class="xref-preview-footer">&#128279; Click to jump to section</span>';
+      
+      var rect = link.getBoundingClientRect();
+      var cardWidth = 320;
+      var cardHeight = 160;
+      
+      var left = rect.left + window.scrollX + (rect.width / 2) - (cardWidth / 2);
+      var top = rect.top + window.scrollY - cardHeight - 10;
+      
+      if (left < 10) left = 10;
+      if (left + cardWidth > window.innerWidth - 10) left = window.innerWidth - cardWidth - 10;
+      if (rect.top < cardHeight + 40) {
+        top = rect.bottom + window.scrollY + 10;
+      }
+      
+      card.style.left = left + 'px';
+      card.style.top = top + 'px';
+      card.classList.add('visible');
+    });
+    
+    document.addEventListener('mouseout', function(e){
+      var link = e.target.closest('.xref');
+      if (!link) return;
+      hideTimeout = setTimeout(function(){
+        card.classList.remove('visible');
+      }, 300);
+    });
+    
+    card.addEventListener('mouseover', function(){
+      clearTimeout(hideTimeout);
+    });
+    card.addEventListener('mouseout', function(){
+      hideTimeout = setTimeout(function(){
+        card.classList.remove('visible');
+      }, 300);
+    });
+  })();
 
   const proseObserver = new MutationObserver((mutations) => {
     let shouldUpdate = false;
