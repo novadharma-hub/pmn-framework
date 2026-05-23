@@ -301,5 +301,11 @@ grep -n "paraId=\"34415D7C\"" PMN_unpacked/word/document.xml
 ## Part order (post-v108)
 Parts I–XIII → XV → XVI → XVII → **XIV** → Coda → Intellectual Debts → Bibliography
 
+
+## New Para IDs (v116)
+| Para ID | Location | Content |
+|---------|----------|---------|
+| `1E164004` | 16.4 | e/acc — anti-foreclosure critique paragraph |
+
 ## Current version
 **v114** — PMN_Framework_v114.docx
