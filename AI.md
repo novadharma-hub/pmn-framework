@@ -43,6 +43,13 @@ Your workspace is fully automated, removing any requirement for legacy manual CL
     3.  **Flexible Version Parsing:** Automatically extracts the manuscript version from the `.docx` filename, normalizing underscores and dots (e.g. `PMN_Framework_v116_2.docx` resolves to standard public label **`v116.2`**).
     4.  **Automatic Persistence:** Writes the resolved version directly into the visual template `index.ui.html` so future compilations keep the version synchronized.
 
+## 🛑 STRICT RUNTIME RESTRICTIONS & TOKEN SAFETY (FOR AIs)
+
+To maximize token efficiency, prevent redundant loop failures, and avoid system-sandbox errors, the following workspace restrictions are **STRICTLY ENFORCED**:
+1.  **NO LOCALHOST / HTTP SERVER ATTEMPTS:** Never start a local Python HTTP server or equivalent backend server inside this repository for testing.
+2.  **NO BROWSER SUBAGENT ATTEMPTS:** Never invoke `browser_subagent` or any GUI peramban automation tools to open or inspect pages in this project. The system peramban sandboxing causes resolution crashes under Windows (`::1` IPv6 conflict vs Python IPv4 `127.0.0.1`), wasting extensive context tokens.
+3.  **AUDIT MANUALLY & ANALYTICALLY:** Always perform code analysis, layout assessments, visual contrast auditing, and diagnostic checks manually by directly inspecting the stylesheet `style.css` and skeleton markup `index.ui.html`. The static theme variables are fully visible and highly predictive.
+
 ---
 
 ## 🛠️ CRITICAL CODE & FORMATTING RULES (FOR AIs)
