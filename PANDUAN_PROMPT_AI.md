@@ -13,11 +13,12 @@ The website uses a **Modular Dynamic Pipeline** where the naskah/manuscript is s
 
 ## 📂 REPOSITORY ARCHITECTURE OVERVIEW
 Here is the file structure of the PMN Framework development workspace:
-*   `index_bersih.html` — The lightweight layout skeleton of the website.
+*   `index.ui.html` — The lightweight layout skeleton of the website without manuscript text.
 *   `style.css` & `app.js` — External layout styles and operational logic.
 *   `data/parts/manifest.json` — The master Table of Contents (contains only Part/Section IDs and Titles, NO body text).
 *   `data/parts/part_*.json` — Modular JSON files containing the actual naskah and HTML content for each specific Part.
-*   `modularizer.py` & `compile_pmn.bat` — The builder tools that compile the modular files back into a single monolithic `index.html`.
+*   `modularizer.py` — The builder tool that compiles the modular files back into a single monolithic `index.html`.
+*   `00_PMN_WORKSPACE.bat` — The super main dashboard batch file launcher.
 
 ---
 
