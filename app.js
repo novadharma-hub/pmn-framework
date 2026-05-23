@@ -1483,6 +1483,8 @@
     window.getJumpOrigin = getJumpOrigin;
     window.resolveSectionId = resolveSectionId;
     window.esc = esc;
+    window.nav = nav;
+    window.showContentsPanel = showContentsPanel;
 
     // Rotating quotes
     (function () {
@@ -2920,7 +2922,11 @@
           return;
         }
 
-        var pack = buildContextPack(q, {
+        // Ambil asisten AI dari jalur komunikasi global
+        var buildCtx = window.buildContextPack || (typeof buildContextPack !== 'undefined' ? buildContextPack : null);
+        if (!buildCtx) return;
+
+        var pack = buildCtx(q, {
           maxSections: 6,
           maxGlossary: 4
         });
@@ -2985,7 +2991,7 @@
           }
           hide();
         } else if (action === 'glossary') {
-          nav('gl');
+          if (window.nav) window.nav('gl');
           hide();
         } else if (action === 'section') {
           var id = btn.getAttribute('data-id');
@@ -3101,8 +3107,8 @@
           e.stopPropagation();
           dismissBanner();
           // Trigger Start Reading Contents Navigation
-          nav('srch');
-          showContentsPanel();
+          if (window.nav) window.nav('srch');
+          if (window.showContentsPanel) window.showContentsPanel();
         });
       }
 
