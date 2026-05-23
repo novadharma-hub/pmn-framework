@@ -53,8 +53,8 @@ def main():
     print(f"\n🌍 Memulai Local Server di http://localhost:{PORT}")
     print("Membuka browser otomatis...")
     
-    # Buka index_bersih.html di browser default
-    webbrowser.open(f"http://localhost:{PORT}/index_bersih.html")
+    # Buka index.ui.html di browser default
+    webbrowser.open(f"http://localhost:{PORT}/index.ui.html")
 
     # Jalankan server
     socketserver.TCPServer.allow_reuse_address = True

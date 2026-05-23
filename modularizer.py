@@ -71,7 +71,7 @@ def split_mode():
     print("=" * 60)
 
 def compile_mode():
-    clean_html_path = "index_bersih.html"
+    clean_html_path = "index.ui.html"
     output_html_path = "index.html"
     style_css_path = "style.css"
     app_js_path = "app.js"
@@ -211,6 +211,16 @@ def compile_mode():
         html_content = html_content.replace("</body>", f"{embedded_js_html}\n</body>")
     print("   [OK] Javascript and Data inlined successfully.")
 
+    # Create automated safety backup of previous index.html before writing new one
+    if os.path.exists(output_html_path):
+        backup_path = output_html_path + ".bak"
+        try:
+            import shutil
+            shutil.copy2(output_html_path, backup_path)
+            print(f"   [OK] Safety backup of previous index.html saved to {backup_path}")
+        except Exception as be:
+            print(f"   [WARN] Could not create safety backup: {be}")
+
     # Save to index.html
     with open(output_html_path, "w", encoding="utf-8") as f:
         f.write(html_content)
@@ -220,6 +230,51 @@ def compile_mode():
     with open(os.path.join("data", "parts.json"), "w", encoding="utf-8") as f:
         json.dump(full_parts, f, ensure_ascii=False)
     print("   [OK] data/parts.json synchronized successfully.")
+
+    # Auto-generate the full Markdown Corpus for AI ingestion
+    try:
+        corpus_path = "pmn_corpus_for_ai.md"
+        with open(corpus_path, "w", encoding="utf-8") as cf:
+            cf.write("# 📚 PROGRESSIVE MATERIALIST NATURALISM (PMN) FRAMEWORK CORPUS\n\n")
+            cf.write("> **Note for AI Models:** This is the complete consolidated plain-text corpus of the PMN manuscript and glossary, auto-generated for training, RAG retrieval, and grounding purposes.\n\n")
+            
+            # 1. Embed Glossary
+            cf.write("## 📖 KEY TERMS & GLOSSARY DEFINITIONS\n\n")
+            gl_file = os.path.join("data", "gl.json")
+            if os.path.exists(gl_file):
+                with open(gl_file, "r", encoding="utf-8") as gf:
+                    gl_data = json.load(gf)
+                for term, definition in gl_data.items():
+                    cf.write(f"*   **{term.title()}**: {definition}\n")
+                cf.write("\n---\n\n")
+            
+            # 2. Embed Manuscript Parts
+            cf.write("## 📝 MANUSCRIPT PARTS & SECTIONS\n\n")
+            for part in full_parts:
+                part_title = part.get("title", "")
+                part_id = part.get("part", "")
+                cf.write(f"### Part {part_id}: {part_title}\n\n")
+                
+                for sub in part.get("subs", []):
+                    sub_id = sub.get("id", "")
+                    sub_title = sub.get("title", "")
+                    html_text = sub.get("html", "")
+                    
+                    # Strip HTML tags to make it ultra-clean text for AI models
+                    clean_text = re.sub(r'<[^>]+>', '', html_text)
+                    # Fix whitespace
+                    clean_text = re.sub(r'\s+', ' ', clean_text).strip()
+                    # Decode common entities
+                    clean_text = clean_text.replace("&ldquo;", '"').replace("&rdquo;", '"')
+                    clean_text = clean_text.replace("&lsquo;", "'").replace("&rsquo;", "'")
+                    clean_text = clean_text.replace("&mdash;", "—").replace("&ndash;", "–")
+                    
+                    cf.write(f"#### Section {sub_id} — {sub_title}\n")
+                    cf.write(f"{clean_text}\n\n")
+                    
+        print(f"   [OK] Consolidated AI Grounding Corpus auto-generated at {corpus_path}")
+    except Exception as ce:
+        print(f"   [WARN] Could not generate AI corpus: {ce}")
 
     file_size_mb = os.path.getsize(output_html_path) / (1024 * 1024)
     print(f"\n[SUCCESS] Monolithic index.html compiled!")
