@@ -1,0 +1,96 @@
+====================================================================
+           PANDUAN PENGGUNAAN HARIAN (CARA PAKAI) PMN FRAMEWORK
+====================================================================
+Halo Komandan Ali Ikhsan! Selamat datang di ekosistem baru pembaca 
+manuskrip PMN yang super modular, hemat token AI, dan dilengkapi 
+fitur interaksi premium berkelas dunia.
+
+Panduan ringkas ini dirancang khusus untuk Anda (Human User) agar bisa
+mengelola, mengedit, dan menikmati fitur web baru ini dengan mudah.
+
+--------------------------------------------------------------------
+1. PEMAHAMAN DASAR ASTRUKTUR BARU (DI BELAKANG LAYAR)
+--------------------------------------------------------------------
+Sistem Anda saat ini menggunakan arsitektur Hybrid Modular-Monolith:
+* RUANG EDIT DOKUMEN: Berada di folder 'data/parts/'. Berisi 21 file
+  JSON bab yang berukuran kecil (~10KB hingga ~300KB).
+* RUANG EDIT TAMPILAN (UI): Mengedit file 'index_bersih.html' (~40KB).
+* RUANG EDIT DESAIN & LOGIKA: Mengedit 'style.css' dan 'app.js'.
+* HASIL AKHIR (PUBLIKASI): Berupa file tunggal raksasa 'index.html'
+  (2.55 MB) yang dihasilkan otomatis oleh compiler.
+
+--------------------------------------------------------------------
+2. CARA MENGEDIT ISI NASKAH (BAB / PARAGRAF)
+--------------------------------------------------------------------
+A. JANGAN PERNAH mengedit file 'index.html' secara langsung!
+B. Cari file JSON bab yang ingin Anda ubah di folder:
+   C:\Users\Ali Ikhsan\Downloads\pmn-framework\data\parts\
+   (Contoh: Bab III berada di file 'part_III.json').
+C. Buka file JSON tersebut menggunakan notepad atau VS Code:
+   * Setiap bab memiliki daftar objek dengan "id" (misal: "3.4").
+   * Ubah teks di dalam properti "html" (Anda bisa menggunakan tag
+     HTML standar seperti <p>, <strong>, <ul>, dll.).
+   * Simpan file tersebut.
+D. Jika menggunakan bantuan AI eksternal (ChatGPT/Gemini/Claude):
+   Cukup berikan file JSON bab yang kecil itu saja ke AI. Sangat 
+   hemat token dibanding memberikan seluruh file 2.6MB!
+
+--------------------------------------------------------------------
+3. CARA MENGEDIT TAMPILAN WEB & SIDEBAR (UI)
+--------------------------------------------------------------------
+A. Jika ingin mengubah menu, tombol sidebar, tata letak web, atau 
+   elemen HTML visual lainnya, buka file:
+   C:\Users\Ali Ikhsan\Downloads\pmn-framework\index_bersih.html
+B. File ini hanya berisi kerangka UI bersih tanpa teks naskah tebal,
+   sehingga sangat ringan dan aman diedit (hanya ~40KB).
+C. Simpan perubahan Anda.
+
+--------------------------------------------------------------------
+4. CARA ME-LIGHTNING COMPILE (SATU KLIK SAJA!)
+--------------------------------------------------------------------
+Setelah Anda selesai melakukan perubahan pada Bab (JSON) maupun UI 
+(index_bersih.html / style.css / app.js):
+A. Masuk ke folder utama: C:\Users\Ali Ikhsan\Downloads\pmn-framework\
+B. Double-click file: 'compile_pmn.bat'
+C. Sistem Linter bawaan akan mendeteksi kesehatan file dalam sekejap.
+   * Jika aman, ia akan langsung menggabungkan semuanya dan
+     memperbarui berkas 'index.html' serta 'data/parts.json'.
+   * Jika ada salah ketik tanda baca (error JSON) dari AI, compiler
+     akan otomatis membatalkan proses dan memberi tahu letak error
+     tanpa merusak web Anda!
+
+--------------------------------------------------------------------
+5. CARA MENIKMATI TIGA FITUR PREMIUM TERBARU DI BROWSER
+--------------------------------------------------------------------
+Cukup klik ganda 'index.html' untuk membukanya secara offline di 
+browser Anda, lalu rasakan pengalaman mewah ini:
+
+✦ FITUR 1: Dialectical Synthesis Terminal (Local AI Agent)
+  * Ketik pertanyaan Anda di kotak "Home AI" atau buka tab "Claude"
+    pada menu pembaca bab, lalu pilih "Target: Local AI (In-Browser Expert)"
+    dan klik "Ask Agent".
+  * Mesin AI offline di browser akan langsung mencarikan rujukan bab
+    dan menuliskan sintesis jawaban dengan efek animasi mengetik mulus
+    lengkap dengan kursor retro berkedip (█).
+  * Menariknya, semua nomor bab yang disebut oleh AI otomatis
+    menjadi link hidup yang bisa diklik untuk melompat ke naskah!
+
+✦ FITUR 2: Wikipedia-Style Floating Preview
+  * Letakkan kursor mouse (hover) di atas rujukan silang bab (xref)
+    seperti angka "3.4" atau "15.15" di dalam naskah.
+  * Popover elegan bergaya glassmorphism akan langsung melayang
+    menampilkan judul dan intisari bab tersebut tanpa perlu diklik!
+
+✦ FITUR 3: Universal Command Palette (Pintasan Keyboard)
+  * Tekan tombol 'Ctrl+K' (atau 'Cmd+K' di Mac) kapan saja saat membaca.
+  * Sebuah bar pencarian melayang akan muncul di layar. Anda bisa:
+    - Ketik nama bab atau istilah glosarium untuk langsung melompat.
+    - Pilih opsi untuk beralih mode gelap/terang secara instan.
+    - Mengaktifkan Focus Mode (membaca tanpa distraksi).
+    - Membaca bab acak (mendapatkan wawasan mendadak).
+    - Menutupnya kembali dengan menekan tombol 'ESC'.
+
+--------------------------------------------------------------------
+Selamat menikmati platform pembaca manuskrip paling canggih dan 
+modern di PC Anda! Web ini 100% siap di-push ke GitHub Anda. 🫡🚀🔥
+====================================================================

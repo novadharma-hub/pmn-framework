@@ -1638,3 +1638,207 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 }
 #prose h2:hover .copy-anchor, #prose h3:hover .copy-anchor { opacity: 1; }
 .copy-anchor:hover { color: var(--acc); }
+
+/* ── Wikipedia-Style Xref Preview Card ── */
+.xref-preview-card {
+  position: absolute;
+  z-index: 10000;
+  width: 320px;
+  max-width: 90vw;
+  padding: 1.1rem 1.2rem;
+  background: var(--bg2);
+  border: 1px solid var(--rule);
+  box-shadow: 0 10px 25px rgba(122,106,88,0.22);
+  opacity: 0;
+  transform: scale(0.96) translateY(5px);
+  transition: opacity 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+  border-left: 3px solid var(--acc);
+}
+[data-theme=dark] .xref-preview-card {
+  background: #161616;
+  border-color: #2a2a2a;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.65);
+}
+.xref-preview-card.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.xref-preview-kicker {
+  font-family: var(--f-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mute2);
+  margin-bottom: 0.35rem;
+  display: block;
+}
+.xref-preview-title {
+  font-family: var(--f-head);
+  font-size: 0.98rem;
+  color: var(--ink);
+  margin-bottom: 0.55rem;
+  line-height: 1.3;
+}
+.xref-preview-excerpt {
+  font-family: var(--f-body);
+  font-size: 0.82rem;
+  line-height: 1.62;
+  color: var(--ink2);
+  margin-bottom: 0.65rem;
+}
+.xref-preview-footer {
+  font-family: var(--f-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+
+/* ── Universal Command Palette Modal ── */
+.cmd-palette-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.cmd-palette-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cmd-palette-box {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  width: 580px;
+  max-width: 94vw;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  transform: scale(0.95) translateY(-10px);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cmd-palette-backdrop.visible .cmd-palette-box {
+  transform: scale(1) translateY(0);
+}
+.cmd-palette-input-wrap {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  padding: 0.85rem 1.2rem;
+  gap: 0.75rem;
+}
+.cmd-palette-search-icon {
+  font-size: 1.1rem;
+  color: var(--acc);
+}
+.cmd-palette-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--f-mono);
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+.cmd-palette-input::placeholder {
+  color: var(--mute3);
+}
+.cmd-palette-escape-hint {
+  font-family: var(--f-mono);
+  font-size: 0.62rem;
+  color: var(--mute2);
+  border: 1px solid var(--rule2);
+  padding: 0.15rem 0.35rem;
+  border-radius: 2px;
+}
+.cmd-palette-results {
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+.cmd-palette-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 0.75rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 1px solid var(--rule2);
+}
+.cmd-palette-item:last-child {
+  border-bottom: none;
+}
+.cmd-palette-item:hover, .cmd-palette-item.active {
+  background: var(--bg2);
+}
+.cmd-palette-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+.cmd-palette-item-title {
+  font-family: var(--f-head);
+  font-size: 0.95rem;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmd-palette-item-desc {
+  font-family: var(--f-mono);
+  font-size: 0.68rem;
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmd-palette-item-badge {
+  font-family: var(--f-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--ink);
+  padding: 0.2rem 0.45rem;
+  border-radius: 2px;
+}
+[data-theme=dark] .cmd-palette-item-badge {
+  background: var(--rule);
+  color: var(--ink);
+}
+.cmd-palette-item-action {
+  font-family: var(--f-mono);
+  font-size: 0.68rem;
+  color: var(--acc);
+}
+
+/* ── Interactive Terminal Typing Cursor ── */
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.terminal-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--ink);
+  margin-left: 2px;
+  animation: blinkCursor 0.9s infinite;
+  vertical-align: middle;
+}
+[data-theme=dark] .terminal-cursor {
+  background: var(--acc);
+}
