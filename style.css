@@ -26,7 +26,7 @@
 [data-theme=dark] {
   --bg:#0d0d0d; --bg2:#171717; --bg3:#1f1f1f;
   --sb:#141414; --ink:#f5f0e8; --ink2:#c8bfb2;
-  --acc:#c0271a; --acc2:#961f14; --mute:#8a7d6e; --mute2:#5e5248; --mute3:#3a3530;
+  --acc:#c0271a; --acc2:#961f14; --mute:#8a7d6e; --mute2:#7c7064; --mute3:#3a3530;
   --rule:#302b27; --rule2:#3d3730;
   --hdr:#0d0d0d;
   --code-bg:#181818;
@@ -918,8 +918,8 @@ mark{background:transparent;color:var(--acc2);text-decoration:underline;text-dec
 .sb-iid.r{color:var(--acc2)}
 .sb-ilbl{font-family:'Lora',serif;font-style:italic;font-size:calc(.8rem * var(--sidebar-scale));color:var(--mute);line-height:1.3;text-align:left}
 .sb-ilbl.on{color:var(--ink);font-style:normal}
-.sb-item.intro-sec .sb-iid{opacity:.5}
-.sb-item.intro-sec .sb-ilbl{font-style:normal;font-size:calc(.75rem * var(--sidebar-scale));opacity:.7}
+.sb-item.intro-sec .sb-iid{opacity:.75}
+.sb-item.intro-sec .sb-ilbl{font-style:normal;font-size:calc(.75rem * var(--sidebar-scale));opacity:.88}
 
 /* ── Sidebar toggle ── */
 #sb-tog{position:absolute;right:-16px;top:50%;transform:translateY(-50%);z-index:10;background:var(--sb);border:1px solid var(--rule);border-left:none;color:var(--mute2);width:16px;height:48px;display:flex;align-items:center;justify-content:center;font-size:.65rem;cursor:pointer;transition:color .15s}
