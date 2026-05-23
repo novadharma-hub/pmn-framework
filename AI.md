@@ -93,3 +93,13 @@ Maintain this log chronologically. Always check this section before executing ta
     5.  **Compile & Telemetry:** Successfully recompiled into standalone `index.html` (2.58 MB) and verified complete synchronization across the 121 glossary categories.
 *   **Outcome:** Searching or clicking glossary terms now automatically navigates and grounds readers on the exact philosophical sections, and cover radial gradients are incredibly organic, smooth, and highly atmospheric.
 
+### 📅 May 24, 2026 (III): Ecosystem Clean-Up, TypeError Resolution & High-Performance Workspace Search
+*   **Situation:** The codebase had accumulated historical redundancies (over 370+ lines of dead functions and duplicate prompt-building chains) which bloated `app.js` and wasted AI context tokens. Furthermore, a dynamic `TypeError` bug was discovered inside `updateReaderAgentStatus` where it attempted to map obsolete `.rec` object keys, causing silent runtime failures on section navigation. Finally, the AI required a fast, unbuffered, and safe local search tool to locate workspace code references without risking cp1252 terminal crashes.
+*   **Action Taken:**
+    *   **Dead-Code Demolition (`app.js`):** Stripped 373 lines of legacy redundant functions including `getTopSections`, `getTopGlossary`, the old `buildContextPack` (L371), `formatSectionPacket`, `formatGlossaryPacket`, `launchAgent`, and old clipboard copy APIs. All of these were remnants of an older prompt redirection flow that was 100% bypassed by the active `#hai-tabs` architecture.
+    *   **TypeError Navigation Fix (`app.js`):** Corrected `updateReaderAgentStatus` to map directly to flat `.id` and `.term` variables returned by the active `buildContextPack` version, and inlined `partDisplay` logic to guarantee 100% robust, error-free section switching.
+    *   **ASCII-Safe Workspace Search (`pmn_console.py`):** Added a lightning-fast (0.06s) terminal and menu search engine `workspace_search`. Implemented Windows `cp1252` encoding safety by sanitizing output to clean ASCII, integrated 120-character snippet clipping centered on search matches to save AI tokens, and configured automatic exclusions for giant compiled outputs.
+    *   **Compile & Release:** Recompiled cleanly into `index.html` (shrinking standalone footprint to 2.57 MB) and successfully pushed all clean assets to production.
+*   **Outcome:** The javascript codebase is extremely clean, highly readable, and free of silent errors. The new workspace search runs instantly in under 0.07 seconds, providing a powerful unbuffered utility for developers and AI agents alike.
+
+
