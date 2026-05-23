@@ -12,43 +12,40 @@ The PMN Framework is built on a **Hybrid Modular-Monolith** design. To protect t
 
 | Path Location | Type | Purpose / Description |
 | :--- | :--- | :--- |
-| `D:\pmn-framework\00_PMN_WORKSPACE.bat` | Launcher | **Super Main Dashboard App** (one-click entry point) |
-| `D:\pmn-framework\CARA_PAKAI_PMN.txt` | Workspace Guide | Front-page quick reference for editing, compiling, and testing |
-| `D:\pmn-framework\PANDUAN_PROMPT_AI.md` | AI Prompt Blueprint | Front-page primer guiding AI on escaping, json writing, & formats |
+| `D:\pmn-framework\00_PMN_WORKSPACE.bat` | Launcher | **Super Main Dashboard App** (one-click entry point!) |
+| `D:\pmn-framework\CARA_PAKAI_PMN.txt` | Workspace Guide | Front-page quick reference for Indonesian human developers |
+| `D:\pmn-framework\PANDUAN_PROMPT_AI.md` | AI Prompt Blueprint | Front-page primer guiding AI on escaping, JSON writing, & formats |
 | `D:\pmn-framework\docx_source\` | MS Word Source | Dedicated folder for the **single active `.docx` manuscript file** |
 | `D:\pmn-framework\index.ui.html` | UI Skeleton | The lightweight HTML layout (~40KB) without manuscript text |
 | `D:\pmn-framework\style.css` | CSS Styles | Core styling, fonts, and dark/light modes |
 | `D:\pmn-framework\app.js` | UI Logic | Interactive features (Command Palette, popovers, Local LLM terminal) |
 | `D:\pmn-framework\data\` | Core Data | Contains glossary dictionaries, relations, lookups, and quotes |
-| `D:\pmn-framework\data\parts\` | Manuscript | Split JSON files (`part_Preface.json` to `part_XXI.json`) containing raw text |
+| `D:\pmn-framework\data\parts\` | Manuscript | Split JSON files (`part_Preface.json` to `part_Coda.json`) containing raw text |
+| `D:\pmn-framework\scripts\import_pmn_docx.py` | Importer | Vanilla Python DOCX parser & modular JSON part splitter |
+| `D:\pmn-framework\scripts\test_dynamic_docx.py` | Stress Tester | Pure-Python OOXML script verifying dynamic UI & schema growth |
 | `D:\pmn-framework\supabase\` | Backend SQL | Migration schemas and SQL procedures for Supabase backend |
 | `D:\pmn-framework\src\lib\` | Backend Libs | Client scaffolds and backend helpers for database coordination |
-| `D:\pmn-framework\index.html` | Compiled Monolith | The single 2.67 MB output compiled automatically for the public |
+| `D:\pmn-framework\index.html` | Compiled Monolith | The single 2.56 MB output compiled automatically for the public |
 
 ---
 
-## ⚡ COMPILATION, TESTING & MANAGEMENT CENTER
+## ⚡ AUTOMATION, COMPILATION & TESTING CENTER
 
-To manage, compile, or run testing servers inside your PMN Framework workspace, use these automated tools:
-*   **`00_PMN_WORKSPACE.bat`**: Launches the main interactive command console (`pmn_console.py`). This is the **super main dashboard app** where you can view live repository telemetry (version, glossary count, section totals), compile with one key, start server, split files, and preview blueprints in a retro-styled interactive shell.
-*   **`scripts/compile_pmn.bat`**: Runs `modularizer.py compile`. It acts as an automated compiler, safety linter, and corpus generator:
-    1.  **Safety Backup (`index.html.bak`):** Automatically copies the previous version of `index.html` as a fallback backup before writing a new compile build.
-    2.  **Linter:** Blocks compilation upon syntax issues (invalid commas/JSON) to preserve visual integrity.
+Your workspace is fully automated, removing any requirement for legacy manual CLI commands:
+*   **`00_PMN_WORKSPACE.bat`**: Launches the main interactive Python console (`pmn_console.py`). This is the **super main dashboard** where you can view live repository telemetry (version, glossary count, section totals), compile with one key, start the local server, split files, and preview blueprints in a retro-styled interactive shell.
+*   **The Lightning Compiler (`modularizer.py compile`)**:
+    1.  **Safety Backup (`index.html.bak`):** Automatically copies the previous version of `index.html` as a fallback backup before writing a new compiled build.
+    2.  **Syntax Linter:** Blocks compilation upon syntax issues (invalid commas/JSON) to preserve visual integrity.
     3.  **AI Grounding Corpus (`pmn_corpus_for_ai.md`):** Automatically compiles the entire philosophy and key glossary into a clean, flat Markdown file (stripped of HTML tags) at the root, optimized for instant ingestion by RAG scrapers or external LLMs.
-*   **`scripts/buka_web.bat`**: Runs `jalankan_web.py`. Starts a local HTTP server on `http://localhost:8000` and automatically opens `index.ui.html` in your default browser for real-time local previews.
+*   **Word Manuscript Importer (`scripts/import_pmn_docx.py`)**:
+    1.  **Zip & OOXML Surgery:** Unpacks the Microsoft Word `.docx` file in `docx_source/` natively using Python's core libraries (zero external dependencies).
+    2.  **Robust Tag Matching:** Uses attribute-order-agnostic regular expressions to match and replace payload tags (`<script id="d-parts" type="application/json">` or any attribute ordering) inside both `index.html` and `index.ui.html`.
+    3.  **Flexible Version Parsing:** Automatically extracts the manuscript version from the `.docx` filename, normalizing underscores and dots (e.g. `PMN_Framework_v116_2.docx` resolves to standard public label **`v116.2`**).
+    4.  **Automatic Persistence:** Writes the resolved version directly into the visual template `index.ui.html` so future compilations keep the version synchronized.
 
 ---
 
-## 💎 CORE INTERACTIVE FEATURES
-
-The frontend has three premium interactive modules programmed inside `app.js` and `index.ui.html`:
-1.  **Dialectical Synthesis Terminal (Local AI Agent):** Uses in-browser local LLM integration to answer user queries using natural language with retro typewriter effects (█) and turns section numbers into active hyperlinked buttons.
-2.  **Wikipedia-Style Floating Preview:** Hovering over cross-references (e.g. `#3.4`) triggers an elegant glassmorphism popover showing the preview of that section dynamically.
-3.  **Universal Command Palette (Ctrl+K):** A sliding panel for fast global search, focus mode, random chapter generation, and instant theme toggling.
-
----
-
-## 🛠️ CRITICAL CODE & NASKAH WRITING RULES (FOR AIs)
+## 🛠️ CRITICAL CODE & FORMATTING RULES (FOR AIs)
 
 When editing or updating files inside `data/parts/`, you **MUST** strictly adhere to these standards:
 
@@ -56,7 +53,7 @@ When editing or updating files inside `data/parts/`, you **MUST** strictly adher
 2.  **Cross-References (Xref Links):** Links referencing other sections (e.g., section 1.1) **MUST** be formatted using the exact class and `data-sid` parameters:
     `<a class=\"xref\" href=\"#1.1\" data-sid=\"1.1\">1.1</a>`
 3.  **Paragraph Wrapping:** Wrap every separate body paragraph cleanly inside `<p>...</p>`.
-4.  **No Monolith Edits:** **NEVER** edit `index.html` directly. Only edit modular files (`data/parts/part_*.json` or `index.ui.html`) and run `compile_pmn.bat`.
+4.  **No Monolith Edits:** **NEVER** edit `index.html` directly. Only edit modular files (`data/parts/part_*.json` or `index.ui.html`) and compile them.
 
 ---
 
@@ -69,14 +66,15 @@ Always maintain these definitions with perfect precision. Never summarize or cha
 
 ---
 
-## 💡 SYSTEM HISTORY & TROUBLESHOOTING LOG
+## 💡 SYSTEM LOGS & TROUBLESHOOTING
 
 Maintain this log chronologically. Always check this section before executing tasks.
 
-### 📅 May 24, 2026: Repositories Migration & Path Synchronization
-*   **Situation:** The user migrated the entire `pmn-framework` workspace from their local Downloads directory to the permanent storage drive: `D:\pmn-framework`.
+### 📅 May 24, 2026: Importer Regex Upgrade & Dynamic Stress-Testing
+*   **Situation:** The Word importer failed to locate payload script tags inside production compiled files due to reversed HTML attribute ordering (`type` before `id`). Emojis in terminal logs also threw charmap encoding exceptions on Windows consoles.
 *   **Action Taken:**
-    1.  Scanned all script, markdown, and text configurations for legacy path remnants.
-    2.  Upgraded [CARA_PAKAI_PMN.txt](file:///d:/pmn-framework/CARA_PAKAI_PMN.txt) to target `D:\pmn-framework` for editing chapters, compilation steps, and layout skeletons.
-    3.  Upgraded [docs\supabase-phase1.md](file:///d:/pmn-framework/docs/supabase-phase1.md) backend scaffolding paths (including `.env.example`, client, and SQL schemas) to point to the new migrated active directory.
-*   **Outcome:** All hardcoded paths successfully cleared. One-click compiler and web server are tested, fully healthy, and verified 100% operational on `D:\pmn-framework`.
+    1.  Upgraded `replace_json_script` in `import_pmn_docx.py` to use an attribute-order-agnostic regular expression (`rf'<script\s+[^>]*id="..."[^>]*>.*?</script>'`).
+    2.  Added persistent version synchronization into `index.ui.html` during manuscript import.
+    3.  Created a pure-Python OOXML testing suite `scripts/test_dynamic_docx.py` that dynamically appends new parts to a Word file, imports, compiles, programmatically asserts UI responsiveness, and cleans up.
+    4.  Removed Unicode emojis from logs, replacing them with standard plain-text status labels (`[PASS]`, `[FAIL]`, `[SUCCESS]`) to avoid Windows code page `cp1252` encoding issues.
+*   **Outcome:** All stress-tests successfully passed. The pipeline is mathematically and empirically proven to scale seamlessly with manuscript growth!

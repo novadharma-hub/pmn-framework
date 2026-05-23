@@ -1,96 +1,89 @@
 ====================================================================
-           PANDUAN PENGGUNAAN HARIAN (CARA PAKAI) PMN FRAMEWORK
+           PANDUAN ACUAN KERJA (CARA PAKAI) PMN FRAMEWORK
 ====================================================================
-Halo Komandan Ali Ikhsan! Selamat datang di ekosistem baru pembaca 
-manuskrip PMN yang super modular, hemat token AI, dan dilengkapi 
-fitur interaksi premium berkelas dunia.
+Halo Komandan Ali Ikhsan! Selamat datang di ekosistem asisten kerja
+PMN yang super modular, stabil secara empiris, dan terotomatisasi penuh.
 
-Panduan ringkas ini dirancang khusus untuk Anda (Human User) agar bisa
-mengelola, mengedit, dan menikmati fitur web baru ini dengan mudah.
-
---------------------------------------------------------------------
-1. PEMAHAMAN DASAR ASTRUKTUR BARU (DI BELAKANG LAYAR)
---------------------------------------------------------------------
-Sistem Anda saat ini menggunakan arsitektur Hybrid Modular-Monolith:
-* RUANG EDIT DOKUMEN: Berada di folder 'data/parts/'. Berisi 21 file
-  JSON bab yang berukuran kecil (~10KB hingga ~300KB).
-* RUANG EDIT TAMPILAN (UI): Mengedit file 'index.ui.html' (~40KB).
-* RUANG EDIT DESAIN & LOGIKA: Mengedit 'style.css' dan 'app.js'.
-* HASIL AKHIR (PUBLIKASI): Berupa file tunggal raksasa 'index.html'
-  (2.55 MB) yang dihasilkan otomatis oleh compiler.
+Panduan lokal ini menggunakan Bahasa Indonesia untuk kenyamanan dan
+kecepatan pengerjaan harian Anda secara offline di PC.
 
 --------------------------------------------------------------------
-2. CARA MENGEDIT ISI NASKAH (BAB / PARAGRAF)
+1. ARSITEKTUR KARYA: HYBRID MODULAR-MONOLITH
 --------------------------------------------------------------------
-A. JANGAN PERNAH mengedit file 'index.html' secara langsung!
-B. Cari file JSON bab yang ingin Anda ubah di folder:
-   D:\pmn-framework\data\parts\
-   (Contoh: Bab III berada di file 'part_III.json').
-C. Buka file JSON tersebut menggunakan notepad atau VS Code:
-   * Setiap bab memiliki daftar objek dengan "id" (misal: "3.4").
-   * Ubah teks di dalam properti "html" (Anda bisa menggunakan tag
-     HTML standar seperti <p>, <strong>, <ul>, dll.).
-   * Simpan file tersebut.
-D. Jika menggunakan bantuan AI eksternal (ChatGPT/Gemini/Claude):
-   Cukup berikan file JSON bab yang kecil itu saja ke AI. Sangat 
-   hemat token dibanding memberikan seluruh file 2.6MB!
+Untuk efisiensi token AI dan kemudahan kolaborasi, proyek ini dibagi:
+*   KOTAK EDIT NASKAH (DATABASE): Folder `data/parts/` berisi 21 berkas
+    JSON bab berukuran sangat kecil (~10KB hingga ~300KB).
+*   KOTAK EDIT TAMPILAN (UI): File `index.ui.html` (~40KB).
+*   KOTAK EDIT DESAIN & LOGIKA: Berkas `style.css` dan `app.js`.
+*   HASIL AKHIR PRODUKSI: Berupa berkas HTML tunggal raksasa `index.html`
+    (2.56 MB) yang dihasilkan otomatis oleh kompilator.
 
 --------------------------------------------------------------------
-3. CARA MENGEDIT TAMPILAN WEB & SIDEBAR (UI)
+2. PUSAT KENDALI UTAMA: 00_PMN_WORKSPACE.bat
 --------------------------------------------------------------------
-A. Jika ingin mengubah menu, tombol sidebar, tata letak web, atau 
-   elemen HTML visual lainnya, buka file:
-   D:\pmn-framework\index.ui.html
-B. File ini hanya berisi kerangka UI bersih tanpa teks naskah tebal,
-   sehingga sangat ringan dan aman diedit (hanya ~40KB).
-C. Simpan perubahan Anda.
+Komandan TIDAK PERLU lagi menjalankan banyak file bat terpisah atau
+mengetik baris kode CMD. Cukup klik ganda (double-click) file sakti:
+   D:\pmn-framework\00_PMN_WORKSPACE.bat
+
+Menu konsol interaktif berwarna akan muncul. Tekan angka pilihan Komandan:
+*   Tekan [1] : LIGHTNING COMPILE (Kompilasi Visual + Data + Corpus AI)
+    --> Dilengkapi CHECKLIST PENGAMAN khusus untuk mencegah kompilasi kosong.
+        Sistem akan menanyakan konfirmasi kesiapan berkas Word/UI baru Komandan,
+        dan memverifikasi apakah database naskah sudah dipecah secara modular.
+*   Tekan [2] : LAUNCH DEV SERVER (Server Preview Lokal)
+    --> Menjalankan server HTTP lokal ringan pada http://localhost:8000
+        dan otomatis membuka browser untuk meninjau perubahan secara realtime.
+*   Tekan [3] : IMPORT WORD NASKAH (Impor Selektif & Kompilasi Otomatis)
+    --> Fitur super canggih! Sistem otomatis memindai seluruh berkas Word
+        (.docx) di folder docx_source/, menampilkan daftar berkas, dan memproses
+        pilihan Komandan. Setelah terimpor dan terpecah secara modular, sistem
+        akan otomatis men-compile website final secara instan.
+*   Tekan [4] : SPLIT MONOLITH TO JSON (Pecah Database)
+    --> Memotong paksa data/parts.json menjadi 21 file JSON modular kecil.
+*   Tekan [5] : RESTORE STABLE BACKUP (Sistem Rollback / Batalkan Rilis)
+    --> Fitur penyelamat darurat! Jika setelah Kompilasi Komandan mendeteksi ada
+        kesalahan visual/isi, cukup pilih menu ini untuk menimpa website aktif
+        dan mengembalikannya ke versi cadangan stabil (index.html.bak).
+*   Tekan [6] : SYSTEM BLUEPRINT (Cetak Biru Arsitektur AI)
+    --> Membuka ringkasan arsitektur file AI.md langsung di layar konsol.
 
 --------------------------------------------------------------------
-4. CARA ME-LIGHTNING COMPILE (SATU KLIK SAJA!)
+3. CARA MENGUPDATE NASKAH DARI MICROSOFT WORD (.DOCX)
 --------------------------------------------------------------------
-Setelah Anda selesai melakukan perubahan pada Bab (JSON) maupun UI 
-(index.ui.html / style.css / app.js):
-A. Masuk ke folder utama: D:\pmn-framework\
-B. Double-click file: 'compile_pmn.bat'
-C. Sistem Linter bawaan akan mendeteksi kesehatan file dalam sekejap.
-   * Jika aman, ia akan langsung menggabungkan semuanya dan
-     memperbarui berkas 'index.html' serta 'data/parts.json'.
-   * Jika ada salah ketik tanda baca (error JSON) dari AI, compiler
-     akan otomatis membatalkan proses dan memberi tahu letak error
-     tanpa merusak web Anda!
+Kini Komandan dapat mengimpor tulisan langsung dari file Word:
+A. Taruh file Word manuskrip baru Komandan ke dalam folder:
+   D:\pmn-framework\docx_source\
+   (Contoh nama berkas: PMN_Framework_v116_2.docx).
+B. Jalankan `00_PMN_WORKSPACE.bat` dan pilih opsi [3].
+C. Sistem akan otomatis mendeteksi versi naskah, membaca isinya,
+   menyinkronkan label versi ke `index.ui.html`, memecah bagian
+   menjadi berkas JSON modular, dan memperbarui `index.html`.
 
---------------------------------------------------------------------
-5. CARA MENIKMATI TIGA FITUR PREMIUM TERBARU DI BROWSER
---------------------------------------------------------------------
-Cukup klik ganda 'index.html' untuk membukanya secara offline di 
-browser Anda, lalu rasakan pengalaman mewah ini:
-
-✦ FITUR 1: Dialectical Synthesis Terminal (Local AI Agent)
-  * Ketik pertanyaan Anda di kotak "Home AI" atau buka tab "Claude"
-    pada menu pembaca bab, lalu pilih "Target: Local AI (In-Browser Expert)"
-    dan klik "Ask Agent".
-  * Mesin AI offline di browser akan langsung mencarikan rujukan bab
-    dan menuliskan sintesis jawaban dengan efek animasi mengetik mulus
-    lengkap dengan kursor retro berkedip (█).
-  * Menariknya, semua nomor bab yang disebut oleh AI otomatis
-    menjadi link hidup yang bisa diklik untuk melompat ke naskah!
-
-✦ FITUR 2: Wikipedia-Style Floating Preview
-  * Letakkan kursor mouse (hover) di atas rujukan silang bab (xref)
-    seperti angka "3.4" atau "15.15" di dalam naskah.
-  * Popover elegan bergaya glassmorphism akan langsung melayang
-    menampilkan judul dan intisari bab tersebut tanpa perlu diklik!
-
-✦ FITUR 3: Universal Command Palette (Pintasan Keyboard)
-  * Tekan tombol 'Ctrl+K' (atau 'Cmd+K' di Mac) kapan saja saat membaca.
-  * Sebuah bar pencarian melayang akan muncul di layar. Anda bisa:
-    - Ketik nama bab atau istilah glosarium untuk langsung melompat.
-    - Pilih opsi untuk beralih mode gelap/terang secara instan.
-    - Mengaktifkan Focus Mode (membaca tanpa distraksi).
-    - Membaca bab acak (mendapatkan wawasan mendadak).
-    - Menutupnya kembali dengan menekan tombol 'ESC'.
+*Catatan: Sistem secara otomatis membuat file cadangan aman dari
+website stabil sebelumnya ke file index.html.bak.*
 
 --------------------------------------------------------------------
-Selamat menikmati platform pembaca manuskrip paling canggih dan 
-modern di PC Anda! Web ini 100% siap di-push ke GitHub Anda. 🫡🚀🔥
+4. CARA MENJALANKAN UJI KETAHANAN SKEMA (STRESSTEST)
+--------------------------------------------------------------------
+Jika Komandan ingin membuktikan secara ilmiah apakah sistem pembaca
+otomatis mendeteksi bab baru dan menggambar tombol UI secara dinamis:
+A. Jalankan perintah berikut di Git Bash / Terminal VS Code:
+   python scripts/test_dynamic_docx.py
+B. Skrip akan secara otomatis membackup naskah, menyuntikkan "Part XVIII"
+   palsu beserta dua sub-bab baru ke dalam struktur biner Word,
+   menjalankan impor, memvalidasi keberhasilan kompilasi di HTML,
+   lalu membersihkan diri dan mengembalikan repositori ke status suci.
+
+--------------------------------------------------------------------
+5. KOMITMEN DUA BAHASA (BILINGUAL & TOKEN EFFICIENCY)
+--------------------------------------------------------------------
+Untuk menjaga proyek tetap profesional di GitHub dan hemat token AI:
+1.  README.md: Dibuat dalam dua bahasa (Bilingual: Inggris di bagian
+    atas untuk publik filsafat global, Indonesia di bagian bawah).
+2.  AI.md & pmn_system_prompt.txt: Wajib menggunakan bahasa Inggris
+    penuh agar model AI (Claude/Gemini/ChatGPT) dapat mencernanya
+    secara sangat efisien dan akurat tanpa membuang kuota token!
+
+====================================================================
+Sistem Anda telah terotomatisasi secara mandiri dan siap digunakan! 🫡🚀🔥
 ====================================================================
