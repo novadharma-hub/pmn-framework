@@ -4,15 +4,15 @@ This repo now includes the first migration scaffold for moving PMN from browser-
 
 ## What is ready
 
-- Environment template in [`/.env.example`](/C:/Users/Ali%20Ikhsan/Downloads/pmn-framework/.env.example)
-- Supabase client scaffold in [`/src/lib/supabase.js`](/C:/Users/Ali%20Ikhsan/Downloads/pmn-framework/src/lib/supabase.js)
-- Backend data helpers in [`/src/lib/pmn-backend.js`](/C:/Users/Ali%20Ikhsan/Downloads/pmn-framework/src/lib/pmn-backend.js)
-- SQL schema with RLS in [`/supabase/schema.sql`](/C:/Users/Ali%20Ikhsan/Downloads/pmn-framework/supabase/schema.sql)
+- Environment template in [`/.env.example`](/D:/pmn-framework/.env.example)
+- Supabase client scaffold in [`/src/lib/supabase.js`](/D:/pmn-framework/src/lib/supabase.js)
+- Backend data helpers in [`/src/lib/pmn-backend.js`](/D:/pmn-framework/src/lib/pmn-backend.js)
+- SQL schema with RLS in [`/supabase/schema.sql`](/D:/pmn-framework/supabase/schema.sql)
 
 ## What still needs to happen in Supabase
 
 1. Create a Supabase project.
-2. Open the SQL editor and run [`/supabase/schema.sql`](/C:/Users/Ali%20Ikhsan/Downloads/pmn-framework/supabase/schema.sql).
+2. Open the SQL editor and run [`/supabase/schema.sql`](/D:/pmn-framework/supabase/schema.sql).
 3. Create the first admin user with normal sign-up.
 4. In the SQL editor, promote that user:
 

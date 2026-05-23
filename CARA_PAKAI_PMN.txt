@@ -14,7 +14,7 @@ mengelola, mengedit, dan menikmati fitur web baru ini dengan mudah.
 Sistem Anda saat ini menggunakan arsitektur Hybrid Modular-Monolith:
 * RUANG EDIT DOKUMEN: Berada di folder 'data/parts/'. Berisi 21 file
   JSON bab yang berukuran kecil (~10KB hingga ~300KB).
-* RUANG EDIT TAMPILAN (UI): Mengedit file 'index_bersih.html' (~40KB).
+* RUANG EDIT TAMPILAN (UI): Mengedit file 'index.ui.html' (~40KB).
 * RUANG EDIT DESAIN & LOGIKA: Mengedit 'style.css' dan 'app.js'.
 * HASIL AKHIR (PUBLIKASI): Berupa file tunggal raksasa 'index.html'
   (2.55 MB) yang dihasilkan otomatis oleh compiler.
@@ -24,7 +24,7 @@ Sistem Anda saat ini menggunakan arsitektur Hybrid Modular-Monolith:
 --------------------------------------------------------------------
 A. JANGAN PERNAH mengedit file 'index.html' secara langsung!
 B. Cari file JSON bab yang ingin Anda ubah di folder:
-   C:\Users\Ali Ikhsan\Downloads\pmn-framework\data\parts\
+   D:\pmn-framework\data\parts\
    (Contoh: Bab III berada di file 'part_III.json').
 C. Buka file JSON tersebut menggunakan notepad atau VS Code:
    * Setiap bab memiliki daftar objek dengan "id" (misal: "3.4").
@@ -40,7 +40,7 @@ D. Jika menggunakan bantuan AI eksternal (ChatGPT/Gemini/Claude):
 --------------------------------------------------------------------
 A. Jika ingin mengubah menu, tombol sidebar, tata letak web, atau 
    elemen HTML visual lainnya, buka file:
-   C:\Users\Ali Ikhsan\Downloads\pmn-framework\index_bersih.html
+   D:\pmn-framework\index.ui.html
 B. File ini hanya berisi kerangka UI bersih tanpa teks naskah tebal,
    sehingga sangat ringan dan aman diedit (hanya ~40KB).
 C. Simpan perubahan Anda.
@@ -49,8 +49,8 @@ C. Simpan perubahan Anda.
 4. CARA ME-LIGHTNING COMPILE (SATU KLIK SAJA!)
 --------------------------------------------------------------------
 Setelah Anda selesai melakukan perubahan pada Bab (JSON) maupun UI 
-(index_bersih.html / style.css / app.js):
-A. Masuk ke folder utama: C:\Users\Ali Ikhsan\Downloads\pmn-framework\
+(index.ui.html / style.css / app.js):
+A. Masuk ke folder utama: D:\pmn-framework\
 B. Double-click file: 'compile_pmn.bat'
 C. Sistem Linter bawaan akan mendeteksi kesehatan file dalam sekejap.
    * Jika aman, ia akan langsung menggabungkan semuanya dan
