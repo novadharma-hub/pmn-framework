@@ -2062,7 +2062,7 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
     <button class="hbtn" id="hb-home">Contents</button>
     <button class="hbtn hsm" id="hb-gl">Glossary</button>
     <button id="theme-tog" title="Toggle dark/light mode"></button>
-    <button class="hbtn hsm" id="hb-kbd" title="Keyboard shortcuts">Keys</button>
+    <button class="hbtn hsm" id="hb-kbd" title="Keyboard shortcuts">Keys <span style="opacity:.5;font-size:.62rem">[K]</span></button>
   </div>
 </header>
 <div class="views-shell" style="flex:1;overflow:hidden;position:relative;min-height:0">
@@ -2083,7 +2083,7 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
         </div>
         <div class="hero-ctas">
         <div class="cta-row-main">
-            <button id="cta-begin" class="cta-p cta-main">Contents / Index <span style="opacity:.55;font-size:.65rem">[C]</span></button>
+            <button id="cta-begin" class="cta-p cta-main">Start Reading <span style="opacity:.55;font-size:.65rem">[C]</span></button>
             <button id="cta-resume" class="cta-p secondary" style="display:none">Resume &rarr; <span style="opacity:.55;font-size:.65rem">[R]</span></button>
           </div>
           <div class="cta-row-s">
@@ -2647,17 +2647,20 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
     <p class="kbd-title">Keyboard Shortcuts</p>
     <div class="kbd-section">
       <span class="kbd-section-lbl">Navigation</span>
-      <div class="kbd-row"><span class="kbd-desc">Search / jump to section</span><span class="kbd-keys"><span class="kbd-key">/</span></span></div>
-      <div class="kbd-row"><span class="kbd-desc">Glossary / key terms</span><span class="kbd-keys"><span class="kbd-key">?</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Start Reading / Contents</span><span class="kbd-keys"><span class="kbd-key">C</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Resume Reading</span><span class="kbd-keys"><span class="kbd-key">R</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Search / command palette</span><span class="kbd-keys"><span class="kbd-key">/</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Glossary / key terms</span><span class="kbd-keys"><span class="kbd-key">?</span> or <span class="kbd-key">G</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Toggle keyboard help</span><span class="kbd-keys"><span class="kbd-key">K</span></span></div>
       <div class="kbd-row"><span class="kbd-desc">Next section</span><span class="kbd-keys"><span class="kbd-key">→</span><span class="kbd-key">↓</span></span></div>
       <div class="kbd-row"><span class="kbd-desc">Previous section</span><span class="kbd-keys"><span class="kbd-key">←</span><span class="kbd-key">↑</span></span></div>
-      <div class="kbd-row"><span class="kbd-desc">Close / back to contents</span><span class="kbd-keys"><span class="kbd-key">Esc</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Close Modal / clear search</span><span class="kbd-keys"><span class="kbd-key">Esc</span></span></div>
     </div>
     <div class="kbd-section">
       <span class="kbd-section-lbl">Reader</span>
-      <div class="kbd-row"><span class="kbd-desc">Jump to section by ID (e.g. 3.4b)</span><span class="kbd-keys"><span class="kbd-key">type in search</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">AI Agent Guide</span><span class="kbd-keys"><span class="kbd-key">A</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">My Notes Panel</span><span class="kbd-keys"><span class="kbd-key">N</span></span></div>
       <div class="kbd-row"><span class="kbd-desc">Save notes</span><span class="kbd-keys"><span class="kbd-key">Ctrl</span>+<span class="kbd-key">S</span></span></div>
-      <div class="kbd-row"><span class="kbd-desc">Share section link</span><span class="kbd-keys"><span class="kbd-key">hover title</span></span></div>
     </div>
     <div class="kbd-section">
       <span class="kbd-section-lbl">Tips</span>
@@ -4081,13 +4084,71 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 
   document.addEventListener('keydown',function(e){
     if(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='TEXTAREA') return;
-    if(e.key==='?'){ e.preventDefault(); showKbd(); return; }
-    if(e.key==='/'){ e.preventDefault(); g('srch-in').focus(); return; }
-    if(e.key==='Escape'){
-      if(g('kbd-modal').style.display==='block'){ closeKbd(); return; }
-      if(g('notes-modal').style.display==='block'){ closeNotesModal(); return; }
-      if(g('srch-view').classList.contains('on')){ clrS(); return; }
+    
+    var key = e.key.toLowerCase();
+    
+    // c/C -> Start Reading / Contents
+    if(key==='c'){
+      e.preventDefault();
+      nav('srch');
+      showContentsPanel();
+      return;
     }
+    
+    // r/R -> Resume Reading
+    if(key==='r'){
+      e.preventDefault();
+      var resBtn = g('cta-resume');
+      if(resBtn && resBtn.style.display !== 'none'){
+        resBtn.click();
+      }
+      return;
+    }
+    
+    // a/A -> AI Agent Guide
+    if(key==='a'){
+      e.preventDefault();
+      window.location.href = 'pmn-agent-guide.html';
+      return;
+    }
+
+    // n/N -> My Notes modal toggle
+    if(key==='n'){
+      e.preventDefault();
+      var notesBtn = g('cta-notes');
+      if(notesBtn) notesBtn.click();
+      return;
+    }
+
+    // ? or g/G -> Glossary / Key Terms
+    if(e.key==='?' || key==='g'){
+      e.preventDefault();
+      showGL();
+      return;
+    }
+
+    // k/K -> Keyboard Shortcuts modal help
+    if(key==='k'){
+      e.preventDefault();
+      showKbd();
+      return;
+    }
+
+    // / -> Focus Search input
+    if(e.key==='/'){
+      e.preventDefault();
+      g('srch-in').focus();
+      return;
+    }
+
+    // Escape -> Close active modals
+    if(e.key==='Escape'){
+      if(g('kbd-modal') && g('kbd-modal').style.display==='block'){ closeKbd(); return; }
+      if(g('notes-modal') && g('notes-modal').style.display==='block'){ closeNotesModal(); return; }
+      if(g('srch-view') && g('srch-view').classList.contains('on')){ clrS(); return; }
+    }
+
+    // Arrow keys (Reader mode only)
     if(g('reader-view').classList.contains('on')){
       if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); navN(); }
       if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); navP(); }
