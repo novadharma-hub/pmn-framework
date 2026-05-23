@@ -63,7 +63,7 @@
     var tog=g('theme-tog');
     if(tog) tog.textContent=(t==='dark'?'☀ Light':'☾ Dark');
   }
-  function initTheme(){ try{ applyTheme(localStorage.getItem('pmn-theme')||'light'); }catch(e){ applyTheme('light'); } }
+  function initTheme(){ try{ applyTheme(localStorage.getItem('pmn-theme')||'dark'); }catch(e){ applyTheme('dark'); } }
   function toggleTheme(){
     var cur=document.documentElement.getAttribute('data-theme')||'dark';
     applyTheme(cur==='dark'?'light':'dark');
@@ -2833,46 +2833,83 @@
   function Particle(){
     this.x = Math.random() * w;
     this.y = Math.random() * h;
-    this.size = Math.random() * 2.2 + 0.6;
-    this.vx = (Math.random() - 0.5) * 0.4;
-    this.vy = (Math.random() - 0.5) * 0.4;
+    this.size = Math.random() * 2.8 + 0.8;
+    this.vx = (Math.random() - 0.5) * 1.5;
+    this.vy = (Math.random() - 0.5) * 1.5;
     this.baseX = this.x;
     this.baseY = this.y;
+    this.sizeSeed = Math.random() * 100;
   }
   Particle.prototype.update = function(){
-    this.x += this.vx; this.y += this.vy;
+    // Organic sine-wave drift
+    this.x += this.vx + Math.sin(this.y * 0.008 + this.sizeSeed) * 0.22;
+    this.y += this.vy + Math.cos(this.x * 0.008 + this.sizeSeed) * 0.22;
+    
     // Bounce off canvas edges
     if(this.x > w){ this.x = w; this.vx = -Math.abs(this.vx); }
     if(this.x < 0){ this.x = 0; this.vx = Math.abs(this.vx); }
     if(this.y > h){ this.y = h; this.vy = -Math.abs(this.vy); }
     if(this.y < 0){ this.y = 0; this.vy = Math.abs(this.vy); }
+    
     // Mouse repulsion
     if(mouse.x != null){
       var dx = mouse.x - this.x, dy = mouse.y - this.y;
       var dist = Math.sqrt(dx*dx + dy*dy);
       if(dist < mouse.radius && dist > 0){
         var force = (mouse.radius - dist) / mouse.radius;
-        this.x -= (dx/dist) * force * 2.2;
-        this.y -= (dy/dist) * force * 2.2;
+        this.x -= (dx/dist) * force * 3.5;
+        this.y -= (dy/dist) * force * 3.5;
       }
     }
   };
-  Particle.prototype.draw = function(){
+  Particle.prototype.draw = function(index){
     var dark = isDark();
-    var col = dark ? 'rgba(210,30,30,0.8)' : 'rgba(160,50,25,0.4)';
+    var col = dark ? 'rgba(192,39,26,0.85)' : 'rgba(184,58,27,0.7)';
+    var glow = dark ? 'rgba(239,68,68,0.7)' : 'rgba(220,38,38,0.5)';
+    
+    // Size breathing effect
+    var currentSize = this.size + Math.sin(Date.now() * 0.0016 + this.sizeSeed) * 0.35;
+    currentSize = Math.max(0.4, currentSize);
+    
+    ctx.save();
     ctx.fillStyle = col;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
+    // Glowing shadow effect for particles!
+    ctx.shadowBlur = dark ? 6 : 4;
+    ctx.shadowColor = glow;
+    ctx.arc(this.x, this.y, currentSize * 0.6, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
+    
     // Connect to nearby mouse
     if(mouse.x != null){
       var dx = mouse.x - this.x, dy = mouse.y - this.y;
       var dist = Math.sqrt(dx*dx + dy*dy);
-      if(dist < mouse.radius * 0.7){
+      if(dist < mouse.radius * 0.85){
         ctx.save();
-        ctx.globalAlpha = (1 - dist/(mouse.radius*0.7)) * 0.25;
-        ctx.strokeStyle = col; ctx.lineWidth = 0.6;
-        ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+        ctx.globalAlpha = (1 - dist/(mouse.radius*0.85)) * 0.35;
+        ctx.strokeStyle = dark ? 'rgba(239,68,68,0.45)' : 'rgba(184,58,27,0.35)';
+        ctx.lineWidth = 0.75;
+        ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(mouse.x, mouse.y); 
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+    
+    // Connect particles to each other (glowing neural network/constellation!)
+    for(var j = index + 1; j < particles.length; j++){
+      var p2 = particles[j];
+      var dx2 = this.x - p2.x, dy2 = this.y - p2.y;
+      var dist2 = Math.sqrt(dx2*dx2 + dy2*dy2);
+      if(dist2 < 82){
+        ctx.save();
+        ctx.globalAlpha = (1 - dist2/82) * (dark ? 0.22 : 0.16);
+        ctx.strokeStyle = dark ? 'rgba(192,39,26,0.35)' : 'rgba(184,58,27,0.22)';
+        ctx.lineWidth = 0.55;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
         ctx.restore();
       }
     }
@@ -2888,7 +2925,7 @@
   function animate(){
     ctx.clearRect(0,0,w,h);
     if(!isHome){ animId=null; return; }
-    particles.forEach(function(p){ p.update(); p.draw(); });
+    particles.forEach(function(p, i){ p.update(); p.draw(i); });
     animId = requestAnimationFrame(animate);
   }
 
@@ -3259,6 +3296,51 @@
   });
   const proseEl = document.getElementById('prose');
   if (proseEl) proseObserver.observe(proseEl, { childList: true, subtree: false });
+
+  // ── Floating Welcome / Orientation Toast ──
+  (function(){
+    var banner = document.getElementById('welcome-banner');
+    if(!banner) return;
+    
+    var closeBtn = document.getElementById('welcome-close');
+    var startBtn = document.getElementById('welcome-start');
+    
+    function dismissBanner(){
+      banner.classList.add('hidden');
+      try {
+        localStorage.setItem('pmn-welcome-dismissed', 'true');
+      } catch(e) {}
+    }
+    
+    if(closeBtn){
+      closeBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        dismissBanner();
+      });
+    }
+    
+    if(startBtn){
+      startBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        dismissBanner();
+        // Trigger Start Reading Contents Navigation
+        nav('srch');
+        showContentsPanel();
+      });
+    }
+    
+    // Show banner after 1.5 seconds if not dismissed previously
+    setTimeout(function(){
+      try {
+        var dismissed = localStorage.getItem('pmn-welcome-dismissed');
+        if(dismissed !== 'true' && document.getElementById('home-view').classList.contains('on')){
+          banner.classList.remove('hidden');
+        }
+      } catch(e) {
+        banner.classList.remove('hidden');
+      }
+    }, 1500);
+  })();
 
 })();
 })();
