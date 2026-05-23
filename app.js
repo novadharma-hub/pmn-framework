@@ -1406,13 +1406,71 @@
 
   document.addEventListener('keydown',function(e){
     if(document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='TEXTAREA') return;
-    if(e.key==='?'){ e.preventDefault(); showKbd(); return; }
-    if(e.key==='/'){ e.preventDefault(); g('srch-in').focus(); return; }
-    if(e.key==='Escape'){
-      if(g('kbd-modal').style.display==='block'){ closeKbd(); return; }
-      if(g('notes-modal').style.display==='block'){ closeNotesModal(); return; }
-      if(g('srch-view').classList.contains('on')){ clrS(); return; }
+    
+    var key = e.key.toLowerCase();
+    
+    // c/C -> Start Reading / Contents
+    if(key==='c'){
+      e.preventDefault();
+      nav('srch');
+      showContentsPanel();
+      return;
     }
+    
+    // r/R -> Resume Reading
+    if(key==='r'){
+      e.preventDefault();
+      var resBtn = g('cta-resume');
+      if(resBtn && resBtn.style.display !== 'none'){
+        resBtn.click();
+      }
+      return;
+    }
+    
+    // a/A -> AI Agent Guide
+    if(key==='a'){
+      e.preventDefault();
+      window.location.href = 'pmn-agent-guide.html';
+      return;
+    }
+
+    // n/N -> My Notes modal toggle
+    if(key==='n'){
+      e.preventDefault();
+      var notesBtn = g('cta-notes');
+      if(notesBtn) notesBtn.click();
+      return;
+    }
+
+    // ? or g/G -> Glossary / Key Terms
+    if(e.key==='?' || key==='g'){
+      e.preventDefault();
+      showGL();
+      return;
+    }
+
+    // k/K -> Keyboard Shortcuts modal help
+    if(key==='k'){
+      e.preventDefault();
+      showKbd();
+      return;
+    }
+
+    // / -> Focus Search input
+    if(e.key==='/'){
+      e.preventDefault();
+      g('srch-in').focus();
+      return;
+    }
+
+    // Escape -> Close active modals
+    if(e.key==='Escape'){
+      if(g('kbd-modal') && g('kbd-modal').style.display==='block'){ closeKbd(); return; }
+      if(g('notes-modal') && g('notes-modal').style.display==='block'){ closeNotesModal(); return; }
+      if(g('srch-view') && g('srch-view').classList.contains('on')){ clrS(); return; }
+    }
+
+    // Arrow keys (Reader mode only)
     if(g('reader-view').classList.contains('on')){
       if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); navN(); }
       if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); navP(); }
