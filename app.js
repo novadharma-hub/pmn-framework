@@ -3029,7 +3029,7 @@
                 termSpan.textContent = match;
                 const tooltipSpan = document.createElement('span');
                 tooltipSpan.className = 'glossary-tooltip';
-                tooltipSpan.textContent = glData[termKey].length > 120 ? glData[termKey].substring(0, 120) + '...' : glData[termKey];
+                tooltipSpan.textContent = glData[termKey];
                 termSpan.appendChild(tooltipSpan);
                 fragment.appendChild(termSpan);
             } else {
