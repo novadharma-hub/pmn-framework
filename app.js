@@ -1,25 +1,38 @@
 
 (async function initializeApp() {
-    console.log("Memuat data naskah dari folder data/...");
-    const dataFiles = ['parts', 'gl', 'glg', 'rel', 'look', 'ci', 'quotes'];
-    const mockData = {};
-    
-    // Mengambil data dari folder data/
-    await Promise.all(dataFiles.map(async (file) => {
-        try {
-            const res = await fetch(`data/${file}.json`);
-            if(res.ok) mockData[`d-${file}`] = await res.text();
-        } catch(e) { console.error("Gagal memuat " + file); }
-    }));
+    var hasInlined = false;
+    try {
+        var el = document.getElementById('d-parts');
+        if (el && el.textContent.trim().length > 10) {
+            hasInlined = true;
+        }
+    } catch(e) {}
 
-    // Memanipulasi fungsi bawaan agar Script asli mengira data ada di HTML
-    const originalGetElementById = document.getElementById.bind(document);
-    document.getElementById = function(id) {
-        if (mockData[id]) return { textContent: mockData[id] };
-        return originalGetElementById(id);
-    };
+    if (!hasInlined) {
+        console.log("Memuat data naskah dari folder data/...");
+        const dataFiles = ['parts', 'gl', 'glg', 'rel', 'look', 'ci', 'quotes'];
+        const mockData = {};
+        
+        // Mengambil data dari folder data/
+        await Promise.all(dataFiles.map(async (file) => {
+            try {
+                const res = await fetch(`data/${file}.json`);
+                if(res.ok) mockData[`d-${file}`] = await res.text();
+            } catch(e) { console.error("Gagal memuat " + file); }
+        }));
 
-    console.log("✅ Data berhasil dimuat. Menjalankan aplikasi utama...");
+        // Memanipulasi fungsi bawaan agar Script asli mengira data ada di HTML
+        const originalGetElementById = document.getElementById.bind(document);
+        document.getElementById = function(id) {
+            if (mockData[id]) return { textContent: mockData[id] };
+            return originalGetElementById(id);
+        };
+        console.log("✅ Data berhasil dimuat secara dinamis.");
+    } else {
+        console.log("✅ Data inlined terdeteksi. Bypassing fetch lokal.");
+    }
+
+    console.log("✅ Aplikasi siap dijalankan...");
     
     // ================= KODE JAVASCRIPT ASLI DI BAWAH INI =================
 (function() {
