@@ -295,25 +295,9 @@ footer{
         <div class="platform-note">Useful for broad synthesis and long inputs, but sometimes too eager to harmonize tensions that PMN wants to keep analytically alive.</div>
         <span class="platform-badge badge-ok">Best for synthesis</span>
       </div>
-      <div class="platform-card">
-        <div class="platform-name">Google NotebookLM</div>
-        <div class="platform-note">Upload the PMN PDF as a source and it becomes the notebook's permanent grounding. Strong for citation-backed retrieval: NotebookLM quotes the exact passage it draws on, making section drift visible immediately. Use the Audio Overview for a fast first-pass orientation before a deep session.</div>
-        <span class="platform-badge badge-best">Best for grounded retrieval</span>
-      </div>
     </div>
     <div class="callout">
       <strong>On plans and tiers:</strong> plan names and limits change often, so this guide does not hard-code them. For a full ~600-page PMN workflow, use the highest-context upload tier available on the platform you choose. Lower or free tiers are better suited to chunked input or reader-generated context packs. DeepSeek can still be very useful for narrower diagnostic passes even when you are not using a premium workflow.
-    </div>
-    <div class="note-box">
-      <span class="note-label">Google NotebookLM — how to use it well</span>
-      <p style="font-size:.9rem;color:var(--ink2);line-height:1.75;margin-bottom:.7rem">NotebookLM (notebook.google.com) is free and treats uploaded sources as the only ground truth the model draws from — making it unusually resistant to hallucinated section IDs.</p>
-      <ul style="font-size:.88rem;color:var(--mute);line-height:1.8;padding-left:1.2rem;margin-bottom:.5rem">
-        <li><strong style="color:var(--ink)">Upload the PMN PDF as a source.</strong> Every answer will be anchored to it with clickable inline citations.</li>
-        <li><strong style="color:var(--ink)">Use the Audio Overview first.</strong> It generates a 10–15 min dialogue summarising the manuscript — useful for orientation before a deep analytical session.</li>
-        <li><strong style="color:var(--ink)">Ask for section IDs explicitly.</strong> NotebookLM surfaces the source passage — verify that the citation matches the actual PMN text, not just a plausible paraphrase.</li>
-        <li><strong style="color:var(--ink)">Use the Study Guide feature.</strong> It auto-generates key questions and a glossary — seed your own follow-up prompts with these to stay framework-grounded.</li>
-        <li><strong style="color:var(--ink)">Keep a shared notebook for long projects.</strong> NotebookLM supports collaborative notebooks — use this to accumulate verified conclusions and unresolved tensions across sessions.</li>
-      </ul>
     </div>
   </div>
 
@@ -492,10 +476,6 @@ Instead:
       <div class="advice-card">
         <div class="advice-name">Gemini</div>
         <div class="advice-note">Use for long inputs and broad synthesis, but watch for over-smoothing or premature reconciliation of tensions that PMN wants to hold open.</div>
-      </div>
-      <div class="advice-card">
-        <div class="advice-name">Google NotebookLM</div>
-        <div class="advice-note">Use for citation-backed verification and multi-session knowledge management. Upload the PMN PDF once; every answer is grounded to it. Best when you need to confirm that a section ID is real and the cited passage actually supports the claim.</div>
       </div>
     </div>
 
