@@ -1,97 +1,118 @@
-# PMN Framework — Nova Dharma
+# 🚀 Progressive Materialist Naturalism (PMN) Reader Platform
 
-**Progressive Materialist Naturalism**  
-*A Framework for Navigating Material Reality*
+[![Version](https://img.shields.io/badge/Release-v114-blueviolet.svg?style=flat-square)](#)
+[![Architecture](https://img.shields.io/badge/Architecture-Hybrid%20Modular--Monolith-brightgreen.svg?style=flat-square)](#)
+[![AI-Ready](https://img.shields.io/badge/AI--Grounding-Corpus%20Enabled-orange.svg?style=flat-square)](#)
+[![Deployment](https://img.shields.io/badge/Runtime-Offline%20Zero--Dependencies-blue.svg?style=flat-square)](#)
 
-Site publikasi untuk framework PMN. Dibuat dengan React + Vite, di-host di GitHub Pages.
+Welcome to the **Progressive Materialist Naturalism (PMN) Ecosystem**! This repository hosts the interactive offline-first reader platform for the PMN philosophical manuscript—a framework designed for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming.
 
----
-
-## Setup Pertama Kali
-
-### 1. Fork / Clone repo ini
-
-```bash
-git clone https://github.com/USERNAME/pmn-framework.git
-cd pmn-framework
-```
-
-### 2. Edit nama repo di `vite.config.js`
-
-Buka `vite.config.js` dan ganti `pmn-framework` dengan nama repo GitHub kamu:
-
-```js
-base: '/nama-repo-kamu/',
-```
-
-### 3. Push ke GitHub
-
-```bash
-git add .
-git commit -m "Initial setup"
-git push origin main
-```
-
-### 4. Aktifkan GitHub Pages
-
-1. Buka repo di GitHub → **Settings** → **Pages**
-2. Di bagian **Source**, pilih: **GitHub Actions**
-3. Tunggu ~2 menit → site live di:  
-   `https://USERNAME.github.io/pmn-framework/`
+To prevent token bloat during AI pair programming sessions, the large 2.6 MB manuscript is engineered under a **Hybrid Modular-Monolith** design: the document remains divided into 21 lightweight JSON bab chunks for rapid, inexpensive AI editing, which are then compiled on-demand into a high-performance standalone webpage.
 
 ---
 
-## Cara Update Versi Baru
+## 📂 Repository Directory Tree
 
-1. Buka site → klik **Admin ↗** (pojok kanan atas)
-2. Login dengan akun admin kamu
-3. Klik **Publikasikan Versi Baru**
-4. Isi form: nomor versi, tanggal, ringkasan, changelog, URL PDF
-5. Klik **Publikasikan**
+A professional overview of the workspace directory layout:
 
-> **Catatan:** Data versi tersimpan di `localStorage` browser. Artinya:
-> - Tersimpan permanen di browser yang sama
-> - Jika ingin pindah perangkat, export data dulu (fitur bisa ditambahkan)
-> - Untuk setup multi-admin, pertimbangkan backend sederhana
-
----
-
-## Backend Migration
-
-Scaffold Phase 1 untuk migrasi ke Supabase sudah ditambahkan:
-
-- `.env.example`
-- `src/lib/supabase.js`
-- `src/lib/pmn-backend.js`
-- `supabase/schema.sql`
-- `docs/supabase-phase1.md`
-
-App saat ini masih berjalan dengan mode lokal yang lama. Scaffold ini disiapkan supaya migrasi ke backend bisa dilakukan bertahap tanpa mematahkan flow yang sudah ada.
-
----
-
-## Development Lokal
-
-```bash
-npm install
-npm run dev
-```
-
-Buka `http://localhost:5173/pmn-framework/`
-
----
-
-## Struktur Proyek
-
-```
+```text
 pmn-framework/
-├── src/
-│   ├── App.jsx          ← Semua komponen UI
-│   └── main.jsx         ← Entry point
-├── index.html
-├── vite.config.js       ← ⚠️ Ganti base sesuai nama repo
-├── package.json
-└── .github/
-    └── workflows/
-        └── deploy.yml   ← Auto-deploy ke GitHub Pages
+├── 🚀 00_PMN_WORKSPACE.bat    ← Super main dashboard launcher (One-click entry point!)
+├── 📝 CARA_PAKAI_PMN.txt      ← Front-page workspace quick start guide for editing & compiling
+├── 🧠 PANDUAN_PROMPT_AI.md    ← Front-page prompt blueprints to guide developer AI models
+│
+├── 📂 docx_source/            ← Dedicated folder for **exactly one active MS Word (.docx) file**
+│   └── PMN_Framework_v*.docx  ← Splitting source (Any .docx here is processed automatically!)
+│
+├── 🎨 User Interface & Logic
+│   ├── index.ui.html          ← Core visual layout skeleton (Lightweight UI, ~40KB)
+│   ├── style.css              ← Elegant typography, glassmorphism UI, & dark/light theme
+│   ├── app.js                 ← Interactive features (AI terminal, Command Palette, etc.)
+│   └── pmn-agent-guide.html   ← Standalone AI workspace interaction guide
+│
+├── 📦 Data Directories
+│   ├── data/
+│   │   ├── gl.json            ← Monolithic glossary dictionary (Key PMN terms)
+│   │   ├── parts.json         ← Bundled json parts used by development server
+│   │   └── parts/
+│   │       ├── manifest.json  ← Lightweight catalog tracking parts & section metadata
+│   │       └── part_*.json    ← 21 Modular chapter files (~10KB to ~300KB)
+│   │
+│   └── scripts/               ← Helper tools, document importers, and launchers
+│       ├── compile_pmn.bat    ← Secondary compilation linter batch
+│       ├── buka_web.bat       ← Secondary local HTTP web server batch
+│       ├── import_pmn_docx.py ← Custom utility to import .docx files into JSON segments
+│       └── utils/             ← Auxiliary utility scripts (ekstraktor.py, inspect_parts.py)
+│
+├── 🧠 AI Grounding & Documentation
+│   ├── AI.md                  ← Master workspace context brain (Read first by developer AIs)
+│   ├── README.md              ← Main GitHub repository documentation (This file)
+│   ├── docs/
+│   │   └── supabase-phase1.md ← Database migration guidelines
+│   ├── pmn_corpus_for_ai.md   ← Auto-compiled flat markdown text for training / RAG grounding
+│   └── Dokumentasi_AI/
+│       └── pmn_system_prompt.txt ← Primed developer prompt for LM Studio/OpenAI
+│
+├── ⚡ Supabase Backend scaffold (Phase 1 Ready)
+│   ├── supabase/schema.sql    ← Database schemas and migration steps
+│   └── src/lib/supabase.js    ← Supabase initialization helpers
+│
+└── ⚙️ Configuration
+    ├── package.json           ← Node configuration
+    ├── vite.config.js         ← Vite deploy config
+    ├── .gitignore             ← Git exclusions (caches, logs, index.html.bak)
+    └── .editorconfig          ← Workspace code styling configs
 ```
+
+---
+
+## ⚡ Interactive Dashboard & Automations
+
+Your workspace is fully automated. You do not need to memorise commands; simply use the batch shortcuts:
+
+### 1. The Command Center: `00_PMN_WORKSPACE.bat`
+Double-click `00_PMN_WORKSPACE.bat` at the root folder to launch the **Super Main Control Panel** (`pmn_console.py`). It provides a beautiful terminal UI showing live repository stats:
+*   Active manuscript version.
+*   Total parts & sections count.
+*   Glossary term count inside `data/gl.json`.
+*   Size of compiled monolithic `index.html`.
+*   Existence and timestamp of safety backups.
+*   Instant access keys to compile, boot servers, split files, or read blueprints.
+
+### 2. Compilation and Linting: `compile_pmn.bat`
+Executes `modularizer.py compile`. It functions as a compiler, structural linter, and grounding builder:
+*   **Automatic Safety Backup:** Automatically backs up the previous working `index.html` as `index.html.bak` prior to compilation.
+*   **Linter:** Prevents compilation if there are JSON syntax syntax errors.
+*   **AI Markdown Corpus:** Converts the entire manuscript and glossary into a flat, plain-text Markdown file (`pmn_corpus_for_ai.md`) stripped of HTML tags and special entities, optimized for ingestion by **Custom GPTs**, **LM Studio RAG**, or **Gemini context windows**.
+
+### 3. Local Server Preview: `buka_web.bat`
+Launches `jalankan_web.py` to host the workspace on `http://localhost:8000` and automatically opens `index.ui.html` in your default browser.
+
+---
+
+## 🛠️ Formatting Rules for AI Developers
+
+If you are pair-programming with an AI model (Gemini, Claude, or custom LLMs), they **MUST** strictly adhere to these workspace standards to avoid breaking compilation:
+
+1.  **JSON Double Quote Escaping:** Since naskah text is wrapped inside a JSON string value, all double quotes in HTML attributes or classes **MUST** be escaped using a backslash `\"` (e.g., `<span class=\"highlight\">text</span>`).
+2.  **Cross-References (Xref Links):** Internal section links (e.g., section 3.2) must be formatted exactly using:
+    ``<a class=\"xref\" href=\"#3.2\" data-sid=\"3.2\">3.2</a>``
+3.  **No Direct Monolith Edits:** Never edit `index.html` directly. Always make edits to modular parts inside `data/parts/` or the UI visual layout `index.ui.html`, then run `compile_pmn.bat`.
+
+---
+
+## 💎 Premium Features Showcase
+
+*   **Dialectical Synthesis Terminal (Local AI):** Integrated in-browser typewriter-styled chatbot that connects to secure local models or APIs to answer philosophical inquiries, turning references into clickable navigation buttons.
+*   **Wikipedia-Style Hover Previews:** Elegantly styled radial-gradient glassmorphism popovers showing section content when hovering over any `#xref` link.
+*   **Universal Command Palette (Ctrl+K):** A sliding dark-mode HUD interface allowing instant keyword searches, focus mode toggles, glossary searches, and random reading selections.
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**. Feel free to use, modify, and distribute the PMN Reader Platform offline or online as a framework for navigating material reality.
+
+---
+
+*“Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.”* — Nova Dharma

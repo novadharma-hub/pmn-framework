@@ -33,3 +33,15 @@ yarn-error.log*
 *.sln
 *.user
 .history/
+
+# Ignore Python Caches and Compiled Folders
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Ignore Compiled Backups and Local Artifacts
+*.bak
+index.html.bak
+

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 from __future__ import annotations
 
 import argparse
@@ -419,7 +419,7 @@ def replace_json_script(index_html: str, script_id: str, payload: object) -> str
     serialized = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     replacement = f'<script id="{script_id}" type="application/json">{serialized}</script>'
     updated, count = re.subn(
-        rf'<script id="{re.escape(script_id)}" type="application/json">.*?</script>',
+        rf'<script\s+[^>]*id="{re.escape(script_id)}"[^>]*>.*?</script>',
         lambda _: replacement,
         index_html,
         count=1,
@@ -492,17 +492,19 @@ def infer_public_version_label(index_html: str) -> str | None:
 
 
 def version_key(path: Path) -> tuple[int, ...]:
-    match = re.search(r"PMN_Framework_v(\d+(?:\.\d+)*)\.docx$", path.name, flags=re.IGNORECASE)
+    match = re.search(r"PMN_Framework_v(\d+(?:[._]\d+)*)\.docx$", path.name, flags=re.IGNORECASE)
     if not match:
         return ()
-    return tuple(int(part) for part in match.group(1).split("."))
+    parts = re.split(r"[._]", match.group(1))
+    return tuple(int(part) for part in parts if part.isdigit())
 
 
 def infer_version_label_from_docx(docx_path: Path) -> str | None:
-    match = re.search(r"PMN_Framework_v(\d+(?:\.\d+)*)\.docx$", docx_path.name, flags=re.IGNORECASE)
+    match = re.search(r"PMN_Framework_v(\d+(?:[._]\d+)*)\.docx$", docx_path.name, flags=re.IGNORECASE)
     if not match:
         return None
-    return f"v{match.group(1)}"
+    label = match.group(1).replace("_", ".")
+    return f"v{label}"
 
 
 def resolve_docx_path(value: str | None) -> Path:
@@ -517,6 +519,7 @@ def resolve_docx_path(value: str | None) -> Path:
     cwd = Path.cwd()
     script_dir = Path(__file__).resolve().parent
     search_roots = [
+        cwd / "docx_source",
         cwd,
         cwd / "docs",
         cwd / "Docx",
@@ -618,10 +621,39 @@ def main() -> int:
         print(summarize(parts))
         return 0
 
+    # Save parsed parts list directly to data/parts.json
+    try:
+        os.makedirs("data", exist_ok=True)
+        with open(os.path.join("data", "parts.json"), "w", encoding="utf-8") as f:
+            json.dump(parts, f, ensure_ascii=False, indent=2)
+        print("   [OK] data/parts.json successfully synchronized from DOCX.")
+    except Exception as e:
+        print(f"   [WARN] Could not write to data/parts.json: {e}")
+
     html_text = replace_json_script(html_text, "d-parts", parts)
     html_text = replace_derived_structures(html_text, parts)
     html_text = replace_version_labels(html_text, version_label)
     index_path.write_text(html_text, encoding="utf-8")
+
+    # Also update index.ui.html to persist the version label across future compiles!
+    try:
+        ui_path = Path("index.ui.html")
+        if ui_path.exists():
+            ui_text = ui_path.read_text(encoding="utf-8")
+            ui_text = replace_version_labels(ui_text, version_label)
+            ui_path.write_text(ui_text, encoding="utf-8")
+            print(f"   [OK] Persistent version {version_label} successfully saved in index.ui.html.")
+    except Exception as uie:
+        print(f"   [WARN] Could not update version in index.ui.html: {uie}")
+
+    # Automatically trigger modularizer split to overwrite individual modular part files!
+    try:
+        import subprocess
+        # Execute modularizer split from root directory
+        subprocess.run([sys.executable, "modularizer.py", "split"], check=True)
+        print("   [OK] Modular JSON parts split and synchronized successfully!")
+    except Exception as se:
+        print(f"   [WARN] Could not trigger modularizer split: {se}")
 
     print(summarize(parts))
     return 0

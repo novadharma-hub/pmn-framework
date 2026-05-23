@@ -1,3 +1,27 @@
+
+(async function initializeApp() {
+    console.log("Memuat data naskah dari folder data/...");
+    const dataFiles = ['parts', 'gl', 'glg', 'rel', 'look', 'ci', 'quotes'];
+    const mockData = {};
+    
+    // Mengambil data dari folder data/
+    await Promise.all(dataFiles.map(async (file) => {
+        try {
+            const res = await fetch(`data/${file}.json`);
+            if(res.ok) mockData[`d-${file}`] = await res.text();
+        } catch(e) { console.error("Gagal memuat " + file); }
+    }));
+
+    // Memanipulasi fungsi bawaan agar Script asli mengira data ada di HTML
+    const originalGetElementById = document.getElementById.bind(document);
+    document.getElementById = function(id) {
+        if (mockData[id]) return { textContent: mockData[id] };
+        return originalGetElementById(id);
+    };
+
+    console.log("✅ Data berhasil dimuat. Menjalankan aplikasi utama...");
+    
+    // ================= KODE JAVASCRIPT ASLI DI BAWAH INI =================
 (function() {
   // Load data from JSON script tags - completely safe, no escaping issues
   var PARTS = JSON.parse(document.getElementById('d-parts').textContent);
@@ -3178,4 +3202,5 @@
   const proseEl = document.getElementById('prose');
   if (proseEl) proseObserver.observe(proseEl, { childList: true, subtree: false });
 
+})();
 })();

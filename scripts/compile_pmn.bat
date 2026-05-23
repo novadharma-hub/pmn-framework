@@ -15,6 +15,7 @@ if %errorlevel% neq 0 (
 )
 
 :: Run compiler script
+cd /d "%~dp0.."
 python modularizer.py compile
 
 echo.
