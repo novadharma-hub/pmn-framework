@@ -6,6 +6,69 @@ import re
 import subprocess
 import time
 
+
+def clean_ascii(text):
+    # Replaces non-ASCII characters to keep it safe for Windows cp1252 consoles
+    return "".join(c if ord(c) < 128 else '?' for c in text)
+
+def workspace_search(query):
+    query_lower = query.lower()
+    print("\033[96m" + "=" * 65)
+    print(f"  SEARCHING WORKSPACE FOR: '{query}'")
+    print("=" * 65 + "\033[0m")
+    
+    extensions = ('.js', '.css', '.html', '.json', '.py', '.md', '.txt')
+    exclude_dirs = {'.git', 'docx_source', 'index.html.bak'}
+    
+    total_matches = 0
+    start_time = time.time()
+    
+    root_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else os.getcwd()
+    
+    for root, dirs, files in os.walk(root_dir):
+        # Prune excluded directories
+        dirs[:] = [d for d in dirs if d not in exclude_dirs]
+        
+        for file in files:
+            if not file.endswith(extensions):
+                continue
+            if file == 'pmn_corpus_for_ai.md' or file == 'index.html' or file == 'index.html.bak':
+                # Skip compiled outputs to prevent massive redundant hits
+                continue
+                
+            filepath = os.path.join(root, file)
+            rel_path = os.path.relpath(filepath, root_dir)
+            
+            try:
+                with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                    lines = f.readlines()
+            except Exception as e:
+                continue
+                
+            file_printed = False
+            for idx, line in enumerate(lines):
+                if query_lower in line.lower():
+                    if not file_printed:
+                        print(f"\n\033[93m[MATCH] {rel_path}\033[0m")
+                        file_printed = True
+                    
+                    cleaned_line = line.strip()
+                    # Limit long lines (e.g. JSON strings) to 120 chars
+                    if len(cleaned_line) > 120:
+                        q_pos = cleaned_line.lower().find(query_lower)
+                        start_clip = max(0, q_pos - 40)
+                        end_clip = min(len(cleaned_line), q_pos + len(query) + 60)
+                        cleaned_line = ("..." if start_clip > 0 else "") + cleaned_line[start_clip:end_clip] + ("..." if end_clip < len(cleaned_line) else "")
+                        
+                    ascii_line = clean_ascii(cleaned_line)
+                    print(f"  Line {idx + 1:4d}: {ascii_line}")
+                    total_matches += 1
+                    
+    duration = time.time() - start_time
+    print("\033[96m" + "-" * 65 + "\033[0m")
+    print(f"  Total Matches: {total_matches} | Time Elapsed: {duration:.3f}s")
+    print("\033[96m" + "=" * 65 + "\033[0m")
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -115,6 +178,7 @@ def print_dashboard():
     print("  \033[92m[4]\033[0m SPLIT MONOLITH TO JSON\033[90m(Split data/parts.json into 21 edit JSONs)\033[0m")
     print("  \033[92m[5]\033[0m RESTORE STABLE BACKUP\033[90m(Rollback index.html to stable index.html.bak)\033[0m")
     print("  \033[92m[6]\033[0m SYSTEM BLUEPRINT    \033[90m(Print master AI.md system architecture)\033[0m")
+    print("  \033[92m[7]\033[0m SEARCH WORKSPACE     \033[90m(Fast, safe token-saving source code search)\033[0m")
     print("  \033[91m[0]\033[0m EXIT TERMINAL")
     print("\033[96m" + "=" * 65 + "\033[0m")
 
@@ -138,7 +202,13 @@ def show_blueprint():
     input("\n  Press Enter to return to Dashboard...")
 
 def main():
-    # Set Windows Console title and color if on Windows
+    # Direct CLI search handling
+    if len(sys.argv) > 1 and sys.argv[1].lower() == 'search':
+        if len(sys.argv) > 2:
+            workspace_search(sys.argv[2])
+        else:
+            print("Usage: python pmn_console.py search \"<query>\"")
+        sys.exit(0)
     if sys.platform.startswith('win'):
         os.system("title PMN Framework - Central Console Dashboard")
         os.system("color 0F")
@@ -271,6 +341,14 @@ def main():
             
         elif choice == "6":
             show_blueprint()
+            
+        elif choice == "7":
+            query = input("\n  Enter search query: ").strip()
+            if query:
+                workspace_search(query)
+            else:
+                print("  Empty query. Search canceled.")
+            input("\n  Press Enter to return to dashboard...")
             
         elif choice == "0":
             print("\n  Closing PMN Console. Sampai jumpa, Komandan Ali Ikhsan! 🫡")
