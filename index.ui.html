@@ -5,7 +5,7 @@
 <script>
   (function() {
     try {
-      var saved = localStorage.getItem('pmn-theme') || 'light';
+      var saved = localStorage.getItem('pmn-theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
     } catch(e) {}
   })();
@@ -646,6 +646,19 @@
   </div>
 </div>
 <div id="tt"><p id="tt-term"></p><p id="tt-def"></p></div>
+
+<!-- ── FLOATING WELCOME & SHORTCUTS TOAST ── -->
+<div id="welcome-banner" class="welcome-card hidden">
+  <button id="welcome-close" class="welcome-close-btn" aria-label="Dismiss">&times;</button>
+  <div class="welcome-badge">🧭 ORIENTATION TIP</div>
+  <p class="welcome-title">Welcome to PMN Framework</p>
+  <p class="welcome-text">Press <span class="welcome-kbd">K</span> anytime to see all shortcuts, or visit our <a href="pmn-agent-guide.html" class="welcome-link">AI Agent Guide [A]</a> to interact with philosophy.</p>
+  <div class="welcome-actions">
+    <button id="welcome-start" class="welcome-btn welcome-btn-primary">Start Reading</button>
+    <a href="pmn-agent-guide.html" class="welcome-btn welcome-btn-secondary">Open AI Guide</a>
+  </div>
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>
