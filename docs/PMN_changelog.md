@@ -377,3 +377,56 @@ Monitoring notes:
 - "becoming" appears 469x as shorthand — all defined by 2A45B015
 - 66x "anti-foreclosure" — new term introduced in v114
 - Next session: consider whether 4.5c and 4.5d need minor language updates to fully reflect loop model
+
+---
+
+## v116 (May 2026)
+**Source:** v115 → v116
+**Session:** Becoming reframe completion — e/acc, thinker audit, final sweeps
+
+### Changes Made
+| # | Location | Change | Notes |
+|---|----------|--------|-------|
+| 1 | **16.4 e/acc** — new para `1E164004` | Added paragraph applying anti-foreclosure criterion to e/acc critique. Two simultaneous violations: immediate floor failure + anti-foreclosure failure (destruction of collective response infrastructure through mass displacement). "Future generations will benefit" doesn't resolve either violation. | Stronger PMN critique than old floor-vs-ceiling framing |
+| 2 | 16.4 e/acc body | "future flourishing" → "future adaptive response capacity" | Terminology alignment |
+| 3 | Final sweeps | All remaining "genuine becoming" (44x), "future flourishing", "becoming as aspiration" patterns resolved | |
+
+### Thinker reference audit (v116)
+| Thinker | Count | Treatment |
+|---------|-------|-----------|
+| Gramsci | 137x | Hegemony, biological floor relation — accurate ✅ |
+| Marx | 68x | Displacement from idealism to material production; PMN extends further to biology — accurate ✅ |
+| Hegel | 16x | Displacement move credited; idealism rejected; World Spirit used as contrast case — fair ✅ |
+| Nietzsche | 19x | Last Man concern taken seriously; PMN acknowledges validity then departs structurally — fair ✅ |
+| Ambedkar | 28x | Central to Part III; E variable derivation — substantive engagement ✅ |
+| Ibn Khaldun | 13x | Muqaddimah epistemology; asabiyyah as counter-power — accurate ✅ |
+| Foucault | 3x | Technologies of the self — light treatment, acceptable given PMN's focus |
+| Kastrup | 7x | Bulletproof postulate; idealist challenge acknowledged seriously — fair ✅ |
+| Peirce | 8x | Fallibilism; pragmatic epistemology — accurate ✅ |
+
+### Final state of becoming reframe (v114–v116)
+| Check | v116 |
+|-------|------|
+| "evaluative ceiling" | 0x ✅ |
+| "becoming is primary" | 0x ✅ |
+| "genuine becoming" | 0x ✅ |
+| "future flourishing" | 0x ✅ |
+| "anti-foreclosure" | 70x ✅ |
+| loop model | ✅ |
+| 3.3 coherent | "one commitment, stated at two levels of causal depth" ✅ |
+| 17.7 second-order | ✅ |
+| 4.5d second-order | ✅ |
+| e/acc anti-foreclosure | ✅ |
+
+### Paragraph count
+v115: 3355 → v116: 3356 (+1: e/acc anti-foreclosure paragraph)
+
+### New Para IDs
+| Para ID | Location | Content |
+|---------|----------|---------|
+| `1E164004` | 16.4 | e/acc — anti-foreclosure critique (two simultaneous violations) |
+
+---
+
+## Pending / Backlog
+*(No known gaps. v114–v116 = complete becoming reframe, first- and second-order, with e/acc application.)*
