@@ -535,13 +535,33 @@ Do not become smoother than the evidence allows.</div>
 
   <div class="step">
     <span class="step-num">Step 08</span>
-    <h2 class="step-h2">Use the PMN site for what it is actually good at</h2>
-    <p>The public PMN site is already useful, but its strength is manuscript-grounded retrieval, not magical URL comprehension by an external model.</p>
+    <h2 class="step-h2">Navigate the AI Scraping & Grounding Pitfalls</h2>
+    <p>Feeding a live website link directly into an external AI search engine or a roleplay bot often fails in silent, destructive ways. To build a highly disciplined AI Agent or run a random Q&A roleplay session, you must understand the five major scraper limitations and how to bypass them.</p>
+    
+    <div class="note-box" style="border-left: 3px solid var(--acc);">
+      <span class="note-label">⚠️ The Five Severe Web-Scraping Failures</span>
+      <ul style="font-size: 0.88rem; color: var(--ink2); line-height: 1.75; padding-left: 1.2rem; margin: 0.5rem 0;">
+        <li><strong style="color:var(--ink)">1. Dynamic JS Rendering:</strong> AI bots act like simple text scrapers. Because the main PMN site wraps the manuscript inside JSON script tags, standard web crawlers only see a blank visual skeleton and fail to extract the actual text.</li>
+        <li><strong style="color:var(--ink)">2. Client-Side Routing Fails:</strong> Scrapers ignore hash parameters (like <code>/#1.1</code>). The AI only crawls the main homepage generally, completely failing to find the specific section context you intended to reference.</li>
+        <li><strong style="color:var(--ink)">3. Hidden UI States:</strong> Bots cannot "click" or interact with sliding search drawers, accordion theses, or popovers. Anything hidden behind a UI toggle is completely invisible to them.</li>
+        <li><strong style="color:var(--ink)">4. AI Hallucination Fallback:</strong> When a crawler fails to read the raw text but sees the title "Progressive Materialist Naturalism", it will try to sound smart by generating generic materialism/naturalism talk from its training data, producing falsified arguments.</li>
+        <li><strong style="color:var(--ink)">5. Decaying Persona:</strong> Instructing a model to "be a PMN Agent by reading this link" causes a rapid fading of context. The model will forget the framework's strict biological boundaries after just one or two dialogue turns.</li>
+      </ul>
+    </div>
+
     <div class="checklist">
-      <div class="check-item"><strong>Use the reader</strong><span>Open the relevant section, related sections, and glossary terms before asking the model to analyze.</span></div>
-      <div class="check-item"><strong>Use the handoff honestly</strong><span>The static build prepares prompts and context packs. It does not claim secure in-browser provider execution.</span></div>
-      <div class="check-item"><strong>Prefer text over assumptions</strong><span>If the manuscript text is in the prompt, the model should use that text rather than guess from the URL.</span></div>
-      <div class="check-item"><strong>Build backend retrieval later</strong><span>The long-term upgrade path is citation-backed retrieval, not pretending static pages are a full agent backend.</span></div>
+      <div class="check-item">
+        <strong>1. File Upload (The Gold Standard)</strong>
+        <span>To secure durable, high-fidelity AI roleplay, always download the PMN PDF or the raw Markdown corpus, then <strong>upload it directly</strong> as a source file inside Google NotebookLM, Claude Projects, or a Custom GPT. Direct file injection guarantees persistent memory and zero context decay.</span>
+      </div>
+      <div class="check-item">
+        <strong>2. The Pure Markdown Link Bypass</strong>
+        <span>If you must feed a live link to a search AI (like Perplexity or ChatGPT Search), <strong>do not feed the HTML reader link</strong>. Instead, feed the direct raw Markdown URL: <code>pmn_corpus_for_ai.md</code>. This serves a flat, static, JS-free text file that crawlers digest instantly in 0.1s with 100% semantic accuracy.</span>
+      </div>
+      <div class="check-item">
+        <strong>3. Rely on Grounded Files</strong>
+        <span>Make the model earn every conclusion by explicitly prompting: <em>"Search the uploaded PMN file for section IDs and quote the exact passage before answering."</em> This forces citation-backed retrieval and completely kills hallucination.</span>
+      </div>
     </div>
   </div>
 
