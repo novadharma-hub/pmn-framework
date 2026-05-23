@@ -80,3 +80,16 @@ Maintain this log chronologically. Always check this section before executing ta
     5.  **Floating Orientation Toast:** Embedded a glassmorphic welcome toast card (`#welcome-banner`) in `index.ui.html` sliding in after 1.5 seconds, guiding readers on keyboard shortcuts, and integrated localStorage close persistence.
     6.  **Cozy Cottage Bookstore Light Theme:** Completely overhauled Light Mode variables in `style.css` to soft ivory paper background (`#fdfbf7`), deep espresso roasted ink (`#1c1510`), warm wood/walnut details (`#756456`), and terracotta crimson buttons (`#b83a1b`).
 *   **Outcome:** All stress-tests successfully passed. The website compiled clean, scales beautifully, runs at buttery smooth frame rates, and visual presentation is highly premium and cohesive.
+
+### 📅 May 24, 2026 (II): Smart Glossary Search Mapping & Gorgeous Seamless Circular Cover Gradients
+*   **Situation:** Clicking glossary cards (e.g. `"inaction as choice"`) returned `"0 results"` because the search strictly checked manuscript text and ignored the glossary dictionary, causing critical navigation breakages. Additionally, the Dark Mode cover radial gradient was visually stretched into a boxy/rectangular frame against the viewport due to hard `transparent` interpolation, while the Light Mode cover felt completely flat and empty.
+*   **Action Taken:**
+    1.  **Smart Glossary Search (`doSrch`):** Upgraded `app.js` to automatically intercept queries matching any of the 121 glossary terms. The search dynamically scans the matching term's definition in `GL`, extracts parenthetical section citations (e.g. `(1.5)`), and automatically inserts those cited sections as highly-visible **Key Term Match** results at the top of the search list.
+    2.  **Soft Token Search Fallback:** Implemented a multi-word fallback matching mechanism in `doSrch` that splits queries into individual tokens (e.g. `"inaction"`, `"choice"`) if a strict substring search returns zero results, ensuring flexible matches.
+    3.  **Visual Styling of Glossary Match:** Styled `.res.is-glossary-match` results in `style.css` with a bold terracotta left-border accent and soft backing gradient, distinguishing key terms beautifully.
+    4.  **Seamless Circular Cover Gradients (`style.css`):**
+        *   *Dark Mode:* Replaced viewport-stretched gradients with a true circular terracotta center-orb fading smoothly to the background color `var(--bg)` at `80%`, blending organically and resolving the rigid segiempat shape.
+        *   *Light Mode:* Added a stunning "cozy cottage bookstore warm reading lamp" ivory-sepia radial glow fading smoothly to ivory background at `80%`, giving the cover a luxurious three-dimensional sense of space.
+    5.  **Compile & Telemetry:** Successfully recompiled into standalone `index.html` (2.58 MB) and verified complete synchronization across the 121 glossary categories.
+*   **Outcome:** Searching or clicking glossary terms now automatically navigates and grounds readers on the exact philosophical sections, and cover radial gradients are incredibly organic, smooth, and highly atmospheric.
+

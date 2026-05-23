@@ -1347,31 +1347,115 @@
     if(svBody) svBody.style.display='';
     var ql=q.toLowerCase().trim(), res=[];
     var pf=g('srch-part')?g('srch-part').value:'';
-      if(/^[0-9]+\.[0-9]+[a-z]?$/.test(ql)||/^a\.[0-9]+$/i.test(ql)){
+    if(/^[0-9]+\.[0-9]+[a-z]?$/.test(ql)||/^a\.[0-9]+$/i.test(ql)){
       var info=LOOK[resolveSectionId(ql)]; if(info){ jumpToSection(info.pi,info.si,{origin:getJumpOrigin()}); clrS(); return; }
     }
+    
+    // Smart Glossary mapping:
+    var citedSections = [];
+    var matchedTermKey = null;
+    var keys = Object.keys(GL);
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      if (k.toLowerCase() === ql || ql.indexOf(k.toLowerCase()) >= 0 || k.toLowerCase().indexOf(ql) >= 0) {
+        matchedTermKey = k;
+        var def = GL[k];
+        var rx = /\((\d+\.\d+[a-z]?)\)/g, match;
+        while ((match = rx.exec(def)) !== null) {
+          var secId = match[1];
+          if (citedSections.indexOf(secId) < 0) citedSections.push(secId);
+        }
+      }
+    }
+    
+    var addedSections = {}; // To avoid duplicates
+    
+    // First, add explicitly cited sections from matching glossary term
+    for (var i = 0; i < citedSections.length; i++) {
+      var secId = citedSections[i];
+      var info = LOOK[resolveSectionId(secId)];
+      if (info) {
+        if (pf !== '' && info.pi !== +pf) continue;
+        var p = PARTS[info.pi];
+        var s = p.subs[info.si];
+        var key = info.pi + '-' + info.si;
+        if (!addedSections[key]) {
+          res.push({
+            pi: info.pi,
+            si: info.si,
+            p: p,
+            s: s,
+            snip: '<em>Key Term Match: “' + matchedTermKey + '” is cited here.</em>',
+            isGlossaryMatch: true
+          });
+          addedSections[key] = true;
+        }
+      }
+    }
+
+    // Now scan all parts for regular matching
     for(var pi=0;pi<PARTS.length;pi++){
       var p=PARTS[pi];
       for(var si=0;si<p.subs.length;si++){
         var s=p.subs[si];
         if(pf!==''&&pi!==+pf) continue;
+        var key = pi + '-' + si;
+        if (addedSections[key]) continue; // Already added as glossary match
+        
         var stxt=s.html?(s.html.replace(/<[^>]+>/g,' ')):s.text||'';
-        if(ql&&s.title.toLowerCase().indexOf(ql)<0 && stxt.toLowerCase().indexOf(ql)<0) continue;
-        var stxt2=stxt;
-        var idx=stxt2.toLowerCase().indexOf(ql), snip='';
-        if(idx>=0){ var st=Math.max(0,idx-90),en=Math.min(stxt2.length,idx+160); snip=(st>0?'…':'')+stxt2.slice(st,en)+(en<stxt2.length?'…':''); }
-        res.push({pi:pi,si:si,p:p,s:s,snip:snip});
+        var matched = false;
+        var snip = '';
+        
+        // 1. Strict substring match
+        if (ql && (s.title.toLowerCase().indexOf(ql) >= 0 || stxt.toLowerCase().indexOf(ql) >= 0)) {
+          matched = true;
+          var idx=stxt.toLowerCase().indexOf(ql);
+          if(idx>=0){ 
+            var st=Math.max(0,idx-90),en=Math.min(stxt.length,idx+160); 
+            snip=(st>0?'…':'')+stxt.slice(st,en)+(en<stxt.length?'…':''); 
+          }
+        } 
+        // 2. Token fallback: if multi-word query, check if all words are present
+        else if (ql && ql.indexOf(' ') > 0) {
+          var words = ql.split(/\s+/).filter(function(w){ return w.length > 2; });
+          if (words.length >= 2) {
+            var allWordsPresent = true;
+            for (var wIdx = 0; wIdx < words.length; wIdx++) {
+              var w = words[wIdx];
+              if (s.title.toLowerCase().indexOf(w) < 0 && stxt.toLowerCase().indexOf(w) < 0) {
+                allWordsPresent = false;
+                break;
+              }
+            }
+            if (allWordsPresent) {
+              matched = true;
+              // Create a snippet around the first matching word
+              var firstWord = words[0];
+              var idx = stxt.toLowerCase().indexOf(firstWord);
+              if (idx >= 0) {
+                var st=Math.max(0,idx-90),en=Math.min(stxt.length,idx+160);
+                snip=(st>0?'…':'')+stxt.slice(st,en)+(en<stxt.length?'…':'');
+              }
+            }
+          }
+        }
+        
+        if (matched) {
+          res.push({pi:pi,si:si,p:p,s:s,snip:snip});
+          addedSections[key] = true;
+        }
       }
     }
+
     function hl(t){ if(!q||q.length<2) return esc(t); return esc(t).replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>'); }
     g('sv-hdr').textContent=res.length+' result'+(res.length!==1?'s':'')+' for “'+q+'”';
     var shown=res.slice(0,40), h='';
     for(var i=0;i<shown.length;i++){
       var r=shown[i];
-      h+='<button class="res" data-pi="'+r.pi+'" data-si="'+r.si+'">'
+      h+='<button class="res' + (r.isGlossaryMatch ? ' is-glossary-match' : '') + '" data-pi="'+r.pi+'" data-si="'+r.si+'">'
         +'<p class="res-loc">'+esc(pshort(r.p))+' · '+esc(r.s.id)+'</p>'
         +'<p class="res-title">'+hl(r.s.title)+'</p>'
-        +(r.snip?'<p class="res-snip">'+hl(r.snip)+'</p>':'')
+        +(r.snip?'<p class="res-snip">'+(r.isGlossaryMatch ? r.snip : hl(r.snip))+'</p>':'')
         +'</button>';
     }
     if(!res.length) h='<p class="empty">No results found.</p>';
