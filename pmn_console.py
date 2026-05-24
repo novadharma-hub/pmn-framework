@@ -170,6 +170,15 @@ def print_dashboard():
     print(f"  ● Safety Backup    : \033[96m{stats['backup_status']}\033[0m     ● Grounding Corpus: \033[96m{stats['corpus_status']}\033[0m")
     print("\033[90m" + "-" * 65 + "\033[0m")
     
+    # Layman Workflow Recommended Order Guide
+    print(" \033[93m[ALUR KERJA HARIAN - NORMALNYA URUTANNYA BEGINI]:\033[0m")
+    print("  \033[97m1.\033[0m Edit naskah di Microsoft Word (tutup setelah selesai)")
+    print("  \033[97m2.\033[0m Letakkan dokumen .docx Anda di folder \\docx_source\\")
+    print("  \033[97m3.\033[0m Tekan \033[92m[3]\033[0m di bawah untuk Impor & Kompilasi otomatis")
+    print("  \033[97m4.\033[0m Tekan \033[92m[8]\033[0m di bawah untuk Pembersihan Metadata Aman")
+    print("  \033[97m5.\033[0m Klik ganda file \033[96mKIRIM_KE_GITHUB.bat\033[0m di folder utama untuk rilis!")
+    print("\033[90m" + "-" * 65 + "\033[0m")
+    
     # Premium Menu Option Rows
     print(" \033[97m[COMMAND MENU - SELECT ACTION]\033[0m")
     print("  \033[92m[1]\033[0m LIGHTNING COMPILE    \033[90m(Rebuild index.html with Safety Checklist)\033[0m")
