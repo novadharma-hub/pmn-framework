@@ -46,6 +46,12 @@ Menu konsol interaktif berwarna akan muncul. Tekan angka pilihan Komandan:
         dan mengembalikannya ke versi cadangan stabil (index.html.bak).
 *   Tekan [6] : SYSTEM BLUEPRINT (Cetak Biru Arsitektur AI)
     --> Membuka ringkasan arsitektur file AI.md langsung di layar konsol.
+*   Tekan [7] : SEARCH WORKSPACE (Pencarian Kode Cepat)
+    --> Fitur pencarian kata kunci di seluruh berkas kode sumber lokal Anda.
+*   Tekan [8] : SECURE META REMOVER (Pembersih Metadata & Backup Telegram)
+    --> Meluncurkan pipa keamanan tingkat tinggi untuk membersihkan nama asli
+        Anda dari dokumen draf (.docx/.pdf) secara lokal, mengaudit hasilnya,
+        dan otomatis mengunggah cadangan sterilnya ke Telegram Log Group.
 
 --------------------------------------------------------------------
 3. CARA MENGUPDATE NASKAH DARI MICROSOFT WORD (.DOCX)
@@ -83,6 +89,32 @@ Untuk menjaga proyek tetap profesional di GitHub dan hemat token AI:
 2.  AI.md & pmn_system_prompt.txt: Wajib menggunakan bahasa Inggris
     penuh agar model AI (Claude/Gemini/ChatGPT) dapat mencernanya
     secara sangat efisien dan akurat tanpa membuang kuota token!
+
+--------------------------------------------------------------------
+6. PIPA KEAMANAN & STERILISASI METADATA SECARA INTERAKTIF (OPSI 8)
+--------------------------------------------------------------------
+Sebelum Komandan merilis manuskrip/draf Word (.docx) atau PDF (.pdf) ke
+dunia publik GitHub, Anda wajib memastikan tidak ada data pribadi (seperti
+nama asli atau identitas komputer) yang menempel pada properti dokumen!
+
+Tersedia dua metode sterilisasi otomatis yang sangat praktis:
+
+A. METODE KONSOL (PEMROSESAN MASSAL):
+   1. Letakkan dokumen-dokumen mentah (.docx / .pdf) Komandan ke folder:
+      D:\pmn-framework\docs\raw_inputs\
+   2. Jalankan `00_PMN_WORKSPACE.bat` lalu pilih Opsi [8].
+   3. Ketik 'Y' saat ditawarkan opsi pembersihan massal.
+   4. Berkas akan steril 100%, diaudit ulang secara otomatis oleh sistem,
+      dan disimpan di folder: \docs\clean_outputs\
+      Serta dicadangkan otomatis ke Telegram Log Group!
+
+B. METODE DRAG-AND-DROP INSTAN:
+   1. Ambil dokumen draf (.docx / .pdf) Komandan di Windows Explorer.
+   2. Seret (drag) dan jatuhkan (drop) dokumen tersebut langsung di atas
+      berkas launcher batch:
+      D:\pmn-framework\BERSIHKAN_DAN_BACKUP_DOKUMEN.bat
+   3. Konsol akan aktif sesaat, membersihkan berkas, memvalidasi isinya,
+      mengunggahnya ke Telegram, dan menutup secara otomatis!
 
 ====================================================================
 Sistem Anda telah terotomatisasi secara mandiri dan siap digunakan! 🫡🚀🔥
