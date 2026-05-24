@@ -125,6 +125,48 @@ Setiap kali Anda selesai melakukan perubahan naskah atau merombak tata letak vis
 
 ---
 
+## 📖 Panduan Alur Kerja Harian: Dari Naskah Word Hingga ke GitHub (Bagi Pemula)
+
+Berikut adalah panduan langkah-demi-langkah yang sangat mudah diikuti oleh orang awam untuk memperbarui website filosofi PMN dari Microsoft Word hingga terbit dengan aman di GitHub publik tanpa khawatir kebocoran data pribadi:
+
+### 1️⃣ LANGKAH 1: EDIT NASKAH DI MICROSOFT WORD
+* Buka dokumen manuskrip filosofi PMN Anda di **Microsoft Word** seperti biasa.
+* Lakukan penulisan atau revisi bab sesuka hati Anda.
+* Setelah selesai, klik **Save As** dan simpan dengan nama berformat versi terbaru, misalnya: `PMN_Framework_v117.docx` atau `PMN_Framework_v116_3.docx`.
+* > [!IMPORTANT]
+  > **Tutup Microsoft Word Anda!** Jangan biarkan Word tetap terbuka, karena Windows akan mengunci berkas tersebut dan menghalangi skrip kompilator untuk membacanya.
+
+### 2️⃣ LANGKAH 2: MASUKKAN KE FOLDER SUMBER
+* Pindahkan file `.docx` baru Anda tersebut ke dalam folder:
+  `D:\pmn-framework\docx_source\`
+* *(Catatan: Pastikan hanya ada satu file `.docx` aktif di folder ini agar sistem pemecah otomatis tidak mengalami kebingungan).*
+
+### 3️⃣ LANGKAH 3: IMPOR & KOMPILASI OTOMATIS
+* Klik ganda (double-click) file launcher utama Anda:
+  `D:\pmn-framework\00_PMN_WORKSPACE.bat`
+* Konsol kendali utama PMN yang interaktif akan terbuka di layar Anda.
+* Ketik angka **`3`** lalu tekan **Enter** untuk memilih menu **`IMPORT WORD NASKAH`**.
+* Sistem akan membaca dokumen Word Anda, memecahnya menjadi file bab JSON, menyesuaikan nomor versi di header web, dan mengompilasi halaman web final `index.html` secara otomatis dalam 2 detik!
+
+### 4️⃣ LANGKAH 4: STERILKAN METADATA & CADANGKAN (AMAN DARI LEAKS!)
+* Masih di dalam konsol utama yang sama, ketik angka **`8`** lalu tekan **Enter** untuk memilih menu **`SECURE META REMOVER`**.
+* Skrip akan menanyakan apakah Anda ingin melakukan sterilisasi massal. Ketik **`Y`** lalu **Enter**.
+* Sistem secara instan akan:
+  * Menyapu bersih nama asli Anda ("Ali Ikhsan") dan properti komputer dari metadata dokumen draf.
+  * Melakukan audit keamanan internal pasca-proses untuk memastikan berkas benar-benar steril.
+  * Menyimpan salinan steril di folder aman `docs/clean_outputs/` (yang disembunyikan otomatis dari git).
+  * Mengirim salinan steril tersebut langsung ke grup Telegram Log Anda sebagai cadangan rahasia!
+* *(Alternatif Cepat: Anda juga bisa langsung menyeret/drag file Word mentah Anda dari Windows Explorer dan menjatuhkannya/drop tepat di atas berkas batch `BERSIHKAN_DAN_BACKUP_DOKUMEN.bat`)*.
+
+### 5️⃣ LANGKAH 5: DORONG KE GITHUB HANYA DENGAN 1 KLIK!
+* Setelah kompilasi dan pembersihan selesai, cari file berikut di root folder Anda:
+  `D:\pmn-framework\KIRIM_KE_GITHUB.bat`
+* **Klik ganda (double-click) file `KIRIM_KE_GITHUB.bat` tersebut.**
+* Masukkan pesan pembaruan singkat saat diminta (misal: `Update Bab 5` atau cukup tekan **Enter** untuk pesan otomatis), lalu biarkan skrip berjalan sendiri.
+* *Selesai! Seluruh perubahan website final beserta dokumen steril Anda kini telah resmi terunggah dengan aman dan steril ke GitHub publik!* 🫡🚀🔥
+
+---
+
 ## 📜 License
 
 This project is licensed under the **MIT License**. Feel free to use, modify, and distribute the PMN Reader Platform offline or online as a framework for navigating material reality.
