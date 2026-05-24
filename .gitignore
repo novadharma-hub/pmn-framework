@@ -45,3 +45,10 @@ __pycache__/
 *.bak
 index.html.bak
 
+# Ignore local secure document sandbox directories
+docs/raw_inputs/
+docs/clean_outputs/
+docs/clean_output/
+docs/Anonymous
+
+

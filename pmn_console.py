@@ -179,6 +179,7 @@ def print_dashboard():
     print("  \033[92m[5]\033[0m RESTORE STABLE BACKUP\033[90m(Rollback index.html to stable index.html.bak)\033[0m")
     print("  \033[92m[6]\033[0m SYSTEM BLUEPRINT    \033[90m(Print master AI.md system architecture)\033[0m")
     print("  \033[92m[7]\033[0m SEARCH WORKSPACE     \033[90m(Fast, safe token-saving source code search)\033[0m")
+    print("  \033[92m[8]\033[0m SECURE META REMOVER  \033[90m(Clean raw_inputs documents & backup to Telegram)\033[0m")
     print("  \033[91m[0]\033[0m EXIT TERMINAL")
     print("\033[96m" + "=" * 65 + "\033[0m")
 
@@ -226,7 +227,7 @@ def main():
         print_dashboard()
         
         try:
-            choice = input(" \033[93mEnter choice [0-6]: \033[0m").strip()
+            choice = input(" \033[93mEnter choice [0-8]: \033[0m").strip()
         except KeyboardInterrupt:
             print("\n\n  Exiting control dashboard. Sampai jumpa, Komandan!")
             break
@@ -350,12 +351,21 @@ def main():
                 print("  Empty query. Search canceled.")
             input("\n  Press Enter to return to dashboard...")
             
+        elif choice == "8":
+            print("\n\033[93m[SECURE METADATA REMOVER & BACKUP PIPELINE]\033[0m")
+            try:
+                # Run the newly created metadata cleaner and distributor script
+                subprocess.run([sys.executable, "scripts/strip_metadata_and_backup.py"], check=True)
+            except Exception as e:
+                print(f"\n\033[91m[ERROR] Gagal menjalankan pembersih dokumen: {e}\033[0m")
+            input("\n  Press Enter to continue...")
+            
         elif choice == "0":
             print("\n  Closing PMN Console. Sampai jumpa, Komandan Ali Ikhsan! 🫡")
             time.sleep(1)
             break
         else:
-            print("\n  \033[91mPilihan tidak valid. Silakan masukkan angka 0 s.d 6.\033[0m")
+            print("\n  \033[91mPilihan tidak valid. Silakan masukkan angka 0 s.d 8.\033[0m")
             time.sleep(1.5)
 
 if __name__ == "__main__":

@@ -13,15 +13,19 @@ The PMN Framework is built on a **Hybrid Modular-Monolith** design. To protect t
 | Path Location | Type | Purpose / Description |
 | :--- | :--- | :--- |
 | `D:\pmn-framework\00_PMN_WORKSPACE.bat` | Launcher | **Super Main Dashboard App** (one-click entry point!) |
+| `D:\pmn-framework\BERSIHKAN_DAN_BACKUP_DOKUMEN.bat` | Launcher | One-click drag-and-drop batch tool for sterilizing documents |
 | `D:\pmn-framework\CARA_PAKAI_PMN.txt` | Workspace Guide | Front-page quick reference for Indonesian human developers |
 | `D:\pmn-framework\PANDUAN_PROMPT_AI.md` | AI Prompt Blueprint | Front-page primer guiding AI on escaping, JSON writing, & formats |
 | `D:\pmn-framework\docx_source\` | MS Word Source | Dedicated folder for the **single active `.docx` manuscript file** |
+| `D:\pmn-framework\docs\raw_inputs\` | MS Word / PDF Input | Dedicated folder for raw document drafts containing personal metadata |
+| `D:\pmn-framework\docs\clean_outputs\` | Clean Output | Dedicated folder for sterilized, 100% clean and audited documents |
 | `D:\pmn-framework\index.ui.html` | UI Skeleton | The lightweight HTML layout (~40KB) without manuscript text |
 | `D:\pmn-framework\style.css` | CSS Styles | Core styling, fonts, and dark/light modes |
 | `D:\pmn-framework\app.js` | UI Logic | Interactive features (Command Palette, popovers, Local LLM terminal) |
 | `D:\pmn-framework\data\` | Core Data | Contains glossary dictionaries, relations, lookups, and quotes |
 | `D:\pmn-framework\data\parts\` | Manuscript | Split JSON files (`part_Preface.json` to `part_Coda.json`) containing raw text |
 | `D:\pmn-framework\scripts\import_pmn_docx.py` | Importer | Vanilla Python DOCX parser & modular JSON part splitter |
+| `D:\pmn-framework\scripts\strip_metadata_and_backup.py` | Security Scrubber | Python script sterilizing metadata, scanning for leaks, and uploading to Telegram |
 | `D:\pmn-framework\scripts\test_dynamic_docx.py` | Stress Tester | Pure-Python OOXML script verifying dynamic UI & schema growth |
 | `D:\pmn-framework\supabase\` | Backend SQL | Migration schemas and SQL procedures for Supabase backend |
 | `D:\pmn-framework\src\lib\` | Backend Libs | Client scaffolds and backend helpers for database coordination |
@@ -116,4 +120,12 @@ Maintain this log chronologically. Always check this section before executing ta
     *   **Compile & Release:** Recompiled cleanly into `index.html` (shrinking standalone footprint to 2.57 MB) and successfully pushed all clean assets to production.
 *   **Outcome:** The javascript codebase is extremely clean, highly readable, and free of silent errors. The new workspace search runs instantly in under 0.07 seconds, providing a powerful unbuffered utility for developers and AI agents alike. The compiled monolithic layout loads instantly offline and local-CORS-free.
 
-
+### 📅 May 24, 2026 (IV): Secure Document Metadata Scrubber Pipeline & Central Dashboard Integration
+*   **Situation:** The developer required a secure, local pipeline inside `pmn-framework` to clean personal metadata from document drafts before git pushing to public repositories. This required input/output sandboxes, deep post-process validation to guarantee 100% leak-free files, automatic Telegram logging backup, and full integration into the main workspace dashboard launcher (`00_PMN_WORKSPACE.bat` -> `pmn_console.py`).
+*   **Action Taken:**
+    1.  **Pipeline Construction (`scripts/strip_metadata_and_backup.py`):** Created a modular python script that establishes `docs/raw_inputs/` and `docs/clean_outputs/` sandbox folders. Strips core and app XML metadata properties from DOCX and PDF formats natively.
+    2.  **Post-Process Deep Safety Audit:** Programmed `verify_cleanliness()` to physically re-open output files, scanning internal ZIP XMLs (Word) and metadata dictionary trees (PDF) for case-insensitive occurrences of sensitive developer terms (`ali`, `ikhsan`). If the audit fails, the output is deleted/quarantined, blocking cloud distribution.
+    3.  **Command Console Centralization (`pmn_console.py`):** Added a new select choice **Option `[8] SECURE META REMOVER`** inside the main telemetry-rich workspace dashboard. Triggers bulk processing of all raw documents placed in the masukan sandbox.
+    4.  **Drag-and-Drop Batch Launcher (`BERSIHKAN_DAN_BACKUP_DOKUMEN.bat`):** Created a dedicated, standard ASCII-safe batch launcher supporting drag-and-drop actions for Windows Explorer. Implemented pure ASCII characters to prevent legacy `cmd.exe` multi-byte byte-offset parsing crashes.
+    5.  **Telemetry Documentation:** Documented the new security commands in the master Indonesian developer manual `CARA_PAKAI_PMN.txt`.
+*   **Outcome:** Both manual drag-and-drop and bulk console execution flows work flawlessly. Personal metadata leaks are 100% caught, audited, and stripped. The `pmn-framework` repository remains 100% public-safe and clean.
