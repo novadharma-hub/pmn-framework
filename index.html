@@ -3080,7 +3080,10 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
       var msg = 'Current packet: ' + s.id + ' - ' + s.title + '\nPart: ' + (SPECIAL[p.part] ? p.title : ('Part ' + p.part + ' - ' + p.title));
       if (retrieved) msg += '\nRetrieved passages: ' + retrieved;
       if (terms) msg += '\nGlossary: ' + terms;
-      setStatus('reader-agent-status', msg);
+
+      // PERBAIKAN: Mengganti fungsi setStatus yang hilang dengan manipulasi DOM langsung secara aman
+      var statusEl = g('reader-agent-status') || document.getElementById('reader-agent-status');
+      if (statusEl) statusEl.textContent = msg;
     }
 
     function upgradeThesisSection() {
@@ -4328,6 +4331,8 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
     window.getJumpOrigin = getJumpOrigin;
     window.resolveSectionId = resolveSectionId;
     window.esc = esc;
+    window.nav = nav;
+    window.showContentsPanel = showContentsPanel;
 
     // Rotating quotes
     (function () {
@@ -5765,7 +5770,11 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
           return;
         }
 
-        var pack = buildContextPack(q, {
+        // Ambil asisten AI dari jalur komunikasi global
+        var buildCtx = window.buildContextPack || (typeof buildContextPack !== 'undefined' ? buildContextPack : null);
+        if (!buildCtx) return;
+
+        var pack = buildCtx(q, {
           maxSections: 6,
           maxGlossary: 4
         });
@@ -5830,7 +5839,7 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
           }
           hide();
         } else if (action === 'glossary') {
-          nav('gl');
+          if (window.nav) window.nav('gl');
           hide();
         } else if (action === 'section') {
           var id = btn.getAttribute('data-id');
@@ -5946,8 +5955,8 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
           e.stopPropagation();
           dismissBanner();
           // Trigger Start Reading Contents Navigation
-          nav('srch');
-          showContentsPanel();
+          if (window.nav) window.nav('srch');
+          if (window.showContentsPanel) window.showContentsPanel();
         });
       }
 
