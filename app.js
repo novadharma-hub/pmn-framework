@@ -235,7 +235,10 @@
       var msg = 'Current packet: ' + s.id + ' - ' + s.title + '\nPart: ' + (SPECIAL[p.part] ? p.title : ('Part ' + p.part + ' - ' + p.title));
       if (retrieved) msg += '\nRetrieved passages: ' + retrieved;
       if (terms) msg += '\nGlossary: ' + terms;
-      setStatus('reader-agent-status', msg);
+
+      // PERBAIKAN: Mengganti fungsi setStatus yang hilang dengan manipulasi DOM langsung secara aman
+      var statusEl = g('reader-agent-status') || document.getElementById('reader-agent-status');
+      if (statusEl) statusEl.textContent = msg;
     }
 
     function upgradeThesisSection() {
