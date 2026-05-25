@@ -173,7 +173,7 @@ def print_dashboard():
     # Layman Workflow Recommended Order Guide
     print(" \033[93m[ALUR KERJA HARIAN - NORMALNYA URUTANNYA BEGINI]:\033[0m")
     print("  \033[97m1.\033[0m Edit naskah di Microsoft Word (tutup setelah selesai)")
-    print("  \033[97m2.\033[0m Letakkan dokumen .docx Anda di folder \\docx_source\\")
+    print("  \033[97m2.\033[0m Letakkan dokumen .docx Anda di folder \\private\\docx_source\\")
     print("  \033[97m3.\033[0m Tekan \033[92m[3]\033[0m di bawah untuk Impor & Kompilasi otomatis")
     print("  \033[97m4.\033[0m Tekan \033[92m[8]\033[0m di bawah untuk Pembersihan Metadata Aman")
     print("  \033[97m5.\033[0m Klik ganda file \033[96mKIRIM_KE_GITHUB.bat\033[0m di folder utama untuk rilis!")
@@ -281,8 +281,16 @@ def main():
             input("\n  Press Enter to return to dashboard...")
             
         elif choice == "3":
-            print("\n\033[96m[RUNNING] Scanning docx_source/ folder for manuscripts...\033[0m")
-            docx_folder = "docx_source"
+            # Resolusi jalur dinamis untuk pmn-workspace
+            parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            if os.path.exists(os.path.join(parent_dir, "private", "docx_source")):
+                docx_folder = os.path.join(parent_dir, "private", "docx_source")
+            elif os.path.exists(r"D:\pmn-workspace\private\docx_source"):
+                docx_folder = r"D:\pmn-workspace\private\docx_source"
+            else:
+                docx_folder = "docx_source"
+                
+            print(f"\n\033[96m[RUNNING] Scanning folder for manuscripts: {docx_folder}...\033[0m")
             if not os.path.exists(docx_folder):
                 try:
                     os.makedirs(docx_folder)
@@ -294,7 +302,7 @@ def main():
                 docx_files = [f for f in os.listdir(docx_folder) if f.endswith(".docx") and not f.startswith("~$")]
             
             if not docx_files:
-                print("\n  \033[91m[WARNING] Tidak ada file Word (.docx) aktif ditemukan di folder: docx_source/\033[0m")
+                print(f"\n  \033[91m[WARNING] Tidak ada file Word (.docx) aktif ditemukan di folder: {docx_folder}\033[0m")
                 print("  Silakan taruh manuskrip Word (.docx) baru Anda di folder tersebut terlebih dahulu!")
             else:
                 print("\n  Berkas naskah Word (.docx) yang tersedia:")

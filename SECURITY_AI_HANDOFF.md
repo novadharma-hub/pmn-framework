@@ -31,11 +31,10 @@ Recommended local operating layout:
 ```text
 D:\pmn-workspace\
   private\
-  public\
-    pmn-framework\  -> junction to D:\pmn-framework
+  public\  -> junction to D:\pmn-framework
 ```
 
-See `WORKSPACE_LAYOUT.md`. AI tools may be opened at `D:\pmn-workspace`, but Git operations should happen only inside `public/pmn-framework`.
+See `WORKSPACE_LAYOUT.md`. AI tools may be opened at `D:\pmn-workspace`, but Git operations should happen only inside `public`.
 
 ---
 
