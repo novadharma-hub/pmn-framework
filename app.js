@@ -547,6 +547,17 @@
       jumpToSection(info.pi, info.si, opts);
       return true;
     }
+    function openPartStart(part, opts) {
+      for (var pi = 0; pi < PARTS.length; pi++) {
+        if (PARTS[pi].part === part) {
+          if (PARTS[pi].subs && PARTS[pi].subs.length > 0) {
+            jumpToSection(pi, 0, opts);
+            return true;
+          }
+        }
+      }
+      return false;
+    }
     function linkXrefs(container) {
       var pat = XREF_IDS.map(function (id) { return id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|');
       var re = new RegExp('(?<![\\w.])(' + pat + ')(?![\\w.])', 'g');
@@ -1483,6 +1494,7 @@
     window.openSec = openSec;
     window.jumpToSection = jumpToSection;
     window.jumpToSectionById = jumpToSectionById;
+    window.openPartStart = openPartStart;
     window.getJumpOrigin = getJumpOrigin;
     window.resolveSectionId = resolveSectionId;
     window.esc = esc;
