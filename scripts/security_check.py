@@ -121,7 +121,16 @@ def check_tracked_cache() -> list[str]:
 
 def check_docx_metadata() -> list[str]:
     findings: list[str] = []
+    
+    # Resolusi jalur dinamis untuk pmn-workspace
+    private_docx_dir = ROOT.parent / "private" / "docx_source"
+    if not private_docx_dir.exists() and os.path.exists(r"D:\pmn-workspace\private\docx_source"):
+        private_docx_dir = Path(r"D:\pmn-workspace\private\docx_source")
+        
     paths = list((ROOT / "docs").glob("*.docx")) + list((ROOT / "docx_source").glob("*.docx"))
+    if private_docx_dir.exists():
+        paths += list(private_docx_dir.glob("*.docx"))
+        
     personal_re = re.compile(r"\b(ali\s+ikhsan|ali|ikhsan)\b", re.IGNORECASE)
     for path in paths:
         try:

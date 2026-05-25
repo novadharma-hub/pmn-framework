@@ -518,7 +518,14 @@ def resolve_docx_path(value: str | None) -> Path:
 
     cwd = Path.cwd()
     script_dir = Path(__file__).resolve().parent
+    
+    # Resolusi jalur dinamis untuk zona privat workspace
+    private_docx = script_dir.parent.parent / "private" / "docx_source"
+    if not private_docx.exists() and os.path.exists(r"D:\pmn-workspace\private\docx_source"):
+        private_docx = Path(r"D:\pmn-workspace\private\docx_source")
+        
     search_roots = [
+        private_docx,
         cwd / "docx_source",
         cwd,
         cwd / "docs",
