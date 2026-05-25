@@ -80,6 +80,16 @@ def compile_mode():
 
     print("[INFO] Initiating structural diagnostic check...")
     
+    # Run manuscript formatting audit
+    try:
+        import subprocess
+        print("[INFO] Running manuscript formatting and integrity audit...")
+        sys.stdout.flush()
+        subprocess.run([sys.executable, os.path.join("scripts", "verify_formatting.py")])
+        print("")
+    except Exception as e:
+        print(f"[WARN] Formatting audit skipped: {e}\n")
+    
     # 1. Check if files exist
     files_to_check = [clean_html_path, style_css_path, app_js_path, manifest_path]
     missing_files = [f for f in files_to_check if not os.path.exists(f)]
