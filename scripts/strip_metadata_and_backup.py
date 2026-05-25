@@ -212,7 +212,7 @@ def process_single_file(input_file, clean_dir, env):
         return False
         
     print(f"[OK] AUDIT LOLOS: Berkas '{filename}' terbukti 100% steril dari nama Ali Ikhsan!")
-    print(f"    Disimpan di -> D:\\pmn-framework\\docs\\clean_outputs\\{filename}")
+    print(f"    Disimpan di -> {output_file}")
     
     # C. Kirim berkas steril tersebut ke Telegram Log Group
     bot_token = env.get("BOT_TOKEN_COMMANDER", "").strip("'\"")
@@ -229,9 +229,24 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     pmn_dir = os.path.dirname(script_dir)
     
-    # Buat direktori input dan output
-    raw_dir = os.path.join(pmn_dir, "docs", "raw_inputs")
-    clean_dir = os.path.join(pmn_dir, "docs", "clean_outputs")
+    # Resolusi jalur dinamis untuk pmn-workspace
+    parent_dir = os.path.dirname(pmn_dir)
+    grandparent_dir = os.path.dirname(parent_dir)
+    
+    if os.path.basename(parent_dir).lower() == "public" and os.path.exists(os.path.join(grandparent_dir, "private")):
+        workspace_root = grandparent_dir
+    elif os.path.exists(r"D:\pmn-workspace\private"):
+        workspace_root = r"D:\pmn-workspace"
+    else:
+        workspace_root = pmn_dir # Fallback
+        
+    if workspace_root == pmn_dir:
+        raw_dir = os.path.join(pmn_dir, "docs", "raw_inputs")
+        clean_dir = os.path.join(pmn_dir, "docs", "clean_outputs")
+    else:
+        raw_dir = os.path.join(workspace_root, "private", "raw_inputs")
+        clean_dir = os.path.join(workspace_root, "private", "clean_outputs")
+        
     os.makedirs(raw_dir, exist_ok=True)
     os.makedirs(clean_dir, exist_ok=True)
     
@@ -258,7 +273,7 @@ def main():
             print("====================================================================")
             print("         PMN-FRAMEWORK: SECURE DOCUMENT PIPELINE")
             print("====================================================================")
-            print(f"Folder raw_inputs kosong: D:\\pmn-framework\\docs\\raw_inputs\\")
+            print(f"Folder raw_inputs kosong: {raw_dir}")
             print("Letakkan draf dokumen Anda di sana, lalu jalankan batch kembali untuk")
             print("mensterilkan dan mengunggah semuanya secara massal!")
             sys.exit(0)

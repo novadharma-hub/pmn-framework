@@ -3,9 +3,16 @@ title PMN-FRAMEWORK: SECURE DOCUMENT CLEANER
 mode con: cols=80 lines=24
 
 :: Tentukan path skrip Python lokal PMN
-set "SCRIPT_PATH=D:\pmn-framework\scripts\strip_metadata_and_backup.py"
-set "RAW_DIR=D:\pmn-framework\docs\raw_inputs"
-set "CLEAN_DIR=D:\pmn-framework\docs\clean_outputs"
+set "SCRIPT_PATH=%~dp0scripts\strip_metadata_and_backup.py"
+
+:: Resolusi jalur dinamis untuk pmn-workspace
+if exist "D:\pmn-workspace\private" (
+    set "RAW_DIR=D:\pmn-workspace\private\raw_inputs"
+    set "CLEAN_DIR=D:\pmn-workspace\private\clean_outputs"
+) else (
+    set "RAW_DIR=%~dp0docs\raw_inputs"
+    set "CLEAN_DIR=%~dp0docs\clean_outputs"
+)
 
 :: Buat folder otomatis jika belum ada
 if not exist "%RAW_DIR%" mkdir "%RAW_DIR%"
@@ -26,12 +33,12 @@ echo.
 echo   Alat ini akan secara otomatis:
 echo   1. Membersihkan metadata (Nama Pembuat, Komputer, Revisi) - Anonymous
 echo   2. Melakukan audit internal pasca-proses (Validasi nama Ali Ikhsan)
-echo   3. Menyimpan salinan steril ke: \docs\clean_outputs\
+echo   3. Menyimpan salinan steril ke folder tujuan
 echo   4. Mengunggah cadangan berkas aman langsung ke Telegram Log Group
 echo.
 echo ========================================================================
-echo   [FOLDER RAW]   : D:\pmn-framework\docs\raw_inputs\
-echo   [FOLDER CLEAN] : D:\pmn-framework\docs\clean_outputs\
+echo   [FOLDER RAW]   : %RAW_DIR%
+echo   [FOLDER CLEAN] : %CLEAN_DIR%
 echo ========================================================================
 echo.
 
