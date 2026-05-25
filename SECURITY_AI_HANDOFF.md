@@ -26,6 +26,16 @@ The repository also contains local automation for:
 
 The main risk is not server compromise. The main risk is accidental publication of local/private artifacts.
 
+Recommended local operating layout:
+
+```text
+D:\pmn-workspace\
+  _private\
+  pmn-framework\  -> junction to D:\pmn-framework
+```
+
+See `WORKSPACE_LAYOUT.md`. AI tools may be opened at `D:\pmn-workspace`, but Git operations should happen only inside `pmn-framework`.
+
 ---
 
 ## 2. High-Risk Files And Folders
