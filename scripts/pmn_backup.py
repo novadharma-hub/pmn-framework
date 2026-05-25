@@ -32,11 +32,20 @@ def get_source_files():
                 
     return sources
 
+def get_backup_dir(root_dir):
+    parent_dir = os.path.dirname(root_dir)
+    grandparent_dir = os.path.dirname(parent_dir)
+    if os.path.basename(parent_dir).lower() == "public" and os.path.exists(os.path.join(grandparent_dir, "private", "backups")):
+        return os.path.join(grandparent_dir, "private", "backups")
+    elif os.path.exists(r"D:\pmn-workspace\private\backups"):
+        return r"D:\pmn-workspace\private\backups"
+    return os.path.join(root_dir, "backups")
+
 def create_snapshot(auto=False):
     root_dir = r"D:\pmn-framework"
     os.chdir(root_dir)
     
-    backup_dir = os.path.join(root_dir, "backups")
+    backup_dir = get_backup_dir(root_dir)
     if not os.path.exists(backup_dir):
         os.makedirs(backup_dir)
         print(f"[DIR] Created backup directory: {backup_dir}")
@@ -81,7 +90,7 @@ def rotate_snapshots(backup_dir):
 
 def list_snapshots():
     root_dir = r"D:\pmn-framework"
-    backup_dir = os.path.join(root_dir, "backups")
+    backup_dir = get_backup_dir(root_dir)
     if not os.path.exists(backup_dir):
         return []
         
@@ -94,7 +103,8 @@ def restore_snapshot(zip_name):
     root_dir = r"D:\pmn-framework"
     os.chdir(root_dir)
     
-    zip_path = os.path.join(root_dir, "backups", zip_name)
+    backup_dir = get_backup_dir(root_dir)
+    zip_path = os.path.join(backup_dir, zip_name)
     if not os.path.exists(zip_path):
         print(f"\033[91m[ERROR] Snapshot file not found: {zip_path}\033[0m")
         return False
