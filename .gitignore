@@ -44,11 +44,12 @@ __pycache__/
 # Ignore Compiled Backups and Local Artifacts
 *.bak
 index.html.bak
+backups/
+LENGKAPI_DIAGNOSIS_UNTUK_AI.md
 
 # Ignore local secure document sandbox directories
 docs/raw_inputs/
 docs/clean_outputs/
 docs/clean_output/
 docs/Anonymous
-
 
