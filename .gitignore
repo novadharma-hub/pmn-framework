@@ -47,9 +47,11 @@ index.html.bak
 backups/
 LENGKAPI_DIAGNOSIS_UNTUK_AI.md
 
-# Ignore local secure document sandbox directories
+# Ignore local secure document sandbox directories and legacy release binaries
 docs/raw_inputs/
 docs/clean_outputs/
 docs/clean_output/
 docs/Anonymous
+docs/*.docx
+docs/*.pdf
 
