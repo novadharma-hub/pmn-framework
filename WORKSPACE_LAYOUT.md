@@ -11,9 +11,16 @@ D:\pmn-workspace\
     scratch\
     release_packets\
     config_notes\
+    docx_source\      <== [RAW MS WORD SOURCE MANUSCRIPTS ARE SECURELY KEPT HERE]
 
-  public\
-    pmn-framework\  -> junction to D:\pmn-framework
+  public\             <== [THE REPOSITORY ITSELF DIRECTLY AS JUNCTION TO D:\pmn-framework]
+    index.html
+    index.ui.html
+    app.js
+    style.css
+    data/
+    docs/
+    scripts/
 ```
 
 Open AI coding tools at:
@@ -25,10 +32,10 @@ D:\pmn-workspace
 Use the Git repository at:
 
 ```text
-D:\pmn-workspace\public\pmn-framework
+D:\pmn-workspace\public
 ```
 
-The `public/pmn-framework` entry is a Windows junction pointing to the real public repo at `D:\pmn-framework`. This keeps existing scripts and Git remotes stable while giving AI tools one parent workspace that contains both private and public zones.
+The `public` entry is a Windows junction pointing to the real public repo at `D:\pmn-framework`. This keeps existing scripts and Git remotes stable while giving AI tools one parent workspace that contains both private and public zones side-by-side.
 
 ---
 
@@ -38,9 +45,10 @@ The `public/pmn-framework` entry is a Windows junction pointing to the real publ
 
 Use `private` for files that should not be pushed:
 
-- raw DOCX/PDF drafts
+- raw DOCX/PDF drafts (in `raw_inputs/`)
+- raw Microsoft Word manuscript files (in `docx_source/`)
 - unsanitized source documents
-- backup ZIPs
+- backup ZIPs (in `backups/`)
 - scratch files
 - AI experiments
 - private release notes
@@ -49,9 +57,9 @@ Use `private` for files that should not be pushed:
 
 Never commit files from `private`.
 
-### `public/pmn-framework`
+### `public`
 
-Use `public/pmn-framework` for public, Git-tracked project files:
+Use `public` for public, Git-tracked project files:
 
 - `index.ui.html`
 - `style.css`
@@ -63,7 +71,7 @@ Use `public/pmn-framework` for public, Git-tracked project files:
 - generated `index.html`
 - AI handoff Markdown files
 
-Only push from inside `public/pmn-framework`.
+Only push from inside `public`.
 
 ---
 
@@ -71,26 +79,22 @@ Only push from inside `public/pmn-framework`.
 
 ```text
 1. Put raw manuscript drafts in:
-   D:\pmn-workspace\private\raw_inputs
+   D:\pmn-workspace\private\docx_source
 
 2. Scrub or review metadata.
 
-3. Move only public-safe release artifacts into:
-   D:\pmn-workspace\public\pmn-framework\docx_source
-   or
-   D:\pmn-workspace\public\pmn-framework\docs
+3. Import DOCX and compile from the repo (Option [3] in Central Console).
+   The import script dynamically reads from private\docx_source and splits it into modular JSONs.
 
-4. Import DOCX and compile from the repo.
-
-5. Run:
+4. Run:
    python scripts/security_check.py
 
-6. Review:
+5. Review:
    git status -sb
    git diff --cached --stat
 
-7. Push only from:
-   D:\pmn-workspace\public\pmn-framework
+6. Push only from:
+   D:\pmn-workspace\public
 ```
 
 ---
@@ -101,12 +105,12 @@ When an AI agent is opened at `D:\pmn-workspace`, follow this rule:
 
 ```text
 Workspace root: D:\pmn-workspace
-Public Git repo: D:\pmn-workspace\public\pmn-framework
+Public Git repo: D:\pmn-workspace\public
 Private non-git area: D:\pmn-workspace\private
 
 Never commit files from private.
-Only run git commit/push inside public/pmn-framework.
-Before push, run python scripts/security_check.py from public/pmn-framework.
+Only run git commit/push inside public.
+Before push, run python scripts/security_check.py from public.
 ```
 
 ---
@@ -118,7 +122,7 @@ AI tools often work best when they can see one folder. A single public repo is s
 This layout gives both:
 
 - one AI-visible workspace root
-- one clean GitHub repo (inside public/)
-- one private area outside git
+- one clean GitHub repo (directly at public/)
+- one private area outside git (at private/)
 - no need to physically move the existing repo
 - no broken Git remote or deployment setup
