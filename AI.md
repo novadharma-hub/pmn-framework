@@ -129,3 +129,16 @@ Maintain this log chronologically. Always check this section before executing ta
     4.  **Drag-and-Drop Batch Launcher (`BERSIHKAN_DAN_BACKUP_DOKUMEN.bat`):** Created a dedicated, standard ASCII-safe batch launcher supporting drag-and-drop actions for Windows Explorer. Implemented pure ASCII characters to prevent legacy `cmd.exe` multi-byte byte-offset parsing crashes.
     5.  **Telemetry Documentation:** Documented the new security commands in the master Indonesian developer manual `CARA_PAKAI_PMN.txt`.
 *   **Outcome:** Both manual drag-and-drop and bulk console execution flows work flawlessly. Personal metadata leaks are 100% caught, audited, and stripped. The `pmn-framework` repository remains 100% public-safe and clean.
+
+### 📅 May 25, 2026: Revised Manuscript Ingestion (v116.2), UI Navigation Restoration, & Linter Pipeline Integration
+*   **Situation:** The revised manuscript `v116.2` (fixing historical bibliography editorial formatting markers and intellectual debts merging bugs) was missing in the active release pipeline, causing older errors to persist. Furthermore, several visual controls ("Open foundations" and "Open cases") on the dashboard were non-functional, throwing `ReferenceError: openPartStart is not defined` due to missing implementation in `app.js`. Lastly, a robust formatting validator was needed to safeguard the repository from future bad merges or bad formatting tags.
+*   **Action Taken:**
+    1.  **Ingestion of v116.2:** Placed the clean `PMN_Framework_v116_2.docx` draft in the workspace, ran `import_pmn_docx.py`, updated all modular part JSON database entries, and synchronized version metadata so the web dashboard dynamically displays `v116.2`.
+    2.  **Database Cleanup:** 
+        *   `part_Intellectual_Debts.json`: Separated the merged list entries of Al-Farabi and Ibn Rushd into distinct, properly bolded HTML paragraphs.
+        *   `part_Bibliography.json`: Completely scrubbed the editorial reminder text *"Chicago Author-Date format. Titles in italics."*
+    3.  **Visual Interaction Fixes (`app.js`):** Engineered the missing `openPartStart(part, opts)` helper within the main javascript IIFE, globally exposing it as `window.openPartStart`. This connects homepage card actions directly to their matching philosophical parts (e.g. Part I and Part XVII) via robust transitions.
+    4.  **Automated Formatting Linter (`scripts/verify_formatting.py`):** Developed a local programmatic linter that scans all modular part JSON files for unbalanced HTML tags, nested styling anomalies (false merged list items), and editorial markers.
+    5.  **Compiler Guard (`modularizer.py`):** Integrated the linter directly into the compile process so that syntax or structural anomalies are caught and logged before writing to the public `index.html`.
+    6.  **Windows Console Standardizing:** Resolved CP1252 character crashes on Windows consoles by adding `sys.stdout.reconfigure(encoding='utf-8')` to the verify script and compiler streams.
+*   **Outcome:** All navigation bugs are successfully resolved, database formatting anomalies are eradicated, and the automated compiler guard successfully preserves repository health. All tests passed cleanly and changes are deployed to GitHub.
