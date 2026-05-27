@@ -39,7 +39,9 @@ angka pilihan Anda [0 s.d 10] lalu tekan Enter:
 *   Tekan [1] : LIGHTNING COMPILE (Kompilasi Visual + Data + Corpus)
     --> Menggabungkan semua berkas modular, gaya CSS, logika JS, dan
         glosarium menjadi file produksi `index.html` tunggal dalam 1 detik.
-        Dilengkapi Checklist Pengaman berlapis untuk mencegah rilis kosong.
+        Sistem sekarang OTOMATIS melakukan audit kerapian & integrasi HTML 
+        (mendeteksi tag tidak berpasangan, entri tergabung, dan placeholder) 
+        sebelum menyetujui kompilasi rilis akhir!
 *   Tekan [2] : LAUNCH DEV SERVER (Server Pratinjau Lokal)
     --> Menjalankan server HTTP ringan pada http://localhost:8000 dan 
         otomatis membuka browser agar Anda bisa membaca perubahan secara realtime.
@@ -163,6 +165,10 @@ D. Buka berkas tersebut, **salin (copy) seluruh isinya**, lalu tempelkan
 E. Laporan tersebut sudah dilengkapi instruksi sistem pembuka (*System Prompt*) 
    yang menceritakan arsitektur modular situs Anda secara lengkap. AI web tersebut 
    akan langsung memahami masalahnya dan memberikan solusi kode perbaikan secara tepat!
+
+F. Skrip Audit Kerapian Naskah (`scripts/verify_formatting.py`):
+   * Berfungsi mendeteksi tag HTML yang bocor/tidak seimbang, entri tokoh yang terlebur di daftar Intellectual Debts, serta teks sisa pengerjaan editor ("draft", "instruction", dll.). Skrip ini terpicu otomatis pada opsi [1] kompilasi, namun bisa juga Anda jalankan mandiri di terminal melalui:
+     `python scripts/verify_formatting.py`
 
 --------------------------------------------------------------------
 5. UTALITAS SNAPSHOT WORKSPACE (TOTAL SAFETY LOCK)
