@@ -364,6 +364,11 @@
         "is_intro": false
       },
       {
+        "id": "5.6b",
+        "title": "Measuring Meaning Infrastructure",
+        "is_intro": false
+      },
+      {
         "id": "5.6c",
         "title": "Operationalizing Meaning Infrastructure",
         "is_intro": false
@@ -381,21 +386,6 @@
       {
         "id": "5.8",
         "title": "Al-Farabi and the Islamic Political Philosophy Tradition",
-        "is_intro": false
-      },
-      {
-        "id": "5.6b",
-        "title": "Measuring Meaning Infrastructure",
-        "is_intro": false
-      },
-      {
-        "id": "6.7",
-        "title": "Legitimacy Production: How Systems Build Consent",
-        "is_intro": false
-      },
-      {
-        "id": "6.8",
-        "title": "Elite Circulation and Structural Continuity",
         "is_intro": false
       }
     ]
@@ -432,6 +422,16 @@
       {
         "id": "6.6",
         "title": "Legitimacy Crisis: When Systems Lose the Consent That Sustains Them",
+        "is_intro": false
+      },
+      {
+        "id": "6.7",
+        "title": "Legitimacy Production: How Systems Build Consent",
+        "is_intro": false
+      },
+      {
+        "id": "6.8",
+        "title": "Elite Circulation and Structural Continuity",
         "is_intro": false
       }
     ]
@@ -841,6 +841,11 @@
         "is_intro": false
       },
       {
+        "id": "12.5b",
+        "title": "Two Phrases That Foreclose Analysis: \"Essentially\" and \"Should\"",
+        "is_intro": false
+      },
+      {
         "id": "12.5c",
         "title": "Engaging External Criticism: Substantive Critique vs. Misreading",
         "is_intro": false
@@ -858,11 +863,6 @@
       {
         "id": "12.7",
         "title": "The Genealogy of This Framework",
-        "is_intro": false
-      },
-      {
-        "id": "12.5b",
-        "title": "Two Phrases That Foreclose Analysis: \"Essentially\" and \"Should\"",
         "is_intro": false
       },
       {
@@ -937,11 +937,6 @@
         "is_intro": false
       },
       {
-        "id": "13.5",
-        "title": "Closing: The Framework That Must Be Surpassed",
-        "is_intro": false
-      },
-      {
         "id": "13.4e",
         "title": "The Variation-Deficit Tension: When Does Difference Become Deficiency?",
         "is_intro": false
@@ -964,6 +959,11 @@
       {
         "id": "13.4i",
         "title": "Triage Protocol for High-Urgency Cases",
+        "is_intro": false
+      },
+      {
+        "id": "13.5",
+        "title": "Closing: The Framework That Must Be Surpassed",
         "is_intro": false
       }
     ]
