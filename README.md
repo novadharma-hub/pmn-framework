@@ -127,13 +127,32 @@ Setiap kali Anda selesai melakukan perubahan naskah atau merombak tata letak vis
 
 ---
 
-## 📖 Panduan Alur Kerja Harian: Dari Naskah Word Hingga ke GitHub (Bagi Pemula)
+## 📖 Panduan Alur Kerja Harian (Sangat Mudah & Urut)
 
-Berikut adalah panduan langkah-demi-langkah yang sangat mudah diikuti oleh orang awam untuk memperbarui website filosofi PMN dari Microsoft Word hingga terbit dengan aman di GitHub publik tanpa khawatir kebocoran data pribadi:
+Berikut adalah cara paling sederhana dan berurutan untuk memperbarui PMN dari Word hingga terbit di GitHub.
+
+**Catatan penting tentang Konten vs UI:**
+
+Sistem ini memisahkan dua hal besar:
+
+- **Konten (Isi Naskah)** → Berasal dari Word → dipecah otomatis jadi file JSON kecil di `data/parts/`.
+- **UI / Tampilan** → Ada di `index.ui.html` (kerangka), `style.css` (desain), dan `app.js` (logika interaktif).
+
+**Kenapa urutan menu lebih banyak bicara soal Word/DOCX?**
+- Karena 95%+ pekerjaan sehari-hari adalah **mengupdate isi naskah** dari Word.
+- Perubahan UI (tampilan) jauh lebih jarang.
+- Makanya alur utama difokuskan ke: Word → Import → Compile → Push.
+
+Kalau kamu ingin mengubah tampilan website, baru saat itu kamu perlu menyentuh `index.ui.html`, `style.css`, atau `app.js`.
+
 
 ### 1️⃣ LANGKAH 1: EDIT NASKAH DI MICROSOFT WORD
 * Buka dokumen manuskrip filosofi PMN Anda di **Microsoft Word** seperti biasa.
 * Lakukan penulisan atau revisi bab sesuka hati Anda.
+* **Catatan tentang UI/Tampilan:**
+  - Kalau kamu hanya ingin **mengubah isi naskah**, cukup edit di Word.
+  - Kalau kamu ingin **mengubah tampilan website** (warna, layout, fitur baru, dll), baru edit file `index.ui.html`, `style.css`, atau `app.js`.
+  - Dalam praktik sehari-hari, 95%+ update hanya dari Word (konten). UI jarang disentuh.
 * Setelah selesai, klik **Save As** dan simpan dengan nama berformat versi terbaru, misalnya: `PMN_Framework_v117.docx` atau `PMN_Framework_v116_3.docx`.
 * > [!IMPORTANT]
   > **Tutup Microsoft Word Anda!** Jangan biarkan Word tetap terbuka, karena Windows akan mengunci berkas tersebut dan menghalangi skrip kompilator untuk membacanya.
@@ -142,19 +161,29 @@ Berikut adalah panduan langkah-demi-langkah yang sangat mudah diikuti oleh orang
 * Pindahkan file `.docx` baru Anda ke folder `docx_source/` di root repository.
 * Pastikan hanya ada **satu** file `.docx` aktif di folder tersebut.
 
-### 3️⃣ LANGKAH 3: IMPOR & KOMPILASI OTOMATIS
-* Jalankan `00_PMN_WORKSPACE.bat` (atau `python pmn_console.py`).
-* Pilih menu **Import Word** (biasanya nomor 3).
-* Sistem akan memecah naskah menjadi file JSON modular, memperbarui versi, dan mengompilasi `index.html`.
+### 3️⃣ LANGKAH 3: IMPOR & KOMPILASI OTOMATIS (URUTAN YANG PALING MUDAH)
+
+**Alur normal (hampir selalu seperti ini):**
+1. Tekan **[1]** → STAGED DOCX IMPORT (paling direkomendasikan)
+2. Tekan **[2]** → LIGHTNING COMPILE
+3. Tekan **[3]** → SECURE META REMOVER
+4. Tekan **[4]** → KIRIM KE GITHUB (langsung dari console)
+
+**Kapan perlu menyentuh UI (`index.ui.html`, `style.css`, `app.js`)?**
+- Hanya jika kamu ingin mengubah **tampilan atau fitur** website (bukan isi naskah).
+- Contoh: ubah warna, tambah fitur baru, ubah layout, dll.
+- Perubahan UI biasanya jarang terjadi dibandingkan update isi naskah.
+
+Semua proses utama dilakukan dari dalam satu program console. Sangat minim hafalan.
 
 ### 4️⃣ LANGKAH 4: STERILKAN METADATA (PENTING!)
 * Di console yang sama, jalankan menu **Secure Meta Remover**.
-* Sistem akan membersihkan metadata pribadi dari dokumen, melakukan audit, dan menyimpan hasil steril ke lokasi aman di luar repository publik.
-* Raw documents dan output sensitif sebaiknya dikelola di luar folder public (lihat struktur private workspace jika Anda menggunakan layout yang direkomendasikan).
+* Sistem akan membersihkan metadata pribadi dari dokumen dan menyimpan hasil steril ke `private/clean_outputs/`.
 
 ### 5️⃣ LANGKAH 5: PUSH KE GITHUB
-* Setelah kompilasi dan pembersihan, gunakan `KIRIM_KE_GITHUB.bat` atau perintah git manual.
-* Selalu review `git status` dan `git diff --cached --stat` sebelum commit.
+* Tekan **[4] KIRIM KE GITHUB** langsung dari console (paling mudah).
+* Atau gunakan `KIRIM_KE_GITHUB.bat` jika lebih suka.
+* Selalu review perubahan sebelum push.
 * Pastikan tidak ada file sensitif yang ikut ter-stage.
 
 **Catatan Keamanan:** Raw manuscript drafts dan backup sensitif sebaiknya dikelola di luar repository publik untuk menghindari kebocoran metadata. Lihat dokumentasi internal di `private/docs/` jika Anda menggunakan setup workspace lengkap.
