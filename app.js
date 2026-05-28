@@ -1,4 +1,17 @@
 
+/*
+PMN Reader — Main Application Logic
+
+UI_EDITING_GUIDE.md — FILE INI = LOGIKA INTERAKTIF & PERILAKU
+Tugas utama:
+- Pencarian, AI Terminal, Command Palette, Popover, Tema
+- Rendering data dari JSON ke halaman
+- Semua event listener dan interaksi pengguna
+
+Ini adalah file yang paling kompleks secara teknis.
+Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
+*/
+
 (async function initializeApp() {
   var hasInlined = false;
   try {

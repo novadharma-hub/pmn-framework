@@ -10,7 +10,9 @@ Goal:
 - Add validation layers between DOCX and final JSON output
 - Prepare the ground for a proper Document Structure Contract
 
-Current status: Initial skeleton + critical validations (based on Parser Assumptions Audit)
+Current status: 6 stages implemented.
+Focus: Structural integrity + Content quality + Early cross-reference checks.
+These stages are designed to run before or alongside the main importer.
 """
 
 from __future__ import annotations
@@ -257,6 +259,135 @@ def stage_3_heading_validation(paragraphs: list[dict]) -> PipelineResult:
 
 
 # =============================================================================
+# STAGE 4: Editorial Placeholder & Draft Detection
+# =============================================================================
+
+PLACEHOLDER_KEYWORDS = [
+    "draft", "instruction", "todo", "fixme", "placeholder",
+    "chicago author-date", "author-date format", "insert here"
+]
+
+def stage_4_placeholder_detection(paragraphs: list[dict]) -> PipelineResult:
+    """
+    Stage 4: Detect leftover editorial notes, drafts, and common placeholders.
+    This directly addresses many of the warnings we saw during v117.2 compile.
+    """
+    issues: list[PipelineIssue] = []
+
+    for para in paragraphs:
+        text_lower = para["text"].lower()
+        for keyword in PLACEHOLDER_KEYWORDS:
+            if keyword in text_lower:
+                issues.append(PipelineIssue(
+                    stage="placeholder_detection",
+                    severity="warning",
+                    code="EDITORIAL_PLACEHOLDER",
+                    message=f"Potential editorial placeholder detected: '{keyword}'",
+                    context={"text": para["text"][:120]}
+                ))
+                break  # avoid duplicate warnings for same paragraph
+
+    success = not any(i.severity == "error" for i in issues)
+
+    return PipelineResult(
+        stage="4_placeholder_detection",
+        success=success,
+        data=paragraphs,
+        issues=issues
+    )
+
+
+# =============================================================================
+# STAGE 5: List & Formatting Integrity Check
+# =============================================================================
+
+def stage_5_formatting_integrity(paragraphs: list[dict]) -> PipelineResult:
+    """
+    Stage 5: Detect common formatting problems that often appear after
+    heavy Word + AI editing (merged list entries, broken bold chains, etc.).
+    """
+    issues: list[PipelineIssue] = []
+
+    for para in paragraphs:
+        text = para["text"]
+        # Very rough heuristic: many consecutive <strong> tags often indicate merged list items
+        strong_count = text.lower().count("<strong>")
+        if strong_count >= 5:
+            issues.append(PipelineIssue(
+                stage="formatting_integrity",
+                severity="warning",
+                code="POSSIBLE_MERGED_LIST",
+                message=f"Paragraph has {strong_count} <strong> tags. Possible merged list or broken formatting.",
+                context={"text": text[:150]}
+            ))
+
+    success = not any(i.severity == "error" for i in issues)
+
+    return PipelineResult(
+        stage="5_formatting_integrity",
+        success=success,
+        data=paragraphs,
+        issues=issues
+    )
+
+
+# =============================================================================
+# STAGE 6: Cross-Reference Validation (Basic)
+# =============================================================================
+
+def stage_6_cross_reference_validation(paragraphs: list[dict]) -> PipelineResult:
+    """
+    Stage 6: Basic cross-reference validation.
+    Looks for patterns that look like section references (e.g. 1.2, 15.3, 3.4b)
+    and checks if they appear as actual headings in the document.
+
+    This is a lightweight version. A more powerful version would run after
+    parts are fully built.
+    """
+    issues: list[PipelineIssue] = []
+
+    # Collect all potential section IDs from headings
+    known_ids = set()
+    for para in paragraphs:
+        text = para["text"]
+        match = re.match(r"^([0-9]+(?:\.[0-9A-Za-z-]+)*)", text)
+        if match:
+            known_ids.add(match.group(1))
+
+    # Look for references in body text
+    ref_pattern = re.compile(r"\b(\d+(?:\.\d+[A-Za-z]?)*)\b")
+
+    for para in paragraphs:
+        text = para["text"]
+        # Skip obvious headings
+        if re.match(r"^(\d+|Part |Preface|Coda|Bibliography)", text):
+            continue
+
+        for match in ref_pattern.finditer(text):
+            ref = match.group(1)
+            # Only flag references that look like real section numbers
+            if "." in ref and ref not in known_ids:
+                # Avoid false positives on years, decimals, etc.
+                if len(ref) > 2 and not re.match(r"^\d{4}$", ref):
+                    issues.append(PipelineIssue(
+                        stage="cross_reference_validation",
+                        severity="warning",
+                        code="POSSIBLE_BROKEN_XREF",
+                        message=f"Possible broken cross-reference: '{ref}' not found as heading.",
+                        context={"text": text[:120]}
+                    ))
+
+    success = not any(i.severity == "error" for i in issues)
+
+    return PipelineResult(
+        stage="6_cross_reference_validation",
+        success=success,
+        data=paragraphs,
+        issues=issues
+    )
+
+
+# =============================================================================
 # Main Orchestrator (for now)
 # =============================================================================
 
@@ -293,7 +424,26 @@ def run_staged_import(docx_path: Path, verbose: bool = True) -> ImportReport:
     if verbose:
         print(f"[Stage 3] Heading Validation: {'OK' if r3.success else 'FAILED'} | Issues: {len(r3.issues)}")
 
-    # TODO: Continue with actual transformation + assembly in future iterations
+    # Stage 4 - Editorial placeholders
+    r4 = stage_4_placeholder_detection(paragraphs)
+    stages.append(r4)
+    if verbose:
+        print(f"[Stage 4] Placeholder Detection: {'OK' if r4.success else 'FAILED'} | Issues: {len(r4.issues)}")
+
+    # Stage 5 - Formatting integrity
+    r5 = stage_5_formatting_integrity(paragraphs)
+    stages.append(r5)
+    if verbose:
+        print(f"[Stage 5] Formatting Integrity: {'OK' if r5.success else 'FAILED'} | Issues: {len(r5.issues)}")
+
+    # Stage 6 - Cross-reference validation
+    r6 = stage_6_cross_reference_validation(paragraphs)
+    stages.append(r6)
+    if verbose:
+        print(f"[Stage 6] Cross-Reference Validation: {'OK' if r6.success else 'FAILED'} | Issues: {len(r6.issues)}")
+
+    # Note: Full transformation to JSON parts still happens in the original importer for now.
+    # These stages are meant to run as pre-checks or post-checks.
 
     overall_success = all(s.success for s in stages)
     total_errors = sum(1 for s in stages for i in s.issues if i.severity == "error")
