@@ -42,17 +42,16 @@ See `WORKSPACE_LAYOUT.md`. AI tools may be opened at `D:\pmn-workspace`, but Git
 
 Treat these as sensitive or operationally risky:
 
-| Path | Risk | Expected Handling |
+| Path / Pattern | Risk | Expected Handling |
 | :--- | :--- | :--- |
-| `.env`, `.env.local` | Secrets/API keys | Must remain ignored |
-| `docs/raw_inputs/` | Raw personal documents | Must remain ignored |
-| `docs/clean_outputs/` | Cleaned outputs, still may be private | Must remain ignored unless intentionally published |
-| `backups/` | Local source snapshots | Must remain ignored |
-| `LENGKAPI_DIAGNOSIS_UNTUK_AI.md` | Generated rescue report may contain paths/context | Must remain ignored (now lives in private/diagnostics/) |
-| `*.bak` + `private/backups/` | Local/stable backups | Must remain ignored (system now writes backups here when possible) |
+| `.env*` | Secrets/API keys | Must remain ignored |
+| `raw_inputs/`, `clean_outputs/` (in private/) | Raw / sensitive documents | Must remain outside public repo |
+| `backups/` (in private/) | Local snapshots | Must remain ignored |
+| `LENGKAPI_DIAGNOSIS...` | Generated diagnostics | Must remain ignored / in private |
+| `*.bak` | Local backups | Must remain ignored (system prefers private/backups) |
 | `__pycache__/`, `*.pyc` | Machine-generated Python cache | Must not be tracked |
-| `docx_source/` | Active manuscript source | Review before publishing |
-| `docs/*.docx` | Public manuscript copies | Scrub metadata before publishing |
+| `docx_source/` (active) | Manuscript source | Review / scrub before any public copy |
+| Any `.docx` / `.pdf` in public | Potential metadata | Scrub before publishing |
 
 ---
 
@@ -90,18 +89,17 @@ The repo currently contains public-facing references to local paths and personal
 
 Examples to review:
 
-- `D:\pmn-framework`
-- `C:\Users\...`
-- Real personal name of the author (example: "Ali Ikhsan")
-- Telegram backup/logging claims
+- Hardcoded absolute local paths (e.g. `D:\...`)
+- Personal names and machine identifiers in documentation or metadata
+- References to external backup/logging systems (Telegram, etc.)
 
 Recommended policy:
 
-- Public docs should prefer generic paths like `<repo-root>`.
-- Personal names should appear only when intentionally public.
+- Public docs should prefer generic paths like `<repo-root>` or relative paths.
+- Personal names and machine-specific details must not appear in public files.
 - Raw drafts must go through the scrubber before being copied into public folders.
-- DOCX files under `docs/` should be treated as public release artifacts and metadata-audited before push.
-- When scanning DOCX internals, avoid naive substring matching for `ali`; XML namespace words such as `schemaLibrary` can produce false positives. Prefer word-boundary checks in `docProps/core.xml` and `docProps/app.xml`.
+- DOCX files under `docs/` (if any) should be treated as public release artifacts and metadata-audited before push.
+- When scanning DOCX internals, avoid naive substring matching; use proper XML property checks in `docProps/core.xml` and `docProps/app.xml`.
 
 ---
 
@@ -140,10 +138,10 @@ The DOCX importer reads Word files as ZIP/XML. It does not execute macros, but s
 - After import, verify generated JSON and compiled output.
 - If publishing DOCX files, scrub metadata first.
 
-Known architecture issue:
+Known architecture note:
 
-- `scripts/import_pmn_docx.py` still uses `index.html` as part of its import/update path.
-- Longer-term improvement: refactor import so DOCX writes only to `data/parts/*.json`, `data/parts/manifest.json`, derived JSON files, and `index.ui.html` version labels. Then `modularizer.py compile` should be the only writer of `index.html`.
+- The DOCX importer interacts with `index.html` and `index.ui.html`.
+- Longer-term improvement: Prefer writing only to `data/parts/*.json` + `index.ui.html`, letting the compiler be the single source of truth for `index.html`.
 
 ---
 

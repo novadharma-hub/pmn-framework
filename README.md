@@ -137,33 +137,25 @@ Berikut adalah panduan langkah-demi-langkah yang sangat mudah diikuti oleh orang
   > **Tutup Microsoft Word Anda!** Jangan biarkan Word tetap terbuka, karena Windows akan mengunci berkas tersebut dan menghalangi skrip kompilator untuk membacanya.
 
 ### 2️⃣ LANGKAH 2: MASUKKAN KE FOLDER SUMBER
-* Pindahkan file `.docx` baru Anda tersebut ke dalam folder:
-  `D:\pmn-framework\docx_source\`
-* *(Catatan: Pastikan hanya ada satu file `.docx` aktif di folder ini agar sistem pemecah otomatis tidak mengalami kebingungan).*
+* Pindahkan file `.docx` baru Anda ke folder `docx_source/` di root repository.
+* Pastikan hanya ada **satu** file `.docx` aktif di folder tersebut.
 
 ### 3️⃣ LANGKAH 3: IMPOR & KOMPILASI OTOMATIS
-* Klik ganda (double-click) file launcher utama Anda:
-  `D:\pmn-framework\00_PMN_WORKSPACE.bat`
-* Konsol kendali utama PMN yang interaktif akan terbuka di layar Anda.
-* Ketik angka **`3`** lalu tekan **Enter** untuk memilih menu **`IMPORT WORD NASKAH`**.
-* Sistem akan membaca dokumen Word Anda, memecahnya menjadi file bab JSON, menyesuaikan nomor versi di header web, dan mengompilasi halaman web final `index.html` secara otomatis dalam 2 detik!
+* Jalankan `00_PMN_WORKSPACE.bat` (atau `python pmn_console.py`).
+* Pilih menu **Import Word** (biasanya nomor 3).
+* Sistem akan memecah naskah menjadi file JSON modular, memperbarui versi, dan mengompilasi `index.html`.
 
-### 4️⃣ LANGKAH 4: STERILKAN METADATA & CADANGKAN (AMAN DARI LEAKS!)
-* Masih di dalam konsol utama yang sama, ketik angka **`8`** lalu tekan **Enter** untuk memilih menu **`SECURE META REMOVER`**.
-* Skrip akan menanyakan apakah Anda ingin melakukan sterilisasi massal. Ketik **`Y`** lalu **Enter**.
-* Sistem secara instan akan:
-  * Menyapu bersih nama asli pembuat dan properti komputer dari metadata dokumen draf.
-  * Melakukan audit keamanan internal pasca-proses untuk memastikan berkas benar-benar steril.
-  * Menyimpan salinan steril di folder aman `docs/clean_outputs/` (yang disembunyikan otomatis dari git).
-  * Mengirim salinan steril tersebut langsung ke grup Telegram Log Anda sebagai cadangan rahasia!
-* *(Alternatif Cepat: Anda juga bisa langsung menyeret/drag file Word mentah Anda dari Windows Explorer dan menjatuhkannya/drop tepat di atas berkas batch `BERSIHKAN_DAN_BACKUP_DOKUMEN.bat`)*.
+### 4️⃣ LANGKAH 4: STERILKAN METADATA (PENTING!)
+* Di console yang sama, jalankan menu **Secure Meta Remover**.
+* Sistem akan membersihkan metadata pribadi dari dokumen, melakukan audit, dan menyimpan hasil steril ke lokasi aman di luar repository publik.
+* Raw documents dan output sensitif sebaiknya dikelola di luar folder public (lihat struktur private workspace jika Anda menggunakan layout yang direkomendasikan).
 
-### 5️⃣ LANGKAH 5: DORONG KE GITHUB HANYA DENGAN 1 KLIK!
-* Setelah kompilasi dan pembersihan selesai, cari file berikut di root folder Anda:
-  `D:\pmn-framework\KIRIM_KE_GITHUB.bat`
-* **Klik ganda (double-click) file `KIRIM_KE_GITHUB.bat` tersebut.**
-* Masukkan pesan pembaruan singkat saat diminta (misal: `Update Bab 5` atau cukup tekan **Enter** untuk pesan otomatis), lalu biarkan skrip berjalan sendiri.
-* *Selesai! Seluruh perubahan website final beserta dokumen steril Anda kini telah resmi terunggah dengan aman dan steril ke GitHub publik!* 🫡🚀🔥
+### 5️⃣ LANGKAH 5: PUSH KE GITHUB
+* Setelah kompilasi dan pembersihan, gunakan `KIRIM_KE_GITHUB.bat` atau perintah git manual.
+* Selalu review `git status` dan `git diff --cached --stat` sebelum commit.
+* Pastikan tidak ada file sensitif yang ikut ter-stage.
+
+**Catatan Keamanan:** Raw manuscript drafts dan backup sensitif sebaiknya dikelola di luar repository publik untuk menghindari kebocoran metadata. Lihat dokumentasi internal di `private/docs/` jika Anda menggunakan setup workspace lengkap.
 
 ---
 

@@ -18,7 +18,7 @@ def get_backup_path():
         cwd = os.getcwd()
         # Common case: running from public/ folder directly
         if os.path.basename(cwd).lower() == "public":
-            parent = os.path.dirname(cwd)  # D:\pmn-workspace
+            parent = os.path.dirname(cwd)  # parent of public/ in workspace layout
             private_dir = os.path.join(parent, "private")
             if os.path.exists(private_dir):
                 private_bak = os.path.join(private_dir, "backups", "index.html.bak")

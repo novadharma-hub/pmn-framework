@@ -10,42 +10,39 @@ Use this document as your primary source of truth for the project's architecture
 
 The PMN Framework is built on a **Hybrid Modular-Monolith** design. To protect token efficiency, the large 2.6 MB manuscript is separated into lightweight JSON files for editing, then compiled into a single massive index file for distribution.
 
-| Path Location | Type | Purpose / Description |
+| Path (relative to repo root) | Type | Purpose / Description |
 | :--- | :--- | :--- |
-| `D:\pmn-framework\00_PMN_WORKSPACE.bat` | Launcher | **Super Main Dashboard App** (one-click entry point!) |
-| `D:\pmn-framework\BERSIHKAN_DAN_BACKUP_DOKUMEN.bat` | Launcher | One-click drag-and-drop batch tool for sterilizing documents |
-| `D:\pmn-framework\CARA_PAKAI_PMN.txt` | Workspace Guide | Front-page quick reference for Indonesian human developers |
-| `D:\pmn-framework\PANDUAN_PROMPT_AI.md` | AI Prompt Blueprint | Front-page primer guiding AI on escaping, JSON writing, & formats |
-| `D:\pmn-framework\docx_source\` | MS Word Source | Dedicated folder for the **single active `.docx` manuscript file** |
-| `D:\pmn-framework\docs\raw_inputs\` | MS Word / PDF Input | Dedicated folder for raw document drafts containing personal metadata |
-| `D:\pmn-framework\docs\clean_outputs\` | Clean Output | Dedicated folder for sterilized, 100% clean and audited documents |
-| `D:\pmn-framework\index.ui.html` | UI Skeleton | The lightweight HTML layout (~40KB) without manuscript text |
-| `D:\pmn-framework\style.css` | CSS Styles | Core styling, fonts, and dark/light modes |
-| `D:\pmn-framework\app.js` | UI Logic | Interactive features (Command Palette, popovers, Local LLM terminal) |
-| `D:\pmn-framework\data\` | Core Data | Contains glossary dictionaries, relations, lookups, and quotes |
-| `D:\pmn-framework\data\parts\` | Manuscript | Split JSON files (`part_Preface.json` to `part_Coda.json`) containing raw text |
-| `D:\pmn-framework\scripts\import_pmn_docx.py` | Importer | Vanilla Python DOCX parser & modular JSON part splitter |
-| `D:\pmn-framework\scripts\strip_metadata_and_backup.py` | Security Scrubber | Python script sterilizing metadata, scanning for leaks, and uploading to Telegram |
-| `D:\pmn-framework\scripts\test_dynamic_docx.py` | Stress Tester | Pure-Python OOXML script verifying dynamic UI & schema growth |
-| `D:\pmn-framework\supabase\` | Backend SQL | Migration schemas and SQL procedures for Supabase backend |
-| `D:\pmn-framework\src\lib\` | Backend Libs | Client scaffolds and backend helpers for database coordination |
-| `D:\pmn-framework\index.html` | Compiled Monolith | The single 2.56 MB output compiled automatically for the public |
+| `00_PMN_WORKSPACE.bat` | Launcher | **Super Main Dashboard App** (one-click entry point!) |
+| `docx_source/` | MS Word Source | Dedicated folder for the **single active `.docx` manuscript file** (see private/ for raw drafts) |
+| `index.ui.html` | UI Skeleton | The lightweight HTML layout (~40KB) without manuscript text |
+| `style.css` | CSS Styles | Core styling, fonts, and dark/light modes |
+| `app.js` | UI Logic | Interactive features (Command Palette, popovers, Local LLM terminal) |
+| `data/` | Core Data | Contains glossary dictionaries, relations, lookups, and quotes |
+| `data/parts/` | Manuscript | Split JSON files (`part_Preface.json` to `part_Coda.json`) containing raw text |
+| `scripts/import_pmn_docx.py` | Importer | Vanilla Python DOCX parser & modular JSON part splitter |
+| `scripts/strip_metadata_and_backup.py` | Security Scrubber | Python script for metadata stripping (raw inputs live in private/) |
+| `scripts/test_dynamic_docx.py` | Stress Tester | Pure-Python OOXML script verifying dynamic UI & schema growth |
+| `supabase/` | Backend SQL | Migration schemas and SQL procedures for Supabase backend |
+| `src/lib/` | Backend Libs | Client scaffolds and backend helpers for database coordination |
+| `index.html` | Compiled Monolith | The single ~2.5 MB output compiled automatically for the public |
+
+**Note:** Raw drafts, personal guides, diagnostics, and backups live in the sibling `private/` directory (outside this repository).
 
 ---
 
 ## ⚡ AUTOMATION, COMPILATION & TESTING CENTER
 
 Your workspace is fully automated, removing any requirement for legacy manual CLI commands:
-*   **`00_PMN_WORKSPACE.bat`**: Launches the main interactive Python console (`pmn_console.py`). This is the **super main dashboard** where you can view live repository telemetry (version, glossary count, section totals), compile with one key, start the local server, split files, and preview blueprints in a retro-styled interactive shell.
+*   **`00_PMN_WORKSPACE.bat`**: Launches the main interactive Python console (`pmn_console.py`). This is the **super main dashboard** for telemetry, compilation, importing, and utilities.
 *   **The Lightning Compiler (`modularizer.py compile`)**:
-    1.  **Safety Backup (`index.html.bak`):** Automatically copies the previous version of `index.html` as a fallback backup before writing a new compiled build.
+    1.  **Safety Backup:** Automatically creates a backup of the previous `index.html` before writing a new build (stored safely outside the public repo when using the recommended layout).
     2.  **Syntax Linter:** Blocks compilation upon syntax issues (invalid commas/JSON) to preserve visual integrity.
     3.  **AI Grounding Corpus (`pmn_corpus_for_ai.md`):** Automatically compiles the entire philosophy and key glossary into a clean, flat Markdown file (stripped of HTML tags) at the root, optimized for instant ingestion by RAG scrapers or external LLMs.
 *   **Word Manuscript Importer (`scripts/import_pmn_docx.py`)**:
     1.  **Zip & OOXML Surgery:** Unpacks the Microsoft Word `.docx` file in `docx_source/` natively using Python's core libraries (zero external dependencies).
-    2.  **Robust Tag Matching:** Uses attribute-order-agnostic regular expressions to match and replace payload tags (`<script id="d-parts" type="application/json">` or any attribute ordering) inside both `index.html` and `index.ui.html`.
-    3.  **Flexible Version Parsing:** Automatically extracts the manuscript version from the `.docx` filename, normalizing underscores and dots (e.g. `PMN_Framework_v116_2.docx` resolves to standard public label **`v116.2`**).
-    4.  **Automatic Persistence:** Writes the resolved version directly into the visual template `index.ui.html` so future compilations keep the version synchronized.
+    2.  **Robust Tag Matching:** Uses attribute-order-agnostic regular expressions to match and replace payload tags inside both `index.html` and `index.ui.html`.
+    3.  **Flexible Version Parsing:** Automatically extracts the manuscript version from the `.docx` filename.
+    4.  **Automatic Persistence:** Writes the resolved version directly into the visual template `index.ui.html`.
 
 ## 🛑 STRICT RUNTIME RESTRICTIONS & TOKEN SAFETY (FOR AIs)
 
@@ -120,15 +117,14 @@ Maintain this log chronologically. Always check this section before executing ta
     *   **Compile & Release:** Recompiled cleanly into `index.html` (shrinking standalone footprint to 2.57 MB) and successfully pushed all clean assets to production.
 *   **Outcome:** The javascript codebase is extremely clean, highly readable, and free of silent errors. The new workspace search runs instantly in under 0.07 seconds, providing a powerful unbuffered utility for developers and AI agents alike. The compiled monolithic layout loads instantly offline and local-CORS-free.
 
-### 📅 May 24, 2026 (IV): Secure Document Metadata Scrubber Pipeline & Central Dashboard Integration
-*   **Situation:** The developer required a secure, local pipeline inside `pmn-framework` to clean personal metadata from document drafts before git pushing to public repositories. This required input/output sandboxes, deep post-process validation to guarantee 100% leak-free files, automatic Telegram logging backup, and full integration into the main workspace dashboard launcher (`00_PMN_WORKSPACE.bat` -> `pmn_console.py`).
+### 📅 May 24, 2026 (IV): Secure Document Metadata Scrubber Pipeline
+*   **Situation:** A secure local pipeline was needed to strip personal metadata from document drafts before any public release.
 *   **Action Taken:**
-    1.  **Pipeline Construction (`scripts/strip_metadata_and_backup.py`):** Created a modular python script that establishes `docs/raw_inputs/` and `docs/clean_outputs/` sandbox folders. Strips core and app XML metadata properties from DOCX and PDF formats natively.
-    2.  **Post-Process Deep Safety Audit:** Programmed `verify_cleanliness()` to physically re-open output files, scanning internal ZIP XMLs (Word) and metadata dictionary trees (PDF) for case-insensitive occurrences of sensitive developer terms (`ali`, `ikhsan`). If the audit fails, the output is deleted/quarantined, blocking cloud distribution.
-    3.  **Command Console Centralization (`pmn_console.py`):** Added a new select choice **Option `[8] SECURE META REMOVER`** inside the main telemetry-rich workspace dashboard. Triggers bulk processing of all raw documents placed in the masukan sandbox.
-    4.  **Drag-and-Drop Batch Launcher (`BERSIHKAN_DAN_BACKUP_DOKUMEN.bat`):** Created a dedicated, standard ASCII-safe batch launcher supporting drag-and-drop actions for Windows Explorer. Implemented pure ASCII characters to prevent legacy `cmd.exe` multi-byte byte-offset parsing crashes.
-    5.  **Telemetry Documentation:** Documented the new security commands in the master Indonesian developer manual `CARA_PAKAI_PMN.txt`.
-*   **Outcome:** Both manual drag-and-drop and bulk console execution flows work flawlessly. Personal metadata leaks are 100% caught, audited, and stripped. The `pmn-framework` repository remains 100% public-safe and clean.
+    1.  Created `scripts/strip_metadata_and_backup.py` that strips core/app XML metadata from DOCX and PDF.
+    2.  Added deep post-process validation (`verify_cleanliness()`) that scans for sensitive terms.
+    3.  Integrated as **Option [8] SECURE META REMOVER** in the main console.
+    4.  Added drag-and-drop batch support.
+*   **Outcome:** Metadata stripping is reliable and integrated into the normal release workflow. Raw inputs and sensitive outputs are kept outside the public repository.
 
 ### 📅 May 25, 2026: Revised Manuscript Ingestion (v116.2), UI Navigation Restoration, & Linter Pipeline Integration
 *   **Situation:** The revised manuscript `v116.2` (fixing historical bibliography editorial formatting markers and intellectual debts merging bugs) was missing in the active release pipeline, causing older errors to persist. Furthermore, several visual controls ("Open foundations" and "Open cases") on the dashboard were non-functional, throwing `ReferenceError: openPartStart is not defined` due to missing implementation in `app.js`. Lastly, a robust formatting validator was needed to safeguard the repository from future bad merges or bad formatting tags.
