@@ -1,6 +1,15 @@
 /* ═══════════════════════════════════════════════════════
-   PMN v114 — Master Stylesheet (clean rebuild)
-   ═══════════════════════════════════════════════════════ */
+   PMN Framework — Master Stylesheet
+   Current release managed via index.ui.html version badge
+   ═══════════════════════════════════════════════════════
+
+   UI_EDITING_GUIDE.md — FILE INI = DESAIN VISUAL
+   Tugas utama:
+   - Semua warna, font, spacing, layout, dan tema
+   - Komponen visual (tombol, kartu, popover, dll)
+
+   Lihat UI_EDITING_GUIDE.md untuk penjelasan peran ketiga file UI.
+*/
 
 /* ── Variables ── */
 :root {

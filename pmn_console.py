@@ -189,28 +189,35 @@ def print_dashboard():
     print(f"  ● Safety Backup    : \033[96m{stats['backup_status']}\033[0m     ● Grounding Corpus: \033[96m{stats['corpus_status']}\033[0m")
     print("\033[90m" + "-" * 65 + "\033[0m")
     
-    # Layman Workflow Recommended Order Guide
-    print(" \033[93m[ALUR KERJA HARIAN - NORMALNYA URUTANNYA BEGINI]:\033[0m")
-    print("  \033[97m1.\033[0m Edit naskah di Microsoft Word (tutup setelah selesai)")
-    print("  \033[97m2.\033[0m Letakkan dokumen .docx Anda di folder \\private\\docx_source\\")
-    print("  \033[97m3.\033[0m Tekan \033[92m[3]\033[0m di bawah untuk Impor & Kompilasi otomatis")
-    print("  \033[97m4.\033[0m Tekan \033[92m[8]\033[0m di bawah untuk Pembersihan Metadata Aman")
-    print("  \033[97m5.\033[0m Klik ganda file \033[96mKIRIM_KE_GITHUB.bat\033[0m di folder utama untuk rilis!")
+    # Alur Kerja Harian - Lengkap, urut, dan ramah pemula
+    print(" \033[93m[ALUR KERJA HARIAN - CUKUP IKUTI LANGKAH INI]\033[0m")
+    print("  \033[97m1.\033[0m Edit naskah di Microsoft Word → simpan ke \\private\\docx_source\\")
+    print("  \033[97m2.\033[0m Tekan \033[92m[1]\033[0m → STAGED DOCX IMPORT (naskah dipecah otomatis)")
+    print("  \033[97m3.\033[0m (Opsional) Edit \\data\\parts\\ (konten) atau \\index.ui.html\\ (tampilan)")
+    print("        Catatan: UI biasanya jarang berubah. Kebanyakan update hanya di konten dari Word.")
+    print("  \033[97m4.\033[0m Tekan \033[92m[2]\033[0m → LIGHTNING COMPILE (gabungkan semua jadi index.html)")
+    print("  \033[97m5.\033[0m Tekan \033[92m[3]\033[0m → SECURE META REMOVER (bersihkan metadata)")
+    print("  \033[97m6.\033[0m Tekan \033[92m[4]\033[0m → KIRIM KE GITHUB (push perubahan)")
     print("\033[90m" + "-" * 65 + "\033[0m")
     
-    # Premium Menu Option Rows
-    print(" \033[97m[COMMAND MENU - SELECT ACTION]\033[0m")
-    print("  \033[92m[1]\033[0m LIGHTNING COMPILE    \033[90m(Rebuild index.html with Safety Checklist)\033[0m")
-    print("  \033[92m[2]\033[0m LAUNCH DEV SERVER   \033[90m(Run simple HTTP server + Browser preview)\033[0m")
-    print("  \033[92m[3]\033[0m IMPORT WORD NASKAH  \033[90m(Select & import .docx from docx_source/ folder)\033[0m")
-    print("  \033[92m[4]\033[0m SPLIT MONOLITH TO JSON\033[90m(Split data/parts.json into 21 edit JSONs)\033[0m")
-    print("  \033[92m[5]\033[0m RESTORE STABLE BACKUP\033[90m(Rollback index.html to stable index.html.bak)\033[0m")
-    print("  \033[92m[6]\033[0m SYSTEM BLUEPRINT    \033[90m(Print master AI.md system architecture)\033[0m")
-    print("  \033[92m[7]\033[0m SEARCH WORKSPACE     \033[90m(Fast, safe token-saving source code search)\033[0m")
-    print("  \033[92m[8]\033[0m SECURE META REMOVER  \033[90m(Clean raw_inputs documents & backup to Telegram)\033[0m")
-    print("  \033[92m[9]\033[0m SYSTEM DIAGNOSTICS   \033[90m(Run deep check + generate AI Rescue Packet)\033[0m")
-    print("  \033[92m[10]\033[0m BACKUP & ROLLBACK    \033[90m(Create/Restore ZIP snapshots of all sources)\033[0m")
-    print("  \033[91m[0]\033[0m EXIT TERMINAL")
+    # Menu - Diurutkan persis mengikuti alur kerja harian (sangat awam friendly)
+    print(" \033[97m[ALUR KERJA UTAMA]\033[0m")
+    print("  \033[92m[1]\033[0m STAGED DOCX IMPORT     \033[90m(1. Ambil naskah dari Word)\033[0m")
+    print("  \033[92m[2]\033[0m LIGHTNING COMPILE      \033[90m(2. Jadikan index.html)\033[0m")
+    print("  \033[92m[3]\033[0m SECURE META REMOVER    \033[90m(3. Bersihkan metadata)\033[0m")
+    print("  \033[92m[4]\033[0m KIRIM KE GITHUB        \033[90m(4. Push ke GitHub)\033[0m")
+    print()
+    print(" \033[97m[ALAT PENDUKUNG]\033[0m")
+    print("  \033[92m[5]\033[0m RESTORE STABLE BACKUP  \033[90m(Kembalikan ke versi lama)\033[0m")
+    print("  \033[92m[6]\033[0m LAUNCH DEV SERVER      \033[90m(Preview di browser)\033[0m")
+    print("  \033[92m[7]\033[0m SPLIT TO JSON          \033[90m(Edit per bagian)\033[0m")
+    print()
+    print("  \033[92m[8]\033[0m DIAGNOSTICS            \033[90m(Cek sistem)\033[0m")
+    print("  \033[92m[9]\033[0m SEARCH                 \033[90m(Cari di kode)\033[0m")
+    print("  \033[92m[10]\033[0m BLUEPRINT              \033[90m(Lihat panduan sistem)\033[0m")
+    print("  \033[92m[11]\033[0m BACKUP & ROLLBACK      \033[90m(Snapshot lengkap)\033[0m")
+    print("  \033[92m[12]\033[0m BANTUAN EDIT UI        \033[90m(Panduan lengkap edit tampilan website)\033[0m")
+    print("  \033[91m[0]\033[0m EXIT")
     print("\033[96m" + "=" * 65 + "\033[0m")
 
 def show_blueprint():
@@ -414,6 +421,124 @@ def main():
                 print(f"\n\033[91m[ERROR] Gagal menjalankan utilitas backup: {e}\033[0m")
             input("\n  Press Enter to continue...")
             
+        elif choice == "11":
+            print("\n\033[93m[STAGED DOCX IMPORT WITH VALIDATION LAYERS]\033[0m")
+            print("This will run the new multi-stage pipeline with early validation checks.")
+            try:
+                from scripts.docx_import_pipeline import run_staged_import
+                from pathlib import Path
+
+                # Reuse the same private docx_source detection logic
+                parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                if os.path.exists(os.path.join(parent_dir, "private", "docx_source")):
+                    docx_folder = os.path.join(parent_dir, "private", "docx_source")
+                elif os.path.exists(r"D:\pmn-workspace\private\docx_source"):
+                    docx_folder = r"D:\pmn-workspace\private\docx_source"
+                else:
+                    docx_folder = "docx_source"
+
+                docx_files = []
+                if os.path.exists(docx_folder):
+                    docx_files = [f for f in os.listdir(docx_folder) if f.endswith(".docx") and not f.startswith("~$")]
+
+                if not docx_files:
+                    print(f"\n[ERROR] Tidak ada file .docx di {docx_folder}")
+                else:
+                    print(f"\nDitemukan file di {docx_folder}:")
+                    for i, f in enumerate(docx_files, 1):
+                        print(f"  [{i}] {f}")
+
+                    try:
+                        selection = int(input("\nPilih nomor file untuk di-import dengan staged validation: ").strip())
+                        if 1 <= selection <= len(docx_files):
+                            chosen_file = os.path.join(docx_folder, docx_files[selection-1])
+                            report = run_staged_import(Path(chosen_file), verbose=True)
+                            report.print_detailed_report()
+
+                            if report.overall_success:
+                                print("\n[INFO] Staged validation passed. You can now proceed with normal Import (menu 3) or Compile.")
+                            else:
+                                print("\n[WARN] Staged validation menemukan masalah. Disarankan perbaiki dulu sebelum import penuh.")
+                        else:
+                            print("Pilihan tidak valid.")
+                    except ValueError:
+                        print("Input tidak valid.")
+            except Exception as e:
+                print(f"\n[ERROR] Gagal menjalankan staged pipeline: {e}")
+            input("\n  Press Enter to continue...")
+
+        elif choice == "12":
+            print("\n\033[93m[BANTUAN EDIT UI / TAMPILAN WEBSITE]\033[0m")
+            print("Mengubah tampilan website melibatkan 3 file utama:")
+            print("  • index.ui.html   → Struktur & kerangka halaman")
+            print("  • style.css       → Semua desain visual (warna, spacing, tema, dll)")
+            print("  • app.js          → Logika interaktif (pencarian, AI, popover, dll)")
+            print()
+            print("Pilih aksi cepat:")
+            print("  [o] Buka ketiga file UI di editor default Windows")
+            print("  [b] Backup ketiga file UI sekaligus (ke folder backups/ui/)")
+            print("  [f] Buka folder UI saja di Explorer")
+            print("  [g] Buka UI_EDITING_GUIDE.md (panduan lengkap)")
+            print("  [q] Buka UI_QUICK_REFERENCE.md (versi 1 halaman untuk dicetak)")
+            print("  [x] Kembali ke menu utama")
+            
+            sub_choice = input("\nPilihan: ").strip().lower()
+            
+            if sub_choice == "o":
+                print("\nMembuka file UI...")
+                os.system("start index.ui.html")
+                os.system("start style.css")
+                os.system("start app.js")
+                print("Ketiga file telah dibuka di program default Anda.")
+                
+            elif sub_choice == "b":
+                print("\nMelakukan backup ketiga file UI...")
+                try:
+                    import shutil
+                    from datetime import datetime
+                    
+                    ui_backup_dir = os.path.join("..", "private", "backups", "ui")
+                    os.makedirs(ui_backup_dir, exist_ok=True)
+                    
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                    backup_subdir = os.path.join(ui_backup_dir, f"ui_backup_{timestamp}")
+                    os.makedirs(backup_subdir, exist_ok=True)
+                    
+                    files_to_backup = ["index.ui.html", "style.css", "app.js"]
+                    for f in files_to_backup:
+                        if os.path.exists(f):
+                            shutil.copy2(f, os.path.join(backup_subdir, f))
+                            print(f"  ✓ {f} dibackup")
+                        else:
+                            print(f"  ! {f} tidak ditemukan")
+                    
+                    print(f"\nBackup selesai ke: {os.path.abspath(backup_subdir)}")
+                except Exception as e:
+                    print(f"\n[ERROR] Gagal backup UI: {e}")
+                    
+            elif sub_choice == "f":
+                print("\nMembuka folder UI...")
+                # Buka folder public (tempat UI files berada)
+                os.system("start .")
+                print("Folder UI telah dibuka di Explorer.")
+                
+            elif sub_choice == "g":
+                if os.path.exists("UI_EDITING_GUIDE.md"):
+                    os.system("start UI_EDITING_GUIDE.md")
+                    print("UI_EDITING_GUIDE.md telah dibuka.")
+                else:
+                    print("File UI_EDITING_GUIDE.md tidak ditemukan di root.")
+                    
+            elif sub_choice == "q":
+                if os.path.exists("UI_QUICK_REFERENCE.md"):
+                    os.system("start UI_QUICK_REFERENCE.md")
+                    print("UI_QUICK_REFERENCE.md (versi ringkas) telah dibuka.")
+                else:
+                    print("File UI_QUICK_REFERENCE.md tidak ditemukan.")
+            else:
+                print("Kembali ke menu utama.")
+            input("\n  Tekan Enter untuk kembali...")
+
         elif choice == "0":
             print("\n  Closing PMN Console. Sampai jumpa, Komandan! 🫡")
             time.sleep(1)
