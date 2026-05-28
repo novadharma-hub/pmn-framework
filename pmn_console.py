@@ -264,171 +264,19 @@ def main():
         print_dashboard()
         
         try:
-            choice = input(" \033[93mEnter choice [0-10]: \033[0m").strip()
+            choice = input(" \033[93mEnter choice [0-12]: \033[0m").strip()
         except KeyboardInterrupt:
             print("\n\n  Exiting control dashboard. Sampai jumpa, Komandan!")
             break
             
         if choice == "1":
-            print("\n\033[93m[SAFETY CHECK - PEMASANGAN NASKAH / UI]\033[0m")
-            q1 = input("  Apakah Komandan sudah menyinkronkan naskah Word baru atau mengedit file UI? (y/n): ").strip().lower()
-            if q1 != 'y':
-                print("  [INFO] Silakan lengkapi berkas naskah/UI Anda terlebih dahulu. Kompilasi dibatalkan.")
-                input("\n  Press Enter to continue...")
-                continue
-                
-            q2 = input("  Apakah naskah tersebut sudah dipecah menjadi berkas JSON modular (Opsi 3/4)? (y/n): ").strip().lower()
-            if q2 != 'y':
-                print("\n  [TIPS] Sistem merekomendasikan untuk memecah naskah terlebih dahulu agar data terbarukan.")
-                confirm = input("  Apakah Komandan tetap ingin mem-compile dengan database JSON yang ada sekarang? (y/n): ").strip().lower()
-                if confirm != 'y':
-                    continue
-
-            print("\n\033[96m[RUNNING] Compiling all modular segments...\033[0m")
-            time.sleep(0.5)
-            # Run modularizer compile mode
-            try:
-                subprocess.run([sys.executable, "modularizer.py", "compile"], check=True)
-            except Exception as e:
-                print(f"\n\033[91m[ERROR] Compilation failed: {e}\033[0m")
-            input("\n  Press Enter to continue...")
-            
-        elif choice == "2":
-            print("\n\033[92m[RUNNING] Launching Python dev server on port 8000...\033[0m")
-            print("\033[90m(To stop server, press CTRL+C inside this window)\033[0m\n")
-            time.sleep(1)
-            try:
-                # Direct import or subprocess run of local server to keep interactive terminal active
-                subprocess.run([sys.executable, "jalankan_web.py"])
-            except KeyboardInterrupt:
-                print("\n  Local server closed successfully.")
-            except Exception as e:
-                print(f"\n\033[91m[ERROR] Server crash: {e}\033[0m")
-            input("\n  Press Enter to return to dashboard...")
-            
-        elif choice == "3":
-            # Resolusi jalur dinamis untuk pmn-workspace
-            parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            if os.path.exists(os.path.join(parent_dir, "private", "docx_source")):
-                docx_folder = os.path.join(parent_dir, "private", "docx_source")
-            elif os.path.exists(r"D:\pmn-workspace\private\docx_source"):
-                docx_folder = r"D:\pmn-workspace\private\docx_source"
-            else:
-                docx_folder = "docx_source"
-                
-            print(f"\n\033[96m[RUNNING] Scanning folder for manuscripts: {docx_folder}...\033[0m")
-            if not os.path.exists(docx_folder):
-                try:
-                    os.makedirs(docx_folder)
-                except:
-                    pass
-            
-            docx_files = []
-            if os.path.exists(docx_folder):
-                docx_files = [f for f in os.listdir(docx_folder) if f.endswith(".docx") and not f.startswith("~$")]
-            
-            if not docx_files:
-                print(f"\n  \033[91m[WARNING] Tidak ada file Word (.docx) aktif ditemukan di folder: {docx_folder}\033[0m")
-                print("  Silakan taruh manuskrip Word (.docx) baru Anda di folder tersebut terlebih dahulu!")
-            else:
-                print("\n  Berkas naskah Word (.docx) yang tersedia:")
-                for idx, fn in enumerate(docx_files):
-                    print(f"    \033[92m[{idx + 1}]\033[0m {fn}")
-                print("    \033[91m[n]\033[0m Batal")
-                
-                try:
-                    sel = input(f"\n  Pilih naskah untuk diimpor [1-{len(docx_files)}] (atau 'n'): ").strip().lower()
-                    if sel.isdigit() and 1 <= int(sel) <= len(docx_files):
-                        selected_file = os.path.join(docx_folder, docx_files[int(sel) - 1])
-                        print(f"\n\033[96m[IMPORTING]\033[0m Memproses naskah: {selected_file}...")
-                        subprocess.run([sys.executable, "scripts/import_pmn_docx.py", "--docx", selected_file], check=True)
-                        
-                        # Automatically run compiler after successful import
-                        print("\n\033[92m[COMPILED]\033[0m Merajut visual web dengan naskah hasil impor baru...")
-                        subprocess.run([sys.executable, "modularizer.py", "compile"], check=True)
-                    else:
-                        print("\n  Operasi impor dibatalkan.")
-                except Exception as e:
-                    print(f"\n  \033[91m[ERROR] Proses impor atau kompilasi gagal: {e}\033[0m")
-            
-            input("\n  Press Enter to continue...")
-            
-        elif choice == "4":
-            confirm = input("\n  \033[91m[WARNING]\033[0m Tindakan ini akan memotong parts.json monolithic dan menimpa folder modular. Lanjutkan? (y/n): ").strip().lower()
-            if confirm == 'y':
-                print("\n\033[96m[RUNNING] Splitting monolithic parts.json...\033[0m")
-                try:
-                    subprocess.run([sys.executable, "modularizer.py", "split"], check=True)
-                except Exception as e:
-                    print(f"\n\033[91m[ERROR] Split operation failed: {e}\033[0m")
-            else:
-                print("\n  Operation canceled.")
-            input("\n  Press Enter to continue...")
-            
-        elif choice == "5":
-            backup_path = get_backup_path()
-            compiled_path = "index.html"
-            if not os.path.exists(backup_path):
-                print("\n  \033[91m[ERROR] Tidak ditemukan berkas cadangan stabil index.html.bak!\033[0m")
-                print("  Pastikan Komandan sudah pernah melakukan kompilasi minimal satu kali sebelumnya.")
-            else:
-                print("\n  \033[93m[ROLLBACK SYSTEM]\033[0m")
-                confirm = input("  Apakah Komandan yakin ingin membatalkan rilis naskah/UI saat ini\n  dan memulihkan website index.html dari cadangan stabil (index.html.bak)? (y/n): ").strip().lower()
-                if confirm == 'y':
-                    try:
-                        import shutil
-                        shutil.copy2(backup_path, compiled_path)
-                        print("\n  \033[92m[SUCCESS] Website index.html BERHASIL dikembalikan ke cadangan stabil!\033[0m")
-                    except Exception as e:
-                        print(f"\n  \033[91m[ERROR] Gagal memulihkan berkas cadangan: {e}\033[0m")
-                else:
-                    print("\n  Pemulihan cadangan dibatalkan.")
-            input("\n  Press Enter to continue...")
-            
-        elif choice == "6":
-            show_blueprint()
-            
-        elif choice == "7":
-            query = input("\n  Enter search query: ").strip()
-            if query:
-                workspace_search(query)
-            else:
-                print("  Empty query. Search canceled.")
-            input("\n  Press Enter to return to dashboard...")
-            
-        elif choice == "8":
-            print("\n\033[93m[SECURE METADATA REMOVER & BACKUP PIPELINE]\033[0m")
-            try:
-                # Run the newly created metadata cleaner and distributor script
-                subprocess.run([sys.executable, "scripts/strip_metadata_and_backup.py"], check=True)
-            except Exception as e:
-                print(f"\n\033[91m[ERROR] Gagal menjalankan pembersih dokumen: {e}\033[0m")
-            input("\n  Press Enter to continue...")
-            
-        elif choice == "9":
-            print("\n\033[93m[RUNNING SYSTEM DIAGNOSTICS & AI RESCUE PIPELINE]\033[0m")
-            try:
-                subprocess.run([sys.executable, "scripts/pmn_diagnostics.py"], check=True)
-            except Exception as e:
-                print(f"\n\033[91m[ERROR] Gagal menjalankan diagnostik: {e}\033[0m")
-            input("\n  Press Enter to continue...")
-            
-        elif choice == "10":
-            print("\n\033[93m[RUNNING SYSTEM SNAPSHOTS BACKUP & ROLLBACK PIPELINE]\033[0m")
-            try:
-                subprocess.run([sys.executable, "scripts/pmn_backup.py"], check=True)
-            except Exception as e:
-                print(f"\n\033[91m[ERROR] Gagal menjalankan utilitas backup: {e}\033[0m")
-            input("\n  Press Enter to continue...")
-            
-        elif choice == "11":
             print("\n\033[93m[STAGED DOCX IMPORT WITH VALIDATION LAYERS]\033[0m")
             print("This will run the new multi-stage pipeline with early validation checks.")
             try:
                 from scripts.docx_import_pipeline import run_staged_import
                 from pathlib import Path
 
-                # Reuse the same private docx_source detection logic
+                # Resolusi jalur dinamis untuk pmn-workspace
                 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
                 if os.path.exists(os.path.join(parent_dir, "private", "docx_source")):
                     docx_folder = os.path.join(parent_dir, "private", "docx_source")
@@ -456,9 +304,17 @@ def main():
                             report.print_detailed_report()
 
                             if report.overall_success:
-                                print("\n[INFO] Staged validation passed. You can now proceed with normal Import (menu 3) or Compile.")
+                                print("\n[INFO] Staged validation passed. Proceeding with import...")
+                                subprocess.run([sys.executable, "scripts/import_pmn_docx.py", "--docx", chosen_file], check=True)
+                                print("\n\033[92m[COMPILED]\033[0m Merajut visual web dengan naskah hasil impor baru...")
+                                subprocess.run([sys.executable, "modularizer.py", "compile"], check=True)
                             else:
                                 print("\n[WARN] Staged validation menemukan masalah. Disarankan perbaiki dulu sebelum import penuh.")
+                                proceed = input("Apakah tetap ingin memaksakan import penuh? (y/n): ").strip().lower()
+                                if proceed == 'y':
+                                    subprocess.run([sys.executable, "scripts/import_pmn_docx.py", "--docx", chosen_file], check=True)
+                                    print("\n\033[92m[COMPILED]\033[0m Merajut visual web...")
+                                    subprocess.run([sys.executable, "modularizer.py", "compile"], check=True)
                         else:
                             print("Pilihan tidak valid.")
                     except ValueError:
@@ -466,7 +322,123 @@ def main():
             except Exception as e:
                 print(f"\n[ERROR] Gagal menjalankan staged pipeline: {e}")
             input("\n  Press Enter to continue...")
+            
+        elif choice == "2":
+            print("\n\033[93m[SAFETY CHECK - PEMASANGAN NASKAH / UI]\033[0m")
+            q1 = input("  Apakah Komandan sudah menyinkronkan naskah Word baru atau mengedit file UI? (y/n): ").strip().lower()
+            if q1 != 'y':
+                print("  [INFO] Silakan lengkapi berkas naskah/UI Anda terlebih dahulu. Kompilasi dibatalkan.")
+                input("\n  Press Enter to continue...")
+                continue
+                
+            q2 = input("  Apakah naskah tersebut sudah dipecah menjadi berkas JSON modular (Opsi 1/7)? (y/n): ").strip().lower()
+            if q2 != 'y':
+                print("\n  [TIPS] Sistem merekomendasikan untuk memecah naskah terlebih dahulu agar data terbarukan.")
+                confirm = input("  Apakah Komandan tetap ingin mem-compile dengan database JSON yang ada sekarang? (y/n): ").strip().lower()
+                if confirm != 'y':
+                    continue
 
+            print("\n\033[96m[RUNNING] Compiling all modular segments...\033[0m")
+            time.sleep(0.5)
+            # Run modularizer compile mode
+            try:
+                subprocess.run([sys.executable, "modularizer.py", "compile"], check=True)
+            except Exception as e:
+                print(f"\n\033[91m[ERROR] Compilation failed: {e}\033[0m")
+            input("\n  Press Enter to continue...")
+            
+        elif choice == "3":
+            print("\n\033[93m[SECURE METADATA REMOVER & BACKUP PIPELINE]\033[0m")
+            try:
+                # Run the newly created metadata cleaner and distributor script
+                subprocess.run([sys.executable, "scripts/strip_metadata_and_backup.py"], check=True)
+            except Exception as e:
+                print(f"\n\033[91m[ERROR] Gagal menjalankan pembersih dokumen: {e}\033[0m")
+            input("\n  Press Enter to continue...")
+            
+        elif choice == "4":
+            print("\n\033[93m[RUNNING] Kirim ke GitHub (Push Changes)...\033[0m")
+            try:
+                if sys.platform == 'win32':
+                    subprocess.run(["cmd.exe", "/c", "KIRIM_KE_GITHUB.bat"], check=True)
+                else:
+                    print("\n  [ERROR] Skrip ini hanya dapat dijalankan pada Windows OS.")
+            except Exception as e:
+                print(f"\n\033[91m[ERROR] Gagal menjalankan KIRIM_KE_GITHUB.bat: {e}\033[0m")
+            input("\n  Press Enter to continue...")
+            
+        elif choice == "5":
+            backup_path = get_backup_path()
+            compiled_path = "index.html"
+            if not os.path.exists(backup_path):
+                print("\n  \033[91m[ERROR] Tidak ditemukan berkas cadangan stabil index.html.bak!\033[0m")
+                print("  Pastikan Komandan sudah pernah melakukan kompilasi minimal satu kali sebelumnya.")
+            else:
+                print("\n  \033[93m[ROLLBACK SYSTEM]\033[0m")
+                confirm = input("  Apakah Komandan yakin ingin membatalkan rilis naskah/UI saat ini\n  dan memulihkan website index.html dari cadangan stabil (index.html.bak)? (y/n): ").strip().lower()
+                if confirm == 'y':
+                    try:
+                        import shutil
+                        shutil.copy2(backup_path, compiled_path)
+                        print("\n  \033[92m[SUCCESS] Website index.html BERHASIL dikembalikan ke cadangan stabil!\033[0m")
+                    except Exception as e:
+                        print(f"\n  \033[91m[ERROR] Gagal memulihkan berkas cadangan: {e}\033[0m")
+                else:
+                    print("\n  Pemulihan cadangan dibatalkan.")
+            input("\n  Press Enter to continue...")
+            
+        elif choice == "6":
+            print("\n\033[92m[RUNNING] Launching Python dev server on port 8000...\033[0m")
+            print("\033[90m(To stop server, press CTRL+C inside this window)\033[0m\n")
+            time.sleep(1)
+            try:
+                # Direct import or subprocess run of local server to keep interactive terminal active
+                subprocess.run([sys.executable, "jalankan_web.py"])
+            except KeyboardInterrupt:
+                print("\n  Local server closed successfully.")
+            except Exception as e:
+                print(f"\n\033[91m[ERROR] Server crash: {e}\033[0m")
+            input("\n  Press Enter to return to dashboard...")
+            
+        elif choice == "7":
+            confirm = input("\n  \033[91m[WARNING]\033[0m Tindakan ini akan memotong parts.json monolithic dan menimpa folder modular. Lanjutkan? (y/n): ").strip().lower()
+            if confirm == 'y':
+                print("\n\033[96m[RUNNING] Splitting monolithic parts.json...\033[0m")
+                try:
+                    subprocess.run([sys.executable, "modularizer.py", "split"], check=True)
+                except Exception as e:
+                    print(f"\n\033[91m[ERROR] Split operation failed: {e}\033[0m")
+            else:
+                print("\n  Operation canceled.")
+            input("\n  Press Enter to continue...")
+            
+        elif choice == "8":
+            print("\n\033[93m[RUNNING SYSTEM DIAGNOSTICS & AI RESCUE PIPELINE]\033[0m")
+            try:
+                subprocess.run([sys.executable, "scripts/pmn_diagnostics.py"], check=True)
+            except Exception as e:
+                print(f"\n\033[91m[ERROR] Gagal menjalankan diagnostik: {e}\033[0m")
+            input("\n  Press Enter to continue...")
+            
+        elif choice == "9":
+            query = input("\n  Enter search query: ").strip()
+            if query:
+                workspace_search(query)
+            else:
+                print("  Empty query. Search canceled.")
+            input("\n  Press Enter to return to dashboard...")
+            
+        elif choice == "10":
+            show_blueprint()
+            
+        elif choice == "11":
+            print("\n\033[93m[RUNNING SYSTEM SNAPSHOTS BACKUP & ROLLBACK PIPELINE]\033[0m")
+            try:
+                subprocess.run([sys.executable, "scripts/pmn_backup.py"], check=True)
+            except Exception as e:
+                print(f"\n\033[91m[ERROR] Gagal menjalankan utilitas backup: {e}\033[0m")
+            input("\n  Press Enter to continue...")
+            
         elif choice == "12":
             print("\n\033[93m[BANTUAN EDIT UI / TAMPILAN WEBSITE]\033[0m")
             print("Mengubah tampilan website melibatkan 3 file utama:")
@@ -538,13 +510,13 @@ def main():
             else:
                 print("Kembali ke menu utama.")
             input("\n  Tekan Enter untuk kembali...")
-
+ 
         elif choice == "0":
             print("\n  Closing PMN Console. Sampai jumpa, Komandan! 🫡")
             time.sleep(1)
             break
         else:
-            print("\n  \033[91mPilihan tidak valid. Silakan masukkan angka 0 s.d 10.\033[0m")
+            print("\n  \033[91mPilihan tidak valid. Silakan masukkan angka 0 s.d 12.\033[0m")
             time.sleep(1.5)
 
 if __name__ == "__main__":

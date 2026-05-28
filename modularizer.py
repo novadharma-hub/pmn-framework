@@ -218,6 +218,27 @@ def compile_mode():
         json_str = json.dumps(data, ensure_ascii=False)
         return f'<script type="application/json" id="{tag_id}">{json_str}</script>'
 
+    # Recalculate look, rel, and ci dynamically to ensure single source of truth from modular JSONs
+    print("[INFO] Recalculating cross-references and section lookups dynamically...")
+    try:
+        sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+        from import_pmn_docx import build_look, build_rel_and_cited
+        
+        look = build_look(full_parts)
+        related, cited = build_rel_and_cited(full_parts)
+        
+        # Save them back to disk to ensure data/ folder matches Compiled index.html
+        os.makedirs("data", exist_ok=True)
+        with open(os.path.join("data", "look.json"), "w", encoding="utf-8") as f:
+            json.dump(look, f, ensure_ascii=False, indent=2)
+        with open(os.path.join("data", "rel.json"), "w", encoding="utf-8") as f:
+            json.dump(related, f, ensure_ascii=False, indent=2)
+        with open(os.path.join("data", "ci.json"), "w", encoding="utf-8") as f:
+            json.dump(cited, f, ensure_ascii=False, indent=2)
+        print("   [OK] Reference tables (look, rel, ci) recalculated successfully.")
+    except Exception as e:
+        print(f"   [WARN] Could not dynamically recalculate references: {e}")
+
     # Load all the data files as inlined script tags
     print("[INFO] Embedding all JSON data files...")
     json_scripts = []
