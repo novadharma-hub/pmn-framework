@@ -159,18 +159,66 @@ def check_json_validity() -> list[str]:
     return findings
 
 
+def is_private_public_layout() -> bool:
+    """Detect if we are running inside the recommended pmn-workspace layout.
+
+    Handles two common cases:
+    1. Running from the workspace public folder (direct)
+    2. Running from the git repo junction (D:\\pmn-framework)
+    """
+    try:
+        candidates = []
+
+        # Case 1: Script is inside a 'public' folder
+        if ROOT.name.lower() == "public":
+            candidates.append(ROOT.parent / "private")
+
+        # Case 2: Current ROOT might be the junction target (D:\pmn-framework)
+        # Check if there is a known private sibling at workspace level
+        # Try going up one level from ROOT
+        candidates.append(ROOT.parent / "private")
+
+        # Also check the classic D:\pmn-workspace location as fallback
+        candidates.append(Path(r"D:\pmn-workspace\private"))
+
+        for private_dir in candidates:
+            if private_dir.exists():
+                # Additional sanity: look for known private subfolders
+                if (private_dir / "backups").exists() or (private_dir / "docs").exists():
+                    return True
+        return False
+    except Exception:
+        return False
+
+
 def check_ignore_contract() -> list[str]:
     ignore_path = ROOT / ".gitignore"
     text = ignore_path.read_text(encoding="utf-8", errors="ignore") if ignore_path.exists() else ""
-    required = [
-        ".env",
-        "docs/raw_inputs/",
-        "docs/clean_outputs/",
-        "backups/",
-        "LENGKAPI_DIAGNOSIS_UNTUK_AI.md",
-        "__pycache__/",
-        "*.pyc",
-    ]
+
+    if is_private_public_layout():
+        # In the recommended private/public layout, many sensitive folders
+        # (raw_inputs, backups, LENGKAPI_DIAGNOSIS, etc.) live in private/.
+        # We only require the minimal set that should still be present in the
+        # public .gitignore.
+        required = [
+            ".env",
+            "__pycache__/",
+            "*.pyc",
+            "*.bak",           # Still good to ignore in public
+            "index.html.bak",
+        ]
+    else:
+        # Legacy single-folder mode: keep the original strict expectations
+        required = [
+            ".env",
+            "docs/raw_inputs/",
+            "docs/clean_outputs/",
+            "backups/",
+            "LENGKAPI_DIAGNOSIS_UNTUK_AI.md",
+            "__pycache__/",
+            "*.pyc",
+        ]
+
     return [item for item in required if item not in text]
 
 

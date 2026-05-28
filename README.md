@@ -18,9 +18,11 @@ A professional overview of the workspace directory layout:
 ```text
 pmn-framework/
 ├── 🚀 00_PMN_WORKSPACE.bat    ← Super main dashboard launcher (One-click entry point!)
-├── 📝 CARA_PAKAI_PMN.txt      ← Front-page workspace quick start guide for human developers
-├── 🧠 PANDUAN_PROMPT_AI.md    ← Front-page prompt blueprints to guide developer AI models
 │
+│   (Many internal guides & detailed docs live in sibling `private/` when using
+│    the recommended pmn-workspace layout)
+│
+
 ├── 📂 docx_source/            ← Dedicated folder for **exactly one active MS Word (.docx) file**
 │   └── PMN_Framework_v*.docx  ← Splitting source (Any .docx here is processed automatically!)
 │

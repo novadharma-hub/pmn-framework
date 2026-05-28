@@ -34,7 +34,7 @@ D:\pmn-workspace\
   public\  -> junction to D:\pmn-framework
 ```
 
-See `WORKSPACE_LAYOUT.md`. AI tools may be opened at `D:\pmn-workspace`, but Git operations should happen only inside `public`.
+See the full `WORKSPACE_LAYOUT.md` in `private/docs/internal/` (when using the recommended pmn-workspace layout). AI tools may be opened at the workspace root, but Git operations should happen only inside `public/`.
 
 ---
 
