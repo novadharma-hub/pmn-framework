@@ -48,7 +48,10 @@ Use `private` for files that should not be pushed:
 - raw DOCX/PDF drafts (in `raw_inputs/`)
 - raw Microsoft Word manuscript files (in `docx_source/`)
 - unsanitized source documents
-- backup ZIPs (in `backups/`)
+- backup ZIPs and stable .bak files (in `backups/`)
+- generated diagnostics (`LENGKAPI_DIAGNOSIS_UNTUK_AI.md`)
+- personal user guides (`CARA_PAKAI_PMN.txt`)
+- AI system prompts and personal documentation
 - scratch files
 - AI experiments
 - private release notes
@@ -81,7 +84,7 @@ Only push from inside `public`.
 1. Put raw manuscript drafts in:
    D:\pmn-workspace\private\docx_source
 
-2. Scrub or review metadata.
+2. Scrub or review metadata (using BERSIHKAN_DAN_BACKUP_DOKUMEN.bat or menu 8).
 
 3. Import DOCX and compile from the repo (Option [3] in Central Console).
    The import script dynamically reads from private\docx_source and splits it into modular JSONs.
@@ -96,6 +99,10 @@ Only push from inside `public`.
 6. Push only from:
    D:\pmn-workspace\public
 ```
+
+Note: Stable backups (`index.html.bak` etc.) are now automatically written to `private/backups/`
+when the pmn-workspace layout is detected.
+
 
 ---
 

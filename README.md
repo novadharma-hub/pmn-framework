@@ -152,7 +152,7 @@ Berikut adalah panduan langkah-demi-langkah yang sangat mudah diikuti oleh orang
 * Masih di dalam konsol utama yang sama, ketik angka **`8`** lalu tekan **Enter** untuk memilih menu **`SECURE META REMOVER`**.
 * Skrip akan menanyakan apakah Anda ingin melakukan sterilisasi massal. Ketik **`Y`** lalu **Enter**.
 * Sistem secara instan akan:
-  * Menyapu bersih nama asli Anda ("Ali Ikhsan") dan properti komputer dari metadata dokumen draf.
+  * Menyapu bersih nama asli pembuat dan properti komputer dari metadata dokumen draf.
   * Melakukan audit keamanan internal pasca-proses untuk memastikan berkas benar-benar steril.
   * Menyimpan salinan steril di folder aman `docs/clean_outputs/` (yang disembunyikan otomatis dari git).
   * Mengirim salinan steril tersebut langsung ke grup Telegram Log Anda sebagai cadangan rahasia!

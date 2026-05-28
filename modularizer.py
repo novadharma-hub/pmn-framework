@@ -2,11 +2,41 @@ import os
 import json
 import re
 import sys
+import shutil
 
 def print_banner():
     print("=" * 60)
     print("      PMN FRAMEWORK MODULARIZER & COMPILED BUILD SYSTEM      ")
     print("=" * 60)
+
+
+def get_backup_path():
+    """Return the correct path for index.html.bak.
+    Prefers private/backups/ when running inside the pmn-workspace layout.
+    """
+    try:
+        cwd = os.getcwd()
+        # Common case: running from public/ folder directly
+        if os.path.basename(cwd).lower() == "public":
+            parent = os.path.dirname(cwd)  # D:\pmn-workspace
+            private_dir = os.path.join(parent, "private")
+            if os.path.exists(private_dir):
+                private_bak = os.path.join(private_dir, "backups", "index.html.bak")
+                os.makedirs(os.path.dirname(private_bak), exist_ok=True)
+                return private_bak
+
+        # Another common case: script/module is inside public/
+        script_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else cwd
+        if os.path.basename(script_dir).lower() == "public":
+            parent = os.path.dirname(script_dir)
+            private_dir = os.path.join(parent, "private")
+            if os.path.exists(private_dir):
+                private_bak = os.path.join(private_dir, "backups", "index.html.bak")
+                os.makedirs(os.path.dirname(private_bak), exist_ok=True)
+                return private_bak
+    except Exception:
+        pass
+    return "index.html.bak"
 
 def sanitize_part_id(part_id):
     # Sanitize part names to be safe filenames
@@ -223,9 +253,8 @@ def compile_mode():
 
     # Create automated safety backup of previous index.html before writing new one
     if os.path.exists(output_html_path):
-        backup_path = output_html_path + ".bak"
+        backup_path = get_backup_path()
         try:
-            import shutil
             shutil.copy2(output_html_path, backup_path)
             print(f"   [OK] Safety backup of previous index.html saved to {backup_path}")
         except Exception as be:

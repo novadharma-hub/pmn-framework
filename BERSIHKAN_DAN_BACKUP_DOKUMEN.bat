@@ -32,7 +32,7 @@ echo ========================================================================
 echo.
 echo   Alat ini akan secara otomatis:
 echo   1. Membersihkan metadata (Nama Pembuat, Komputer, Revisi) - Anonymous
-echo   2. Melakukan audit internal pasca-proses (Validasi nama Ali Ikhsan)
+echo   2. Melakukan audit internal pasca-proses (Validasi metadata sensitif)
 echo   3. Menyimpan salinan steril ke folder tujuan
 echo   4. Mengunggah cadangan berkas aman langsung ke Telegram Log Group
 echo.

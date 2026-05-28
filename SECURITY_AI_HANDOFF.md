@@ -48,8 +48,8 @@ Treat these as sensitive or operationally risky:
 | `docs/raw_inputs/` | Raw personal documents | Must remain ignored |
 | `docs/clean_outputs/` | Cleaned outputs, still may be private | Must remain ignored unless intentionally published |
 | `backups/` | Local source snapshots | Must remain ignored |
-| `LENGKAPI_DIAGNOSIS_UNTUK_AI.md` | Generated rescue report may contain paths/context | Must remain ignored |
-| `*.bak` | Local backups | Must remain ignored |
+| `LENGKAPI_DIAGNOSIS_UNTUK_AI.md` | Generated rescue report may contain paths/context | Must remain ignored (now lives in private/diagnostics/) |
+| `*.bak` + `private/backups/` | Local/stable backups | Must remain ignored (system now writes backups here when possible) |
 | `__pycache__/`, `*.pyc` | Machine-generated Python cache | Must not be tracked |
 | `docx_source/` | Active manuscript source | Review before publishing |
 | `docs/*.docx` | Public manuscript copies | Scrub metadata before publishing |
@@ -92,7 +92,7 @@ Examples to review:
 
 - `D:\pmn-framework`
 - `C:\Users\...`
-- `Ali Ikhsan`
+- Real personal name of the author (example: "Ali Ikhsan")
 - Telegram backup/logging claims
 
 Recommended policy:

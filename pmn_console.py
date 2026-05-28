@@ -72,6 +72,25 @@ def workspace_search(query):
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
+def get_backup_path():
+    """Return the correct path for index.html.bak.
+    Prefers private/backups/ when running inside the pmn-workspace layout.
+    Falls back to local index.html.bak for single-folder usage.
+    """
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        if os.path.basename(script_dir).lower() == "public":
+            parent = os.path.dirname(script_dir)  # D:\pmn-workspace
+            private_dir = os.path.join(parent, "private")
+            if os.path.exists(private_dir):
+                private_bak = os.path.join(private_dir, "backups", "index.html.bak")
+                os.makedirs(os.path.dirname(private_bak), exist_ok=True)
+                return private_bak
+    except Exception:
+        pass
+    return "index.html.bak"
+
 def get_system_stats():
     stats = {
         "version": "Unknown",
@@ -129,7 +148,7 @@ def get_system_stats():
             pass
             
     # 5. Safety Backup Check
-    backup_path = "index.html.bak"
+    backup_path = get_backup_path()
     if os.path.exists(backup_path):
         try:
             mtime = os.path.getmtime(backup_path)
@@ -340,7 +359,7 @@ def main():
             input("\n  Press Enter to continue...")
             
         elif choice == "5":
-            backup_path = "index.html.bak"
+            backup_path = get_backup_path()
             compiled_path = "index.html"
             if not os.path.exists(backup_path):
                 print("\n  \033[91m[ERROR] Tidak ditemukan berkas cadangan stabil index.html.bak!\033[0m")
@@ -396,7 +415,7 @@ def main():
             input("\n  Press Enter to continue...")
             
         elif choice == "0":
-            print("\n  Closing PMN Console. Sampai jumpa, Komandan Ali Ikhsan! 🫡")
+            print("\n  Closing PMN Console. Sampai jumpa, Komandan! 🫡")
             time.sleep(1)
             break
         else:
