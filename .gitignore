@@ -55,3 +55,9 @@ docs/Anonymous
 docs/*.docx
 docs/*.pdf
 
+# Private workspace artifacts (when using pmn-workspace layout)
+# These are already covered by the parent .gitignore, but explicit here for clarity
+LENGKAPI_DIAGNOSIS_UNTUK_AI.md
+private/
+../private/
+
