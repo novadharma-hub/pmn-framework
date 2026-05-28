@@ -637,11 +637,6 @@ def main() -> int:
     except Exception as e:
         print(f"   [WARN] Could not write to data/parts.json: {e}")
 
-    html_text = replace_json_script(html_text, "d-parts", parts)
-    html_text = replace_derived_structures(html_text, parts)
-    html_text = replace_version_labels(html_text, version_label)
-    index_path.write_text(html_text, encoding="utf-8")
-
     # Also update index.ui.html to persist the version label across future compiles!
     try:
         ui_path = Path("index.ui.html")
@@ -653,14 +648,20 @@ def main() -> int:
     except Exception as uie:
         print(f"   [WARN] Could not update version in index.ui.html: {uie}")
 
-    # Automatically trigger modularizer split to overwrite individual modular part files!
+    # Automatically trigger modularizer split and compile to rebuild modular parts and compile dynamically!
     try:
         import subprocess
         # Execute modularizer split from root directory
+        print("[INFO] Splitting monolithic parts into modular JSON files...")
         subprocess.run([sys.executable, "modularizer.py", "split"], check=True)
         print("   [OK] Modular JSON parts split and synchronized successfully!")
+        
+        # Execute modularizer compile to rebuild index.html with recalculated references
+        print("[INFO] Recompiling index.html with recalculated references...")
+        subprocess.run([sys.executable, "modularizer.py", "compile"], check=True)
+        print("   [OK] Standalone index.html successfully recompiled!")
     except Exception as se:
-        print(f"   [WARN] Could not trigger modularizer split: {se}")
+        print(f"   [WARN] Could not trigger modularizer split/compile: {se}")
 
     print(summarize(parts))
     return 0
