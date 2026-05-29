@@ -42,6 +42,42 @@ def sanitize_part_id(part_id):
     # Sanitize part names to be safe filenames
     return re.sub(r'[^a-zA-Z0-9_\-]', '_', str(part_id))
 
+
+# Sensitive path patterns for AI agent hook context protection.
+# Claude Code and Cursor hooks may receive JSON referencing arbitrary paths.
+# Block access to credentials, private keys, and sensitive config files.
+_SENSITIVE_PATTERNS = [
+    re.compile(r'[\\/]\.ssh[\\/]'),
+    re.compile(r'[\\/]\.aws[\\/]'),
+    re.compile(r'[\\/]\.gnupg[\\/]'),
+    re.compile(r'\.env$'),
+    re.compile(r'\.env\.'),
+    re.compile(r'credentials$'),
+    re.compile(r'[\\/]id_rsa'),
+    re.compile(r'[\\/]id_ed25519'),
+    re.compile(r'[\\/]id_ecdsa'),
+    re.compile(r'\.pem$'),
+    re.compile(r'\.key$'),
+    re.compile(r'\.p12$'),
+    re.compile(r'\.pfx$'),
+    re.compile(r'[\\/]secrets[\\/]'),
+]
+
+def is_sensitive_path(path: str) -> bool:
+    """Return True if path matches a known sensitive file pattern.
+
+    Call this before any file operation that accepts a path derived from
+    external input (JSON manifests, AI agent hooks, CLI arguments).
+    """
+    norm = path.replace('\\', '/')
+    home = os.path.expanduser('~').replace('\\', '/')
+    if norm.startswith(home + '/.ssh') or norm.startswith(home + '/.aws'):
+        return True
+    for pat in _SENSITIVE_PATTERNS:
+        if pat.search(norm):
+            return True
+    return False
+
 def split_mode():
     parts_path = os.path.join("data", "parts.json")
     if not os.path.exists(parts_path):
@@ -67,11 +103,26 @@ def split_mode():
         subs = part.get("subs", [])
         
         safe_id = sanitize_part_id(part_id)
+        if not safe_id:
+            print(f"[WARN] Skipping part with empty/invalid id: {part_id!r}")
+            continue
         part_filename = f"part_{safe_id}.json"
         part_filepath = os.path.join(parts_dir, part_filename)
 
+        # Path-containment guard: ensure resolved path stays inside parts_dir
+        abs_parts_dir = os.path.abspath(parts_dir)
+        abs_part_filepath = os.path.abspath(part_filepath)
+        if not abs_part_filepath.startswith(abs_parts_dir + os.sep):
+            print(f"[ERROR] Refusing to write outside parts directory: {abs_part_filepath}")
+            return
+
+        # Sensitive path guard: block access to credentials and private keys
+        if is_sensitive_path(abs_part_filepath):
+            print(f"[ERROR] Refusing to write to sensitive path: {abs_part_filepath}")
+            return
+
         # 1. Save modular Part JSON containing the full sections data (including huge HTML content)
-        with open(part_filepath, "w", encoding="utf-8") as pf:
+        with open(abs_part_filepath, "w", encoding="utf-8") as pf:
             json.dump(subs, pf, indent=2, ensure_ascii=False)
         print(f"   [OK] Saved {part_filename} ({len(subs)} sections)")
 
@@ -143,16 +194,31 @@ def compile_mode():
     for part in manifest:
         part_id = part.get("part", "")
         safe_id = sanitize_part_id(part_id)
+        if not safe_id:
+            print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Part has empty/invalid id in manifest: {part_id!r}")
+            return
         part_filename = f"part_{safe_id}.json"
         part_filepath = os.path.join(parts_dir, part_filename)
 
-        if not os.path.exists(part_filepath):
+        # Path-containment guard: ensure resolved path stays inside parts_dir
+        abs_parts_dir = os.path.abspath(parts_dir)
+        abs_part_filepath = os.path.abspath(part_filepath)
+        if not abs_part_filepath.startswith(abs_parts_dir + os.sep):
+            print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Refusing to read outside parts directory: {abs_part_filepath}")
+            return
+
+        # Sensitive path guard: block access to credentials and private keys
+        if is_sensitive_path(abs_part_filepath):
+            print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Refusing to read sensitive path: {abs_part_filepath}")
+            return
+
+        if not os.path.exists(abs_part_filepath):
             print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Part file referenced in manifest is missing!")
-            print(f"   -> Missing file: {part_filepath}")
+            print(f"   -> Missing file: {abs_part_filepath}")
             return
 
         try:
-            with open(part_filepath, "r", encoding="utf-8") as pf:
+            with open(abs_part_filepath, "r", encoding="utf-8") as pf:
                 part_subs = json.load(pf)
         except json.JSONDecodeError as je:
             print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Syntax error in naskah JSON!")

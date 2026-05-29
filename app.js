@@ -37,7 +37,9 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
     // Memanipulasi fungsi bawaan agar Script asli mengira data ada di HTML
     const originalGetElementById = document.getElementById.bind(document);
     document.getElementById = function (id) {
-      if (mockData[id]) return { textContent: mockData[id] };
+      if (id !== '__proto__' && id !== 'constructor' && id !== 'prototype' && Object.prototype.hasOwnProperty.call(mockData, id)) {
+        return { textContent: mockData[id] };
+      }
       return originalGetElementById(id);
     };
     console.log("✅ Data berhasil dimuat secara dinamis.");
@@ -70,15 +72,57 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
 
     function g(id) { return document.getElementById(id); }
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
-    function isR(p, s) { return !!readMap[p + '-' + s]; }
-    function markR(p, s) { readMap[p + '-' + s] = true; try { localStorage.setItem('pmn-read', JSON.stringify(readMap)); } catch (e) { } pip(); }
+    function safeGet(obj, key) {
+      if (!obj || typeof key !== 'string') return undefined;
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') return undefined;
+      return Object.prototype.hasOwnProperty.call(obj, key) ? obj[key] : undefined;
+    }
+    function safeSet(obj, key, val) {
+      if (!obj || typeof key !== 'string') return;
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') return;
+      obj[key] = val;
+    }
+    /**
+     * safeSetHTML — Safely set HTML content via DOMParser.
+     * Use for content derived from JSON data (DOCX import, PARTS, GL, REL, etc.).
+     * Do NOT use for hardcoded static template strings (those are not XSS risks).
+     */
+    function safeSetHTML(el, html) {
+      if (!el) return;
+      try {
+        var doc = (new DOMParser()).parseFromString(html, 'text/html');
+        // Remove scripts
+        var scripts = doc.body.querySelectorAll('script');
+        for (var i = 0; i < scripts.length; i++) scripts[i].remove();
+        // Remove inline event handlers (on*) and javascript: links
+        var allEls = doc.body.querySelectorAll('*');
+        for (var i = 0; i < allEls.length; i++) {
+          var attrs = allEls[i].attributes;
+          for (var j = attrs.length - 1; j >= 0; j--) {
+            var attrName = attrs[j].name.toLowerCase();
+            if (attrName.startsWith('on') || attrs[j].value.toLowerCase().trim().startsWith('javascript:')) {
+              allEls[i].removeAttribute(attrs[j].name);
+            }
+          }
+        }
+        el.innerHTML = '';
+        var child = doc.body.firstChild;
+        while (child) { var next = child.nextSibling; el.appendChild(child); child = next; }
+      } catch (e) {
+        // Safe fallback: assign as plain text to prevent execution
+        el.textContent = html;
+      }
+    }
+    function isR(p, s) { return !!safeGet(readMap, p + '-' + s); }
+    function markR(p, s) { safeSet(readMap, p + '-' + s, true); try { localStorage.setItem('pmn-read', JSON.stringify(readMap)); } catch (e) { } pip(); }
     function savePos(p, s) { try { localStorage.setItem('pmn-pos', p + ',' + s); } catch (e) { } }
     function loadPos() { try { var v = localStorage.getItem('pmn-pos'); if (v) { var a = v.split(','); return [+a[0], +a[1]]; } } catch (e) { } return null; }
-    function pshort(p) { return SPECIAL[p.part] ? p.title : 'Part ' + p.part; }
-    function plong(p) { return SPECIAL[p.part] ? '' : 'Part ' + p.part; }
+    function pshort(p) { return safeGet(SPECIAL, p.part) ? p.title : 'Part ' + p.part; }
+    function plong(p) { return safeGet(SPECIAL, p.part) ? '' : 'Part ' + p.part; }
     function displaySectionId(id) {
       var sid = String(id || '');
-      if (SECTION_LABELS[sid]) return SECTION_LABELS[sid];
+      var label = safeGet(SECTION_LABELS, sid);
+      if (label !== undefined) return label;
       return sid;
     }
 
@@ -87,7 +131,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       document.documentElement.setAttribute('data-theme', t);
       try { localStorage.setItem('pmn-theme', t); } catch (e) { }
       var tog = g('theme-tog');
-      if (tog) tog.textContent = (t === 'dark' ? '☀ Light' : '☾ Dark');
+      if (tog) tog.innerHTML = (t === 'dark' ? '<span>☀</span><span class="desktop-only"> Light</span>' : '<span>☾</span><span class="desktop-only"> Dark</span>');
     }
     function initTheme() { try { applyTheme(localStorage.getItem('pmn-theme') || 'dark'); } catch (e) { applyTheme('dark'); } }
     function toggleTheme() {
@@ -96,56 +140,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
     }
     initTheme();
 
-    // ── Layout toggle (mobile/desktop override)
-    var isMobileScreen = window.innerWidth <= 680;
-    function isManualLayout() { try { return localStorage.getItem('pmn-layout'); } catch (e) { return null; } }
-    function applyLayout(mode) {
-      var html = document.documentElement;
-      if (mode === 'mobile') { html.setAttribute('data-layout', 'mobile'); }
-      else if (mode === 'desktop') { html.setAttribute('data-layout', 'desktop'); }
-      else { html.removeAttribute('data-layout'); }
-      try { if (mode) localStorage.setItem('pmn-layout', mode); else localStorage.removeItem('pmn-layout'); } catch (e) { }
-      updateLayoutTog();
-      // Re-evaluate sidebar state when switching to desktop
-      if (mode === 'desktop' && !sbOpen) { var sb = g('sidebar'); sb.classList.remove('mob-open'); }
-    }
-    function currentEffectiveLayout() {
-      var manual = isManualLayout();
-      if (manual) return manual;
-      return isMobileScreen ? 'mobile' : 'desktop';
-    }
-    function updateLayoutTog() {
-      var btn = g('layout-tog'); if (!btn) return;
-      var eff = currentEffectiveLayout();
-      var manual = isManualLayout();
-      if (manual === 'mobile') {
-        btn.textContent = 'Layout: Mobile \u2192 switch to desktop';
-      } else if (manual === 'desktop') {
-        btn.textContent = 'Layout: Desktop \u2192 reset to auto';
-      } else {
-        btn.textContent = 'Layout: Auto (' + (eff === 'mobile' ? 'mobile' : 'desktop') + ') \u2192 override';
-      }
-    }
-    function toggleLayout() {
-      var manual = isManualLayout();
-      var eff = currentEffectiveLayout();
-      if (!manual) {
-        // First click: override to opposite of current
-        applyLayout(eff === 'mobile' ? 'desktop' : 'mobile');
-      } else if (manual === eff) {
-        // Currently overriding to match auto — cycle to opposite override
-        applyLayout(eff === 'mobile' ? 'desktop' : 'mobile');
-      } else {
-        // Already overriding to opposite — reset to auto
-        applyLayout(null);
-      }
-    }
-    // Init layout on load
-    (function () {
-      var saved = isManualLayout();
-      if (saved) applyLayout(saved);
-      else updateLayoutTog();
-    })();
+
 
     function applyReaderScale(scale) {
       readerScale = scale;
@@ -237,15 +232,15 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
 
       var pack = buildCtx('', {
         activeId: s.id,
-        relatedIds: (REL[s.id] || []).slice(0, 4),
-        fallbackIds: [s.id].concat((REL[s.id] || []).slice(0, 2)),
+        relatedIds: (safeGet(REL, s.id) || []).slice(0, 4),
+        fallbackIds: [s.id].concat((safeGet(REL, s.id) || []).slice(0, 2)),
         maxSections: 3,
         maxGlossary: 3,
         querySeed: [s.id, s.title, p.title].join(' ')
       });
       var retrieved = pack.sections.map(function (item) { return item.id; }).join(', ');
       var terms = pack.glossary.map(function (item) { return item.term; }).join(', ');
-      var msg = 'Current packet: ' + s.id + ' - ' + s.title + '\nPart: ' + (SPECIAL[p.part] ? p.title : ('Part ' + p.part + ' - ' + p.title));
+      var msg = 'Current packet: ' + s.id + ' - ' + s.title + '\nPart: ' + (safeGet(SPECIAL, p.part) ? p.title : ('Part ' + p.part + ' - ' + p.title));
       if (retrieved) msg += '\nRetrieved passages: ' + retrieved;
       if (terms) msg += '\nGlossary: ' + terms;
 
@@ -269,7 +264,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
           Array.prototype.forEach.call(legacy.children, function (node, idx) {
             node.className = 'theses-tier-chip tier-' + (idx + 1);
             node.removeAttribute('style');
-            node.innerHTML = labels[idx] || node.innerHTML;
+            safeSetHTML(node, labels[idx] || node.innerHTML);
           });
         }
       }
@@ -285,9 +280,10 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         ];
         hdrs.forEach(function (node, idx) {
           if (!meta[idx]) return;
-          node.className = 'thesis-tier-hdr ' + meta[idx][0];
+          var item = meta[idx];
+          node.className = 'thesis-tier-hdr ' + item[0];
           node.removeAttribute('style');
-          node.innerHTML = meta[idx][1] + ' <span class="thesis-tier-note">' + meta[idx][2] + '</span>';
+          safeSetHTML(node, item[1] + ' <span class="thesis-tier-note">' + item[2] + '</span>');
         });
       }
     }
@@ -297,7 +293,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       if (!ai || !ai.parentNode) return;
       var wrap = document.createElement('section');
       wrap.className = 'reading-paths';
-      wrap.innerHTML =
+      safeSetHTML(wrap,
         '<div class="reading-paths-hdr">'
         + '<h2>Reading Paths</h2>'
         + '<p>Not every reader needs to start the same way. These entry paths give faster on-ramps into PMN depending on whether you want foundations, power analysis, formula compression, or applied cases.</p>'
@@ -312,13 +308,14 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         + '<article class="path-card" data-ghost="02"><span class="path-kicker">Path 02</span><h3>Power and Institutions</h3><p>Jump straight into how power, legitimacy, and institutional capture shape the arrangement beneath the narrative.</p><button class="path-btn" type="button" data-open-part="VI">Open Part VI</button></article>'
         + '<article class="path-card" data-ghost="03"><span class="path-kicker">Path 03</span><h3>Compressed Core</h3><p>Use the short-form PMN core when you need the framework fast before going back for the full architecture.</p><button class="path-btn" type="button" data-open-id="15.15">Open 15.15</button></article>'
         + '<article class="path-card" data-ghost="04"><span class="path-kicker">Path 04</span><h3>Cases and the Individual</h3><p>Move from abstract structure into historical cases and the practical demands PMN places on a person who holds it.</p><button class="path-btn" type="button" data-open-part="XVII">Open Part XVII</button></article>'
-        + '</div>';
+        + '</div>'
+      );
       ai.parentNode.insertBefore(wrap, ai);
     }
     function upgradeHomeAi() {
       var inner = document.querySelector('.home-ai-section .home-ai-inner');
       if (!inner || g('home-ai-copy') || document.getElementById('hai-tabs')) return;
-      inner.innerHTML =
+      safeSetHTML(inner,
         '<div class="home-ai-hdr">Dialectical Synthesis Terminal (AI-Powered)</div>'
         + '<p class="home-ai-desc">Ask a PMN question here, choose your target AI, then let the site retrieve relevant PMN passages and glossary terms from the manuscript before opening ChatGPT or Gemini.</p>'
         + '<div class="home-ai-row">'
@@ -332,7 +329,8 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         + '</div>'
         + '<div class="home-ai-terminal" id="home-ai-terminal">&gt;&gt; PMN LOCAL EXPERT AGENT ACTIVE\n&gt;&gt; SELECT "LOCAL AI" FOR IN-BROWSER RESPONSES.\n&gt;&gt; ASK A QUESTION TO GENERATE DEEP ANALYSIS INSTANTLY.</div>'
         + '<div class="home-ai-actions"><button id="home-ai-copy" class="pmn-agent-btn" type="button">Copy prompt only</button></div>'
-        + '<p class="home-ai-note">The local AI expert generates responses entirely in-browser, referencing the full manuscript offline.</p>';
+        + '<p class="home-ai-note">The local AI expert generates responses entirely in-browser, referencing the full manuscript offline.</p>'
+      );
     }
 
 
@@ -423,7 +421,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
           + progBar
           + '</div>';
       }
-      g('toc-grid').innerHTML = html;
+      g('toc-grid').innerHTML = html; // static html built with esc() — safe
       // Attach events
       var btns = g('toc-grid').querySelectorAll('[data-pi]');
       for (var i = 0; i < btns.length; i++) {
@@ -446,7 +444,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
             + '</button>';
         }
       }
-      g('sb-list').innerHTML = html;
+      g('sb-list').innerHTML = html; // static html built with esc() — safe
       var btns = g('sb-list').querySelectorAll('[data-pi]');
       for (var i = 0; i < btns.length; i++) {
         btns[i].addEventListener('click', (function (b) {
@@ -656,7 +654,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
           + '<span class="sb-hist-title">' + esc(e.title.length > 32 ? e.title.slice(0, 30) + '\u2026' : e.title) + '</span>'
           + '</div>';
       }
-      list.innerHTML = h;
+      list.innerHTML = h; // static html built with esc() — safe
     }
     // ── Suggestions
     var SG = { 'unread': [['1.1', 'Start at beginning'], ['3.4', 'Minimal anchor'], ['12.1', 'How to use']], 'early': [['1.3', 'Probabilistic determinism'], ['4.1', 'Foundation of value'], ['6.1', 'Power']], 'mid': [['10.1', 'Systems change'], ['13.1', 'Permanent tensions'], ['16.0', 'Technology']], 'late': [['12.5', 'Failure modes'], ['14.2', 'The doctrine'], ['13.5', 'Beyond the framework']] };
@@ -665,9 +663,9 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       var tot = 0; for (var i = 0; i < PARTS.length; i++) { var ps = PARTS[i].subs; for (var j = 0; j < ps.length; j++) { tot++; if (ps[j].subs) for (var k = 0; k < ps[j].subs.length; k++) { tot++; if (ps[j].subs[k].subs) tot += ps[j].subs[k].subs.length; } } }
       var done = Object.keys(readMap).length, pct = tot ? done / tot : 0;
       var tier = pct === 0 ? 'unread' : pct < 0.15 ? 'early' : pct < 0.5 ? 'mid' : 'late';
-      var ents = SG[tier], h = '<div class="suggest-lbl">Suggested entry points</div>', shown = 0;
+      var ents = safeGet(SG, tier) || [], h = '<div class="suggest-lbl">Suggested entry points</div>', shown = 0;
       for (var i = 0; i < ents.length; i++) {
-        var sid = ents[i][0], why = ents[i][1], info = LOOK[sid]; if (!info) continue;
+        var sid = ents[i][0], why = ents[i][1], info = safeGet(LOOK, sid); if (!info) continue;
         h += '<button class="suggest-btn" data-pi="' + info.pi + '" data-si="' + info.si + '">'
           + '<span class="suggest-sid">' + esc(sid) + '</span>'
           + '<span class="suggest-title">' + esc(PARTS[info.pi].subs[info.si].title) + '</span>'
@@ -675,23 +673,23 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
           + '</button>';
         shown++;
       }
-      if (shown > 0) { wrap.innerHTML = h; wrap.style.display = ''; }
+      if (shown > 0) { safeSetHTML(wrap, h); wrap.style.display = ''; }
     }
     // ── Cited-in
     function renderCitedIn(sid) {
       var el = g('cited-sec'); if (!el) return;
-      var refs = CITED[sid];
+      var refs = safeGet(CITED, sid);
       if (!refs || !refs.length) { el.innerHTML = ''; return; }
       var h = '<span class="cited-lbl">Referenced in</span><div class="cited-list">';
       for (var i = 0; i < refs.length; i++) {
-        var r = refs[i], info = LOOK[r]; if (!info) continue;
+        var r = refs[i], info = safeGet(LOOK, r); if (!info) continue;
         h += '<button class="cited-btn" data-pi="' + info.pi + '" data-si="' + info.si + '">'
           + '<span class="cited-sid">' + esc(r) + '</span>'
           + esc(info.title.length > 40 ? info.title.slice(0, 38) + '\u2026' : info.title)
           + '</button>';
       }
       h += '</div>';
-      el.innerHTML = h;
+      safeSetHTML(el, h);
     }
     // ── Annotations
     function annotKey(pi, si) { return 'pmn-an-' + PARTS[pi].subs[si].id; }
@@ -807,7 +805,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
     }
     function buildCurrentSectionCitation() {
       var p = PARTS[curP], s = p.subs[curS];
-      var partLabel = SPECIAL[p.part] ? p.title : ('Part ' + p.part + ' — ' + p.title);
+      var partLabel = safeGet(SPECIAL, p.part) ? p.title : ('Part ' + p.part + ' — ' + p.title);
       return [
         getPublicVersionTag() + ' — Progressive Materialist Naturalism',
         s.id + ' — ' + s.title,
@@ -827,9 +825,9 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       var modal = g('notes-modal'), body = g('notes-body');
       if (!modal || !body) return;
       if (!entries.length) {
-        body.innerHTML = '<p style="font-family:Lora,serif;font-style:italic;color:var(--mute);padding:1rem 0">No notes yet. Open any section and write in the Notes field below the text.</p>';
+        safeSetHTML(body, '<p style="font-family:Lora,serif;font-style:italic;color:var(--mute);padding:1rem 0">No notes yet. Open any section and write in the Notes field below the text.</p>');
       } else {
-        body.innerHTML = entries.map(function (e) {
+        var notesHtml = entries.map(function (e) {
           return '<div style="margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--rule)">'
             + '<div style="display:flex;gap:.6rem;align-items:baseline;margin-bottom:.5rem">'
             + '<span style="font-family:Source Code Pro,monospace;font-size:.7rem;color:var(--acc)">' + esc(e.id) + '</span>'
@@ -838,6 +836,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
             + '<pre style="font-family:Lora,serif;font-size:.95rem;line-height:1.75;white-space:pre-wrap;color:var(--ink2);margin:0">' + esc(e.note) + '</pre>'
             + '</div>';
         }).join('');
+        safeSetHTML(body, notesHtml);
       }
       modal.style.display = 'block';
       document.body.style.overflow = 'hidden';
@@ -859,11 +858,11 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
     }
     function renderRelated(sid) {
       var el = g('related-sec');
-      var refs = REL[sid];
-      if (!refs || !refs.length) { el.innerHTML = ''; return; }
+      var refs = safeGet(REL, sid);
+      if (!refs || !refs.length) { el.textContent = ''; return; }
       var h = '<span class="related-lbl">See also</span><div class="related-list">';
       for (var i = 0; i < refs.length; i++) {
-        var r = refs[i], info = LOOK[r];
+        var r = refs[i], info = safeGet(LOOK, r);
         if (!info) continue;
         var pt = info.pt;
         var ptlbl = (['Preface', 'Coda', 'Intellectual Debts', 'Bibliography'].indexOf(pt) >= 0) ? pt : 'Part ' + pt;
@@ -874,28 +873,37 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
           + '</button>';
       }
       h += '</div>';
-      el.innerHTML = h;
+      safeSetHTML(el, h);
       // clicks handled by delegation
     }
 
     function renderSec() {
       var p = PARTS[curP], s = p.subs[curS];
-      var lbl = SPECIAL[p.part] ? '' : ('Part ' + p.part + ' — ' + p.title);
+      var lbl = safeGet(SPECIAL, p.part) ? '' : ('Part ' + p.part + ' — ' + p.title);
       var intro = s.is_intro;
       g('bc-part').textContent = pshort(p);
       g('bc-sid').textContent = s.id;
       g('sec-eye').textContent = lbl;
-      var isSpecialSec = SPECIAL[p.part] || s.id.indexOf('.') < 0;
-      var shareBtn = '<button class="share-btn" title="Copy link" onclick="copySecLink()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="3" r="1.8"/><circle cx="3" cy="8" r="1.8"/><circle cx="13" cy="13" r="1.8"/><line x1="4.7" y1="7" x2="11.3" y2="4"/><line x1="4.7" y1="9" x2="11.3" y2="12"/></svg></button>';
-      g('sec-ttl').innerHTML = (isSpecialSec ? '' : '<span class="sec-id">' + esc(s.id) + '</span>') + esc(s.title) + shareBtn;
+      var isSpecialSec = safeGet(SPECIAL, p.part) || s.id.indexOf('.') < 0;
+      
+      var titleHtml = (isSpecialSec ? '' : '<span class="sec-id">' + esc(s.id) + '</span>') + esc(s.title);
+      safeSetHTML(g('sec-ttl'), titleHtml);
+      var shareBtn = document.createElement('button');
+      shareBtn.className = 'share-btn';
+      shareBtn.title = 'Copy link';
+      shareBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="3" r="1.8"/><circle cx="3" cy="8" r="1.8"/><circle cx="13" cy="13" r="1.8"/><line x1="4.7" y1="7" x2="11.3" y2="4"/><line x1="4.7" y1="9" x2="11.3" y2="12"/></svg>';
+      shareBtn.addEventListener('click', copySecLink);
+      g('sec-ttl').appendChild(shareBtn);
+      
       g('sec-ttl').className = isSpecialSec ? 'sec-ttl intro-ttl' : 'sec-ttl';
       var html = s.html || (s.text ? '<p>' + esc(s.text) + '</p>' : '');
-      var _sh = g('srch-in') ? g('srch-in').value.trim() : '';
+      var _sh = g('srch-in') ? g('srch-in').value.trim().slice(0, 100) : '';
       if (_sh.length > 2) {
-        var _re = new RegExp('(' + _sh.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        var _escaped = _sh.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var _re = new RegExp('(' + _escaped + ')', 'gi');
         html = html.replace(_re, '<mark>$1</mark>');
       }
-      g('prose').innerHTML = html;
+      safeSetHTML(g('prose'), html);
       linkXrefs(g('prose'));
       g('prose').addEventListener('mouseup', handleSel);
       // Reading time
@@ -917,7 +925,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       renderCitedIn(s.id);
 
       // Dynamically show/hide meta-links-panel based on reference presence
-      var hasRefs = (REL[s.id] && REL[s.id].length > 0) || (CITED[s.id] && CITED[s.id].length > 0);
+      var hasRefs = (safeGet(REL, s.id) && safeGet(REL, s.id).length > 0) || (safeGet(CITED, s.id) && safeGet(CITED, s.id).length > 0);
       var metaPanel = g('meta-links-panel');
       if (metaPanel) {
         metaPanel.style.display = hasRefs ? '' : 'none';
@@ -994,7 +1002,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         }
         h += '</div>';
       }
-      g('sv-body').innerHTML = h;
+      safeSetHTML(g('sv-body'), h);
     }
 
     function renderGL() {
@@ -1005,17 +1013,17 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       var h = '';
       var grps = Object.keys(GLG);
       for (var i = 0; i < grps.length; i++) {
-        var grp = grps[i], terms = GLG[grp];
+        var grp = grps[i], terms = safeGet(GLG, grp);
         h += '<div class="gl-grp-lbl">' + esc(grp) + '</div><div class="gl-grid">';
         for (var j = 0; j < terms.length; j++) {
-          var t = terms[j], raw = (GL[t] || '').trim();
+          var t = terms[j], raw = (safeGet(GL, t) || '').trim();
           var empty = !raw;
           var d = empty ? 'Definition pending in this public build. Open the manuscript or search this term for context.' : raw;
           h += '<button class="gl-card" data-term="' + esc(t) + '" title="Search sections mentioning this term"><p class="gl-term">' + esc(t) + '</p><p class="gl-def' + (empty ? ' is-empty' : '') + '">' + esc(d) + '</p></button>';
         }
         h += '</div>';
       }
-      g('sv-body').innerHTML = h;
+      safeSetHTML(g('sv-body'), h);
     }
 
     function populatePartFilter() {
@@ -1031,10 +1039,11 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       hideContentsPanel();
       var svBody = g('sv-body');
       if (svBody) svBody.style.display = '';
-      var ql = q.toLowerCase().trim(), res = [];
+      var safeQ = String(q || '').slice(0, 100);
+      var ql = safeQ.toLowerCase().trim(), res = [];
       var pf = g('srch-part') ? g('srch-part').value : '';
       if (/^[0-9]+\.[0-9]+[a-z]?$/.test(ql) || /^a\.[0-9]+$/i.test(ql)) {
-        var info = LOOK[resolveSectionId(ql)]; if (info) { jumpToSection(info.pi, info.si, { origin: getJumpOrigin() }); clrS(); return; }
+        var info = safeGet(LOOK, resolveSectionId(ql)); if (info) { jumpToSection(info.pi, info.si, { origin: getJumpOrigin() }); clrS(); return; }
       }
 
       // Smart Glossary mapping:
@@ -1045,7 +1054,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         var k = keys[i];
         if (k.toLowerCase() === ql || ql.indexOf(k.toLowerCase()) >= 0 || k.toLowerCase().indexOf(ql) >= 0) {
           matchedTermKey = k;
-          var def = GL[k];
+          var def = safeGet(GL, k);
           var rx = /\((\d+\.\d+[a-z]?)\)/g, match;
           while ((match = rx.exec(def)) !== null) {
             var secId = match[1];
@@ -1059,7 +1068,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       // First, add explicitly cited sections from matching glossary term
       for (var i = 0; i < citedSections.length; i++) {
         var secId = citedSections[i];
-        var info = LOOK[resolveSectionId(secId)];
+        var info = safeGet(LOOK, resolveSectionId(secId));
         if (info) {
           if (pf !== '' && info.pi !== +pf) continue;
           var p = PARTS[info.pi];
@@ -1133,8 +1142,13 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         }
       }
 
-      function hl(t) { if (!q || q.length < 2) return esc(t); return esc(t).replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<mark>$1</mark>'); }
-      g('sv-hdr').textContent = res.length + ' result' + (res.length !== 1 ? 's' : '') + ' for “' + q + '”';
+      function hl(t) {
+        if (!q || q.length < 2) return esc(t);
+        var safeQ = String(q).slice(0, 100);
+        var _escaped = safeQ.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return esc(t).replace(new RegExp('(' + _escaped + ')', 'gi'), '<mark>$1</mark>');
+      }
+      g('sv-hdr').textContent = res.length + ' result' + (res.length !== 1 ? 's' : '') + ' for “' + safeQ + '”';
       var shown = res.slice(0, 40), h = '';
       for (var i = 0; i < shown.length; i++) {
         var r = shown[i];
@@ -1145,7 +1159,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
           + '</button>';
       }
       if (!res.length) h = '<p class="empty">No results found.</p>';
-      g('sv-body').innerHTML = h;
+      safeSetHTML(g('sv-body'), h);
       // clicks handled by delegation
     }
 
@@ -1157,7 +1171,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       for (var i = 0; i < keys.length; i++) { if (txt === keys[i] || txt.indexOf(keys[i]) >= 0) { key = keys[i]; break; } }
       if (!key) { hideTT(); return; }
       g('tt-term').textContent = key;
-      g('tt-def').textContent = GL[key];
+      g('tt-def').textContent = safeGet(GL, key);
       var x = Math.min(e.clientX, window.innerWidth - 285);
       var y = Math.min(e.clientY + 14, window.innerHeight - 120);
       var tt = g('tt');
@@ -1300,7 +1314,6 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
     g('mob-mid') && g('mob-mid').addEventListener('click', function () { nav('srch'); showContentsPanel(); });
 
     g('theme-tog').addEventListener('click', toggleTheme);
-    g('layout-tog') && g('layout-tog').addEventListener('click', toggleLayout);
     g('srch-clr').addEventListener('click', clrS);
     g('srch-in').addEventListener('input', function () { onSI(this.value); });
     g('srch-in').addEventListener('focus', onSF);
@@ -2364,7 +2377,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         var note = document.getElementById('hl-toolbar-note-in').value.trim();
         var secId = getSecId();
         if (editHlId && secId) {
-          var hl = (highlights[secId] || []).find(function (h) { return h.id === editHlId; });
+          var hl = (safeGet(highlights, secId) || []).find(function (h) { return h.id === editHlId; });
           if (hl) { hl.note = note; saveHL(); }
           var sp = document.querySelector('[data-hl-id="' + editHlId + '"]');
           if (sp) sp.title = note ? '📝 ' + note : 'Click to annotate';
@@ -2376,7 +2389,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         e.stopPropagation();
         var secId = getSecId();
         if (editHlId && secId) {
-          highlights[secId] = (highlights[secId] || []).filter(function (h) { return h.id !== editHlId; });
+          safeSet(highlights, secId, (safeGet(highlights, secId) || []).filter(function (h) { return h.id !== editHlId; }));
           saveHL();
           var sp = document.querySelector('[data-hl-id="' + editHlId + '"]');
           if (sp) { var par = sp.parentNode; while (sp.firstChild) par.insertBefore(sp.firstChild, sp); par.removeChild(sp); }
@@ -2407,23 +2420,24 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       function updateBadge(secId) {
         var badge = document.getElementById('hl-count-badge');
         if (!badge) return;
-        var n = (highlights[secId] || []).length;
+        var n = (safeGet(highlights, secId) || []).length;
         badge.textContent = n ? n + ' highlight' + (n > 1 ? 's' : '') : 'Highlights';
       }
 
       function showHlModal() {
         var secId = getSecId();
-        var sHls = highlights[secId] || [];
+        var sHls = safeGet(highlights, secId) || [];
         var modal = document.getElementById('notes-modal'), body = document.getElementById('notes-body');
         if (!modal || !body) return;
         if (!sHls.length) {
-          body.innerHTML = '<p style="font-family:Lora,serif;font-style:italic;color:var(--mute);padding:1rem 0">No highlights in this section. Select text in the reader to highlight it.</p>';
+          safeSetHTML(body, '<p style="font-family:Lora,serif;font-style:italic;color:var(--mute);padding:1rem 0">No highlights in this section. Select text in the reader to highlight it.</p>');
         } else {
           var colors = { red: 'var(--acc)', blue: '#60a5fa', green: '#4ade80', yellow: '#facc15' };
-          body.innerHTML = sHls.map(function (h) {
-            var dot = '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + (colors[h.color] || colors.red) + ';margin-right:.4rem;vertical-align:middle"></span>';
-            return '<div style="margin-bottom:1.4rem;padding-bottom:1.4rem;border-bottom:1px solid var(--rule)">' + dot + '<span style="font-family:Lora,serif;font-size:.9rem;color:var(--ink2);font-style:italic">&ldquo;' + h.text.slice(0, 120) + (h.text.length > 120 ? '…' : '') + '&rdquo;</span>' + (h.note ? '<div style="font-family:Source Code Pro,monospace;font-size:.75rem;color:var(--mute);margin-top:.3rem;margin-left:1.2rem">📝 ' + h.note + '</div>' : '') + '</div>';
+          var hlsHtml = sHls.map(function (h) {
+            var dot = '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + (safeGet(colors, h.color) || colors.red) + ';margin-right:.4rem;vertical-align:middle"></span>';
+            return '<div style="margin-bottom:1.4rem;padding-bottom:1.4rem;border-bottom:1px solid var(--rule)">' + dot + '<span style="font-family:Lora,serif;font-size:.9rem;color:var(--ink2);font-style:italic">&ldquo;' + esc(h.text.slice(0, 120)) + (h.text.length > 120 ? '…' : '') + '&rdquo;</span>' + (h.note ? '<div style="font-family:Source Code Pro,monospace;font-size:.75rem;color:var(--mute);margin-top:.3rem;margin-left:1.2rem">📝 ' + esc(h.note) + '</div>' : '') + '</div>';
           }).join('');
+          safeSetHTML(body, hlsHtml);
         }
         modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
@@ -2432,15 +2446,15 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
       function renderHL(secId) {
         var prose = document.getElementById('prose');
         if (!prose || !secId) return;
-        var sHls = highlights[secId] || [];
+        var sHls = safeGet(highlights, secId) || [];
         if (!sHls.length) return;
         var html = prose.innerHTML;
         sHls.forEach(function (hl) {
-          var esc = hl.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          var escText = hl.text.slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
           var cls = 'pmn-hl' + (hl.color && hl.color !== 'red' ? ' hl-' + hl.color : '');
           var titleAttr = hl.note ? 'title="📝 ' + hl.note.replace(/"/g, '&quot;') + '"' : '';
           // Only replace first occurrence to avoid double-wrapping
-          html = html.replace(new RegExp('(?<![\'"=>])(' + esc + ')(?![^<]*>)'), '<span class="' + cls + '" data-hl-id="' + hl.id + '" ' + titleAttr + '>$1</span>');
+          html = html.replace(new RegExp('(?<![\'"=>])(' + escText + ')(?![^<]*>)'), '<span class="' + cls + '" data-hl-id="' + hl.id + '" ' + titleAttr + '>$1</span>');
         });
         prose.innerHTML = html;
         prose.querySelectorAll('[data-hl-id]').forEach(function (sp) {
@@ -2484,7 +2498,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
 
       var semTimer = null;
       srchIn.addEventListener('input', function () {
-        var q = srchIn.value.trim();
+        var q = srchIn.value.trim().slice(0, 100);
         if (!semanticOn || q.length < 4) { semBar.classList.remove('visible'); return; }
         clearTimeout(semTimer);
         semBar.textContent = '✦ Deep scan: locally ranking "' + q + '"…';
@@ -2494,6 +2508,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
 
       function doSemantic(q) {
         ensureData();
+        var safeQ = String(q).slice(0, 100);
         var scored = [];
         for (var pi = 0; pi < PARTS.length; pi++) {
           var p = PARTS[pi];
@@ -2501,35 +2516,37 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
             var s = p.subs[si];
             var blob = ((s.title || '') + ' ' + (s.html || '')).toLowerCase().replace(/<[^>]+>/g, ' ');
             var score = 0;
-            q.toLowerCase().split(/\s+/).filter(function (w) { return w.length > 2; }).forEach(function (w) {
+            safeQ.toLowerCase().split(/\s+/).filter(function (w) { return w.length > 2; }).forEach(function (w) {
               var i = blob.indexOf(w);
               while (i >= 0 && score < 30) { score++; i = blob.indexOf(w, i + 1); }
             });
             Object.keys(GL || {}).forEach(function (term) {
-              if (q.toLowerCase().indexOf(term.toLowerCase()) >= 0 && blob.indexOf(term.toLowerCase()) >= 0) score += 3;
+              if (safeQ.toLowerCase().indexOf(term.toLowerCase()) >= 0 && blob.indexOf(term.toLowerCase()) >= 0) score += 3;
             });
             if (score > 0) scored.push({ pi: pi, si: si, s: s, p: p, score: score });
           }
         }
         scored.sort(function (a, b) { return b.score - a.score; });
         var top = scored.slice(0, 8);
-        if (!top.length) { semBar.textContent = 'No results for "' + q + '"'; return; }
-        semBar.innerHTML = '✦ Deep scan: <strong>' + top.length + '</strong> locally ranked matches';
-        renderSemantic(q, top);
+        if (!top.length) { semBar.textContent = 'No results for "' + safeQ + '"'; return; }
+        safeSetHTML(semBar, '✦ Deep scan: <strong>' + top.length + '</strong> locally ranked matches');
+        renderSemantic(safeQ, top);
       }
 
       function renderSemantic(q, results) {
+        var safeQ = String(q).slice(0, 100);
         var tocPanel = document.getElementById('toc-panel');
         if (tocPanel) tocPanel.style.display = 'none';
         svBody.style.display = '';
-        if (svHdr) svHdr.textContent = 'Deep scan: "' + q + '"';
-        var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        if (svHdr) svHdr.textContent = 'Deep scan: "' + safeQ + '"';
+        var _escaped = safeQ.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var re = new RegExp('(' + _escaped + ')', 'gi');
         var h = results.map(function (item) {
           var snip = truncate(item.s.html, 200).replace(re, '<mark>$1</mark>');
           var pt = (['Preface', 'Coda', 'Intellectual Debts', 'Bibliography'].indexOf(item.p.part) >= 0) ? item.p.part : 'Part ' + item.p.part;
           return '<button class="res" data-pi="' + item.pi + '" data-si="' + item.si + '"><span class="res-loc">' + pt + ' — ' + item.s.id + '</span><div class="res-title">' + item.s.title + '</div><div class="res-snip">' + snip + '</div></button>';
         }).join('');
-        svBody.innerHTML = h || '<p class="empty">No results.</p>';
+        safeSetHTML(svBody, h || '<p class="empty">No results.</p>');
       }
     })();
 
@@ -2823,13 +2840,14 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
           text.replace(termRegex, (match, p1, offset) => {
             if (offset > lastIndex) fragment.appendChild(document.createTextNode(text.substring(lastIndex, offset)));
             const termKey = terms.find(t => t.toLowerCase() === match.toLowerCase());
-            if (termKey && glData[termKey]) {
+            var definition = termKey ? safeGet(glData, termKey) : undefined;
+            if (termKey && definition) {
               const termSpan = document.createElement('span');
               termSpan.className = 'glossary-term';
               termSpan.textContent = match;
               const tooltipSpan = document.createElement('span');
               tooltipSpan.className = 'glossary-tooltip';
-              tooltipSpan.textContent = glData[termKey];
+              tooltipSpan.textContent = definition;
               termSpan.appendChild(tooltipSpan);
               fragment.appendChild(termSpan);
             } else {
@@ -2853,14 +2871,14 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         if (heading.querySelector('.copy-anchor')) return;
         const anchor = document.createElement('span');
         anchor.className = 'copy-anchor';
-        anchor.innerHTML = '&#128279;';
+        anchor.textContent = '🔗';
         anchor.title = 'Copy link to this section';
         anchor.addEventListener('click', (e) => {
           e.preventDefault();
           const url = window.location.href.split('#')[0] + '#' + heading.id;
           navigator.clipboard.writeText(url).then(() => {
-            anchor.innerHTML = '&#10003;'; anchor.classList.add('copied');
-            setTimeout(() => { anchor.innerHTML = '&#128279;'; anchor.classList.remove('copied'); }, 2000);
+            anchor.textContent = '✓'; anchor.classList.add('copied');
+            setTimeout(() => { anchor.textContent = '🔗'; anchor.classList.remove('copied'); }, 2000);
           });
         });
         heading.appendChild(anchor);
@@ -2940,11 +2958,11 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
           + '</div>'
           + '<span class="cmd-palette-item-badge">Action</span>'
           + '</button>';
-        results.innerHTML = h;
+        safeSetHTML(results, h);
       }
 
       input.addEventListener('input', function () {
-        var q = input.value.trim();
+        var q = input.value.trim().slice(0, 100);
         if (!q) {
           renderDefault();
           return;
@@ -2983,7 +3001,7 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
             + '</button>';
         });
 
-        results.innerHTML = h || '<div style="padding: 1.5rem; text-align: center; font-family: var(--f-mono); font-size: 0.8rem; color: var(--mute);">No matching sections or terms found.</div>';
+        safeSetHTML(results, h || '<div style="padding: 1.5rem; text-align: center; font-family: var(--f-mono); font-size: 0.8rem; color: var(--mute);">No matching sections or terms found.</div>');
       });
 
       results.addEventListener('click', function (e) {
@@ -3046,18 +3064,22 @@ Baca UI_EDITING_GUIDE.md sebelum melakukan perubahan besar.
         clearTimeout(hideTimeout);
         var sid = link.getAttribute('data-sid');
         if (window.ensureData) window.ensureData();
-        var info = window.LOOK ? window.LOOK[sid] : null;
+        var info = window.LOOK ? safeGet(window.LOOK, sid) : null;
         if (!info) return;
 
-        var sec = (window.PARTS || PARTS)[info.pi].subs[info.si];
+        var partsList = window.PARTS || PARTS;
+        var sec = partsList[info.pi].subs[info.si];
         var plain = window.stripHtml ? window.stripHtml(sec.html || sec.text || '') : '';
         var excerpt = plain.slice(0, 180) + (plain.length > 180 ? '...' : '');
 
-        card.innerHTML =
-          '<span class="xref-preview-kicker">Part ' + (window.PARTS || PARTS)[info.pi].part + ' &mdash; Section ' + sid + '</span>'
-          + '<h4 class="xref-preview-title">' + (window.esc ? window.esc(sec.title) : sec.title) + '</h4>'
-          + '<p class="xref-preview-excerpt">' + (window.esc ? window.esc(excerpt) : excerpt) + '</p>'
-          + '<span class="xref-preview-footer">&#128279; Click to jump to section</span>';
+        var escFunc = window.esc || esc;
+        var kicker = 'Part ' + partsList[info.pi].part + ' &mdash; Section ' + sid;
+        safeSetHTML(card,
+          '<span class="xref-preview-kicker">' + kicker + '</span>'
+          + '<h4 class="xref-preview-title">' + escFunc(sec.title) + '</h4>'
+          + '<p class="xref-preview-excerpt">' + escFunc(excerpt) + '</p>'
+          + '<span class="xref-preview-footer">🔗 Click to jump to section</span>'
+        );
 
         var rect = link.getBoundingClientRect();
         var cardWidth = 320;

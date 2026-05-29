@@ -1,0 +1,6 @@
+# Python dependencies for PMN Workspace scripts
+# Install with: pip install -r requirements.txt
+
+# SECURITY: Required for safe DOCX/ZIP XML parsing (XXE protection)
+# See: scripts/docx_import_pipeline.py, scripts/import_pmn_docx.py
+defusedxml>=0.7.1
