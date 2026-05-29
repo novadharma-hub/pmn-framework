@@ -21,6 +21,32 @@ except ImportError:
         print(f"[WARN] Gagal mengunduh pypdf. Pembersihan PDF lewati: {e}")
         pypdf = None
 
+# --------------------------------------------------------------------
+# 1.b SETUP GOOGLE DRIVE API CLIENT MODULE
+# --------------------------------------------------------------------
+try:
+    from googleapiclient.discovery import build
+    from googleapiclient.http import MediaFileUpload
+    from google.oauth2 import service_account
+    from google.auth.transport.requests import Request
+    from google.oauth2.credentials import Credentials
+    from google_auth_oauthlib.flow import InstalledAppFlow
+    gdrive_api_available = True
+except ImportError:
+    print("[*] Mengunduh modul Google API Client (google-api-python-client google-auth-oauthlib)...")
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "install", "google-api-python-client", "google-auth", "google-auth-httplib2", "google-auth-oauthlib"], check=True)
+        from googleapiclient.discovery import build
+        from googleapiclient.http import MediaFileUpload
+        from google.oauth2 import service_account
+        from google.auth.transport.requests import Request
+        from google.oauth2.credentials import Credentials
+        from google_auth_oauthlib.flow import InstalledAppFlow
+        gdrive_api_available = True
+    except Exception as e:
+        print(f"[WARN] Gagal mengunduh modul Google Drive. Auto-upload dilewati: {e}")
+        gdrive_api_available = False
+
 # ====================================================================
 # 2. DEFINISI ALGORITMA SCRUBBER METADATA (DOCX & PDF)
 # ====================================================================
@@ -171,6 +197,94 @@ def send_to_telegram(file_path, bot_token, chat_id, topic_id):
         print(f"[ERROR] Gagal mengirim dokumen ke Telegram: {e}")
         return False
 
+
+# ====================================================================
+# 4.b DISTRIBUSI KE GOOGLE DRIVE
+# ====================================================================
+def upload_to_gdrive(file_path, folder_id, credentials_dir):
+    if not gdrive_api_available:
+        print("[WARN] Google Drive API client tidak tersedia.")
+        return False
+        
+    token_path = os.path.join(credentials_dir, "gdrive_token.json")
+    service_account_path = os.path.join(credentials_dir, "gdrive_service_account.json")
+    client_secrets_path = os.path.join(credentials_dir, "client_secrets.json")
+    
+    creds = None
+    scopes = ['https://www.googleapis.com/auth/drive']
+    
+    try:
+        # A. Coba gunakan OAuth 2.0 User Token (Untuk Akun @gmail.com Pribadi)
+        if os.path.exists(token_path):
+            creds = Credentials.from_authorized_user_file(token_path, scopes)
+            # Refresh token jika kedaluwarsa
+            if creds and creds.expired and creds.refresh_token:
+                print("[*] Memperbarui token akses Google Drive yang kedaluwarsa...")
+                creds.refresh(Request())
+                with open(token_path, 'w') as token_file:
+                    token_file.write(creds.to_json())
+                    
+        # B. Jika Token belum ada tapi ada client_secrets.json, lakukan autentikasi pertama kali
+        elif os.path.exists(client_secrets_path):
+            print("[*] Berkas client_secrets.json terdeteksi. Memulai proses login pertama kali...")
+            flow = InstalledAppFlow.from_client_secrets_file(client_secrets_path, scopes)
+            creds = flow.run_local_server(port=0)
+            # Simpan token untuk pemakaian berikutnya
+            with open(token_path, 'w') as token_file:
+                token_file.write(creds.to_json())
+            print(f"[v] SUKSES: Token akses disimpan di '{os.path.basename(token_path)}'")
+            
+        # C. Fallback ke Service Account (Workspace Only)
+        elif os.path.exists(service_account_path):
+            print("[*] Mencoba masuk menggunakan Service Account...")
+            creds = service_account.Credentials.from_service_account_file(service_account_path, scopes=scopes)
+            
+        else:
+            print("[WARN] Otorisasi Google Drive lewati (gdrive_token.json, client_secrets.json, atau gdrive_service_account.json tidak ditemukan).")
+            return False
+            
+        if not creds:
+            print("[WARN] Gagal mendapatkan otorisasi Google Drive.")
+            return False
+            
+        service = build('drive', 'v3', credentials=creds)
+        
+        file_name = os.path.basename(file_path)
+        file_metadata = {
+            'name': file_name,
+            'parents': [folder_id]
+        }
+        
+        media = MediaFileUpload(file_path, resumable=True)
+        
+        # Cek apakah file dengan nama yang sama sudah ada di folder tersebut untuk menimpa (overwrite)
+        query = f"name = '{file_name}' and '{folder_id}' in parents and trashed = false"
+        results = service.files().list(q=query, fields="files(id)").execute()
+        items = results.get('files', [])
+        
+        if items:
+            file_id = items[0]['id']
+            print(f"[*] Berkas lama terdeteksi (ID: {file_id}). Memperbarui berkas di Google Drive...")
+            updated_file = service.files().update(
+                fileId=file_id,
+                media_body=media
+            ).execute()
+            print(f"[v] SUKSES GDRIVE: Berkas '{file_name}' berhasil diperbarui di Google Drive!")
+        else:
+            print(f"[*] Mengunggah berkas baru '{file_name}' ke Google Drive...")
+            new_file = service.files().create(
+                body=file_metadata,
+                media_body=media,
+                fields='id'
+            ).execute()
+            print(f"[v] SUKSES GDRIVE: Berkas baru berhasil diunggah dengan ID: {new_file.get('id')}")
+            
+        return True
+    except Exception as e:
+        print(f"[ERROR] Gagal mengunggah berkas ke Google Drive: {e}")
+        return False
+
+
 # ====================================================================
 # 5. PIPELINE PROCESSOR
 # ====================================================================
@@ -220,6 +334,30 @@ def process_single_file(input_file, clean_dir, env):
     topic_id = env.get("LOG_TOPIC_C2_COMMANDER", "20").strip("'\"")
     
     send_to_telegram(output_file, bot_token, chat_id, topic_id)
+    
+    # D. Auto-upload steril PDF ke Google Drive jika folder_id terdefinisi
+    # Resolusi folder credentials_path secara dinamis di dalam folder private
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    pmn_dir = os.path.dirname(script_dir)
+    parent_dir = os.path.dirname(pmn_dir)
+    grandparent_dir = os.path.dirname(parent_dir)
+    
+    if os.path.basename(pmn_dir).lower() == "public" and os.path.exists(os.path.join(parent_dir, "private")):
+        workspace_root = parent_dir
+    elif os.path.basename(parent_dir).lower() == "public" and os.path.exists(os.path.join(grandparent_dir, "private")):
+        workspace_root = grandparent_dir
+    elif os.path.exists(r"D:\pmn-workspace\private"):
+        workspace_root = r"D:\pmn-workspace"
+    else:
+        workspace_root = pmn_dir
+        
+    credentials_dir = os.path.join(workspace_root, "private", "credentials")
+    credentials_path = os.path.join(credentials_dir, "gdrive_service_account.json")
+    folder_id = "1y1c7XCnYGLAydALvTTAR5EQeUrz4zCjS"
+    
+    if ext == '.pdf':
+        upload_to_gdrive(output_file, folder_id, credentials_dir)
+        
     return True
 
 # ====================================================================
@@ -233,7 +371,9 @@ def main():
     parent_dir = os.path.dirname(pmn_dir)
     grandparent_dir = os.path.dirname(parent_dir)
     
-    if os.path.basename(parent_dir).lower() == "public" and os.path.exists(os.path.join(grandparent_dir, "private")):
+    if os.path.basename(pmn_dir).lower() == "public" and os.path.exists(os.path.join(parent_dir, "private")):
+        workspace_root = parent_dir
+    elif os.path.basename(parent_dir).lower() == "public" and os.path.exists(os.path.join(grandparent_dir, "private")):
         workspace_root = grandparent_dir
     elif os.path.exists(r"D:\pmn-workspace\private"):
         workspace_root = r"D:\pmn-workspace"

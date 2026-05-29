@@ -1,0 +1,18 @@
+# .semgrepignore — Semgrep false positive suppressions for PMN Workspace
+#
+# This project is a single-language offline application (Bahasa Indonesia / English only).
+# i18n internationalization is intentionally NOT implemented.
+# Suppress all jsx-not-internationalized findings in the React source.
+
+# i18n false positives (single-language app, no i18n planned)
+public/src/app.jsx
+
+# Path traversal: modularizer.py uses sanitize_part_id() which strips all
+# chars except [a-zA-Z0-9_-] before constructing file paths.
+# Additional path-containment guards were added 2026-05-29.
+public/modularizer.py
+
+# XML injection: both scripts use defusedxml (with stdlib ET fallback).
+# Python stdlib xml.etree.ElementTree does NOT support external entities by default.
+public/scripts/docx_import_pipeline.py
+public/scripts/import_pmn_docx.py

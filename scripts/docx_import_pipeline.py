@@ -25,6 +25,19 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+# Use defusedxml to explicitly block XML External Entity (XXE) attacks.
+# defusedxml disables external entity resolution, DTD loading, and XInclude by default.
+# Per secure coding guidelines: MUST harden XML parsing configuration for DOCX/ZIP files.
+# Install: pip install defusedxml
+try:
+    import defusedxml.ElementTree as _defused_ET
+    def _safe_fromstring(data): return _defused_ET.fromstring(data)
+except ImportError as _exc:
+    raise ImportError(
+        "defusedxml is required for safe DOCX XML parsing. "
+        "Install it with: pip install defusedxml"
+    ) from _exc  # TODO(security): Do not fall back to ET.fromstring — fail closed
+
 # Reuse some utilities from the existing importer when possible
 # (we import specific functions to avoid circular issues for now)
 try:
@@ -125,7 +138,7 @@ def stage_1_extract_paragraphs(docx_path: Path) -> PipelineResult:
     try:
         with zipfile.ZipFile(docx_path) as archive:
             document_xml = archive.read("word/document.xml")
-        root = ET.fromstring(document_xml)
+        root = _safe_fromstring(document_xml)
 
         for para in root.findall(".//w:p", NS):
             text = "".join(node.text or "" for node in para.findall(".//w:t", NS))
