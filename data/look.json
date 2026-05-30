@@ -497,75 +497,81 @@
     "title": "The State Problem",
     "pt": "VII"
   },
-  "7.2": {
+  "7.1b": {
     "pi": 7,
     "si": 4,
+    "title": "The Military as Autonomous Institutional Actor",
+    "pt": "VII"
+  },
+  "7.2": {
+    "pi": 7,
+    "si": 5,
     "title": "Progressive Institutionalism",
     "pt": "VII"
   },
   "7.2b": {
     "pi": 7,
-    "si": 5,
+    "si": 6,
     "title": "Pancasila and Gotong Royong: Pluralism Without Suppression",
     "pt": "VII"
   },
   "7.3": {
     "pi": 7,
-    "si": 6,
+    "si": 7,
     "title": "The Custodian Problem",
     "pt": "VII"
   },
   "7.3b": {
     "pi": 7,
-    "si": 7,
+    "si": 8,
     "title": "Early Detection of Institutional Capture",
     "pt": "VII"
   },
   "7.3c": {
     "pi": 7,
-    "si": 8,
+    "si": 9,
     "title": "Incentive Architecture and Predictable Institutional Failure",
     "pt": "VII"
   },
   "7.3c-ii": {
     "pi": 7,
-    "si": 9,
+    "si": 10,
     "title": "Cosmological Capture: When Belief Distorts the Institution From Within",
     "pt": "VII"
   },
   "7.3d": {
     "pi": 7,
-    "si": 10,
+    "si": 11,
     "title": "Institutionalizing Anti-Capture",
     "pt": "VII"
   },
   "7.4": {
     "pi": 7,
-    "si": 11,
+    "si": 12,
     "title": "The State and Long-Term Direction",
     "pt": "VII"
   },
   "7.5": {
     "pi": 7,
-    "si": 12,
+    "si": 13,
     "title": "Noble Lie: Fictions That Serve Power",
     "pt": "VII"
   },
   "7.6": {
     "pi": 7,
-    "si": 13,
+    "si": 14,
     "title": "Those Who Stand on Others: The Structural Analysis",
     "pt": "VII"
   },
   "7.7": {
     "pi": 7,
-    "si": 14,
+    "si": 15,
     "title": "Path Dependence: Why History Constrains the Present",
     "pt": "VII"
   },
   "7.8": {
     "pi": 7,
-    "si": 15,
+    "si": 16,
     "title": "Regime Types: A Comparative Diagnostic",
     "pt": "VII"
   },
@@ -671,15 +677,21 @@
     "title": "Multipolarity as Transitional Arrangement",
     "pt": "IX"
   },
-  "9.4": {
+  "9.3b": {
     "pi": 9,
     "si": 7,
+    "title": "The Current Transition: Semiconductor Controls, De-dollarization, and Critical Minerals as Structural Variables",
+    "pt": "IX"
+  },
+  "9.4": {
+    "pi": 9,
+    "si": 8,
     "title": "The Parallel Development Framework",
     "pt": "IX"
   },
   "9.5": {
     "pi": 9,
-    "si": 8,
+    "si": 9,
     "title": "Ecological Debt and Climate Justice",
     "pt": "IX"
   },
@@ -755,75 +767,81 @@
     "title": "The Organizational Form Problem",
     "pt": "X"
   },
-  "10.9": {
+  "10.8b": {
     "pi": 10,
     "si": 12,
+    "title": "Shadow Institutions and Parallel Infrastructure Doctrine",
+    "pt": "X"
+  },
+  "10.9": {
+    "pi": 10,
+    "si": 13,
     "title": "How Counter-Power Accumulates",
     "pt": "X"
   },
   "10.10": {
     "pi": 10,
-    "si": 13,
+    "si": 14,
     "title": "The Two Modes of Struggle",
     "pt": "X"
   },
   "10.10b": {
     "pi": 10,
-    "si": 14,
+    "si": 15,
     "title": "Performative Hostility and Coordination Behind the Surface",
     "pt": "X"
   },
   "10.10c": {
     "pi": 10,
-    "si": 15,
+    "si": 16,
     "title": "The Extended Agent Typology: Beyond the Hero-Vigilante Binary",
     "pt": "X"
   },
   "10.10c-i": {
     "pi": 10,
-    "si": 16,
+    "si": 17,
     "title": "The Seven Additional Durable Positions",
     "pt": "X"
   },
   "10.10c-ii": {
     "pi": 10,
-    "si": 17,
+    "si": 18,
     "title": "The Watcher Problem: Coordination From Above and Behind",
     "pt": "X"
   },
   "10.10c-iii": {
     "pi": 10,
-    "si": 18,
+    "si": 19,
     "title": "Spontaneous and Transitional Actors",
     "pt": "X"
   },
   "10.11": {
     "pi": 10,
-    "si": 19,
+    "si": 20,
     "title": "Gradations Within the Ecosystem",
     "pt": "X"
   },
   "10.12": {
     "pi": 10,
-    "si": 20,
+    "si": 21,
     "title": "Drift Mechanisms: How Actors Shift",
     "pt": "X"
   },
   "10.13": {
     "pi": 10,
-    "si": 21,
+    "si": 22,
     "title": "Legitimacy as Function, Not Status",
     "pt": "X"
   },
   "10.14": {
     "pi": 10,
-    "si": 22,
+    "si": 23,
     "title": "Who Watches the Watchers",
     "pt": "X"
   },
   "10.15": {
     "pi": 10,
-    "si": 23,
+    "si": 24,
     "title": "Micro-Politics and Structural Transformation",
     "pt": "X"
   },
@@ -935,27 +953,33 @@
     "title": "Misuse Resistance: Non-Bypassable Diagnostic Triggers",
     "pt": "XII"
   },
-  "12.6": {
+  "12.5e": {
     "pi": 12,
     "si": 10,
+    "title": "Deficit Estimation Protocol: PMN Analysis with Partial Data",
+    "pt": "XII"
+  },
+  "12.6": {
+    "pi": 12,
+    "si": 11,
     "title": "Genealogical Interrogation as Method",
     "pt": "XII"
   },
   "12.7": {
     "pi": 12,
-    "si": 11,
+    "si": 12,
     "title": "The Genealogy of This Framework",
     "pt": "XII"
   },
   "12.8": {
     "pi": 12,
-    "si": 12,
+    "si": 13,
     "title": "Technocratic Drift Safeguard",
     "pt": "XII"
   },
   "12.9": {
     "pi": 12,
-    "si": 13,
+    "si": 14,
     "title": "Comparative Demonstration: Where Competing Frameworks Fail",
     "pt": "XII"
   },
