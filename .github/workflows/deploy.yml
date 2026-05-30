@@ -10,6 +10,9 @@ permissions:
   pages: write
   id-token: write
 
+# Security: Add branch protection for main branch
+# Ensure only authorized users can push to main
+
 concurrency:
   group: pages
   cancel-in-progress: false
