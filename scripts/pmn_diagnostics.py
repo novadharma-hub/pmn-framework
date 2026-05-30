@@ -11,7 +11,8 @@ def clean_ascii(text):
     return "".join(c if ord(c) < 128 else '?' for c in text)
 
 def run_diagnostics():
-    root_dir = r"D:\pmn-framework"
+    script_dir = os.path.dirname(os.path.abspath(__file__)) if '__file__' in globals() else os.getcwd()
+    root_dir = os.path.dirname(script_dir)
     os.chdir(root_dir)
     
     report_path = "LENGKAPI_DIAGNOSIS_UNTUK_AI.md"
