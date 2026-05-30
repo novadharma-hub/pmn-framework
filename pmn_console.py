@@ -108,7 +108,7 @@ def get_system_stats():
         try:
             with open(ui_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            match = re.search(r"Version\s+([0-9a-zA-Z_\-]+)", content)
+            match = re.search(r"Version\s+([0-9a-zA-Z_\-\.]+)", content)
             if match:
                 stats["version"] = match.group(1)
         except:
