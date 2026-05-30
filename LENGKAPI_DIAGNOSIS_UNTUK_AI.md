@@ -6,24 +6,24 @@
 
 *   **Platform Sistem Operasi**: WIN32
 *   **Versi Python Lokal**: Python 3.13.13
-*   **Versi Publik PMN aktif**: `117.2`
+*   **Versi Publik PMN aktif**: `117.3`
 *   **Total Bagian (Parts)**: 21 kelompok naskah
-*   **Total Bab (Sections)**: 223 bab naskah
+*   **Total Bab (Sections)**: 227 bab naskah
 *   **Total Istilah Glosarium**: 122 istilah aktif
-*   **Ukuran Berkas Kompilasi (index.html)**: 2.58 MB
-*   **Ukuran Grounding Corpus (AI)**: 2243.0 KB
+*   **Ukuran Berkas Kompilasi (index.html)**: 2.59 MB
+*   **Ukuran Grounding Corpus (AI)**: 2243.1 KB
 
 ## 📝 2. INTEGRITY CHECKLIST DIAGNOSTIC AUDIT
 
 | Status | Komponen Pemeriksaan | Detail Temuan & Ukuran |
 | :---: | :--- | :--- |
-| [OK] | File Existence: `index.ui.html` | UI Layout Skeleton (44.4 KB) |
+| [OK] | File Existence: `index.ui.html` | UI Layout Skeleton (45.1 KB) |
 | [OK] | File Existence: `style.css` | Core Style System (98.0 KB) |
 | [OK] | File Existence: `app.js` | Interactive Logic Script (148.2 KB) |
 | [OK] | File Existence: `modularizer.py` | Stitching Compiler (16.5 KB) |
 | [OK] | File Existence: `data/gl.json` | Glossary Dictionary Data (31.1 KB) |
 | [OK] | File Existence: `data/glg.json` | Glossary Group Taxonomy Data (4.0 KB) |
-| [OK] | File Existence: `data/parts.json` | Monolithic Manuscript Data (2267.3 KB) |
+| [OK] | File Existence: `data/parts.json` | Monolithic Manuscript Data (2267.5 KB) |
 | [OK] | JSON Structure: `data/gl.json` | Valid JSON Syntax. |
 | [OK] | JSON Structure: `data/glg.json` | Valid JSON Syntax. |
 | [OK] | JSON Structure: `data/rel.json` | Valid JSON Syntax. |
