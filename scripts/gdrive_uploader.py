@@ -40,7 +40,8 @@ def upload_pdf(file_path):
         print(f"[*] Found existing file on GDrive (ID: {file_id}). Updating...")
         updated_file = service.files().update(
             fileId=file_id,
-            media_body=media
+            media_body=media,
+            supportsAllDrives=True
         ).execute()
         print(f"[v] GDrive Update Success: {filename} (ID: {updated_file.get('id')})")
         return updated_file.get('id')
@@ -54,7 +55,8 @@ def upload_pdf(file_path):
         new_file = service.files().create(
             body=file_metadata,
             media_body=media,
-            fields='id'
+            fields='id',
+            supportsAllDrives=True
         ).execute()
         print(f"[v] GDrive Upload Success: {filename} (ID: {new_file.get('id')})")
         return new_file.get('id')
