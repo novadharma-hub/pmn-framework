@@ -68,6 +68,17 @@ def extract_paragraphs(docx_path: Path) -> list[Paragraph]:
     return paragraphs
 
 
+def is_valid_heading(text: str) -> bool:
+    SPECIAL_HEADINGS = {"Preface", "How to Read This Document", "Coda", "Intellectual Debts", "Bibliography"}
+    if text in SPECIAL_HEADINGS:
+        return True
+    if re.match(r"^Part\s+[IVXLC]+:", text):
+        return True
+    if re.match(r"^([0-9]+(?:\.[0-9A-Za-z-]+)*)\s+(.+)$", text):
+        return True
+    return False
+
+
 def find_body_start(paragraphs: list[Paragraph]) -> tuple[list[str], int]:
     try:
         contents_idx = next(i for i, para in enumerate(paragraphs) if para.text == "Contents")
@@ -77,7 +88,8 @@ def find_body_start(paragraphs: list[Paragraph]) -> tuple[list[str], int]:
     if len(preface_indices) < 2:
         raise ValueError("Could not locate the start of the body after the contents list.")
     body_start = preface_indices[1]
-    toc_headings = [para.text for para in paragraphs[contents_idx + 1 : body_start]]
+    raw_toc_headings = [para.text for para in paragraphs[contents_idx + 1 : body_start]]
+    toc_headings = [heading for heading in raw_toc_headings if is_valid_heading(heading)]
     return toc_headings, body_start
 
 
@@ -463,9 +475,15 @@ def replace_version_labels(index_html: str, version_label: str) -> str:
             f"Progressive Materialist Naturalism {version_label}",
         ),
         (r"\[PMN v\d+(?:\.\d+)? REFERENCE\]", f"[PMN {version_label} REFERENCE]"),
+        (r'(id="home-bottom-version">)[vV]?\d+(?:\.\d+)?(</strong>)', rf"\g<1>V{version_number}\g<2>"),
+        (r'(<span>)[vV]?\d+(?:\.\d+)?(\s+MANUSCRIPT\b)', rf"\g<1>V{version_number}\g<2>"),
     ]
     for pattern, replacement in generic_replacements:
         index_html = re.sub(pattern, replacement, index_html)
+
+    # Force comprehensive fallback replacements for any residual old version strings
+    index_html = re.sub(r"\b[vV]117\.3\b", version_label, index_html)
+    index_html = re.sub(r"\b117\.3\b", version_number, index_html)
     return index_html
 
 
@@ -647,6 +665,17 @@ def main() -> int:
             print(f"   [OK] Persistent version {version_label} successfully saved in index.ui.html.")
     except Exception as uie:
         print(f"   [WARN] Could not update version in index.ui.html: {uie}")
+
+    # Also update pmn-agent-guide.html if it exists!
+    try:
+        guide_path = Path("pmn-agent-guide.html")
+        if guide_path.exists():
+            guide_text = guide_path.read_text(encoding="utf-8")
+            guide_text = replace_version_labels(guide_text, version_label)
+            guide_path.write_text(guide_text, encoding="utf-8")
+            print(f"   [OK] Version {version_label} successfully synchronized in pmn-agent-guide.html.")
+    except Exception as ge:
+        print(f"   [WARN] Could not update version in pmn-agent-guide.html: {ge}")
 
     # Automatically trigger modularizer split and compile to rebuild modular parts and compile dynamically!
     try:
