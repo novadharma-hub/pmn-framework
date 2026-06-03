@@ -50,3 +50,7 @@ pmn_system_log.txt
 config.enc
 private/backups/
 *.enc
+
+# Ignore versioned release assets to prevent Git history bloat
+dist/PMN_Framework_v*.pdf
+dist/PMN_Framework_v*.md
