@@ -533,45 +533,51 @@
     "title": "Incentive Architecture and Predictable Institutional Failure",
     "pt": "VII"
   },
-  "7.3c-ii": {
+  "7.3c-i": {
     "pi": 7,
     "si": 10,
+    "title": "A General Theory of Capture: Mechanism, Stages, and Detection Across Organizational Forms",
+    "pt": "VII"
+  },
+  "7.3c-ii": {
+    "pi": 7,
+    "si": 11,
     "title": "Cosmological Capture: When Belief Distorts the Institution From Within",
     "pt": "VII"
   },
   "7.3d": {
     "pi": 7,
-    "si": 11,
+    "si": 12,
     "title": "Institutionalizing Anti-Capture",
     "pt": "VII"
   },
   "7.4": {
     "pi": 7,
-    "si": 12,
+    "si": 13,
     "title": "The State and Long-Term Direction",
     "pt": "VII"
   },
   "7.5": {
     "pi": 7,
-    "si": 13,
+    "si": 14,
     "title": "Noble Lie: Fictions That Serve Power",
     "pt": "VII"
   },
   "7.6": {
     "pi": 7,
-    "si": 14,
+    "si": 15,
     "title": "Those Who Stand on Others: The Structural Analysis",
     "pt": "VII"
   },
   "7.7": {
     "pi": 7,
-    "si": 15,
+    "si": 16,
     "title": "Path Dependence: Why History Constrains the Present",
     "pt": "VII"
   },
   "7.8": {
     "pi": 7,
-    "si": 16,
+    "si": 17,
     "title": "Regime Types: A Comparative Diagnostic",
     "pt": "VII"
   },

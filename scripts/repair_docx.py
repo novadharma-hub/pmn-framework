@@ -80,49 +80,82 @@ def main():
                 
         print(f"[*] Identified {len(polluted_paras)} polluted paragraphs in TOC.")
         
-        # 3. SELECT KEY PARAGRAPHS TO MOVE & DELETE OTHERS
-        # We will match the text of these 5 unique paragraphs
-        p_73b_intro = None
-        p_73b_stages = None
-        p_73b_detection = None
-        p_73c_cosmo = None
-        p_121b_obligation = None
-        
-        to_delete = []
-        
+        # 3. IDENTIFY ALL 24 POLLUTED PARAGRAPHS & THEIR DESTINATIONS
+        PARAGRAPH_MAPPING = [
+            # Section 3.0b
+            ("The naturalistic fallacy, as Moore formulated it", "3.0b"),
+            ("The objection misdescribes what the bridge does", "3.0b"),
+            ("The bridge is conditional, not derivational", "3.0b"),
+            
+            # Section 3.0c
+            ("The stability argument provides the second leg", "3.0c"),
+            ("The argument is not that instability proves", "3.0c"),
+            ("This matters for the framework's epistemic status", "3.0c"),
+            
+            # Section 3.0d
+            ("A common misreading of PMN treats it as reducing", "3.0d"),
+            ("The misreading conflates the evaluative anchor", "3.0d"),
+            ("The correct reading is that the biological floor", "3.0d"),
+            
+            # Section 3.0e
+            ("A second misreading treats PMN's use of", "3.0e"),
+            ("The anti-foreclosure criterion is prohibitory, not teleological", "3.0e"),
+            ("PMN explicitly rejects strong teleology", "3.0e"),
+            
+            # Section 3.0f
+            ("Sections 3.0b through 3.0e clear the ground", "3.0f"),
+            ("PMN's normative architecture is conditional", "3.0f"),
+            ("This conditionality is a precision, not a weakness", "3.0f"),
+            
+            # Section 7.3b
+            ("Institutional capture is the process by which", "7.3b"),
+            ("Capture follows a recognizable sequence", "7.3b"),
+            ("Detection at stages one and two is the only", "7.3b"),
+            
+            # Section 7.3c-ii
+            ("Cosmological capture is a distinct mechanism", "7.3c-ii"),
+            ("Cosmological capture operates through belief", "7.3c-ii"),
+            ("The diagnostic challenge is that cosmological", "7.3c-ii"),
+            
+            # Section 12.1b
+            ("The stress-testing methodology evaluates proposed", "12.1b"),
+            ("The Multi-Level Consequence Procedure specifies", "12.1b"),
+            ("The obligation arises because the layers are causally", "12.1b"),
+        ]
+
+        p_by_prefix = {}
         for p, text in polluted_paras:
-            if text.startswith("Institutional capture is the process by which the concentrated interests that an institution is designed to constrain"):
-                p_73b_intro = p
-                print("[+] Found unique intro paragraph for 7.3b.")
-            elif text.startswith("Capture follows a recognizable sequence. In the first stage, access asymmetry is established"):
-                p_73b_stages = p
-                print("[+] Found unique stages paragraph for 7.3b (Stage 5).")
-            elif text.startswith("Detection at stages one and two is the only tractable intervention point"):
-                p_73b_detection = p
-                print("[+] Found unique detection paragraph for 7.3b.")
-            elif text.startswith("Cosmological capture is a distinct mechanism from the sequential capture described in 7.3c-i"):
-                p_73c_cosmo = p
-                print("[+] Found unique cosmological capture intro paragraph.")
-            elif text.startswith("The obligation arises because the layers are causally connected"):
-                p_121b_obligation = p
-                print("[+] Found unique obligation paragraph for 12.1b.")
-            else:
+            matched = False
+            for prefix, sec_id in PARAGRAPH_MAPPING:
+                if text.startswith(prefix):
+                    p_by_prefix[prefix] = p
+                    matched = True
+                    break
+            if not matched:
+                print(f"[WARN] Non-heading paragraph in TOC did not match any prefix: {text[:60]}")
+
+        print(f"[*] Found {len(p_by_prefix)} of 24 paragraphs to move.")
+
+        # 4. REMOVE ALL POLLUTED PARAGRAPHS FROM TOC BLOCK
+        for p in p_by_prefix.values():
+            body.remove(p)
+            
+        # Also clean up any unmatched polluted paras
+        to_delete = []
+        for p, text in polluted_paras:
+            matched = False
+            for prefix, sec_id in PARAGRAPH_MAPPING:
+                if text.startswith(prefix):
+                    matched = True
+                    break
+            if not matched:
                 to_delete.append(p)
                 
-        print(f"[*] Configured {len(to_delete)} duplicate/outdated drafts for deletion.")
-        
-        # 4. REMOVE POLLUTED PARAGRAPHS FROM TOC BLOCK
-        # To avoid index shifting issues, we delete elements directly from the XML tree parent
         for p in to_delete:
             body.remove(p)
             
-        # We also temporarily remove the 5 paragraphs to be moved so they are no longer in the TOC
-        for p in [p_73b_intro, p_73b_stages, p_73b_detection, p_73c_cosmo, p_121b_obligation]:
-            if p is not None:
-                body.remove(p)
-                
         print("[*] Successfully cleaned the TOC page of the XML tree.")
-        
+
         # 5. FIND DESTINATION PARAGRAPHS IN THE BODY & INSERT MOVED PARAGRAPHS
         # Re-fetch body paragraphs to get updated index list
         paras_after_clean = list(body)
@@ -140,68 +173,162 @@ def main():
         print(f"[*] XML body start index: {body_start_xml_idx}")
         
         def find_p_by_text(exact_text):
-            for p in paras_after_clean[body_start_xml_idx:]:
+            for p in list(body)[body_start_xml_idx:]:
                 if get_para_text(p) == exact_text:
                     return p
             return None
             
         def find_p_by_prefix(prefix):
-            for p in paras_after_clean[body_start_xml_idx:]:
+            for p in list(body)[body_start_xml_idx:]:
                 if get_para_text(p).startswith(prefix):
                     return p
             return None
 
-        # Insert Target 1 (7.3b Intro) and Target 2 (7.3b Stages)
+        # --- INSERT 3.0b PARAGRAPHS ---
+        p_pmn_does_not = find_p_by_prefix("PMN does not make")
+        if p_pmn_does_not is not None:
+            idx = list(body).index(p_pmn_does_not)
+            p1 = p_by_prefix.get("The naturalistic fallacy, as Moore formulated it")
+            p2 = p_by_prefix.get("The objection misdescribes what the bridge does")
+            p3 = p_by_prefix.get("The bridge is conditional, not derivational")
+            if p1 is not None: body.insert(idx + 1, p1); idx += 1
+            if p2 is not None: body.insert(idx + 1, p2); idx += 1
+            if p3 is not None: body.insert(idx + 1, p3); idx += 1
+            print("[*] Integrated 3.0b TOC paragraphs after 'PMN does not make...'")
+        else:
+            print("[WARN] Could not find 'PMN does not make' paragraph in body!")
+
+        # --- INSERT 3.0c PARAGRAPHS ---
+        p_normative_enters = find_p_by_prefix("The normative dimension enters")
+        if p_normative_enters is not None:
+            idx = list(body).index(p_normative_enters)
+            p1 = p_by_prefix.get("The stability argument provides the second leg")
+            p2 = p_by_prefix.get("The argument is not that instability proves")
+            if p1 is not None: body.insert(idx + 1, p1); idx += 1
+            if p2 is not None: body.insert(idx + 1, p2); idx += 1
+            print("[*] Integrated 3.0c TOC paragraphs P1 & P2 after 'The normative dimension enters...'")
+            
+        p_logical_struct = find_p_by_prefix("The logical structure")
+        if p_logical_struct is not None:
+            idx = list(body).index(p_logical_struct)
+            p3 = p_by_prefix.get("This matters for the framework's epistemic status")
+            if p3 is not None:
+                body.insert(idx + 1, p3)
+                print("[*] Integrated 3.0c TOC paragraph P3 after logical structure paragraph.")
+        else:
+            print("[WARN] Could not find logical structure paragraph in body!")
+
+        # --- INSERT 3.0d PARAGRAPHS ---
+        p_floor = find_p_by_prefix("The biological floor is a floor")
+        if p_floor is not None:
+            idx = list(body).index(p_floor)
+            p1 = p_by_prefix.get("A common misreading of PMN treats it as reducing")
+            p2 = p_by_prefix.get("The misreading conflates the evaluative anchor")
+            p3 = p_by_prefix.get("The correct reading is that the biological floor")
+            if p1 is not None: body.insert(idx + 1, p1); idx += 1
+            if p2 is not None: body.insert(idx + 1, p2); idx += 1
+            if p3 is not None: body.insert(idx + 1, p3); idx += 1
+            print("[*] Integrated 3.0d TOC paragraphs after 'The biological floor is a floor...'")
+        else:
+            print("[WARN] Could not find 'The biological floor is a floor' paragraph in body!")
+
+        # --- INSERT 3.0e PARAGRAPHS ---
+        p_diff = find_p_by_prefix("The difference between a teleological claim")
+        if p_diff is not None:
+            idx = list(body).index(p_diff)
+            p1 = p_by_prefix.get("A second misreading treats PMN's use of")
+            p2 = p_by_prefix.get("The anti-foreclosure criterion is prohibitory, not teleological")
+            p3 = p_by_prefix.get("PMN explicitly rejects strong teleology")
+            if p1 is not None: body.insert(idx + 1, p1); idx += 1
+            if p2 is not None: body.insert(idx + 1, p2); idx += 1
+            if p3 is not None: body.insert(idx + 1, p3); idx += 1
+            print("[*] Integrated 3.0e TOC paragraphs after 'The difference between...'")
+        else:
+            print("[WARN] Could not find 'The difference between a teleological claim' paragraph in body!")
+
+        # --- INSERT 3.0f PARAGRAPHS ---
+        p_30f_heading = find_p_by_text("Conditional Normative Framework: The Summary Statement")
+        if p_30f_heading is not None:
+            idx = list(body).index(p_30f_heading)
+            p1 = p_by_prefix.get("Sections 3.0b through 3.0e clear the ground")
+            p2 = p_by_prefix.get("PMN's normative architecture is conditional")
+            p3 = p_by_prefix.get("This conditionality is a precision, not a weakness")
+            if p1 is not None: body.insert(idx + 1, p1); idx += 1
+            if p2 is not None: body.insert(idx + 1, p2); idx += 1
+            if p3 is not None: body.insert(idx + 1, p3); idx += 1
+            print("[*] Integrated 3.0f TOC paragraphs immediately after heading.")
+        else:
+            print("[WARN] Could not find 3.0f heading in body!")
+
+        # --- INSERT 7.3b PARAGRAPHS ---
         p_73b_heading = find_p_by_text("7.3b Early Detection of Institutional Capture")
         if p_73b_heading is not None:
-            idx = paras_after_clean.index(p_73b_heading)
-            # Insert intro paragraph right after heading
-            if p_73b_intro is not None:
-                body.insert(idx + 1, p_73b_intro)
-                print(f"[*] Inserted 7.3b intro paragraph at XML index {idx + 1}.")
-                paras_after_clean = list(body) # Refresh
-                
-            # Insert stages paragraph right after intro
-            p_73b_intro_inserted = find_p_by_prefix("Institutional capture is the process by which the concentrated interests that an institution is designed to constrain")
-            if p_73b_intro_inserted is not None and p_73b_stages is not None:
-                idx_stages = paras_after_clean.index(p_73b_intro_inserted)
-                body.insert(idx_stages + 1, p_73b_stages)
-                print(f"[*] Inserted 7.3b stages paragraph (with Stage 5) at XML index {idx_stages + 1}.")
-                paras_after_clean = list(body) # Refresh
+            idx = list(body).index(p_73b_heading)
+            p1 = p_by_prefix.get("Institutional capture is the process by which")
+            p2 = p_by_prefix.get("Capture follows a recognizable sequence")
+            if p1 is not None: body.insert(idx + 1, p1); idx += 1
+            if p2 is not None: body.insert(idx + 1, p2); idx += 1
+            print("[*] Integrated 7.3b intro and sequence summary after heading.")
+            
+            p_stage4 = find_p_by_prefix("Stage 4")
+            if p_stage4 is not None:
+                idx_s4 = list(body).index(p_stage4)
+                p3 = p_by_prefix.get("Detection at stages one and two is the only")
+                if p3 is not None:
+                    body.insert(idx_s4 + 1, p3)
+                    print("[*] Integrated 7.3b detection paragraph after Stage 4.")
         else:
-            print("[WARN] Could not find '7.3b Early Detection...' heading in body!")
+            print("[WARN] Could not find 7.3b heading in body!")
 
-        # Insert Target 3 (7.3b Detection) after Stage 4 paragraph in body
-        p_stage4 = find_p_by_prefix("Stage 4")
-        if p_stage4 is not None:
-            idx_s4 = paras_after_clean.index(p_stage4)
-            if p_73b_detection is not None:
-                body.insert(idx_s4 + 1, p_73b_detection)
-                print(f"[*] Inserted 7.3b detection paragraph after Stage 4 at XML index {idx_s4 + 1}.")
-                paras_after_clean = list(body) # Refresh
+        # --- INSERT 7.3c-ii PARAGRAPHS ---
+        p_gen_theory = find_p_by_prefix("The general capture theory of section 7.3c identifies")
+        if p_gen_theory is not None:
+            idx = list(body).index(p_gen_theory)
+            p1 = p_by_prefix.get("Cosmological capture is a distinct mechanism")
+            p2 = p_by_prefix.get("Cosmological capture operates through belief")
+            p3 = p_by_prefix.get("The diagnostic challenge is that cosmological")
+            if p1 is not None: body.insert(idx + 1, p1); idx += 1
+            if p2 is not None: body.insert(idx + 1, p2); idx += 1
+            if p3 is not None: body.insert(idx + 1, p3); idx += 1
+            print("[*] Integrated 7.3c-ii TOC paragraphs after first body paragraph.")
         else:
-            print("[WARN] Could not find Stage 4 paragraph in body!")
+            print("[WARN] Could not find cosmological capture first body paragraph!")
 
-        # Insert Target 4 (Cosmological Capture Intro)
-        p_cosmo_heading = find_p_by_text("Cosmological Capture: When Belief Distorts the Institution From Within")
-        if p_cosmo_heading is not None:
-            idx_cosmo = paras_after_clean.index(p_cosmo_heading)
-            if p_73c_cosmo is not None:
-                body.insert(idx_cosmo + 1, p_73c_cosmo)
-                print(f"[*] Inserted cosmological capture intro paragraph at XML index {idx_cosmo + 1}.")
-                paras_after_clean = list(body) # Refresh
+        # --- INSERT 12.1b PARAGRAPHS ---
+        p_mechanism = find_p_by_prefix("The mechanism by which second-order effects")
+        if p_mechanism is not None:
+            idx = list(body).index(p_mechanism)
+            p1 = p_by_prefix.get("The stress-testing methodology evaluates proposed")
+            p2 = p_by_prefix.get("The Multi-Level Consequence Procedure specifies")
+            p3 = p_by_prefix.get("The obligation arises because the layers are causally")
+            if p1 is not None: body.insert(idx + 1, p1); idx += 1
+            if p2 is not None: body.insert(idx + 1, p2); idx += 1
+            if p3 is not None: body.insert(idx + 1, p3); idx += 1
+            print("[*] Integrated 12.1b TOC paragraphs after second body paragraph.")
         else:
-            print("[WARN] Could not find 'Cosmological Capture...' heading in body!")
+            print("[WARN] Could not find 12.1b second body paragraph!")
 
-        # Insert Target 5 (12.1b Obligation)
-        p_121b_heading = find_p_by_text("Second-Order Effects as Analytical Obligation: The Multi-Level Consequence Procedure")
-        if p_121b_heading is not None:
-            idx_121b = paras_after_clean.index(p_121b_heading)
-            if p_121b_obligation is not None:
-                body.insert(idx_121b + 1, p_121b_obligation)
-                print(f"[*] Inserted 12.1b obligation paragraph at XML index {idx_121b + 1}.")
-        else:
-            print("[WARN] Could not find 'Second-Order Effects...' heading in body!")
+        # 5b. PREPEND NUMBERS TO UNNUMBERED HEADINGS IN THE BODY
+        headings_to_number = {
+            "The Naturalistic Fallacy Objection and Why It Does Not Apply Here": "3.0b ",
+            "The Stability Argument: The Bridge That Is Not a Derivation": "3.0c ",
+            "Against the Reductionism Reading": "3.0d ",
+            "Against the Teleology Reading": "3.0e ",
+            "Conditional Normative Framework: The Summary Statement": "3.0f ",
+            "A General Theory of Capture: Mechanism, Stages, and Detection Across Organizational Forms": "7.3c-i ",
+            "Cosmological Capture: When Belief Distorts the Institution From Within": "7.3c-ii ",
+            "Second-Order Effects as Analytical Obligation: The Multi-Level Consequence Procedure": "12.1b "
+        }
+        
+        paras_after_clean = list(body)
+        for heading_p in paras_after_clean[body_start_xml_idx:]:
+            p_text = get_para_text(heading_p)
+            if p_text in headings_to_number:
+                prefix = headings_to_number[p_text]
+                t_elem = heading_p.find(".//w:t", NS)
+                if t_elem is not None:
+                    t_elem.text = prefix + (t_elem.text or "")
+                    print(f"[+] Numbered body heading: '{prefix}{p_text}'")
 
         # 6. WRITE BACK TO XML AND ZIP IT UP
         tree.write(doc_xml_path, encoding="utf-8", xml_declaration=True)
