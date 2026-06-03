@@ -7,6 +7,48 @@ import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+# Register namespaces to prevent ElementTree from generating "ns0" prefixes
+NAMESPACES_TO_REGISTER = {
+    'wpc': 'http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas',
+    'cx': 'http://schemas.microsoft.com/office/drawing/2014/chartex',
+    'cx1': 'http://schemas.microsoft.com/office/drawing/2015/9/8/chartex',
+    'cx2': 'http://schemas.microsoft.com/office/drawing/2015/10/21/chartex',
+    'cx3': 'http://schemas.microsoft.com/office/drawing/2016/5/9/chartex',
+    'cx4': 'http://schemas.microsoft.com/office/drawing/2016/5/10/chartex',
+    'cx5': 'http://schemas.microsoft.com/office/drawing/2015/11/chartex',
+    'cx6': 'http://schemas.microsoft.com/office/drawing/2016/5/12/chartex',
+    'cx7': 'http://schemas.microsoft.com/office/drawing/2016/5/13/chartex',
+    'cx8': 'http://schemas.microsoft.com/office/drawing/2016/5/14/chartex',
+    'mc': 'http://schemas.openxmlformats.org/markup-compatibility/2006',
+    'aink': 'http://schemas.microsoft.com/office/drawing/2016/ink',
+    'am3d': 'http://schemas.microsoft.com/office/drawing/2017/model3d',
+    'o': 'urn:schemas-microsoft-com:office:office',
+    'oel': 'http://schemas.microsoft.com/office/2019/extlst',
+    'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
+    'm': 'http://schemas.openxmlformats.org/officeDocument/2006/math',
+    'v': 'urn:schemas-microsoft-com:vml',
+    'wp14': 'http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing',
+    'wp': 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing',
+    'w10': 'urn:schemas-microsoft-com:office:word',
+    'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main',
+    'w14': 'http://schemas.microsoft.com/office/word/2010/wordml',
+    'w15': 'http://schemas.microsoft.com/office/word/2012/wordml',
+    'w16cex': 'http://schemas.microsoft.com/office/word/2018/wordml/cex',
+    'w16cid': 'http://schemas.microsoft.com/office/word/2016/wordml/cid',
+    'w16': 'http://schemas.microsoft.com/office/word/2018/wordml',
+    'w16du': 'http://schemas.microsoft.com/office/word/2023/wordml/word16du',
+    'w16sdtdh': 'http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash',
+    'w16sdtfl': 'http://schemas.microsoft.com/office/word/2024/wordml/sdtformatlock',
+    'w16se': 'http://schemas.microsoft.com/office/word/2015/wordml/symex',
+    'wpg': 'http://schemas.microsoft.com/office/word/2010/wordprocessingGroup',
+    'wpi': 'http://schemas.microsoft.com/office/word/2010/wordprocessingInk',
+    'wne': 'http://schemas.microsoft.com/office/word/2006/wordml',
+    'wps': 'http://schemas.microsoft.com/office/word/2010/wordprocessingShape',
+}
+
+for prefix, uri in NAMESPACES_TO_REGISTER.items():
+    ET.register_namespace(prefix, uri)
+
 NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
 W_NS = "{%s}" % NS["w"]
 
@@ -174,7 +216,8 @@ def main():
         
         def find_p_by_text(exact_text):
             for p in list(body)[body_start_xml_idx:]:
-                if get_para_text(p) == exact_text:
+                t = get_para_text(p)
+                if t == exact_text or t.endswith(exact_text):
                     return p
             return None
             
@@ -331,7 +374,63 @@ def main():
                     print(f"[+] Numbered body heading: '{prefix}{p_text}'")
 
         # 6. WRITE BACK TO XML AND ZIP IT UP
-        tree.write(doc_xml_path, encoding="utf-8", xml_declaration=True)
+        root = tree.getroot()
+        raw_xml = ET.tostring(root, encoding="utf-8").decode("utf-8")
+        
+        # Standard XML header and root namespaces
+        XML_HEADER = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n'
+        DOCUMENT_TAG = (
+            '<w:document '
+            'xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" '
+            'xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" '
+            'xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" '
+            'xmlns:cx2="http://schemas.microsoft.com/office/drawing/2015/10/21/chartex" '
+            'xmlns:cx3="http://schemas.microsoft.com/office/drawing/2016/5/9/chartex" '
+            'xmlns:cx4="http://schemas.microsoft.com/office/drawing/2016/5/10/chartex" '
+            'xmlns:cx5="http://schemas.microsoft.com/office/drawing/2015/11/chartex" '
+            'xmlns:cx6="http://schemas.microsoft.com/office/drawing/2016/5/12/chartex" '
+            'xmlns:cx7="http://schemas.microsoft.com/office/drawing/2016/5/13/chartex" '
+            'xmlns:cx8="http://schemas.microsoft.com/office/drawing/2016/5/14/chartex" '
+            'xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" '
+            'xmlns:aink="http://schemas.microsoft.com/office/drawing/2016/ink" '
+            'xmlns:am3d="http://schemas.microsoft.com/office/drawing/2017/model3d" '
+            'xmlns:o="urn:schemas-microsoft-com:office:office" '
+            'xmlns:oel="http://schemas.microsoft.com/office/2019/extlst" '
+            'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" '
+            'xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" '
+            'xmlns:v="urn:schemas-microsoft-com:vml" '
+            'xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" '
+            'xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" '
+            'xmlns:w10="urn:schemas-microsoft-com:office:word" '
+            'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
+            'xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" '
+            'xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" '
+            'xmlns:w16cex="http://schemas.microsoft.com/office/word/2018/wordml/cex" '
+            'xmlns:w16cid="http://schemas.microsoft.com/office/word/2016/wordml/cid" '
+            'xmlns:w16="http://schemas.microsoft.com/office/word/2018/wordml" '
+            'xmlns:w16du="http://schemas.microsoft.com/office/word/2023/wordml/word16du" '
+            'xmlns:w16sdtdh="http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash" '
+            'xmlns:w16sdtfl="http://schemas.microsoft.com/office/word/2024/wordml/sdtformatlock" '
+            'xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex" '
+            'xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" '
+            'xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" '
+            'xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" '
+            'xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" '
+            'mc:Ignorable="w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du wp14">'
+        )
+        
+        start_idx = raw_xml.find("<w:document")
+        if start_idx == -1:
+            raise ValueError("Could not find <w:document tag in serialized XML!")
+        end_idx = raw_xml.find(">", start_idx)
+        if end_idx == -1:
+            raise ValueError("Could not find end of <w:document tag!")
+            
+        fixed_xml_bytes = (XML_HEADER + DOCUMENT_TAG + raw_xml[end_idx + 1:]).encode("utf-8")
+        
+        with open(doc_xml_path, "wb") as f:
+            f.write(fixed_xml_bytes)
+            
         print("[*] Document XML successfully rewritten.")
         
         # Repackage the zip file safely outside temp_dir to prevent WinError 32

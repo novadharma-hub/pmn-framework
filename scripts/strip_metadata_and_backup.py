@@ -233,8 +233,8 @@ def main():
     parent_dir = os.path.dirname(pmn_dir)
     grandparent_dir = os.path.dirname(parent_dir)
     
-    if os.path.basename(parent_dir).lower() == "public" and os.path.exists(os.path.join(grandparent_dir, "private")):
-        workspace_root = grandparent_dir
+    if os.path.basename(pmn_dir).lower() == "public" and os.path.exists(os.path.join(parent_dir, "private")):
+        workspace_root = parent_dir
     elif os.path.exists(r"D:\pmn-workspace\private"):
         workspace_root = r"D:\pmn-workspace"
     else:
