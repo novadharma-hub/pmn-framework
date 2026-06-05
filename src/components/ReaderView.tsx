@@ -836,10 +836,9 @@ export default function ReaderView({
   const countActiveHls = s ? (highlights[s.id] || []).length : 0
 
   return (
-    <div className="relative min-h-screen bg-[var(--bg)] text-[var(--ink)] flex flex-col md:flex-row select-none">
-      
+    <div className="flex h-screen overflow-hidden bg-pmn-bg text-pmn-ink font-pmn-body select-text">
       {/* SIDEBAR PANEL */}
-      {sbOpen && (
+      {!focusMode && sbOpen && (
         <Sidebar 
           parts={data.parts}
           readMap={readMap}
@@ -850,51 +849,51 @@ export default function ReaderView({
       )}
 
       {/* MAIN CONTENT WRAPPER */}
-      <main id="reader-main" className="flex-1 h-screen overflow-y-auto relative flex flex-col">
+      <main id="reader-main" className="flex-1 flex flex-col min-w-0 bg-pmn-bg overflow-y-auto relative z-10 scroll-smooth">
         {/* Floating Sidebar Toggle Button */}
         <button 
           id="sb-tog"
           onClick={() => setSbOpen(!sbOpen)}
-          className="fixed left-4 bottom-4 w-9 h-9 rounded-full bg-[var(--surface)] border border-[var(--rule2)] text-[var(--ink)] hover:text-[var(--acc)] flex items-center justify-center font-bold z-50 shadow-md cursor-pointer transition-all"
+          className="fixed left-4 bottom-4 w-10 h-10 rounded-full bg-pmn-bg2 border border-pmn-rule text-pmn-ink hover:text-pmn-acc flex items-center justify-center font-bold z-50 shadow-2xl cursor-pointer transition-all"
           title={sbOpen ? "Sembunyikan Sidebar" : "Tampilkan Sidebar"}
         >
           {sbOpen ? '‹' : '›'}
         </button>
 
         {/* Top Header Bar */}
-        <header className="sticky top-0 bg-[var(--hdr)] border-b border-[var(--rule)] h-[52px] px-6 flex items-center justify-between z-30 select-none">
+        <header className="sticky top-0 bg-pmn-bg border-b border-pmn-rule h-[52px] px-6 flex items-center justify-between z-[100] select-none">
           <div className="flex items-center gap-4">
-            <button onClick={onBackHome} className="font-serif font-bold text-[1.05rem] text-[var(--acc)] tracking-[0.04em] hover:opacity-75 cursor-pointer">
+            <button onClick={onBackHome} className="font-pmn-head font-bold text-[1.05rem] text-pmn-acc tracking-[0.04em] hover:opacity-75 cursor-pointer">
               PMN
             </button>
-            <nav className="hidden md:flex items-center gap-2 font-mono text-[0.68rem] text-[var(--mute2)]">
+            <nav className="hidden md:flex items-center gap-2 font-pmn-mono text-[0.68rem] text-pmn-mute">
               <span>&rsaquo;</span>
-              <button onClick={onBackHome} className="hover:text-[var(--acc)] cursor-pointer">Daftar Isi</button>
+              <button onClick={onBackHome} className="hover:text-pmn-acc cursor-pointer">Daftar Isi</button>
               <span>&rsaquo;</span>
-              <span className="text-[var(--mute)] truncate max-w-[150px]">{pshort(p)}</span>
+              <span className="text-pmn-mute truncate max-w-[150px]">{pshort(p)}</span>
               <span>&rsaquo;</span>
-              <span className="text-[var(--acc)] font-bold">{s?.id}</span>
+              <span className="text-pmn-acc font-bold">{s?.id}</span>
             </nav>
           </div>
 
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setFocusMode(!focusMode)} 
-              className={`hidden md:block font-mono text-[0.65rem] border border-[var(--rule)] px-3 py-1 cursor-pointer transition-all ${focusMode ? 'bg-[var(--acc)] text-white dark:text-black border-[var(--acc)]' : 'text-[var(--mute)] hover:text-[var(--acc)]'}`}
+              className={`hidden md:block font-pmn-mono text-[0.65rem] border border-pmn-rule px-3 py-1 cursor-pointer transition-all ${focusMode ? 'bg-pmn-acc text-white dark:text-black border-pmn-acc' : 'text-pmn-mute hover:text-pmn-acc'}`}
             >
               {focusMode ? 'EXIT FOCUS' : 'FOCUS'}
             </button>
-            <button onClick={onToggleTheme} className="font-mono text-[0.65rem] border border-[var(--rule2)] px-2.5 py-1 text-[var(--mute)] hover:text-[var(--acc)] cursor-pointer">
+            <button onClick={onToggleTheme} className="font-pmn-mono text-[0.65rem] border border-pmn-rule2 px-2.5 py-1 text-pmn-mute hover:text-pmn-acc cursor-pointer">
               {theme === 'dark' ? '☀ LIGHT' : '☾ DARK'}
             </button>
-            <button onClick={() => setKbdModalOpen(true)} className="font-mono text-[0.62rem] text-[var(--mute)] border border-[var(--rule)] bg-[var(--surface)] px-2.5 py-1 hover:opacity-80 cursor-pointer">
+            <button onClick={() => setKbdModalOpen(true)} className="font-pmn-mono text-[0.62rem] text-pmn-mute border border-pmn-rule bg-pmn-bg2 px-2.5 py-1 hover:opacity-80 cursor-pointer">
               SHORTCUTS [K]
             </button>
           </div>
         </header>
 
         {/* READING CONTAINER */}
-        <div id="reader-col" className="flex-1 max-w-[var(--reader-measure)] w-full mx-auto px-6 py-12 md:px-12 flex flex-col gap-8">
+        <div id="reader-col" className="flex-1 max-w-(--reader-measure) w-full mx-auto px-6 py-12 md:px-12 flex flex-col gap-8" style={{ '--reader-measure': readerMeasure } as React.CSSProperties}>
           
           {/* Breadcrumb Jumpback alert */}
           {hasJumpback && jumpbackMeta && (
@@ -910,17 +909,17 @@ export default function ReaderView({
           )}
 
           {/* Section Titles */}
-          <div className="space-y-3">
-            <span className="block font-mono text-[0.65rem] text-[var(--mute2)] tracking-widest uppercase">
+          <div className="space-y-4">
+            <span className="block font-pmn-mono text-[0.65rem] text-pmn-mute tracking-[0.25em] uppercase">
               {SPECIAL[p?.part] ? '' : `Part ${p?.part} — ${p?.title}`}
             </span>
-            <div className="flex justify-between items-baseline gap-4 flex-wrap">
-              <h1 className={`font-serif text-[clamp(1.8rem,4vw,2.4rem)] font-bold text-[var(--ink)] dark:text-white leading-tight ${SPECIAL[p?.part] ? 'italic' : ''}`}>
-                {!SPECIAL[p?.part] && <span className="font-serif font-light text-[var(--acc)] mr-3 select-none">{s?.id}</span>}
+            <div className="flex justify-between items-baseline gap-6 flex-wrap">
+              <h1 className={`font-pmn-head text-[clamp(1.8rem,4vw,2.4rem)] font-bold text-pmn-ink leading-tight ${SPECIAL[p?.part] ? 'italic' : ''}`}>
+                {!SPECIAL[p?.part] && <span className="font-pmn-head font-light text-pmn-acc mr-4 select-none opacity-80">{s?.id}</span>}
                 {s?.title}
               </h1>
-              <button onClick={copySectionLink} className="share-btn text-[var(--mute)] hover:text-[var(--acc)] cursor-pointer" title="Salin link bab">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <button onClick={copySectionLink} className="share-btn text-pmn-mute hover:text-pmn-acc cursor-pointer transition-colors p-1" title="Salin link bab">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8">
                   <circle cx="13" cy="3" r="1.8"/>
                   <circle cx="3" cy="8" r="1.8"/>
                   <circle cx="13" cy="13" r="1.8"/>
@@ -929,49 +928,50 @@ export default function ReaderView({
                 </svg>
               </button>
             </div>
-            <div className="h-[1px] bg-[var(--rule)]" />
+            <div className="h-px bg-pmn-rule/50" />
           </div>
 
           {/* Prose body content */}
           <div 
             ref={proseRef} 
             id="prose" 
-            className={`prose font-serif text-[1.05rem] leading-[1.8] text-[var(--ink2)] dark:text-gray-300 space-y-6 ${SPECIAL[p?.part] ? 'back-matter' : ''}`}
+            className={`pmn-prose font-pmn-body text-[1.12rem] leading-[1.85] text-pmn-ink space-y-8 prose-p:mb-8 ${SPECIAL[p?.part] ? 'back-matter' : ''}`}
+            style={{ fontSize: `${readerScale}rem` }}
             dangerouslySetInnerHTML={{ __html: getProcessedHtml() }}
           />
 
           {/* Next & Previous Section Bottom Navigation */}
-          <nav className="flex items-center justify-between border-t border-[var(--rule)] pt-6 mt-8 font-mono text-xs text-[var(--mute)] select-none">
+          <nav className="flex items-center justify-between border-t border-pmn-rule pt-8 mt-12 font-pmn-mono text-xs text-pmn-mute select-none">
             <button 
               onClick={handlePrevSection}
               disabled={partIdx === 0 && secIdx === 0}
-              className="py-1.5 px-3 border border-[var(--rule)] bg-[var(--surface)] hover:text-[var(--acc)] cursor-pointer disabled:opacity-30 disabled:hover:text-[var(--mute)]"
+              className="py-2 px-4 border border-pmn-rule bg-pmn-bg2 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer disabled:opacity-30 disabled:hover:text-pmn-mute transition-all shadow-sm"
             >
               &larr; SEBELUMNYA
             </button>
-            <span className="text-[0.65rem] tracking-widest text-[var(--mute2)]">
+            <span className="text-[0.65rem] tracking-[0.2em] text-pmn-mute/60">
               {secIdx + 1} / {p?.subs.length}
             </span>
             <button 
               onClick={handleNextSection}
               disabled={partIdx === data.parts.length - 1 && secIdx === p?.subs.length - 1}
-              className="py-1.5 px-3 border border-[var(--rule)] bg-[var(--surface)] hover:text-[var(--acc)] cursor-pointer disabled:opacity-30 disabled:hover:text-[var(--mute)]"
+              className="py-2 px-4 border border-pmn-rule bg-pmn-bg2 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer disabled:opacity-30 disabled:hover:text-pmn-mute transition-all shadow-sm"
             >
               SELANJUTNYA &rarr;
             </button>
           </nav>
 
           {/* Section Tools & Handoff Grid */}
-          <div className="border-t border-[var(--rule)] pt-8 mt-12 space-y-8">
+          <div className="border-t border-pmn-rule pt-12 mt-12 space-y-12">
             <div className="flex justify-between items-center flex-wrap gap-4 select-none">
-              <span className="font-mono text-[0.62rem] text-[var(--mute2)] uppercase tracking-widest">Infrastruktur Bacaan</span>
-              <div className="flex gap-2.5">
-                <button onClick={copySectionLink} className="font-mono text-[0.66rem] border border-[var(--rule)] px-3 py-1.5 hover:text-[var(--acc)] cursor-pointer">Salin Link</button>
-                <button onClick={copySectionCitation} className="font-mono text-[0.66rem] border border-[var(--rule)] px-3 py-1.5 hover:text-[var(--acc)] cursor-pointer">Salin Kutipan</button>
-                <button onClick={onBackHome} className="font-mono text-[0.66rem] border border-[var(--rule)] px-3 py-1.5 hover:text-[var(--acc)] cursor-pointer">Daftar Isi</button>
+              <span className="font-pmn-mono text-[0.62rem] text-pmn-mute uppercase tracking-widest font-bold">Infrastruktur Bacaan</span>
+              <div className="flex gap-2.5 flex-wrap">
+                <button onClick={copySectionLink} className="font-pmn-mono text-[0.66rem] border border-pmn-rule px-3 py-1.5 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all bg-pmn-bg2">Salin Link</button>
+                <button onClick={copySectionCitation} className="font-pmn-mono text-[0.66rem] border border-pmn-rule px-3 py-1.5 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all bg-pmn-bg2">Salin Kutipan</button>
+                <button onClick={onBackHome} className="font-pmn-mono text-[0.66rem] border border-pmn-rule px-3 py-1.5 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all bg-pmn-bg2">Daftar Isi</button>
                 <button 
                   onClick={() => setNotesModalOpen(true)} 
-                  className="font-mono text-[0.66rem] border border-[var(--rule2)] px-3 py-1.5 text-[var(--acc)] hover:bg-[rgba(201,168,76,0.05)] cursor-pointer"
+                  className="font-pmn-mono text-[0.66rem] border border-pmn-acc/40 px-3 py-1.5 text-pmn-acc hover:bg-pmn-acc/5 cursor-pointer transition-all bg-pmn-bg2"
                 >
                   {countActiveHls ? `${countActiveHls} Sorotan` : 'Daftar Sorotan'}
                 </button>
@@ -980,11 +980,11 @@ export default function ReaderView({
 
             {/* Related section links */}
             {(data.rel[s?.id]?.length > 0 || data.ci[s?.id]?.length > 0) && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-[var(--bg2)] border border-[var(--rule)] p-6 select-none">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-pmn-bg2 border border-pmn-rule p-8 shadow-inner select-none">
                 {data.rel[s?.id]?.length > 0 && (
-                  <div className="space-y-3">
-                    <span className="block font-mono text-[0.6rem] text-[var(--acc)] uppercase tracking-wider">Lihat Juga</span>
-                    <div className="flex flex-col gap-2">
+                  <div className="space-y-4">
+                    <span className="block font-pmn-mono text-[0.6rem] text-pmn-acc uppercase tracking-widest font-bold">Lihat Juga</span>
+                    <div className="flex flex-col gap-3">
                       {data.rel[s.id].map((relId: string) => {
                         const info = data.look[relId]
                         if (!info) return null
@@ -992,10 +992,10 @@ export default function ReaderView({
                           <button
                             key={relId}
                             onClick={() => handleXrefClick(relId)}
-                            className="text-left font-serif text-xs text-[var(--ink)] hover:text-[var(--acc)] transition-colors flex items-baseline gap-2 cursor-pointer"
+                            className="text-left font-pmn-body text-[0.85rem] text-pmn-ink hover:text-pmn-acc transition-colors flex items-baseline gap-2 cursor-pointer group"
                           >
-                            <span className="font-mono text-[0.68rem] text-[var(--mute2)]">{relId}</span>
-                            <span className="hover:underline">{data.parts[info.pi]?.subs[info.si]?.title}</span>
+                            <span className="font-pmn-mono text-[0.68rem] text-pmn-mute group-hover:text-pmn-acc transition-colors">{relId}</span>
+                            <span className="group-hover:underline underline-offset-4 decoration-pmn-acc/30">{data.parts[info.pi]?.subs[info.si]?.title}</span>
                           </button>
                         )
                       })}
@@ -1003,9 +1003,9 @@ export default function ReaderView({
                   </div>
                 )}
                 {data.ci[s?.id]?.length > 0 && (
-                  <div className="space-y-3">
-                    <span className="block font-mono text-[0.6rem] text-[var(--acc)] uppercase tracking-wider">Dirujuk Di Bab</span>
-                    <div className="flex flex-col gap-2">
+                  <div className="space-y-4">
+                    <span className="block font-pmn-mono text-[0.6rem] text-pmn-acc uppercase tracking-widest font-bold">Dirujuk Di Bab</span>
+                    <div className="flex flex-col gap-3">
                       {data.ci[s.id].map((citId: string) => {
                         const info = data.look[citId]
                         if (!info) return null
@@ -1013,10 +1013,10 @@ export default function ReaderView({
                           <button
                             key={citId}
                             onClick={() => handleXrefClick(citId)}
-                            className="text-left font-serif text-xs text-[var(--ink)] hover:text-[var(--acc)] transition-colors flex items-baseline gap-2 cursor-pointer"
+                            className="text-left font-pmn-body text-[0.85rem] text-pmn-ink hover:text-pmn-acc transition-colors flex items-baseline gap-2 cursor-pointer group"
                           >
-                            <span className="font-mono text-[0.68rem] text-[var(--mute2)]">{citId}</span>
-                            <span className="hover:underline">{data.parts[info.pi]?.subs[info.si]?.title}</span>
+                            <span className="font-pmn-mono text-[0.68rem] text-pmn-mute group-hover:text-pmn-acc transition-colors">{citId}</span>
+                            <span className="group-hover:underline underline-offset-4 decoration-pmn-acc/30">{data.parts[info.pi]?.subs[info.si]?.title}</span>
                           </button>
                         )
                       })}
@@ -1027,19 +1027,19 @@ export default function ReaderView({
             )}
 
             {/* Markdown notes area and AI Terminal Handoff */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               
               {/* Margin notes */}
-              <div className="bg-[var(--bg2)] border border-[var(--rule)] p-6 flex flex-col gap-4">
+              <div className="bg-pmn-bg2 border border-pmn-rule p-8 flex flex-col gap-5 shadow-sm">
                 <div className="flex justify-between items-baseline select-none">
-                  <span className="block font-mono text-[0.6rem] text-[var(--mute2)] uppercase tracking-wider">Catatan Pinggir</span>
-                  <div className="flex items-center gap-3">
+                  <span className="block font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest font-bold">Catatan Pinggir</span>
+                  <div className="flex items-center gap-4">
                     {noteSavedStatus && (
-                      <span className="font-mono text-[0.58rem] text-[var(--acc)] uppercase">{noteSavedStatus}</span>
+                      <span className="font-pmn-mono text-[0.58rem] text-pmn-acc uppercase animate-pulse">{noteSavedStatus}</span>
                     )}
                     <button 
                       onClick={saveSectionNotes}
-                      className="font-mono text-[0.66rem] border border-[var(--rule2)] px-2.5 py-1 text-[var(--ink)] hover:text-[var(--acc)] cursor-pointer"
+                      className="font-pmn-mono text-[0.66rem] border border-pmn-rule2 px-3 py-1.5 text-pmn-ink hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all bg-pmn-bg"
                     >
                       Simpan [Ctrl+S]
                     </button>
@@ -1050,7 +1050,7 @@ export default function ReaderView({
                   onChange={e => setNoteText(e.target.value)}
                   onKeyDown={handleNotesKeyDown}
                   placeholder="Ketik catatan analisis Anda tentang bab ini di sini. Disimpan otomatis ke browser Anda..."
-                  className="w-full h-44 bg-[var(--bg)] border border-[var(--rule)] p-3 font-serif text-sm outline-none resize-none focus:border-[var(--acc)] text-[var(--ink)]"
+                  className="w-full h-56 bg-pmn-bg border border-pmn-rule p-4 font-pmn-body text-[0.9rem] leading-relaxed outline-none resize-none focus:border-pmn-acc transition-colors text-pmn-ink placeholder:text-pmn-mute/40"
                 />
               </div>
 
@@ -1059,29 +1059,29 @@ export default function ReaderView({
             </div>
 
             {/* Suggestions & Recent History */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-[var(--rule)] pt-6 select-none text-xs">
-              <div className="space-y-2">
-                <span className="block font-mono text-[0.65rem] text-[var(--mute2)] uppercase tracking-widest">Saran Jalur Alternatif</span>
-                <div className="flex flex-col gap-1 text-[var(--mute)]">
-                  <button onClick={() => handleXrefClick('how-to-read-this-document')} className="text-left hover:text-[var(--acc)] cursor-pointer font-serif">🧭 Panduan Membaca Awal &rarr;</button>
-                  <button onClick={() => handleXrefClick('15.15')} className="text-left hover:text-[var(--acc)] cursor-pointer font-serif">⚡ Ringkasan Inti Kompresi 15.15 &rarr;</button>
-                  <button onClick={() => handleXrefClick('3.0')} className="text-left hover:text-[var(--acc)] cursor-pointer font-serif">🧬 Landasan Biologis (Bab 3.0) &rarr;</button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-pmn-rule pt-8 select-none text-[0.8rem]">
+              <div className="space-y-3">
+                <span className="block font-pmn-mono text-[0.65rem] text-pmn-mute uppercase tracking-widest font-bold">Saran Jalur Alternatif</span>
+                <div className="flex flex-col gap-2.5 text-pmn-mute/80 font-pmn-body">
+                  <button onClick={() => handleXrefClick('how-to-read-this-document')} className="text-left hover:text-pmn-acc cursor-pointer transition-colors">🧭 Panduan Membaca Awal &rarr;</button>
+                  <button onClick={() => handleXrefClick('15.15')} className="text-left hover:text-pmn-acc cursor-pointer transition-colors">⚡ Ringkasan Inti Kompresi 15.15 &rarr;</button>
+                  <button onClick={() => handleXrefClick('3.0')} className="text-left hover:text-pmn-acc cursor-pointer transition-colors">🧬 Landasan Biologis (Bab 3.0) &rarr;</button>
                 </div>
               </div>
-              <div className="space-y-2">
-                <span className="block font-mono text-[0.65rem] text-[var(--mute2)] uppercase tracking-widest">Riwayat Terakhir</span>
-                <div className="flex flex-col gap-1 text-[var(--mute)]">
+              <div className="space-y-3">
+                <span className="block font-pmn-mono text-[0.65rem] text-pmn-mute uppercase tracking-widest font-bold">Riwayat Terakhir</span>
+                <div className="flex flex-col gap-2.5 text-pmn-mute/80 font-pmn-body">
                   {sessHist.slice(1, 5).map(hist => (
                     <button 
                       key={`${hist.pi}-${hist.si}`}
                       onClick={() => onSavePosition(hist.pi, hist.si)}
-                      className="text-left hover:text-[var(--acc)] cursor-pointer font-serif truncate"
+                      className="text-left hover:text-pmn-acc cursor-pointer truncate transition-colors"
                     >
-                      <span className="font-mono text-[0.62rem] text-[var(--mute2)] mr-2">{hist.id}</span>
+                      <span className="font-pmn-mono text-[0.62rem] text-pmn-mute mr-2 font-bold">{hist.id}</span>
                       {hist.title}
                     </button>
                   ))}
-                  {sessHist.length < 2 && <span className="font-serif italic text-[var(--mute2)]">Belum ada riwayat bacaan.</span>}
+                  {sessHist.length < 2 && <span className="italic text-pmn-mute/50">Belum ada riwayat bacaan.</span>}
                 </div>
               </div>
             </div>
@@ -1089,7 +1089,7 @@ export default function ReaderView({
         </div>
 
         {/* Footer */}
-        <footer className="py-8 border-t border-[var(--rule)] text-center text-xs font-mono text-[var(--mute2)] uppercase tracking-widest mt-auto select-none">
+        <footer className="py-12 border-t border-pmn-rule text-center text-xs font-pmn-mono text-pmn-mute uppercase tracking-[0.25em] mt-auto select-none bg-pmn-bg">
           Progressive Materialist Naturalism &mdash; V117.6
         </footer>
       </main>
@@ -1099,17 +1099,17 @@ export default function ReaderView({
         <div 
           ref={toolbarRef}
           id="hl-toolbar"
-          className="visible flex items-center gap-1.5 p-2 bg-[var(--bg)] border border-[var(--rule)] shadow-lg z-[8000]"
+          className="visible flex items-center gap-2 p-2 bg-pmn-bg border border-pmn-rule shadow-2xl z-[8000] rounded-xs"
           style={{ 
             left: `${Math.min(toolbarState.x, window.innerWidth - 290)}px`, 
             top: `${toolbarState.y}px`,
             position: 'absolute'
           }}
         >
-          <button className="hl-btn hl-btn-red" onClick={() => handleColorClick('red')} title="Red"></button>
-          <button className="hl-btn hl-btn-blue" onClick={() => handleColorClick('blue')} title="Blue"></button>
-          <button className="hl-btn hl-btn-green" onClick={() => handleColorClick('green')} title="Green"></button>
-          <button className="hl-btn hl-btn-yellow" onClick={() => handleColorClick('yellow')} title="Yellow"></button>
+          <button className="w-5 h-5 rounded-full bg-pmn-acc hover:scale-110 transition-transform cursor-pointer" onClick={() => handleColorClick('red')} title="Red"></button>
+          <button className="w-5 h-5 rounded-full bg-blue-500 hover:scale-110 transition-transform cursor-pointer" onClick={() => handleColorClick('blue')} title="Blue"></button>
+          <button className="w-5 h-5 rounded-full bg-green-500 hover:scale-110 transition-transform cursor-pointer" onClick={() => handleColorClick('green')} title="Green"></button>
+          <button className="w-5 h-5 rounded-full bg-yellow-500 hover:scale-110 transition-transform cursor-pointer" onClick={() => handleColorClick('yellow')} title="Yellow"></button>
           <input 
             id="hl-toolbar-note-in" 
             placeholder="Catatan..." 
@@ -1117,11 +1117,11 @@ export default function ReaderView({
             onChange={e => setToolbarState(prev => ({ ...prev, note: e.target.value }))}
             onKeyDown={e => e.key === 'Enter' && handleSaveHlNote()}
             autoComplete="off"
-            className="bg-[var(--bg2)] border border-[var(--rule)] text-[var(--ink)] font-mono text-[0.68rem] px-1.5 py-0.5 outline-none max-w-[100px]"
+            className="bg-pmn-bg2 border border-pmn-rule text-pmn-ink font-pmn-mono text-[0.68rem] px-2 py-1 outline-none max-w-[120px] ml-1"
           />
-          <button className="hl-save-note text-[0.62rem] font-bold bg-[var(--acc)] text-white dark:text-black px-2 py-0.5" onClick={handleSaveHlNote}>Simpan</button>
+          <button className="font-pmn-mono text-[0.62rem] font-bold bg-pmn-acc text-white dark:text-black px-2.5 py-1.5 uppercase cursor-pointer hover:opacity-85" onClick={handleSaveHlNote}>Simpan</button>
           {toolbarState.activeHlId && (
-            <span className="hl-btn-remove cursor-pointer text-xs font-bold text-[var(--mute2)] px-1 hover:text-[#c0392b]" onClick={handleRemoveHl} title="Hapus Sorotan">✕</span>
+            <span className="cursor-pointer text-xs font-bold text-pmn-mute px-2 hover:text-red-600 transition-colors" onClick={handleRemoveHl} title="Hapus Sorotan">✕</span>
           )}
         </div>
       )}
@@ -1130,28 +1130,28 @@ export default function ReaderView({
       {xrefPreview.visible && (
         <div 
           ref={xrefCardRef}
-          className="xref-preview-card visible bg-[var(--bg)] border border-[var(--rule)] p-4 shadow-xl select-none"
+          className="visible bg-pmn-bg border border-pmn-rule p-5 shadow-2xl select-none rounded-xs border-l-4 border-l-pmn-acc"
           style={{
             left: `${xrefPreview.x}px`,
             top: `${xrefPreview.y}px`,
             position: 'absolute',
             zIndex: 1000,
-            width: '320px',
+            width: '340px',
             pointerEvents: 'auto'
           }}
           onMouseOver={handlePreviewMouseOver}
           onMouseOut={hideXrefPreview}
         >
-          <span className="xref-preview-kicker block font-mono text-[0.55rem] text-[var(--acc)] uppercase tracking-wider mb-1">
+          <span className="block font-pmn-mono text-[0.55rem] text-pmn-acc uppercase tracking-widest mb-2 font-bold">
             {xrefPreview.kicker}
           </span>
-          <h4 className="xref-preview-title font-serif text-[0.92rem] font-bold text-[var(--ink)] mb-2">
+          <h4 className="font-pmn-head text-[1rem] font-bold text-pmn-ink mb-3 leading-snug">
             {xrefPreview.title}
           </h4>
-          <p className="xref-preview-excerpt font-serif text-xs leading-relaxed text-[var(--mute)] mb-3">
+          <p className="font-pmn-body text-[0.8rem] leading-relaxed text-pmn-mute mb-4 line-clamp-4">
             {xrefPreview.excerpt}
           </p>
-          <span className="xref-preview-footer block font-mono text-[0.58rem] text-[var(--mute2)]">
+          <span className="block font-pmn-mono text-[0.58rem] text-pmn-mute pt-3 border-t border-pmn-rule">
             &#128279; Klik untuk lompat ke bab
           </span>
         </div>
@@ -1160,34 +1160,34 @@ export default function ReaderView({
       {/* MODAL: ALL NOTES & HIGHLIGHTS OF ACTIVE SECTION */}
       {notesModalOpen && (
         <div className="fixed inset-0 z-[500] bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="w-full max-w-[620px] bg-[var(--bg)] border border-[var(--rule)] p-6 flex flex-col gap-6 max-h-[85vh]">
-            <div className="flex justify-between items-baseline border-b border-[var(--rule)] pb-3">
-              <span className="font-serif text-lg font-bold text-[var(--ink)]">Daftar Sorotan Bab {s?.id}</span>
-              <button onClick={() => setNotesModalOpen(false)} className="text-xl font-mono text-[var(--mute)] hover:text-[var(--acc)] cursor-pointer">&times;</button>
+          <div className="w-full max-w-[620px] bg-pmn-bg border border-pmn-rule p-6 flex flex-col gap-6 max-h-[85vh] shadow-2xl">
+            <div className="flex justify-between items-baseline border-b border-pmn-rule pb-3">
+              <span className="font-pmn-head text-lg font-bold text-pmn-ink">Daftar Sorotan Bab {s?.id}</span>
+              <button onClick={() => setNotesModalOpen(false)} className="text-xl font-pmn-mono text-pmn-mute hover:text-pmn-acc cursor-pointer">&times;</button>
             </div>
-            <div className="flex-1 overflow-y-auto divide-y divide-[var(--rule)] pr-2">
+            <div className="flex-1 overflow-y-auto divide-y divide-pmn-rule pr-2">
               {s && (highlights[s.id] || []).length > 0 ? (
                 (highlights[s.id] || []).map(hl => (
                   <div key={hl.id} className="py-4 space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ backgroundColor: hl.color === 'red' ? 'var(--acc)' : hl.color === 'blue' ? '#60a5fa' : hl.color === 'green' ? '#4ade80' : '#facc15' }} />
-                      <span className="font-mono text-[0.62rem] text-[var(--mute2)] uppercase tracking-wider">{hl.color}</span>
+                      <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ backgroundColor: hl.color === 'red' ? 'var(--color-pmn-acc)' : hl.color === 'blue' ? '#60a5fa' : hl.color === 'green' ? '#4ade80' : '#facc15' }} />
+                      <span className="font-pmn-mono text-[0.62rem] text-pmn-mute uppercase tracking-wider">{hl.color}</span>
                     </div>
-                    <p className="font-serif text-[0.88rem] italic leading-relaxed text-[var(--ink2)]">&ldquo;{hl.text}&rdquo;</p>
+                    <p className="font-pmn-body text-[0.88rem] italic leading-relaxed text-pmn-ink2">&ldquo;{hl.text}&rdquo;</p>
                     {hl.note && (
-                      <div className="pl-3 border-l-2 border-[var(--rule2)] font-serif text-xs text-[var(--mute)]">
+                      <div className="pl-3 border-l-2 border-pmn-rule2 font-pmn-body text-xs text-pmn-mute">
                         📝 {hl.note}
                       </div>
                     )}
                   </div>
                 ))
               ) : (
-                <div className="py-12 text-center font-serif italic text-[var(--mute2)]">
+                <div className="py-12 text-center font-pmn-body italic text-pmn-mute">
                   Belum ada kalimat yang disorot di bab ini. Seleksi teks di atas untuk menyorot.
                 </div>
               )}
             </div>
-            <div className="flex justify-end border-t border-[var(--rule)] pt-4">
+            <div className="flex justify-end border-t border-pmn-rule pt-4">
               <button 
                 onClick={() => {
                   if (s && (highlights[s.id] || []).length > 0) {
@@ -1198,7 +1198,7 @@ export default function ReaderView({
                   }
                 }}
                 disabled={!s || !(highlights[s.id] || []).length}
-                className="font-mono text-[0.66rem] bg-[var(--acc)] text-white dark:text-black font-bold px-4 py-2 uppercase tracking-wider cursor-pointer hover:opacity-85 disabled:opacity-40"
+                className="font-pmn-mono text-[0.66rem] bg-pmn-acc text-white dark:text-black font-bold px-4 py-2 uppercase tracking-wider cursor-pointer hover:opacity-85 disabled:opacity-40"
               >
                 Salin Semua Sorotan
               </button>
@@ -1210,52 +1210,52 @@ export default function ReaderView({
       {/* MODAL: KEYBOARD SHORTCUTS HELP */}
       {kbdModalOpen && (
         <div className="fixed inset-0 z-[500] bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 select-none">
-          <div className="w-full max-w-[480px] bg-[var(--bg)] border border-[var(--rule)] p-6 space-y-6">
-            <div className="flex justify-between items-baseline border-b border-[var(--rule)] pb-3">
-              <span className="font-serif text-lg font-bold text-[var(--ink)]">Shortcut Keyboard</span>
-              <button onClick={() => setKbdModalOpen(false)} className="text-xl font-mono text-[var(--mute)] hover:text-[var(--acc)] cursor-pointer">&times;</button>
+          <div className="w-full max-w-[480px] bg-pmn-bg border border-pmn-rule p-6 space-y-6 shadow-2xl">
+            <div className="flex justify-between items-baseline border-b border-pmn-rule pb-3">
+              <span className="font-pmn-head text-lg font-bold text-pmn-ink">Shortcut Keyboard</span>
+              <button onClick={() => setKbdModalOpen(false)} className="text-xl font-pmn-mono text-pmn-mute hover:text-pmn-acc cursor-pointer">&times;</button>
             </div>
             
-            <div className="space-y-4 font-mono text-[0.72rem] text-[var(--ink2)]">
-              <div className="flex justify-between border-b border-[var(--rule)] pb-2">
+            <div className="space-y-4 font-pmn-mono text-[0.72rem] text-pmn-ink2">
+              <div className="flex justify-between border-b border-pmn-rule pb-2">
                 <span>Kembali ke Beranda</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">C</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">C</span>
               </div>
-              <div className="flex justify-between border-b border-[var(--rule)] pb-2">
+              <div className="flex justify-between border-b border-pmn-rule pb-2">
                 <span>Buka Panduan Agen AI</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">A</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">A</span>
               </div>
-              <div className="flex justify-between border-b border-[var(--rule)] pb-2">
+              <div className="flex justify-between border-b border-pmn-rule pb-2">
                 <span>Daftar Sorotan & Catatan</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">N</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">N</span>
               </div>
-              <div className="flex justify-between border-b border-[var(--rule)] pb-2">
+              <div className="flex justify-between border-b border-pmn-rule pb-2">
                 <span>Pencarian / Command Palette</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">/</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">/</span>
               </div>
-              <div className="flex justify-between border-b border-[var(--rule)] pb-2">
+              <div className="flex justify-between border-b border-pmn-rule pb-2">
                 <span>Menu Bantuan Shortcuts</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">K</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">K</span>
               </div>
-              <div className="flex justify-between border-b border-[var(--rule)] pb-2">
+              <div className="flex justify-between border-b border-pmn-rule pb-2">
                 <span>Bab Selanjutnya</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">&rarr; / &darr;</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">&rarr; / &darr;</span>
               </div>
-              <div className="flex justify-between border-b border-[var(--rule)] pb-2">
+              <div className="flex justify-between border-b border-pmn-rule pb-2">
                 <span>Bab Sebelumnya</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">&larr; / &uarr;</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">&larr; / &uarr;</span>
               </div>
-              <div className="flex justify-between border-b border-[var(--rule)] pb-2">
+              <div className="flex justify-between border-b border-pmn-rule pb-2">
                 <span>Simpan Catatan Bab</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">Ctrl + S</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">Ctrl + S</span>
               </div>
               <div className="flex justify-between">
                 <span>Tutup Jendela Modal</span>
-                <span className="bg-[var(--bg2)] px-2 py-0.5 border border-[var(--rule2)] rounded-xs">Esc</span>
+                <span className="bg-pmn-bg2 px-2 py-0.5 border border-pmn-rule2 rounded-xs">Esc</span>
               </div>
             </div>
 
-            <div className="text-center font-serif italic text-xs text-[var(--mute2)] leading-relaxed">
+            <div className="text-center font-pmn-body italic text-xs text-pmn-mute leading-relaxed">
               * Tips: Anda juga dapat menyeleksi kata apa saja di dalam tulisan untuk memunculkan kartu kamus istilah (glossary).
             </div>
           </div>
@@ -1269,23 +1269,23 @@ export default function ReaderView({
         } catch(e) {}
         
         return (
-          <div className="fixed bottom-6 right-6 max-w-[340px] bg-[var(--bg2)] border border-[var(--acc)] p-5 shadow-2xl z-[400] flex flex-col gap-3 font-serif">
+          <div className="fixed bottom-6 right-6 max-w-[340px] bg-pmn-bg2 border border-pmn-acc p-5 shadow-2xl z-[400] flex flex-col gap-3 font-pmn-body">
             <div className="flex justify-between items-baseline select-none">
-              <span className="font-mono text-[0.58rem] text-[var(--acc)] tracking-widest uppercase">🧭 Petunjuk Orientasi</span>
+              <span className="font-pmn-mono text-[0.58rem] text-pmn-acc tracking-widest uppercase">🧭 Petunjuk Orientasi</span>
               <button 
                 onClick={() => {
                   try { localStorage.setItem('pmn-welcome-dismissed', 'true') } catch (e) {}
                   // Trigger simple local state updates to re-evaluate
                   onSavePosition(partIdx, secIdx)
                 }} 
-                className="font-mono text-xs text-[var(--mute)] hover:text-[var(--acc)] cursor-pointer"
+                className="font-pmn-mono text-xs text-pmn-mute hover:text-pmn-acc cursor-pointer"
               >
                 &times;
               </button>
             </div>
-            <h4 className="font-serif font-bold text-sm text-[var(--ink)] leading-snug">Selamat datang di Pembaca Interaktif PMN</h4>
-            <p className="text-xs leading-relaxed text-[var(--mute)]">
-              Gunakan pintasan keyboard <span className="font-mono bg-[var(--bg)] border border-[var(--rule)] px-1 py-0.2 rounded-xs">K</span> untuk melihat cara navigasi cepat, dan sorot kalimat penting untuk menambahkan catatan atau referensi Anda.
+            <h4 className="font-pmn-head font-bold text-sm text-pmn-ink leading-snug">Selamat datang di Pembaca Interaktif PMN</h4>
+            <p className="text-xs leading-relaxed text-pmn-mute">
+              Gunakan pintasan keyboard <span className="font-pmn-mono bg-pmn-bg border border-pmn-rule px-1 py-0.2 rounded-xs">K</span> untuk melihat cara navigasi cepat, dan sorot kalimat penting untuk menambahkan catatan atau referensi Anda.
             </p>
           </div>
         )
@@ -1297,6 +1297,12 @@ export default function ReaderView({
         onSelectSection={(pIdx, sIdx) => onSavePosition(pIdx, sIdx)}
         isOpen={commandPaletteOpen}
         onClose={() => setCommandPaletteOpen(false)}
+      />
+
+    </div>
+  )
+}
+(false)}
       />
 
     </div>

@@ -63,8 +63,9 @@ export default function ParticlesBackground() {
 
       draw(index: number) {
         const dark = isDark()
-        const col = dark ? 'rgba(192,39,26,0.85)' : 'rgba(184,58,27,0.7)'
-        const glow = dark ? 'rgba(239,68,68,0.7)' : 'rgba(220,38,38,0.5)'
+        // PMN Red Accents: #c0271a (Dark) vs #b83a1b (Light)
+        const col = dark ? 'rgba(192, 39, 26, 0.9)' : 'rgba(184, 58, 27, 0.75)'
+        const glow = dark ? 'rgba(192, 39, 26, 0.6)' : 'rgba(184, 58, 27, 0.4)'
 
         // Size breathing effect
         let currentSize = this.size + Math.sin(Date.now() * 0.0016 + this.sizeSeed) * 0.35
@@ -73,7 +74,7 @@ export default function ParticlesBackground() {
         ctx.save()
         ctx.fillStyle = col
         ctx.beginPath()
-        ctx.shadowBlur = dark ? 6 : 4
+        ctx.shadowBlur = dark ? 8 : 4
         ctx.shadowColor = glow
         ctx.arc(this.x, this.y, currentSize * 0.6, 0, Math.PI * 2)
         ctx.fill()
@@ -86,9 +87,9 @@ export default function ParticlesBackground() {
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < mouse.radius * 0.85) {
             ctx.save()
-            ctx.globalAlpha = (1 - dist / (mouse.radius * 0.85)) * 0.35
-            ctx.strokeStyle = dark ? 'rgba(239,68,68,0.45)' : 'rgba(184,58,27,0.35)'
-            ctx.lineWidth = 0.75
+            ctx.globalAlpha = (1 - dist / (mouse.radius * 0.85)) * 0.4
+            ctx.strokeStyle = dark ? 'rgba(192, 39, 26, 0.5)' : 'rgba(184, 58, 27, 0.35)'
+            ctx.lineWidth = 0.8
             ctx.beginPath()
             ctx.moveTo(this.x, this.y)
             ctx.lineTo(mouse.x, mouse.y)
@@ -105,9 +106,9 @@ export default function ParticlesBackground() {
           const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2)
           if (dist2 < 82) {
             ctx.save()
-            ctx.globalAlpha = (1 - dist2 / 82) * (dark ? 0.22 : 0.16)
-            ctx.strokeStyle = dark ? 'rgba(192,39,26,0.35)' : 'rgba(184,58,27,0.22)'
-            ctx.lineWidth = 0.55
+            ctx.globalAlpha = (1 - dist2 / 82) * (dark ? 0.25 : 0.18)
+            ctx.strokeStyle = dark ? 'rgba(192, 39, 26, 0.4)' : 'rgba(184, 58, 27, 0.25)'
+            ctx.lineWidth = 0.6
             ctx.beginPath()
             ctx.moveTo(this.x, this.y)
             ctx.lineTo(p2.x, p2.y)

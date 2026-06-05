@@ -1,9 +1,48 @@
 @import "tailwindcss";
 
-/* Preservasi visual retro/vintage */
+@theme {
+  /* PMN Brand Colors (Extracted from style.css) */
+  --color-pmn-bg: var(--bg);
+  --color-pmn-bg2: var(--bg2);
+  --color-pmn-bg3: var(--bg3);
+  --color-pmn-ink: var(--ink);
+  --color-pmn-ink2: var(--ink2);
+  --color-pmn-acc: var(--acc);
+  --color-pmn-acc2: var(--acc2);
+  --color-pmn-mute: var(--mute);
+  --color-pmn-rule: var(--rule);
+  --color-pmn-rule2: var(--rule2);
+
+  /* Fonts */
+  --font-pmn-head: 'Libre Baskerville', serif;
+  --font-pmn-body: 'Lora', serif;
+  --font-pmn-mono: 'Source Code Pro', monospace;
+}
+
+/* 
+   Legacy variable definitions for base functionality.
+   Tailwind v4 theme will map to these variables.
+*/
+:root {
+  --bg: #fdfbf7; --bg2: #f7f3eb; --bg3: #eee6d8;
+  --sb: #f5efe4; --ink: #1c1510; --ink2: #4a3a2d;
+  --acc: #b83a1b; --acc2: #8f2812; --mute: #756456; --mute2: #605043; --mute3: #8c7b6c;
+  --rule: #e8dcc4; --rule2: #dbcaa6;
+  --hdr: #f7f3eb;
+}
+
+[data-theme=dark] {
+  --bg: #0d0d0d; --bg2: #171717; --bg3: #1f1f1f;
+  --sb: #141414; --ink: #f5f0e8; --ink2: #c8bfb2;
+  --acc: #c0271a; --acc2: #961f14; --mute: #8a7d6e; --mute2: #7c7064; --mute3: #3a3530;
+  --rule: #302b27; --rule2: #3d3730;
+  --hdr: #0d0d0d;
+}
+
+/* Preservasi visual retro/vintage (Temporary bridge) */
+/* We will eventually move these to Tailwind components */
 @import "../style.css";
 
-/* Tambahan custom rules jika dibutuhkan di React */
 #root {
   min-height: 100vh;
   display: flex;

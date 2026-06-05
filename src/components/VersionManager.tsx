@@ -160,41 +160,41 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
   }
 
   return (
-    <div className="relative z-10 min-h-screen bg-[var(--bg)]">
+    <div className="relative z-10 min-h-screen bg-pmn-bg font-pmn-body">
       {/* Top Admin Navigation */}
-      <div className="bg-[var(--sb)] border-b border-[var(--rule)] flex justify-between items-center px-8 py-3.5">
+      <div className="bg-pmn-bg2 border-b border-pmn-rule flex justify-between items-center px-8 py-4">
         <div className="flex items-center gap-6">
-          <span className="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-[var(--acc)]">PMN Admin Panel</span>
+          <span className="font-pmn-mono text-[0.65rem] tracking-[0.2em] uppercase text-pmn-acc font-bold">PMN Admin Panel</span>
           {view !== 'list' && (
-            <button onClick={() => { setView('list'); setTarget(null) }} className="font-mono text-[0.6rem] text-[var(--mute)] uppercase tracking-wider hover:text-[var(--acc)] cursor-pointer">
+            <button onClick={() => { setView('list'); setTarget(null) }} className="font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-wider hover:text-pmn-acc cursor-pointer">
               ← Daftar Versi
             </button>
           )}
         </div>
-        <button onClick={handleLogout} className="font-mono text-[0.6rem] text-[var(--mute)] uppercase tracking-[0.14em] hover:text-[var(--acc)] cursor-pointer">
+        <button onClick={handleLogout} className="font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-[0.14em] hover:text-pmn-acc cursor-pointer">
           Keluar →
         </button>
       </div>
 
-      <div className="max-w-[720px] mx-auto py-12 px-6">
+      <div className="max-w-[720px] mx-auto py-16 px-6">
         {toast && (
-          <div className="bg-[#1a2e1a] border border-[#2d6a4f] text-[#6fcf97] font-mono text-[0.68rem] p-3 mb-6">
+          <div className="bg-green-950/20 border border-green-900/50 text-green-400 font-pmn-mono text-[0.68rem] p-4 mb-8 shadow-sm">
             {toast}
           </div>
         )}
 
         {view === 'list' && (
           <>
-            <div className="flex justify-between items-center flex-wrap gap-4 mb-8">
-              <span className="font-mono text-xs uppercase tracking-wider text-[var(--mute2)]">Semua Versi ({versions.length})</span>
-              <div className="flex gap-2 flex-wrap">
-                <button onClick={handleImportClick} className="font-mono text-[0.66rem] border border-[var(--rule)] px-3 py-1.5 hover:text-[var(--acc)] cursor-pointer">
+            <div className="flex justify-between items-center flex-wrap gap-4 mb-10">
+              <span className="font-pmn-mono text-xs uppercase tracking-widest text-pmn-mute font-bold">Semua Versi ({versions.length})</span>
+              <div className="flex gap-2.5 flex-wrap">
+                <button onClick={handleImportClick} className="font-pmn-mono text-[0.66rem] border border-pmn-rule px-3 py-2 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all bg-pmn-bg2">
                   Import Backup
                 </button>
-                <button onClick={handleExport} className="font-mono text-[0.66rem] border border-[var(--rule)] px-3 py-1.5 hover:text-[var(--acc)] cursor-pointer">
+                <button onClick={handleExport} className="font-pmn-mono text-[0.66rem] border border-pmn-rule px-3 py-2 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all bg-pmn-bg2">
                   Export JSON
                 </button>
-                <button onClick={() => { setTarget(null); setView('add') }} className="font-mono text-[0.66rem] bg-[var(--acc)] text-white dark:text-black px-4 py-1.5 tracking-wider hover:opacity-75 cursor-pointer">
+                <button onClick={() => { setTarget(null); setView('add') }} className="font-pmn-mono text-[0.66rem] bg-pmn-acc text-white dark:text-black px-5 py-2 tracking-widest font-bold hover:opacity-85 shadow-lg cursor-pointer transition-all">
                   + Versi Baru
                 </button>
                 <input ref={fileRef} type="file" accept="application/json" onChange={handleImportFile} className="hidden" />
@@ -202,27 +202,27 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
             </div>
 
             {versions.length === 0 ? (
-              <div className="border border-dashed border-[var(--rule)] p-10 text-center font-serif italic text-[var(--mute)]">
+              <div className="border border-dashed border-pmn-rule p-16 text-center font-pmn-body italic text-pmn-mute bg-pmn-bg2/30 rounded-sm">
                 Belum ada versi rilis yang terdaftar. Klik '+ Versi Baru' untuk menambahkan.
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {versions.map((v, i) => (
-                  <div key={v.id} className={`border border-[var(--rule)] bg-[var(--bg2)] p-6 relative ${i === 0 ? 'border-left-2 border-l-[var(--acc)]' : ''}`}>
-                    <div className="flex justify-between items-start gap-4 flex-wrap">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <span className="font-serif text-lg font-bold text-[var(--ink)] dark:text-white">PMN v{v.version}</span>
-                          {i === 0 && <span className="bg-[#c9a84c22] text-[#c9a84c] border border-[#c9a84c44] font-mono text-[0.58rem] px-2 py-0.5 uppercase">TERKINI</span>}
-                          <span className="font-mono text-[0.63rem] text-[var(--mute)]">{fmtDate(v.date)}</span>
+                  <div key={v.id} className={`border border-pmn-rule bg-pmn-bg2 p-8 relative shadow-sm transition-all hover:border-pmn-mute ${i === 0 ? 'border-l-4 border-l-pmn-acc' : ''}`}>
+                    <div className="flex justify-between items-start gap-6 flex-wrap">
+                      <div className="space-y-3 flex-1 min-w-[280px]">
+                        <div className="flex items-center gap-4 flex-wrap">
+                          <span className="font-pmn-head text-xl font-bold text-pmn-ink">PMN v{v.version}</span>
+                          {i === 0 && <span className="bg-pmn-acc/10 text-pmn-acc border border-pmn-acc/30 font-pmn-mono text-[0.58rem] px-2 py-0.5 uppercase tracking-widest font-bold">TERKINI</span>}
+                          <span className="font-pmn-mono text-[0.63rem] text-pmn-mute opacity-60 font-bold">{fmtDate(v.date)}</span>
                         </div>
-                        {v.subtitle && <p className="font-serif italic text-sm text-[var(--mute)]">{v.subtitle}</p>}
-                        <p className="font-serif text-sm text-[var(--mute)] leading-relaxed">{v.summary}</p>
-                        {v.pdfUrl && <p className="font-mono text-[0.6rem] text-[var(--mute)] break-all">↗ {v.pdfUrl}</p>}
+                        {v.subtitle && <p className="font-pmn-body italic text-[0.92rem] text-pmn-mute/80">{v.subtitle}</p>}
+                        <p className="font-pmn-body text-[0.88rem] text-pmn-ink opacity-80 leading-relaxed line-clamp-3">{v.summary}</p>
+                        {v.pdfUrl && <p className="font-pmn-mono text-[0.6rem] text-pmn-acc opacity-70 break-all border border-pmn-acc/20 inline-block px-2 py-1 bg-pmn-acc/5">↗ {v.pdfUrl}</p>}
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => { setTarget(v); setView('edit') }} className="font-mono text-[0.66rem] border border-[var(--rule)] px-3 py-1 hover:text-[var(--acc)] cursor-pointer">Edit</button>
-                        <button onClick={() => handleDelete(v.id)} className="font-mono text-[0.66rem] bg-[#2a0e0e] text-[#e57373] px-3 py-1 cursor-pointer">Hapus</button>
+                        <button onClick={() => { setTarget(v); setView('edit') }} className="font-pmn-mono text-[0.62rem] border border-pmn-rule px-3 py-1.5 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-colors bg-pmn-bg font-bold uppercase tracking-wider">Edit</button>
+                        <button onClick={() => handleDelete(v.id)} className="font-pmn-mono text-[0.62rem] bg-red-950/20 text-red-400 border border-red-900/50 px-3 py-1.5 cursor-pointer hover:bg-red-900/40 transition-colors font-bold uppercase tracking-wider">Hapus</button>
                       </div>
                     </div>
                   </div>
@@ -231,21 +231,21 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
             )}
 
             {/* Audit Logs */}
-            <section className="mt-12 border-t border-[var(--rule)] pt-8">
-              <span className="block font-mono text-[0.65rem] uppercase tracking-wider text-[var(--mute2)] mb-4">Aktivitas Lokal Terakhir</span>
-              <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+            <section className="mt-20 border-t border-pmn-rule pt-10">
+              <span className="block font-pmn-mono text-[0.65rem] uppercase tracking-[0.2em] text-pmn-mute font-bold mb-6">Aktivitas Lokal Terakhir</span>
+              <div className="space-y-3 max-h-[350px] overflow-y-auto pr-3 custom-scrollbar">
                 {auditEntries.length > 0 ? auditEntries.map(entry => (
-                  <div key={entry.id} className="border border-[var(--rule)] bg-[var(--bg2)] p-4 text-xs font-serif leading-relaxed">
-                    <div className="flex justify-between gap-4 font-mono text-[0.6rem] uppercase tracking-wider text-[var(--mute2)] mb-1">
-                      <strong>{entry.action}</strong>
-                      <span>{fmtDate(entry.at)}</span>
+                  <div key={entry.id} className="border border-pmn-rule bg-pmn-bg2/50 p-5 text-xs font-pmn-body leading-relaxed shadow-xs">
+                    <div className="flex justify-between gap-4 font-pmn-mono text-[0.58rem] uppercase tracking-widest text-pmn-mute font-bold mb-2">
+                      <strong className="text-pmn-acc">{entry.action}</strong>
+                      <span className="opacity-50">{fmtDate(entry.at)}</span>
                     </div>
-                    <p className="text-[var(--ink)] dark:text-gray-300">{entry.details}</p>
-                    <span className="block font-mono text-[0.55rem] text-[var(--mute)] mt-1">Oleh: {entry.actor}</span>
+                    <p className="text-pmn-ink opacity-90">{entry.details}</p>
+                    <span className="block font-pmn-mono text-[0.52rem] text-pmn-mute mt-2 uppercase tracking-tighter opacity-40">Oleh: {entry.actor}</span>
                   </div>
                 )) : (
-                  <div className="border border-dashed border-[var(--rule)] p-4 text-center font-mono text-xs text-[var(--mute)]">
-                    Belum ada aktivitas yang tercatat.
+                  <div className="border border-dashed border-pmn-rule p-6 text-center font-pmn-mono text-[0.65rem] text-pmn-mute/50 uppercase tracking-widest">
+                    Belum ada aktivitas yang tercatat dalam log audit.
                   </div>
                 )}
               </div>
@@ -302,49 +302,49 @@ function VersionForm({ initial, onSave, onCancel }: VersionFormProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <span className="block font-mono text-[0.65rem] uppercase tracking-wider text-[var(--mute2)] mb-2">
-        {initial ? `Edit PMN v${initial.version}` : 'Publikasikan Versi Baru'}
+    <div className="space-y-6 animate-fade-in">
+      <span className="block font-pmn-mono text-[0.7rem] uppercase tracking-[0.2em] text-pmn-acc font-bold mb-4">
+        {initial ? `⚙️ Edit Manuskrip v${initial.version}` : '📡 Publikasikan Versi Baru'}
       </span>
       
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block font-mono text-[0.58rem] uppercase text-[var(--mute)] mb-1">Nomor Versi</label>
-          <input className="w-full bg-[#0d0d0d] border border-[var(--rule)] text-[var(--ink)] font-serif p-2.5 outline-none focus:border-[var(--acc)]" placeholder="contoh: 117.6" value={ver} onChange={e => { setVer(e.target.value); setErr('') }} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Nomor Versi</label>
+          <input className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-3 outline-none focus:border-pmn-acc shadow-xs transition-colors" placeholder="contoh: 117.6" value={ver} onChange={e => { setVer(e.target.value); setErr('') }} />
         </div>
-        <div>
-          <label className="block font-mono text-[0.58rem] uppercase text-[var(--mute)] mb-1">Tanggal Rilis</label>
-          <input className="w-full bg-[#0d0d0d] border border-[var(--rule)] text-[var(--ink)] font-serif p-2.5 outline-none focus:border-[var(--acc)] dark:color-scheme-dark" type="date" value={date} onChange={e => setDate(e.target.value)} />
+        <div className="space-y-2">
+          <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Tanggal Rilis</label>
+          <input className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-3 outline-none focus:border-pmn-acc shadow-xs transition-colors color-scheme-dark" type="date" value={date} onChange={e => setDate(e.target.value)} />
         </div>
       </div>
 
-      <div>
-        <label className="block font-mono text-[0.58rem] uppercase text-[var(--mute)] mb-1">Subjudul (Opsional)</label>
-        <input className="w-full bg-[#0d0d0d] border border-[var(--rule)] text-[var(--ink)] font-serif p-2.5 outline-none focus:border-[var(--acc)]" placeholder="A Framework for Navigating Material Reality" value={sub} onChange={e => setSub(e.target.value)} />
+      <div className="space-y-2">
+        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Subjudul (Opsional)</label>
+        <input className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-3 outline-none focus:border-pmn-acc shadow-xs transition-colors" placeholder="A Framework for Navigating Material Reality" value={sub} onChange={e => setSub(e.target.value)} />
       </div>
 
-      <div>
-        <label className="block font-mono text-[0.58rem] uppercase text-[var(--mute)] mb-1">Ringkasan Singkat</label>
-        <textarea className="w-full bg-[#0d0d0d] border border-[var(--rule)] text-[var(--ink)] font-serif p-2.5 outline-none focus:border-[var(--acc)] min-height-[90px] resize-y" placeholder="Deskripsikan inti perubahan di rilis ini..." value={sum} onChange={e => { setSum(e.target.value); setErr('') }} />
+      <div className="space-y-2">
+        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Ringkasan Singkat</label>
+        <textarea className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-4 outline-none focus:border-pmn-acc shadow-xs transition-colors min-h-[100px] resize-y" placeholder="Deskripsikan inti perubahan di rilis ini..." value={sum} onChange={e => { setSum(e.target.value); setErr('') }} />
       </div>
 
-      <div>
-        <label className="block font-mono text-[0.58rem] uppercase text-[var(--mute)] mb-1">Detail Changelog (Opsional)</label>
-        <textarea className="w-full bg-[#0d0d0d] border border-[var(--rule)] text-[var(--ink)] font-serif p-2.5 outline-none focus:border-[var(--acc)] min-height-[130px] resize-y" placeholder="- Penambahan Subbab X&#10;- Koreksi istilah Y..." value={log} onChange={e => setLog(e.target.value)} />
+      <div className="space-y-2">
+        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Detail Changelog (Opsional)</label>
+        <textarea className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-4 outline-none focus:border-pmn-acc shadow-xs transition-colors min-h-[140px] resize-y" placeholder="- Penambahan Subbab X&#10;- Koreksi istilah Y..." value={log} onChange={e => setLog(e.target.value)} />
       </div>
 
-      <div>
-        <label className="block font-mono text-[0.58rem] uppercase text-[var(--mute)] mb-1">URL PDF (Download Link)</label>
-        <input className="w-full bg-[#0d0d0d] border border-[var(--rule)] text-[var(--ink)] font-serif p-2.5 outline-none focus:border-[var(--acc)]" placeholder="https://drive.google.com/file/d/..." value={pdf} onChange={e => setPdf(e.target.value)} />
+      <div className="space-y-2">
+        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">URL PDF (Download Link)</label>
+        <input className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-mono text-[0.8rem] p-3 outline-none focus:border-pmn-acc shadow-xs transition-colors" placeholder="https://drive.google.com/file/d/..." value={pdf} onChange={e => setPdf(e.target.value)} />
       </div>
 
-      {err && <p className="text-[#c0392b] font-mono text-[0.68rem]">{err}</p>}
+      {err && <p className="text-pmn-acc font-pmn-mono text-[0.68rem] animate-pulse">⚠️ {err}</p>}
 
-      <div className="flex gap-2 pt-2">
-        <button onClick={submit} className="bg-[var(--acc)] text-white dark:text-black font-mono text-[0.72rem] font-bold uppercase px-4 py-2 tracking-widest hover:opacity-75 cursor-pointer">
+      <div className="flex gap-4 pt-6">
+        <button onClick={submit} className="bg-pmn-acc text-white dark:text-black font-pmn-mono text-[0.72rem] font-bold uppercase px-8 py-3 tracking-[0.15em] shadow-lg hover:translate-y-[-1px] active:translate-y-[1px] cursor-pointer transition-all">
           {initial ? 'Simpan Perubahan' : 'Publikasikan'}
         </button>
-        <button onClick={onCancel} className="border border-[var(--rule)] text-[var(--mute)] font-mono text-[0.72rem] uppercase px-4 py-2 hover:text-[var(--acc)] cursor-pointer">
+        <button onClick={onCancel} className="border border-pmn-rule text-pmn-mute font-pmn-mono text-[0.72rem] font-bold uppercase px-6 py-3 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all">
           Batal
         </button>
       </div>
