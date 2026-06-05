@@ -284,40 +284,40 @@ export default function ContentsView({
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
 
   return (
-    <div className="relative z-10 flex-1 flex flex-col min-h-screen">
+    <div className="relative z-10 flex-1 flex flex-col min-h-screen bg-pmn-bg">
       
       {/* HEADER BAR */}
-      <header className="sticky top-0 bg-[var(--hdr)] border-b border-[var(--rule)] h-[52px] px-6 flex items-center justify-between z-[100] select-none">
+      <header className="sticky top-0 bg-pmn-bg border-b border-pmn-rule h-[52px] px-6 flex items-center justify-between z-[100] select-none">
         <div className="flex items-center gap-4 flex-1">
-          <button onClick={onBackHome} className="font-serif font-bold text-[1.05rem] text-[var(--acc)] tracking-[0.04em] hover:opacity-75 cursor-pointer">
+          <button onClick={onBackHome} className="font-pmn-head font-bold text-[1.05rem] text-pmn-acc tracking-[0.04em] hover:opacity-75 cursor-pointer">
             PMN
           </button>
           
           {/* Top Search bar */}
-          <div className="relative flex items-center bg-[var(--surface)] border border-[var(--rule)] rounded-xs px-2.5 py-1 w-full max-w-[340px]">
-            <span className="font-mono text-xs text-[var(--mute2)] mr-2">&#8981;</span>
+          <div className="relative flex items-center bg-pmn-bg2 border border-pmn-rule rounded-xs px-2.5 py-1 w-full max-w-[340px]">
+            <span className="font-pmn-mono text-xs text-pmn-mute mr-2">&#8981;</span>
             <input 
               ref={searchInputRef}
               type="text" 
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="Cari kata kunci atau nomor bab..." 
-              className="bg-transparent border-none outline-none font-mono text-[0.72rem] text-[var(--ink)] placeholder-[var(--mute3)] w-full"
+              className="bg-transparent border-none outline-none font-pmn-mono text-[0.72rem] text-pmn-ink placeholder-pmn-mute/50 w-full"
             />
             {searchQuery && (
-              <button onClick={handleClearSearch} className="text-xs text-[var(--mute)] hover:text-[var(--acc)] px-1 cursor-pointer">&times;</button>
+              <button onClick={handleClearSearch} className="text-xs text-pmn-mute hover:text-pmn-acc px-1 cursor-pointer">&times;</button>
             )}
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <button onClick={() => setActiveTab('toc')} className={`font-mono text-[0.66rem] uppercase tracking-wider px-3 py-1 cursor-pointer transition-colors ${activeTab === 'toc' ? 'bg-[var(--acc)] text-white dark:text-black font-bold' : 'text-[var(--mute)] hover:text-[var(--ink)]'}`}>
+          <button onClick={() => setActiveTab('toc')} className={`font-pmn-mono text-[0.66rem] uppercase tracking-wider px-3 py-1 cursor-pointer transition-colors ${activeTab === 'toc' ? 'bg-pmn-acc text-white dark:text-black font-bold' : 'text-pmn-mute hover:text-pmn-ink'}`}>
             Daftar Isi
           </button>
-          <button onClick={() => setActiveTab('glossary')} className={`font-mono text-[0.66rem] uppercase tracking-wider px-3 py-1 cursor-pointer transition-colors ${activeTab === 'glossary' ? 'bg-[var(--acc)] text-white dark:text-black font-bold' : 'text-[var(--mute)] hover:text-[var(--ink)]'}`}>
+          <button onClick={() => setActiveTab('glossary')} className={`font-pmn-mono text-[0.66rem] uppercase tracking-wider px-3 py-1 cursor-pointer transition-colors ${activeTab === 'glossary' ? 'bg-pmn-acc text-white dark:text-black font-bold' : 'text-pmn-mute hover:text-pmn-ink'}`}>
             Glossary
           </button>
-          <button onClick={onToggleTheme} className="font-mono text-[0.65rem] border border-[var(--rule2)] px-2.5 py-1 text-[var(--mute)] hover:text-[var(--acc)] cursor-pointer">
+          <button onClick={onToggleTheme} className="font-pmn-mono text-[0.65rem] border border-pmn-rule2 px-2.5 py-1 text-pmn-mute hover:text-pmn-acc cursor-pointer">
             {theme === 'dark' ? '☀ LIGHT' : '☾ DARK'}
           </button>
         </div>
@@ -328,20 +328,20 @@ export default function ContentsView({
         
         {/* ROTATING QUOTES STRIP */}
         {data.quotes && data.quotes.length > 0 && (
-          <div id="quote-strip" className={`border border-[var(--rule)] bg-[var(--bg2)] p-4 relative transition-all duration-300 ${quotesCollapsed ? 'h-[42px] overflow-hidden' : ''}`}>
-            <div id="quote-strip-hdr" className="flex justify-between items-center border-b border-[var(--rule)] pb-2 mb-2 select-none">
-              <span id="quote-strip-lbl" className="font-mono text-[0.58rem] text-[var(--acc)] uppercase tracking-widest">— PMN AXIOM SHIELD —</span>
-              <button onClick={toggleQuotes} className="font-mono text-xs text-[var(--mute)] hover:text-[var(--acc)] px-2 cursor-pointer">
+          <div id="quote-strip" className={`border border-pmn-rule bg-pmn-bg2 p-4 relative transition-all duration-300 ${quotesCollapsed ? 'h-[42px] overflow-hidden' : ''}`}>
+            <div id="quote-strip-hdr" className="flex justify-between items-center border-b border-pmn-rule pb-2 mb-2 select-none">
+              <span id="quote-strip-lbl" className="font-pmn-mono text-[0.58rem] text-pmn-acc uppercase tracking-widest">— PMN AXIOM SHIELD —</span>
+              <button onClick={toggleQuotes} className="font-pmn-mono text-xs text-pmn-mute hover:text-pmn-acc px-2 cursor-pointer">
                 {quotesCollapsed ? '+' : '−'}
               </button>
             </div>
             {!quotesCollapsed && (
               <div id="quote-inner" className="space-y-2 py-2">
-                <blockquote id="quote-body" className="font-serif italic text-sm text-[var(--ink)] leading-relaxed transition-opacity duration-500">
+                <blockquote id="quote-body" className="font-pmn-body italic text-sm text-pmn-ink leading-relaxed transition-opacity duration-500">
                   &ldquo;{data.quotes[currentQuoteIdx]?.body || data.quotes[currentQuoteIdx]}&rdquo;
                 </blockquote>
                 {data.quotes[currentQuoteIdx]?.title && (
-                  <cite id="quote-title" className="block font-mono text-[0.6rem] text-[var(--mute2)] text-right not-italic uppercase tracking-wider">
+                  <cite id="quote-title" className="block font-pmn-mono text-[0.6rem] text-pmn-mute text-right not-italic uppercase tracking-wider">
                     — {data.quotes[currentQuoteIdx].title}
                   </cite>
                 )}
@@ -350,7 +350,7 @@ export default function ContentsView({
                     <button 
                       key={i} 
                       onClick={() => setCurrentQuoteIdx(i)}
-                      className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${i === currentQuoteIdx ? 'bg-[var(--acc)] scale-125' : 'bg-[var(--rule)]'}`}
+                      className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${i === currentQuoteIdx ? 'bg-pmn-acc scale-125' : 'bg-pmn-rule'}`}
                     />
                   ))}
                 </div>
@@ -360,8 +360,8 @@ export default function ContentsView({
         )}
 
         {/* BREADCRUMB HEADER */}
-        <div className="flex justify-between items-baseline border-b border-[var(--rule)] pb-4 flex-wrap gap-4 select-none">
-          <h2 className="font-serif text-2xl font-bold text-[var(--ink)]">
+        <div className="flex justify-between items-baseline border-b border-pmn-rule pb-4 flex-wrap gap-4 select-none">
+          <h2 className="font-pmn-head text-2xl font-bold text-pmn-ink">
             {activeTab === 'toc' && 'Daftar Isi — Peta Manuskrip'}
             {activeTab === 'glossary' && 'Lexicon — Istilah Kunci'}
             {activeTab === 'search' && `Pencarian: "${searchQuery}"`}
@@ -370,16 +370,16 @@ export default function ContentsView({
           <div className="flex items-center gap-4 flex-wrap">
             {/* Scale adjustment */}
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[0.58rem] text-[var(--mute2)] uppercase">Skala Teks</span>
-              <div className="font-controls flex border border-[var(--rule)]">
-                <button onClick={() => setContentsScaleValue(0.94)} className={`font-mono text-[0.68rem] px-2 py-0.5 border-r border-[var(--rule)] cursor-pointer hover:bg-[rgba(201,168,76,0.05)] ${contentsScale === 0.94 ? 'bg-[var(--acc)] text-white dark:text-black font-bold' : 'text-[var(--mute)]'}`}>A-</button>
-                <button onClick={() => setContentsScaleValue(1)} className={`font-mono text-[0.68rem] px-2.5 py-0.5 border-r border-[var(--rule)] cursor-pointer hover:bg-[rgba(201,168,76,0.05)] ${contentsScale === 1 ? 'bg-[var(--acc)] text-white dark:text-black font-bold' : 'text-[var(--mute)]'}`}>A</button>
-                <button onClick={() => setContentsScaleValue(1.1)} className={`font-mono text-[0.68rem] px-2 py-0.5 cursor-pointer hover:bg-[rgba(201,168,76,0.05)] ${contentsScale === 1.1 ? 'bg-[var(--acc)] text-white dark:text-black font-bold' : 'text-[var(--mute)]'}`}>A+</button>
+              <span className="font-pmn-mono text-[0.58rem] text-pmn-mute uppercase">Skala Teks</span>
+              <div className="font-controls flex border border-pmn-rule">
+                <button onClick={() => setContentsScaleValue(0.94)} className={`font-pmn-mono text-[0.68rem] px-2 py-0.5 border-r border-pmn-rule cursor-pointer hover:bg-pmn-acc/5 ${contentsScale === 0.94 ? 'bg-pmn-acc text-white dark:text-black font-bold' : 'text-pmn-mute'}`}>A-</button>
+                <button onClick={() => setContentsScaleValue(1)} className={`font-pmn-mono text-[0.68rem] px-2.5 py-0.5 border-r border-pmn-rule cursor-pointer hover:bg-pmn-acc/5 ${contentsScale === 1 ? 'bg-pmn-acc text-white dark:text-black font-bold' : 'text-pmn-mute'}`}>A</button>
+                <button onClick={() => setContentsScaleValue(1.1)} className={`font-pmn-mono text-[0.68rem] px-2 py-0.5 cursor-pointer hover:bg-pmn-acc/5 ${contentsScale === 1.1 ? 'bg-pmn-acc text-white dark:text-black font-bold' : 'text-pmn-mute'}`}>A+</button>
               </div>
             </div>
             
             {/* Stats */}
-            <div className="flex items-center gap-3 font-mono text-[0.63rem] text-[var(--mute)] bg-[var(--bg2)] border border-[var(--rule)] px-3 py-1">
+            <div className="flex items-center gap-3 font-pmn-mono text-[0.63rem] text-pmn-mute bg-pmn-bg2 border border-pmn-rule px-3 py-1">
               <span>Rilis: <strong>V117.6</strong></span>
               <span>•</span>
               <span>Bab: <strong>{totalSections}</strong></span>
@@ -403,41 +403,41 @@ export default function ContentsView({
               const pSubtext = isSpecial ? '' : p.title
 
               return (
-                <div key={p.part} className="border border-[var(--rule)] bg-[var(--bg2)] p-6 space-y-4 shadow-xs">
+                <div key={p.part} className="border border-pmn-rule bg-pmn-bg2 p-6 space-y-4 shadow-xs">
                   {/* Part Header */}
                   <div className="space-y-1">
-                    <span className="block font-mono text-[0.58rem] text-[var(--acc)] uppercase tracking-wider">{pLabel}</span>
-                    <h3 className="font-serif text-base font-bold text-[var(--ink)]">{pSubtext || p.title}</h3>
+                    <span className="block font-pmn-mono text-[0.58rem] text-pmn-acc uppercase tracking-wider">{pLabel}</span>
+                    <h3 className="font-pmn-head text-base font-bold text-pmn-ink">{pSubtext || p.title}</h3>
                     {totalPartSubs > 1 && (
-                      <div className="flex items-center justify-between font-mono text-[0.55rem] text-[var(--mute2)] tracking-wider pt-2">
+                      <div className="flex items-center justify-between font-pmn-mono text-[0.55rem] text-pmn-mute tracking-wider pt-2">
                         <span>PROGRESS</span>
                         <span>{readPartCount}/{totalPartSubs} ({partPct}%)</span>
                       </div>
                     )}
                     {totalPartSubs > 1 && (
-                      <div className="w-full h-[2px] bg-[var(--rule)] overflow-hidden">
-                        <div className="h-full bg-[var(--acc)]" style={{ width: `${partPct}%` }} />
+                      <div className="w-full h-[2px] bg-pmn-rule overflow-hidden">
+                        <div className="h-full bg-pmn-acc" style={{ width: `${partPct}%` }} />
                       </div>
                     )}
                   </div>
                   
                   {/* Sections List */}
-                  <div className="flex flex-col gap-2 pt-2 border-t border-[var(--rule)]">
+                  <div className="flex flex-col gap-2 pt-2 border-t border-pmn-rule">
                     {subs.map((s, sIdx) => {
                       const isRead = !!readMap[`${pIdx}-${sIdx}`]
                       return (
                         <button
                           key={s.id}
                           onClick={() => onSelectSection(pIdx, sIdx)}
-                          className={`w-full text-left font-serif text-xs py-1.5 flex items-baseline gap-2 transition-colors cursor-pointer ${s.is_intro ? 'italic text-[var(--mute)] hover:text-[var(--acc)]' : 'text-[var(--ink)] hover:text-[var(--acc)]'}`}
+                          className={`w-full text-left font-pmn-body text-xs py-1.5 flex items-baseline gap-2 transition-colors cursor-pointer ${s.is_intro ? 'italic text-pmn-mute hover:text-pmn-acc' : 'text-pmn-ink hover:text-pmn-acc'}`}
                         >
                           {!s.is_intro && (
-                            <span className={`font-mono text-[0.68rem] min-w-[28px] ${isRead ? 'text-[var(--mute2)]' : 'text-[var(--acc)]'}`}>
+                            <span className={`font-pmn-mono text-[0.68rem] min-w-[28px] ${isRead ? 'text-pmn-mute' : 'text-pmn-acc'}`}>
                               {s.id}
                             </span>
                           )}
                           <span className="flex-1 hover:underline truncate">{s.title}</span>
-                          {isRead && <span className="font-mono text-[0.55rem] text-[var(--mute2)]">✓</span>}
+                          {isRead && <span className="font-pmn-mono text-[0.55rem] text-pmn-mute">✓</span>}
                         </button>
                       )
                     })}
@@ -455,7 +455,7 @@ export default function ContentsView({
               const terms = data.glg[groupName] || []
               return (
                 <div key={groupName} className="space-y-4">
-                  <h3 className="font-mono text-[0.65rem] text-[var(--acc)] uppercase tracking-widest border-b border-[var(--rule)] pb-2">{groupName}</h3>
+                  <h3 className="font-pmn-mono text-[0.65rem] text-pmn-acc uppercase tracking-widest border-b border-pmn-rule pb-2">{groupName}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {terms.map((term: string) => {
                       const def = data.gl[term] || ''
@@ -467,10 +467,10 @@ export default function ContentsView({
                         <button
                           key={term}
                           onClick={() => handleGlossaryCardClick(term)}
-                          className="text-left border border-[var(--rule)] bg-[var(--bg2)] p-4 flex flex-col gap-2 cursor-pointer hover:bg-[rgba(201,168,76,0.02)] transition-colors group"
+                          className="text-left border border-pmn-rule bg-pmn-bg2 p-4 flex flex-col gap-2 cursor-pointer hover:bg-pmn-acc/5 transition-colors group"
                         >
-                          <span className="block font-serif text-sm font-bold text-[var(--ink)] group-hover:text-[var(--acc)] transition-colors">{term}</span>
-                          <p className={`font-serif text-xs leading-relaxed text-[var(--mute)] ${empty ? 'italic text-[var(--mute2)]' : ''}`}>
+                          <span className="block font-pmn-head text-sm font-bold text-pmn-ink group-hover:text-pmn-acc transition-colors">{term}</span>
+                          <p className={`font-pmn-body text-xs leading-relaxed text-pmn-mute ${empty ? 'italic text-pmn-mute' : ''}`}>
                             {displayText}
                           </p>
                         </button>
@@ -486,16 +486,16 @@ export default function ContentsView({
         {/* SEARCH RESULTS TAB */}
         {activeTab === 'search' && (
           <div className="space-y-6">
-            <div className="flex justify-between items-center flex-wrap gap-3 pb-3 border-b border-[var(--rule)] select-none">
-              <span className="font-mono text-xs text-[var(--mute)]">
+            <div className="flex justify-between items-center flex-wrap gap-3 pb-3 border-b border-pmn-rule select-none">
+              <span className="font-pmn-mono text-xs text-pmn-mute">
                 Ditemukan <strong>{searchResults.length}</strong> hasil pencarian untuk "{searchQuery}"
               </span>
               <div className="flex items-center gap-2">
-                <span className="font-mono text-[0.58rem] text-[var(--mute2)] uppercase">Filter Part</span>
+                <span className="font-pmn-mono text-[0.58rem] text-pmn-mute uppercase">Filter Part</span>
                 <select 
                   value={partFilter} 
                   onChange={handlePartFilterChange}
-                  className="bg-[var(--bg2)] border border-[var(--rule)] text-[var(--ink)] font-mono text-[0.68rem] p-1.5 outline-none cursor-pointer"
+                  className="bg-pmn-bg2 border border-pmn-rule text-pmn-ink font-pmn-mono text-[0.68rem] p-1.5 outline-none cursor-pointer"
                 >
                   <option value="">Semua Bagian</option>
                   {data.parts.map((p, idx) => (
@@ -506,7 +506,7 @@ export default function ContentsView({
             </div>
 
             {searchResults.length === 0 ? (
-              <div className="border border-dashed border-[var(--rule)] p-12 text-center font-serif italic text-[var(--mute2)]">
+              <div className="border border-dashed border-pmn-rule p-12 text-center font-pmn-body italic text-pmn-mute">
                 Tidak ada hasil pencarian yang cocok. Coba kurangi kata kunci Anda.
               </div>
             ) : (
@@ -515,15 +515,15 @@ export default function ContentsView({
                   <button
                     key={`${result.pi}-${result.si}`}
                     onClick={() => onSelectSection(result.pi, result.si)}
-                    className={`w-full text-left border p-5 bg-[var(--bg2)] hover:bg-[rgba(201,168,76,0.015)] flex flex-col gap-2 transition-colors cursor-pointer ${result.isGlossaryMatch ? 'border-[var(--acc)]' : 'border-[var(--rule)]'}`}
+                    className={`w-full text-left border p-5 bg-pmn-bg2 hover:bg-pmn-acc/5 flex flex-col gap-2 transition-colors cursor-pointer ${result.isGlossaryMatch ? 'border-pmn-acc' : 'border-pmn-rule'}`}
                   >
-                    <div className="flex justify-between items-baseline font-mono text-[0.6rem] text-[var(--mute2)] uppercase tracking-wider">
+                    <div className="flex justify-between items-baseline font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-wider">
                       <span>{pshort(result.p)} &middot; Bab {result.s.id}</span>
-                      {result.isGlossaryMatch && <span className="text-[var(--acc)]">ISTILAH GLOSARIUM</span>}
+                      {result.isGlossaryMatch && <span className="text-pmn-acc">ISTILAH GLOSARIUM</span>}
                     </div>
-                    <h4 className="font-serif text-sm font-bold text-[var(--ink)] hover:text-[var(--acc)]" dangerouslySetInnerHTML={{ __html: highlightQuery(result.s.title) }} />
+                    <h4 className="font-pmn-head text-sm font-bold text-pmn-ink hover:text-pmn-acc" dangerouslySetInnerHTML={{ __html: highlightQuery(result.s.title) }} />
                     {result.snip && (
-                      <p className="font-serif text-xs leading-relaxed text-[var(--mute)]" dangerouslySetInnerHTML={{ __html: result.isGlossaryMatch ? result.snip : highlightQuery(result.snip) }} />
+                      <p className="font-pmn-body text-xs leading-relaxed text-pmn-mute" dangerouslySetInnerHTML={{ __html: result.isGlossaryMatch ? result.snip : highlightQuery(result.snip) }} />
                     )}
                   </button>
                 ))}
@@ -535,7 +535,7 @@ export default function ContentsView({
       </div>
 
       {/* FOOTER */}
-      <footer className="py-8 border-t border-[var(--rule)] text-center text-xs font-mono text-[var(--mute2)] uppercase tracking-widest mt-auto select-none">
+      <footer className="py-8 border-t border-pmn-rule text-center text-xs font-pmn-mono text-pmn-mute uppercase tracking-widest mt-auto select-none bg-pmn-bg">
         Progressive Materialist Naturalism &mdash; V117.6
       </footer>
     </div>
