@@ -12,6 +12,8 @@ interface Part {
   subs: SubSection[]
 }
 
+const SPECIAL: Record<string, number> = { Preface: 1, Coda: 1, 'Intellectual Debts': 1, Bibliography: 1 }
+
 interface SidebarProps {
   parts: Part[]
   readMap: Record<string, boolean>
@@ -63,6 +65,9 @@ export default function Sidebar({ parts, readMap, curPos, onSelectSection, onClo
         {parts.map((p, pIdx) => {
           const isOpen = !!openParts[p.part]
           const isPartActive = curPos[0] === pIdx
+          const isSpecial = SPECIAL[p.part]
+          const pLabel = isSpecial ? p.title : `Part ${p.part}`
+          const pSubtext = isSpecial ? '' : p.title
 
           return (
             <div key={p.part} className="flex flex-col">
@@ -72,8 +77,10 @@ export default function Sidebar({ parts, readMap, curPos, onSelectSection, onClo
                 className={`w-full text-left p-4 flex items-center justify-between cursor-pointer hover:bg-[rgba(173,52,30,0.02)] transition-colors ${isPartActive ? 'bg-[var(--surface)]' : ''}`}
               >
                 <div className="flex-1 pr-2">
-                  <span className="block font-mono text-[0.58rem] text-[var(--acc)] uppercase tracking-wider mb-1">Part {p.part}</span>
-                  <span className="font-serif text-xs font-semibold text-[var(--ink)] dark:text-gray-200 leading-tight">{p.title}</span>
+                  <span className="block font-mono text-[0.58rem] text-[var(--acc)] uppercase tracking-wider mb-1">{pLabel}</span>
+                  {pSubtext && (
+                    <span className="font-serif text-xs font-semibold text-[var(--ink)] dark:text-gray-200 leading-tight">{pSubtext}</span>
+                  )}
                 </div>
                 <span className="font-mono text-xs text-[var(--mute)] transition-transform duration-200" style={{ transform: isOpen ? 'rotate(90deg)' : 'rotate(0)' }}>
                   ›
