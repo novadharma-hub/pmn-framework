@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Preservasi visual retro/vintage */
+@import "../style.css";
+
+/* Tambahan custom rules jika dibutuhkan di React */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

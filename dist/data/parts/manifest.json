@@ -1,0 +1,1268 @@
+[
+  {
+    "part": "Preface",
+    "title": "Preface",
+    "subs": [
+      {
+        "id": "preface",
+        "title": "Preface",
+        "is_intro": true
+      },
+      {
+        "id": "how-to-read-this-document",
+        "title": "How to Read This Document",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "I",
+    "title": "How We Know: The Epistemological Foundation",
+    "subs": [
+      {
+        "id": "1.1",
+        "title": "The Prior Question",
+        "is_intro": false
+      },
+      {
+        "id": "1.2",
+        "title": "The Primary Diagnostic",
+        "is_intro": false
+      },
+      {
+        "id": "1.3",
+        "title": "Probabilistic Determinism",
+        "is_intro": false
+      },
+      {
+        "id": "1.4",
+        "title": "Convergence Under Material Pressure",
+        "is_intro": false
+      },
+      {
+        "id": "1.5",
+        "title": "Inaction and Its Costs",
+        "is_intro": false
+      },
+      {
+        "id": "1.6",
+        "title": "Truth, Communication, and the Management Problem",
+        "is_intro": false
+      },
+      {
+        "id": "1.6b",
+        "title": "Belief and Doubt: The Productive Equilibrium",
+        "is_intro": false
+      },
+      {
+        "id": "1.7",
+        "title": "Knowledge Production as a Material Process",
+        "is_intro": false
+      },
+      {
+        "id": "1.8",
+        "title": "The Social Architecture of What Can Be Known",
+        "is_intro": false
+      },
+      {
+        "id": "1.9",
+        "title": "Epistemic Authority: How Claims Acquire Social Standing",
+        "is_intro": false
+      },
+      {
+        "id": "1.10",
+        "title": "Information Asymmetry as Structural Power",
+        "is_intro": false
+      },
+      {
+        "id": "1.11",
+        "title": "Trust Infrastructure and Its Collapse",
+        "is_intro": false
+      },
+      {
+        "id": "1.12",
+        "title": "Epistemic Infrastructure and the Visibility Variable",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "II",
+    "title": "What Exists: The Ontological Foundation",
+    "subs": [
+      {
+        "id": "2.1",
+        "title": "Reality as Primary",
+        "is_intro": false
+      },
+      {
+        "id": "2.2",
+        "title": "Adaptive Materialism",
+        "is_intro": false
+      },
+      {
+        "id": "2.3",
+        "title": "On Necessary Being",
+        "is_intro": false
+      },
+      {
+        "id": "2.4",
+        "title": "Social Ontology: The Reality of Emergent Structures",
+        "is_intro": false
+      },
+      {
+        "id": "2.5",
+        "title": "Against Reductionism and Against Explanatory Idealism: The Middle Position",
+        "is_intro": false
+      },
+      {
+        "id": "2.6",
+        "title": "PMN, Secular Rationalism, and the Limits of Materialist Explanation",
+        "is_intro": false
+      },
+      {
+        "id": "2.6b",
+        "title": "The Projecting Fallacy Risk and PMN’s Specific Defense",
+        "is_intro": false
+      },
+      {
+        "id": "2.6c",
+        "title": "What Hard Materialism Gets Right, and Where PMN Diverges",
+        "is_intro": false
+      },
+      {
+        "id": "2.6d",
+        "title": "PMN as Open Passage: Material Analysis Without Metaphysical Foreclosure",
+        "is_intro": false
+      },
+      {
+        "id": "2.6e",
+        "title": "The Supra-Rational Challenge: Is PMN’s Criterion Binding on Anyone?",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "III",
+    "title": "The Biological Foundation: From Physiology to Institution",
+    "subs": [
+      {
+        "id": "3.1",
+        "title": "The Displacement That Matters",
+        "is_intro": false
+      },
+      {
+        "id": "3.0",
+        "title": "The Normative Status of Biological Constraints: Conditional, Not Derived",
+        "is_intro": false
+      },
+      {
+        "id": "3.0b",
+        "title": "The Naturalistic Fallacy Objection and Why It Does Not Apply Here",
+        "is_intro": false
+      },
+      {
+        "id": "3.0c",
+        "title": "The Stability Argument: The Bridge That Is Not a Derivation",
+        "is_intro": false
+      },
+      {
+        "id": "3.0d",
+        "title": "Against the Reductionism Reading",
+        "is_intro": false
+      },
+      {
+        "id": "3.0e",
+        "title": "Against the Teleology Reading",
+        "is_intro": false
+      },
+      {
+        "id": "3.0f",
+        "title": "Conditional Normative Framework: The Summary Statement",
+        "is_intro": false
+      },
+      {
+        "id": "3.2",
+        "title": "The Starting Point: Descriptive, Not Normative",
+        "is_intro": false
+      },
+      {
+        "id": "3.2b",
+        "title": "Relational Ontology and the Social Constitution of Personhood",
+        "is_intro": false
+      },
+      {
+        "id": "3.3",
+        "title": "From Description to Evaluation: The Is-Ought Bridge",
+        "is_intro": false
+      },
+      {
+        "id": "3.4",
+        "title": "The Minimal Anchor",
+        "is_intro": false
+      },
+      {
+        "id": "3.4b",
+        "title": "A Typology of Suffering",
+        "is_intro": false
+      },
+      {
+        "id": "3.4c",
+        "title": "The Dispositional Harm Prevention Problem: Institutional Design for Risk Before Action",
+        "is_intro": false
+      },
+      {
+        "id": "3.4c-ii",
+        "title": "Extension to Non-Human Sentients: A Minimal Doctrinal Position",
+        "is_intro": false
+      },
+      {
+        "id": "3.4d",
+        "title": "The Biological Foundation Under Technological Pressure: Augmentation, Transition, and the Post-Biological Horizon",
+        "is_intro": false
+      },
+      {
+        "id": "3.4e",
+        "title": "Suffering Comparison Under Trade-off Conditions",
+        "is_intro": false
+      },
+      {
+        "id": "3.5",
+        "title": "Suffering as a System-Level Variable",
+        "is_intro": false
+      },
+      {
+        "id": "3.6",
+        "title": "The Arc from Physiology to Institution",
+        "is_intro": false
+      },
+      {
+        "id": "3.7",
+        "title": "The Causal Chain: From Self-Interest to Collective Structure",
+        "is_intro": false
+      },
+      {
+        "id": "3.8",
+        "title": "Cognitive Constraints and Institutional Limits",
+        "is_intro": false
+      },
+      {
+        "id": "3.8b",
+        "title": "Affective Mobilization and the Politics of Collective Emotion",
+        "is_intro": false
+      },
+      {
+        "id": "3.8c",
+        "title": "Stable Irrationality as a Structural Variable",
+        "is_intro": false
+      },
+      {
+        "id": "3.9",
+        "title": "Demographic Dynamics as Material Variables",
+        "is_intro": false
+      },
+      {
+        "id": "3.10",
+        "title": "Ecological Constraints: The Ground Beneath All Systems",
+        "is_intro": false
+      },
+      {
+        "id": "3.11",
+        "title": "Illustrative Cases: The Chain in Operation",
+        "is_intro": false
+      },
+      {
+        "id": "3.12",
+        "title": "Rational Micro, Problematic Macro",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "IV",
+    "title": "What Matters: Ethics, Value, and the Evaluative Commitment",
+    "subs": [
+      {
+        "id": "4.1",
+        "title": "The Foundation of Value",
+        "is_intro": false
+      },
+      {
+        "id": "4.1b",
+        "title": "The Maqasid al-Shariah: An Independent Derivation of the Floor/Becoming Structure",
+        "is_intro": false
+      },
+      {
+        "id": "4.2",
+        "title": "Better and Worse",
+        "is_intro": false
+      },
+      {
+        "id": "4.3",
+        "title": "On Progress",
+        "is_intro": false
+      },
+      {
+        "id": "4.4",
+        "title": "On Manipulation, Trust, and Structural Checks",
+        "is_intro": false
+      },
+      {
+        "id": "4.5",
+        "title": "Beyond the Minimal Anchor: The Anti-Foreclosure Criterion",
+        "is_intro": false
+      },
+      {
+        "id": "4.5b",
+        "title": "The Loop Model and the Anti-Foreclosure Criterion",
+        "is_intro": false
+      },
+      {
+        "id": "4.5c",
+        "title": "The Procedural Account of Becoming",
+        "is_intro": false
+      },
+      {
+        "id": "4.5d",
+        "title": "Becoming as Epistemic Capacity",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "V",
+    "title": "The Metaphysical Dimension: Meaning, Religion, and Material Reality",
+    "subs": [
+      {
+        "id": "5.1",
+        "title": "What the Materialist Tradition Got Wrong About Religion",
+        "is_intro": false
+      },
+      {
+        "id": "5.2",
+        "title": "Two Levels of the Same Question",
+        "is_intro": false
+      },
+      {
+        "id": "5.3",
+        "title": "Interface-Emergent Phenomena",
+        "is_intro": false
+      },
+      {
+        "id": "5.4",
+        "title": "The Evaluative Standard for Metaphysical Claims",
+        "is_intro": false
+      },
+      {
+        "id": "5.5",
+        "title": "Religion as Material Variable",
+        "is_intro": false
+      },
+      {
+        "id": "5.6",
+        "title": "Meaning as Material Condition",
+        "is_intro": false
+      },
+      {
+        "id": "5.6b",
+        "title": "Measuring Meaning Infrastructure",
+        "is_intro": false
+      },
+      {
+        "id": "5.6c",
+        "title": "Operationalizing Meaning Infrastructure",
+        "is_intro": false
+      },
+      {
+        "id": "5.6d",
+        "title": "Acute Meaning-Collapse: Triage and Immediate Response",
+        "is_intro": false
+      },
+      {
+        "id": "5.7",
+        "title": "Christian Political Theology: Augustine, Aquinas, and Catholic Social Teaching",
+        "is_intro": false
+      },
+      {
+        "id": "5.8",
+        "title": "Al-Farabi and the Islamic Political Philosophy Tradition",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "VI",
+    "title": "Power: The Variable That Cannot Be Left Implicit",
+    "subs": [
+      {
+        "id": "6.1",
+        "title": "Why Power Must Be Named",
+        "is_intro": false
+      },
+      {
+        "id": "6.2",
+        "title": "Power as Structural Position",
+        "is_intro": false
+      },
+      {
+        "id": "6.3",
+        "title": "Asymmetry, Capture, and Information",
+        "is_intro": false
+      },
+      {
+        "id": "6.4",
+        "title": "The Anti-Technocratic Guardrail",
+        "is_intro": false
+      },
+      {
+        "id": "6.5",
+        "title": "How Institutions Preserve Themselves",
+        "is_intro": false
+      },
+      {
+        "id": "6.6",
+        "title": "Legitimacy Crisis: When Systems Lose the Consent That Sustains Them",
+        "is_intro": false
+      },
+      {
+        "id": "6.7",
+        "title": "Legitimacy Production: How Systems Build Consent",
+        "is_intro": false
+      },
+      {
+        "id": "6.8",
+        "title": "Elite Circulation and Structural Continuity",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "VII",
+    "title": "How to Organize: Politics, Institutions, and the State",
+    "subs": [
+      {
+        "id": "7.0",
+        "title": "What We Mean by System",
+        "is_intro": false
+      },
+      {
+        "id": "7.0b",
+        "title": "Levels of Analysis",
+        "is_intro": false
+      },
+      {
+        "id": "7.0c",
+        "title": "Scale as a Structural Variable",
+        "is_intro": false
+      },
+      {
+        "id": "7.1",
+        "title": "The State Problem",
+        "is_intro": false
+      },
+      {
+        "id": "7.1b",
+        "title": "The Military as Autonomous Institutional Actor",
+        "is_intro": false
+      },
+      {
+        "id": "7.2",
+        "title": "Progressive Institutionalism",
+        "is_intro": false
+      },
+      {
+        "id": "7.2b",
+        "title": "Pancasila and Gotong Royong: Pluralism Without Suppression",
+        "is_intro": false
+      },
+      {
+        "id": "7.3",
+        "title": "The Custodian Problem",
+        "is_intro": false
+      },
+      {
+        "id": "7.3b",
+        "title": "Early Detection of Institutional Capture",
+        "is_intro": false
+      },
+      {
+        "id": "7.3c",
+        "title": "Incentive Architecture and Predictable Institutional Failure",
+        "is_intro": false
+      },
+      {
+        "id": "7.3c-i",
+        "title": "A General Theory of Capture: Mechanism, Stages, and Detection Across Organizational Forms",
+        "is_intro": false
+      },
+      {
+        "id": "7.3c-ii",
+        "title": "Cosmological Capture: When Belief Distorts the Institution From Within",
+        "is_intro": false
+      },
+      {
+        "id": "7.3d",
+        "title": "Institutionalizing Anti-Capture",
+        "is_intro": false
+      },
+      {
+        "id": "7.4",
+        "title": "The State and Long-Term Direction",
+        "is_intro": false
+      },
+      {
+        "id": "7.5",
+        "title": "Noble Lie: Fictions That Serve Power",
+        "is_intro": false
+      },
+      {
+        "id": "7.6",
+        "title": "Those Who Stand on Others: The Structural Analysis",
+        "is_intro": false
+      },
+      {
+        "id": "7.7",
+        "title": "Path Dependence: Why History Constrains the Present",
+        "is_intro": false
+      },
+      {
+        "id": "7.8",
+        "title": "Regime Types: A Comparative Diagnostic",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "VIII",
+    "title": "Society, Culture, and the Politics of Material Outcomes",
+    "subs": [
+      {
+        "id": "8.1",
+        "title": "Evaluating Cultural Practices",
+        "is_intro": false
+      },
+      {
+        "id": "8.2",
+        "title": "Marginalized Groups and the Material Frame",
+        "is_intro": false
+      },
+      {
+        "id": "8.2b",
+        "title": "Intersectional Analysis as Methodological Procedure",
+        "is_intro": false
+      },
+      {
+        "id": "8.3",
+        "title": "The Consistency Standard",
+        "is_intro": false
+      },
+      {
+        "id": "8.4",
+        "title": "Governing Narrative as Material Force: The Social Construction of Reality",
+        "is_intro": false
+      },
+      {
+        "id": "8.4b",
+        "title": "Narrative Typology: How Governing Narratives Structure Political Time",
+        "is_intro": false
+      },
+      {
+        "id": "8.4c",
+        "title": "Meritocracy as Visibility Suppression",
+        "is_intro": false
+      },
+      {
+        "id": "8.5",
+        "title": "Anti-Naïve Universalism: What the Universal Standard Actually Requires",
+        "is_intro": false
+      },
+      {
+        "id": "8.6",
+        "title": "Anti-Passive Multiculturalism: The Consistency Standard Applied",
+        "is_intro": false
+      },
+      {
+        "id": "8.7",
+        "title": "Education as Structural Variable",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "IX",
+    "title": "The International Dimension: Geopolitics and Global Order",
+    "subs": [
+      {
+        "id": "9.0",
+        "title": "The Material Basis of International Order",
+        "is_intro": false
+      },
+      {
+        "id": "9.0b",
+        "title": "The Historical Divergence: How the Distribution Was Produced",
+        "is_intro": false
+      },
+      {
+        "id": "9.1",
+        "title": "Realism and Direction",
+        "is_intro": false
+      },
+      {
+        "id": "9.2",
+        "title": "On Power Concentration",
+        "is_intro": false
+      },
+      {
+        "id": "9.2b",
+        "title": "Technology as Redistributor of Material Power",
+        "is_intro": false
+      },
+      {
+        "id": "9.2c",
+        "title": "Artificial Intelligence and the New Architecture of Institutional Power",
+        "is_intro": false
+      },
+      {
+        "id": "9.3",
+        "title": "Multipolarity as Transitional Arrangement",
+        "is_intro": false
+      },
+      {
+        "id": "9.3b",
+        "title": "The Current Transition: Semiconductor Controls, De-dollarization, and Critical Minerals as Structural Variables",
+        "is_intro": false
+      },
+      {
+        "id": "9.4",
+        "title": "The Parallel Development Framework",
+        "is_intro": false
+      },
+      {
+        "id": "9.5",
+        "title": "Ecological Debt and Climate Justice",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "X",
+    "title": "How Systems Change: Adaptive Dynamics and Historical Transformation",
+    "subs": [
+      {
+        "id": "10.1",
+        "title": "Why Systems Change",
+        "is_intro": false
+      },
+      {
+        "id": "10.2",
+        "title": "Suffering as the Signal of System Stress",
+        "is_intro": false
+      },
+      {
+        "id": "10.3",
+        "title": "Technology and System Transition",
+        "is_intro": false
+      },
+      {
+        "id": "10.4",
+        "title": "Adaptation, Not Optimization",
+        "is_intro": false
+      },
+      {
+        "id": "10.5",
+        "title": "Thresholds and Non-Linearity",
+        "is_intro": false
+      },
+      {
+        "id": "10.5b",
+        "title": "Political Time: Windows, Conjunctures, and the Materiality of Timing",
+        "is_intro": false
+      },
+      {
+        "id": "10.6",
+        "title": "Reform, Revolution, and the Sequencing Problem",
+        "is_intro": false
+      },
+      {
+        "id": "10.7",
+        "title": "PMN and the Political Traditions: A Diagnostic Engagement",
+        "is_intro": false
+      },
+      {
+        "id": "10.7b",
+        "title": "Gramsci: Hegemony, Biological Floor, and the Level Relation",
+        "is_intro": false
+      },
+      {
+        "id": "10.7c",
+        "title": "Where PMN Is Architecturally More Advanced: Seven Dimensions",
+        "is_intro": false
+      },
+      {
+        "id": "10.7d",
+        "title": "PMN and the Right-Wing Intellectual Traditions",
+        "is_intro": false
+      },
+      {
+        "id": "10.8",
+        "title": "The Organizational Form Problem",
+        "is_intro": false
+      },
+      {
+        "id": "10.8b",
+        "title": "Shadow Institutions and Parallel Infrastructure Doctrine",
+        "is_intro": false
+      },
+      {
+        "id": "10.9",
+        "title": "How Counter-Power Accumulates",
+        "is_intro": false
+      },
+      {
+        "id": "10.10",
+        "title": "The Two Modes of Struggle",
+        "is_intro": false
+      },
+      {
+        "id": "10.10b",
+        "title": "Performative Hostility and Coordination Behind the Surface",
+        "is_intro": false
+      },
+      {
+        "id": "10.10c",
+        "title": "The Extended Agent Typology: Beyond the Hero-Vigilante Binary",
+        "is_intro": false
+      },
+      {
+        "id": "10.10c-i",
+        "title": "The Seven Additional Durable Positions",
+        "is_intro": false
+      },
+      {
+        "id": "10.10c-ii",
+        "title": "The Watcher Problem: Coordination From Above and Behind",
+        "is_intro": false
+      },
+      {
+        "id": "10.10c-iii",
+        "title": "Spontaneous and Transitional Actors",
+        "is_intro": false
+      },
+      {
+        "id": "10.11",
+        "title": "Gradations Within the Ecosystem",
+        "is_intro": false
+      },
+      {
+        "id": "10.12",
+        "title": "Drift Mechanisms: How Actors Shift",
+        "is_intro": false
+      },
+      {
+        "id": "10.13",
+        "title": "Legitimacy as Function, Not Status",
+        "is_intro": false
+      },
+      {
+        "id": "10.14",
+        "title": "Who Watches the Watchers",
+        "is_intro": false
+      },
+      {
+        "id": "10.15",
+        "title": "Micro-Politics and Structural Transformation",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "XI",
+    "title": "The Economic Doctrine",
+    "subs": [
+      {
+        "id": "11.0",
+        "title": "Two Levels of Economic Analysis",
+        "is_intro": false
+      },
+      {
+        "id": "11.0b",
+        "title": "Incentive Structures in Economic Arrangements",
+        "is_intro": false
+      },
+      {
+        "id": "11.1",
+        "title": "Economics Without Prior Commitments",
+        "is_intro": false
+      },
+      {
+        "id": "11.2",
+        "title": "The Permanent Conditions and Economic Doctrine",
+        "is_intro": false
+      },
+      {
+        "id": "11.3",
+        "title": "Horizon and Instrument",
+        "is_intro": false
+      },
+      {
+        "id": "11.3b",
+        "title": "Contemporary Capitalism as Terrain for the Seven Diagnostics",
+        "is_intro": false
+      },
+      {
+        "id": "11.4",
+        "title": "What Doctrine Looks Like: A Contrastive Illustration",
+        "is_intro": false
+      },
+      {
+        "id": "11.5",
+        "title": "Power Beyond Ownership: Expertise, Information, and Network Effects",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "XII",
+    "title": "How This Framework Operates",
+    "subs": [
+      {
+        "id": "12.1",
+        "title": "The Methodology of Stress-Testing",
+        "is_intro": false
+      },
+      {
+        "id": "12.1b",
+        "title": "Second-Order Effects as Analytical Obligation: The Multi-Level Consequence Procedure",
+        "is_intro": false
+      },
+      {
+        "id": "12.2",
+        "title": "Multi-Perspectival Analysis",
+        "is_intro": false
+      },
+      {
+        "id": "12.3",
+        "title": "Framework and Doctrine in Practice",
+        "is_intro": false
+      },
+      {
+        "id": "12.3b",
+        "title": "The Framework-Doctrine Boundary: Detection Procedure",
+        "is_intro": false
+      },
+      {
+        "id": "12.4",
+        "title": "The Architecture of the Framework: Parts I, II, and III in Sequence",
+        "is_intro": false
+      },
+      {
+        "id": "12.5",
+        "title": "When This Framework Fails: Specific Failure Modes",
+        "is_intro": false
+      },
+      {
+        "id": "12.5b",
+        "title": "Two Phrases That Foreclose Analysis: \"Essentially\" and \"Should\"",
+        "is_intro": false
+      },
+      {
+        "id": "12.5c",
+        "title": "Engaging External Criticism: Substantive Critique vs. Misreading",
+        "is_intro": false
+      },
+      {
+        "id": "12.5d",
+        "title": "Misuse Resistance: Non-Bypassable Diagnostic Triggers",
+        "is_intro": false
+      },
+      {
+        "id": "12.5e",
+        "title": "Deficit Estimation Protocol: PMN Analysis with Partial Data",
+        "is_intro": false
+      },
+      {
+        "id": "12.6",
+        "title": "Genealogical Interrogation as Method",
+        "is_intro": false
+      },
+      {
+        "id": "12.7",
+        "title": "The Genealogy of This Framework",
+        "is_intro": false
+      },
+      {
+        "id": "12.8",
+        "title": "Technocratic Drift Safeguard",
+        "is_intro": false
+      },
+      {
+        "id": "12.9",
+        "title": "Comparative Demonstration: Where Competing Frameworks Fail",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "XIII",
+    "title": "Tensions That Cannot Be Resolved — Only Managed",
+    "subs": [
+      {
+        "id": "13.1",
+        "title": "The Nature of Permanent Tension",
+        "is_intro": false
+      },
+      {
+        "id": "13.1b",
+        "title": "The Relationship Between Contradictions and Tensions",
+        "is_intro": false
+      },
+      {
+        "id": "13.1c",
+        "title": "Diagnostic: Is This a Tension or a Contradiction?",
+        "is_intro": false
+      },
+      {
+        "id": "13.1d",
+        "title": "When Tensions Become Contradictions: Condition-Dependent Categorical Shifts",
+        "is_intro": false
+      },
+      {
+        "id": "13.2",
+        "title": "The Tensions",
+        "is_intro": false
+      },
+      {
+        "id": "13.2b",
+        "title": "Conditional Tensions: Present Under Specific Circumstances",
+        "is_intro": false
+      },
+      {
+        "id": "13.3",
+        "title": "Trade-offs as Permanent Features of Complex Systems",
+        "is_intro": false
+      },
+      {
+        "id": "13.4",
+        "title": "Limits of This Framework",
+        "is_intro": false
+      },
+      {
+        "id": "13.4b",
+        "title": "The Meaning Problem of Abundance: Becoming Without Constraint",
+        "is_intro": false
+      },
+      {
+        "id": "13.4c",
+        "title": "The Subject Boundary at the Horizon: PMN Without a Human Subject",
+        "is_intro": false
+      },
+      {
+        "id": "13.4d",
+        "title": "The Strategic Equilibrium Problem: Between Preservation and Transformation",
+        "is_intro": false
+      },
+      {
+        "id": "13.4e",
+        "title": "The Variation-Deficit Tension: When Does Difference Become Deficiency?",
+        "is_intro": false
+      },
+      {
+        "id": "13.4f",
+        "title": "The Accommodation-Transformation Tension: Ramp or Redesign?",
+        "is_intro": false
+      },
+      {
+        "id": "13.4g",
+        "title": "The Agency-Structure Tension in Internalized Norms: The Apology Problem",
+        "is_intro": false
+      },
+      {
+        "id": "13.4h",
+        "title": "The Moral-Functional Tension: When Killing the Institution Kills What It Was Doing",
+        "is_intro": false
+      },
+      {
+        "id": "13.4i",
+        "title": "Triage Protocol for High-Urgency Cases",
+        "is_intro": false
+      },
+      {
+        "id": "13.5",
+        "title": "Closing: The Framework That Must Be Surpassed",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "XV",
+    "title": "The Formula Architecture",
+    "subs": [
+      {
+        "id": "15.0",
+        "title": "The Input Architecture of Structural Tendency Analysis",
+        "is_intro": false
+      },
+      {
+        "id": "15.1",
+        "title": "Complexity & Systems Dynamics: The Operator Decomposed",
+        "is_intro": false
+      },
+      {
+        "id": "15.0b",
+        "title": "Canonical Term Definitions",
+        "is_intro": false
+      },
+      {
+        "id": "15.2",
+        "title": "The Primary Formula",
+        "is_intro": false
+      },
+      {
+        "id": "15.3",
+        "title": "The Suffering Variable: What Feeds Transformation Pressure",
+        "is_intro": false
+      },
+      {
+        "id": "15.4",
+        "title": "The Duration and Scale Multipliers",
+        "is_intro": false
+      },
+      {
+        "id": "15.5",
+        "title": "The Adaptive Capacity Formula",
+        "is_intro": false
+      },
+      {
+        "id": "15.6",
+        "title": "The Repressive Capacity Formula",
+        "is_intro": false
+      },
+      {
+        "id": "15.7",
+        "title": "The Legitimacy Formula",
+        "is_intro": false
+      },
+      {
+        "id": "15.8",
+        "title": "The Counter-Power Formula",
+        "is_intro": false
+      },
+      {
+        "id": "15.9",
+        "title": "The Structural Tendency Analysis Formula",
+        "is_intro": false
+      },
+      {
+        "id": "15.10",
+        "title": "Domain-Specific Formulas",
+        "is_intro": false
+      },
+      {
+        "id": "15.11",
+        "title": "The Time Variable: Windows and Cycles",
+        "is_intro": false
+      },
+      {
+        "id": "15.12",
+        "title": "Application: Reading Current Conditions",
+        "is_intro": false
+      },
+      {
+        "id": "15.13",
+        "title": "What the Formulas Cannot Do",
+        "is_intro": false
+      },
+      {
+        "id": "15.14",
+        "title": "Applied Cases: The Formulas in Operation",
+        "is_intro": false
+      },
+      {
+        "id": "15.15",
+        "title": "The Compressed Core: PMN Without the Architecture",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "XVI",
+    "title": "Technology as Structural Variable",
+    "subs": [
+      {
+        "id": "16.0",
+        "title": "Technology as Constraint-Modifier, Not Tool",
+        "is_intro": false
+      },
+      {
+        "id": "16.1",
+        "title": "The Capture Problem at Technological Leverage Points",
+        "is_intro": false
+      },
+      {
+        "id": "16.2",
+        "title": "Artificial Intelligence as Institutional Architecture",
+        "is_intro": false
+      },
+      {
+        "id": "16.3",
+        "title": "Biotechnology and the Biological Floor Under Institutional Pressure",
+        "is_intro": false
+      },
+      {
+        "id": "16.4",
+        "title": "Technology, Meaning Infrastructure, and the Acceleration Problem",
+        "is_intro": false
+      },
+      {
+        "id": "16.5",
+        "title": "Reproductive Technology and the Commodification Problem",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "XVII",
+    "title": "Cases and the Individual: Pattern, Drift, and the Demands of the Framework",
+    "subs": [
+      {
+        "id": "17.0",
+        "title": "Why Cases and Why the Individual",
+        "is_intro": false
+      },
+      {
+        "id": "17.1",
+        "title": "The Prohibition Case: When Moral Clarity Produces Structural Harm",
+        "is_intro": false
+      },
+      {
+        "id": "17.2",
+        "title": "The Labour Movement Case: Institutional Capture Through Incremental Drift",
+        "is_intro": false
+      },
+      {
+        "id": "17.3",
+        "title": "The Land Reform Case: Winning the Rule Without Changing the Relation",
+        "is_intro": false
+      },
+      {
+        "id": "17.4",
+        "title": "The Revolutionary Capture Case: When the Custodian Becomes What It Displaced",
+        "is_intro": false
+      },
+      {
+        "id": "17.5",
+        "title": "The Platform Governance Case: When Infrastructure Becomes Speech",
+        "is_intro": false
+      },
+      {
+        "id": "17.6",
+        "title": "The Nationalism Case: Counter-Power Vehicle or Exclusionary Mechanism?",
+        "is_intro": false
+      },
+      {
+        "id": "17.7",
+        "title": "PMN at the Level of the Individual: What the Framework Asks of the Person Who Holds It",
+        "is_intro": false
+      },
+      {
+        "id": "17.7b",
+        "title": "On Acting Within Institutions",
+        "is_intro": false
+      },
+      {
+        "id": "17.7c",
+        "title": "On Detecting Your Own Drift",
+        "is_intro": false
+      },
+      {
+        "id": "17.7d",
+        "title": "On Meaning Infrastructure and the Sustainability of Analysis",
+        "is_intro": false
+      },
+      {
+        "id": "17.7e",
+        "title": "On Communicating Across Frameworks",
+        "is_intro": false
+      },
+      {
+        "id": "17.8",
+        "title": "How a Framework Travels: The Transmission Problem",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "XIV",
+    "title": "Summary: Framework, Doctrine, and What Remains Open",
+    "subs": [
+      {
+        "id": "14.1",
+        "title": "The Framework: Adaptive Naturalism",
+        "is_intro": false
+      },
+      {
+        "id": "14.2",
+        "title": "Current Analytical Positions: The Framework Applied",
+        "is_intro": false
+      },
+      {
+        "id": "14.3",
+        "title": "Argument, Assumption, and Open Question",
+        "is_intro": false
+      },
+      {
+        "id": "14.4",
+        "title": "What Would Surpass This Framework",
+        "is_intro": false
+      },
+      {
+        "id": "14.4b",
+        "title": "Anti-Closure: Conditions for Paradigm-Level Revision",
+        "is_intro": false
+      },
+      {
+        "id": "14.5",
+        "title": "Framework Institutionalization: Transmission, Quality Control, and Evolution",
+        "is_intro": false
+      },
+      {
+        "id": "14.6",
+        "title": "Self-Capture Risk Assessment for the PMN Community",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "Coda",
+    "title": "Coda",
+    "subs": [
+      {
+        "id": "coda",
+        "title": "Coda",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "Intellectual Debts",
+    "title": "Intellectual Debts",
+    "subs": [
+      {
+        "id": "intellectual-debts",
+        "title": "Intellectual Debts",
+        "is_intro": false
+      }
+    ]
+  },
+  {
+    "part": "Bibliography",
+    "title": "Bibliography",
+    "subs": [
+      {
+        "id": "bibliography",
+        "title": "Bibliography",
+        "is_intro": false
+      }
+    ]
+  }
+]
