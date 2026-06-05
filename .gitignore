@@ -54,3 +54,6 @@ private/backups/
 # Ignore versioned release assets to prevent Git history bloat
 dist/PMN_Framework_v*.pdf
 dist/PMN_Framework_v*.md
+
+# Local Vite public static folder (copied from source data)
+public_static/

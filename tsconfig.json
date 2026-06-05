@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": false,
-    "outDir": ".",
+    "outDir": "dist",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "strict": false,
@@ -15,6 +18,6 @@
     "noImplicitThis": false,
     "noEmitOnError": false
   },
-  "include": ["app.ts"],
-  "exclude": []
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
