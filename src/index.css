@@ -13,35 +13,40 @@
   --color-pmn-rule: var(--rule);
   --color-pmn-rule2: var(--rule2);
 
-  /* Fonts */
+  /* Fonts mapping */
   --font-pmn-head: 'Libre Baskerville', serif;
   --font-pmn-body: 'Lora', serif;
   --font-pmn-mono: 'Source Code Pro', monospace;
 }
 
 /* 
-   Legacy variable definitions for base functionality.
-   Tailwind v4 theme will map to these variables.
+   CORE LAYER: Foundation variables and global resets.
 */
-:root {
-  --bg: #fdfbf7; --bg2: #f7f3eb; --bg3: #eee6d8;
-  --sb: #f5efe4; --ink: #1c1510; --ink2: #4a3a2d;
-  --acc: #b83a1b; --acc2: #8f2812; --mute: #756456; --mute2: #605043; --mute3: #8c7b6c;
-  --rule: #e8dcc4; --rule2: #dbcaa6;
-  --hdr: #f7f3eb;
-}
+@layer base {
+  :root {
+    --bg: #fdfbf7; --bg2: #f7f3eb; --bg3: #eee6d8;
+    --sb: #f5efe4; --ink: #1c1510; --ink2: #4a3a2d;
+    --acc: #b83a1b; --acc2: #8f2812; --mute: #756456; --mute2: #605043; --mute3: #8c7b6c;
+    --rule: #e8dcc4; --rule2: #dbcaa6;
+    --hdr: #f7f3eb;
+  }
 
-[data-theme=dark] {
-  --bg: #0d0d0d; --bg2: #171717; --bg3: #1f1f1f;
-  --sb: #141414; --ink: #f5f0e8; --ink2: #c8bfb2;
-  --acc: #c0271a; --acc2: #961f14; --mute: #8a7d6e; --mute2: #7c7064; --mute3: #3a3530;
-  --rule: #302b27; --rule2: #3d3730;
-  --hdr: #0d0d0d;
-}
+  [data-theme=dark] {
+    --bg: #0d0d0d; --bg2: #171717; --bg3: #1f1f1f;
+    --sb: #141414; --ink: #f5f0e8; --ink2: #c8bfb2;
+    --acc: #c0271a; --acc2: #961f14; --mute: #8a7d6e; --mute2: #7c7064; --mute3: #3a3530;
+    --rule: #302b27; --rule2: #3d3730;
+    --hdr: #0d0d0d;
+  }
 
-/* Preservasi visual retro/vintage (Temporary bridge) */
-/* We will eventually move these to Tailwind components */
-@import "../style.css";
+  /* Legacy Bridge: Loaded in BASE layer so Tailwind Utilities (Utility layer) can override them! */
+  @import "../style.css";
+
+  body {
+    @apply bg-pmn-bg text-pmn-ink font-pmn-body;
+    min-height: 100vh;
+  }
+}
 
 #root {
   min-height: 100vh;

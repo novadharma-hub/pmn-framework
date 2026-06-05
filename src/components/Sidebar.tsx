@@ -14,40 +14,54 @@ export default function Sidebar({ parts, readMap, curPos, onSelectSection, onClo
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
 
   return (
-    <aside id="sidebar" className="w-[320px] h-full bg-pmn-bg2 border-r border-pmn-rule flex flex-col flex-shrink-0 z-40 select-none overflow-hidden">
-      <div className="p-5 border-b border-pmn-rule flex items-center justify-between bg-pmn-bg">
-        <div>
-          <span className="block font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest mb-1">Manuskrip PMN</span>
-          <span className="font-pmn-head text-sm font-bold text-pmn-ink">Daftar Isi</span>
+    <aside id="sidebar" className="select-none flex flex-col h-full bg-pmn-bg2 border-r border-pmn-rule transition-all duration-300 overflow-hidden">
+      
+      {/* Sidebar Tool Bar (Mirroring Legacy sb-tools) */}
+      <div className="sb-tools p-5 border-b border-pmn-rule bg-pmn-bg/40 backdrop-blur-md">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <span className="block font-pmn-mono text-[0.62rem] text-pmn-mute uppercase tracking-[0.2em] mb-1">Manuskrip PMN</span>
+            <span className="font-pmn-head text-sm font-bold text-pmn-ink">Daftar Isi</span>
+          </div>
+          <button onClick={onClose} className="lg:hidden text-pmn-mute hover:text-pmn-acc p-2 cursor-pointer transition-colors">&times;</button>
         </div>
-        <button onClick={onClose} className="lg:hidden text-pmn-mute hover:text-pmn-acc">&times;</button>
+
+        {/* Local Progress Bar */}
+        <span className="block font-pmn-mono text-[0.58rem] text-pmn-mute uppercase tracking-widest mb-2 font-bold">Keterbacaan: {readPct}%</span>
+        <div className="w-full h-[2px] bg-pmn-rule overflow-hidden shadow-inner">
+          <div className="h-full bg-pmn-acc transition-all duration-700" style={{ width: `${readPct}%` }} />
+        </div>
       </div>
 
-      <div className="p-4 bg-pmn-bg2 border-b border-pmn-rule">
-        <div className="flex justify-between font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-wider mb-2">
-          <span>Progress</span>
-          <span>{readPct}% ({readCount}/{totalSections})</span>
-        </div>
-        <div className="w-full h-[3px] bg-pmn-rule overflow-hidden">
-          <div className="h-full bg-pmn-acc transition-all duration-500" style={{ width: `${readPct}%` }} />
-        </div>
-      </div>
-
-      <nav className="flex-1 overflow-y-auto custom-scrollbar">
+      {/* Main Navigation List (Mirroring Legacy sb-list) */}
+      <nav id="sb-list" className="flex-1 overflow-y-auto custom-scrollbar divide-y divide-pmn-rule/40 pb-20">
         {parts.map((p, pIdx) => (
-          <div key={p.part} className="flex flex-col">
-            <div className={`p-4 font-pmn-mono text-[0.58rem] text-pmn-acc uppercase tracking-widest bg-pmn-bg3/30 border-b border-pmn-rule ${curPos[0] === pIdx ? 'bg-pmn-acc/5' : ''}`}>
+          <div key={p.part} className="flex flex-col group">
+            {/* Part Label (Legacy sb-plbl) */}
+            <div className={`sb-plbl px-5 py-4 font-pmn-mono text-[0.65rem] tracking-[0.2em] uppercase font-bold transition-colors ${curPos[0] === pIdx ? 'text-pmn-acc bg-pmn-acc/5' : 'text-pmn-mute'}`}>
               {p.part} &mdash; {p.title}
             </div>
-            <div className="flex flex-col border-b border-pmn-rule">
+            
+            <div className="flex flex-col">
               {p.subs.map((s, sIdx) => {
-                const on = curPos[0] === pIdx && curPos[1] === sIdx
-                const r = !!readMap[`${pIdx}-${sIdx}`]
+                const isActive = curPos[0] === pIdx && curPos[1] === sIdx
+                const isRead = !!readMap[`${pIdx}-${sIdx}`]
+                
                 return (
-                  <button key={s.id} onClick={() => onSelectSection(pIdx, sIdx)} className={`w-full text-left py-2.5 px-5 flex items-baseline gap-3 hover:bg-pmn-acc/5 transition-all border-l-2 ${on ? 'border-pmn-acc bg-pmn-bg text-pmn-acc' : 'border-transparent text-pmn-ink2'}`}>
-                    {!s.is_intro && <span className={`font-pmn-mono text-[0.68rem] ${on ? 'text-pmn-acc' : 'text-pmn-mute'}`}>{s.id}</span>}
-                    <span className={`font-pmn-body text-[0.75rem] leading-snug flex-1 ${on ? 'font-bold' : ''}`}>{s.title}</span>
-                    {r && <span className="text-pmn-acc text-[0.6rem]">✓</span>}
+                  <button 
+                    key={s.id} 
+                    onClick={() => onSelectSection(pIdx, sIdx)} 
+                    className={`sb-item w-full text-left py-3 px-5 flex items-baseline gap-3 transition-all cursor-pointer border-l-2 ${isActive ? 'border-pmn-acc bg-pmn-bg2 text-pmn-ink' : 'border-transparent text-pmn-mute hover:bg-pmn-acc/5 hover:text-pmn-ink2'}`}
+                  >
+                    {!s.is_intro && (
+                      <span className={`sb-iid font-pmn-mono text-[0.7rem] min-w-[32px] font-bold ${isActive ? 'text-pmn-acc' : isRead ? 'text-pmn-acc/50' : 'text-pmn-mute/60'}`}>
+                        {s.id}
+                      </span>
+                    )}
+                    <span className={`sb-ilbl font-pmn-body text-[0.8rem] leading-snug flex-1 ${isActive ? 'font-bold' : 'italic'}`}>
+                      {s.title}
+                    </span>
+                    {isRead && <span className="text-pmn-acc text-[0.65rem] font-bold">✓</span>}
                   </button>
                 )
               })}
