@@ -1,7 +1,16 @@
 import os
+import sys
 import webbrowser
 import http.server
 import socketserver
+
+# Ensure stdout handles UTF-8 correctly on Windows
+if sys.platform.startswith('win'):
+    import codecs
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except AttributeError:
+        pass
 
 def main():
     # 1. BUNGKUS APP.JS DENGAN ASYNC LOADER (Hanya jika belum dibungkus)
@@ -13,7 +22,7 @@ def main():
         js_content = f.read()
 
     # Cek apakah sudah kita perbaiki sebelumnya
-    if "async function initializeApp()" not in js_content:
+    if "function initializeApp()" not in js_content:
         print("🔧 Menambahkan 'Magic Loader' ke app.js agar otomatis membaca JSON...")
         wrapper = """
 (async function initializeApp() {

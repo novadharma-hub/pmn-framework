@@ -108,6 +108,34 @@ def compile_mode():
     parts_dir = os.path.join("data", "parts")
     manifest_path = os.path.join(parts_dir, "manifest.json")
 
+    # TypeScript compilation
+    print("[INFO] Compiling app.ts to app.js via tsc...")
+    try:
+        import subprocess
+        # Clean old app.js first to avoid typescript compiler checkJs/global scope collision issues
+        if os.path.exists(app_js_path):
+            try:
+                os.remove(app_js_path)
+            except Exception as e:
+                print(f"[WARN] Could not remove old app.js before compile: {e}")
+
+        # Run tsc
+        res = subprocess.run("npx tsc", shell=True, capture_output=True, text=True)
+        if res.returncode != 0:
+            print("[WARN] TypeScript compilation completed with warnings/errors:")
+            print(res.stderr or res.stdout)
+            # Check if app.js was emitted despite warnings
+            if not os.path.exists(app_js_path):
+                print("[ERROR] CRITICAL: TypeScript compilation failed and no app.js was generated.")
+                return
+        else:
+            print("   [OK] TypeScript compilation completed successfully.")
+    except Exception as e:
+        print(f"[WARN] Failed to execute TypeScript compiler (npx tsc): {e}")
+        if not os.path.exists(app_js_path):
+            print("[ERROR] CRITICAL: app.js is missing and TypeScript compilation could not run.")
+            return
+
     print("[INFO] Initiating structural diagnostic check...")
     
     # Run manuscript formatting audit
