@@ -148,184 +148,111 @@ Consult Section 3.0 for the three-level architecture (Life, Suffering, Becoming)
     }
 
     if (q.includes('start') || q.includes('read') || q.includes('begin') || q.includes('guide')) {
-      return `### ✦ PMN ENTRY ORIENTATION
+      return `### ✦ PMN ORIENTATION GUIDE
 
-Welcome to the PMN Interactive Framework. The manuscript is structurally layered, meaning you do not have to read it linearly from start to finish. Here is your optimal entry strategy:
+Welcome to the **Progressive Materialist Naturalism** framework. To understand the architecture of reality through our dialectical lens, we recommend the following path:
 
-1. **Foundations (Part I & II):** If you prefer analytical rigor, begin with the metaphysics of material reality (Axiom 1a) and the layered constraint model (Section 2.2).
-2. **Compressed Core (Section 15.15):** If you need a high-density operational summary of the entire framework in under 10 minutes, jump straight to Section 15.15.
-3. **Power Analysis (Part VI):** To see how PMN diagnoses systemic power, custodian capture, and information bottlenecks, proceed directly to Part VI.
-4. **Applied Action (Part XVII):** To explore the ethical demands PMN places on the individual holding it, read Part XVII.
+1. **Section 1.0 (How to Read):** Establishes the epistemology and the multi-layered reading method.
+2. **Axiom 1b:** The core material anchor for our value system.
+3. **Part II (Material Foundations):** Lays out the biological and physical basis of naturalism.
 
-Select 'Contents' in the top bar to choose your path, or jump straight to Section 15.15 to begin the core overview.`
+You can use the **Search** feature or the **Glossary** (Lexicon) to look up specific terms like 'Metasubjectivity' or 'The Bio-Floor'.`
     }
 
-    // Default Fallback Context-based response
-    const bestSec = pack.sections?.[0]
-    const bestGloss = pack.glossary?.[0]
+    if (pack.sections.length > 0) {
+      return `### ✦ PMN CONTEXTUAL SEARCH RESULT
 
-    let response = `### ✦ PMN CONTEXTUAL SYNTHESIS
+I found information in **${pack.sections[0].title} (${pack.sections[0].id})**. 
 
-Analyzing your query through the lens of the Progressive Materialist Naturalism manuscript. `
+${pack.sections[0].excerpt}...
 
-    if (bestSec) {
-      response += `The most relevant architectural anchor is **Section ${bestSec.id} (${bestSec.title})** under **${bestSec.part}**.\n\n**Manuscript Passage Analysis:**\nThe framework establishes that: \n> "${bestSec.excerpt}..."\n\nThis asserts that material processes are primary (source level) and emergent phenomena must be tracked through their causal dependencies.\n\n`
-    } else {
-      response += `The manuscript focuses on anchoring all conceptual claims in mind-independent material foundations, bypassing speculative abstractions.\n\n`
+**Analysis:**
+This section appears to be the most relevant to your inquiry regarding "${query}". Under the current offline simulation mode, I am providing high-level pointers based on the manuscript's structure. For a deeper, generative analysis, please use the **ChatGPT or Gemini Handoff** tabs above.`
     }
 
-    if (bestGloss) {
-      response += `**Core Terminology:**\nTo understand this, you should master **${bestGloss.term}** (${bestGloss.def}).\n\n`
-    }
+    return `### ✦ OFFLINE MODE: LIMITED ANALYSIS
 
-    response += `**Analytical Conclusion:**\nPMN tracks these processes using the *Layered Constraint Model* (ecological, biological, economic, institutional, meaning). Any proposed solution that violates a lower layer constraint will inevitably fail.`
+I cannot find a direct dialectical match for "${query}" in the active context. However, based on the PMN framework:
 
-    return response
+1. Material conditions always precede ideological superstructures.
+2. Every inquiry should begin by identifying the underlying information asymmetry.
+
+Try asking about: **"Is-Ought Bridge"**, **"Materialism"**, or **"Institutional Collapse"**.`
   }
 
-  // Handle Claude Inline Send
   const handleClaudeSend = () => {
     if (!input.trim() || busy) return
-    const userQuery = input.trim()
+    const userMsg: Message = { role: 'user', content: input }
+    setMessages(prev => [...prev, userMsg])
     setInput('')
     setBusy(true)
 
-    const nextMessages: Message[] = [
-      ...messages,
-      { role: 'user', content: userQuery }
-    ]
-    setMessages(nextMessages)
-
-    // Append thinking indicator
-    setMessages(prev => [
-      ...prev,
-      { role: 'assistant', content: 'Membaca data manuskrip...', isStreaming: true }
-    ])
-
+    // Simulate thinking
     setTimeout(() => {
-      const pack = buildContextPack(userQuery, 3, 3)
-      const fullResponse = generateLocalResponse(userQuery, pack)
-      
-      // Stream Response
-      let index = 0
-      const words = fullResponse.split(' ')
-      let currentText = ''
-      
-      const interval = setInterval(() => {
-        if (index < words.length) {
-          currentText += (index === 0 ? '' : ' ') + words[index]
-          index++
-          setMessages(prev => {
-            const copy = [...prev]
-            copy[copy.length - 1] = {
-              role: 'assistant',
-              content: currentText + '█',
-              isStreaming: true
-            }
-            return copy
-          })
-        } else {
-          clearInterval(interval)
-          setMessages(prev => {
-            const copy = [...prev]
-            copy[copy.length - 1] = {
-              role: 'assistant',
-              content: currentText,
-              isStreaming: false
-            }
-            return copy
-          })
-          setBusy(false)
-        }
-      }, 35)
-    }, 800)
-  }
-
-  // ChatGPT & Gemini Prompt Generator
-  const MODES = {
-    agent: 'Terapkan kriteria evaluatif PMN. Hubungkan dengan bagian bab terdekat.',
-    diagnostic: 'Terapkan 7 pertanyaan diagnosis ekonomi (11.0) dan tipologi kegagalan (12.5). Fokus pada analisis struktural, bukan sekadar opini.',
-    debate: 'Rekonstruksi argumen pengguna ke versi PMN terkuat, lalu tunjukkan di mana letak ketidaklengkapan arsitekturalnya.',
-    oracle: 'Format tanggapan kaku: [REFERENSI PMN] -> [ANALISIS STRUKTURAL] -> [IMPLIKASI EVALUATIF]'
-  }
-
-  const generateRedirectPrompt = (mode: keyof typeof MODES, question: string) => {
-    const pack = buildContextPack(question, 5, 5)
-    const modeDesc = MODES[mode] || MODES.agent
-
-    // Format Context sections full text
-    const contextSections = pack.sections.map(s => {
-      return `\n[${s.id}] ${s.title} (${s.part})\n─────────────────────────────────────\n${s.fullText}\n`
-    }).join('\n')
-
-    // Format Glossary terms
-    const glossaryTerms = pack.glossary.map(g => `• ${g.term}: ${g.def}`).join('\n')
-
-    return `# PMN Agent — Grounded Input Package
-
-## System Prompt / Role
-You are PMN Agent for Progressive Materialist Naturalism (PMN) by Nova Dharma.
-Analyze the user's question using ONLY the manuscript extracts provided below.
-When answering: cite specific section IDs (e.g. "[3.4]"), label your inferences, and stay analytically rigorous.
-
-## Active Mode
-${modeDesc}
-
-## User Question
-${question || 'Berikan tinjauan atas bab ini dan letaknya di dalam arsitektur PMN.'}
-
-## PMN Manuscript Extracts
-================================================================
-${activeSec ? `━━━ CURRENT ACTIVE SECTION ━━━\n[${activeSec.id}] ${activeSec.title}\n─────────────────────────────────────\n${stripHtml(activeSec.html || '').slice(0, 2500)}\n\n` : ''}
-━━━ RELATED RETRIEVED SECTIONS ━━━
-${contextSections}
-
-━━━ KEY TERMS GLOSSARY ━━━
-${glossaryTerms}
-================================================================
-
-## Final Output Constraints
-- Rely exclusively on the manuscript extracts above.
-- Do not make generic philosophical assumptions.
-- Cite specific section IDs for every claim.
-- End with what empirical evidence would be required to falsify your conclusion.`
+      const pack = buildContextPack(userMsg.content)
+      const assistantMsg: Message = { 
+        role: 'assistant', 
+        content: generateLocalResponse(userMsg.content, pack) 
+      }
+      setMessages(prev => [...prev, assistantMsg])
+      setBusy(false)
+    }, 1200)
   }
 
   const handleCopyPrompt = (platform: 'chatgpt' | 'gemini') => {
-    const queryText = redirectQuery.trim() || (activeSec ? `Jelaskan peran Bab ${activeSec.id} dalam arsitektur PMN.` : 'Berikan tinjauan singkat tentang PMN.')
-    const prompt = generateRedirectPrompt(redirectMode, queryText)
+    setPromptCopied(true)
+    const pack = buildContextPack(redirectQuery || (activeSec?.title || 'General PMN Overview'), 8, 10)
     
+    let prompt = `[CONTEXT: PROGRESSIVE MATERIALIST NATURALISM (PMN) FRAMEWORK]\n`
+    prompt += `You are acting as an advanced PMN Dialectical Engine. Use the provided context to analyze the following query.\n\n`
+    prompt += `CORE QUERY: ${redirectQuery || 'Summarize the provided sections.'}\n\n`
+    prompt += `[MANUSKRIP CONTEXT - TARGET SECTIONS]\n`
+    pack.sections.forEach(s => {
+      prompt += `--- SECTION ${s.id}: ${s.title} ---\n${s.fullText}\n\n`
+    })
+    
+    if (pack.glossary.length > 0) {
+      prompt += `[LEXICON DEFINITIONS]\n`
+      pack.glossary.forEach(g => {
+        prompt += `- ${g.term}: ${g.def}\n`
+      })
+    }
+
+    prompt += `\n[INSTRUCTIONS]\n`
+    prompt += `1. Maintain the philosophical rigor of PMN.\n`
+    prompt += `2. Reference specific bab (Section IDs) provided in the text.\n`
+    prompt += `3. Identify material foundations vs ideological superstructures in the query.\n`
+
     navigator.clipboard.writeText(prompt).then(() => {
-      setPromptCopied(true)
       setPromptStats(`Teks paket prompt (${Math.round(prompt.length / 1024)} KB) berhasil disalin. Siap ditempelkan ke ${platform === 'chatgpt' ? 'ChatGPT' : 'Gemini'}!`)
       setTimeout(() => setPromptCopied(false), 2000)
     })
   }
 
   return (
-    <div className="bg-[var(--bg2)] dark:bg-[#111] border border-[var(--rule)] p-6 flex flex-col h-[520px] select-none">
+    <div className="bg-pmn-bg2 border border-pmn-rule p-8 flex flex-col h-[520px] select-none shadow-sm">
       {/* Header Tabs */}
-      <div className="flex justify-between items-center border-b border-[var(--rule)] pb-4 mb-4 flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <span className="animate-pulse w-2 h-2 bg-[var(--acc)] rounded-full inline-block" />
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[var(--ink)] dark:text-gray-200">PMN AI Assistant</span>
+      <div className="flex justify-between items-center border-b border-pmn-rule pb-4 mb-6 flex-wrap gap-4">
+        <div className="flex items-center gap-2.5">
+          <span className="animate-pulse w-2 h-2 bg-pmn-acc rounded-full inline-block shadow-[0_0_8px_rgba(192,39,26,0.4)]" />
+          <span className="font-pmn-mono text-[0.65rem] font-bold uppercase tracking-[0.2em] text-pmn-ink">PMN AI Assistant</span>
         </div>
         <div className="flex gap-2">
           <button 
             onClick={() => setActiveTab('claude')}
-            className={`font-mono text-[0.66rem] uppercase tracking-wider px-3 py-1 cursor-pointer transition-colors ${activeTab === 'claude' ? 'bg-[var(--acc)] text-white dark:text-black font-bold' : 'text-[var(--mute)] hover:text-[var(--ink)]'}`}
+            className={`font-pmn-mono text-[0.62rem] uppercase tracking-wider px-3 py-1.5 cursor-pointer transition-all ${activeTab === 'claude' ? 'bg-pmn-acc text-white dark:text-black font-bold shadow-sm' : 'text-pmn-mute hover:text-pmn-ink'}`}
           >
             Claude (Offline Sim)
           </button>
           <button 
             onClick={() => setActiveTab('chatgpt')}
-            className={`font-mono text-[0.66rem] uppercase tracking-wider px-3 py-1 cursor-pointer transition-colors ${activeTab === 'chatgpt' ? 'bg-[var(--acc)] text-white dark:text-black font-bold' : 'text-[var(--mute)] hover:text-[var(--ink)]'}`}
+            className={`font-pmn-mono text-[0.62rem] uppercase tracking-wider px-3 py-1.5 cursor-pointer transition-all ${activeTab === 'chatgpt' ? 'bg-pmn-acc text-white dark:text-black font-bold shadow-sm' : 'text-pmn-mute hover:text-pmn-ink'}`}
           >
             ChatGPT Handoff
           </button>
           <button 
             onClick={() => setActiveTab('gemini')}
-            className={`font-mono text-[0.66rem] uppercase tracking-wider px-3 py-1 cursor-pointer transition-colors ${activeTab === 'gemini' ? 'bg-[var(--acc)] text-white dark:text-black font-bold' : 'text-[var(--mute)] hover:text-[var(--ink)]'}`}
+            className={`font-pmn-mono text-[0.62rem] uppercase tracking-wider px-3 py-1.5 cursor-pointer transition-all ${activeTab === 'gemini' ? 'bg-pmn-acc text-white dark:text-black font-bold shadow-sm' : 'text-pmn-mute hover:text-pmn-ink'}`}
           >
             Gemini Handoff
           </button>
@@ -336,21 +263,21 @@ ${glossaryTerms}
       {activeTab === 'claude' && (
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Chat Logs */}
-          <div ref={chatLogRef} className="flex-1 overflow-y-auto space-y-4 mb-4 p-4 border border-[var(--rule)] bg-[var(--bg)]">
+          <div ref={chatLogRef} className="flex-1 overflow-y-auto space-y-5 mb-5 p-5 border border-pmn-rule bg-pmn-bg shadow-inner scroll-smooth">
             {messages.length === 0 ? (
-              <div className="h-full flex flex-col justify-center items-center text-center text-xs font-mono text-[var(--mute2)] space-y-2">
-                <span>✦ PMN AGENT SIMULATOR (OFFLINE) ✦</span>
-                <p className="max-w-[320px] font-serif leading-relaxed italic text-[var(--mute)]">
-                  Mode ini berjalan 100% lokal di browser Anda. COBA TANYA tentang "ought" atau "custodian".
+              <div className="h-full flex flex-col justify-center items-center text-center space-y-3">
+                <span className="font-pmn-mono text-[0.6rem] text-pmn-acc uppercase tracking-[0.3em] opacity-80">✦ PMN AGENT SIMULATOR ✦</span>
+                <p className="max-w-[320px] font-pmn-body leading-relaxed italic text-[0.85rem] text-pmn-mute/70">
+                  Mode ini berjalan 100% lokal. COBA TANYA tentang "ought" atau "custodian".
                 </p>
               </div>
             ) : (
               messages.map((m, idx) => (
-                <div key={idx} className={`space-y-1 ${m.role === 'user' ? 'text-right' : ''}`}>
-                  <span className="font-mono text-[0.6rem] uppercase tracking-wider text-[var(--mute2)]">
-                    {m.role === 'user' ? 'You' : 'PMN Agent'}
+                <div key={idx} className={`space-y-1.5 ${m.role === 'user' ? 'text-right' : ''}`}>
+                  <span className="font-pmn-mono text-[0.58rem] uppercase tracking-widest text-pmn-mute/60 font-bold">
+                    {m.role === 'user' ? 'Analytical Request' : 'PMN Dialectical Engine'}
                   </span>
-                  <div className={`p-3 text-left font-serif text-[0.88rem] leading-relaxed whitespace-pre-wrap ${m.role === 'user' ? 'bg-[rgba(201,168,76,0.1)] inline-block border border-[rgba(201,168,76,0.2)]' : 'bg-[var(--bg2)] border border-[var(--rule)]'}`}>
+                  <div className={`p-4 text-left font-pmn-body text-[0.88rem] leading-relaxed whitespace-pre-wrap shadow-xs ${m.role === 'user' ? 'bg-pmn-acc/5 inline-block border border-pmn-acc/20 rounded-sm italic' : 'bg-pmn-bg2 border border-pmn-rule rounded-sm'}`}>
                     {m.content}
                   </div>
                 </div>
@@ -363,7 +290,7 @@ ${glossaryTerms}
             <select 
               value={chatMode} 
               onChange={e => setChatMode(e.target.value as any)}
-              className="bg-[var(--bg)] border border-[var(--rule)] text-[var(--ink)] font-mono text-[0.68rem] px-2 outline-none cursor-pointer"
+              className="bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-mono text-[0.68rem] px-3 outline-none cursor-pointer hover:border-pmn-acc transition-colors"
             >
               <option value="agent">Analyst Mode</option>
               <option value="diagnostic">Diagnostic Mode</option>
@@ -375,14 +302,14 @@ ${glossaryTerms}
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleClaudeSend()}
-              className="flex-1 bg-[var(--bg)] border border-[var(--rule)] text-[var(--ink)] font-serif p-2 outline-none text-sm focus:border-[var(--acc)]"
-              placeholder="Tulis pertanyaan Anda..."
+              className="flex-1 bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-3 outline-none text-sm focus:border-pmn-acc transition-colors placeholder:text-pmn-mute/30 shadow-xs"
+              placeholder="Ketik pertanyaan analitis..."
               disabled={busy}
             />
             <button 
               onClick={handleClaudeSend}
               disabled={busy || !input.trim()}
-              className="bg-[var(--acc)] text-white dark:text-black font-mono text-xs font-bold uppercase px-4 hover:opacity-75 cursor-pointer disabled:opacity-50"
+              className="bg-pmn-acc text-white dark:text-black font-pmn-mono text-[0.68rem] font-bold uppercase px-6 tracking-widest hover:opacity-85 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               Kirim
             </button>
@@ -393,18 +320,18 @@ ${glossaryTerms}
       {/* CHATGPT / GEMINI REDIRECT HANDOFF TABS */}
       {(activeTab === 'chatgpt' || activeTab === 'gemini') && (
         <div className="flex-1 flex flex-col justify-between overflow-hidden">
-          <div className="space-y-4">
-            <p className="font-serif text-sm text-[var(--mute)] leading-relaxed">
-              Karena bot eksternal tidak dapat membuka URL dinamis manuskrip, tab ini akan **mengemas teks bab yang sedang Anda baca dan daftar istilah relevan** secara utuh ke dalam clipboard Anda.
+          <div className="space-y-6">
+            <p className="font-pmn-body text-[0.9rem] text-pmn-mute leading-relaxed">
+              Bot eksternal membutuhkan konteks utuh. Tab ini akan **mengemas naskah bab yang sedang dibaca dan daftar istilah relevan** secara sistematis ke dalam clipboard Anda.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-[150px_1fr] gap-3">
-              <div>
-                <label className="block font-mono text-[0.58rem] uppercase text-[var(--mute2)] mb-1">Mode Agen</label>
+            <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-4">
+              <div className="space-y-1.5">
+                <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute/80 tracking-widest font-bold">Mode Agen</label>
                 <select 
                   value={redirectMode} 
                   onChange={e => setRedirectMode(e.target.value as any)}
-                  className="w-full bg-[var(--bg)] border border-[var(--rule)] text-[var(--ink)] font-mono text-[0.68rem] p-2 outline-none cursor-pointer"
+                  className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-mono text-[0.7rem] p-2.5 outline-none cursor-pointer hover:border-pmn-acc transition-colors shadow-xs"
                 >
                   <option value="agent">General Analyst</option>
                   <option value="diagnostic">Diagnostic Mode</option>
@@ -412,34 +339,34 @@ ${glossaryTerms}
                   <option value="oracle">Strict Oracle</option>
                 </select>
               </div>
-              <div>
-                <label className="block font-mono text-[0.58rem] uppercase text-[var(--mute2)] mb-1">Pertanyaan Analitis</label>
+              <div className="space-y-1.5">
+                <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute/80 tracking-widest font-bold">Pertanyaan Khusus</label>
                 <input 
                   type="text" 
                   value={redirectQuery} 
                   onChange={e => setRedirectQuery(e.target.value)} 
-                  className="w-full bg-[var(--bg)] border border-[var(--rule)] text-[var(--ink)] font-serif p-2 outline-none text-sm focus:border-[var(--acc)]"
-                  placeholder={activeSec ? `Jelaskan peran Bab ${activeSec.id} dalam arsitektur PMN.` : 'Berikan tinjauan singkat tentang PMN.'}
+                  className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-2.5 outline-none text-[0.9rem] focus:border-pmn-acc transition-colors shadow-xs"
+                  placeholder={activeSec ? `Jelaskan peran Bab ${activeSec.id} dalam PMN.` : 'Berikan tinjauan singkat tentang PMN.'}
                 />
               </div>
             </div>
 
             {promptStats && (
-              <div className="bg-[#1b2210] border border-[#3b4f24] text-[#a5d6a7] font-mono text-[0.64rem] p-3 leading-relaxed">
+              <div className="bg-green-950/20 border border-green-900/50 text-green-400 font-pmn-mono text-[0.65rem] p-4 leading-relaxed animate-in fade-in slide-in-from-top-1">
                 {promptStats}
               </div>
             )}
           </div>
 
-          <div className="flex justify-between items-center mt-4">
-            <span className="font-mono text-[0.58rem] text-[var(--mute2)] uppercase tracking-wider">
-              ✦ Grounded Prompt Generator ✦
+          <div className="flex justify-between items-center mt-6 pt-6 border-t border-pmn-rule/50">
+            <span className="font-pmn-mono text-[0.6rem] text-pmn-mute/50 uppercase tracking-[0.2em]">
+              ✦ Prompt Pack Generator ✦
             </span>
             <button 
               onClick={() => handleCopyPrompt(activeTab)}
-              className="bg-[var(--acc)] text-white dark:text-black font-mono text-xs font-bold uppercase py-2.5 px-6 tracking-widest hover:opacity-75 cursor-pointer"
+              className="bg-pmn-acc text-white dark:text-black font-pmn-mono text-[0.7rem] font-bold uppercase py-3 px-8 tracking-[0.15em] shadow-lg hover:translate-y-[-1px] active:translate-y-[1px] cursor-pointer transition-all"
             >
-              {promptCopied ? 'Tersalin!' : `Salin Prompt & Buka ${activeTab === 'chatgpt' ? 'ChatGPT' : 'Gemini'} ↗`}
+              {promptCopied ? 'TERKEMAS!' : `SALIN PAKET & BUKA ${activeTab === 'chatgpt' ? 'CHATGPT' : 'GEMINI'} ↗`}
             </button>
           </div>
         </div>

@@ -342,57 +342,57 @@ function HomeView({
   }
 
   return (
-    <div ref={homeViewRef} id="home-view" className="view on h-screen overflow-y-auto relative z-10 flex flex-col">
+    <div ref={homeViewRef} id="home-view" className="view on h-screen overflow-y-auto relative z-10 flex flex-col bg-pmn-bg text-pmn-ink font-pmn-body">
       {/* Header Bar */}
-      <header className="fixed top-0 left-0 right-0 h-[52px] bg-[var(--hdr)] border-b border-[var(--rule)] px-5 flex items-center justify-between z-[100] select-none">
-        <button className="font-serif font-bold text-[1.05rem] text-[var(--acc)] tracking-[0.04em] cursor-pointer hover:opacity-75">
+      <header className="fixed top-0 left-0 right-0 h-[52px] bg-pmn-bg border-b border-pmn-rule px-5 flex items-center justify-between z-[100] select-none">
+        <button className="font-pmn-head font-bold text-[1.05rem] text-pmn-acc tracking-[0.04em] cursor-pointer hover:opacity-75">
           PMN
         </button>
         <div className="flex items-center gap-6">
-          <button onClick={onStartReading} className="font-mono text-[0.72rem] text-[var(--mute)] uppercase tracking-[0.14em] hover:text-[var(--acc)] cursor-pointer">
+          <button onClick={onStartReading} className="font-pmn-mono text-[0.72rem] text-pmn-mute uppercase tracking-[0.14em] hover:text-pmn-acc cursor-pointer">
             Mulai Membaca
           </button>
-          <button onClick={onToggleTheme} className="font-mono text-[0.72rem] text-[var(--mute)] border border-[var(--rule2)] px-3 py-1 hover:text-[var(--acc)] hover:border-[var(--acc)] cursor-pointer">
+          <button onClick={onToggleTheme} className="font-pmn-mono text-[0.72rem] text-pmn-mute border border-pmn-rule2 px-3 py-1 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer">
             {theme === 'dark' ? '☀ LIGHT' : '☾ DARK'}
           </button>
-          <button onClick={onOpenAdmin} className="font-mono text-[0.62rem] text-[var(--mute)] border border-[var(--rule)] bg-[var(--surface)] px-3 py-1.5 hover:opacity-75 cursor-pointer">
+          <button onClick={onOpenAdmin} className="font-pmn-mono text-[0.62rem] text-pmn-mute border border-pmn-rule bg-pmn-bg2 px-3 py-1.5 hover:opacity-75 cursor-pointer">
             ADMIN ↗
           </button>
         </div>
       </header>
 
       {/* Hero Cinematic Section */}
-      <section ref={heroStageRef} id="hero-stage" className="hero-stage cover-active relative min-h-screen flex flex-col justify-center items-center text-center p-6 border-b border-[var(--rule)] overflow-hidden">
+      <section ref={heroStageRef} id="hero-stage" className="hero-stage cover-active relative min-h-screen flex flex-col justify-center items-center text-center p-6 border-b border-pmn-rule overflow-hidden">
         <ParticlesBackground />
         
         <div className="hero-parallax relative z-10 max-w-[820px] w-full mx-auto mt-12">
-          <div className="font-mono text-[0.7rem] bg-[var(--acc)] text-white dark:text-black inline-block px-5 py-1.5 tracking-[0.2em] uppercase mb-8">
+          <div className="font-pmn-mono text-[0.7rem] bg-pmn-acc text-white dark:text-black inline-block px-5 py-1.5 tracking-[0.2em] uppercase mb-8">
             A Framework for Navigating Material Reality
           </div>
-          <h1 className="font-serif text-[clamp(2.5rem,7vw,5rem)] font-bold uppercase leading-none tracking-tight text-[var(--ink)] mb-4 select-none">
+          <h1 className="font-pmn-head text-[clamp(2.5rem,7vw,5rem)] font-bold uppercase leading-none tracking-tight text-pmn-ink mb-4 select-none">
             Progressive<br />Materialist<br />
-            <em className="text-[var(--acc)] not-italic serif-italic font-normal block lowercase mt-2">naturalism</em>
+            <em className="text-pmn-acc not-italic font-normal block lowercase mt-2" style={{ fontFamily: "serif", fontStyle: "italic" }}>naturalism</em>
           </h1>
-          <p className="font-serif italic text-lg text-[var(--ink)] opacity-85 mb-8">
+          <p className="font-pmn-body italic text-lg text-pmn-ink opacity-85 mb-8">
             By Nova Dharma &mdash; Version 117.6
           </p>
-          <div className="font-serif italic text-sm text-[var(--ink2)] max-w-[520px] mx-auto border-t border-b border-[var(--acc)] py-3 px-6 mb-8 leading-relaxed">
+          <div className="font-pmn-body italic text-sm text-pmn-ink2 max-w-[520px] mx-auto border-t border-b border-pmn-acc py-3 px-6 mb-8 leading-relaxed">
             &ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;
           </div>
 
           {/* Quick Metrics */}
-          <div className="grid grid-cols-3 max-w-[480px] mx-auto border border-[var(--rule)] bg-[var(--bg2)] mb-8 divide-x divide-[var(--rule)]">
+          <div className="grid grid-cols-3 max-w-[480px] mx-auto border border-pmn-rule bg-pmn-bg2 mb-8 divide-x divide-pmn-rule">
             <div className="py-3 text-center">
-              <span className="block font-mono text-[0.62rem] text-[var(--mute2)] uppercase tracking-widest mb-1">Parts</span>
-              <span className="font-serif text-[1.1rem] text-[var(--acc)]">{data.parts.length}</span>
+              <span className="block font-pmn-mono text-[0.62rem] text-pmn-mute uppercase tracking-widest mb-1">Parts</span>
+              <span className="font-pmn-head text-[1.1rem] text-pmn-acc">{data.parts.length}</span>
             </div>
             <div className="py-3 text-center">
-              <span className="block font-mono text-[0.62rem] text-[var(--mute2)] uppercase tracking-widest mb-1">Sections</span>
-              <span className="font-serif text-[1.1rem] text-[var(--acc)]">{totalSections}</span>
+              <span className="block font-pmn-mono text-[0.62rem] text-pmn-mute uppercase tracking-widest mb-1">Sections</span>
+              <span className="font-pmn-head text-[1.1rem] text-pmn-acc">{totalSections}</span>
             </div>
             <div className="py-3 text-center">
-              <span className="block font-mono text-[0.62rem] text-[var(--mute2)] uppercase tracking-widest mb-1">Read</span>
-              <span className="font-serif text-[1.1rem] text-[var(--acc)]">{readPct}%</span>
+              <span className="block font-pmn-mono text-[0.62rem] text-pmn-mute uppercase tracking-widest mb-1">Read</span>
+              <span className="font-pmn-head text-[1.1rem] text-pmn-acc">{readPct}%</span>
             </div>
           </div>
 
