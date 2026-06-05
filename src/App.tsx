@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ParticlesBackground from './components/ParticlesBackground'
-import Sidebar from './components/Sidebar'
 import ReaderView from './components/ReaderView'
+import ContentsView from './components/ContentsView'
 import VersionManager from './components/VersionManager'
 
 export default function App() {
-  const [page, setPage] = useState<'home' | 'reader' | 'admin' | 'login'>('home')
+  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin'>('home')
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [layoutMode, setLayoutMode] = useState<'auto' | 'mobile' | 'desktop'>('auto')
   
   // Manuscript Data State
   const [loading, setLoading] = useState(true)
@@ -52,7 +53,7 @@ export default function App() {
     })
   }, [])
 
-  // Initialize Theme & Reading Progress
+  // Initialize Theme, Reading Progress, & Layout overrides
   useEffect(() => {
     // Theme
     try {
@@ -60,6 +61,15 @@ export default function App() {
       const activeTheme = savedTheme || 'dark'
       setTheme(activeTheme)
       document.documentElement.setAttribute('data-theme', activeTheme)
+    } catch (e) {}
+
+    // Layout
+    try {
+      const savedLayout = localStorage.getItem('pmn-layout') as 'mobile' | 'desktop' | null
+      if (savedLayout) {
+        setLayoutMode(savedLayout)
+        document.documentElement.setAttribute('data-layout', savedLayout)
+      }
     } catch (e) {}
 
     // Reading Progress
@@ -86,6 +96,31 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', nextTheme)
     try {
       localStorage.setItem('pmn-theme', nextTheme)
+    } catch (e) {}
+  }
+
+  const toggleLayoutMode = () => {
+    const isMobileScreen = window.innerWidth <= 680
+    const eff = layoutMode === 'auto' ? (isMobileScreen ? 'mobile' : 'desktop') : layoutMode
+    
+    let nextMode: 'auto' | 'mobile' | 'desktop' = 'auto'
+    if (layoutMode === 'auto') {
+      nextMode = eff === 'mobile' ? 'desktop' : 'mobile'
+    } else if (layoutMode === eff) {
+      nextMode = eff === 'mobile' ? 'desktop' : 'mobile'
+    } else {
+      nextMode = 'auto'
+    }
+
+    setLayoutMode(nextMode)
+    try {
+      if (nextMode !== 'auto') {
+        localStorage.setItem('pmn-layout', nextMode)
+        document.documentElement.setAttribute('data-layout', nextMode)
+      } else {
+        localStorage.removeItem('pmn-layout')
+        document.documentElement.removeAttribute('data-layout')
+      }
     } catch (e) {}
   }
 
@@ -119,22 +154,46 @@ export default function App() {
     )
   }
 
+  // Find resume section info if valid
+  const resumeSection = (() => {
+    const [pIdx, sIdx] = curPos
+    return data.parts[pIdx]?.subs[sIdx] || null
+  })()
+
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--ink)] transition-colors duration-200">
       {/* Dynamic Grid Overlays */}
       <div className="vignette-overlay" />
       <div className="grid-overlay" />
 
-      {/* Main App Container */}
+      {/* Main App Page Routing Container */}
       {page === 'home' && (
         <HomeView 
           data={data}
           readMap={readMap}
-          curPos={curPos}
+          resumeSec={resumeSection}
           theme={theme}
           onToggleTheme={toggleTheme}
-          onStartReading={() => setPage('reader')}
+          layoutMode={layoutMode}
+          onToggleLayout={toggleLayoutMode}
+          onStartReading={() => setPage('contents')}
+          onResumeReading={() => setPage('reader')}
           onOpenAdmin={() => setPage('login')}
+        />
+      )}
+
+      {page === 'contents' && (
+        <ContentsView 
+          data={data}
+          readMap={readMap}
+          curPos={curPos}
+          onSelectSection={(pIdx, sIdx) => {
+            saveReadingPosition(pIdx, sIdx)
+            setPage('reader')
+          }}
+          onBackHome={() => setPage('home')}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
       )}
 
@@ -145,7 +204,7 @@ export default function App() {
           curPos={curPos}
           onMarkRead={markSectionAsRead}
           onSavePosition={saveReadingPosition}
-          onBackHome={() => setPage('home')}
+          onBackHome={() => setPage('contents')}
           theme={theme}
           onToggleTheme={toggleTheme}
         />
@@ -171,35 +230,121 @@ export default function App() {
 interface HomeViewProps {
   data: any
   readMap: Record<string, boolean>
-  curPos: [number, number]
+  resumeSec: any
   theme: 'dark' | 'light'
   onToggleTheme: () => void
+  layoutMode: 'auto' | 'mobile' | 'desktop'
+  onToggleLayout: () => void
   onStartReading: () => void
+  onResumeReading: () => void
   onOpenAdmin: () => void
 }
 
-function HomeView({ data, readMap, curPos, theme, onToggleTheme, onStartReading, onOpenAdmin }: HomeViewProps) {
-  const [scrolledPct, setScrolledPct] = useState(0)
+function HomeView({ 
+  data, 
+  readMap, 
+  resumeSec, 
+  theme, 
+  onToggleTheme, 
+  layoutMode, 
+  onToggleLayout, 
+  onStartReading, 
+  onResumeReading, 
+  onOpenAdmin 
+}: HomeViewProps) {
+  const homeViewRef = useRef<HTMLDivElement>(null)
+  const heroStageRef = useRef<HTMLDivElement>(null)
 
+  // Cover parallax calculations (L1432-1484 in app.ts)
   useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY
-      const total = document.documentElement.scrollHeight - window.innerHeight
-      setScrolledPct(total > 0 ? (scrolled / total) * 100 : 0)
+    const homeView = homeViewRef.current
+    const stage = heroStageRef.current
+    if (!homeView || !stage) return
+
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let current = 0
+    let target = 0
+    let rafId = 0
+
+    function holdRatio() {
+      return window.innerWidth <= 680 ? 0.18 : 0.3
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    
+    function shapeProgress(raw: number) {
+      const hold = holdRatio()
+      if (raw <= hold) return raw * 0.05
+      // Simplified smoothStep: v * v * (3 - 2 * v)
+      const v = (raw - hold) / (1 - hold)
+      return 0.015 + (v * v * (3 - 2 * v)) * 0.985
+    }
+
+    function paint() {
+      if (!reduceMotion) {
+        current += (target - current) * 0.075
+        if (Math.abs(target - current) < 0.001) current = target
+      } else {
+        current = target
+      }
+      
+      // Eased cubic release
+      const eased = 1 - Math.pow(1 - current, 3)
+      stage.style.setProperty('--cover-progress', eased.toFixed(4))
+      stage.classList.toggle('cover-settled', eased > 0.985)
+      
+      if (!reduceMotion && current !== target) {
+        rafId = requestAnimationFrame(paint)
+      } else {
+        rafId = 0
+      }
+    }
+
+    function syncCover() {
+      const releaseRange = Math.max(stage.offsetHeight - homeView.clientHeight, 1)
+      const raw = Math.max(0, Math.min(1, (homeView.scrollTop - stage.offsetTop) / releaseRange))
+      target = shapeProgress(raw)
+      
+      if (reduceMotion) {
+        current = target
+        paint()
+      } else if (!rafId) {
+        rafId = requestAnimationFrame(paint)
+      }
+    }
+
+    homeView.addEventListener('scroll', syncCover, { passive: true })
+    window.addEventListener('resize', syncCover)
+    syncCover()
+
+    return () => {
+      homeView.removeEventListener('scroll', syncCover)
+      window.removeEventListener('resize', syncCover)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
   }, [])
 
-  // Hitung persentase keterbacaan
+  // Calculate statistics
   const totalSections = data.parts.reduce((acc: number, p: any) => acc + (p.subs?.length || 0), 0)
   const readCount = Object.keys(readMap).length
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
 
+  // Format layout toggle label
+  const getLayoutLabel = () => {
+    const isMobileScreen = window.innerWidth <= 680
+    const eff = isMobileScreen ? 'mobile' : 'desktop'
+    
+    if (layoutMode === 'mobile') {
+      return 'Layout: Mobile \u2192 switch to desktop'
+    } else if (layoutMode === 'desktop') {
+      return 'Layout: Desktop \u2192 reset to auto'
+    } else {
+      return `Layout: Auto (${eff}) \u2192 override`
+    }
+  }
+
   return (
-    <div className="relative z-10">
+    <div ref={homeViewRef} id="home-view" className="view on h-screen overflow-y-auto relative z-10 flex flex-col">
       {/* Header Bar */}
-      <header className="fixed top-0 left-0 right-0 h-[52px] bg-[var(--hdr)] border-b border-[var(--rule)] px-5 flex items-center justify-between z-[100]">
+      <header className="fixed top-0 left-0 right-0 h-[52px] bg-[var(--hdr)] border-b border-[var(--rule)] px-5 flex items-center justify-between z-[100] select-none">
         <button className="font-serif font-bold text-[1.05rem] text-[var(--acc)] tracking-[0.04em] cursor-pointer hover:opacity-75">
           PMN
         </button>
@@ -216,16 +361,11 @@ function HomeView({ data, readMap, curPos, theme, onToggleTheme, onStartReading,
         </div>
       </header>
 
-      {/* Progress Bar di Header */}
-      <div className="fixed top-[51px] left-0 right-0 h-[2px] bg-[var(--rule2)] z-[100]">
-        <div className="h-full bg-[var(--acc)] transition-all duration-300" style={{ width: `${scrolledPct}%` }} />
-      </div>
-
       {/* Hero Cinematic Section */}
-      <section className="relative min-h-screen flex flex-col justify-center items-center text-center p-6 border-b border-[var(--rule)] overflow-hidden">
+      <section ref={heroStageRef} id="hero-stage" className="hero-stage cover-active relative min-h-screen flex flex-col justify-center items-center text-center p-6 border-b border-[var(--rule)] overflow-hidden">
         <ParticlesBackground />
         
-        <div className="relative z-10 max-w-[820px] w-full mx-auto mt-12">
+        <div className="hero-parallax relative z-10 max-w-[820px] w-full mx-auto mt-12">
           <div className="font-mono text-[0.7rem] bg-[var(--acc)] text-white dark:text-black inline-block px-5 py-1.5 tracking-[0.2em] uppercase mb-8">
             A Framework for Navigating Material Reality
           </div>
@@ -257,19 +397,29 @@ function HomeView({ data, readMap, curPos, theme, onToggleTheme, onStartReading,
           </div>
 
           {/* CTAs */}
-          <div className="max-w-[520px] mx-auto border border-[var(--ink)] dark:border-[var(--rule2)] divide-y divide-[var(--ink)] dark:divide-[var(--rule2)] bg-[#050505]">
+          <div className="max-w-[520px] mx-auto border border-[var(--ink)] dark:border-[var(--rule2)] divide-y divide-[var(--ink)] dark:divide-[var(--rule2)] bg-[#050505] shadow-xl">
             <div className="flex divide-x divide-[var(--ink)] dark:divide-[var(--rule2)]">
               <button onClick={onStartReading} className="flex-1 font-mono text-[0.72rem] font-bold text-white bg-[var(--acc)] uppercase tracking-[0.18em] py-4 cursor-pointer hover:bg-[var(--acc2)] transition-colors">
-                Mulai Membaca
+                Mulai Membaca [C]
               </button>
+              {resumeSec && (
+                <button onClick={onResumeReading} className="flex-1 font-mono text-[0.72rem] font-bold text-[var(--acc)] border-l border-[var(--rule2)] bg-transparent uppercase tracking-[0.18em] py-4 cursor-pointer hover:bg-[rgba(201,168,76,0.05)] transition-colors">
+                  Resume: {resumeSec.id} &rarr; [R]
+                </button>
+              )}
             </div>
-            <div className="flex divide-x divide-[var(--ink)] dark:divide-[var(--rule2)] text-center">
-              <a href="https://github.com/novadharma-hub/pmn-framework/releases/latest" target="_blank" rel="noopener noreferrer" className="flex-1 font-mono text-[0.68rem] text-[var(--ink)] dark:text-[var(--ink2)] py-3 uppercase tracking-wider hover:bg-[var(--ink)] dark:hover:bg-[var(--rule2)] hover:text-white dark:hover:text-[var(--acc)] transition-colors">
+            <div className="flex divide-x divide-[var(--ink)] dark:divide-[var(--rule2)] text-center font-mono text-[0.68rem]">
+              <a href="https://github.com/novadharma-hub/pmn-framework/releases/latest" target="_blank" rel="noopener noreferrer" className="flex-1 text-[var(--ink)] dark:text-[var(--ink2)] py-3 uppercase tracking-wider hover:bg-[var(--ink)] dark:hover:bg-[var(--rule2)] hover:text-white dark:hover:text-[var(--acc)] transition-colors">
                 Download PDF/MD &darr;
               </a>
-              <a href="pmn-agent-guide.html" className="flex-1 font-mono text-[0.68rem] text-[var(--ink)] dark:text-[var(--ink2)] py-3 uppercase tracking-wider hover:bg-[var(--ink)] dark:hover:bg-[var(--rule2)] hover:text-white dark:hover:text-[var(--acc)] transition-colors">
-                AI Agent Guide &rarr;
+              <a href="pmn-agent-guide.html" className="flex-1 text-[var(--ink)] dark:text-[var(--ink2)] py-3 uppercase tracking-wider hover:bg-[var(--ink)] dark:hover:bg-[var(--rule2)] hover:text-white dark:hover:text-[var(--acc)] transition-colors">
+                AI Agent Guide [A] &rarr;
               </a>
+            </div>
+            <div className="flex divide-x divide-[var(--ink)] dark:divide-[var(--rule2)] text-center font-mono text-[0.62rem]">
+              <button onClick={onToggleLayout} className="flex-1 text-[var(--mute)] py-2.5 uppercase tracking-wider hover:bg-[var(--ink)] dark:hover:bg-[var(--rule2)] hover:text-white dark:hover:text-[var(--acc)] cursor-pointer">
+                {getLayoutLabel()}
+              </button>
             </div>
           </div>
         </div>
@@ -287,7 +437,7 @@ function HomeView({ data, readMap, curPos, theme, onToggleTheme, onStartReading,
       </div>
 
       {/* Axiom Map Section (Accordion) */}
-      <section className="bg-[var(--bg2)] dark:bg-[#141414] py-16 px-6 border-b border-[var(--rule)]">
+      <section className="bg-[var(--bg2)] dark:bg-[#141414] py-16 px-6 border-b border-[var(--rule)] select-none">
         <div className="max-w-[1080px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8">
           <div className="border border-[#7a593c42] bg-[rgba(255,255,255,0.22)] dark:bg-[rgba(255,255,255,0.018)] p-8 shadow-[12px_12px_0_rgba(122,106,88,0.08)] dark:shadow-[10px_10px_0_rgba(0,0,0,0.28)]">
             <h2 className="font-serif text-2xl font-semibold mb-3">Axiom Structure</h2>
@@ -304,10 +454,13 @@ function HomeView({ data, readMap, curPos, theme, onToggleTheme, onStartReading,
           <div className="divide-y divide-[var(--rule)]">
             <div className="font-mono text-[0.65rem] text-[var(--acc)] uppercase tracking-wider pb-3">Tier 1 — Foundational Axioms (Titik Tolak)</div>
             <AxiomItem num="1a" title="Mind-Independent Material Reality is Primary" defaultOpen={true}>
-              Realitas ada terlepas dari persepsi atau kerangka konseptual kita. Ini adalah fondasi mutlak: kerangka apa pun yang mendahulukan norma/nilai sebelum menetapkan kondisi material telah dibangun di atas pasir.
+              Realitas ada terlepas dari persepsi atau kerangka konseptual kita. Ini adalah fondasi mutlak: kerangka apa pun yang mendahulukan norma/nilai sebelum menetapkan kondisi material telah disusun di atas pasir.
             </AxiomItem>
             <AxiomItem num="1b" title="Suffering Has Negative Evaluative Valence">
               Penderitaan (suffering) biologi yang tidak perlu adalah jangkar moral non-arbitrer yang kita pilih. Kami tidak berargumen dari metafisika, melainkan dari kenyataan biologis bahwa organisme menghindari rasa sakit.
+            </AxiomItem>
+            <AxiomItem num="1c" title="Becoming is Evaluatively Significant">
+              Pengembangan kapasitas diri melampaui kelangsungan hidup (Becoming) adalah atap evaluatif yang berpasangan dengan lantai penderitaan. Atap dan lantai ini saling mendukung.
             </AxiomItem>
             <div className="font-mono text-[0.65rem] text-[var(--ink2)] dark:text-[#d4c4b4] uppercase tracking-wider py-3 mt-4">Tier 2 — Structural Commitments (Kerangka Kerja)</div>
             <AxiomItem num="2a" title="Probabilistic Determinism">
@@ -318,7 +471,7 @@ function HomeView({ data, readMap, curPos, theme, onToggleTheme, onStartReading,
       </section>
 
       {/* Footer */}
-      <footer className="max-w-[900px] mx-auto py-8 px-6 flex justify-between flex-wrap gap-4 text-xs font-mono text-[var(--mute)] uppercase tracking-widest">
+      <footer className="max-w-[900px] mx-auto py-8 px-6 flex justify-between flex-wrap gap-4 text-xs font-mono text-[var(--mute)] uppercase tracking-widest mt-auto">
         <span>Progressive Materialist Naturalism &mdash; Nova Dharma</span>
         <span>{new Date().getFullYear()}</span>
       </footer>
