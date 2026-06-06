@@ -128,17 +128,20 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
           </div>
           <div className="flex justify-center text-center px-4">
             <p className="sv-hdr !border-none !p-0 !m-0 font-pmn-head text-[1.7rem] lg:text-[2.2rem] text-pmn-ink whitespace-nowrap leading-tight" id="sv-hdr">
-              {activeTab === 'map' ? 'Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : 'Search Analysis'}
+              {activeTab === 'map' ? 'Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : `Search — "${searchQuery}"`}
             </p>
           </div>
           <div className="flex justify-end items-center gap-6">
-            {/* Redundant Map/Glossary buttons removed — already in main header */}
+            <div className="flex gap-2">
+               <button onClick={() => onSetSubView?.('map')} className={`font-mono text-[0.65rem] uppercase tracking-widest px-3 py-1 border transition-all ${activeTab === 'map' ? 'border-pmn-acc text-pmn-acc bg-pmn-acc/5' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink'}`}>Map</button>
+               <button onClick={() => onSetSubView?.('glossary')} className={`font-mono text-[0.65rem] uppercase tracking-widest px-3 py-1 border transition-all ${activeTab === 'glossary' ? 'border-pmn-acc text-pmn-acc bg-pmn-acc/5' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink'}`}>Glossary</button>
+            </div>
           </div>
         </div>
       </div>
       
-      <div id="sv-body-scroll" className="flex-1 overflow-y-auto custom-scrollbar w-full flex flex-col items-center">
-        <div id="sv-body" className="w-full pt-16 pb-32 flex flex-col items-center" style={{ maxWidth: '1280px', paddingLeft: '2rem', paddingRight: '2rem', marginLeft: 'auto', marginRight: 'auto', boxSizing: 'border-box' }}>
+      <div id="sv-body-scroll" className="flex-1 overflow-y-auto custom-scrollbar w-full flex flex-col items-center" style={{ marginLeft: 0, paddingLeft: 0 }}>
+        <div id="sv-body" className="w-full mx-auto pt-16 pb-32" style={{ maxWidth: '1280px', paddingLeft: '2rem', paddingRight: '2rem' }}>
 
           {activeTab === 'map' && (
             <div id="toc-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[1200px] mx-auto">
@@ -276,20 +279,20 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
           )}
 
           {activeTab === 'search' && (
-            <div id="search-results-panel" className="animate-in fade-in slide-in-from-bottom-2 w-full max-w-[840px] pt-10 flex flex-col items-center" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-              
-              <div className="mb-20 text-center w-full">
-                <h3 className="font-pmn-head text-4xl lg:text-5xl font-normal text-pmn-ink opacity-90 leading-tight">
-                  {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} for &ldquo;{searchQuery || '...'}&rdquo;
+            <div id="search-results-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[840px] mx-auto pt-10">
+              <div className="mb-20 text-center">
+                <h3 className="font-pmn-head text-4xl lg:text-5xl font-normal text-pmn-ink opacity-90">
+                  {searchResults.length} results for &ldquo;{searchQuery}&rdquo;
                 </h3>
+                <div className="w-24 h-px bg-pmn-rule/60 mx-auto mt-8" />
               </div>
 
-              <div className="w-full space-y-0">
+              <div className="space-y-0">
                 {searchResults.map((r, i) => (
                   <button 
                     key={i} 
                     onClick={() => onSelectSection(r.pIdx, r.sIdx)}
-                    className="res w-full text-left bg-transparent py-12 border-b border-pmn-rule/20 hover:bg-pmn-acc/[0.02] transition-all group flex flex-col gap-2 px-6 rounded-xs"
+                    className="res w-full text-left bg-transparent py-12 border-b border-pmn-rule/20 hover:bg-pmn-acc/[0.02] transition-all group flex flex-col gap-2 px-4 -mx-4 rounded-xs"
                   >
                     <div className="flex items-center gap-3 mb-1">
                       <span className="res-loc font-mono text-[0.65rem] text-pmn-acc uppercase tracking-[0.2em] font-bold">
@@ -318,19 +321,9 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                 ))}
 
                 {searchResults.length === 0 && (
-                  <div className="py-24 w-full flex flex-col items-center text-center">
-                    <p className="font-pmn-body text-xl text-pmn-mute italic opacity-60 max-w-[400px] mx-auto leading-relaxed">
-                      {searchQuery 
-                        ? `No direct matches found in the manuscript for "${searchQuery}".` 
-                        : "Enter a term above to begin analytical search."
-                      }
-                    </p>
-                    <button 
-                      onClick={() => onSetSubView?.('map')} 
-                      className="mt-12 font-pmn-mono text-[0.7rem] text-pmn-acc uppercase tracking-[0.2em] border border-pmn-acc/40 px-8 py-3 hover:bg-pmn-acc hover:text-white transition-all rounded-xs"
-                    >
-                      Return to Manuscript Map
-                    </button>
+                  <div className="py-32 text-center">
+                    <p className="font-pmn-body text-xl text-pmn-mute italic opacity-60">No direct matches found in the manuscript for this query.</p>
+                    <button onClick={() => onSetSubView?.('map')} className="mt-8 font-mono text-[0.7rem] text-pmn-acc uppercase tracking-widest border border-pmn-acc px-6 py-2 hover:bg-pmn-acc hover:text-white transition-all">Return to Map</button>
                   </div>
                 )}
               </div>
