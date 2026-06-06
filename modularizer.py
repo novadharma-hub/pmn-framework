@@ -109,7 +109,7 @@ def compile_mode():
     manifest_path = os.path.join(parts_dir, "manifest.json")
 
     # TypeScript compilation
-    print("[INFO] Compiling app.ts to app.js via tsc...")
+    print("[INFO] Compiling app.ts to app.js via esbuild...")
     try:
         import subprocess
         # Clean old app.js first to avoid typescript compiler checkJs/global scope collision issues
@@ -119,19 +119,19 @@ def compile_mode():
             except Exception as e:
                 print(f"[WARN] Could not remove old app.js before compile: {e}")
 
-        # Run tsc
-        res = subprocess.run("npx tsc", shell=True, capture_output=True, text=True)
+        # Run esbuild
+        res = subprocess.run("npx esbuild app.ts --outfile=app.js", shell=True, capture_output=True, text=True)
         if res.returncode != 0:
-            print("[WARN] TypeScript compilation completed with warnings/errors:")
+            print("[WARN] esbuild compilation completed with warnings/errors:")
             print(res.stderr or res.stdout)
             # Check if app.js was emitted despite warnings
             if not os.path.exists(app_js_path):
-                print("[ERROR] CRITICAL: TypeScript compilation failed and no app.js was generated.")
+                print("[ERROR] CRITICAL: esbuild compilation failed and no app.js was generated.")
                 return
         else:
-            print("   [OK] TypeScript compilation completed successfully.")
+            print("   [OK] esbuild compilation completed successfully.")
     except Exception as e:
-        print(f"[WARN] Failed to execute TypeScript compiler (npx tsc): {e}")
+        print(f"[WARN] Failed to execute esbuild (npx esbuild): {e}")
         if not os.path.exists(app_js_path):
             print("[ERROR] CRITICAL: app.js is missing and TypeScript compilation could not run.")
             return
@@ -227,10 +227,10 @@ def compile_mode():
     css_placeholder_pattern = r'<!-- PANGGIL CSS EKSTERNAL -->\s*<link rel="stylesheet" href="style.css">'
     css_replacement = f"<style>\n{css_content}\n</style>"
     if re.search(css_placeholder_pattern, html_content):
-        html_content = re.sub(css_placeholder_pattern, css_replacement, html_content)
+        html_content = re.sub(css_placeholder_pattern, lambda _: css_replacement, html_content)
     else:
         # Fallback in case the exact comment is modified
-        html_content = re.sub(r'<link rel="stylesheet" href="style.css">', css_replacement, html_content)
+        html_content = re.sub(r'<link rel="stylesheet" href="style.css">', lambda _: css_replacement, html_content)
     print("   [OK] CSS inlined successfully.")
 
     # Helper function to generate JSON script tag
