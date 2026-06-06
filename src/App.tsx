@@ -1,249 +1,582 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import ParticlesBackground from './components/ParticlesBackground'
 import ReaderView from './components/ReaderView'
 import ContentsView from './components/ContentsView'
 import VersionManager from './components/VersionManager'
+import KeyboardModal from './components/KeyboardModal'
+import NotesModal from './components/NotesModal'
+import GuideView from './components/GuideView'
+import AITerminal from './components/AITerminal'
+
+
 
 export default function App() {
-  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin'>('home')
+  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide'>('home')
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-  const [layoutMode, setLayoutMode] = useState<'auto' | 'mobile' | 'desktop'>('auto')
-  
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<any>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [readMap, setReadMap] = useState<Record<string, boolean>>({})
   const [curPos, setCurPos] = useState<[number, number]>([0, 0])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchPartFilter, setSearchPartFilter] = useState('')
+  const [paletteTrigger, setPaletteTrigger] = useState(0)
+  const [contentsSub, setContentsSub] = useState<'map' | 'glossary' | 'search'>('map')
+  const [kbdOpen, setKbdOpen] = useState(false)
+  const [notesOpen, setNotesOpen] = useState(false)
+  const [contentWidth, setContentWidth] = useState<'narrow' | 'medium' | 'wide'>('wide')
+  const [history, setHistory] = useState<[number, number][]>([])
+  const [showTip, setShowTip] = useState<boolean>(() => {
+    try { return localStorage.getItem('pmn-tip-dismissed') !== '1' } catch { return true }
+  }) // persist until X (mengikuti user, not reset on reload/nav back to cover)
 
-  // Fetch Data
+  // Global hotkeys: K = keyboard modal, N = notes modal, / = command palette
   useEffect(() => {
-    const files = ['parts', 'gl', 'glg', 'rel', 'look', 'quotes', 'ci']
-    Promise.all(files.map(f => fetch(`./data/${f}.json`).then(r => r.json()).catch(() => null)))
+    const onKey = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) return
+      const key = e.key.toLowerCase()
+      if (key === 'k') { e.preventDefault(); setKbdOpen(v => !v) }
+      if (key === 'n') { e.preventDefault(); setNotesOpen(v => !v) }
+      if (key === '/') { e.preventDefault(); if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }
+      if (key === 'f') { e.preventDefault(); document.body.classList.toggle('focus-mode') } // global focus toggle even if hdr hidden
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [page])
+
+  // Data loading
+  useEffect(() => {
+    const dataFiles = ['parts', 'gl', 'glg', 'rel', 'look', 'quotes', 'ci']
+    Promise.all(dataFiles.map(f => fetch(`./data/${f}.json`).then(r => r.json()).catch(() => null)))
       .then(([parts, gl, glg, rel, look, quotes, ci]) => {
         setData({ parts: parts || [], gl: gl || {}, glg: glg || {}, rel: rel || {}, look: look || {}, quotes: quotes || [], ci: ci || {} })
+        setLoadError((parts && parts.length > 0) ? null : 'Gagal memuat data manuskrip. Cek network / public_static/data.')
         setLoading(false)
       })
+      .catch(e => { setLoadError('Error memuat data: ' + (e?.message || e)); setLoading(false) })
   }, [])
 
-  // Init Settings
+  // Theme & local storage sync
   useEffect(() => {
-    const st = localStorage.getItem('pmn-theme') as 'dark' | 'light' || 'dark'
-    setTheme(st); document.documentElement.setAttribute('data-theme', st)
-    
-    const sl = localStorage.getItem('pmn-layout'); if (sl) { setLayoutMode(sl as any); document.documentElement.setAttribute('data-layout', sl) }
-    const sr = JSON.parse(localStorage.getItem('pmn-read') || '{}'); setReadMap(sr)
-    const sp = localStorage.getItem('pmn-pos'); if (sp) { const [p, s] = sp.split(',').map(Number); if (!isNaN(p) && !isNaN(s)) setCurPos([p, s]) }
+    const savedTheme = localStorage.getItem('pmn-theme') as 'dark' | 'light' || 'dark'
+    setTheme(savedTheme)
+    document.documentElement.setAttribute('data-theme', savedTheme)
+    const savedRead = JSON.parse(localStorage.getItem('pmn-read') || '{}')
+    setReadMap(savedRead)
+    const savedPos = localStorage.getItem('pmn-pos')
+    if (savedPos) {
+      const [p, s] = savedPos.split(',').map(Number)
+      if (!isNaN(p) && !isNaN(s)) setCurPos([p, s])
+    }
+    const savedWidth = localStorage.getItem('pmn-content-width') as any
+    if (savedWidth) setContentWidth(savedWidth)
+    const savedHist = JSON.parse(localStorage.getItem('pmn-history') || '[]')
+    setHistory(savedHist)
+  }, [])
+
+  // Content width initialization (moved before conditional returns to fix Hook order violation)
+  useEffect(() => {
+    const savedWidth = localStorage.getItem('pmn-content-width') as any
+    if (savedWidth) {
+      setContentWidth(savedWidth)
+      const val = savedWidth === 'narrow' ? '62ch' : savedWidth === 'wide' ? '92ch' : '78ch'
+      document.documentElement.style.setProperty('--reader-measure', val)
+    } else {
+      document.documentElement.style.setProperty('--reader-measure', '78ch')
+    }
   }, [])
 
   const toggleTheme = () => {
-    const nt = theme === 'dark' ? 'light' : 'dark'; setTheme(nt); document.documentElement.setAttribute('data-theme', nt); localStorage.setItem('pmn-theme', nt)
+    const nt = theme === 'dark' ? 'light' : 'dark'
+    setTheme(nt)
+    document.documentElement.setAttribute('data-theme', nt)
+    localStorage.setItem('pmn-theme', nt)
   }
 
-  if (loading || !data) return (
-    <div className="flex items-center justify-center min-h-screen bg-pmn-bg text-pmn-acc font-pmn-mono text-xs tracking-[0.3em] uppercase animate-pulse">
-      MEMUAT MANUSKRIP PMN...
+  const handleGlobalSearchJump = () => {
+    const q = searchQuery.trim()
+    if (!q || !data) { setSearchQuery(''); return }
+    
+    // 1. Check for exact module ID jump
+    const lookHit = data.look && data.look[q]
+    if (lookHit && typeof lookHit.pi === 'number') {
+      navToSection(lookHit.pi, lookHit.si)
+      setPage('reader'); setSearchQuery(''); return
+    }
+    
+    // 2. If on contents page, trigger dedicated search view
+    if (page === 'contents') {
+      setContentsSub('search');
+      return;
+    }
+
+    // 3. Fallback to Part jump
+    const lowerQ = q.toLowerCase()
+    const partHit = data.parts.findIndex((p: any) => p.part.toLowerCase() === lowerQ || p.title.toLowerCase().includes(lowerQ))
+    if (partHit !== -1) {
+      navToSection(partHit, 0)
+      setPage('reader'); setSearchQuery(''); return
+    }
+    
+    // 4. Default: Go to search results page
+    setPage('contents');
+    setContentsSub('search');
+  }
+
+  if (loading) return (
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh',background:'#0d0d0d',color:'#c0271a',fontFamily:"'Source Code Pro',monospace",fontSize:'.65rem',letterSpacing:'.3em',textTransform:'uppercase'}}>
+      &gt;&gt; Initializing PMN Core...
+    </div>
+  )
+
+  if (loadError || !data) return (
+    <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'100vh',background:'var(--bg)',color:'var(--ink)',padding:'1.5rem',textAlign:'center'}}>
+      <div style={{fontFamily:"'Source Code Pro',monospace",color:'var(--acc)',fontSize:'.85rem',letterSpacing:'.2em',marginBottom:'1rem'}}>DATA LOAD FAILED</div>
+      <div style={{maxWidth:'420px',marginBottom:'1.5rem'}}>{loadError || 'Tidak ada data.'}</div>
+      <button onClick={() => window.location.reload()} style={{fontFamily:"'Source Code Pro',monospace",fontSize:'.75rem',border:'1px solid var(--rule)',padding:'.5rem 1.2rem',background:'none',color:'var(--ink)',cursor:'pointer'}}>RELOAD</button>
     </div>
   )
 
   const resumeSection = data.parts[curPos[0]]?.subs[curPos[1]] || null
+  const totalSections = data.parts.reduce((a: number, p: any) => a + (p.subs?.length || 0), 0)
+  const readPct = totalSections > 0 ? Math.round((Object.keys(readMap).length / totalSections) * 100) : 0
+
+  const navToSection = (pi: number, si: number) => {
+    setCurPos([pi, si])
+    localStorage.setItem('pmn-pos', `${pi},${si}`)
+    // Update history
+    setHistory(prev => {
+      const next = [[pi, si], ...prev.filter(h => h[0] !== pi || h[1] !== si)].slice(0, 5) as [number, number][]
+      localStorage.setItem('pmn-history', JSON.stringify(next))
+      return next
+    })
+  }
+
+  const changeWidth = (w: 'narrow' | 'medium' | 'wide') => {
+    setContentWidth(w)
+    localStorage.setItem('pmn-content-width', w)
+    const val = w === 'narrow' ? '62ch' : w === 'wide' ? '92ch' : '78ch'
+    document.documentElement.style.setProperty('--reader-measure', val)
+  }
 
   return (
-    <div className="min-h-screen bg-pmn-bg text-pmn-ink transition-colors duration-300 selection:bg-pmn-acc/30 selection:text-white dark:selection:text-black">
-      {/* Decorative Overlays (Consistent with index.html.bak) */}
-      <div className="vignette-overlay pointer-events-none" />
-      <div className="grid-overlay pointer-events-none" />
+    <>
+      <div className="vignette-overlay" />
+      <div className="noise-overlay" />
+      <div className="grid-overlay" />
 
-      {page === 'home' && (
-        <HomeView 
-          data={data} readMap={readMap} resumeSec={resumeSection} 
-          theme={theme} onToggleTheme={toggleTheme}
-          onStartReading={() => setPage('contents')}
-          onResumeReading={() => setPage('reader')}
-          onOpenAdmin={() => setPage('login')}
-        />
-      )}
+      {/* HEADER — IDs match style.css rules exactly */}
+      <header id="hdr" className="select-none">
+        <div id="reading-progress" className="fixed top-[52px] left-0 h-[2px] bg-pmn-acc z-[110] transition-[width] duration-100 ease-out pointer-events-none" style={{ width: '0%' }} />
+        <button id="hdr-logo" onClick={() => setPage('home')}>PMN</button>
+        <div id="hdr-srch">
+          <span id="srch-icon">&#8981;</span>
+          <input
+            id="srch-in" type="search"
+            placeholder="Search or jump to section… (e.g. 3.4b)"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            onFocus={() => {
+              if (page !== 'contents') setPage('contents');
+              setContentsSub('search');
+            }}
+            onKeyDown={e => { if (e.key === 'Enter') handleGlobalSearchJump(); if (e.key === 'Escape') setSearchQuery('') }}
+          />
+          <select id="srch-part" value={searchPartFilter} onChange={e => setSearchPartFilter(e.target.value)}>
+            <option value="">All parts</option>
+            {data?.parts?.map((p: any) => <option key={p.part} value={p.part}>{p.part}</option>)}
+          </select>
+          <button id="srch-clr" onClick={() => { setSearchQuery(''); setSearchPartFilter('') }}>&times;</button>
+        </div>
+        {/* DEEP SCAN after search (rapi samping logo, not pushing srch to tengah) */}
+        <button className="hbtn text-[10px] opacity-70" onClick={() => { if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }}>DEEP SCAN</button>
+        <div id="hdr-r">
+          <button id="focus-btn" className="focus-mode-btn font-pmn-mono text-[0.62rem] tracking-[0.1em] text-pmn-mute hover:text-pmn-acc transition-colors" onClick={() => document.body.classList.toggle('focus-mode')}>FOCUS</button>
+          <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Contents</button>
+          <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-gl" onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
+          <button id="theme-tog" className="font-pmn-mono text-[0.62rem] tracking-[0.1em] border border-pmn-rule px-3 py-1 hover:border-pmn-acc hover:text-pmn-acc transition-all" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
+          <button className="font-pmn-mono text-[0.62rem] tracking-[0.1em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-kbd" onClick={() => setKbdOpen(true)}>Keys [K]</button>
+        </div>
+      </header>
 
-      {page === 'contents' && (
-        <ContentsView 
-          data={data} readMap={readMap} curPos={curPos}
-          onSelectSection={(p, s) => { setCurPos([p, s]); localStorage.setItem('pmn-pos', `${p},${s}`); setPage('reader') }}
-          onBackHome={() => setPage('home')}
-          theme={theme} onToggleTheme={toggleTheme}
-        />
-      )}
+      {/* PAGE SHELL — height = 100vh - 52px (header height) */}
+      <div className="page-shell">
+        <div className="views-shell" style={{flex:1, overflow:'hidden', position:'relative', minHeight:0}}>
 
-      {page === 'reader' && (
-        <ReaderView 
-          data={data} readMap={readMap} curPos={curPos}
-          onMarkRead={(p, s) => { const key = `${p}-${s}`; const up = { ...readMap, [key]: true }; setReadMap(up); localStorage.setItem('pmn-read', JSON.stringify(up)) }}
-          onSavePosition={(p, s) => { setCurPos([p, s]); localStorage.setItem('pmn-pos', `${p},${s}`) }}
-          onBackHome={() => setPage('contents')}
-          theme={theme} onToggleTheme={toggleTheme}
-        />
-      )}
+          {page === 'home' && (
+            <HomeView
+              data={data} readMap={readMap} resumeSec={resumeSection}
+              onStartReading={() => setPage('contents')}
+              onResumeReading={() => setPage('reader')}
+              onOpenAdmin={() => setPage('login')}
+              onOpenNotes={() => setNotesOpen(true)}
+              onOpenGuide={() => setPage('guide')}
+              onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }}
+              showTip={showTip} setShowTip={setShowTip}
+            />
+          )}
 
-      {page === 'login' && <AdminLogin onLogin={() => setPage('admin')} onBack={() => setPage('home')} />}
-      {page === 'admin' && <VersionManager onBack={() => setPage('home')} />}
-    </div>
+          {page === 'contents' && (
+            <ContentsView
+              data={data} readMap={readMap} curPos={curPos}
+              subView={contentsSub}
+              searchQuery={searchQuery}
+              onSelectSection={(p, s) => { navToSection(p, s); setPage('reader') }}
+              onBackHome={() => setPage('home')}
+              onSetSubView={setContentsSub}
+              onSearch={(query) => {
+                setSearchQuery(query);
+                setContentsSub('search'); // Dedicated legacy-style search view
+                setPage('contents');
+              }}
+              contentWidth={contentWidth}
+              onChangeWidth={changeWidth}
+            />
+          )}
+
+          {page === 'reader' && (
+            <ReaderView
+              data={data} readMap={readMap} curPos={curPos}
+              onMarkRead={(p, s) => {
+                const key = `${p}-${s}`
+                const up = { ...readMap, [key]: true }
+                setReadMap(up)
+                localStorage.setItem('pmn-read', JSON.stringify(up))
+              }}
+              onSavePosition={(p, s) => navToSection(p, s)}
+              onBackHome={() => setPage('contents')}
+              theme={theme}
+              onToggleTheme={toggleTheme}
+              forceOpenPalette={paletteTrigger}
+              contentWidth={contentWidth}
+              onChangeWidth={changeWidth}
+              history={history}
+            />
+          )}
+
+          {page === 'login' && <AdminLogin onLogin={() => setPage('admin')} onBack={() => setPage('home')} />}
+          {page === 'admin' && <VersionManager onBack={() => setPage('home')} />}
+          {page === 'guide' && <GuideView onBackHome={() => setPage('home')} />}
+
+        </div>
+
+        <nav id="mob-nav">
+          <button className="mob-nav-btn" onClick={() => setPage(page === 'reader' ? 'contents' : 'home')}>&#8592;</button>
+          <button className="mob-nav-btn" onClick={() => setPage('contents')}>&#9776;</button>
+          <button className="mob-nav-btn" onClick={() => setPage('reader')}>&#8594;</button>
+        </nav>
+      </div>
+
+      <KeyboardModal isOpen={kbdOpen} onClose={() => setKbdOpen(false)} />
+      <NotesModal isOpen={notesOpen} onClose={() => setNotesOpen(false)} data={data} onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }} />
+    </>
   )
 }
 
-function HomeView({ data, readMap, resumeSec, theme, onToggleTheme, onStartReading, onResumeReading, onOpenAdmin }: any) {
+// ─── HomeView ─────────────────────────────────────────────────────────────────
+
+function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onJump, showTip, setShowTip }: any) {
   const totalSections = data.parts.reduce((a: number, p: any) => a + (p.subs?.length || 0), 0)
   const readCount = Object.keys(readMap).length
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
 
+  const [anatTab, setAnatTab] = useState(0)
+  const anatParts = data.parts.filter((p: any) => p.part !== 'Preface').slice(0, 14)
+  const selectedPart = anatParts[anatTab] || null
+
   return (
-    <div id="home-view" className="view on h-screen overflow-y-auto relative z-10 flex flex-col">
-      {/* HEADER: Restoration to Original Minimal Style */}
-      <header id="hdr" className="sticky top-0 h-[52px] bg-pmn-bg border-b border-pmn-rule px-6 flex items-center justify-between z-[100] select-none">
-        <button className="font-pmn-head font-bold text-[1.1rem] text-pmn-acc tracking-[0.04em] hover:opacity-80 transition-opacity">
-          PMN
-        </button>
-        <div className="flex items-center gap-8">
-          <button onClick={onStartReading} className="font-pmn-mono text-[0.68rem] text-pmn-mute uppercase tracking-[0.15em] hover:text-pmn-acc transition-colors">
-            Contents
-          </button>
-          <button onClick={onToggleTheme} className="font-pmn-mono text-[0.65rem] border border-pmn-rule2 px-3 py-1 text-pmn-mute hover:border-pmn-acc hover:text-pmn-acc transition-all">
-            {theme === 'dark' ? '☀ LIGHT' : '☾ DARK'}
-          </button>
-          <button onClick={onOpenAdmin} className="font-pmn-mono text-[0.62rem] text-pmn-mute border border-pmn-rule bg-pmn-bg2 px-3 py-1.5 hover:bg-pmn-acc/10 transition-all">
-            ADMIN ↗
-          </button>
-        </div>
-      </header>
+    <div id="home-view" className="view on" style={{overflowY:'auto', height:'100%'}}>
 
-      {/* HERO: Cinematic & Dense */}
-      <section id="hero-stage" className="hero-stage relative min-h-screen flex flex-col justify-center items-center text-center p-6 border-b border-pmn-rule overflow-hidden">
-        <ParticlesBackground />
-        
-        <div id="hero-parallax" className="hero-parallax relative z-10 max-w-[850px] w-full mx-auto mt-8 flex flex-col items-center">
-          <div className="font-pmn-mono text-[0.68rem] bg-pmn-acc text-white dark:text-black inline-block px-6 py-2 tracking-[0.25em] uppercase mb-10 shadow-xl">
-            A Framework for Navigating Material Reality
-          </div>
-          
-          <h1 className="font-pmn-head text-[clamp(2.8rem,8vw,5.5rem)] font-bold uppercase leading-[0.95] tracking-tight text-pmn-ink mb-6 select-none drop-shadow-2xl">
-            Progressive<br />Materialist<br />
-            <em className="text-pmn-acc not-italic font-normal block lowercase mt-3" style={{ fontFamily: 'serif', fontStyle: 'italic' }}>naturalism</em>
-          </h1>
-          
-          <p className="font-pmn-body italic text-xl text-pmn-ink opacity-90 mb-10 tracking-wide">
-            By Nova Dharma &mdash; Version 117.6
-          </p>
-          
-          <div className="font-pmn-body italic text-[0.95rem] text-pmn-ink2 max-w-[580px] border-y border-pmn-acc/40 py-5 px-8 mb-12 leading-relaxed bg-pmn-bg2/30 backdrop-blur-xs">
-            &ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;
-          </div>
+      {/* HERO STAGE */}
+      <div className="hero-stage cover-active" id="hero-stage">
+        <div className="hero">
+          <ParticlesBackground />
+          <div className="hero-inner hero-parallax" id="hero-parallax" style={{paddingTop: '1.5rem'}}>
+            <div className="hero-orn" style={{marginTop: '0.5rem'}}>A Framework for Navigating Material Reality</div>
+            <h1 className="hero-h1">Progressive<br />Materialist<br /><em>naturalism</em></h1>
+            <p className="hero-sub">By Nova Dharma &mdash; Version 117.6</p>
+            <p className="hero-quote">&ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;</p>
 
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-3 w-full max-w-[520px] border border-pmn-rule bg-pmn-bg2 mb-12 divide-x divide-pmn-rule shadow-2xl">
-            <div className="py-4 px-2">
-              <span className="block font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-[0.2em] mb-1">Architecture</span>
-              <span className="font-pmn-head text-[1.2rem] text-pmn-acc font-bold">{data.parts.length} Parts</span>
+            <div className="hero-stats">
+              <div className="stat"><span className="stat-lbl">Version</span><span className="stat-val">117.6</span></div>
+              <div className="stat"><span className="stat-lbl">Parts</span><span className="stat-val">{data.parts.length}</span></div>
+              <div className="stat"><span className="stat-lbl">Sections</span><span className="stat-val">{totalSections}</span></div>
+              <div className="stat"><span className="stat-lbl">Read</span><span className="stat-val">{readPct}%</span></div>
             </div>
-            <div className="py-4 px-2">
-              <span className="block font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-[0.2em] mb-1">Modules</span>
-              <span className="font-pmn-head text-[1.2rem] text-pmn-acc font-bold">{totalSections} Sections</span>
-            </div>
-            <div className="py-4 px-2">
-              <span className="block font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-[0.2em] mb-1">Progress</span>
-              <span className="font-pmn-head text-[1.2rem] text-pmn-acc font-bold">{readPct}% Read</span>
+
+            <div className="hero-ctas">
+              <div className="cta-row-main">
+                <button id="cta-begin" className="cta-p cta-main" onClick={onStartReading}>
+                  Start Reading <span style={{opacity:.82, fontSize:'.68rem'}}>[C]</span>
+                </button>
+                {resumeSec && (
+                  <button id="cta-resume" className="cta-p secondary" onClick={onResumeReading}>
+                    Resume &rarr; <span style={{opacity:.82, fontSize:'.68rem'}}>[R]</span>
+                  </button>
+                )}
+              </div>
+              <div className="cta-row-s">
+                <button id="cta-gl" className="cta-s" onClick={onStartReading}>Key Terms <span style={{opacity:.76, fontSize:'.68rem'}}>[?]</span></button>
+                <a href="https://github.com/novadharma-hub/pmn-framework/releases/latest" className="cta-s" target="_blank" rel="noopener">Download Manuscript &darr;</a>
+                <button className="cta-s" onClick={onOpenGuide}>AI Agent Guide &rarr;</button>
+              </div>
+              <div className="cta-row-util">
+                <button id="cta-notes" className="cta-util" onClick={onOpenNotes}>My Notes</button>
+                {/* Admin Access removed per refs/contoh (no equivalent button in Versi Lama PNGs) */}
+              </div>
             </div>
           </div>
 
-          {/* Main Action Row */}
-          <div className="flex flex-wrap gap-5 justify-center w-full max-w-[600px]">
-            <button 
-              onClick={onStartReading} 
-              className="bg-pmn-acc text-white dark:text-black font-pmn-mono text-[0.8rem] font-bold px-12 py-5 tracking-[0.2em] uppercase shadow-[10px_10px_0_rgba(0,0,0,0.5)] hover:translate-y-[-2px] hover:translate-x-[-2px] active:translate-y-[0] active:translate-x-[0] transition-all cursor-pointer"
-            >
-              Start Reading [C]
-            </button>
-            {resumeSec && (
-              <button 
-                onClick={onResumeReading} 
-                className="border border-pmn-rule bg-pmn-bg2 font-pmn-mono text-[0.75rem] font-bold text-pmn-acc px-10 py-5 tracking-[0.15em] uppercase hover:bg-pmn-acc/5 transition-all shadow-xl cursor-pointer"
-              >
-                Resume: {resumeSec.id} &rarr;
-              </button>
-            )}
+          {/* Orientation tip card — floating, with close X per refs (not menempel/stuck in flow); persist LS so follows user until X only */}
+          {showTip && (
+            <div className="hero-orientation-tip" style={{position:'absolute',bottom:'1.6rem',right:'1.6rem',background:'var(--bg2)',border:'1px solid var(--rule)',padding:'0.95rem 1.05rem',maxWidth:275,boxShadow:'10px 10px 0 rgba(0,0,0,.25)',zIndex:10}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.3rem'}}>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:'.62rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc)'}}>&#9679; ORIENTATION TIP</div>
+                <button onClick={() => { try{localStorage.setItem('pmn-tip-dismissed','1')}catch{}; setShowTip(false) }} style={{background:'none',border:'none',color:'var(--mute)',cursor:'pointer',fontSize:'1.05rem',lineHeight:1}} title="Close tip">×</button>
+              </div>
+              <div style={{fontFamily:'var(--f-head)',fontSize:'.95rem',color:'var(--ink)',marginBottom:'.3rem'}}>Welcome to PMN Framework</div>
+              <p style={{fontFamily:'var(--f-body)',fontSize:'.78rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
+                Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>K</kbd> anytime for shortcuts, or visit the <button onClick={onOpenGuide} style={{color:'var(--acc)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
+              </p>
+              <div style={{display:'flex',gap:'.5rem'}}>
+                <button onClick={onStartReading} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
+                <button onClick={onOpenGuide} style={{border:'1px solid var(--rule)',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',color:'var(--ink)',background:'none',cursor:'pointer'}}>OPEN AI GUIDE</button>
+              </div>
+            </div>
+          )}
+
+          <div className="hero-scroll" aria-hidden="true">
+            <span className="hero-scroll-label">Scroll to enter</span>
+            <span className="hero-scroll-line"><span className="hero-scroll-fill"></span></span>
           </div>
-        </div>
-
-        {/* Scroll Prompt */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 animate-bounce opacity-40">
-           <span className="font-pmn-mono text-[0.55rem] uppercase tracking-widest text-pmn-mute">Scroll Down</span>
-           <div className="w-px h-12 bg-pmn-acc" />
-        </div>
-      </section>
-
-      {/* MARQUEE: Crucial for "Density" feel */}
-      <div className="bg-pmn-acc py-3.5 border-y border-pmn-rule select-none overflow-hidden whitespace-nowrap shadow-xl">
-        <div className="animate-marquee inline-block font-pmn-mono font-bold text-[0.72rem] text-white dark:text-black uppercase tracking-[0.15em]">
-          <span className="mr-12">MATERIAL REALITY IS PRIMARY — EMERGENT AND INTERFACE PHENOMENA REMAIN REAL</span>
-          <span className="mr-12">ANTI-DOGMATIC BY DESIGN — DOCTRINE REVISABLE UNDER EVIDENCE AND FAILURE</span>
-          <span className="mr-12">REDUCE STRUCTURAL SUFFERING — EXPAND GENUINE BECOMING — PMN v117.6</span>
-          <span className="mr-12">THE CUSTODIAN PROBLEM — INFORMATION ASYMMETRY AS STRUCTURAL POWER</span>
         </div>
       </div>
 
-      {/* AXIOM MAP: Structural Fidelity */}
-      <section className="bg-pmn-bg2 py-24 px-6 border-b border-pmn-rule">
-        <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_2.2fr] gap-16 items-start">
-          <div className="border border-pmn-rule p-10 bg-pmn-bg shadow-[15px_15px_0_rgba(0,0,0,0.4)] sticky top-24">
-            <h2 className="font-pmn-head text-3xl font-bold mb-5 leading-tight">Axiom Map</h2>
-            <p className="font-pmn-body text-[0.95rem] text-pmn-mute leading-relaxed mb-8 opacity-80 italic">
-              PMN operates on three integrated layers of analysis. Every proposition is anchored in the layers below it.
-            </p>
-            <div className="flex flex-col gap-3 font-pmn-mono text-[0.62rem] uppercase tracking-[0.2em] font-bold">
-              <div className="text-pmn-acc flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-pmn-acc" /> Tier 1 — Foundational</div>
-              <div className="text-pmn-ink opacity-60 flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-pmn-ink" /> Tier 2 — Structural</div>
-              <div className="text-pmn-mute flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-pmn-mute" /> Tier 3 — Empirical</div>
+      {/* MARQUEE */}
+      <div className="marquee-wrap">
+        <div className="marquee-track">
+          <span className="marquee-txt">MATERIAL REALITY IS PRIMARY — EMERGENT AND INTERFACE PHENOMENA REMAIN REAL</span>
+          <span className="marquee-txt">ANTI-DOGMATIC BY DESIGN — DOCTRINE REVISABLE UNDER EVIDENCE AND FAILURE</span>
+          <span className="marquee-txt">CONDITIONAL BIOLOGICAL CONSTRAINTS — PROBABILISTIC DETERMINISM — LAYERED ANALYSIS</span>
+          <span className="marquee-txt">THE CUSTODIAN PROBLEM — INFORMATION ASYMMETRY AS STRUCTURAL POWER</span>
+          <span className="marquee-txt">REDUCE STRUCTURAL SUFFERING — EXPAND GENUINE BECOMING — PMN v117.6</span>
+        </div>
+      </div>
+
+      {/* READING PATHS */}
+      <div className="reading-paths">
+        <div className="reading-paths-hdr">
+          <h2>Reading Paths</h2>
+          <p>Not every reader needs to start the same way. These entry paths give faster on-ramps into PMN depending on whether you want foundations, power analysis, formula compression, or applied cases.</p>
+        </div>
+        <div className="reading-paths-meta">
+          <div className="reading-stat"><strong>Entry Logic</strong><span>Choose by task, not by obligation.</span></div>
+          <div className="reading-stat"><strong>Fastest Route</strong><span>15.15 for compression, then backfill.</span></div>
+          <div className="reading-stat"><strong>Best for First Pass</strong><span>Start with foundations, not slogans.</span></div>
+        </div>
+        <div className="reading-paths-grid">
+          {([
+            {num:'01', kicker:'Foundation First', desc:'Start with epistemology, ontology, and the biological floor before touching doctrine or applied cases.', cta:'Open Part I'},
+            {num:'02', kicker:'Power and Institutions', desc:'Jump straight into how power, legitimacy, and institutional capture shape the arrangement beneath the narrative.', cta:'Open Part VI'},
+            {num:'03', kicker:'Compressed Core', desc:'Use the short-form PMN core when you need the framework fast before going back for the full architecture.', cta:'Open 15.15'},
+            {num:'04', kicker:'Cases and the Individual', desc:'Move from abstract structure into historical cases and the practical demands PMN places on a person who holds it.', cta:'Open Part XVII'},
+          ] as const).map(path => (
+            <div key={path.num} className="path-card" data-ghost={path.num}>
+              <span className="path-kicker">PATH {path.num}</span>
+              <h3>{path.kicker}</h3>
+              <p>{path.desc}</p>
+              <button className="path-btn" onClick={() => {
+                if (onJump && data) {
+                  // Specific matching to avoid 'I' matching 'VI' or 'XVII'
+                  let targetPart = null;
+                  if (path.cta === 'Open Part I') targetPart = 'I';
+                  else if (path.cta === 'Open Part VI') targetPart = 'VI';
+                  else if (path.cta === 'Open Part XVII') targetPart = 'XVII';
+
+                  if (targetPart) {
+                    const idx = data.parts.findIndex((pp: any) => pp.part === targetPart);
+                    if (idx >= 0) { onJump(idx, 0); return; }
+                  }
+
+                  // Special case for compressed core 15.15
+                  if (path.cta.includes('15.15') || path.cta.includes('15,15')) {
+                    const look = data.look?.['15.15'] || data.look?.['15,15'];
+                    if (look) { 
+                      onJump(look.pi, look.si); 
+                      return; 
+                    }
+                  }
+                }
+                onStartReading();
+              }}>{path.cta}</button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ANATOMY TERMINAL — interactive, wired to real parts data */}
+      <div className="anatomy-section">
+        <div className="anatomy-section-hdr">
+          <h2>Theoretical Anatomy</h2>
+          <span>Structural Log: Active</span>
+        </div>
+        <div className="anatomy-terminal">
+          <div className="anatomy-sidebar">
+            <div style={{background:'var(--acc)',color:'var(--bg)',fontFamily:'var(--f-mono)',fontSize:'.68rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'.1em',padding:'.6rem 1rem',flexShrink:0}}>
+              Theoretical Anatomy
+            </div>
+            {anatParts.map((p: any, i: number) => (
+              <button key={p.part} className={`anatomy-tab${anatTab === i ? ' on' : ''}`} onClick={() => setAnatTab(i)}>
+                Part {p.part}
+              </button>
+            ))}
+          </div>
+          <div className="anatomy-content">
+            {selectedPart && (
+              <div className="anatomy-panel on">
+                <div className="ap-badge">Part {selectedPart.part}</div>
+                <h3>{selectedPart.title}</h3>
+                <p style={{marginBottom:'.85rem'}}>
+                  {selectedPart.subs?.[0]?.text
+                    ? selectedPart.subs[0].text.slice(0, 260) + '\u2026'
+                    : `This part contains ${selectedPart.subs?.length || 0} analytical modules.`}
+                </p>
+                <div style={{fontFamily:'var(--f-mono)',fontSize:'.7rem',marginBottom:'1rem',display:'flex',flexDirection:'column',gap:'.2rem'}}>
+                  {(selectedPart.subs || []).slice(0, 7).map((s: any) => (
+                    <div key={s.id} style={{padding:'.25rem 0',borderBottom:'1px solid var(--rule)'}}>
+                      <span style={{color:'var(--acc)'}}>{s.id}</span>
+                      <span style={{color:'var(--ink2)',marginLeft:'.5rem'}}>{s.title}</span>
+                    </div>
+                  ))}
+                  {(selectedPart.subs?.length || 0) > 7 && <div style={{color:'var(--mute)',paddingTop:'.3rem'}}>+ {selectedPart.subs.length - 7} more</div>}
+                </div>
+                <button className="btn-anatomy-more" onClick={onStartReading}>Open in Reader &rarr;</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* CORE THESES: ACCORDION */}
+      <div className="theses-section">
+        <div className="theses-inner">
+          <div className="theses-lead">
+            <h2>Axiom Structure</h2>
+            <p className="theses-lead-sub">PMN operates on three tiers. Tier 1 axioms are design choices defended by argument. Tier 2 are structural commitments. Tier 3 are empirical hypotheses (revisable).</p>
+            <div className="theses-tier-list">
+              <span className="theses-tier-chip tier-1">&#9679; Tier 1 &mdash; Foundational</span>
+              <span className="theses-tier-chip tier-2">&#9679; Tier 2 &mdash; Structural</span>
+              <span className="theses-tier-chip tier-3">&#9679; Tier 3 &mdash; Empirical</span>
             </div>
           </div>
-          
-          <div className="divide-y divide-pmn-rule/60 border-t border-pmn-rule/60">
-            <AxiomItem num="1a" title="Mind-Independent Material Reality is Primary">
-              Reality exists independently of perception. Establishing material conditions is the prior analytical move: any framework that begins with norms before conditions is built on sand.
-            </AxiomItem>
-            <AxiomItem num="1b" title="Suffering Has Negative Evaluative Valence">
-              Biological suffering is our non-arbitrary moral anchor. We do not argue from metaphysics, but from the material fact that organisms avoid pain.
-            </AxiomItem>
-            <AxiomItem num="1c" title="Becoming is Evaluatively Significant">
-              The expansion of capacity for development beyond mere survival is the evaluative ceiling that pairs with the biological floor.
-            </AxiomItem>
-            <AxiomItem num="2a" title="Probabilistic Determinism">
-              Structural forces establish probability distributions over outcomes, not fatalistic certainty. The task is to identify which outcomes the arrangement makes most likely.
-            </AxiomItem>
+          <div className="theses-list" id="theses-list">
+            <div className="thesis-tier-hdr tier-1 first">Tier 1 &mdash; Foundational Axioms</div>
+            <ThesisItem num="1a" title="MIND-INDEPENDENT MATERIAL REALITY IS PRIMARY">Reality exists independently of perception. Establishing material conditions is the prior move.</ThesisItem>
+            <ThesisItem num="1b" title="SUFFERING HAS NEGATIVE EVALUATIVE VALENCE">Biological suffering is our non-arbitrary moral anchor. Pain is materially avoided by all sentient systems.</ThesisItem>
+            <ThesisItem num="1c" title="BECOMING IS EVALUATIVELY SIGNIFICANT">The expansion of development capacity is the evaluative ceiling that pairs with the floor of suffering reduction.</ThesisItem>
+            <div className="thesis-tier-hdr tier-2">Tier 2 &mdash; Structural Commitments</div>
+            <ThesisItem num="2a" title="CONDITIONAL BIOLOGICAL CONSTRAINTS">Human behavior and cognition operate within probabilistic biological constraints that are real but not fatalist.</ThesisItem>
+            <ThesisItem num="2b" title="LAYERED ANALYTICAL ARCHITECTURE">Analysis proceeds across tiers: material conditions &#8594; structural forces &#8594; individual agency. No tier collapses into another.</ThesisItem>
+            <div className="thesis-tier-hdr tier-3">Tier 3 &mdash; Empirical Hypotheses</div>
+            <ThesisItem num="3a" title="INFORMATION ASYMMETRY AS STRUCTURAL POWER">Custodian advantage through selective access to information is a primary mechanism of institutional capture.</ThesisItem>
+          </div>
+        </div>
+      </div>
+
+      {/* HOME AI MODULE — Integrated React Terminal */}
+      <div className="home-ai-section">
+        <div className="home-ai-inner" style={{maxWidth:1000, margin:'0 auto'}}>
+          <AITerminal parts={data.parts} gl={data.gl} activeSec={null} />
+        </div>
+      </div>
+
+      {/* READER DESK */}
+      <section className="home-bottom">
+        <div className="home-bottom-inner">
+          <div className="home-bottom-hdr">
+            <div>
+              <span className="home-bottom-kicker">Reader Desk</span>
+              <h2 className="home-bottom-title">Keep notes, prompts, and feedback near the manuscript.</h2>
+            </div>
+            <p className="home-bottom-desc">Use this space like a working margin: save a line of inquiry, then jump back into the reader without losing your place.</p>
+          </div>
+          <div className="home-bottom-grid" style={{display:'grid', gridTemplateColumns:'repeat(12, 1fr)', gap:'1.5rem'}}>
+            <article className="home-bottom-card notes-card" style={{gridColumn: 'span 8'}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.6rem'}}>
+                <span style={{fontFamily:'var(--f-mono)',fontSize:'.6rem',letterSpacing:'.15em',textTransform:'uppercase',color:'var(--mute)'}}>Quick Notes</span>
+                <div style={{display:'flex',gap:'.4rem'}}>
+                  <button className="annot-btn">Copy</button>
+                  <button className="annot-btn">Clear</button>
+                </div>
+              </div>
+              <textarea className="home-bottom-notes" placeholder="Your notes on this section\u2026" />
+            </article>
+            <article className="home-bottom-card compact-card" style={{gridColumn: 'span 4'}}>
+              <h3>Useful next moves</h3>
+              <p>Keep one foot in the manuscript while you move between orientation and guidance.</p>
+              <div className="home-bottom-actions">
+                <button className="home-bottom-link" onClick={onStartReading}>Open orientation</button>
+                <button className="home-bottom-link" onClick={onOpenGuide}>Open AI Guide</button>
+              </div>
+            </article>
+          </div>
+
+          {/* Release Snapshot — now SEPARATE section (not jammed/terhimpit in Reader Desk grid). Matches Image 1 look + live stats + open actions */}
+          <div className="home-bottom-card release-card" style={{marginTop: '2rem', padding: '2rem'}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'2rem',flexWrap:'wrap'}}>
+              <div style={{flex: '1', minWidth: '300px'}}>
+                <h3 style={{fontSize:'1.4rem', marginBottom:'.5rem'}}>Release Snapshot</h3>
+                <p style={{fontSize:'.9rem',color:'var(--ink2)',maxWidth:'400px'}}>Live manuscript state, version tracking, and quick access to core foundations.</p>
+              </div>
+              <div style={{display:'flex', gap:'2rem', flexWrap:'wrap', flex: '2', justifyContent: 'flex-end'}}>
+                <div style={{textAlign: 'center'}}>
+                  <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Parts</span>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>{data.parts.length}</strong>
+                </div>
+                <div style={{textAlign: 'center'}}>
+                  <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Sections</span>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>{totalSections}</strong>
+                </div>
+                <div style={{textAlign: 'center'}}>
+                  <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Read</span>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>{readPct}%</strong>
+                </div>
+                <div style={{textAlign: 'center'}}>
+                  <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Release</span>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>V117.6</strong>
+                </div>
+              </div>
+            </div>
+            <div className="home-bottom-actions" style={{marginTop:'1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--rule)', display: 'flex', gap: '1rem'}}>
+              <button className="home-bottom-link" onClick={onStartReading}>Open Full Contents Map &rarr;</button>
+              <button className="home-bottom-link" onClick={() => { onJump(1, 0) }}>Jump to Foundations &rarr;</button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="max-w-[1000px] mx-auto py-16 px-8 flex justify-between items-center flex-wrap gap-6 text-xs font-pmn-mono text-pmn-mute uppercase tracking-[0.25em] mt-auto select-none">
-        <span>Progressive Materialist Naturalism &mdash; Nova Dharma</span>
-        <div className="flex gap-6">
-           <a href="https://github.com/novadharma-hub/pmn-framework" target="_blank" className="hover:text-pmn-acc transition-colors">GitHub</a>
-           <span>{new Date().getFullYear()}</span>
-        </div>
-      </footer>
+      {/* HOME FOOTER */}
+      <div className="home-footer-bar">
+        <span>[C] 2026 Nova Dharma // PMN Collective</span>
+        <span>V117.6 &mdash; Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>?</kbd> for Glossary &mdash; <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>K</kbd> for Keys</span>
+      </div>
     </div>
   )
 }
 
-function AxiomItem({ num, title, children }: any) {
+// ─── ThesisItem ───────────────────────────────────────────────────────────────
+
+function ThesisItem({ num, title, children }: any) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="group border-b border-pmn-rule/40 last:border-none">
-      <button 
-        onClick={() => setOpen(!open)} 
-        className="w-full flex items-baseline gap-6 py-8 text-left hover:bg-pmn-acc/5 transition-all px-4 cursor-pointer"
-      >
-        <span className="font-pmn-mono font-bold text-pmn-acc text-[1.1rem] tracking-tighter opacity-80 group-hover:opacity-100">{num}</span>
-        <span className="font-pmn-head font-bold text-[1.25rem] text-pmn-ink flex-1 leading-tight group-hover:text-pmn-acc transition-colors">{title}</span>
-        <span className="font-pmn-mono text-lg text-pmn-mute transition-transform duration-300" style={{ transform: open ? 'rotate(90deg)' : 'rotate(0)' }}>›</span>
+    <div className={`thesis-item border-b border-pmn-rule ${open ? 'open bg-pmn-acc/[0.02]' : ''}`}>
+      <button className="thesis-toggle w-full flex items-baseline gap-6 py-6 text-left hover:bg-pmn-acc/[0.03] transition-colors" onClick={() => setOpen(!open)}>
+        <span className="thesis-num font-pmn-mono text-pmn-acc font-bold text-[0.75rem] tracking-widest">{num}</span>
+        <span className="thesis-title font-pmn-head text-[1.05rem] text-pmn-ink uppercase tracking-tight flex-1">{title}</span>
+        <span className="thesis-arrow font-pmn-mono text-[0.8rem] text-pmn-mute transition-transform duration-300" style={{ transform: open ? 'rotate(90deg)' : 'none' }}>&rsaquo;</span>
       </button>
       {open && (
-        <div className="pl-[4.5rem] pr-6 pb-10 font-pmn-body text-[1.05rem] text-pmn-ink/80 leading-relaxed animate-slide-up">
+        <div className="thesis-body pb-8 pl-16 pr-6 font-pmn-body text-[0.98rem] text-pmn-ink2 leading-relaxed italic animate-in fade-in slide-in-from-top-1">
           {children}
         </div>
       )}
@@ -251,29 +584,33 @@ function AxiomItem({ num, title, children }: any) {
   )
 }
 
+// ─── AdminLogin ───────────────────────────────────────────────────────────────
+
 function AdminLogin({ onLogin, onBack }: any) {
-  const [u, setU] = useState(''); const [p, setP] = useState(''); const [err, setErr] = useState('')
-  const submit = () => { if (u === 'admin' && p === 'pmn117') { onLogin() } else { setErr('Akses ditolak.') } }
+  const [u, setU] = useState('')
+  const [p, setP] = useState('')
+  const [err, setErr] = useState('')
+  const submit = () => {
+    if (u === 'admin' && p === 'pmn117') { onLogin() }
+    else { setErr('Access Denied.') }
+  }
   return (
-    <div className="max-w-[380px] mx-auto py-32 px-6 flex flex-col items-center">
-      <button onClick={onBack} className="font-pmn-mono text-[0.62rem] uppercase tracking-[0.2em] text-pmn-mute mb-16 hover:text-pmn-acc flex items-center gap-2 cursor-pointer group transition-all">
-        <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Framework
-      </button>
-      
-      <div className="w-full bg-pmn-bg2 border border-pmn-rule p-10 shadow-[20px_20px_0_rgba(0,0,0,0.6)] space-y-6">
-        <div className="text-center space-y-2 mb-8">
-           <span className="font-pmn-mono text-[0.6rem] text-pmn-acc uppercase tracking-[0.3em] font-bold">Encrypted Access</span>
-           <h2 className="font-pmn-head text-xl font-bold text-pmn-ink">Admin Authorization</h2>
+    <div id="home-view" className="view on" style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100%'}}>
+      <div style={{background:'var(--bg2)',border:'1px solid var(--rule)',padding:'3rem',boxShadow:'12px 12px 0 rgba(0,0,0,.3)',maxWidth:'360px',width:'100%'}}>
+        <h2 style={{fontFamily:'var(--f-head)',fontSize:'1.3rem',fontWeight:700,marginBottom:'2rem',color:'var(--ink)'}}>Admin Authorization</h2>
+        <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
+          <input
+            style={{width:'100%',background:'var(--bg)',border:'1px solid var(--rule)',padding:'1rem',fontFamily:'var(--f-body)',fontSize:'.9rem',outline:'none',color:'var(--ink)'}}
+            placeholder="Identifier" value={u} onChange={e => setU(e.target.value)}
+          />
+          <input
+            style={{width:'100%',background:'var(--bg)',border:'1px solid var(--rule)',padding:'1rem',fontFamily:'var(--f-body)',fontSize:'.9rem',outline:'none',color:'var(--ink)'}}
+            type="password" placeholder="Passphrase" value={p} onChange={e => setP(e.target.value)}
+          />
+          {err && <p style={{color:'var(--acc)',fontSize:'.8rem',fontStyle:'italic'}}>{err}</p>}
+          <button onClick={submit} className="cta-p cta-main" style={{width:'100%',padding:'1rem',marginTop:'.5rem'}}>Authorize &uarr;</button>
+          <button onClick={onBack} style={{width:'100%',background:'none',border:'none',color:'var(--mute)',fontFamily:'var(--f-mono)',fontSize:'.72rem',textTransform:'uppercase',letterSpacing:'.15em',cursor:'pointer',marginTop:'.5rem'}}>&larr; Cancel</button>
         </div>
-        
-        <input className="w-full bg-pmn-bg border border-pmn-rule p-4 font-pmn-body text-sm outline-none focus:border-pmn-acc transition-colors text-pmn-ink" placeholder="Security Identifier" value={u} onChange={e => setU(e.target.value)} />
-        <input className="w-full bg-pmn-bg border border-pmn-rule p-4 font-pmn-body text-sm outline-none focus:border-pmn-acc transition-colors text-pmn-ink" type="password" placeholder="Passphrase" value={p} onChange={e => setP(e.target.value)} />
-        
-        {err && <p className="text-pmn-acc font-pmn-mono text-[0.65rem] text-center italic">⚠️ {err}</p>}
-        
-        <button onClick={submit} className="w-full bg-pmn-acc text-white dark:text-black font-pmn-mono text-xs font-bold py-5 uppercase tracking-[0.2em] shadow-lg hover:opacity-85 transition-opacity cursor-pointer">
-          Authorize Session ↗
-        </button>
       </div>
     </div>
   )
