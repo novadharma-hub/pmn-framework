@@ -13,7 +13,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
-        agent: 'pmn-agent-guide.html',
       }
     }
   }

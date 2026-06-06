@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('pmn-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    } catch(e) {}
+  })();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Progressive Materialist Naturalism</title>
+
+<!--
+    ================================================
+    UI_EDITING_GUIDE.md — FILE INI = KERANGKA STRUKTUR
+    ================================================
+    Tugas utama file ini:
+    - Mendefinisikan struktur dasar halaman (container utama)
+    - Menyediakan tempat di mana konten dari JSON akan dimasukkan
+    - Mengatur urutan elemen secara semantik
+
+    File pendamping:
+    - style.css  → Semua desain visual
+    - app.js     → Semua logika interaktif
+
+    Baca UI_EDITING_GUIDE.md sebelum mengedit file ini.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<!-- PANGGIL CSS EKSTERNAL -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- v84 Global Decorative Overlays -->
+<div class="vignette-overlay"></div>
+<div class="grid-overlay"></div>
+<!-- screen-frame removed -->
+<div class="page-shell">
+<div id="topbar"></div>
+<div id="reading-progress"></div>
+<header id="hdr">
+  <button id="hdr-logo">PMN</button>
+  <div id="hdr-srch">
+    <span id="srch-icon">&#8981;</span>
+    <input id="srch-in" type="search" placeholder="Search or jump to section… (e.g. 3.4b)"/>
+    <select id="srch-part"><option value="">All parts</option></select>
+    <button id="srch-clr">&times;</button>
+  </div>
+  <div id="hdr-r">
+    <button id="focus-btn" class="focus-mode-btn desktop-only" title="Toggle Focus Mode">Focus</button>
+    <div id="pip"><div id="pip-track"><div id="pip-fill"></div></div></div>
+    <button class="hbtn" id="hb-home">Contents</button>
+    <button class="hbtn hsm" id="hb-gl">Glossary</button>
+    <button id="theme-tog" title="Toggle dark/light mode"></button>
+    <button class="hbtn hsm" id="hb-kbd" title="Keyboard shortcuts">Keys <span style="opacity:.76;font-size:.68rem">[K]</span></button>
+  </div>
+</header>
+<div class="views-shell" style="flex:1;overflow:hidden;position:relative;min-height:0">
+<div id="home-view" class="view on">
+  <div class="hero-stage cover-active" id="hero-stage">
+    <div class="hero">
+      <canvas id="particle-canvas"></canvas>
+      <div class="hero-inner hero-parallax" id="hero-parallax">
+        <div class="hero-orn">A Framework for Navigating Material Reality</div>
+        <h1 class="hero-h1">Progressive<br>Materialist<br><em>Naturalism</em></h1>
+        <p class="hero-sub">By Nova Dharma &mdash; Version 117.6</p>
+        <p class="hero-quote">&ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;</p>
+        <div class="hero-stats">
+        <div class="stat"><span class="stat-lbl">Version</span><span class="stat-val">117.6</span></div>
+          <div class="stat"><span class="stat-lbl">Parts</span><span class="stat-val" id="st-p">&mdash;</span></div>
+          <div class="stat"><span class="stat-lbl">Sections</span><span class="stat-val" id="st-s">&mdash;</span></div>
+          <div class="stat"><span class="stat-lbl">Read</span><span class="stat-val" id="st-r">0%</span></div>
+        </div>
+        <div class="hero-ctas">
+        <div class="cta-row-main">
+            <button id="cta-begin" class="cta-p cta-main">Start Reading <span style="opacity:.82;font-size:.68rem">[C]</span></button>
+            <button id="cta-resume" class="cta-p secondary" style="display:none">Resume &rarr; <span style="opacity:.82;font-size:.68rem">[R]</span></button>
+          </div>
+          <div class="cta-row-s">
+            <button id="cta-gl" class="cta-s">Key Terms <span style="opacity:.76;font-size:.68rem">[?]</span></button>
+            <a href="https://github.com/novadharma-hub/pmn-framework/releases/latest" class="cta-s" target="_blank" rel="noopener">Download Manuscript (PDF/MD) &darr;</a>
+            <a href="pmn-agent-guide.html" class="cta-s">AI Agent Guide &rarr;</a>
+          </div>
+          <div class="cta-row-util">
+            <button id="cta-notes" class="cta-util">My Notes</button>
+            <button id="layout-tog" class="cta-util"></button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">
+        <span class="hero-scroll-label">Scroll to enter</span>
+        <span class="hero-scroll-line"><span class="hero-scroll-fill"></span></span>
+      </div>
+    </div>
+  </div>
+  <div id="suggestions" class="hero-suggestions" style="display:none"></div>
+  <!-- ── MARQUEE TICKER ── -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-txt">MATERIAL REALITY IS PRIMARY — EMERGENT AND INTERFACE PHENOMENA REMAIN REAL</span>
+      <span class="marquee-txt">ANTI-DOGMATIC BY DESIGN — DOCTRINE REVISABLE UNDER EVIDENCE AND FAILURE</span>
+      <span class="marquee-txt">CONDITIONAL BIOLOGICAL CONSTRAINTS — PROBABILISTIC DETERMINISM — LAYERED ANALYSIS</span>
+      <span class="marquee-txt">THE CUSTODIAN PROBLEM — INFORMATION ASYMMETRY AS STRUCTURAL POWER</span>
+<span class="marquee-txt">REDUCE STRUCTURAL SUFFERING — EXPAND GENUINE BECOMING — PMN v117.6</span>
+    </div>
+  </div>
+  <!-- ── ANATOMY TERMINAL ── -->
+  <div class="anatomy-section">
+    <div class="anatomy-section-hdr">
+      <h2>Theoretical Anatomy</h2>
+      <span>Structural Log: Active</span>
+    </div>
+    <div class="anatomy-terminal">
+      <div class="anatomy-sidebar" id="anatomy-sidebar"></div>
+      <div class="anatomy-content" id="anatomy-content"></div>
+    </div>
+  </div>
+  <!-- ── CORE THESES: ACCORDION ── -->
+  <div class="theses-section">
+    <div class="theses-inner">
+      <div class="theses-lead">
+        <h2>Axiom Structure</h2>
+        <p class="theses-lead-sub">PMN operates on three tiers. Tier 1 axioms are design choices defended by argument. Tier 2 are structural commitments revisable only by architectural failure. Tier 3 are empirical hypotheses explicitly revisable.</p>
+        <div class="theses-tier-list" style="margin-top:1.5rem;display:flex;flex-direction:column;gap:.5rem">
+          <div style="font-family:var(--f-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)">● Tier 1 — Foundational</div>
+          <div style="font-family:var(--f-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)">● Tier 2 — Structural</div>
+          <div style="font-family:var(--f-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)">● Tier 3 — Empirical</div>
+        </div>
+      </div>
+      <div class="theses-list" id="theses-list">
+        <!-- TIER 1 HEADER -->
+        <div style="padding:.6rem 0;font-family:var(--f-mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);border-bottom:1px solid var(--rule);margin-bottom:0">Tier 1 — Foundational Axioms <span style="opacity:.5">(adopted as starting points)</span></div>
+        <div class="thesis-item open" data-tier="1">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--acc)">1a</span>
+            <span class="thesis-title">Mind-Independent Material Reality is Primary</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Reality exists independently of perception or conceptual framework. This is the ground-clearing move: any framework that begins with values or norms before establishing what is materially the case has built on sand. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 2.1</span></div>
+        </div>
+        <div class="thesis-item" data-tier="1">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--acc)">1b</span>
+            <span class="thesis-title">Suffering Has Negative Evaluative Valence</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">The presence of suffering is bad and its reduction is good. This is a design choice defended by argument — not uniquely determined by it — but it provides the non-arbitrary evaluative anchor the framework requires. Without this commitment, the framework produces structural analysis without evaluative direction. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 3.0, 3.3</span></div>
+        </div>
+        <div class="thesis-item" data-tier="1">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--acc)">1c</span>
+            <span class="thesis-title">Becoming is Evaluatively Significant</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">The expansion of capacity for development beyond survival is not merely instrumentally valuable — it is the evaluative ceiling that pairs with the suffering floor. A framework that addresses only the floor produces a politics of permanent emergency; one that addresses only the ceiling ignores who is being destroyed by its absence. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 4.5b</span></div>
+        </div>
+        <!-- TIER 2 HEADER -->
+        <div style="padding:.6rem 0;font-family:var(--f-mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);border-bottom:1px solid var(--rule);margin-top:.5rem">Tier 2 — Structural Commitments <span style="opacity:.5">(revisable only by architectural failure)</span></div>
+        <div class="thesis-item" data-tier="2">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--ink2)">2a</span>
+            <span class="thesis-title">Life / Suffering / Becoming as the Three-Level Architecture</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Life as ontological foundation, suffering as evaluative criterion, becoming as evaluative ceiling. These three levels are structurally interdependent — you cannot remove one without collapsing the framework's evaluative architecture. The floor and ceiling are not competing values; they are the same commitment at different scales. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 3.0</span></div>
+        </div>
+        <div class="thesis-item" data-tier="2">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--ink2)">2b</span>
+            <span class="thesis-title">Descriptive Egoism as Biological Starting Point</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Organisms avoid pain and seek resources as a prior fact, before any normative framework is imposed. This is not a claim that organisms are selfish in all their behavior — it is the minimal factual anchor from which the is-ought bridge begins. The claim is about structural tendency, not universal behavior. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 3.2</span></div>
+        </div>
+        <div class="thesis-item" data-tier="2">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--ink2)">2c</span>
+            <span class="thesis-title">The Layered Constraint Model</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Ecological Viability → Biological Floor → Economic Arrangements → Institutional Architecture → Meaning Infrastructure. Each layer is constrained by the layer below it. Institutional design that violates biological constraints fails. Economic arrangements that violate ecological constraints collapse. The hierarchy is not a value ranking — it is a dependency structure. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 2.2</span></div>
+        </div>
+        <div class="thesis-item" data-tier="2">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--ink2)">2d</span>
+            <span class="thesis-title">Probabilistic Determinism</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Structural forces establish probability distributions over outcomes, not specific outcomes. Agents are nodes of probability in material networks, not free-floating will-bearers. This prevents moral frameworks from punishing individuals for outcomes produced by structural conditions, and redirects analysis toward the conditions themselves. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 1.3</span></div>
+        </div>
+        <div class="thesis-item" data-tier="2">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--ink2)">2e</span>
+            <span class="thesis-title">The Is-Ought Bridge Through Material Consequences</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Suffering at scale produces observable systemic instability. This is the bridge between descriptive and normative: arrangements that produce mass suffering are not merely evaluated as bad — they generate measurable material consequences that can be tracked independently of moral intuition. The evaluative claim is anchored in causal claims about stability. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 3.3</span></div>
+        </div>
+        <div class="thesis-item" data-tier="2">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--ink2)">2f</span>
+            <span class="thesis-title">Two-Level Metaphysical Architecture</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Source level (material processes as they are) / interface level (how agents experience and represent those processes). The distinction prevents category errors: values, meaning, and experience are real at the interface level while being causally produced at the source level. Reducing one to the other is an error in both directions. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 2.3</span></div>
+        </div>
+        <!-- TIER 3 HEADER -->
+        <div style="padding:.6rem 0;font-family:var(--f-mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--rule);margin-top:.5rem">Tier 3 — Empirical Hypotheses <span style="opacity:.5">(explicitly revisable)</span></div>
+        <div class="thesis-item" data-tier="3">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--mute)">3a</span>
+            <span class="thesis-title">Permanent Conditions are Genuinely Permanent</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">The permanent conditions identified in Part III are genuinely permanent rather than historically contingent — working hypothesis, falsifiable by demonstration of institutional designs that eliminate them. If someone shows that scarcity, information asymmetry, or the custodian problem can be durably resolved by institutional design, this assumption requires revision. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: Part III</span></div>
+        </div>
+        <div class="thesis-item" data-tier="3">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--mute)">3b</span>
+            <span class="thesis-title">Material Conditions Will Support Post-National Coordination</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Speculative projection, stated as such. The framework does not require this to be true for its analytical claims to hold — it is a claim about developmental trajectory, not a precondition for the evaluative criterion or structural analysis. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: Part IX</span></div>
+        </div>
+        <div class="thesis-item" data-tier="3">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--mute)">3c</span>
+            <span class="thesis-title">Cross-Cultural Validity of Suffering as Evaluative Anchor</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">Assumed on convergence grounds — the biological foundation of suffering is universal in a way that culturally specific values are not. The falsification condition in 14.4b specifies the evidence that would revise this: demonstration that organisms with equivalent neurological architecture systematically fail to avoid suffering, or that suffering does not produce the systemic instability the bridge claim requires. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: 3.2, 14.4b</span></div>
+        </div>
+        <div class="thesis-item" data-tier="3">
+          <button class="thesis-toggle">
+            <span class="thesis-num" style="color:var(--mute)">3d</span>
+            <span class="thesis-title">The Formula Architecture Captures Primary Structural Tendencies</span>
+            <span class="thesis-arrow">›</span>
+          </button>
+          <div class="thesis-body">The formulas in Part XV are structural hypotheses, not confirmed causal laws. They are tools for identifying which variables are most analytically significant in a given situation, not mechanisms for generating precise predictions. Their value is heuristic — they force explicitness about which structural factors are being invoked and why. <span style="font-family:var(--f-mono);font-size:.75rem;color:var(--mute)">Ref: Part XV</span></div>
+        </div>
+      </div><!-- /theses-list -->
+    </div>
+  </div>
+  <!-- ── HOME AI MODULE ── -->
+  <div class="home-ai-section">
+    <div class="home-ai-inner" style="max-width:1000px;margin:0 auto">
+      <div class="home-ai-hdr">PMN Agent Terminal ✦</div>
+      <p class="home-ai-desc">Build a PMN manuscript context pack from the reader, glossary, and related sections, then send it to ChatGPT or Gemini. In this static build, grounded handoff is the working path; inline answers still need a secure backend.</p>
+      <!-- Mode tabs -->
+      <div class="hai-tabs" id="hai-tabs">
+        <button class="hai-tab active" data-mode="claude">Backend required</button>
+        <button class="hai-tab" data-mode="chatgpt">ChatGPT ↗</button>
+        <button class="hai-tab" data-mode="gemini">Gemini ↗</button>
+      </div>
+      <!-- Claude inline chat -->
+      <div id="hai-panel-claude" class="hai-panel">
+        <div id="home-chat-log" class="home-chat-log" aria-live="polite">
+          <div class="hcl-placeholder">&gt;&gt; STATIC BUILD DETECTED — inline provider is parked until a secure backend is connected.<br>&gt;&gt; Use ChatGPT/Gemini tabs for grounded handoff, or open the PMN Agent Guide below.</div>
+        </div>
+        <div class="home-ai-row" style="margin-top:.8rem">
+          <input type="text" id="home-ai-input" class="home-ai-input" placeholder="Inline answers need a secure backend in this build." autocomplete="off" disabled>
+          <button id="home-ai-btn" class="home-ai-btn" disabled>Backend required</button>
+        </div>
+        <div class="home-ai-actions">
+          <button id="home-chatgpt-switch" class="pmn-agent-btn primary" type="button">Use ChatGPT handoff</button>
+          <button id="home-gemini-switch" class="pmn-agent-btn" type="button">Use Gemini handoff</button>
+          <a class="pmn-agent-btn" href="pmn-agent-guide.html">Open guide</a>
+        </div>
+      </div>
+      <!-- ChatGPT handoff panel -->
+      <div id="hai-panel-chatgpt" class="hai-panel" style="display:none">
+        <p class="hai-redirect-desc">PMN will prepare a grounded prompt from the manuscript context, then open ChatGPT. Just paste it there.</p>
+        <div class="hai-redirect-config">
+          <select id="hai-chatgpt-mode" class="home-ai-select" style="min-width:200px">
+            <option value="agent">Mode: PMN Analyst</option>
+            <option value="diagnostic">Mode: Diagnostic Only</option>
+            <option value="debate">Mode: Debate Partner</option>
+            <option value="oracle">Mode: PMN Oracle</option>
+          </select>
+        </div>
+        <div class="home-ai-row" style="margin-top:.8rem">
+          <input type="text" id="hai-chatgpt-q" class="home-ai-input" placeholder="Your question for ChatGPT with PMN context…" autocomplete="off">
+          <button id="hai-chatgpt-btn" class="home-ai-btn">Open ChatGPT ↗</button>
+        </div>
+        <div class="home-ai-actions">
+          <button id="hai-chatgpt-copy" class="pmn-agent-btn" type="button">Copy prompt only</button>
+        </div>
+        <div id="hai-chatgpt-status" class="pmn-agent-status" style="margin-top:.6rem"></div>
+      </div>
+      <!-- Gemini handoff panel -->
+      <div id="hai-panel-gemini" class="hai-panel" style="display:none">
+        <p class="hai-redirect-desc">PMN will prepare a grounded prompt from the manuscript context, then open Gemini. Just paste it there.</p>
+        <div class="hai-redirect-config">
+          <select id="hai-gemini-mode" class="home-ai-select" style="min-width:200px">
+            <option value="agent">Mode: PMN Analyst</option>
+            <option value="diagnostic">Mode: Diagnostic Only</option>
+            <option value="debate">Mode: Debate Partner</option>
+            <option value="oracle">Mode: PMN Oracle</option>
+          </select>
+        </div>
+        <div class="home-ai-row" style="margin-top:.8rem">
+          <input type="text" id="hai-gemini-q" class="home-ai-input" placeholder="Your question for Gemini with PMN context…" autocomplete="off">
+          <button id="hai-gemini-btn" class="home-ai-btn">Open Gemini ↗</button>
+        </div>
+        <div class="home-ai-actions">
+          <button id="hai-gemini-copy" class="pmn-agent-btn" type="button">Copy prompt only</button>
+        </div>
+        <div id="hai-gemini-status" class="pmn-agent-status" style="margin-top:.6rem"></div>
+      </div>
+    </div>
+  </div>
+  <section class="home-bottom">
+    <div class="home-bottom-inner">
+      <div class="home-bottom-hdr">
+        <div>
+          <span class="home-bottom-kicker">Reader Desk</span>
+          <h2 class="home-bottom-title">Keep notes, prompts, and feedback near the manuscript.</h2>
+        </div>
+        <p class="home-bottom-desc">Use this space like a working margin for the site itself: save a line of inquiry, leave feedback, then jump back into the reader or the compressed core without losing your place.</p>
+      </div>
+      <div class="home-bottom-grid">
+        <article class="home-bottom-card notes-card">
+          <div class="annot-header">
+            <span class="annot-lbl">Notes</span>
+            <div class="annot-actions">
+              <button id="home-notes-copy" class="annot-btn" type="button">Copy</button>
+              <button id="home-notes-clear" class="annot-btn" type="button">Clear</button>
+              <button id="home-notes-save" class="annot-btn" type="button">Save</button>
+            </div>
+          </div>
+          <textarea id="home-notes-ta" class="home-bottom-notes" placeholder="Your notes on this section, manuscript thread, or PMN question…"></textarea>
+          <span id="home-notes-saved" class="home-bottom-status"></span>
+        </article>
+        <article class="home-bottom-card compact-card">
+          <h3>Feedback or suggestions?</h3>
+          <p>If something is unclear, broken, or worth revising, send it directly instead of letting it disappear into a tab graveyard.</p>
+          <div class="home-bottom-actions">
+            <a id="home-feedback-link" class="home-bottom-link" href="mailto:novadharma.pm@gmail.com?subject=PMN%20Site%20Feedback">Email &rarr;</a>
+            <a id="home-twitter-link" class="home-bottom-link" href="https://twitter.com/intent/tweet?text=Feedback%20for%20PMN%20Reader%20%40nova_dharma_pm" target="_blank" rel="noopener">Twitter &rarr;</a>
+          </div>
+        </article>
+        <article class="home-bottom-card compact-card">
+          <h3>Useful next moves</h3>
+          <p>Keep one foot in the manuscript while you move between orientation, compression, and deployment guidance.</p>
+          <div class="home-bottom-list">
+            <span>Orientation: how-to-read-this-document</span>
+            <span>Compressed core: 15.15</span>
+            <span>Agent workflow: PMN Agent Guide</span>
+          </div>
+          <div class="home-bottom-actions">
+            <button class="home-bottom-link path-btn" type="button" data-open-id="how-to-read-this-document">Open orientation</button>
+            <button class="home-bottom-link path-btn" type="button" data-open-id="15.15">Open 15.15</button>
+            <a class="home-bottom-link" href="pmn-agent-guide.html">Open guide</a>
+          </div>
+        </article>
+        <article class="home-bottom-card release-card">
+          <div class="home-bottom-meta">
+            <div class="home-bottom-meta-copy">
+              <h3>Release snapshot</h3>
+              <p>Keep the live manuscript state, reading coverage, and fast-entry controls visible without leaving the homepage.</p>
+              <div class="home-bottom-caption">This panel reads from the current public build rather than a separate hardcoded dashboard.</div>
+            </div>
+            <div class="home-bottom-statgrid">
+              <div class="home-bottom-stat"><strong id="home-bottom-version">V117.6</strong><span>Release</span></div>
+              <div class="home-bottom-stat"><strong id="home-bottom-parts">21</strong><span>Part groups</span></div>
+              <div class="home-bottom-stat"><strong id="home-bottom-sections">223</strong><span>Sections</span></div>
+              <div class="home-bottom-stat"><strong id="home-bottom-progress">0%</strong><span>Read</span></div>
+            </div>
+          </div>
+          <div class="home-bottom-actions">
+            <button id="home-bottom-open-contents" class="home-bottom-link" type="button">Open contents</button>
+            <button id="home-bottom-glossary" class="home-bottom-link" type="button">Open glossary</button>
+            <button class="home-bottom-link path-btn" type="button" data-open-part="I">Open foundations</button>
+            <button class="home-bottom-link path-btn" type="button" data-open-part="XVII">Open cases</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+  <!-- ── HOME FOOTER ── -->
+  <div class="home-footer-bar">
+    <span>[C] 2026 NOVA DHARMA // PMN COLLECTIVE</span>
+    <span>V117.6 MANUSCRIPT — PRESS <kbd style="font-family:var(--f-mono);border:1px solid var(--rule);padding:.1rem .4rem;font-size:.7rem">?</kbd> FOR GLOSSARY — <kbd style="font-family:var(--f-mono);border:1px solid var(--rule);padding:.1rem .4rem;font-size:.7rem">K</kbd> FOR KEYS</span>
+  </div>
+</div><!-- /home-view -->
+<div id="srch-view" class="view">
+  <p class="sv-hdr" id="sv-hdr">Contents &mdash; Manuscript Map</p>
+  <div id="sv-body"></div>
+  <!-- TOC panel — shown when Contents is active -->
+  <div id="toc-panel" style="display:none">
+    <div id="quote-strip">
+      <div id="quote-strip-hdr">
+        <span id="quote-strip-lbl">— PMN —</span>
+        <button id="quote-tog" title="Hide quotes">&#8722;</button>
+      </div>
+      <div id="quote-inner">
+        <div id="quote-body"></div>
+        <div id="quote-title"></div>
+        <div class="quote-dots" id="quote-dots"></div>
+      </div>
+    </div>
+    <div class="toc-intro">
+      <div class="toc-intro-copy">
+        <div class="toc-intro-toolbar">
+          <strong>Reading room</strong>
+          <div class="contents-size" aria-label="Contents text size">
+            <span class="contents-size-lbl">Contents size</span>
+            <div class="font-controls" role="group" aria-label="Contents font size">
+              <button class="font-btn" id="contents-sm" type="button">A-</button>
+              <button class="font-btn" id="contents-md" type="button">A</button>
+              <button class="font-btn" id="contents-lg" type="button">A+</button>
+            </div>
+          </div>
+        </div>
+        <p>Use Contents as an editorial map rather than a raw index: open a part from the top, scan section IDs at speed, or jump straight from foundations into formulas, institutions, and cases.</p>
+        <div class="toc-intro-actions">
+          <button class="toc-intro-link primary" type="button" data-toc-open-id="how-to-read-this-document">Start with orientation</button>
+          <button class="toc-intro-link" type="button" data-toc-open-part="I">Open foundations</button>
+          <button class="toc-intro-link" type="button" data-toc-open-id="15.15">Open 15.15</button>
+          <button class="toc-intro-link" type="button" data-toc-open-glossary="1">Open glossary</button>
+        </div>
+      </div>
+      <div class="toc-intro-stats">
+        <div class="toc-stat"><strong>Part groups</strong><span id="toc-stat-parts">—</span></div>
+        <div class="toc-stat"><strong>Sections</strong><span id="toc-stat-sections">—</span></div>
+        <div class="toc-stat"><strong>Read</strong><span id="toc-stat-read">0%</span></div>
+      </div>
+    </div>
+    <p class="toc-lbl">Contents</p>
+    <div class="toc-grid" id="toc-grid"></div>
+  </div>
+</div>
+<div id="reader-view" class="view">
+  <div id="sidebar">
+    <button id="sb-tog">&#8249;</button>
+    <div id="sb-hist" class="sb-hist" style="display:none">
+      <div class="sb-hist-lbl">Recent</div>
+      <div id="sb-hist-list"></div>
+    </div>
+    <div class="sb-tools desktop-only">
+      <span class="sb-tools-lbl">Sidebar size</span>
+      <div class="font-controls" role="group" aria-label="Sidebar text size">
+        <button class="font-btn" id="sidebar-sm" type="button">A-</button>
+        <button class="font-btn" id="sidebar-md" type="button">A</button>
+        <button class="font-btn" id="sidebar-lg" type="button">A+</button>
+      </div>
+    </div>
+    <div id="sb-list"></div>
+  </div>
+  <div id="reader-main">
+    <div id="reader-col">
+      <nav class="bc">
+        <button class="bc-btn" id="bc-home">Contents</button>
+        <span class="bc-sep">&rsaquo;</span>
+        <span id="bc-part" class="bc-part"></span>
+        <span class="bc-sep">&rsaquo;</span>
+        <span id="bc-sid" class="bc-sid"></span>
+      </nav>
+      <p id="sec-eye" class="sec-eye"></p>
+      <h1 id="sec-ttl" class="sec-ttl"></h1>
+      <div class="reader-meta">
+        <span id="read-time"></span>
+        <div class="reader-tools">
+          <div class="reader-tools-group">
+            <span class="reader-tools-lbl">Reader font</span>
+            <div class="font-controls" role="group" aria-label="Reader font size">
+              <button class="font-btn" id="font-sm" type="button">A-</button>
+              <button class="font-btn" id="font-md" type="button">A</button>
+              <button class="font-btn" id="font-lg" type="button">A+</button>
+            </div>
+          </div>
+          <div class="reader-tools-group desktop-only">
+            <span class="reader-tools-lbl">Reader width</span>
+            <div class="font-controls" role="group" aria-label="Reader column width">
+              <button class="font-btn" id="measure-narrow" type="button">Narrow</button>
+              <button class="font-btn" id="measure-base" type="button">Base</button>
+              <button class="font-btn" id="measure-wide" type="button">Wide</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="reader-jumpbar" class="reader-jumpbar">
+        <div class="reader-jumpmeta">
+          <span>Cross-reference jump</span>
+          <strong id="reader-jumpmeta">You arrived here from another section.</strong>
+        </div>
+        <button id="reader-jumpback" class="reader-jumpback" type="button">Back to previous section</button>
+      </div>
+      <div id="prose" class="prose"></div>
+      <nav class="rnav">
+        <button class="rnav-btn" id="rn-p">&larr; Previous</button>
+        <span id="rn-pos" class="rnav-pos"></span>
+        <button class="rnav-btn nxt" id="rn-n">Next &rarr;</button>
+      </nav>
+      <div class="reader-endcap">
+        <div class="reader-endcap-hdr">
+          <div>
+            <span class="reader-endcap-kicker">Continue the inquiry</span>
+            <div class="reader-endcap-title">Trace the section outward</div>
+          </div>
+          <div class="reader-endcap-desc">Use related sections, cited links, notes, and PMN Agent handoff without losing the thread of the current page.</div>
+        </div>
+        <div class="reader-endcap-toolbar">
+          <span class="reader-tools-lbl">Section tools</span>
+          <div class="reader-endcap-actions">
+            <button id="reader-copy-link" class="pmn-agent-btn" type="button">Copy link</button>
+            <button id="reader-copy-citation" class="pmn-agent-btn" type="button">Copy citation</button>
+            <button id="reader-open-contents" class="pmn-agent-btn" type="button">Open contents</button>
+          </div>
+        </div>
+        <div class="reader-endcap-grid">
+          <section class="reader-panel" id="meta-links-panel">
+            <div id="related-sec" class="related"></div>
+            <div id="cited-sec" class="cited-in"></div>
+          </section>
+          <section class="reader-panel">
+            <div id="annot-sec" class="annot-block">
+              <div class="annot-header">
+                <span class="annot-lbl">Notes</span>
+                <div class="annot-actions">
+                  <button id="annot-save" class="annot-btn">Save</button>
+                </div>
+              </div>
+              <textarea id="annot-ta" class="annot-ta" placeholder="Your notes on this section..."></textarea>
+              <span id="annot-saved" class="annot-saved"></span>
+            </div>
+          </section>
+        </div>
+      <div class="reader-panel pmn-agent-card" id="pmn-inline-chat">
+        <span class="pmn-agent-kicker">PMN Agent ✦</span>
+        <div class="pmn-agent-head">
+          <div class="pmn-agent-title">Ask anything about this section or the wider PMN architecture.</div>
+        </div>
+        <!-- Reader mode tabs -->
+        <div class="hai-tabs" id="reader-hai-tabs" style="margin-bottom:.8rem">
+          <button class="hai-tab active" data-rmode="claude">Backend required</button>
+          <button class="hai-tab" data-rmode="chatgpt">ChatGPT ↗</button>
+          <button class="hai-tab" data-rmode="gemini">Gemini ↗</button>
+        </div>
+        <!-- Claude inline -->
+        <div id="reader-panel-claude">
+          <div id="pmn-chat-log" class="pmn-chat-log" aria-live="polite">&gt;&gt; INLINE BACKEND MODE IS NOT LIVE IN THIS STATIC BUILD.<br>&gt;&gt; Use ChatGPT/Gemini handoff for grounded answers, or connect a secure backend for in-page replies.</div>
+          <div class="pmn-chat-input-row">
+            <input type="text" id="pmn-chat-in" class="pmn-chat-in" placeholder="Inline answers need a secure backend in this build." autocomplete="off" disabled />
+            <button id="pmn-chat-send" class="pmn-chat-send" type="button" disabled>Backend required</button>
+          </div>
+          <div id="pmn-chat-status" class="pmn-agent-status"></div>
+          <div class="pmn-agent-actions" style="margin-top:.6rem">
+            <button id="reader-chatgpt-switch" class="pmn-agent-btn primary" type="button">Use ChatGPT handoff</button>
+            <button id="reader-gemini-switch" class="pmn-agent-btn" type="button">Use Gemini handoff</button>
+            <button id="export-btn" class="pmn-agent-btn" type="button">Export section</button>
+          </div>
+        </div>
+        <!-- ChatGPT redirect -->
+        <div id="reader-panel-chatgpt" style="display:none">
+          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">This prompt is grounded in the active section plus related sections, so ChatGPT receives manuscript context immediately instead of a bare question.</p>
+          <select id="reader-chatgpt-mode" class="home-ai-select" style="width:100%;margin-bottom:.7rem;font-size:.72rem">
+            <option value="agent">Mode: PMN Analyst</option>
+            <option value="diagnostic">Mode: Diagnostic Only</option>
+            <option value="debate">Mode: Debate Partner</option>
+          </select>
+          <div class="pmn-chat-input-row" style="margin-bottom:.6rem">
+            <input type="text" id="reader-chatgpt-q" class="pmn-chat-in" placeholder="Specific question (optional)..." autocomplete="off"/>
+            <button id="reader-chatgpt-btn" class="pmn-chat-send" type="button">Open ↗</button>
+          </div>
+          <div class="pmn-agent-actions">
+            <button id="reader-copy-btn" class="pmn-agent-btn" type="button">Copy prompt only</button>
+          </div>
+          <div id="reader-chatgpt-status" class="pmn-agent-status" style="margin-top:.5rem"></div>
+        </div>
+        <!-- Gemini redirect -->
+        <div id="reader-panel-gemini" style="display:none">
+          <p style="font-size:.82rem;color:var(--ink2);margin-bottom:.8rem;line-height:1.6">This prompt is grounded in the active section plus related sections, so Gemini receives manuscript context immediately instead of a bare question.</p>
+          <select id="reader-gemini-mode" class="home-ai-select" style="width:100%;margin-bottom:.7rem;font-size:.72rem">
+            <option value="agent">Mode: PMN Analyst</option>
+            <option value="diagnostic">Mode: Diagnostic Only</option>
+            <option value="debate">Mode: Debate Partner</option>
+          </select>
+          <div class="pmn-chat-input-row" style="margin-bottom:.6rem">
+            <input type="text" id="reader-gemini-q" class="pmn-chat-in" placeholder="Specific question (optional)..." autocomplete="off"/>
+            <button id="reader-gemini-btn" class="pmn-chat-send" type="button">Open ↗</button>
+          </div>
+          <div class="pmn-agent-actions">
+            <button id="reader-gemini-copy" class="pmn-agent-btn" type="button">Copy prompt only</button>
+          </div>
+          <div id="reader-gemini-status" class="pmn-agent-status" style="margin-top:.5rem"></div>
+        </div>
+      </div>
+      <div class="annot-block legacy-annot-block" hidden aria-hidden="true">
+        <div class="annot-header">
+          <span class="annot-lbl">Notes</span>
+          <div class="annot-actions">
+            <button id="annot-save-legacy" class="annot-btn">Save</button>
+          </div>
+        </div>
+        <textarea id="annot-ta-legacy" class="annot-ta" placeholder="Your notes on this section…"></textarea>
+        <span id="annot-saved-legacy" class="annot-saved"></span>
+      </div>
+      <div class="reader-panel feedback-bar">
+        <span class="feedback-lbl">Feedback or suggestions?</span>
+        <div class="feedback-actions">
+          <a id="feedback-link" class="feedback-btn" href="#">Email &rarr;</a>
+          <a id="twitter-link" class="feedback-btn" href="https://twitter.com/nova_dharma_pm" target="_blank" rel="noopener">Twitter &rarr;</a>
+        </div>
+      </div>
+      </div>
+      <footer class="doc-footer">
+        <span class="doc-footer-lbl">PMN &mdash; Version 117.6</span>
+        <a href="pmn_corpus_for_ai.md" class="feedback-btn" style="font-family:'Source Code Pro',monospace;font-size:0.75rem;text-decoration:none;border-bottom:1px dotted var(--mute2);margin-left:1rem" title="Clean raw text corpus for LLM / AI Search grounding ingestion" target="_blank">[AI Raw Corpus]</a>
+        <button class="doc-footer-home" id="footer-home">Back to Home &uarr;</button>
+      </footer>
+    </div>
+  </div>
+</div>
+</div><!-- .views-shell -->
+<nav id="mob-nav" class="hidden">
+  <button class="mob-nav-btn" id="mob-prev" type="button" aria-label="Previous section">&#8592;</button>
+  <button class="mob-nav-btn" id="mob-mid" type="button" aria-label="Open contents">&#9776;&nbsp;Contents</button>
+  <button class="mob-nav-btn" id="mob-next" type="button" aria-label="Next section">&#8594;</button>
+</nav>
+<div id="notes-modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);overflow-y:auto">
+  <div style="max-width:680px;margin:3rem auto;background:var(--bg);border:1px solid var(--rule);padding:2.5rem 2.5rem 3rem;position:relative">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.8rem;border-bottom:1px solid var(--rule);padding-bottom:1rem">
+      <span style="font-family:'Libre Baskerville',serif;font-size:1.1rem;color:var(--ink)">My Notes</span>
+      <div style="display:flex;gap:.6rem;align-items:center">
+        <button id="notes-copy-all" style="font-family:'Source Code Pro',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--mute);border:1px solid var(--rule2);padding:.3rem .8rem;cursor:pointer">Copy all</button>
+        <button id="notes-close" style="font-family:'Source Code Pro',monospace;font-size:.9rem;background:none;border:none;color:var(--mute2);cursor:pointer;padding:.2rem .5rem">&times;</button>
+      </div>
+    </div>
+    <div id="notes-body"></div>
+  </div>
+</div>
+</div><!-- .page-shell -->
+<div id="kbd-modal">
+  <div id="kbd-panel">
+    <button id="kbd-close">&times;</button>
+    <p class="kbd-title">Keyboard Shortcuts</p>
+    <div class="kbd-section">
+      <span class="kbd-section-lbl">Navigation</span>
+      <div class="kbd-row"><span class="kbd-desc">Start Reading / Contents</span><span class="kbd-keys"><span class="kbd-key">C</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Resume Reading</span><span class="kbd-keys"><span class="kbd-key">R</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Search / command palette</span><span class="kbd-keys"><span class="kbd-key">/</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Glossary / key terms</span><span class="kbd-keys"><span class="kbd-key">?</span> or <span class="kbd-key">G</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Toggle keyboard help</span><span class="kbd-keys"><span class="kbd-key">K</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Next section</span><span class="kbd-keys"><span class="kbd-key">→</span><span class="kbd-key">↓</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Previous section</span><span class="kbd-keys"><span class="kbd-key">←</span><span class="kbd-key">↑</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Close Modal / clear search</span><span class="kbd-keys"><span class="kbd-key">Esc</span></span></div>
+    </div>
+    <div class="kbd-section">
+      <span class="kbd-section-lbl">Reader</span>
+      <div class="kbd-row"><span class="kbd-desc">AI Agent Guide</span><span class="kbd-keys"><span class="kbd-key">A</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">My Notes Panel</span><span class="kbd-keys"><span class="kbd-key">N</span></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Save notes</span><span class="kbd-keys"><span class="kbd-key">Ctrl</span>+<span class="kbd-key">S</span></span></div>
+    </div>
+    <div class="kbd-section">
+      <span class="kbd-section-lbl">Tips</span>
+      <div class="kbd-row"><span class="kbd-desc">Highlight text to look up glossary</span><span class="kbd-keys"><span class="kbd-key">select</span></span></div>
+    </div>
+  </div>
+</div>
+<div id="tt"><p id="tt-term"></p><p id="tt-def"></p></div>
+
+<!-- ── FLOATING WELCOME & SHORTCUTS TOAST ── -->
+<div id="welcome-banner" class="welcome-card hidden">
+  <button id="welcome-close" class="welcome-close-btn" aria-label="Dismiss">&times;</button>
+  <div class="welcome-badge">🧭 ORIENTATION TIP</div>
+  <p class="welcome-title">Welcome to PMN Framework</p>
+  <p class="welcome-text">Press <span class="welcome-kbd">K</span> anytime to see all shortcuts, or visit our <a href="pmn-agent-guide.html" class="welcome-link">AI Agent Guide [A]</a> to interact with philosophy.</p>
+  <div class="welcome-actions">
+    <button id="welcome-start" class="welcome-btn welcome-btn-primary">Start Reading</button>
+    <a href="pmn-agent-guide.html" class="welcome-btn welcome-btn-secondary">Open AI Guide</a>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

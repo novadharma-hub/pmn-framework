@@ -1,131 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Under Maintenance - PMN Framework</title>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Progressive Materialist Naturalism</title>
+    <!-- Fonts from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            /* PMN Dark Theme Palette */
-            --bg: #0d0d0d;
-            --bg2: #171717;
-            --ink: #f5f0e8;
-            --acc: #c0271a;
-            --mute: #8a7d6e;
-            --rule: rgba(255, 255, 255, 0.08);
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            color: var(--ink);
-            font-family: 'Lora', Georgia, serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            overflow: hidden;
-        }
-        /* Background decorative grid like the original */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: linear-gradient(var(--rule) 1px, transparent 1px), 
-                              linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -1;
-            opacity: 0.5;
-        }
-        .container {
-            max-width: 650px;
-            padding: 4rem 3rem;
-            background-color: var(--bg2);
-            border: 1px solid var(--rule);
-            box-shadow: 12px 12px 0 rgba(0,0,0,0.8);
-            position: relative;
-        }
-        .ornament {
-            font-family: 'Source Code Pro', monospace;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--acc);
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            color: var(--ink);
-            font-family: 'Libre Baskerville', serif;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        h1 em {
-            font-style: italic;
-            color: var(--acc);
-        }
-        p {
-            font-size: 1.15rem;
-            color: var(--mute);
-            line-height: 1.8;
-            margin: 1.5rem 0;
-        }
-        .loader-wrap {
-            margin: 3rem 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-        }
-        .dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--acc);
-            border-radius: 50%;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-        .dot:nth-child(2) { animation-delay: 0.2s; }
-        .dot:nth-child(3) { animation-delay: 0.4s; }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .footer {
-            margin-top: 4rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--rule);
-            font-size: 0.75rem;
-            color: var(--mute);
-            font-family: 'Source Code Pro', monospace;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <span class="ornament">System Status: Re-architecting</span>
-        <h1>Progressive<br>Materialist<br><em>Naturalism</em></h1>
-        <p>The framework is currently undergoing architectural maintenance to ensure its material foundations remain sound.</p>
-        
-        <div class="loader-wrap">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
-        
-        <p style="font-size: 0.95rem;">"Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations."</p>
-        
-        <div class="footer">
-            PMN Framework &mdash; v117.6 &mdash; Maintenance Mode
-        </div>
-    </div>
-</body>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/pmn-framework/assets/main-CZzyUFR8.js"></script>
+    <link rel="stylesheet" crossorigin href="/pmn-framework/assets/main-DaxkorSl.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>

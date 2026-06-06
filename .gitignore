@@ -48,7 +48,8 @@ index.html.bak
 # PMN Workspace specific
 pmn_system_log.txt
 config.enc
-private/backups/
+private/
+backup/
 *.enc
 
 # Ignore versioned release assets to prevent Git history bloat
