@@ -122,7 +122,7 @@ def split_mode():
 
 def compile_mode():
     clean_html_path = "index.ui.html"
-    output_html_path = "index.html"
+    output_html_path = "index.offline.html"
     style_css_path = "style.css"
     app_js_path = "app.js"
     parts_dir = os.path.join("data", "parts")
