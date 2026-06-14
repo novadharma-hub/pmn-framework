@@ -14,12 +14,12 @@
 /* ── Variables ── */
 :root {
   /* LIGHT: Deep Vintage Archive / Cozy Cottage Bookstore */
-  --bg:#f4eedb; --bg2:#eae2ca; --bg3:#e2d6bd;
-  --sb:#eae2ca; --ink:#231711; --ink2:#3d2b20;
-  --acc:#1e4620; --acc2:#143016; --mute:#756456; --mute2:#605043; --mute3:#8c7b6c;
-  --rule:#d5c8ab; --rule2:#c4b595;
-  --hdr:#eae2ca;
-  --code-bg:#eadecc;
+  --bg:#fdfbf7; --bg2:#f5efe0; --bg3:#ebdcb9;
+  --sb:#f2ebdb; --ink:#1e140f; --ink2:#3a2a1f;
+  --acc:#184a1a; --acc2:#103412; --mute:#7c6957; --mute2:#625141; --mute3:#a6917c;
+  --rule:#e6dcc5; --rule2:#cbbda2;
+  --hdr:#f5efe0;
+  --code-bg:#eae1ca;
   --reader-scale:1;
   --contents-scale:1;
   --sidebar-scale:1;
