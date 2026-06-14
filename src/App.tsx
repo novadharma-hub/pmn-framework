@@ -32,18 +32,18 @@ export default function App() {
 
   const [version, setVersion] = useState('117.9')
 
-  // Global hotkeys: K = keyboard modal, N = notes modal, / = command palette, C = contents, ? = glossary, R = resume
+  // Global hotkeys: Alt+K = keyboard modal, Alt+N = notes modal, Alt+/ = command palette, Alt+F = focus, Alt+C = contents, Alt+? = glossary, Alt+R = resume
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) return
-      if (e.ctrlKey || e.metaKey || e.altKey) return // Ignore shortcuts if modifier keys are pressed (e.g. Ctrl+C)
+      if (!e.altKey || e.ctrlKey || e.metaKey) return // Must press Alt, must NOT press Ctrl or Meta
       const key = e.key.toLowerCase()
       if (key === 'k') { e.preventDefault(); setKbdOpen(v => !v) }
       if (key === 'n') { e.preventDefault(); setNotesOpen(v => !v) }
       if (key === '/') { e.preventDefault(); if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }
       if (key === 'f') { e.preventDefault(); document.body.classList.toggle('focus-mode') } // global focus toggle
       if (key === 'c') { e.preventDefault(); setContentsSub('map'); setPage('contents') }
-      if (key === '?') { e.preventDefault(); setContentsSub('glossary'); setPage('contents') }
+      if (key === '?' || (key === '/' && e.shiftKey)) { e.preventDefault(); setContentsSub('glossary'); setPage('contents') }
       if (key === 'r') { e.preventDefault(); setPage('reader') }
       
       // Arrow navigation between sections in Reader view
@@ -202,13 +202,6 @@ export default function App() {
 
   return (
     <>
-      {page === 'home' && (
-        <>
-          <div className="vignette-overlay" />
-          <div className="noise-overlay" />
-          <div className="grid-overlay" />
-        </>
-      )}
 
       {/* HEADER — IDs match style.css rules exactly */}
       <header id="hdr" className="select-none">
@@ -240,7 +233,7 @@ export default function App() {
           <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
           <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-gl" onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
           <button id="theme-tog" className="font-pmn-mono text-[0.62rem] tracking-[0.1em] border border-pmn-rule px-3 py-1 hover:border-pmn-acc hover:text-pmn-acc transition-all" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
-          <button className="font-pmn-mono text-[0.62rem] tracking-[0.1em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-kbd" onClick={() => setKbdOpen(true)}>Keys [K]</button>
+          <button className="font-pmn-mono text-[0.62rem] tracking-[0.1em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-kbd" onClick={() => setKbdOpen(true)}>Keys [Alt+K]</button>
         </div>
       </header>
 
@@ -400,6 +393,9 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
 
       {/* HERO STAGE */}
       <div className="hero-stage cover-active" id="hero-stage">
+        <div className="vignette-overlay" />
+        <div className="noise-overlay" />
+        <div className="grid-overlay" />
         <div className="hero">
           <ParticlesBackground />
           <div className="hero-inner hero-parallax" id="hero-parallax" style={{paddingTop: '1.5rem'}}>
@@ -418,16 +414,16 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
             <div className="hero-ctas">
               <div className="cta-row-main">
                 <button id="cta-begin" className="cta-p cta-main" onClick={onStartReading}>
-                  Start Reading <span style={{opacity:.82, fontSize:'.68rem'}}>[C]</span>
+                  Start Reading <span style={{opacity:.82, fontSize:'.68rem'}}>[Alt+C]</span>
                 </button>
                 {resumeSec && (
                   <button id="cta-resume" className="cta-p secondary" onClick={onResumeReading}>
-                    Resume &rarr; <span style={{opacity:.82, fontSize:'.68rem'}}>[R]</span>
+                    Resume &rarr; <span style={{opacity:.82, fontSize:'.68rem'}}>[Alt+R]</span>
                   </button>
                 )}
               </div>
               <div className="cta-row-s">
-                <button id="cta-gl" className="cta-s" onClick={onOpenGlossary}>Key Terms <span style={{opacity:.76, fontSize:'.68rem'}}>[?]</span></button>
+                <button id="cta-gl" className="cta-s" onClick={onOpenGlossary}>Key Terms <span style={{opacity:.76, fontSize:'.68rem'}}>[Alt+?]</span></button>
                 <a href="https://github.com/novadharma-hub/pmn-framework/releases/latest" className="cta-s" target="_blank" rel="noopener">Download Manuscript &darr;</a>
                 <button className="cta-s" onClick={onOpenGuide}>AI Agent Guide &rarr;</button>
               </div>
@@ -449,16 +445,15 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
         {/* Orientation tip card — moved back to cover-stage but outside sticky .hero so it scrolls along with cover */}
         {showTip && (
           <div className="hero-orientation-tip" style={{
-            position: 'absolute',
-            top: 'calc(100vh - 52px)',
+            position: 'fixed',
+            bottom: '1.6rem',
             right: '1.6rem',
-            transform: 'translateY(calc(-100% - 1.6rem))',
             background: 'var(--bg2)',
             border: '1px solid var(--rule)',
             padding: '0.95rem 1.05rem',
             maxWidth: 275,
             boxShadow: '10px 10px 0 rgba(0,0,0,.25)',
-            zIndex: 10
+            zIndex: 999
           }}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.3rem'}}>
               <div style={{fontFamily:'var(--f-mono)',fontSize:'.62rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc)'}}>&#9679; ORIENTATION TIP</div>
@@ -466,7 +461,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
             </div>
             <div style={{fontFamily:'var(--f-head)',fontSize:'.95rem',color:'var(--ink)',marginBottom:'.3rem'}}>Welcome to PMN Framework</div>
             <p style={{fontFamily:'var(--f-body)',fontSize:'.78rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
-              Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>K</kbd> anytime for shortcuts, or visit the <button onClick={onOpenGuide} style={{color:'var(--acc)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
+              Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>Alt+K</kbd> anytime for shortcuts, or visit the <button onClick={onOpenGuide} style={{color:'var(--acc)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
             </p>
             <div style={{display:'flex',gap:'.5rem'}}>
               <button onClick={onStartReading} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
@@ -690,7 +685,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
       {/* HOME FOOTER */}
       <div className="home-footer-bar">
         <span>[C] 2026 Nova Dharma // PMN Collective</span>
-        <span>V{version} &mdash; Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>?</kbd> for Glossary &mdash; <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>K</kbd> for Keys</span>
+        <span>V{version} &mdash; Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+?</kbd> for Glossary &mdash; <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+K</kbd> for Keys</span>
       </div>
     </div>
   )
