@@ -147,11 +147,6 @@
     "title": "The Biological Foundation: From Physiology to Institution",
     "subs": [
       {
-        "id": "3.1",
-        "title": "The Displacement That Matters",
-        "is_intro": false
-      },
-      {
         "id": "3.0",
         "title": "The Normative Status of Biological Constraints: Conditional, Not Derived",
         "is_intro": false
@@ -179,6 +174,11 @@
       {
         "id": "3.0f",
         "title": "Conditional Normative Framework: The Summary Statement",
+        "is_intro": false
+      },
+      {
+        "id": "3.1",
+        "title": "The Displacement That Matters",
         "is_intro": false
       },
       {
@@ -491,8 +491,13 @@
         "is_intro": false
       },
       {
+        "id": "7.3c-ii",
+        "title": "Cosmological Capture: When Belief Distorts the Institution From Within",
+        "is_intro": false
+      },
+      {
         "id": "7.3c-i",
-        "title": "A General Theory of Capture: Mechanism, Stages, and Detection Across Organizational Forms",
+        "title": "A General Theory of Capture: Mechanism, Stages, and Detection",
         "is_intro": false
       },
       {
@@ -828,6 +833,11 @@
       {
         "id": "12.1",
         "title": "The Methodology of Stress-Testing",
+        "is_intro": false
+      },
+      {
+        "id": "12.1b",
+        "title": "Second-Order Effects as Analytical Obligation: The Multi-Level Consequence Procedure",
         "is_intro": false
       },
       {

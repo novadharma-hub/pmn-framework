@@ -14,6 +14,7 @@ interface ContentsViewProps {
   curPos: [number, number]
   subView?: 'map' | 'glossary' | 'search'
   searchQuery?: string
+  searchPartFilter?: string
   onSelectSection: (pIdx: number, sIdx: number) => void
   onBackHome: () => void
   onSetSubView?: (v: 'map' | 'glossary' | 'search') => void
@@ -31,7 +32,7 @@ const shortenId = (id: string) => {
   return id
 }
 
-export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth }: ContentsViewProps) {
+export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth }: ContentsViewProps) {
   const activeTab = subView
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [quoteVisible, setQuoteVisible] = useState(true)
@@ -74,13 +75,14 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
     const res: any[] = []
 
     data.parts.forEach((p, pIdx) => {
+      // Bug #12: filter by part if searchPartFilter is set
+      if (searchPartFilter && p.part !== searchPartFilter) return
       p.subs.forEach((s, sIdx) => {
         const titleMatch = s.title.toLowerCase().includes(q)
         const textContent = s.text || (s.html ? s.html.replace(/<[^>]+>/g, '') : '')
         const contentMatch = textContent.toLowerCase().indexOf(q)
         
         if (titleMatch || contentMatch !== -1) {
-          // Create snippet
           let snippet = ''
           if (contentMatch !== -1) {
             const start = Math.max(0, contentMatch - 60)
@@ -102,43 +104,37 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
       })
     })
     return res
-  }, [data.parts, searchQuery])
+  }, [data.parts, searchQuery, searchPartFilter])
 
   const currentQuote = data.quotes[quoteIdx] || { body: '...', title: '...' }
 
   return (
     <div 
       id="srch-view" 
-      className="view on flex flex-col h-full bg-pmn-bg select-none w-full overflow-hidden"
-      style={{
-        left: 0,
-        right: 0,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        maxWidth: '1280px',
-        width: '100%'
-      }}
+      className="view on flex flex-col h-full bg-pmn-bg select-none w-full"
     >
-      <div className="sv-hdr-wrap border-b border-pmn-rule bg-pmn-bg sticky top-0 z-50 w-full flex-none">
-        <div className="max-w-[1280px] mx-auto w-full grid grid-cols-[1fr_2fr_1fr] items-center px-6 lg:px-8 h-[100px]">
-          <div className="flex justify-start">
-            <button className="font-mono text-[0.72rem] lg:text-[0.78rem] uppercase tracking-[0.2em] text-pmn-mute hover:text-pmn-acc transition-all flex items-center gap-2 group whitespace-nowrap" onClick={onBackHome}>
-              <span className="text-xl leading-none transition-transform group-hover:-translate-x-1">&larr;</span> Home
+      <div className="sv-hdr-wrap border-b border-pmn-rule flex-none w-full sticky top-0 z-50"
+           style={{ background: 'var(--bg2)', borderBottomColor: 'var(--rule)' }}>
+        {/* Full-width relative container so title centers across the whole viewport */}
+        <div className="w-full h-[64px] relative flex items-center justify-center px-6 lg:px-10">
+          {/* Button absolutely positioned at left edge of the inner 1280px column */}
+          <div className="absolute flex items-center" style={{ left: 'max(1.5rem, calc(50% - 640px + 1.5rem))' }}>
+            <button
+              className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-pmn-mute hover:text-pmn-acc transition-colors flex items-center gap-2 group whitespace-nowrap"
+              onClick={onBackHome}
+            >
+              <span className="text-base leading-none transition-transform group-hover:-translate-x-1">←</span> Home
             </button>
           </div>
-          <div className="flex justify-center text-center px-4">
-            <p className="sv-hdr !border-none !p-0 !m-0 font-pmn-head text-[1.7rem] lg:text-[2.2rem] text-pmn-ink whitespace-nowrap leading-tight" id="sv-hdr">
-              {activeTab === 'map' ? 'Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : 'Search Analysis'}
-            </p>
-          </div>
-          <div className="flex justify-end items-center gap-6">
-            {/* Redundant Map/Glossary buttons removed — already in main header */}
-          </div>
+
+          <h2 className="font-pmn-head font-normal text-[1.15rem] lg:text-[1.35rem] text-pmn-ink whitespace-nowrap leading-none tracking-tight" id="sv-hdr">
+            {activeTab === 'map' ? 'Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : 'Search Analysis'}
+          </h2>
         </div>
       </div>
       
       <div id="sv-body-scroll" className="flex-1 overflow-y-auto custom-scrollbar w-full flex flex-col items-center">
-        <div id="sv-body" className="w-full pt-16 pb-32 flex flex-col items-center" style={{ maxWidth: '1280px', paddingLeft: '2rem', paddingRight: '2rem', marginLeft: 'auto', marginRight: 'auto', boxSizing: 'border-box' }}>
+        <div id="sv-body" className="w-full pt-16 pb-64 px-8 flex flex-col items-center max-w-[1280px] mx-auto box-border">
 
           {activeTab === 'map' && (
             <div id="toc-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[1200px] mx-auto">
@@ -289,7 +285,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                   <button 
                     key={i} 
                     onClick={() => onSelectSection(r.pIdx, r.sIdx)}
-                    className="res w-full text-left bg-transparent py-12 border-b border-pmn-rule/20 hover:bg-pmn-acc/[0.02] transition-all group flex flex-col gap-2 px-6 rounded-xs"
+                    className="res w-full text-left bg-pmn-bg py-12 border-b border-pmn-rule/20 hover:bg-pmn-bg2 transition-all group flex flex-col gap-2 px-6 rounded-xs"
                   >
                     <div className="flex items-center gap-3 mb-1">
                       <span className="res-loc font-mono text-[0.65rem] text-pmn-acc uppercase tracking-[0.2em] font-bold">

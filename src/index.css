@@ -18,7 +18,8 @@
 @theme {
   /* === PMN COLOR TOKENS (Dark mode default values) ===
      Nilai di sini adalah dark mode defaults (karena [data-theme=dark] adalah
-     tampilan primer PMN). Light mode di-override via style.css :root.
+     tampilan primer PMN). Light mode di-override via :root:not([data-theme=dark])
+     di bawah @theme block ini.
      
      Tailwind akan generate class seperti: bg-pmn-bg, text-pmn-ink, border-pmn-rule, dll.
   */
@@ -55,6 +56,39 @@
   --font-pmn-head: 'Libre Baskerville', serif;
   --font-pmn-body: 'Lora', serif;
   --font-pmn-mono: 'Source Code Pro', monospace;
+}
+
+/* ================================================================
+   LIGHT MODE — Tailwind token overrides
+   Diperlukan karena @theme di atas adalah static dark-mode defaults.
+   Tanpa ini, bg-pmn-bg = #0d0d0d (hitam) bahkan di light mode.
+   ================================================================ */
+:root:not([data-theme=dark]) {
+  /* Backgrounds */
+  --color-pmn-bg:    #fdfbf7;
+  --color-pmn-bg2:   #f7f3eb;
+  --color-pmn-bg3:   #eee6d8;
+  --color-pmn-sb:    #f5efe4;
+
+  /* Text */
+  --color-pmn-ink:   #1c1510;
+  --color-pmn-ink2:  #4a3a2d;
+
+  /* Accent */
+  --color-pmn-acc:   #b83a1b;
+  --color-pmn-acc2:  #8f2812;
+
+  /* Muted */
+  --color-pmn-mute:  #756456;
+  --color-pmn-mute2: #605043;
+  --color-pmn-mute3: #8c7b6c;
+
+  /* Borders */
+  --color-pmn-rule:  #e8dcc4;
+  --color-pmn-rule2: #dbcaa6;
+
+  /* Header */
+  --color-pmn-hdr:   #f7f3eb;
 }
 
 /* === GLOBAL DECORATIVE OVERLAYS (Recovery v84+) === */
@@ -274,7 +308,6 @@
 .reader-tool-link {
   display: flex; gap: 12px; align-items: baseline;
   text-align: left; background: none; border: none; cursor: pointer;
-  group: hover;
 }
 .tool-id { font-family: var(--font-pmn-mono); font-size: 0.75rem; color: var(--pmn-acc); }
 .tool-ttl { font-family: var(--font-pmn-head); font-size: 1.05rem; color: var(--pmn-ink); }
@@ -354,7 +387,7 @@
 #sv-body {
     overflow-y: auto;
     flex: 1;
-    padding: 2rem 2.5rem 2rem;
+    padding: 2rem 2.5rem 12rem;
 }
 
 /* GLOBAL ROOT OVERRIDES */
@@ -365,3 +398,61 @@
   position: relative;
   background-color: var(--pmn-bg);
 }
+
+/* ================================================================
+   READER SECTION CARD BOXING
+   Tujuan: buat nav bar, judul, dan teks bacaan terlihat sebagai
+   "kotak" yang jelas terpisah dari background berbercak.
+   Referensi: Image 2 (dark mode, garis putih di tiap section).
+   ================================================================ */
+
+/* Nav bar — clean border bottom only, no box-shadow to act like a real frozen header */
+#reader-nav {
+  border: none !important;
+  border-bottom: 1px solid var(--rule2) !important;
+  background: var(--bg2) !important;
+  box-shadow: none !important;
+}
+
+/* Title card: module kicker + h1 + reader controls */
+.reader-title-card {
+  background: var(--bg2);
+  border: 1px solid var(--rule2);
+  padding: 1.5rem 1.25rem 0.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* Prose content box: teks bacaan utama */
+.reader-prose-box {
+  background: var(--bg2);
+  border: 1px solid var(--rule2);
+  padding: 2rem 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* ── Dark mode: border putih subtle, shadow lebih dalam ── */
+[data-theme=dark] .reader-title-card,
+[data-theme=dark] .reader-prose-box {
+  border-color: rgba(255, 255, 255, 0.11) !important;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.45);
+}
+[data-theme=dark] #reader-nav {
+  border-bottom-color: rgba(255, 255, 255, 0.11) !important;
+  box-shadow: none !important;
+}
+
+/* ── Light mode: border coklat hangat, shadow lembut ── */
+:root:not([data-theme=dark]) .reader-title-card,
+:root:not([data-theme=dark]) .reader-prose-box {
+  border-color: var(--rule) !important;
+  background: #faf5ec !important; /* sedikit lebih gelap dari --bg agar jelas */
+  box-shadow: 5px 5px 0 rgba(100, 70, 40, 0.10);
+}
+:root:not([data-theme=dark]) #reader-nav {
+  border-bottom-color: var(--rule) !important;
+  background: #faf5ec !important;
+  box-shadow: none !important;
+}
+

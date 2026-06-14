@@ -149,46 +149,46 @@
     "title": "The Supra-Rational Challenge: Is PMN’s Criterion Binding on Anyone?",
     "pt": "II"
   },
-  "3.1": {
-    "pi": 3,
-    "si": 0,
-    "title": "The Displacement That Matters",
-    "pt": "III"
-  },
   "3.0": {
     "pi": 3,
-    "si": 1,
+    "si": 0,
     "title": "The Normative Status of Biological Constraints: Conditional, Not Derived",
     "pt": "III"
   },
   "3.0b": {
     "pi": 3,
-    "si": 2,
+    "si": 1,
     "title": "The Naturalistic Fallacy Objection and Why It Does Not Apply Here",
     "pt": "III"
   },
   "3.0c": {
     "pi": 3,
-    "si": 3,
+    "si": 2,
     "title": "The Stability Argument: The Bridge That Is Not a Derivation",
     "pt": "III"
   },
   "3.0d": {
     "pi": 3,
-    "si": 4,
+    "si": 3,
     "title": "Against the Reductionism Reading",
     "pt": "III"
   },
   "3.0e": {
     "pi": 3,
-    "si": 5,
+    "si": 4,
     "title": "Against the Teleology Reading",
     "pt": "III"
   },
   "3.0f": {
     "pi": 3,
-    "si": 6,
+    "si": 5,
     "title": "Conditional Normative Framework: The Summary Statement",
+    "pt": "III"
+  },
+  "3.1": {
+    "pi": 3,
+    "si": 6,
+    "title": "The Displacement That Matters",
     "pt": "III"
   },
   "3.2": {
@@ -533,51 +533,51 @@
     "title": "Incentive Architecture and Predictable Institutional Failure",
     "pt": "VII"
   },
-  "7.3c-i": {
-    "pi": 7,
-    "si": 10,
-    "title": "A General Theory of Capture: Mechanism, Stages, and Detection Across Organizational Forms",
-    "pt": "VII"
-  },
   "7.3c-ii": {
     "pi": 7,
-    "si": 11,
+    "si": 12,
     "title": "Cosmological Capture: When Belief Distorts the Institution From Within",
+    "pt": "VII"
+  },
+  "7.3c-i": {
+    "pi": 7,
+    "si": 11,
+    "title": "A General Theory of Capture: Mechanism, Stages, and Detection",
     "pt": "VII"
   },
   "7.3d": {
     "pi": 7,
-    "si": 12,
+    "si": 13,
     "title": "Institutionalizing Anti-Capture",
     "pt": "VII"
   },
   "7.4": {
     "pi": 7,
-    "si": 13,
+    "si": 14,
     "title": "The State and Long-Term Direction",
     "pt": "VII"
   },
   "7.5": {
     "pi": 7,
-    "si": 14,
+    "si": 15,
     "title": "Noble Lie: Fictions That Serve Power",
     "pt": "VII"
   },
   "7.6": {
     "pi": 7,
-    "si": 15,
+    "si": 16,
     "title": "Those Who Stand on Others: The Structural Analysis",
     "pt": "VII"
   },
   "7.7": {
     "pi": 7,
-    "si": 16,
+    "si": 17,
     "title": "Path Dependence: Why History Constrains the Present",
     "pt": "VII"
   },
   "7.8": {
     "pi": 7,
-    "si": 17,
+    "si": 18,
     "title": "Regime Types: A Comparative Diagnostic",
     "pt": "VII"
   },
@@ -907,85 +907,85 @@
   },
   "12.1b": {
     "pi": 12,
-    "si": 1,
+    "si": 2,
     "title": "Second-Order Effects as Analytical Obligation: The Multi-Level Consequence Procedure",
     "pt": "XII"
   },
   "12.2": {
     "pi": 12,
-    "si": 2,
+    "si": 3,
     "title": "Multi-Perspectival Analysis",
     "pt": "XII"
   },
   "12.3": {
     "pi": 12,
-    "si": 3,
+    "si": 4,
     "title": "Framework and Doctrine in Practice",
     "pt": "XII"
   },
   "12.3b": {
     "pi": 12,
-    "si": 4,
+    "si": 5,
     "title": "The Framework-Doctrine Boundary: Detection Procedure",
     "pt": "XII"
   },
   "12.4": {
     "pi": 12,
-    "si": 5,
+    "si": 6,
     "title": "The Architecture of the Framework: Parts I, II, and III in Sequence",
     "pt": "XII"
   },
   "12.5": {
     "pi": 12,
-    "si": 6,
+    "si": 7,
     "title": "When This Framework Fails: Specific Failure Modes",
     "pt": "XII"
   },
   "12.5b": {
     "pi": 12,
-    "si": 7,
+    "si": 8,
     "title": "Two Phrases That Foreclose Analysis: \"Essentially\" and \"Should\"",
     "pt": "XII"
   },
   "12.5c": {
     "pi": 12,
-    "si": 8,
+    "si": 9,
     "title": "Engaging External Criticism: Substantive Critique vs. Misreading",
     "pt": "XII"
   },
   "12.5d": {
     "pi": 12,
-    "si": 9,
+    "si": 10,
     "title": "Misuse Resistance: Non-Bypassable Diagnostic Triggers",
     "pt": "XII"
   },
   "12.5e": {
     "pi": 12,
-    "si": 10,
+    "si": 11,
     "title": "Deficit Estimation Protocol: PMN Analysis with Partial Data",
     "pt": "XII"
   },
   "12.6": {
     "pi": 12,
-    "si": 11,
+    "si": 12,
     "title": "Genealogical Interrogation as Method",
     "pt": "XII"
   },
   "12.7": {
     "pi": 12,
-    "si": 12,
+    "si": 13,
     "title": "The Genealogy of This Framework",
     "pt": "XII"
   },
   "12.8": {
     "pi": 12,
-    "si": 13,
+    "si": 14,
     "title": "Technocratic Drift Safeguard",
     "pt": "XII"
   },
   "12.9": {
     "pi": 12,
-    "si": 14,
+    "si": 15,
     "title": "Comparative Demonstration: Where Competing Frameworks Fail",
     "pt": "XII"
   },

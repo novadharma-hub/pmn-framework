@@ -30,7 +30,7 @@ export default function App() {
     try { return localStorage.getItem('pmn-tip-dismissed') !== '1' } catch { return true }
   }) // persist until X (mengikuti user, not reset on reload/nav back to cover)
 
-  // Global hotkeys: K = keyboard modal, N = notes modal, / = command palette
+  // Global hotkeys: K = keyboard modal, N = notes modal, / = command palette, C = contents, ? = glossary, R = resume
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) return
@@ -38,11 +38,46 @@ export default function App() {
       if (key === 'k') { e.preventDefault(); setKbdOpen(v => !v) }
       if (key === 'n') { e.preventDefault(); setNotesOpen(v => !v) }
       if (key === '/') { e.preventDefault(); if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }
-      if (key === 'f') { e.preventDefault(); document.body.classList.toggle('focus-mode') } // global focus toggle even if hdr hidden
+      if (key === 'f') { e.preventDefault(); document.body.classList.toggle('focus-mode') } // global focus toggle
+      if (key === 'c') { e.preventDefault(); setContentsSub('map'); setPage('contents') }
+      if (key === '?') { e.preventDefault(); setContentsSub('glossary'); setPage('contents') }
+      if (key === 'r') { e.preventDefault(); setPage('reader') }
+      
+      // Arrow navigation between sections in Reader view
+      if (page === 'reader' && data?.parts) {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault()
+          let [pi, si] = curPos
+          let nextS = si + 1
+          let nextP = pi
+          if (nextS >= data.parts[pi].subs.length) {
+            nextS = 0
+            nextP = pi + 1
+          }
+          if (nextP < data.parts.length) {
+            navToSection(nextP, nextS)
+          }
+        }
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault()
+          let [pi, si] = curPos
+          let prevS = si - 1
+          let prevP = pi
+          if (prevS < 0) {
+            prevP = pi - 1
+            if (prevP >= 0) {
+              prevS = data.parts[prevP].subs.length - 1
+            }
+          }
+          if (prevP >= 0) {
+            navToSection(prevP, prevS)
+          }
+        }
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [page])
+  }, [page, data, curPos])
 
   // Data loading
   useEffect(() => {
@@ -161,9 +196,13 @@ export default function App() {
 
   return (
     <>
-      <div className="vignette-overlay" />
-      <div className="noise-overlay" />
-      <div className="grid-overlay" />
+      {page === 'home' && (
+        <>
+          <div className="vignette-overlay" />
+          <div className="noise-overlay" />
+          <div className="grid-overlay" />
+        </>
+      )}
 
       {/* HEADER — IDs match style.css rules exactly */}
       <header id="hdr" className="select-none">
@@ -201,7 +240,7 @@ export default function App() {
 
       {/* PAGE SHELL — height = 100vh - 52px (header height) */}
       <div className="page-shell">
-        <div className="views-shell" style={{flex:1, overflow:'hidden', position:'relative', minHeight:0}}>
+        <div className="views-shell" style={{flex:1, overflow:'hidden', position:'relative', minHeight:0, width:'100%'}}>
 
           {page === 'home' && (
             <HomeView
@@ -211,6 +250,7 @@ export default function App() {
               onOpenAdmin={() => setPage('login')}
               onOpenNotes={() => setNotesOpen(true)}
               onOpenGuide={() => setPage('guide')}
+              onOpenGlossary={() => { setContentsSub('glossary'); setPage('contents') }}
               onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }}
               showTip={showTip} setShowTip={setShowTip}
             />
@@ -221,6 +261,7 @@ export default function App() {
               data={data} readMap={readMap} curPos={curPos}
               subView={contentsSub}
               searchQuery={searchQuery}
+              searchPartFilter={searchPartFilter}
               onSelectSection={(p, s) => { navToSection(p, s); setPage('reader') }}
               onBackHome={() => setPage('home')}
               onSetSubView={setContentsSub}
@@ -275,12 +316,13 @@ export default function App() {
 
 // ─── HomeView ─────────────────────────────────────────────────────────────────
 
-function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onJump, showTip, setShowTip }: any) {
+function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onOpenGlossary, onJump, showTip, setShowTip }: any) {
   const totalSections = data.parts.reduce((a: number, p: any) => a + (p.subs?.length || 0), 0)
   const readCount = Object.keys(readMap).length
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
 
   const [anatTab, setAnatTab] = useState(0)
+  const [deskNotes, setDeskNotes] = useState(() => { try { return localStorage.getItem('pmn-desk-notes') || '' } catch { return '' } })
   const anatParts = data.parts.filter((p: any) => p.part !== 'Preface').slice(0, 14)
   const selectedPart = anatParts[anatTab] || null
 
@@ -316,7 +358,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
                 )}
               </div>
               <div className="cta-row-s">
-                <button id="cta-gl" className="cta-s" onClick={onStartReading}>Key Terms <span style={{opacity:.76, fontSize:'.68rem'}}>[?]</span></button>
+                <button id="cta-gl" className="cta-s" onClick={onOpenGlossary}>Key Terms <span style={{opacity:.76, fontSize:'.68rem'}}>[?]</span></button>
                 <a href="https://github.com/novadharma-hub/pmn-framework/releases/latest" className="cta-s" target="_blank" rel="noopener">Download Manuscript &darr;</a>
                 <button className="cta-s" onClick={onOpenGuide}>AI Agent Guide &rarr;</button>
               </div>
@@ -450,7 +492,13 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
                   ))}
                   {(selectedPart.subs?.length || 0) > 7 && <div style={{color:'var(--mute)',paddingTop:'.3rem'}}>+ {selectedPart.subs.length - 7} more</div>}
                 </div>
-                <button className="btn-anatomy-more" onClick={onStartReading}>Open in Reader &rarr;</button>
+                <button className="btn-anatomy-more" onClick={() => {
+                  if (onJump && data) {
+                    const pIdx = data.parts.findIndex((pp: any) => pp.part === selectedPart.part)
+                    if (pIdx >= 0) { onJump(pIdx, 0); return }
+                  }
+                  onStartReading()
+                }}>Open in Reader &rarr;</button>
               </div>
             )}
           </div>
@@ -486,7 +534,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
       {/* HOME AI MODULE — Integrated React Terminal */}
       <div className="home-ai-section">
         <div className="home-ai-inner" style={{maxWidth:1000, margin:'0 auto'}}>
-          <AITerminal parts={data.parts} gl={data.gl} activeSec={null} />
+          <AITerminal parts={data.parts} gl={data.gl} activeSec={null} onOpenGuide={onOpenGuide} />
         </div>
       </div>
 
@@ -505,11 +553,11 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
               <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.6rem'}}>
                 <span style={{fontFamily:'var(--f-mono)',fontSize:'.6rem',letterSpacing:'.15em',textTransform:'uppercase',color:'var(--mute)'}}>Quick Notes</span>
                 <div style={{display:'flex',gap:'.4rem'}}>
-                  <button className="annot-btn">Copy</button>
-                  <button className="annot-btn">Clear</button>
+                  <button className="annot-btn" onClick={() => { try { navigator.clipboard.writeText(deskNotes) } catch { window.prompt('Copy:', deskNotes) } }}>Copy</button>
+                  <button className="annot-btn" onClick={() => { setDeskNotes(''); try { localStorage.removeItem('pmn-desk-notes') } catch {} }}>Clear</button>
                 </div>
               </div>
-              <textarea className="home-bottom-notes" placeholder="Your notes on this section\u2026" />
+              <textarea className="home-bottom-notes" placeholder="Your notes on this section\u2026" value={deskNotes} onChange={e => { setDeskNotes(e.target.value); try { localStorage.setItem('pmn-desk-notes', e.target.value) } catch {} }} />
             </article>
             <article className="home-bottom-card compact-card" style={{gridColumn: 'span 4'}}>
               <h3>Useful next moves</h3>
