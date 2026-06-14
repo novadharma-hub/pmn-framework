@@ -65,30 +65,30 @@
    ================================================================ */
 :root:not([data-theme=dark]) {
   /* Backgrounds */
-  --color-pmn-bg:    #f4eedb; /* Cozy Cream Paper */
-  --color-pmn-bg2:   #eae2ca; /* Vintage Page Panel */
-  --color-pmn-bg3:   #e2d6bd;
-  --color-pmn-sb:    #eae2ca;
+  --color-pmn-bg:    #fdfbf7; /* Clean warm eggshell white */
+  --color-pmn-bg2:   #f5efe0; /* Rich oatmeal tan */
+  --color-pmn-bg3:   #ebdcb9; /* Archival book paper */
+  --color-pmn-sb:    #f2ebdb; /* Reader sidebar warm ivory */
 
   /* Text */
-  --color-pmn-ink:   #231711; /* Cozy Chocolate Ink */
-  --color-pmn-ink2:  #3d2b20;
+  --color-pmn-ink:   #1e140f; /* Deep print ink black */
+  --color-pmn-ink2:  #3a2a1f; /* Warm espresso */
 
   /* Accent */
-  --color-pmn-acc:   #1e4620; /* Deep Pine/Forest Green */
-  --color-pmn-acc2:  #143016;
+  --color-pmn-acc:   #184a1a; /* Deep forest green */
+  --color-pmn-acc2:  #103412;
 
   /* Muted */
-  --color-pmn-mute:  #756456;
-  --color-pmn-mute2: #605043;
-  --color-pmn-mute3: #8c7b6c;
+  --color-pmn-mute:  #7c6957; /* Warm leather-brown */
+  --color-pmn-mute2: #625141;
+  --color-pmn-mute3: #a6917c;
 
   /* Borders */
-  --color-pmn-rule:  #d5c8ab; /* Warm Brown Rules */
-  --color-pmn-rule2: #c4b595;
+  --color-pmn-rule:  #e6dcc5; /* Warm soft tan */
+  --color-pmn-rule2: #cbbda2;
 
   /* Header */
-  --color-pmn-hdr:   #eae2ca;
+  --color-pmn-hdr:   #f5efe0;
 }
 
 /* === GLOBAL DECORATIVE OVERLAYS (Recovery v84+) === */
