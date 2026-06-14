@@ -89,11 +89,16 @@ Do not become smoother than the evidence allows.`
     id="guide-view" 
     className="view on bg-pmn-bg select-text"
     style={{
+      display: 'block',
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
       left: 0,
       right: 0,
+      overflowY: 'auto',
       marginLeft: 'auto',
       marginRight: 'auto',
-      maxWidth: '920px', // Sesuai dengan lebar desain halaman panduan Anda
+      maxWidth: '920px',
       width: '100%'
     }}
   >

@@ -245,6 +245,26 @@ export default function ReaderView({
     if (forceOpenPalette && forceOpenPalette > 0) setCommandPaletteOpen(true)
   }, [forceOpenPalette])
 
+  // Bug #18: Load note dari localStorage saat section berganti
+  useEffect(() => {
+    if (!s) return
+    const saved = localStorage.getItem(`pmn-an-${s.id}`) || ''
+    setNoteText(saved)
+    setNoteSavedStatus('')
+  }, [s?.id])
+
+  // Global hotkey: Ctrl+S to save note
+  useEffect(() => {
+    const handleSaveKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault()
+        saveNote()
+      }
+    }
+    window.addEventListener('keydown', handleSaveKey)
+    return () => window.removeEventListener('keydown', handleSaveKey)
+  }, [s, noteText])
+
   useEffect(() => {
     const scroller = mainRef.current
     if (!scroller) return
@@ -288,35 +308,42 @@ export default function ReaderView({
       )}
 
       <main ref={mainRef} id="reader-main" className="flex-1 overflow-y-auto custom-scrollbar relative bg-pmn-bg">
-        <div id="reader-col" className="mx-auto transition-all duration-300">
-          
-          <div 
-            id="reader-nav"
-            role="navigation"
-            className="select-none sticky top-0 z-20 bg-pmn-bg/95 backdrop-blur-md w-full flex items-center border-b border-pmn-rule/40" 
-            style={{ marginLeft: 'auto', marginRight: 'auto', marginBottom: '24px', height: '76px', boxSizing: 'border-box' }}
-          >
-            <div className="w-full grid grid-cols-[1fr_2.5fr_1fr] items-center h-full px-10 lg:px-16">
-              <div className="flex justify-start">
-                <button className="font-mono text-[0.65rem] lg:text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors" onClick={onBackHome}>&larr; Contents Map</button>
-              </div>
-              <div className="flex flex-col items-center justify-center text-center">
-                <span className="font-mono text-[0.7rem] lg:text-[0.75rem] text-pmn-acc uppercase tracking-[0.2em] leading-none mb-2 font-bold px-5">Part {p?.part}</span>
-                <span className="font-pmn-head text-[0.95rem] lg:text-[1.02rem] font-bold text-pmn-ink leading-none truncate w-full max-w-[340px] lg:max-w-[420px]">{p?.title}</span>
-              </div>
-              <div className="flex items-center justify-end">
-                <button 
-                  onClick={() => onMarkRead(pIdx, sIdx)} 
-                  className={`font-mono text-[0.6rem] lg:text-[0.65rem] uppercase tracking-widest border transition-all shrink-0 ${isRead ? 'border-pmn-acc text-pmn-acc bg-pmn-acc/5' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink'}`}
-                  style={{ padding: '8px 16px', cursor: 'pointer' }}
-                >
-                  {isRead ? 'Completed ✓' : 'Mark as Read'}
-                </button>
-              </div>
-            </div>
-          </div>
+        <div 
+          id="reader-nav"
+          role="navigation"
+          className="select-none sticky top-0 z-20 bg-pmn-bg w-full border-b border-pmn-rule/60" 
+          style={{ height: '68px', boxSizing: 'border-box' }}
+        >
+          {/* Full-width relative bar — title always centers across the full reader column */}
+          <div className="w-full h-full relative flex items-center justify-center px-6 lg:px-12">
+            {/* Left: ← Contents button, absolutely pinned */}
+            <button
+              className="absolute left-6 lg:left-12 font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors whitespace-nowrap shrink-0"
+              onClick={onBackHome}
+            >← <span className="hidden sm:inline">Contents</span></button>
 
+            {/* Center: Part label + title — truly centered in the column */}
+            <div className="flex flex-col items-center justify-center text-center pointer-events-none">
+              <span className="font-mono text-[0.6rem] lg:text-[0.7rem] text-pmn-acc uppercase tracking-[0.2em] leading-none mb-1 font-bold whitespace-nowrap">Part {p?.part}</span>
+              <span className="font-pmn-head text-[0.85rem] lg:text-[1rem] font-bold text-pmn-ink leading-snug max-w-[55vw] truncate">{p?.title}</span>
+            </div>
+
+            {/* Right: Mark Read / Completed button, absolutely pinned */}
+            <button
+              onClick={() => onMarkRead(pIdx, sIdx)}
+              className={`absolute right-6 lg:right-12 font-mono text-[0.58rem] lg:text-[0.65rem] uppercase tracking-widest border transition-all shrink-0 whitespace-nowrap ${isRead ? 'border-pmn-acc text-pmn-acc bg-pmn-acc/5' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink'}`}
+              style={{ padding: '6px 12px', cursor: 'pointer' }}
+            >
+              <span className="hidden sm:inline">{isRead ? 'Completed' : 'Mark Read'}</span>
+              <span className="sm:hidden">{isRead ? '✓' : '○'}</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="reader-col" className="mx-auto transition-all duration-300">
           <div className="w-full px-6 lg:px-12">
+            {/* ── Title + Controls Card ── */}
+            <div className="reader-title-card">
             <p className="sec-eye uppercase tracking-[0.4em] font-mono text-[0.62rem] text-pmn-acc opacity-80 mb-6 border-b border-pmn-acc/20 pb-2 inline-block">
               {SPECIAL[p?.part] ? `SYSTEM DOC // ${shortenId(s?.id || '')}` : `MODULE // ${shortenId(s?.id || '')}`}
             </p>
@@ -350,7 +377,10 @@ export default function ReaderView({
                 </button>
               </div>
             </div>
+            </div> {/* /reader-title-card */}
 
+            {/* ── Prose Content Box ── */}
+            <div className="reader-prose-box">
             <div 
               id="prose" 
               ref={proseRef} 
@@ -361,6 +391,7 @@ export default function ReaderView({
               onMouseUp={handleProseMouseUp}
               onMouseOver={handleProseMouseOver}
             />
+            </div> {/* /reader-prose-box */}
 
             <div className="reader-endcap space-y-16 pt-24 border-t border-pmn-rule/40 mt-32">
               <div className="reader-endcap-hdr flex justify-between items-end gap-12">
@@ -370,7 +401,11 @@ export default function ReaderView({
                   <p className="reader-endcap-desc font-pmn-body text-[0.95rem] text-pmn-mute leading-relaxed italic opacity-80 mt-4 max-w-[500px]">Use related sections, manuscript notes, and PMN Agent handoff to bridge this module with the broader framework.</p>
                 </div>
                 <div className="flex gap-4">
-                  <button className="pmn-agent-btn px-6 py-2 border border-pmn-rule hover:border-pmn-acc hover:text-pmn-acc transition-all font-mono text-[0.7rem] uppercase tracking-widest">Copy Citation</button>
+                  <button className="pmn-agent-btn px-6 py-2 border border-pmn-rule hover:border-pmn-acc hover:text-pmn-acc transition-all font-mono text-[0.7rem] uppercase tracking-widest" onClick={() => {
+                    if (!s || !p) return
+                    const citation = `${p.title} — ${s.title} [PMN v117.6, Module ${s.id}]`
+                    try { navigator.clipboard.writeText(citation) } catch { window.prompt('Copy citation:', citation) }
+                  }}>Copy Citation</button>
                   <button className="pmn-agent-btn px-6 py-2 bg-pmn-ink text-pmn-bg hover:bg-pmn-acc transition-all font-mono text-[0.7rem] uppercase tracking-widest shadow-xl" onClick={onBackHome}>Map &uarr;</button>
                 </div>
               </div>

@@ -58,7 +58,10 @@ TEXT_EXTS = {
 
 
 def rel(path: Path) -> str:
-    return path.relative_to(ROOT).as_posix()
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return os.path.relpath(path, ROOT).replace("\\", "/")
 
 
 def run_git(args: list[str]) -> str:
