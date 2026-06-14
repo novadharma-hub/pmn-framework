@@ -26,6 +26,7 @@ interface ReaderViewProps {
   contentWidth?: 'narrow' | 'medium' | 'wide'
   onChangeWidth?: (w: 'narrow' | 'medium' | 'wide') => void
   history?: [number, number][]
+  version?: string
 }
 
 const SPECIAL: Record<string, boolean> = { 'Preface': true, 'Coda': true, 'Intellectual Debts': true, 'Bibliography': true }
@@ -41,7 +42,7 @@ const shortenId = (id: string) => {
 
 export default function ReaderView({ 
   data, partIdx, secIdx, curPos, readMap, onMarkRead, onSavePosition, onBackHome, onToggleTheme, theme, forceOpenPalette,
-  contentWidth = 'narrow', onChangeWidth, history = []
+  contentWidth = 'narrow', onChangeWidth, history = [], version = '117.9'
 }: ReaderViewProps) {
   const [sbOpen, setSbOpen] = useState(window.innerWidth > 1024)
   const [focusMode, setFocusMode] = useState(false)
@@ -320,7 +321,7 @@ export default function ReaderView({
             <button
               className="absolute left-6 lg:left-12 font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors whitespace-nowrap shrink-0"
               onClick={onBackHome}
-            >← <span className="hidden sm:inline">Contents</span></button>
+            >← <span className="hidden sm:inline">Table of Contents</span></button>
 
             {/* Center: Part label + title — truly centered in the column */}
             <div className="flex flex-col items-center justify-center text-center pointer-events-none">
@@ -403,7 +404,7 @@ export default function ReaderView({
                 <div className="flex gap-4">
                   <button className="pmn-agent-btn px-6 py-2 border border-pmn-rule hover:border-pmn-acc hover:text-pmn-acc transition-all font-mono text-[0.7rem] uppercase tracking-widest" onClick={() => {
                     if (!s || !p) return
-                    const citation = `${p.title} — ${s.title} [PMN v117.6, Module ${s.id}]`
+                    const citation = `${p.title} — ${s.title} [PMN v${version}, Module ${s.id}]`
                     try { navigator.clipboard.writeText(citation) } catch { window.prompt('Copy citation:', citation) }
                   }}>Copy Citation</button>
                   <button className="pmn-agent-btn px-6 py-2 bg-pmn-ink text-pmn-bg hover:bg-pmn-acc transition-all font-mono text-[0.7rem] uppercase tracking-widest shadow-xl" onClick={onBackHome}>Map &uarr;</button>
@@ -437,8 +438,8 @@ export default function ReaderView({
               </div>
 
               <footer className="doc-footer border-t border-pmn-rule/40 py-16 flex justify-between items-center select-none font-mono text-[0.7rem] text-pmn-mute uppercase tracking-[0.4em]">
-                <span>PMN CORE &mdash; REV V117.6</span>
-                <button className="hover:text-pmn-acc transition-colors border-b border-transparent hover:border-pmn-acc pb-1" onClick={onBackHome}>Return to Manuscript Map &uarr;</button>
+                <span>PMN CORE &mdash; REV V{version}</span>
+                <button className="hover:text-pmn-acc transition-colors border-b border-transparent hover:border-pmn-acc pb-1" onClick={onBackHome}>Return to Table of Contents &uarr;</button>
               </footer>
             </div>
           </div>

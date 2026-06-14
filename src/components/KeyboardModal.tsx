@@ -8,7 +8,7 @@ interface KeyboardModalProps {
 const SHORTCUTS = [
   { section: 'Navigation', items: [
     { key: 'K', desc: 'Toggle this shortcuts panel' },
-    { key: 'C', desc: 'Open Contents map' },
+    { key: 'C', desc: 'Open Table of Contents' },
     { key: '/', desc: 'Open Command Palette (jump/search)' },
     { key: 'Esc', desc: 'Close active modal or palette' },
   ]},

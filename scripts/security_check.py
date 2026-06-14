@@ -29,6 +29,7 @@ EXCLUDED_DIRS = {
     "node_modules",
     "backups",
     "__pycache__",
+    "dist",
 }
 
 EXCLUDED_FILES = {
@@ -122,31 +123,76 @@ def check_tracked_cache() -> list[str]:
     return bad
 
 
-def check_docx_metadata() -> list[str]:
-    findings: list[str] = []
+def check_metadata_leaks() -> tuple[list[str], list[str]]:
+    critical_findings: list[str] = []
+    info_findings: list[str] = []
     
-    # Resolusi jalur dinamis untuk pmn-workspace
-    private_docx_dir = ROOT.parent / "private" / "docx_source"
-    if not private_docx_dir.exists() and os.path.exists(r"D:\pmn-workspace\private\docx_source"):
-        private_docx_dir = Path(r"D:\pmn-workspace\private\docx_source")
+    private_dir = ROOT.parent / "private"
+    if not private_dir.exists() and os.path.exists(r"D:\pmn-workspace\private"):
+        private_dir = Path(r"D:\pmn-workspace\private")
         
-    paths = list((ROOT / "docs").glob("*.docx")) + list((ROOT / "docx_source").glob("*.docx"))
-    if private_docx_dir.exists():
-        paths += list(private_docx_dir.glob("*.docx"))
-        
-    personal_re = re.compile(r"\b(ali\s+ikhsan|ali|ikhsan)\b", re.IGNORECASE)
-    for path in paths:
+    paths: list[Path] = []
+    for ext in ("*.docx", "*.pdf"):
+        paths.extend(ROOT.rglob(ext))
+        if private_dir.exists():
+            paths.extend(private_dir.glob(ext))
+            for sub_folder in ("docx_source", "clean_outputs", "raw_inputs"):
+                sub_path = private_dir / sub_folder
+                if sub_path.exists():
+                    paths.extend(sub_path.glob(ext))
+                    
+    unique_paths = []
+    seen = set()
+    for p in paths:
         try:
-            with zipfile.ZipFile(path) as archive:
-                for xml_name in ("docProps/core.xml", "docProps/app.xml"):
-                    if xml_name not in archive.namelist():
-                        continue
-                    text = archive.read(xml_name).decode("utf-8", errors="ignore")
-                    if personal_re.search(text):
-                        findings.append(f"{rel(path)}: personal term found in {xml_name}")
-        except (OSError, zipfile.BadZipFile) as exc:
-            findings.append(f"{rel(path)}: could not inspect DOCX metadata ({exc})")
-    return findings
+            resolved = p.resolve()
+        except OSError:
+            resolved = p
+        if resolved not in seen:
+            seen.add(resolved)
+            unique_paths.append(resolved)
+            
+    personal_re = re.compile(r"\b(ali\s+ikhsan|ali|ikhsan)\b", re.IGNORECASE)
+    
+    for path in unique_paths:
+        rel_str = rel(path)
+        is_private = "private" in rel_str.lower() or "backup" in rel_str.lower()
+        findings_list = info_findings if is_private else critical_findings
+        
+        ext = path.suffix.lower()
+        if ext == ".docx":
+            try:
+                with zipfile.ZipFile(path) as archive:
+                    for xml_name in ("docProps/core.xml", "docProps/app.xml"):
+                        if xml_name not in archive.namelist():
+                            continue
+                        text = archive.read(xml_name).decode("utf-8", errors="ignore")
+                        if personal_re.search(text):
+                            findings_list.append(f"{rel_str}: personal term found in {xml_name}")
+            except (OSError, zipfile.BadZipFile) as exc:
+                findings_list.append(f"{rel_str}: could not inspect DOCX metadata ({exc})")
+        elif ext == ".pdf":
+            try:
+                import pypdf
+                reader = pypdf.PdfReader(path)
+                meta = reader.metadata
+                if meta:
+                    for key, val in meta.items():
+                        if personal_re.search(str(val)):
+                            findings_list.append(f"{rel_str}: personal term found in PDF metadata [{key}]: {val}")
+            except ImportError:
+                try:
+                    content = path.read_bytes()
+                    for term in (b"ali", b"ikhsan"):
+                        if term in content.lower():
+                            findings_list.append(f"{rel_str}: potential personal term found in raw PDF content")
+                            break
+                except Exception as exc:
+                    findings_list.append(f"{rel_str}: could not inspect PDF metadata ({exc})")
+            except Exception as exc:
+                findings_list.append(f"{rel_str}: could not inspect PDF metadata ({exc})")
+                
+    return critical_findings, info_findings
 
 
 def check_json_validity() -> list[str]:
@@ -226,10 +272,12 @@ def check_ignore_contract() -> list[str]:
 
 
 def main() -> int:
+    crit_metadata, info_metadata = check_metadata_leaks()
+    
     checks = {
         "Possible secrets/config references": check_secret_patterns(),
         "Tracked Python cache files": check_tracked_cache(),
-        "DOCX metadata personal terms": check_docx_metadata(),
+        "Public metadata leaks (Critical)": crit_metadata,
         "Invalid JSON files": check_json_validity(),
         "Missing .gitignore rules": check_ignore_contract(),
     }
@@ -249,6 +297,13 @@ def main() -> int:
                 print(f"  ... {len(findings) - 20} more")
         else:
             print(f"[OK] {name}")
+
+    if info_metadata:
+        print(f"\n[INFO] Private metadata files (Safe / ignored): {len(info_metadata)}")
+        for item in info_metadata[:10]:
+            print(f"  - {item}")
+        if len(info_metadata) > 10:
+            print(f"  ... {len(info_metadata) - 10} more")
 
     print("=" * 68)
     if failed:

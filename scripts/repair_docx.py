@@ -55,10 +55,34 @@ W_NS = "{%s}" % NS["w"]
 def get_para_text(p_element):
     return "".join(node.text or "" for node in p_element.findall(".//w:t", NS)).strip()
 
+def find_latest_docx() -> Path:
+    """Dynamically find the latest PMN_Framework_v*.docx in private/docx_source."""
+    import re as _re
+    script_dir = Path(__file__).resolve().parent
+    search_roots = [
+        script_dir.parent.parent / "private" / "docx_source",
+        script_dir.parent / "private" / "docx_source",
+        Path("../private/docx_source"),
+    ]
+    def version_key(p):
+        m = _re.search(r"PMN_Framework_v([\d.]+)\.docx$", p.name, _re.IGNORECASE)
+        if not m:
+            return ()
+        return tuple(int(x) for x in m.group(1).split(".") if x.isdigit())
+
+    for root in search_roots:
+        if not root.exists():
+            continue
+        matches = sorted(root.glob("PMN_Framework_v*.docx"), key=version_key, reverse=True)
+        if matches:
+            return matches[0]
+    raise FileNotFoundError(
+        "Could not find any PMN_Framework_v*.docx in private/docx_source. "
+        "Place the DOCX there and retry."
+    )
+
 def main():
-    docx_path = Path("../private/docs/v117.6/PMN_Framework_v117.6.docx")
-    if not docx_path.exists():
-        docx_path = Path("../private/docx_source/PMN_Framework_v117.6.docx")
+    docx_path = find_latest_docx()
         
     print(f"[*] Loading manuscript from: {docx_path}")
     
@@ -435,7 +459,8 @@ def main():
         
         # Repackage the zip file safely outside temp_dir to prevent WinError 32
         repack_dir = tempfile.mkdtemp()
-        output_temp_docx = Path(repack_dir) / "PMN_Framework_v117.6_Repaired.docx"
+        # Use the same stem as the source DOCX for the repaired output
+        output_temp_docx = Path(repack_dir) / f"{docx_path.stem}_Repaired.docx"
         
         with zipfile.ZipFile(output_temp_docx, "w", zipfile.ZIP_DEFLATED) as z_out:
             for root_dir, _, files in os.walk(temp_dir):
@@ -445,9 +470,9 @@ def main():
                     z_out.write(file_path, arcname)
                     
         # Overwrite original files safely
+        # Write back to the original DOCX location only
         dest_paths = [
-            Path("../private/docs/v117.6/PMN_Framework_v117.6.docx"),
-            Path("../private/docx_source/PMN_Framework_v117.6.docx")
+            docx_path,
         ]
         
         for dest in dest_paths:

@@ -30,10 +30,13 @@ export default function App() {
     try { return localStorage.getItem('pmn-tip-dismissed') !== '1' } catch { return true }
   }) // persist until X (mengikuti user, not reset on reload/nav back to cover)
 
+  const [version, setVersion] = useState('117.9')
+
   // Global hotkeys: K = keyboard modal, N = notes modal, / = command palette, C = contents, ? = glossary, R = resume
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) return
+      if (e.ctrlKey || e.metaKey || e.altKey) return // Ignore shortcuts if modifier keys are pressed (e.g. Ctrl+C)
       const key = e.key.toLowerCase()
       if (key === 'k') { e.preventDefault(); setKbdOpen(v => !v) }
       if (key === 'n') { e.preventDefault(); setNotesOpen(v => !v) }
@@ -81,10 +84,13 @@ export default function App() {
 
   // Data loading
   useEffect(() => {
-    const dataFiles = ['parts', 'gl', 'glg', 'rel', 'look', 'quotes', 'ci']
+    const dataFiles = ['parts', 'gl', 'glg', 'rel', 'look', 'quotes', 'ci', 'version']
     Promise.all(dataFiles.map(f => fetch(`./data/${f}.json`).then(r => r.json()).catch(() => null)))
-      .then(([parts, gl, glg, rel, look, quotes, ci]) => {
+      .then(([parts, gl, glg, rel, look, quotes, ci, verData]) => {
         setData({ parts: parts || [], gl: gl || {}, glg: glg || {}, rel: rel || {}, look: look || {}, quotes: quotes || [], ci: ci || {} })
+        if (verData && verData.version) {
+          setVersion(verData.version.replace(/^v/i, ''))
+        }
         setLoadError((parts && parts.length > 0) ? null : 'Gagal memuat data manuskrip. Cek network / public_static/data.')
         setLoading(false)
       })
@@ -231,7 +237,7 @@ export default function App() {
         <button className="hbtn text-[10px] opacity-70" onClick={() => { if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }}>DEEP SCAN</button>
         <div id="hdr-r">
           <button id="focus-btn" className="focus-mode-btn font-pmn-mono text-[0.62rem] tracking-[0.1em] text-pmn-mute hover:text-pmn-acc transition-colors" onClick={() => document.body.classList.toggle('focus-mode')}>FOCUS</button>
-          <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Contents</button>
+          <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
           <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-gl" onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
           <button id="theme-tog" className="font-pmn-mono text-[0.62rem] tracking-[0.1em] border border-pmn-rule px-3 py-1 hover:border-pmn-acc hover:text-pmn-acc transition-all" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
           <button className="font-pmn-mono text-[0.62rem] tracking-[0.1em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-kbd" onClick={() => setKbdOpen(true)}>Keys [K]</button>
@@ -253,6 +259,7 @@ export default function App() {
               onOpenGlossary={() => { setContentsSub('glossary'); setPage('contents') }}
               onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }}
               showTip={showTip} setShowTip={setShowTip}
+              version={version}
             />
           )}
 
@@ -272,6 +279,7 @@ export default function App() {
               }}
               contentWidth={contentWidth}
               onChangeWidth={changeWidth}
+              version={version}
             />
           )}
 
@@ -292,12 +300,13 @@ export default function App() {
               contentWidth={contentWidth}
               onChangeWidth={changeWidth}
               history={history}
+              version={version}
             />
           )}
 
           {page === 'login' && <AdminLogin onLogin={() => setPage('admin')} onBack={() => setPage('home')} />}
           {page === 'admin' && <VersionManager onBack={() => setPage('home')} />}
-          {page === 'guide' && <GuideView onBackHome={() => setPage('home')} />}
+          {page === 'guide' && <GuideView onBackHome={() => setPage('home')} version={version} />}
 
         </div>
 
@@ -316,7 +325,7 @@ export default function App() {
 
 // ─── HomeView ─────────────────────────────────────────────────────────────────
 
-function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onOpenGlossary, onJump, showTip, setShowTip }: any) {
+function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onOpenGlossary, onJump, showTip, setShowTip, version }: any) {
   const totalSections = data.parts.reduce((a: number, p: any) => a + (p.subs?.length || 0), 0)
   const readCount = Object.keys(readMap).length
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
@@ -336,11 +345,11 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
           <div className="hero-inner hero-parallax" id="hero-parallax" style={{paddingTop: '1.5rem'}}>
             <div className="hero-orn" style={{marginTop: '0.5rem'}}>A Framework for Navigating Material Reality</div>
             <h1 className="hero-h1">Progressive<br />Materialist<br /><em>naturalism</em></h1>
-            <p className="hero-sub">By Nova Dharma &mdash; Version 117.6</p>
+            <p className="hero-sub">By Nova Dharma &mdash; Version {version}</p>
             <p className="hero-quote">&ldquo;Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.&rdquo;</p>
 
             <div className="hero-stats">
-              <div className="stat"><span className="stat-lbl">Version</span><span className="stat-val">117.6</span></div>
+              <div className="stat"><span className="stat-lbl">Version</span><span className="stat-val">{version}</span></div>
               <div className="stat"><span className="stat-lbl">Parts</span><span className="stat-val">{data.parts.length}</span></div>
               <div className="stat"><span className="stat-lbl">Sections</span><span className="stat-val">{totalSections}</span></div>
               <div className="stat"><span className="stat-lbl">Read</span><span className="stat-val">{readPct}%</span></div>
@@ -401,7 +410,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
           <span className="marquee-txt">ANTI-DOGMATIC BY DESIGN — DOCTRINE REVISABLE UNDER EVIDENCE AND FAILURE</span>
           <span className="marquee-txt">CONDITIONAL BIOLOGICAL CONSTRAINTS — PROBABILISTIC DETERMINISM — LAYERED ANALYSIS</span>
           <span className="marquee-txt">THE CUSTODIAN PROBLEM — INFORMATION ASYMMETRY AS STRUCTURAL POWER</span>
-          <span className="marquee-txt">REDUCE STRUCTURAL SUFFERING — EXPAND GENUINE BECOMING — PMN v117.6</span>
+          <span className="marquee-txt">REDUCE STRUCTURAL SUFFERING — EXPAND GENUINE BECOMING — PMN v{version}</span>
         </div>
       </div>
 
@@ -591,7 +600,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
                 </div>
                 <div style={{textAlign: 'center'}}>
                   <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Release</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>V117.6</strong>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>V{version}</strong>
                 </div>
               </div>
             </div>
@@ -606,7 +615,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
       {/* HOME FOOTER */}
       <div className="home-footer-bar">
         <span>[C] 2026 Nova Dharma // PMN Collective</span>
-        <span>V117.6 &mdash; Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>?</kbd> for Glossary &mdash; <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>K</kbd> for Keys</span>
+        <span>V{version} &mdash; Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>?</kbd> for Glossary &mdash; <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>K</kbd> for Keys</span>
       </div>
     </div>
   )

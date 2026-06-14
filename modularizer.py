@@ -301,9 +301,10 @@ def compile_mode():
     json_scripts.append(make_json_script("d-look", os.path.join("data", "look.json")))
     json_scripts.append(make_json_script("d-ci", os.path.join("data", "ci.json")))
     json_scripts.append(make_json_script("d-quotes", os.path.join("data", "quotes.json")))
+    json_scripts.append(make_json_script("d-version", os.path.join("data", "version.json")))
 
     embedded_data_html = "\n".join(json_scripts)
-    print("   [OK] Embedded 7 JSON data sets.")
+    print("   [OK] Embedded 8 JSON data sets.")
 
     # Load app.js logic
     with open(app_js_path, "r", encoding="utf-8") as f:
