@@ -1,199 +1,146 @@
-# 🚀 Progressive Materialist Naturalism (PMN) Reader Platform
+# Progressive Materialist Naturalism (PMN) — Reader Platform
 
-[![Version](https://img.shields.io/badge/Release-v116.2-blueviolet.svg?style=flat-square)](#)
-[![Architecture](https://img.shields.io/badge/Architecture-Hybrid%20Modular--Monolith-brightgreen.svg?style=flat-square)](#)
+[![Version](https://img.shields.io/badge/Release-v117.9-blueviolet.svg?style=flat-square)](#)
+[![Stack](https://img.shields.io/badge/Stack-React%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-Corpus%20Enabled-orange.svg?style=flat-square)](#)
-[![Deployment](https://img.shields.io/badge/Runtime-Offline%20Zero--Dependencies-blue.svg?style=flat-square)](#)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg?style=flat-square)](#)
 
-Welcome to the **Progressive Materialist Naturalism (PMN) Ecosystem**! This repository hosts the interactive, offline-first reader platform for the PMN philosophical manuscript—a framework designed for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming.
+A fully interactive, offline-capable reader platform for the PMN philosophical manuscript — a framework for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming.
 
-To prevent token bloat during AI pair-programming sessions, the large 2.6 MB manuscript is engineered under a **Hybrid Modular-Monolith** design: the document remains divided into 21 lightweight JSON chunks for rapid, inexpensive AI editing, which are then compiled on-demand into a high-performance standalone webpage.
+Built as a **React + TypeScript + Vite** single-page application, with a cozy bookstore aesthetic, full dark/light theme, keyboard-first navigation, AI grounding corpus, and a complete build pipeline driven by a single `.bat` launcher.
 
 ---
 
-## 📂 Repository Directory Tree
+## Architecture
 
-A professional overview of the workspace directory layout:
-
-```text
+```
 pmn-framework/
-├── 🚀 00_PMN_WORKSPACE.bat    ← Super main dashboard launcher (One-click entry point!)
+├── src/
+│   ├── App.tsx                     ← Root: all global state, routing, HomeView
+│   ├── main.tsx                    ← Entry point, CSS import order
+│   ├── index.css                   ← Tailwind v4 @theme tokens
+│   └── components/
+│       ├── ReaderView.tsx          ← The main manuscript reader (sidebar + prose)
+│       ├── ContentsView.tsx        ← TOC, Glossary, and Search
+│       ├── Sidebar.tsx             ← Part/section navigation inside ReaderView
+│       ├── AITerminal.tsx          ← In-page AI grounding terminal
+│       ├── GuideView.tsx           ← AI Agent Guide page
+│       ├── KeyboardModal.tsx       ← Keyboard shortcuts modal [Alt+K]
+│       ├── NotesModal.tsx          ← Saved annotations modal [Alt+N]
+│       ├── CommandPalette.tsx      ← Command palette [Alt+/]
+│       ├── ParticlesBackground.tsx ← Hero cover particle/leaf animation
+│       └── VersionManager.tsx      ← Admin: version management panel
 │
-│   (Many internal guides & detailed docs live in sibling `private/` when using
-│    the recommended pmn-workspace layout)
+├── data/
+│   ├── parts.json                  ← Full bundled manuscript (2.3MB, used by dev)
+│   ├── parts/                      ← Per-part JSON chunks (used by dist)
+│   │   ├── manifest.json
+│   │   └── part_*.json
+│   ├── gl.json                     ← Glossary dictionary
+│   ├── glg.json                    ← Glossary groupings
+│   ├── look.json                   ← Section lookup table (id → part/sub index)
+│   ├── ci.json                     ← Cross-reference index
+│   ├── rel.json                    ← Relational concept map
+│   ├── quotes.json                 ← Notable quotes for display
+│   └── version.json                ← Current live version tag
 │
-
-├── 📂 docx_source/            ← Dedicated folder for **exactly one active MS Word (.docx) file**
-│   └── PMN_Framework_v*.docx  ← Splitting source (Any .docx here is processed automatically!)
-│
-├── 🎨 User Interface & Logic
-│   ├── index.ui.html          ← Core visual layout skeleton (Lightweight UI, ~40KB)
-│   ├── style.css              ← Elegant typography, glassmorphism UI, & dark/light theme
-│   ├── app.js                 ← Interactive features (AI terminal, Command Palette, etc.)
-│   └── pmn-agent-guide.html   ← Standalone AI workspace interaction guide
-│
-├── 📦 Data Directories
-│   ├── data/
-│   │   ├── gl.json            ← Monolithic glossary dictionary (Key PMN terms)
-│   │   ├── parts.json         ← Bundled JSON parts used by development server
-│   │   └── parts/
-│   │       ├── manifest.json  ← Lightweight catalog tracking parts & section metadata
-│   │       └── part_*.json    ← 21 Modular chapter files (~10KB to ~300KB)
-│   │
-│   └── scripts/               ← Helper tools, document importers, and launchers
-│       ├── test_dynamic_docx.py ← Programmatic pure-Python stress tester verifying schema growth
-│       ├── import_pmn_docx.py   ← Custom utility to import .docx files into JSON segments
-│       └── utils/             ← Auxiliary utility scripts (inspect_parts.py)
-│
-├── 🧠 AI Grounding & Documentation
-│   ├── AI.md                  ← Master workspace context brain (Read first by developer AIs)
-│   ├── README.md              ← Main GitHub repository documentation (This file)
-│   ├── docs/
-│   │   └── supabase-phase1.md ← Database migration guidelines
-│   ├── pmn_corpus_for_ai.md   ← Auto-compiled flat markdown text for training / RAG grounding
-│   └── Dokumentasi_AI/
-│       └── pmn_system_prompt.txt ← Primed developer prompt for LM Studio/OpenAI
-│
-├── ⚡ Supabase Backend Scaffold (Phase 1 Ready)
-│   ├── supabase/schema.sql    ← Database schemas and migration steps
-│   └── src/lib/supabase.js    ← Supabase initialization helpers
-│
-└── ⚙️ Configuration
-    ├── package.json           ← Node configuration
-    ├── vite.config.js         ← Vite deploy config
-    ├── .gitignore             ← Git exclusions (caches, logs, index.html.bak)
-    └── .editorconfig          ← Workspace code styling configs
+├── style.css                       ← Master CSS (109KB). ALWAYS read before editing.
+├── index.html                      ← Vite entry shell
+├── vite.config.js
+├── package.json
+└── dist/                           ← Production build output (committed to main)
 ```
 
 ---
 
-## ⚡ Interactive Dashboard & Automations
+## Quick Start
 
-Your workspace is fully automated. You do not need to memorise commands; simply use the batch shortcuts:
+```bash
+# Install dependencies
+npm install
 
-### 1. The Command Center: `00_PMN_WORKSPACE.bat`
-Double-click `00_PMN_WORKSPACE.bat` at the root folder to launch the **Super Main Control Panel** (`pmn_console.py`). It provides a beautiful terminal UI showing live repository stats:
-*   Active manuscript version.
-*   Total parts & sections count.
-*   Glossary term count inside `data/gl.json`.
-*   Size of compiled monolithic `index.html`.
-*   Existence and timestamp of safety backups.
-*   Instant access keys to compile, boot servers, split files, or read blueprints.
+# Run local dev server
+npm run dev
+# → http://localhost:5173/pmn-framework/
 
-### 2. Auto-Import from Word (.docx)
-The importer tool (`scripts/import_pmn_docx.py`) native-parses your Word manuscript in `docx_source/`:
-*   Extracts the version from the filename and updates all templates to reflect standard decimal labeling (e.g., `v116.2`).
-*   Stitches and modularizes all chapters into standard JSON structures safely.
-
-### 3. Compilation and Linting
-*   **Automatic Safety Backup:** Automatically backs up the previous working `index.html` as `index.html.bak` prior to compilation.
-*   **Linter:** Prevents compilation if there are JSON syntax errors.
-*   **AI Markdown Corpus:** Converts the entire manuscript and glossary into a flat, plain-text Markdown file (`pmn_corpus_for_ai.md`) stripped of HTML tags and special entities, optimized for ingestion by **Custom GPTs**, **LM Studio RAG**, or **Gemini context windows**.
+# Production build
+npm run build
+```
 
 ---
 
-## 🛠️ Formatting Rules for AI Developers
+## CSS Token System
 
-If you are pair-programming with an AI model (Gemini, Claude, or custom LLMs), they **MUST** strictly adhere to these workspace standards to avoid breaking compilation:
+All theme-adaptive styling uses CSS custom properties from `style.css`. **Do not use Tailwind utility classes for theme-sensitive colors** — the `@theme` tokens in `index.css` are dark-mode hardcoded.
 
-1.  **JSON Double Quote Escaping:** Since manuscript text is wrapped inside a JSON string value, all double quotes in HTML attributes or classes **MUST** be escaped using a backslash `\"` (e.g., `<span class=\"highlight\">text</span>`).
-2.  **Cross-References (Xref Links):** Internal section links (e.g., section 3.2) must be formatted exactly using:
-    ``<a class=\"xref\" href=\"#3.2\" data-sid=\"3.2\">3.2</a>``
-3.  **No Direct Monolith Edits:** Never edit `index.html` directly. Always make edits to modular parts inside `data/parts/` or the UI visual layout `index.ui.html`, then run compile via the dashboard.
-
----
-
-## 💎 Premium Features Showcase
-
-*   **Dialectical Synthesis Terminal (Local AI):** Integrated in-browser typewriter-styled chatbot that connects to secure local models or APIs to answer philosophical inquiries, turning references into clickable navigation buttons.
-*   **Wikipedia-Style Hover Previews:** Elegantly styled radial-gradient glassmorphism popovers showing section content when hovering over any `#xref` link.
-*   **Universal Command Palette (Ctrl+K):** A sliding dark-mode HUD interface allowing instant keyword searches, focus mode toggles, glossary searches, and random reading selections.
+| Token | Light Mode | Dark Mode |
+|-------|-----------|-----------|
+| `var(--bg)` | `#fdfbf7` (cream) | `#0d0d0d` |
+| `var(--bg2)` | `#f7f3eb` | `#171717` |
+| `var(--ink)` | `#1c1510` | `#f5f0e8` |
+| `var(--ink2)` | `#4a3a2d` | `#c8bfb2` |
+| `var(--acc)` | `#b83a1b` | `#c0271a` |
+| `var(--mute)` | `#756456` | `#8a7d6e` |
+| `var(--rule)` | `#e8dcc4` | `#302b27` |
 
 ---
 
-## 🇮🇩 Dokumentasi Proyek (Bahasa Indonesia)
+## Keyboard Shortcuts
 
-Selamat datang di **Ekosistem Pembaca Manuskrip PMN**! Repositori ini menyediakan platform pembaca offline-first interaktif untuk naskah filosofis PMN—sebuah kerangka kerja untuk menganalisis realitas material, meminimalkan penderitaan struktural, dan memaksimalkan aktualitas potensi diri (*genuine becoming*).
+All shortcuts use **Alt** as the modifier to avoid conflicts with system/browser shortcuts.
 
-### Arsitektur Hybrid Modular-Monolith
-Untuk mencegah pemborosan kuota token saat Anda melakukan pemrograman berpasangan dengan AI (ChatGPT/Gemini/Claude), naskah besar sebesar 2.6 MB ini dipecah secara modular menjadi **21 file JSON bab berukuran kecil (~10KB)** di folder `data/parts/`. 
-
-Setiap kali Anda selesai melakukan perubahan naskah atau merombak tata letak visual di `index.ui.html`, Anda cukup mengklik ganda launcher utama **`00_PMN_WORKSPACE.bat`** dan memilih opsi **Compile** untuk menggabungkan semuanya kembali secara instan menjadi satu file mandiri: `index.html` (2.56 MB).
-
-### Fitur Otomatisasi Utama:
-1.  **Impor Langsung dari Microsoft Word:** Cukup taruh file `.docx` naskah baru Anda ke folder `docx_source/`, lalu jalankan menu Impor. Skrip Python bawaan akan secara otomatis memecah naskah dan memperbarui label versi di seluruh sistem (misal menjadi `v116.2`).
-2.  **Linter Kompilasi & Backup Otomatis:** Compiler secara otomatis membuat file cadangan `index.html.bak` untuk keamanan sebelum menulis versi baru, serta memblokir kompilasi jika mendeteksi ada salah ketik tanda baca (error JSON) dari AI.
-3.  **Penyediaan Korpus Grounding AI:** Setiap kali dikompilasi, sistem otomatis membuat file Markdown polos `pmn_corpus_for_ai.md` yang bersih dari kode HTML di halaman depan, siap untuk langsung disuapkan ke Custom GPTs atau Gemini untuk pemahaman naskah yang sangat presisi!
-
----
-
-## 📖 Panduan Alur Kerja Harian (Sangat Mudah & Urut)
-
-Berikut adalah cara paling sederhana dan berurutan untuk memperbarui PMN dari Word hingga terbit di GitHub.
-
-**Catatan penting tentang Konten vs UI:**
-
-Sistem ini memisahkan dua hal besar:
-
-- **Konten (Isi Naskah)** → Berasal dari Word → dipecah otomatis jadi file JSON kecil di `data/parts/`.
-- **UI / Tampilan** → Ada di `index.ui.html` (kerangka), `style.css` (desain), dan `app.js` (logika interaktif).
-
-**Kenapa urutan menu lebih banyak bicara soal Word/DOCX?**
-- Karena 95%+ pekerjaan sehari-hari adalah **mengupdate isi naskah** dari Word.
-- Perubahan UI (tampilan) jauh lebih jarang.
-- Makanya alur utama difokuskan ke: Word → Import → Compile → Push.
-
-Kalau kamu ingin mengubah tampilan website, baru saat itu kamu perlu menyentuh `index.ui.html`, `style.css`, atau `app.js`.
-
-
-### 1️⃣ LANGKAH 1: EDIT NASKAH DI MICROSOFT WORD
-* Buka dokumen manuskrip filosofi PMN Anda di **Microsoft Word** seperti biasa.
-* Lakukan penulisan atau revisi bab sesuka hati Anda.
-* **Catatan tentang UI/Tampilan:**
-  - Kalau kamu hanya ingin **mengubah isi naskah**, cukup edit di Word.
-  - Kalau kamu ingin **mengubah tampilan website** (warna, layout, fitur baru, dll), baru edit file `index.ui.html`, `style.css`, atau `app.js`.
-  - Dalam praktik sehari-hari, 95%+ update hanya dari Word (konten). UI jarang disentuh.
-* Setelah selesai, klik **Save As** dan simpan dengan nama berformat versi terbaru, misalnya: `PMN_Framework_v117.docx` atau `PMN_Framework_v116_3.docx`.
-* > [!IMPORTANT]
-  > **Tutup Microsoft Word Anda!** Jangan biarkan Word tetap terbuka, karena Windows akan mengunci berkas tersebut dan menghalangi skrip kompilator untuk membacanya.
-
-### 2️⃣ LANGKAH 2: MASUKKAN KE FOLDER SUMBER
-* Pindahkan file `.docx` baru Anda ke folder `docx_source/` di root repository.
-* Pastikan hanya ada **satu** file `.docx` aktif di folder tersebut.
-
-### 3️⃣ LANGKAH 3: IMPOR & KOMPILASI OTOMATIS (URUTAN YANG PALING MUDAH)
-
-**Alur normal (hampir selalu seperti ini):**
-1. Tekan **[1]** → STAGED DOCX IMPORT (paling direkomendasikan)
-2. Tekan **[2]** → LIGHTNING COMPILE
-3. Tekan **[3]** → SECURE META REMOVER
-4. Tekan **[4]** → KIRIM KE GITHUB (langsung dari console)
-
-**Kapan perlu menyentuh UI (`index.ui.html`, `style.css`, `app.js`)?**
-- Hanya jika kamu ingin mengubah **tampilan atau fitur** website (bukan isi naskah).
-- Contoh: ubah warna, tambah fitur baru, ubah layout, dll.
-- Perubahan UI biasanya jarang terjadi dibandingkan update isi naskah.
-
-Semua proses utama dilakukan dari dalam satu program console. Sangat minim hafalan.
-
-### 4️⃣ LANGKAH 4: STERILKAN METADATA (PENTING!)
-* Di console yang sama, jalankan menu **Secure Meta Remover**.
-* Sistem akan membersihkan metadata pribadi dari dokumen dan menyimpan hasil steril ke `private/clean_outputs/`.
-
-### 5️⃣ LANGKAH 5: PUSH KE GITHUB
-* Tekan **[4] KIRIM KE GITHUB** langsung dari console (paling mudah).
-* Atau gunakan `KIRIM_KE_GITHUB.bat` jika lebih suka.
-* Selalu review perubahan sebelum push.
-* Pastikan tidak ada file sensitif yang ikut ter-stage.
-
-**Catatan Keamanan:** Raw manuscript drafts dan backup sensitif sebaiknya dikelola di luar repository publik untuk menghindari kebocoran metadata. Lihat dokumentasi internal di `private/docs/` jika Anda menggunakan setup workspace lengkap.
+| Key | Action |
+|-----|--------|
+| `Alt+K` | Open keyboard shortcuts modal |
+| `Alt+N` | Open notes & annotations modal |
+| `Alt+C` | Go to Table of Contents |
+| `Alt+R` | Resume reading (last position) |
+| `Alt+/` | Open command palette |
+| `Alt+F` | Toggle focus mode |
+| `Alt+?` | Open Glossary |
+| `←` / `→` | Navigate between sections (in Reader) |
 
 ---
 
-## 📜 License
+## Build & Deploy Pipeline
 
-This project is licensed under the **MIT License**. Feel free to use, modify, and distribute the PMN Reader Platform offline or online as a framework for navigating material reality.
+The full pipeline is orchestrated by `00_PMN_WORKSPACE.bat` (one file, one entry point):
+
+1. **Import** — Parses `.docx` from `docx_source/`, generates JSON parts and corpus markdown.
+2. **Build** — Runs `npm run build` via Vite; output goes to `dist/`.
+3. **Metadata Scrub** — Strips author metadata from DOCX/PDF before publishing.
+4. **Push & Release** — Commits `public` submodule, pushes to GitHub, creates a GitHub Release with PDF and markdown attachments.
+
+> For UI changes (visual tweaks, new features), edit `src/` files directly, run `npm run build`, then commit.
 
 ---
 
-*“Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations.”* — Nova Dharma
+## AI Grounding
+
+The repository maintains `pmn_corpus_for_ai.md` — a plain-text, HTML-stripped flat export of the entire manuscript, optimized for direct use as AI context. Updated automatically on each import/build cycle.
+
+AI agents working in this repository should read `private/Dokumentasi_AI_Antigravity/HANDOFF_AI.md` before making any changes.
+
+---
+
+## Formatting Rules for AI Developers
+
+1. **JSON Double Quote Escaping:** Manuscript HTML inside JSON strings must escape quotes as `\"`.
+2. **Internal Links:** `<a class=\"xref\" href=\"#3.2\" data-sid=\"3.2\">3.2</a>`
+3. **Never edit `dist/` by hand.** Always build via `npm run build`.
+4. **Always run `npm run build` and confirm clean output before committing.**
+5. **CSS changes:** Use `var(--token)` from `style.css`, not Tailwind `bg-pmn-*` classes.
+
+---
+
+## License
+
+The **reader platform code** (React/TypeScript/CSS/JS) is licensed under the **MIT License**.
+
+The **manuscript content** (all text in `data/parts.json`, `data/parts/`, and `pmn_corpus_for_ai.md`) is licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
+
+You are free to share and adapt the manuscript for non-commercial purposes with attribution. See [LICENSE](./LICENSE) for full terms.
+
+---
+
+*"Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations."* — Nova Dharma
