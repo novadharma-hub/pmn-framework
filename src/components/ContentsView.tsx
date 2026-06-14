@@ -114,8 +114,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
       id="srch-view" 
       className="view on flex flex-col h-full bg-pmn-bg select-none w-full"
     >
-      <div className="sv-hdr-wrap border-b border-pmn-rule flex-none w-full sticky top-0 z-50"
-           style={{ background: 'var(--bg2)', borderBottomColor: 'var(--rule)' }}>
+      <div className="sv-hdr-wrap flex-none w-full sticky top-0 z-50">
         {/* Full-width relative container so title centers across the whole viewport */}
         <div className="w-full h-[64px] relative flex items-center justify-center px-6 lg:px-10">
           {/* Button absolutely positioned at left edge of the inner 1280px column */}
