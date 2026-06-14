@@ -229,11 +229,11 @@ export default function App() {
         {/* DEEP SCAN after search (rapi samping logo, not pushing srch to tengah) */}
         <button className="hbtn text-[10px] opacity-70" onClick={() => { if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }}>DEEP SCAN</button>
         <div id="hdr-r">
-          <button id="focus-btn" className="focus-mode-btn font-pmn-mono text-[0.62rem] tracking-[0.1em] text-pmn-mute hover:text-pmn-acc transition-colors" onClick={() => document.body.classList.toggle('focus-mode')}>FOCUS</button>
-          <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
-          <button className="font-pmn-mono text-[0.65rem] tracking-[0.14em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-gl" onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
-          <button id="theme-tog" className="font-pmn-mono text-[0.62rem] tracking-[0.1em] border border-pmn-rule px-3 py-1 hover:border-pmn-acc hover:text-pmn-acc transition-all" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
-          <button className="font-pmn-mono text-[0.62rem] tracking-[0.1em] text-pmn-mute hover:text-pmn-acc transition-colors px-3 uppercase" id="hb-kbd" onClick={() => setKbdOpen(true)}>Keys [Alt+K]</button>
+          <button id="focus-btn" className="focus-mode-btn" onClick={() => document.body.classList.toggle('focus-mode')}>FOCUS</button>
+          <button id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
+          <button id="hb-gl" onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
+          <button id="theme-tog" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
+          <button id="hb-kbd" onClick={() => setKbdOpen(true)}>Keys [Alt+K]</button>
         </div>
       </header>
 
