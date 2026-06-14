@@ -134,7 +134,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
       </div>
       
       <div id="sv-body-scroll" className="flex-1 overflow-y-auto custom-scrollbar w-full flex flex-col items-center">
-        <div id="sv-body" className="w-full pt-16 pb-64 px-8 flex flex-col items-center max-w-[1280px] mx-auto box-border">
+        <div id="sv-body" className="w-full flex flex-col items-center max-w-[1280px] mx-auto box-border">
 
           {activeTab === 'map' && (
             <div id="toc-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[1200px] mx-auto">

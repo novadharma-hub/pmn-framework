@@ -312,9 +312,9 @@
   background:var(--bg);
   border:1px solid var(--rule2);
   box-shadow:8px 8px 0 var(--rule2);
-  padding:3rem 3.5rem 4rem !important;
-  margin-top:2rem !important;
-  margin-bottom:4rem !important;
+  padding:1.75rem 2.5rem 2.5rem !important;
+  margin-top:1rem !important;
+  margin-bottom:1.5rem !important;
   box-sizing:border-box;
 }
 [data-theme=dark] #sv-body{
