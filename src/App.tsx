@@ -335,6 +335,66 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
   const anatParts = data.parts.filter((p: any) => p.part !== 'Preface').slice(0, 14)
   const selectedPart = anatParts[anatTab] || null
 
+  // Restored cover scroll parallax logic in React
+  useEffect(() => {
+    const homeView = document.getElementById('home-view')
+    const stage = document.getElementById('hero-stage')
+    if (!homeView || !stage) return
+
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let current = 0
+    let target = 0
+    let rafId = 0
+
+    const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v))
+    const easeOutCubic = (v: number) => 1 - Math.pow(1 - v, 3)
+    const smoothStep = (v: number) => v * v * (3 - 2 * v)
+    const holdRatio = () => window.innerWidth <= 680 ? 0.18 : 0.3
+    const shapeProgress = (raw: number) => {
+      const hold = holdRatio()
+      if (raw <= hold) return raw * 0.05
+      return 0.015 + smoothStep((raw - hold) / (1 - hold)) * 0.985
+    }
+
+    const computeTarget = () => {
+      const releaseRange = Math.max(stage.offsetHeight - homeView.clientHeight, 1)
+      const raw = clamp((homeView.scrollTop - stage.offsetTop) / releaseRange, 0, 1)
+      target = shapeProgress(raw)
+      if (reduceMotion) current = target
+    }
+
+    const paint = () => {
+      if (!reduceMotion) {
+        current += (target - current) * 0.075
+        if (Math.abs(target - current) < 0.001) current = target
+      }
+      const eased = easeOutCubic(current)
+      stage.style.setProperty('--cover-progress', eased.toFixed(4))
+      stage.classList.toggle('cover-settled', eased > 0.985)
+      if (!reduceMotion && current !== target) {
+        rafId = requestAnimationFrame(paint)
+      } else {
+        rafId = 0
+      }
+    }
+
+    const syncCover = () => {
+      computeTarget()
+      if (rafId) return
+      rafId = requestAnimationFrame(paint)
+    }
+
+    homeView.addEventListener('scroll', syncCover, { passive: true })
+    window.addEventListener('resize', syncCover)
+    syncCover()
+
+    return () => {
+      homeView.removeEventListener('scroll', syncCover)
+      window.removeEventListener('resize', syncCover)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [data])
+
   return (
     <div id="home-view" className="view on" style={{overflowY:'auto', height:'100%'}}>
 
@@ -378,29 +438,42 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
             </div>
           </div>
 
-          {/* Orientation tip card — floating, with close X per refs (not menempel/stuck in flow); persist LS so follows user until X only */}
-          {showTip && (
-            <div className="hero-orientation-tip" style={{position:'absolute',bottom:'1.6rem',right:'1.6rem',background:'var(--bg2)',border:'1px solid var(--rule)',padding:'0.95rem 1.05rem',maxWidth:275,boxShadow:'10px 10px 0 rgba(0,0,0,.25)',zIndex:10}}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.3rem'}}>
-                <div style={{fontFamily:'var(--f-mono)',fontSize:'.62rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc)'}}>&#9679; ORIENTATION TIP</div>
-                <button onClick={() => { try{localStorage.setItem('pmn-tip-dismissed','1')}catch{}; setShowTip(false) }} style={{background:'none',border:'none',color:'var(--mute)',cursor:'pointer',fontSize:'1.05rem',lineHeight:1}} title="Close tip">×</button>
-              </div>
-              <div style={{fontFamily:'var(--f-head)',fontSize:'.95rem',color:'var(--ink)',marginBottom:'.3rem'}}>Welcome to PMN Framework</div>
-              <p style={{fontFamily:'var(--f-body)',fontSize:'.78rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
-                Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>K</kbd> anytime for shortcuts, or visit the <button onClick={onOpenGuide} style={{color:'var(--acc)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
-              </p>
-              <div style={{display:'flex',gap:'.5rem'}}>
-                <button onClick={onStartReading} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
-                <button onClick={onOpenGuide} style={{border:'1px solid var(--rule)',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',color:'var(--ink)',background:'none',cursor:'pointer'}}>OPEN AI GUIDE</button>
-              </div>
-            </div>
-          )}
+          {/* Orientation tip card moved to App level for global fixed positioning */}
 
           <div className="hero-scroll" aria-hidden="true">
             <span className="hero-scroll-label">Scroll to enter</span>
             <span className="hero-scroll-line"><span className="hero-scroll-fill"></span></span>
           </div>
         </div>
+
+        {/* Orientation tip card — moved back to cover-stage but outside sticky .hero so it scrolls along with cover */}
+        {showTip && (
+          <div className="hero-orientation-tip" style={{
+            position: 'absolute',
+            top: 'calc(100vh - 52px)',
+            right: '1.6rem',
+            transform: 'translateY(calc(-100% - 1.6rem))',
+            background: 'var(--bg2)',
+            border: '1px solid var(--rule)',
+            padding: '0.95rem 1.05rem',
+            maxWidth: 275,
+            boxShadow: '10px 10px 0 rgba(0,0,0,.25)',
+            zIndex: 10
+          }}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.3rem'}}>
+              <div style={{fontFamily:'var(--f-mono)',fontSize:'.62rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc)'}}>&#9679; ORIENTATION TIP</div>
+              <button onClick={() => { try{localStorage.setItem('pmn-tip-dismissed','1')}catch{}; setShowTip(false) }} style={{background:'none',border:'none',color:'var(--mute)',cursor:'pointer',fontSize:'1.05rem',lineHeight:1}} title="Close tip">×</button>
+            </div>
+            <div style={{fontFamily:'var(--f-head)',fontSize:'.95rem',color:'var(--ink)',marginBottom:'.3rem'}}>Welcome to PMN Framework</div>
+            <p style={{fontFamily:'var(--f-body)',fontSize:'.78rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
+              Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>K</kbd> anytime for shortcuts, or visit the <button onClick={onOpenGuide} style={{color:'var(--acc)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
+            </p>
+            <div style={{display:'flex',gap:'.5rem'}}>
+              <button onClick={onStartReading} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
+              <button onClick={onOpenGuide} style={{border:'1px solid var(--rule)',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',color:'var(--ink)',background:'none',cursor:'pointer'}}>OPEN AI GUIDE</button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* MARQUEE */}
@@ -467,49 +540,51 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
 
       {/* ANATOMY TERMINAL — interactive, wired to real parts data */}
       <div className="anatomy-section">
-        <div className="anatomy-section-hdr">
-          <h2>Theoretical Anatomy</h2>
-          <span>Structural Log: Active</span>
-        </div>
-        <div className="anatomy-terminal">
-          <div className="anatomy-sidebar">
-            <div style={{background:'var(--acc)',color:'var(--bg)',fontFamily:'var(--f-mono)',fontSize:'.68rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'.1em',padding:'.6rem 1rem',flexShrink:0}}>
-              Theoretical Anatomy
-            </div>
-            {anatParts.map((p: any, i: number) => (
-              <button key={p.part} className={`anatomy-tab${anatTab === i ? ' on' : ''}`} onClick={() => setAnatTab(i)}>
-                Part {p.part}
-              </button>
-            ))}
+        <div className="anatomy-section-inner">
+          <div className="anatomy-section-hdr">
+            <h2>Theoretical Anatomy</h2>
+            <span>Structural Log: Active</span>
           </div>
-          <div className="anatomy-content">
-            {selectedPart && (
-              <div className="anatomy-panel on">
-                <div className="ap-badge">Part {selectedPart.part}</div>
-                <h3>{selectedPart.title}</h3>
-                <p style={{marginBottom:'.85rem'}}>
-                  {selectedPart.subs?.[0]?.text
-                    ? selectedPart.subs[0].text.slice(0, 260) + '\u2026'
-                    : `This part contains ${selectedPart.subs?.length || 0} analytical modules.`}
-                </p>
-                <div style={{fontFamily:'var(--f-mono)',fontSize:'.7rem',marginBottom:'1rem',display:'flex',flexDirection:'column',gap:'.2rem'}}>
-                  {(selectedPart.subs || []).slice(0, 7).map((s: any) => (
-                    <div key={s.id} style={{padding:'.25rem 0',borderBottom:'1px solid var(--rule)'}}>
-                      <span style={{color:'var(--acc)'}}>{s.id}</span>
-                      <span style={{color:'var(--ink2)',marginLeft:'.5rem'}}>{s.title}</span>
-                    </div>
-                  ))}
-                  {(selectedPart.subs?.length || 0) > 7 && <div style={{color:'var(--mute)',paddingTop:'.3rem'}}>+ {selectedPart.subs.length - 7} more</div>}
-                </div>
-                <button className="btn-anatomy-more" onClick={() => {
-                  if (onJump && data) {
-                    const pIdx = data.parts.findIndex((pp: any) => pp.part === selectedPart.part)
-                    if (pIdx >= 0) { onJump(pIdx, 0); return }
-                  }
-                  onStartReading()
-                }}>Open in Reader &rarr;</button>
+          <div className="anatomy-terminal">
+            <div className="anatomy-sidebar">
+              <div style={{background:'var(--acc)',color:'var(--bg)',fontFamily:'var(--f-mono)',fontSize:'.68rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'.1em',padding:'.6rem 1rem',flexShrink:0}}>
+                Theoretical Anatomy
               </div>
-            )}
+              {anatParts.map((p: any, i: number) => (
+                <button key={p.part} className={`anatomy-tab${anatTab === i ? ' on' : ''}`} onClick={() => setAnatTab(i)}>
+                  Part {p.part}
+                </button>
+              ))}
+            </div>
+            <div className="anatomy-content">
+              {selectedPart && (
+                <div className="anatomy-panel on">
+                  <div className="ap-badge">Part {selectedPart.part}</div>
+                  <h3>{selectedPart.title}</h3>
+                  <p style={{marginBottom:'.85rem'}}>
+                    {selectedPart.subs?.[0]?.text
+                      ? selectedPart.subs[0].text.slice(0, 260) + '\u2026'
+                      : `This part contains ${selectedPart.subs?.length || 0} analytical modules.`}
+                  </p>
+                  <div style={{fontFamily:'var(--f-mono)',fontSize:'.7rem',marginBottom:'1rem',display:'flex',flexDirection:'column',gap:'.2rem'}}>
+                    {(selectedPart.subs || []).slice(0, 7).map((s: any) => (
+                      <div key={s.id} style={{padding:'.25rem 0',borderBottom:'1px solid var(--rule)'}}>
+                        <span style={{color:'var(--acc)'}}>{s.id}</span>
+                        <span style={{color:'var(--ink2)',marginLeft:'.5rem'}}>{s.title}</span>
+                      </div>
+                    ))}
+                    {(selectedPart.subs?.length || 0) > 7 && <div style={{color:'var(--mute)',paddingTop:'.3rem'}}>+ {selectedPart.subs.length - 7} more</div>}
+                  </div>
+                  <button className="btn-anatomy-more" onClick={() => {
+                    if (onJump && data) {
+                      const pIdx = data.parts.findIndex((pp: any) => pp.part === selectedPart.part)
+                      if (pIdx >= 0) { onJump(pIdx, 0); return }
+                    }
+                    onStartReading()
+                  }}>Open in Reader &rarr;</button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
