@@ -655,6 +655,14 @@ def main() -> int:
     except Exception as e:
         print(f"   [WARN] Could not write to data/parts.json: {e}")
 
+    # Save parsed version info directly to data/version.json
+    try:
+        with open(os.path.join("data", "version.json"), "w", encoding="utf-8") as f:
+            json.dump({"version": version_label}, f, ensure_ascii=False, indent=2)
+        print(f"   [OK] data/version.json successfully saved with version {version_label}.")
+    except Exception as e:
+        print(f"   [WARN] Could not write to data/version.json: {e}")
+
     # Also update index.ui.html to persist the version label across future compiles!
     try:
         ui_path = Path("index.ui.html")

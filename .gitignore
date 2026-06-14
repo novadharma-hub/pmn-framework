@@ -44,6 +44,8 @@ __pycache__/
 # Local build artifacts & backups
 *.bak
 index.html.bak
+index.offline.html
+LENGKAPI_DIAGNOSIS_UNTUK_AI.md
 
 # PMN Workspace specific
 pmn_system_log.txt
@@ -57,3 +59,7 @@ dist/PMN_Framework_v*.pdf
 dist/PMN_Framework_v*.md
 public_static/PMN_Framework_v*.pdf
 public_static/PMN_Framework_v*.md
+
+# Internal-only backup snapshots (stale, not for public repo)
+src/txt/
+index.ui.2.html

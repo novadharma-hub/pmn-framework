@@ -268,7 +268,7 @@ def run_diagnostics():
     # ----------------------------------------------------
     # 7. TELEMETRY SIZES
     # ----------------------------------------------------
-    compiled_path = os.path.join(root_dir, "index.html")
+    compiled_path = os.path.join(root_dir, "index.offline.html")
     if os.path.exists(compiled_path):
         size_mb = os.path.getsize(compiled_path) / (1024 * 1024)
         telemetry["index_html_size"] = f"{size_mb:.2f} MB"

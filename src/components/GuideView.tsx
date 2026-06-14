@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 
 interface GuideViewProps {
   onBackHome: () => void
+  version: string
 }
 
-export default function GuideView({ onBackHome }: GuideViewProps) {
+export default function GuideView({ onBackHome, version }: GuideViewProps) {
   const [activeRoleTab, setActiveRoleTab] = useState<'general' | 'diagnostic' | 'debate'>('general')
   const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({})
 
@@ -18,7 +19,7 @@ export default function GuideView({ onBackHome }: GuideViewProps) {
   }
 
   const prompts = {
-    priming: `I am attaching PMN (Progressive Materialist Naturalism) v117.6 by Nova Dharma. Read it as a framework to reason with, not as a document to summarize.
+    priming: `I am attaching PMN (Progressive Materialist Naturalism) v${version} by Nova Dharma. Read it as a framework to reason with, not as a document to summarize.
 
 Your task is to internalize its architecture:
 - epistemology and revision discipline
@@ -116,7 +117,7 @@ Do not become smoother than the evidence allows.`
       </div>
 
       <div className="guide-page">
-        <div className="page-eyebrow">PMN v117.6 - Nova Dharma</div>
+        <div className="page-eyebrow">PMN v{version} - Nova Dharma</div>
         <h1 className="page-h1">Using PMN<br /><em style={{ color: 'var(--acc)' }}>as an AI Agent</em></h1>
         <p className="page-subtitle">A practical guide to deploying the framework through Claude, DeepSeek, ChatGPT, Gemini, and similar systems without letting the manuscript dissolve into generic ideology talk.</p>
 
@@ -428,7 +429,7 @@ Do not become smoother than the evidence allows.`
       </div>
 
       <footer className="py-12 border-t border-pmn-rule text-center text-xs font-pmn-mono text-pmn-mute uppercase tracking-[0.3em] bg-pmn-bg">
-        Progressive Materialist Naturalism &mdash; V117.6
+        Progressive Materialist Naturalism &mdash; V{version}
       </footer>
     </div>
   )
