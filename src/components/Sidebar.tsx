@@ -71,8 +71,9 @@ export default function Sidebar({ parts, readMap, curPos, onSelectSection, onClo
                 borderLeft: curPos[0] === pIdx ? 'none' : '4px solid var(--pmn-acc)'
               }}
             >
-              <span className="font-pmn-mono text-[0.65rem] tracking-[0.2em] mr-5 opacity-60">P.{p.part}</span>
-              {p.title}
+              <span className="font-pmn-mono text-[0.65rem] tracking-[0.2em] opacity-60 shrink-0">P.{p.part}</span>
+              <span className="mx-2 opacity-30 shrink-0">·</span>
+              <span className="min-w-0 break-words">{p.title}</span>
             </div>
             
             <div className="sb-subs flex flex-col border-b border-pmn-rule">

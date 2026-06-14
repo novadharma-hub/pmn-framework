@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "rootDir": "./src",
     "strict": false,
     "strictNullChecks": false,
     "noImplicitAny": false,

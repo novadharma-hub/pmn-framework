@@ -8,20 +8,20 @@ interface KeyboardModalProps {
 const SHORTCUTS = [
   { section: 'Navigation', items: [
     { key: 'K', desc: 'Toggle this shortcuts panel' },
-    { key: 'C', desc: 'Open Contents / manuscript map' },
+    { key: 'C', desc: 'Open Contents map' },
     { key: '/', desc: 'Open Command Palette (jump/search)' },
     { key: 'Esc', desc: 'Close active modal or palette' },
   ]},
   { section: 'Reader', items: [
-    { key: '→ / N', desc: 'Next section' },
-    { key: '← / P', desc: 'Previous section' },
+    { key: '→', desc: 'Next section' },
+    { key: '←', desc: 'Previous section' },
     { key: 'F', desc: 'Toggle Focus Mode (hide sidebar)' },
-    { key: 'A+ / A-', desc: 'Increase / decrease text size' },
+    { key: 'N', desc: 'Toggle Quick Notes modal' },
   ]},
   { section: 'Content', items: [
     { key: '?', desc: 'Jump to Glossary' },
     { key: 'R', desc: 'Resume last reading position' },
-    { key: 'Ctrl+S', desc: 'Save note for current section' },
+    { key: 'Ctrl+S', desc: 'Save note (Reader View)' },
   ]},
 ]
 

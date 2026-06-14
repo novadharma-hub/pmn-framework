@@ -8,9 +8,10 @@ interface AITerminalProps {
   parts: Part[]
   gl: Record<string, string>
   activeSec: SubSection | null
+  onOpenGuide?: () => void
 }
 
-export default function AITerminal({ parts, gl, activeSec }: AITerminalProps) {
+export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerminalProps) {
   const [activeTab, setActiveTab] = useState<'claude' | 'chatgpt' | 'gemini'>('chatgpt')
   const [messages, setMessages] = useState<Message[]>([])
   const chatLogRef = useRef<HTMLDivElement>(null)
@@ -45,7 +46,12 @@ export default function AITerminal({ parts, gl, activeSec }: AITerminalProps) {
   // Reconstruction to match .home-ai-section structure
   return (
     <div className="home-ai-inner" style={{width: '100%'}}>
-      <div className="home-ai-hdr mb-4">PMN Agent Terminal ✦</div>
+      <div className="home-ai-hdr mb-4 flex flex-wrap items-center gap-3">
+        <span>PMN Agent Terminal ✦</span>
+        <span className="text-[9px] font-mono tracking-widest bg-pmn-acc/10 border border-pmn-acc/50 text-pmn-acc px-2.5 py-0.5 rounded-xs uppercase select-none">
+          ✖ Under Development / Maintenance
+        </span>
+      </div>
       <p className="home-ai-desc mb-6 italic text-xs opacity-70">Build a manuscript context pack and send it to ChatGPT or Gemini.</p>
       
       {/* MODE TABS (Legacy .hai-tabs) */}
@@ -84,12 +90,12 @@ export default function AITerminal({ parts, gl, activeSec }: AITerminalProps) {
           </div>
           <div className="home-ai-row flex gap-2">
             <input type="text" id="hai-chatgpt-q" className="home-ai-input flex-1" placeholder="Your question for ChatGPT with PMN context…" />
-            <button id="hai-chatgpt-btn" className="home-ai-btn whitespace-nowrap px-6">Open ChatGPT ↗</button>
+            <button id="hai-chatgpt-btn" className="home-ai-btn whitespace-nowrap px-6" onClick={() => handleOpenPlatform('chatgpt')}>Open ChatGPT ↗</button>
           </div>
           <div className="home-ai-actions flex gap-4 pt-4 border-t border-pmn-rule/40">
             <button className="pmn-agent-btn primary" onClick={() => handleCopyPrompt('chatgpt')}>Copy prompt only</button>
             <button className="pmn-agent-btn" onClick={() => handleOpenPlatform('chatgpt')}>Open ChatGPT ↗</button>
-            <a className="pmn-agent-btn" href="pmn-agent-guide.html">Open guide</a>
+            {onOpenGuide && <button className="pmn-agent-btn" onClick={onOpenGuide}>Open guide</button>}
           </div>
         </div>
       )}
@@ -111,7 +117,7 @@ export default function AITerminal({ parts, gl, activeSec }: AITerminalProps) {
           </div>
           <div className="home-ai-actions flex gap-4 pt-4 border-t border-pmn-rule/40">
             <button className="pmn-agent-btn primary" onClick={() => handleCopyPrompt('gemini')}>Copy prompt only</button>
-            <a className="pmn-agent-btn" href="pmn-agent-guide.html">Open guide</a>
+            {onOpenGuide && <button className="pmn-agent-btn" onClick={onOpenGuide}>Open guide</button>}
           </div>
         </div>
       )}

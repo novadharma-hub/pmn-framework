@@ -4,6 +4,25 @@ import re
 import sys
 import shutil
 
+def sync_to_public_static():
+    src_dir = "data"
+    dest_dir = os.path.join("public_static", "data")
+    if os.path.exists(src_dir):
+        os.makedirs(dest_dir, exist_ok=True)
+        for root, dirs, files in os.walk(src_dir):
+            rel_path = os.path.relpath(root, src_dir)
+            target_dir = dest_dir if rel_path == "." else os.path.join(dest_dir, rel_path)
+            os.makedirs(target_dir, exist_ok=True)
+            for file in files:
+                shutil.copy2(os.path.join(root, file), os.path.join(target_dir, file))
+        print("   [OK] Synchronized data/ folder to public_static/data/")
+    
+    corpus_src = "pmn_corpus_for_ai.md"
+    corpus_dest = os.path.join("public_static", "pmn_corpus_for_ai.md")
+    if os.path.exists(corpus_src):
+        shutil.copy2(corpus_src, corpus_dest)
+        print("   [OK] Synchronized pmn_corpus_for_ai.md to public_static/")
+
 def print_banner():
     print("=" * 60)
     print("      PMN FRAMEWORK MODULARIZER & COMPILED BUILD SYSTEM      ")
@@ -98,6 +117,7 @@ def split_mode():
     print(f"\n[SUCCESS] Modular split complete!")
     print(f"   -> Manifest: {manifest_path} (~15KB)")
     print(f"   -> Part chunks: {parts_dir}/part_*.json (21 files, beautifully formatted for AI editing)")
+    sync_to_public_static()
     print("=" * 60)
 
 def compile_mode():
@@ -368,6 +388,7 @@ def compile_mode():
     print(f"\n[SUCCESS] Monolithic index.html compiled!")
     print(f"   -> Output: {output_html_path} ({file_size_mb:.2f} MB)")
     print("   -> Standalone deployment ready. Zero external local server requirements.")
+    sync_to_public_static()
     print("=" * 60)
 
 if __name__ == "__main__":

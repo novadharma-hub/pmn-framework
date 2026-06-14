@@ -8,8 +8,11 @@ import re
 
 sys.stdout.reconfigure(encoding='utf-8')
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+
 def get_source_files():
-    root_dir = r"D:\pmn-framework"
+    root_dir = DEFAULT_ROOT_DIR
     sources = []
     
     # Core source files
@@ -34,15 +37,13 @@ def get_source_files():
 
 def get_backup_dir(root_dir):
     parent_dir = os.path.dirname(root_dir)
-    grandparent_dir = os.path.dirname(parent_dir)
-    if os.path.basename(parent_dir).lower() == "public" and os.path.exists(os.path.join(grandparent_dir, "private", "backups")):
-        return os.path.join(grandparent_dir, "private", "backups")
-    elif os.path.exists(r"D:\pmn-workspace\private\backups"):
-        return r"D:\pmn-workspace\private\backups"
+    private_bak = os.path.join(parent_dir, "private", "backups")
+    if os.path.exists(private_bak):
+        return private_bak
     return os.path.join(root_dir, "backups")
 
 def create_snapshot(auto=False):
-    root_dir = r"D:\pmn-framework"
+    root_dir = DEFAULT_ROOT_DIR
     os.chdir(root_dir)
     
     backup_dir = get_backup_dir(root_dir)
@@ -89,7 +90,7 @@ def rotate_snapshots(backup_dir):
         print(f"   [WARN] Rotation check failed: {e}")
 
 def list_snapshots():
-    root_dir = r"D:\pmn-framework"
+    root_dir = DEFAULT_ROOT_DIR
     backup_dir = get_backup_dir(root_dir)
     if not os.path.exists(backup_dir):
         return []
@@ -100,7 +101,7 @@ def list_snapshots():
     return files
 
 def restore_snapshot(zip_name):
-    root_dir = r"D:\pmn-framework"
+    root_dir = DEFAULT_ROOT_DIR
     os.chdir(root_dir)
     
     backup_dir = get_backup_dir(root_dir)
