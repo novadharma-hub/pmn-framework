@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/badge/Release-v117.9-blueviolet.svg?style=flat-square)](#)
 [![Stack](https://img.shields.io/badge/Stack-React%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-Corpus%20Enabled-orange.svg?style=flat-square)](#)
-[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg?style=flat-square)](#)
+[![License](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](#)
 
 A fully interactive, offline-capable reader platform for the PMN philosophical manuscript — a framework for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming.
 
