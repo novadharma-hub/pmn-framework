@@ -351,7 +351,23 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
 
   const [anatTab, setAnatTab] = useState(0)
   const [deskNotes, setDeskNotes] = useState(() => { try { return localStorage.getItem('pmn-desk-notes') || '' } catch { return '' } })
-  const anatParts = data.parts.filter((p: any) => p.part !== 'Preface').slice(0, 14)
+
+  const romanToVal = (r: string): number => {
+    const map: Record<string, number> = { i: 1, v: 5, x: 10, l: 50, c: 100, d: 500, m: 1000 };
+    let val = 0, prev = 0;
+    const s = r.toLowerCase();
+    for (let i = s.length - 1; i >= 0; i--) {
+      const curr = map[s[i]] || 0;
+      if (curr < prev) val -= curr;
+      else val += curr;
+      prev = curr;
+    }
+    return val;
+  };
+
+  const anatParts = [...data.parts]
+    .filter((p: any) => /^[IVXLCDM]+$/i.test(p.part))
+    .sort((a: any, b: any) => romanToVal(a.part) - romanToVal(b.part));
   const selectedPart = anatParts[anatTab] || null
 
   // Restored cover scroll parallax logic in React
@@ -497,6 +513,8 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
             {num:'02', kicker:'Power and Institutions', desc:'Jump straight into how power, legitimacy, and institutional capture shape the arrangement beneath the narrative.', cta:'Open Part VI'},
             {num:'03', kicker:'Compressed Core', desc:'Use the short-form PMN core when you need the framework fast before going back for the full architecture.', cta:'Open 15.15'},
             {num:'04', kicker:'Cases and the Individual', desc:'Move from abstract structure into historical cases and the practical demands PMN places on a person who holds it.', cta:'Open Part XVII'},
+            {num:'05', kicker:'Analyzing Situations', desc:'Apply the structural, power, and agent typology diagnostic checklists to understand the forces in play in a specific context.', cta:'Open Part VII'},
+            {num:'06', kicker:'Economic Analysis', desc:'Examine the provisional economic doctrine, accountability-contestability diagnostic, and how power operates beyond ownership.', cta:'Open Part XI'},
           ] as const).map(path => (
             <div key={path.num} className="path-card" data-ghost={path.num}>
               <span className="path-kicker">PATH {path.num}</span>
@@ -504,13 +522,8 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
               <p>{path.desc}</p>
               <button className="path-btn" onClick={() => {
                 if (onJump && data) {
-                  // Specific matching to avoid 'I' matching 'VI' or 'XVII'
-                  let targetPart = null;
-                  if (path.cta === 'Open Part I') targetPart = 'I';
-                  else if (path.cta === 'Open Part VI') targetPart = 'VI';
-                  else if (path.cta === 'Open Part XVII') targetPart = 'XVII';
-
-                  if (targetPart) {
+                  if (path.cta.startsWith('Open Part ')) {
+                    const targetPart = path.cta.replace('Open Part ', '').trim();
                     const idx = data.parts.findIndex((pp: any) => pp.part === targetPart);
                     if (idx >= 0) { onJump(idx, 0); return; }
                   }
