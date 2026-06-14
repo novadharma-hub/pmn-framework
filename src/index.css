@@ -65,18 +65,18 @@
    ================================================================ */
 :root:not([data-theme=dark]) {
   /* Backgrounds */
-  --color-pmn-bg:    #fdfbf7;
-  --color-pmn-bg2:   #f7f3eb;
-  --color-pmn-bg3:   #eee6d8;
-  --color-pmn-sb:    #f5efe4;
+  --color-pmn-bg:    #f4eedb; /* Cozy Cream Paper */
+  --color-pmn-bg2:   #eae2ca; /* Vintage Page Panel */
+  --color-pmn-bg3:   #e2d6bd;
+  --color-pmn-sb:    #eae2ca;
 
   /* Text */
-  --color-pmn-ink:   #1c1510;
-  --color-pmn-ink2:  #4a3a2d;
+  --color-pmn-ink:   #231711; /* Cozy Chocolate Ink */
+  --color-pmn-ink2:  #3d2b20;
 
   /* Accent */
-  --color-pmn-acc:   #b83a1b;
-  --color-pmn-acc2:  #8f2812;
+  --color-pmn-acc:   #1e4620; /* Deep Pine/Forest Green */
+  --color-pmn-acc2:  #143016;
 
   /* Muted */
   --color-pmn-mute:  #756456;
@@ -84,17 +84,17 @@
   --color-pmn-mute3: #8c7b6c;
 
   /* Borders */
-  --color-pmn-rule:  #e8dcc4;
-  --color-pmn-rule2: #dbcaa6;
+  --color-pmn-rule:  #d5c8ab; /* Warm Brown Rules */
+  --color-pmn-rule2: #c4b595;
 
   /* Header */
-  --color-pmn-hdr:   #f7f3eb;
+  --color-pmn-hdr:   #eae2ca;
 }
 
 /* === GLOBAL DECORATIVE OVERLAYS (Recovery v84+) === */
 .vignette-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  pointer-events: none; z-index: 9996;
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 1;
   box-shadow: inset 0 0 200px rgba(100,60,30,0.07);
 }
 [data-theme=dark] .vignette-overlay {
@@ -102,48 +102,42 @@
 }
 
 .noise-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   opacity: 0.05; mix-blend-mode: color-burn;
-  pointer-events: none; z-index: 9999;
+  pointer-events: none; z-index: 2;
 }
 [data-theme=dark] .noise-overlay {
   opacity: 0.03; mix-blend-mode: screen;
 }
 
 .grid-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
   background-size: 40px 40px; opacity: 0.06; pointer-events: none; z-index: 0;
 }
 
-/* === GLASSMORPHISM & HEADER ENHANCEMENTS === */
+/* === SOLID HEADER & NAVIGATION (Non-transparent for readability) === */
 #hdr {
-  background: rgba(231, 214, 187, 0.76) !important;
-  backdrop-filter: blur(14px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(150%) !important;
-  border-bottom: 1px solid rgba(197, 172, 140, 0.35) !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02) !important;
+  background: var(--pmn-hdr) !important;
+  border-bottom: 1px solid var(--pmn-rule2) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02) !important;
 }
 [data-theme=dark] #hdr {
-  background: rgba(13, 13, 13, 0.8) !important;
+  background: var(--pmn-hdr) !important;
   border-bottom-color: rgba(48, 43, 39, 0.45) !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
 #mob-nav {
-  background: rgba(238, 224, 200, 0.78) !important;
-  backdrop-filter: blur(14px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(150%) !important;
-  border-top: 1px solid rgba(197, 172, 140, 0.35) !important;
-  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.03) !important;
+  background: var(--pmn-bg2) !important;
+  border-top: 1px solid var(--pmn-rule2) !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03) !important;
 }
 [data-theme=dark] #mob-nav {
-  background: rgba(20, 20, 20, 0.78) !important;
-  backdrop-filter: blur(14px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(150%) !important;
+  background: var(--pmn-bg2) !important;
   border-top: 1px solid rgba(48, 43, 39, 0.45) !important;
-  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
 /* === SPOTLIGHT SEARCH ENHANCEMENTS === */
