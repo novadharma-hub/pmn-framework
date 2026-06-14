@@ -74,9 +74,9 @@ def clear_screen():
 
 
 def get_backup_path():
-    """Return the correct path for index.html.bak.
+    """Return the correct path for index.offline.html.bak.
     Prefers private/backups/ when running inside the pmn-workspace layout.
-    Falls back to local index.html.bak for single-folder usage.
+    Falls back to local index.offline.html.bak for single-folder usage.
     """
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -84,12 +84,12 @@ def get_backup_path():
             parent = os.path.dirname(script_dir)  # parent of public/ in workspace layout
             private_dir = os.path.join(parent, "private")
             if os.path.exists(private_dir):
-                private_bak = os.path.join(private_dir, "backups", "index.html.bak")
+                private_bak = os.path.join(private_dir, "backups", "index.offline.html.bak")
                 os.makedirs(os.path.dirname(private_bak), exist_ok=True)
                 return private_bak
     except Exception:
         pass
-    return "index.html.bak"
+    return "index.offline.html.bak"
 
 def get_system_stats():
     stats = {
@@ -138,8 +138,8 @@ def get_system_stats():
         except:
             pass
             
-    # 4. Compiled File Size (index.html)
-    compiled_path = "index.html"
+    # 4. Compiled File Size (index.offline.html)
+    compiled_path = "index.offline.html"
     if os.path.exists(compiled_path):
         try:
             size_mb = os.path.getsize(compiled_path) / (1024 * 1024)
@@ -369,18 +369,18 @@ def main():
             
         elif choice == "5":
             backup_path = get_backup_path()
-            compiled_path = "index.html"
+            compiled_path = "index.offline.html"
             if not os.path.exists(backup_path):
-                print("\n  \033[91m[ERROR] Tidak ditemukan berkas cadangan stabil index.html.bak!\033[0m")
+                print("\n  \033[91m[ERROR] Tidak ditemukan berkas cadangan stabil index.offline.html.bak!\033[0m")
                 print("  Pastikan Komandan sudah pernah melakukan kompilasi minimal satu kali sebelumnya.")
             else:
                 print("\n  \033[93m[ROLLBACK SYSTEM]\033[0m")
-                confirm = input("  Apakah Komandan yakin ingin membatalkan rilis naskah/UI saat ini\n  dan memulihkan website index.html dari cadangan stabil (index.html.bak)? (y/n): ").strip().lower()
+                confirm = input("  Apakah Komandan yakin ingin membatalkan rilis naskah/UI saat ini\n  dan memulihkan website index.offline.html dari cadangan stabil (index.offline.html.bak)? (y/n): ").strip().lower()
                 if confirm == 'y':
                     try:
                         import shutil
                         shutil.copy2(backup_path, compiled_path)
-                        print("\n  \033[92m[SUCCESS] Website index.html BERHASIL dikembalikan ke cadangan stabil!\033[0m")
+                        print("\n  \033[92m[SUCCESS] Website index.offline.html BERHASIL dikembalikan ke cadangan stabil!\033[0m")
                     except Exception as e:
                         print(f"\n  \033[91m[ERROR] Gagal memulihkan berkas cadangan: {e}\033[0m")
                 else:

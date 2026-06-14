@@ -21,6 +21,7 @@ interface ContentsViewProps {
   onSearch?: (query: string) => void
   contentWidth?: 'narrow' | 'medium' | 'wide'
   onChangeWidth?: (w: 'narrow' | 'medium' | 'wide') => void
+  version?: string
 }
 
 const shortenId = (id: string) => {
@@ -32,7 +33,7 @@ const shortenId = (id: string) => {
   return id
 }
 
-export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth }: ContentsViewProps) {
+export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth, version = '117.9' }: ContentsViewProps) {
   const activeTab = subView
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [quoteVisible, setQuoteVisible] = useState(true)
@@ -128,7 +129,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
           </div>
 
           <h2 className="font-pmn-head font-normal text-[1.15rem] lg:text-[1.35rem] text-pmn-ink whitespace-nowrap leading-none tracking-tight" id="sv-hdr">
-            {activeTab === 'map' ? 'Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : 'Search Analysis'}
+            {activeTab === 'map' ? 'Table of Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : 'Search Analysis'}
           </h2>
         </div>
       </div>
@@ -170,7 +171,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                     <strong className="font-pmn-head text-2xl text-pmn-ink">Reading Room</strong>
                   </div>
                   <p className="font-pmn-body text-[1.05rem] text-pmn-mute leading-relaxed text-justify max-w-[750px]">
-                    Use Contents as an editorial map rather than a raw index: open a part from the top, scan section IDs at speed, or jump straight from foundations into formulas, institutions, and cases.
+                    Use the Table of Contents as an editorial map rather than a raw index: open a part from the top, scan section IDs at speed, or jump straight from foundations into formulas, institutions, and cases.
                   </p>
                 </div>
                 <div className="toc-intro-stats border border-pmn-rule bg-pmn-bg2 p-8 flex flex-col gap-6 shadow-inner rounded-xs">
@@ -335,7 +336,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
 
         </div>
         <footer className="w-full py-20 border-t border-pmn-rule text-center text-[0.7rem] font-pmn-mono text-pmn-mute uppercase tracking-[0.4em] bg-pmn-bg flex-none">
-          Progressive Materialist Naturalism &mdash; SYSTEM RELEASE V117.6
+          Progressive Materialist Naturalism &mdash; SYSTEM RELEASE V{version}
         </footer>
       </div>
     </div>
