@@ -1,4 +1,4 @@
-MIT License
+Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
 
 Copyright (c) 2026 Nova Dharma & The PMN Collective
 
@@ -30,22 +30,37 @@ SOFTWARE.
 
 ---
 
-## Manuscript Content (CC BY-NC 4.0)
+## Manuscript Content (CC BY-SA 4.0)
 
 The philosophical manuscript text — including all content in `data/parts.json`,
 `data/parts/`, `pmn_corpus_for_ai.md`, and any exported PDF or Markdown releases —
 is the intellectual work of Nova Dharma and is licensed under the Creative Commons
-Attribution-NonCommercial 4.0 International License.
+Attribution-ShareAlike 4.0 International License.
 
 You are free to:
-  - Share: copy and redistribute the material in any medium or format
-  - Adapt: remix, transform, and build upon the material
+  - Share: copy and redistribute the material in any medium, format, or quantity
+  - Adapt: remix, transform, build upon, translate, or derive from the material
+  - Use commercially: including for published works, courses, and organizations
 
 Under the following terms:
-  - Attribution: You must give appropriate credit to Nova Dharma and provide a
-    link to the original repository. You may not imply endorsement.
-  - NonCommercial: You may not use the material for commercial purposes.
+  - Attribution: You must give appropriate credit to Nova Dharma and the PMN
+    Framework, provide a link to this repository, and indicate if changes were
+    made. This applies even when PMN serves only as an inspiration or partial
+    source. You may not imply that Nova Dharma endorses you or your use.
+  - ShareAlike: If you remix, transform, or build upon the material, you must
+    distribute your contributions under the same CC BY-SA 4.0 license. This
+    prevents derived frameworks from being privatized or stripped of their
+    open character.
   - No additional restrictions: You may not apply legal terms or technological
     measures that legally restrict others from doing anything the license permits.
 
-Full license text: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+Full license text: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+---
+
+This dual-license structure is intentional:
+The platform code is MIT to encourage technical reuse and contribution.
+The manuscript content is CC BY-SA to ensure that the framework and all
+works it inspires remain permanently open, attributed, and non-capturable
+by any actor — including institutional, commercial, or ideological ones.
+This is the anti-capture principle applied to the framework itself.
