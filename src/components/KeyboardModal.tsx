@@ -7,20 +7,20 @@ interface KeyboardModalProps {
 
 const SHORTCUTS = [
   { section: 'Navigation', items: [
-    { key: 'K', desc: 'Toggle this shortcuts panel' },
-    { key: 'C', desc: 'Open Table of Contents' },
-    { key: '/', desc: 'Open Command Palette (jump/search)' },
+    { key: 'Alt+K', desc: 'Toggle this shortcuts panel' },
+    { key: 'Alt+C', desc: 'Open Table of Contents' },
+    { key: 'Alt+/', desc: 'Open Command Palette (jump/search)' },
     { key: 'Esc', desc: 'Close active modal or palette' },
   ]},
   { section: 'Reader', items: [
     { key: '→', desc: 'Next section' },
     { key: '←', desc: 'Previous section' },
-    { key: 'F', desc: 'Toggle Focus Mode (hide sidebar)' },
-    { key: 'N', desc: 'Toggle Quick Notes modal' },
+    { key: 'Alt+F', desc: 'Toggle Focus Mode (hide sidebar)' },
+    { key: 'Alt+N', desc: 'Toggle Quick Notes modal' },
   ]},
   { section: 'Content', items: [
-    { key: '?', desc: 'Jump to Glossary' },
-    { key: 'R', desc: 'Resume last reading position' },
+    { key: 'Alt+?', desc: 'Jump to Glossary' },
+    { key: 'Alt+R', desc: 'Resume last reading position' },
     { key: 'Ctrl+S', desc: 'Save note (Reader View)' },
   ]},
 ]
@@ -156,7 +156,7 @@ export default function KeyboardModal({ isOpen, onClose }: KeyboardModalProps) {
           color: 'var(--mute)',
           textTransform: 'uppercase',
         }}>
-          Press <strong style={{color:'var(--acc)'}}>K</strong> anytime to toggle · <strong style={{color:'var(--acc)'}}>ESC</strong> to dismiss
+          Press <strong style={{color:'var(--acc)'}}>Alt+K</strong> anytime to toggle · <strong style={{color:'var(--acc)'}}>ESC</strong> to dismiss
         </div>
       </div>
 
