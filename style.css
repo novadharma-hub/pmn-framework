@@ -18,7 +18,7 @@
   --sb:#f2ebdb; --ink:#1e140f; --ink2:#3a2a1f;
   --acc:#184a1a; --acc2:#103412; --mute:#7c6957; --mute2:#625141; --mute3:#a6917c;
   --rule:#e6dcc5; --rule2:#cbbda2;
-  --hdr:#f5efe0;
+  --hdr:#fdfbf7;
   --code-bg:#eae1ca;
   --reader-scale:1;
   --contents-scale:1;
@@ -284,12 +284,15 @@
 .home-bottom-caption{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;color:var(--mute2)}
 /* ── Srch-view (contents + glossary + search) ── */
 #srch-view{flex-direction:column;height:100%;overflow:hidden}
-.sv-hdr{
-  font-family:'Libre Baskerville',serif;font-size:calc(1.7rem * var(--contents-scale));font-weight:400;color:var(--ink);
-  padding:2rem 2.5rem 1.15rem;border-bottom:1px solid var(--rule);display:block;flex-shrink:0;margin-bottom:0;letter-spacing:-.01em;
-  background:linear-gradient(180deg,rgba(173,52,30,.045),rgba(173,52,30,0) 72%),var(--bg);
+.sv-hdr-wrap {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--rule2);
+  height: 64px;
 }
-[data-theme=dark] .sv-hdr{background:linear-gradient(180deg,rgba(192,39,26,.04),rgba(192,39,26,0) 72%),#101010}
+[data-theme=dark] .sv-hdr-wrap {
+  background: #101010;
+  border-bottom-color: var(--rule);
+}
 #toc-panel{
   overflow-y:auto;flex:1;
   background:
@@ -396,7 +399,7 @@ html{font-size:16px}
 body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;overflow:hidden;height:100vh}
 
 /* ── Header ── */
-#hdr{display:flex;align-items:center;gap:.8rem;padding:.55rem 1.2rem;background:var(--hdr);border-bottom:1px solid var(--rule);height:52px;position:sticky;top:0;z-index:100;flex-shrink:0}
+#hdr{display:flex;align-items:center;gap:.8rem;padding:.55rem 1.2rem;background:var(--hdr);border-bottom:1px solid var(--rule2);height:52px;position:sticky;top:0;z-index:100;flex-shrink:0}
 #hdr-logo{font-family:'Libre Baskerville',serif;font-weight:700;font-size:1.05rem;color:var(--acc);background:none;border:none;cursor:pointer;letter-spacing:.04em;flex-shrink:0}
 #hdr-srch{display:flex;align-items:center;gap:.4rem;background:var(--bg2);border:1px solid var(--rule);padding:.28rem .7rem;flex:1;max-width:380px}
 #srch-icon{color:var(--mute2);font-size:.75rem;flex-shrink:0}
