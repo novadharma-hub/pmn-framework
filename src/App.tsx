@@ -97,7 +97,7 @@ export default function App() {
       .catch(e => { setLoadError('Error memuat data: ' + (e?.message || e)); setLoading(false) })
   }, [])
 
-  // Theme & local storage sync
+  // Theme, local storage sync & content-width CSS variable init (all on mount)
   useEffect(() => {
     const savedTheme = localStorage.getItem('pmn-theme') as 'dark' | 'light' || 'dark'
     setTheme(savedTheme)
@@ -110,14 +110,6 @@ export default function App() {
       if (!isNaN(p) && !isNaN(s)) setCurPos([p, s])
     }
     const savedWidth = localStorage.getItem('pmn-content-width') as any
-    if (savedWidth) setContentWidth(savedWidth)
-    const savedHist = JSON.parse(localStorage.getItem('pmn-history') || '[]')
-    setHistory(savedHist)
-  }, [])
-
-  // Content width initialization (moved before conditional returns to fix Hook order violation)
-  useEffect(() => {
-    const savedWidth = localStorage.getItem('pmn-content-width') as any
     if (savedWidth) {
       setContentWidth(savedWidth)
       const val = savedWidth === 'narrow' ? '62ch' : savedWidth === 'wide' ? '92ch' : '78ch'
@@ -125,6 +117,8 @@ export default function App() {
     } else {
       document.documentElement.style.setProperty('--reader-measure', '78ch')
     }
+    const savedHist = JSON.parse(localStorage.getItem('pmn-history') || '[]')
+    setHistory(savedHist)
   }, [])
 
   const toggleTheme = () => {

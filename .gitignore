@@ -44,7 +44,8 @@ __pycache__/
 # Local build artifacts & backups
 *.bak
 index.html.bak
-index.offline.html
+legacy/index.offline.html
+legacy/app.js
 LENGKAPI_DIAGNOSIS_UNTUK_AI.md
 
 # PMN Workspace specific

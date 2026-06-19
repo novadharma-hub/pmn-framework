@@ -120,13 +120,165 @@ def split_mode():
     sync_to_public_static()
     print("=" * 60)
 
-def compile_mode():
-    clean_html_path = "index.ui.html"
-    output_html_path = "index.offline.html"
-    style_css_path = "style.css"
-    app_js_path = "app.js"
+def build_data_mode():
+    """
+    ACTIVE MODE — Membangun ulang semua file data yang dibutuhkan React SPA
+    dari modular parts. Tidak menghasilkan HTML monolitik.
+
+    Output:
+      - data/parts.json  (React SPA fetch ini di runtime)
+      - data/look.json   (cross-reference lookup)
+      - data/rel.json    (related sections)
+      - data/ci.json     (cited sections)
+      - pmn_corpus_for_ai.md  (AI ingestion corpus)
+      - Sinkronisasi ke public_static/
+    """
     parts_dir = os.path.join("data", "parts")
     manifest_path = os.path.join(parts_dir, "manifest.json")
+
+    print("[INFO] Membangun ulang file data untuk React SPA...")
+
+    # 1. Validate manifest.json
+    if not os.path.exists(manifest_path):
+        print(f"[ERROR] {manifest_path} tidak ditemukan! Jalankan 'split' dulu.")
+        return None
+
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+    except json.JSONDecodeError as je:
+        print(f"[ERROR] Syntax error di {manifest_path}: {je}")
+        return None
+
+    # 2. Validate & load semua part chunks
+    full_parts = []
+    for part in manifest:
+        part_id = part.get("part", "")
+        safe_id = sanitize_part_id(part_id)
+        part_filename = f"part_{safe_id}.json"
+        part_filepath = os.path.join(parts_dir, part_filename)
+
+        if not os.path.exists(part_filepath):
+            print(f"[ERROR] Part file tidak ditemukan: {part_filepath}")
+            return None
+
+        try:
+            with open(part_filepath, "r", encoding="utf-8") as pf:
+                part_subs = json.load(pf)
+        except json.JSONDecodeError as je:
+            print(f"[ERROR] Syntax error di {part_filepath}: {je}")
+            return None
+
+        full_part = {
+            "part": part_id,
+            "title": part.get("title", ""),
+            "subs": part_subs
+        }
+        full_parts.append(full_part)
+
+    print(f"   [OK] {len(full_parts)} parts divalidasi.")
+
+    # 3. Recalculate cross-references (look, rel, ci)
+    print("[INFO] Menghitung ulang cross-references...")
+    try:
+        sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+        from import_pmn_docx import build_look, build_rel_and_cited
+
+        look = build_look(full_parts)
+        related, cited = build_rel_and_cited(full_parts)
+
+        os.makedirs("data", exist_ok=True)
+        with open(os.path.join("data", "look.json"), "w", encoding="utf-8") as f:
+            json.dump(look, f, ensure_ascii=False, indent=2)
+        with open(os.path.join("data", "rel.json"), "w", encoding="utf-8") as f:
+            json.dump(related, f, ensure_ascii=False, indent=2)
+        with open(os.path.join("data", "ci.json"), "w", encoding="utf-8") as f:
+            json.dump(cited, f, ensure_ascii=False, indent=2)
+        print("   [OK] look.json, rel.json, ci.json diregenerate.")
+    except Exception as e:
+        print(f"   [WARN] Gagal recalculate references: {e}")
+
+    # 4. Save data/parts.json (React SPA fetch ini di runtime)
+    os.makedirs("data", exist_ok=True)
+    with open(os.path.join("data", "parts.json"), "w", encoding="utf-8") as f:
+        json.dump(full_parts, f, ensure_ascii=False)
+    print("   [OK] data/parts.json disimpan.")
+
+    # 5. Generate pmn_corpus_for_ai.md
+    try:
+        corpus_path = "pmn_corpus_for_ai.md"
+        with open(corpus_path, "w", encoding="utf-8") as cf:
+            cf.write("# 📚 PROGRESSIVE MATERIALIST NATURALISM (PMN) FRAMEWORK CORPUS\n\n")
+            cf.write("> **Note for AI Models:** This is the complete consolidated plain-text corpus of the PMN manuscript and glossary, auto-generated for training, RAG retrieval, and grounding purposes.\n\n")
+
+            cf.write("## 📖 KEY TERMS & GLOSSARY DEFINITIONS\n\n")
+            gl_file = os.path.join("data", "gl.json")
+            if os.path.exists(gl_file):
+                with open(gl_file, "r", encoding="utf-8") as gf:
+                    gl_data = json.load(gf)
+                for term, definition in gl_data.items():
+                    cf.write(f"*   **{term.title()}**: {definition}\n")
+                cf.write("\n---\n\n")
+
+            cf.write("## 📝 MANUSCRIPT PARTS & SECTIONS\n\n")
+            for part in full_parts:
+                part_title = part.get("title", "")
+                part_id = part.get("part", "")
+                cf.write(f"### Part {part_id}: {part_title}\n\n")
+
+                for sub in part.get("subs", []):
+                    sub_id = sub.get("id", "")
+                    sub_title = sub.get("title", "")
+                    html_text = sub.get("html", "")
+
+                    clean_text = re.sub(r'<[^>]+>', '', html_text)
+                    clean_text = re.sub(r'\s+', ' ', clean_text).strip()
+                    clean_text = clean_text.replace("&ldquo;", '"').replace("&rdquo;", '"')
+                    clean_text = clean_text.replace("&lsquo;", "'").replace("&rsquo;", "'")
+                    clean_text = clean_text.replace("&mdash;", "—").replace("&ndash;", "–")
+
+                    cf.write(f"#### Section {sub_id} — {sub_title}\n")
+                    cf.write(f"{clean_text}\n\n")
+
+        print(f"   [OK] pmn_corpus_for_ai.md digenerate.")
+    except Exception as ce:
+        print(f"   [WARN] Gagal generate AI corpus: {ce}")
+
+    # 6. Sync ke public_static/
+    sync_to_public_static()
+
+    print(f"\n[SUCCESS] Build data untuk React SPA selesai!")
+    print(f"   -> data/parts.json siap di-fetch oleh React app.")
+    print("=" * 60)
+    return full_parts
+
+
+# ═══════════════════════════════════════════════════════════════════
+# @LEGACY — compile_mode()
+#
+# Mode ini menghasilkan index.offline.html (monolitik single-file).
+# Untuk build modern (React SPA), gunakan: python modularizer.py build-data
+#
+# compile_mode() tetap dipertahankan untuk distribusi offline/arsip.
+# Internal: compile_mode() memanggil build_data_mode() untuk rebuild
+# data files, lalu menambahkan kompilasi monolitik di atasnya.
+# ═══════════════════════════════════════════════════════════════════
+def compile_mode():
+    clean_html_path = os.path.join("legacy", "index.ui.html")
+    output_html_path = os.path.join("legacy", "index.offline.html")
+    style_css_path = "style.css"
+    legacy_dir = "legacy"
+    app_ts_path = os.path.join(legacy_dir, "app.ts")
+    app_js_path = os.path.join(legacy_dir, "app.js")
+
+    # ── Phase 1: Build data files (shared with React SPA) ──
+    full_parts = build_data_mode()
+    if full_parts is None:
+        print("[ERROR] Gagal build data — kompilasi monolitik dibatalkan.")
+        return
+
+    # ── Phase 2: Legacy monolith compilation ──
+    print("\n[INFO] Melanjutkan ke kompilasi monolitik (@legacy)...")
 
     # TypeScript compilation
     print("[INFO] Compiling app.ts to app.js via esbuild...")
@@ -140,7 +292,7 @@ def compile_mode():
                 print(f"[WARN] Could not remove old app.js before compile: {e}")
 
         # Run esbuild
-        res = subprocess.run("npx esbuild app.ts --outfile=app.js", shell=True, capture_output=True, text=True)
+        res = subprocess.run(f"npx esbuild {app_ts_path} --outfile={app_js_path}", shell=True, capture_output=True, text=True)
         if res.returncode != 0:
             print("[WARN] esbuild compilation completed with warnings/errors:")
             print(res.stderr or res.stdout)
@@ -168,7 +320,8 @@ def compile_mode():
     except Exception as e:
         print(f"[WARN] Formatting audit skipped: {e}\n")
     
-    # 1. Check if files exist
+    # 1. Check if monolith files exist (manifest & parts already validated by build_data_mode)
+    manifest_path = os.path.join("data", "parts", "manifest.json")
     files_to_check = [clean_html_path, style_css_path, app_js_path, manifest_path]
     missing_files = [f for f in files_to_check if not os.path.exists(f)]
     if missing_files:
@@ -176,52 +329,11 @@ def compile_mode():
         print("[SUGGESTION] Restore these files before attempting to compile.")
         return
 
-    # 2. Check JSON validity of manifest.json
-    try:
-        with open(manifest_path, "r", encoding="utf-8") as f:
-            manifest = json.load(f)
-    except json.JSONDecodeError as je:
-        print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Syntax error in {manifest_path}!")
-        print(f"   -> Error details: {je}")
-        print("[SUGGESTION] Fix the syntax error in manifest.json before compiling.")
-        return
-
-    # 3. Check JSON validity of every single part chunk
-    full_parts = []
-    for part in manifest:
-        part_id = part.get("part", "")
-        safe_id = sanitize_part_id(part_id)
-        part_filename = f"part_{safe_id}.json"
-        part_filepath = os.path.join(parts_dir, part_filename)
-
-        if not os.path.exists(part_filepath):
-            print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Part file referenced in manifest is missing!")
-            print(f"   -> Missing file: {part_filepath}")
-            return
-
-        try:
-            with open(part_filepath, "r", encoding="utf-8") as pf:
-                part_subs = json.load(pf)
-        except json.JSONDecodeError as je:
-            print(f"\n[ERROR] CRITICAL COMPILATION HALTED: Syntax error in naskah JSON!")
-            print(f"   -> Corrupted file: {part_filepath}")
-            print(f"   -> Error details: {je}")
-            print(f"[SUGGESTION] Open the file in an editor to fix the JSON syntax, or ask an AI to repair {part_filename}.")
-            return
-
-        # Merge the full subs containing HTML back into the part definition
-        full_part = {
-            "part": part_id,
-            "title": part.get("title", ""),
-            "subs": part_subs
-        }
-        full_parts.append(full_part)
-
-    # 4. Check HTML structural containers in index_bersih.html
+    # 2. Check HTML structural containers (monolith-specific)
     try:
         with open(clean_html_path, "r", encoding="utf-8") as f:
             html_content = f.read()
-            
+
         required_containers = ["id=\"prose\"", "id=\"sidebar\"", "id=\"home-view\"", "id=\"reader-view\""]
         missing_containers = [c for c in required_containers if c not in html_content]
         if missing_containers:
@@ -266,28 +378,8 @@ def compile_mode():
         json_str = json.dumps(data, ensure_ascii=False)
         return f'<script type="application/json" id="{tag_id}">{json_str}</script>'
 
-    # Recalculate look, rel, and ci dynamically to ensure single source of truth from modular JSONs
-    print("[INFO] Recalculating cross-references and section lookups dynamically...")
-    try:
-        sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
-        from import_pmn_docx import build_look, build_rel_and_cited
-        
-        look = build_look(full_parts)
-        related, cited = build_rel_and_cited(full_parts)
-        
-        # Save them back to disk to ensure data/ folder matches Compiled index.html
-        os.makedirs("data", exist_ok=True)
-        with open(os.path.join("data", "look.json"), "w", encoding="utf-8") as f:
-            json.dump(look, f, ensure_ascii=False, indent=2)
-        with open(os.path.join("data", "rel.json"), "w", encoding="utf-8") as f:
-            json.dump(related, f, ensure_ascii=False, indent=2)
-        with open(os.path.join("data", "ci.json"), "w", encoding="utf-8") as f:
-            json.dump(cited, f, ensure_ascii=False, indent=2)
-        print("   [OK] Reference tables (look, rel, ci) recalculated successfully.")
-    except Exception as e:
-        print(f"   [WARN] Could not dynamically recalculate references: {e}")
-
     # Load all the data files as inlined script tags
+    # (look, rel, ci already regenerated by build_data_mode())
     print("[INFO] Embedding all JSON data files...")
     json_scripts = []
     # 1. Monolithic parts stitched data
@@ -334,62 +426,10 @@ def compile_mode():
     with open(output_html_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    # Save to data/parts.json so local dev server mode is synchronized instantly!
-    os.makedirs("data", exist_ok=True)
-    with open(os.path.join("data", "parts.json"), "w", encoding="utf-8") as f:
-        json.dump(full_parts, f, ensure_ascii=False)
-    print("   [OK] data/parts.json synchronized successfully.")
-
-    # Auto-generate the full Markdown Corpus for AI ingestion
-    try:
-        corpus_path = "pmn_corpus_for_ai.md"
-        with open(corpus_path, "w", encoding="utf-8") as cf:
-            cf.write("# 📚 PROGRESSIVE MATERIALIST NATURALISM (PMN) FRAMEWORK CORPUS\n\n")
-            cf.write("> **Note for AI Models:** This is the complete consolidated plain-text corpus of the PMN manuscript and glossary, auto-generated for training, RAG retrieval, and grounding purposes.\n\n")
-            
-            # 1. Embed Glossary
-            cf.write("## 📖 KEY TERMS & GLOSSARY DEFINITIONS\n\n")
-            gl_file = os.path.join("data", "gl.json")
-            if os.path.exists(gl_file):
-                with open(gl_file, "r", encoding="utf-8") as gf:
-                    gl_data = json.load(gf)
-                for term, definition in gl_data.items():
-                    cf.write(f"*   **{term.title()}**: {definition}\n")
-                cf.write("\n---\n\n")
-            
-            # 2. Embed Manuscript Parts
-            cf.write("## 📝 MANUSCRIPT PARTS & SECTIONS\n\n")
-            for part in full_parts:
-                part_title = part.get("title", "")
-                part_id = part.get("part", "")
-                cf.write(f"### Part {part_id}: {part_title}\n\n")
-                
-                for sub in part.get("subs", []):
-                    sub_id = sub.get("id", "")
-                    sub_title = sub.get("title", "")
-                    html_text = sub.get("html", "")
-                    
-                    # Strip HTML tags to make it ultra-clean text for AI models
-                    clean_text = re.sub(r'<[^>]+>', '', html_text)
-                    # Fix whitespace
-                    clean_text = re.sub(r'\s+', ' ', clean_text).strip()
-                    # Decode common entities
-                    clean_text = clean_text.replace("&ldquo;", '"').replace("&rdquo;", '"')
-                    clean_text = clean_text.replace("&lsquo;", "'").replace("&rsquo;", "'")
-                    clean_text = clean_text.replace("&mdash;", "—").replace("&ndash;", "–")
-                    
-                    cf.write(f"#### Section {sub_id} — {sub_title}\n")
-                    cf.write(f"{clean_text}\n\n")
-                    
-        print(f"   [OK] Consolidated AI Grounding Corpus auto-generated at {corpus_path}")
-    except Exception as ce:
-        print(f"   [WARN] Could not generate AI corpus: {ce}")
-
     file_size_mb = os.path.getsize(output_html_path) / (1024 * 1024)
-    print(f"\n[SUCCESS] Monolithic index.html compiled!")
+    print(f"\n[SUCCESS] Monolithic index.html compiled (@legacy)!")
     print(f"   -> Output: {output_html_path} ({file_size_mb:.2f} MB)")
     print("   -> Standalone deployment ready. Zero external local server requirements.")
-    sync_to_public_static()
     print("=" * 60)
 
 if __name__ == "__main__":
@@ -405,19 +445,24 @@ if __name__ == "__main__":
 
     print_banner()
     if len(sys.argv) < 2:
-        print("Usage: python modularizer.py [split|compile]")
+        print("Usage: python modularizer.py [split|build-data|compile]")
+        print("  split      — Modularisasi parts.json menjadi part chunks")
+        print("  build-data — Build ulang data files untuk React SPA (modern)")
+        print("  compile    — @legacy: Generate index.offline.html monolitik")
         sys.exit(1)
 
     cmd = sys.argv[1].lower()
-    
+
     # Change working directory to script location to ensure relative paths resolve correctly
     script_dir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(script_dir)
 
     if cmd == "split":
         split_mode()
+    elif cmd == "build-data":
+        build_data_mode()
     elif cmd == "compile":
         compile_mode()
     else:
         print(f"[ERROR] Unknown command: {sys.argv[1]}")
-        print("Usage: python modularizer.py [split|compile]")
+        print("Usage: python modularizer.py [split|build-data|compile]")
