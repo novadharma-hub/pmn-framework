@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
+import ErrorBoundary from './components/ErrorBoundary'
 // 1. Tailwind utility layer + @theme tokens
 import './index.css'
 // 2. PMN master stylesheet (style.css) — diimport LANGSUNG di sini,
@@ -10,6 +11,8 @@ import '../style.css'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>,
 )

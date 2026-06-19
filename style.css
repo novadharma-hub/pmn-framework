@@ -1143,9 +1143,11 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
 
 /* ── Mobile styles: triggered by screen size (fixed from invalid ", html[data-layout=...]" syntax that caused Vite optimizer warnings) ── */
 @media (max-width: 680px) {
-  body{overflow:hidden}
-  .page-shell{height:calc(100vh - 52px);overflow:hidden}
-  #home-view{overflow-y:auto}
+  html{overflow:hidden}
+  body{overflow:hidden;position:fixed;width:100%;height:100%}
+  .page-shell{height:calc(100vh - 52px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+  .page-shell > .view{min-height:100%}
+  #home-view{overflow-y:auto;-webkit-overflow-scrolling:touch}
   #home-view > *{padding-left:1.4rem;padding-right:1.4rem}
   #hdr{padding:.55rem .75rem;gap:.4rem}
   #hdr-srch{max-width:none;flex:1;min-width:0}
@@ -1198,8 +1200,9 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .home-bottom-card.notes-card,.home-bottom-card.compact-card,.home-bottom-card.release-card{grid-column:auto}
   .home-bottom-statgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .home-footer-bar{padding:1.5rem 1.4rem;flex-direction:column;gap:.5rem}
-  #reader-view.on{flex-direction:column;overflow-y:auto}
-  #reader-main{width:100%;height:auto;overflow:visible}
+  #reader-view.on{flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #reader-main{width:100%;height:auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #sv-body{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
   #reader-col{padding:1.4rem 1.4rem 5rem;max-width:none}
   #sidebar{position:fixed;left:0;top:52px;height:calc(100% - 52px);z-index:200;transform:translateX(-100%);transition:transform .26s ease;width:280px!important;min-width:280px!important}
   #sidebar.mob-open{transform:translateX(0)}
