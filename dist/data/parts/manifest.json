@@ -293,6 +293,11 @@
         "is_intro": false
       },
       {
+        "id": "4.1c",
+        "title": "The Failure of Divine Mandate as Universal Anchor",
+        "is_intro": false
+      },
+      {
         "id": "4.2",
         "title": "Better and Worse",
         "is_intro": false
@@ -841,8 +846,13 @@
         "is_intro": false
       },
       {
-        "id": "12.1b",
-        "title": "Second-Order Effects as Analytical Obligation: The Multi-Level Consequence Procedure",
+        "id": "12.1c",
+        "title": "Extreme Scenario Testing as Assumption Archaeology",
+        "is_intro": false
+      },
+      {
+        "id": "12.1d",
+        "title": "The Reasoning Type PMN Uses: Defeasible Inference and Why Formal Logic Is Insufficient",
         "is_intro": false
       },
       {
@@ -947,6 +957,11 @@
         "is_intro": false
       },
       {
+        "id": "13.2c",
+        "title": "Conflicting Genuine Suffering Claims",
+        "is_intro": false
+      },
+      {
         "id": "13.3",
         "title": "Trade-offs as Permanent Features of Complex Systems",
         "is_intro": false
@@ -994,6 +1009,11 @@
       {
         "id": "13.4i",
         "title": "Triage Protocol for High-Urgency Cases",
+        "is_intro": false
+      },
+      {
+        "id": "13.4j",
+        "title": "When All Available Options Produce Structural Suffering: The Structural Tragedy Problem",
         "is_intro": false
       },
       {
@@ -1124,6 +1144,11 @@
         "is_intro": false
       },
       {
+        "id": "16.4b",
+        "title": "Effective Accelerationism and the Generational Sacrifice Problem",
+        "is_intro": false
+      },
+      {
         "id": "16.5",
         "title": "Reproductive Technology and the Commodification Problem",
         "is_intro": false
@@ -1185,6 +1210,11 @@
         "is_intro": false
       },
       {
+        "id": "17.7c-ii",
+        "title": "From Diagnostic to Practice: Drift Detection as Technology of the Self",
+        "is_intro": false
+      },
+      {
         "id": "17.7d",
         "title": "On Meaning Infrastructure and the Sustainability of Analysis",
         "is_intro": false
@@ -1192,6 +1222,11 @@
       {
         "id": "17.7e",
         "title": "On Communicating Across Frameworks",
+        "is_intro": false
+      },
+      {
+        "id": "17.7f",
+        "title": "On Weaponized Stoicism: Jurisdictional Demarcation",
         "is_intro": false
       },
       {
