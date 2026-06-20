@@ -14,6 +14,7 @@ interface AITerminalProps {
 export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerminalProps) {
   const [activeTab, setActiveTab] = useState<'claude' | 'chatgpt' | 'gemini'>('chatgpt')
   const [messages, setMessages] = useState<Message[]>([])
+  const [copyStatus, setCopyStatus] = useState('')
   const chatLogRef = useRef<HTMLDivElement>(null)
 
   // Build a grounded prompt from current section + glossary context (simple version for now)
@@ -29,8 +30,8 @@ export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerm
     const sel = (document.querySelector(`#hai-panel-${platform} select`) as HTMLSelectElement)?.value || 'agent'
     const prompt = buildPrompt(qInput, sel)
     navigator.clipboard.writeText(prompt).then(() => {
-      // simple feedback - could improve with toast later
-      alert('Prompt copied! Paste into ' + platform.toUpperCase())
+      setCopyStatus('Prompt copied for ' + platform.toUpperCase() + '.')
+      window.setTimeout(() => setCopyStatus(''), 2200)
     }).catch(() => {
       // fallback
       window.prompt('Copy this prompt manually:', prompt)
@@ -53,6 +54,11 @@ export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerm
         </span>
       </div>
       <p className="home-ai-desc mb-6 italic text-xs opacity-70">Build a manuscript context pack and send it to ChatGPT or Gemini.</p>
+      {copyStatus && (
+        <div className="font-mono text-[0.65rem] uppercase tracking-widest text-pmn-acc border border-pmn-rule bg-pmn-bg px-3 py-2 mb-4">
+          {copyStatus}
+        </div>
+      )}
       
       {/* MODE TABS (Legacy .hai-tabs) */}
       <div className="hai-tabs mb-6" id="hai-tabs">

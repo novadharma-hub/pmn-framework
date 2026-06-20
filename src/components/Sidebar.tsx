@@ -24,6 +24,16 @@ const shortenId = (id: string) => {
 export default function Sidebar({ parts, readMap, curPos, onSelectSection, onClose, history = [] }: SidebarProps) {
   return (
     <div id="sidebar" className="select-none flex flex-col h-full overflow-hidden border-r border-pmn-rule bg-pmn-bg2 shrink-0" style={{width: '380px'}}>
+      <div className="flex items-center justify-between p-4 border-b border-pmn-rule bg-pmn-bg3/20 sm:hidden">
+        <span className="font-mono text-[0.7rem] uppercase tracking-widest text-pmn-ink font-bold">Manuscript Modules</span>
+        <button 
+          onClick={onClose} 
+          className="font-mono text-[0.8rem] text-pmn-mute hover:text-pmn-acc transition-colors p-1"
+          aria-label="Close sections"
+        >
+          ✕
+        </button>
+      </div>
       <button id="sb-tog" onClick={onClose}>&#8249;</button>
       
       {/* Recent / History box — styled using native CSS classes */}

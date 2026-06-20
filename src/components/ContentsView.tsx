@@ -260,7 +260,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                                 </button>
                               )}
                             </div>
-                            <p className="gl-def font-pmn-body text-[0.95rem] text-pmn-mute leading-relaxed italic opacity-85 mt-auto">{def || 'Definisi tertunda.'}</p>
+                            <p className="gl-def font-pmn-body text-[0.95rem] text-pmn-mute leading-relaxed italic opacity-85 mt-auto">{def || 'Definition pending.'}</p>
                           </div>
                         )
                       })}

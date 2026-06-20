@@ -59,6 +59,7 @@ export default function ReaderView({
   const [highlights, setHighlights] = useState<Record<string, { id: string; text: string; color: string; note: string }[]>>(() => {
     try { return JSON.parse(localStorage.getItem('pmn-hl-v3') || '{}') } catch { return {} }
   })
+  const isMobile = () => typeof window !== 'undefined' && window.innerWidth <= 680
 
   const pIdx = (curPos ? curPos[0] : partIdx) ?? 0
   const sIdx = (curPos ? curPos[1] : secIdx) ?? 0
@@ -81,6 +82,12 @@ export default function ReaderView({
 
   useEffect(() => {
     document.documentElement.style.setProperty('--reader-scale', String(readerScale))
+  }, [])
+
+  useEffect(() => {
+    const syncSidebarForViewport = () => setSbOpen(window.innerWidth > 1024)
+    window.addEventListener('resize', syncSidebarForViewport)
+    return () => window.removeEventListener('resize', syncSidebarForViewport)
   }, [])
 
   // Process highlights and XREFs into HTML
@@ -302,9 +309,27 @@ export default function ReaderView({
           parts={data.parts} 
           readMap={readMap}
           curPos={[pIdx, sIdx]}
-          onSelectSection={onSavePosition}
+          onSelectSection={(p, s) => {
+            onSavePosition(p, s)
+            if (isMobile()) setSbOpen(false)
+          }}
           onClose={() => setSbOpen(false)} 
           history={history}
+        />
+      )}
+      {sbOpen && isMobile() && (
+        <button
+          aria-label="Close section drawer"
+          onClick={() => setSbOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 190,
+            background: 'rgba(0,0,0,.52)',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer'
+          }}
         />
       )}
 
@@ -315,29 +340,45 @@ export default function ReaderView({
           className="select-none sticky top-0 z-20 bg-pmn-bg w-full border-b border-pmn-rule/60" 
           style={{ height: '68px', boxSizing: 'border-box' }}
         >
-          {/* Full-width relative bar — title always centers across the full reader column */}
-          <div className="w-full h-full relative flex items-center justify-center px-6 lg:px-12">
-            {/* Left: ← Contents button, absolutely pinned */}
-            <button
-              className="absolute left-6 lg:left-12 font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors whitespace-nowrap shrink-0"
-              onClick={onBackHome}
-            >← <span className="hidden sm:inline">Table of Contents</span></button>
-
-            {/* Center: Part label + title — truly centered in the column */}
-            <div className="flex flex-col items-center justify-center text-center pointer-events-none">
-              <span className="font-mono text-[0.6rem] lg:text-[0.7rem] text-pmn-acc uppercase tracking-[0.2em] leading-none mb-1 font-bold whitespace-nowrap">Part {p?.part}</span>
-              <span className="font-pmn-head text-[0.85rem] lg:text-[1rem] font-bold text-pmn-ink leading-snug max-w-[55vw] truncate">{p?.title}</span>
+          {/* Full-width container: title centers and buttons use natural flex positions */}
+          <div className="w-full h-full relative flex items-center justify-between px-4 sm:px-6 lg:px-12">
+            {/* Left: ← Contents button and mobile sections drawer trigger */}
+            <div className="flex items-center gap-2 z-10">
+              <button
+                className="font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors whitespace-nowrap shrink-0"
+                onClick={onBackHome}
+                aria-label="Back to Table of Contents"
+              >
+                &larr; <span className="hidden sm:inline">Table of Contents</span>
+              </button>
+              <button
+                className="font-mono text-[0.62rem] uppercase tracking-widest text-pmn-acc border border-pmn-rule px-2.5 py-1 sm:hidden shrink-0 transition-all hover:bg-pmn-acc hover:text-white"
+                onClick={() => setSbOpen(v => !v)}
+                aria-expanded={sbOpen}
+                aria-controls="sidebar"
+                style={{ background: 'var(--pmn-bg2)' }}
+              >
+                § Sections
+              </button>
             </div>
 
-            {/* Right: Mark Read / Completed button, absolutely pinned */}
-            <button
-              onClick={() => onMarkRead(pIdx, sIdx)}
-              className={`absolute right-6 lg:right-12 font-mono text-[0.58rem] lg:text-[0.65rem] uppercase tracking-widest border transition-all shrink-0 whitespace-nowrap ${isRead ? 'border-pmn-acc text-pmn-acc bg-pmn-acc/5' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink'}`}
-              style={{ padding: '6px 12px', cursor: 'pointer' }}
-            >
-              <span className="hidden sm:inline">{isRead ? 'Completed' : 'Mark Read'}</span>
-              <span className="sm:hidden">{isRead ? '✓' : '○'}</span>
-            </button>
+            {/* Center: Part label + title, absolutely centered with max width to avoid collision */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-center pointer-events-none max-w-[32%] sm:max-w-[50vw]">
+              <span className="font-mono text-[0.55rem] sm:text-[0.6rem] lg:text-[0.7rem] text-pmn-acc uppercase tracking-[0.2em] leading-none mb-1 font-bold whitespace-nowrap">Part {p?.part}</span>
+              <span className="font-pmn-head text-[0.75rem] sm:text-[0.85rem] lg:text-[1rem] font-bold text-pmn-ink leading-snug truncate w-full">{p?.title}</span>
+            </div>
+
+            {/* Right: Mark Read / Completed button */}
+            <div className="flex items-center gap-2 z-10">
+              <button
+                onClick={() => onMarkRead(pIdx, sIdx)}
+                className={`font-mono text-[0.58rem] lg:text-[0.65rem] uppercase tracking-widest border transition-all shrink-0 whitespace-nowrap ${isRead ? 'border-pmn-acc text-pmn-acc bg-pmn-acc/5' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink'}`}
+                style={{ padding: '6px 12px', cursor: 'pointer' }}
+              >
+                <span className="hidden sm:inline">{isRead ? 'Completed' : 'Mark Read'}</span>
+                <span className="sm:hidden">{isRead ? '✓' : '○'}</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -345,39 +386,78 @@ export default function ReaderView({
           <div className="w-full px-6 lg:px-12">
             {/* ── Title + Controls Card ── */}
             <div className="reader-title-card">
-            <p className="sec-eye uppercase tracking-[0.4em] font-mono text-[0.62rem] text-pmn-acc opacity-80 mb-6 border-b border-pmn-acc/20 pb-2 inline-block">
-              {SPECIAL[p?.part] ? `SYSTEM DOC // ${shortenId(s?.id || '')}` : `MODULE // ${shortenId(s?.id || '')}`}
-            </p>
-            <h1 className="font-pmn-head font-bold text-pmn-ink text-3xl lg:text-5xl leading-tight mb-8 text-center">{s?.title}</h1>
+              <p className="sec-eye uppercase tracking-[0.4em] font-mono text-[0.62rem] text-pmn-acc opacity-80 mb-6 border-b border-pmn-acc/20 pb-2 inline-block">
+                {SPECIAL[p?.part] ? `SYSTEM DOC // ${shortenId(s?.id || '')}` : `MODULE // ${shortenId(s?.id || '')}`}
+              </p>
+              <h1 className="font-pmn-head font-bold text-pmn-ink text-3xl lg:text-5xl leading-tight mb-8 text-center">{s?.title}</h1>
 
-            <div className="reader-meta flex items-center justify-between border-b border-pmn-rule/60 pb-4 mb-10 select-none">
-              <span className="font-mono text-[0.65rem] text-pmn-mute opacity-60 uppercase tracking-widest italic">
-                {s?.text ? `${Math.ceil(s.text.split(/\s+/).length / 200)} min read` : '1 min read'}
-              </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span className="font-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest">Measure</span>
-                  <div style={{ display: 'flex', backgroundColor: 'var(--pmn-bg2)', border: '1px solid var(--pmn-rule)', borderRadius: '2px', padding: '2px', gap: '4px' }}>
-                    <button onClick={() => onChangeWidth?.('narrow')} style={{ padding: '5px 12px', fontSize: '0.75rem', fontFamily: 'monospace', border: 'none', borderRadius: '2px', cursor: 'pointer', backgroundColor: contentWidth === 'narrow' ? 'var(--pmn-acc)' : 'transparent', color: contentWidth === 'narrow' ? '#fff' : 'var(--pmn-mute)' }}>N</button>
-                    <button onClick={() => onChangeWidth?.('medium')} style={{ padding: '5px 12px', fontSize: '0.75rem', fontFamily: 'monospace', border: 'none', borderRadius: '2px', cursor: 'pointer', backgroundColor: contentWidth === 'medium' ? 'var(--pmn-acc)' : 'transparent', color: contentWidth === 'medium' ? '#fff' : 'var(--pmn-mute)' }}>M</button>
-                    <button onClick={() => onChangeWidth?.('wide')} style={{ padding: '5px 12px', fontSize: '0.75rem', fontFamily: 'monospace', border: 'none', borderRadius: '2px', cursor: 'pointer', backgroundColor: contentWidth === 'wide' ? 'var(--pmn-acc)' : 'transparent', color: contentWidth === 'wide' ? '#fff' : 'var(--pmn-mute)' }}>W</button>
+              <div className="reader-meta flex flex-col md:flex-row md:items-center justify-between border-b border-pmn-rule/60 pb-6 mb-10 select-none gap-6">
+                <span className="font-mono text-[0.65rem] text-pmn-mute opacity-60 uppercase tracking-widest italic">
+                  {s?.text ? `${Math.ceil(s.text.split(/\s+/).length / 200)} min read` : '1 min read'}
+                </span>
+                
+                {/* section wrapper used instead of div to bypass the legacy .reader-meta > div styling */}
+                <section className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full md:w-auto">
+                  <div className="flex items-center justify-between sm:justify-start gap-3">
+                    <span className="font-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest">Measure</span>
+                    <div className="flex bg-pmn-bg2 border border-pmn-rule p-0.5 rounded-sm gap-1 select-none">
+                      <button 
+                        onClick={() => onChangeWidth?.('narrow')} 
+                        className={`px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs transition-all ${contentWidth === 'narrow' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                      >
+                        N
+                      </button>
+                      <button 
+                        onClick={() => onChangeWidth?.('medium')} 
+                        className={`px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs transition-all ${contentWidth === 'medium' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                      >
+                        M
+                      </button>
+                      <button 
+                        onClick={() => onChangeWidth?.('wide')} 
+                        className={`px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs transition-all ${contentWidth === 'wide' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                      >
+                        W
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="w-px h-6 bg-pmn-rule/40" />
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span className="font-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest">Zoom</span>
-                  <div style={{ display: 'flex', backgroundColor: 'var(--pmn-bg2)', border: '1px solid var(--pmn-rule)', borderRadius: '2px', padding: '2px', gap: '4px' }}>
-                    <button className="text-pmn-mute hover:text-pmn-ink transition-all rounded-xs" onClick={() => changeReaderScale(-0.1)} style={{ padding: '5px 12px', fontSize: '0.75rem', fontFamily: 'monospace', border: 'none', borderRadius: '2px', cursor: 'pointer', backgroundColor: 'transparent' }}>A-</button>
-                    <button className="text-pmn-mute hover:text-pmn-ink font-bold transition-all rounded-xs" onClick={() => { setReaderScale(1); document.documentElement.style.setProperty('--reader-scale','1'); localStorage.setItem('pmn-reader-scale','1'); }} style={{ padding: '5px 12px', fontSize: '0.75rem', fontFamily: 'monospace', border: 'none', borderRadius: '2px', cursor: 'pointer', backgroundColor: 'var(--pmn-bg)' }}>A</button>
-                    <button className="text-pmn-mute hover:text-pmn-ink transition-all rounded-xs" onClick={() => changeReaderScale(0.1)} style={{ padding: '5px 12px', fontSize: '0.75rem', fontFamily: 'monospace', border: 'none', borderRadius: '2px', cursor: 'pointer', backgroundColor: 'transparent' }}>A+</button>
+                  
+                  <div className="hidden sm:block w-px h-6 bg-pmn-rule/40" />
+                  
+                  <div className="flex items-center justify-between sm:justify-start gap-3">
+                    <span className="font-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest">Zoom</span>
+                    <div className="flex bg-pmn-bg2 border border-pmn-rule p-0.5 rounded-sm gap-1 select-none">
+                      <button 
+                        onClick={() => changeReaderScale(-0.1)} 
+                        className="px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
+                      >
+                        A-
+                      </button>
+                      <button 
+                        onClick={() => { setReaderScale(1); document.documentElement.style.setProperty('--reader-scale','1'); localStorage.setItem('pmn-reader-scale','1'); }} 
+                        className="px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs bg-pmn-bg text-pmn-ink hover:text-pmn-acc transition-all border-none font-bold"
+                      >
+                        A
+                      </button>
+                      <button 
+                        onClick={() => changeReaderScale(0.1)} 
+                        className="px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
+                      >
+                        A+
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="w-px h-6 bg-pmn-rule/40" />
-                <button className={`focus-mode-btn border border-pmn-rule/50 font-mono text-[0.65rem] uppercase tracking-widest cursor-pointer transition-all ${focusMode ? 'bg-pmn-acc text-white border-pmn-acc shadow-lg' : 'text-pmn-mute hover:text-pmn-ink'}`} style={{ padding: '6px 14px' }} onClick={() => setFocusMode(!focusMode)}>
-                  {focusMode ? 'EX-FOC' : 'FOCUS'}
-                </button>
+                  
+                  <div className="hidden sm:block w-px h-6 bg-pmn-rule/40" />
+                  
+                  <button 
+                    onClick={() => setFocusMode(!focusMode)}
+                    className={`px-4 py-1.5 font-mono text-[0.65rem] uppercase tracking-widest cursor-pointer border transition-all rounded-xs w-full sm:w-auto ${focusMode ? 'bg-pmn-acc text-white border-pmn-acc shadow-md' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink bg-transparent'}`}
+                  >
+                    {focusMode ? 'EX-FOC' : 'FOCUS'}
+                  </button>
+                </section>
               </div>
-            </div>
             </div> {/* /reader-title-card */}
 
             {/* ── Prose Content Box ── */}
