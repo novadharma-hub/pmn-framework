@@ -91,7 +91,7 @@ export default function App() {
         if (verData && verData.version) {
           setVersion(verData.version.replace(/^v/i, ''))
         }
-        setLoadError((parts && parts.length > 0) ? null : 'Gagal memuat data manuskrip. Cek network / public_static/data.')
+        setLoadError((parts && parts.length > 0) ? null : 'Failed to load manuscript data. Check the network path or public data files.')
         setLoading(false)
       })
       .catch(e => { setLoadError('Error memuat data: ' + (e?.message || e)); setLoading(false) })
@@ -167,7 +167,7 @@ export default function App() {
   if (loadError || !data) return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'100vh',background:'var(--bg)',color:'var(--ink)',padding:'1.5rem',textAlign:'center'}}>
       <div style={{fontFamily:"'Source Code Pro',monospace",color:'var(--acc)',fontSize:'.85rem',letterSpacing:'.2em',marginBottom:'1rem'}}>DATA LOAD FAILED</div>
-      <div style={{maxWidth:'420px',marginBottom:'1.5rem'}}>{loadError || 'Tidak ada data.'}</div>
+      <div style={{maxWidth:'420px',marginBottom:'1.5rem'}}>{loadError || 'No manuscript data is available.'}</div>
       <button onClick={() => window.location.reload()} style={{fontFamily:"'Source Code Pro',monospace",fontSize:'.75rem',border:'1px solid var(--rule)',padding:'.5rem 1.2rem',background:'none',color:'var(--ink)',cursor:'pointer'}}>RELOAD</button>
     </div>
   )

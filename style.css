@@ -1306,6 +1306,22 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   #sb-tog{display:none!important}
 }
 
+@media (max-width: 680px) {
+  #sidebar{
+    display:block!important;
+    position:fixed!important;
+    left:0!important;
+    top:52px!important;
+    bottom:52px!important;
+    height:auto!important;
+    width:min(86vw, 340px)!important;
+    min-width:0!important;
+    transform:none!important;
+    z-index:200!important;
+    box-shadow:16px 0 40px rgba(0,0,0,.45);
+  }
+}
+
 /* ── Keyboard shortcut overlay ── */
 #kbd-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.65);overflow-y:auto}
 #kbd-panel{max-width:480px;margin:4rem auto;background:var(--bg);border:1px solid var(--rule);padding:2rem 2.2rem 2.4rem;position:relative}
@@ -2394,3 +2410,166 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
   font-family: var(--f-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mute2);
 }
+/* ================================================================
+   Visual Upgrade v1 - theme-aware reader polish
+   Scoped as an additive layer so it can be rolled back cleanly.
+   ================================================================ */
+:root {
+  --pmn-surface-soft: rgba(255,255,255,.42);
+  --pmn-surface-raised: rgba(255,255,255,.58);
+  --pmn-shadow-soft: 0 18px 48px rgba(92,67,38,.10);
+  --pmn-shadow-tight: 0 10px 26px rgba(92,67,38,.08);
+  --pmn-focus-ring: 0 0 0 3px rgba(24,74,26,.14);
+}
+[data-theme=dark] {
+  --pmn-surface-soft: rgba(255,255,255,.035);
+  --pmn-surface-raised: rgba(255,255,255,.055);
+  --pmn-shadow-soft: 0 22px 56px rgba(0,0,0,.46);
+  --pmn-shadow-tight: 0 14px 32px rgba(0,0,0,.34);
+  --pmn-focus-ring: 0 0 0 3px rgba(192,39,26,.18);
+}
+
+#hdr {
+  backdrop-filter: saturate(1.1) blur(10px);
+  gap: .7rem;
+}
+#hdr-logo {
+  min-width: 3.2rem;
+  text-align: left;
+}
+#hdr-srch {
+  min-height: 32px;
+  border-radius: 3px !important;
+  background: color-mix(in srgb, var(--bg2) 84%, var(--bg) 16%) !important;
+}
+#hdr-srch:focus-within {
+  box-shadow: var(--pmn-focus-ring), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+#hdr-r button, #hdr button.hbtn, .pmn-agent-btn, .annot-btn, .path-btn, .home-bottom-link {
+  min-height: 32px;
+}
+
+#reader-main {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--acc) 4%, transparent), transparent 18rem),
+    var(--bg) !important;
+}
+.reader-title-card,
+.reader-prose-box,
+.reader-panel,
+.gl-card,
+.home-bottom-card,
+.path-card {
+  background:
+    linear-gradient(180deg, var(--pmn-surface-raised), transparent 120%),
+    var(--bg2) !important;
+  border-color: color-mix(in srgb, var(--rule2) 76%, var(--ink) 10%) !important;
+  box-shadow: var(--pmn-shadow-tight) !important;
+}
+.reader-title-card,
+.reader-prose-box {
+  border-radius: 4px;
+}
+.reader-title-card {
+  padding: 1.65rem 1.45rem .6rem;
+  margin-bottom: 1.25rem;
+}
+.reader-title-card h1 {
+  max-width: 18ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.reader-prose-box {
+  padding: clamp(1.45rem, 3vw, 2.45rem);
+}
+.prose {
+  color: color-mix(in srgb, var(--ink2) 88%, var(--ink) 12%);
+}
+.prose p {
+  margin-bottom: 1.42em;
+}
+.reader-endcap {
+  border-radius: 4px;
+  box-shadow: var(--pmn-shadow-soft) !important;
+}
+
+#sidebar {
+  box-shadow: 10px 0 32px rgba(0,0,0,.08);
+}
+[data-theme=dark] #sidebar {
+  box-shadow: 12px 0 36px rgba(0,0,0,.38);
+}
+.sb-item.on, .toc-sub.on {
+  box-shadow: inset 3px 0 0 var(--acc);
+}
+
+.hero-orientation-tip {
+  border-radius: 4px;
+  box-shadow: var(--pmn-shadow-soft) !important;
+}
+.home-ai-section .home-ai-inner,
+.hai-panel {
+  max-width: 100%;
+}
+
+@media (max-width: 680px) {
+  #hdr {
+    gap: .35rem;
+  }
+  #hdr-logo {
+    min-width: auto;
+  }
+  #hdr-r {
+    gap: .35rem;
+  }
+  #reader-nav {
+    height: 60px !important;
+  }
+  #reader-col {
+    padding-left: .85rem !important;
+    padding-right: .85rem !important;
+  }
+  .reader-title-card {
+    padding: 1rem .9rem .45rem;
+  }
+  .reader-title-card h1 {
+    font-size: 1.7rem !important;
+    max-width: 14ch;
+    margin-bottom: 1.1rem !important;
+  }
+  .reader-meta > div {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: .65rem !important;
+  }
+  .reader-meta > div > .w-px {
+    display: none;
+  }
+  .reader-prose-box {
+    padding: 1.2rem .95rem;
+  }
+  .prose {
+    font-size: calc(1.02rem * var(--reader-scale, 1)) !important;
+    line-height: 1.78;
+  }
+  .hero-orientation-tip {
+    left: .9rem !important;
+    right: .9rem !important;
+    bottom: 4.2rem !important;
+    max-width: none !important;
+  }
+}
+
+/* ================================================================
+   Visual Upgrade v2 - Stage 02 Mobile Reader Overrides
+   ================================================================ */
+@media (max-width: 680px) {
+  #sidebar {
+    width: min(85vw, 360px) !important;
+  }
+  .reader-prose-box {
+    padding: 1.2rem 1.25rem !important;
+  }
+}
+

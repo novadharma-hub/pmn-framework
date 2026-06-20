@@ -317,45 +317,51 @@
     "title": "The Maqasid al-Shariah: An Independent Derivation of the Floor/Becoming Structure",
     "pt": "IV"
   },
-  "4.2": {
+  "4.1c": {
     "pi": 4,
     "si": 2,
+    "title": "The Failure of Divine Mandate as Universal Anchor",
+    "pt": "IV"
+  },
+  "4.2": {
+    "pi": 4,
+    "si": 3,
     "title": "Better and Worse",
     "pt": "IV"
   },
   "4.3": {
     "pi": 4,
-    "si": 3,
+    "si": 4,
     "title": "On Progress",
     "pt": "IV"
   },
   "4.4": {
     "pi": 4,
-    "si": 4,
+    "si": 5,
     "title": "On Manipulation, Trust, and Structural Checks",
     "pt": "IV"
   },
   "4.5": {
     "pi": 4,
-    "si": 5,
+    "si": 6,
     "title": "Beyond the Minimal Anchor: The Anti-Foreclosure Criterion",
     "pt": "IV"
   },
   "4.5b": {
     "pi": 4,
-    "si": 6,
+    "si": 7,
     "title": "The Loop Model and the Anti-Foreclosure Criterion",
     "pt": "IV"
   },
   "4.5c": {
     "pi": 4,
-    "si": 7,
+    "si": 8,
     "title": "The Procedural Account of Becoming",
     "pt": "IV"
   },
   "4.5d": {
     "pi": 4,
-    "si": 8,
+    "si": 9,
     "title": "Becoming as Epistemic Capacity",
     "pt": "IV"
   },
@@ -907,85 +913,97 @@
   },
   "12.1b": {
     "pi": 12,
-    "si": 2,
+    "si": 1,
     "title": "Second-Order Effects as Analytical Obligation: The Multi-Level Consequence Procedure",
+    "pt": "XII"
+  },
+  "12.1c": {
+    "pi": 12,
+    "si": 2,
+    "title": "Extreme Scenario Testing as Assumption Archaeology",
+    "pt": "XII"
+  },
+  "12.1d": {
+    "pi": 12,
+    "si": 3,
+    "title": "The Reasoning Type PMN Uses: Defeasible Inference and Why Formal Logic Is Insufficient",
     "pt": "XII"
   },
   "12.2": {
     "pi": 12,
-    "si": 3,
+    "si": 4,
     "title": "Multi-Perspectival Analysis",
     "pt": "XII"
   },
   "12.3": {
     "pi": 12,
-    "si": 4,
+    "si": 5,
     "title": "Framework and Doctrine in Practice",
     "pt": "XII"
   },
   "12.3b": {
     "pi": 12,
-    "si": 5,
+    "si": 6,
     "title": "The Framework-Doctrine Boundary: Detection Procedure",
     "pt": "XII"
   },
   "12.4": {
     "pi": 12,
-    "si": 6,
+    "si": 7,
     "title": "The Architecture of the Framework: Parts I, II, and III in Sequence",
     "pt": "XII"
   },
   "12.5": {
     "pi": 12,
-    "si": 7,
+    "si": 8,
     "title": "When This Framework Fails: Specific Failure Modes",
     "pt": "XII"
   },
   "12.5b": {
     "pi": 12,
-    "si": 8,
+    "si": 9,
     "title": "Two Phrases That Foreclose Analysis: \"Essentially\" and \"Should\"",
     "pt": "XII"
   },
   "12.5c": {
     "pi": 12,
-    "si": 9,
+    "si": 10,
     "title": "Engaging External Criticism: Substantive Critique vs. Misreading",
     "pt": "XII"
   },
   "12.5d": {
     "pi": 12,
-    "si": 10,
+    "si": 11,
     "title": "Misuse Resistance: Non-Bypassable Diagnostic Triggers",
     "pt": "XII"
   },
   "12.5e": {
     "pi": 12,
-    "si": 11,
+    "si": 12,
     "title": "Deficit Estimation Protocol: PMN Analysis with Partial Data",
     "pt": "XII"
   },
   "12.6": {
     "pi": 12,
-    "si": 12,
+    "si": 13,
     "title": "Genealogical Interrogation as Method",
     "pt": "XII"
   },
   "12.7": {
     "pi": 12,
-    "si": 13,
+    "si": 14,
     "title": "The Genealogy of This Framework",
     "pt": "XII"
   },
   "12.8": {
     "pi": 12,
-    "si": 14,
+    "si": 15,
     "title": "Technocratic Drift Safeguard",
     "pt": "XII"
   },
   "12.9": {
     "pi": 12,
-    "si": 15,
+    "si": 16,
     "title": "Comparative Demonstration: Where Competing Frameworks Fail",
     "pt": "XII"
   },
@@ -1025,69 +1043,81 @@
     "title": "Conditional Tensions: Present Under Specific Circumstances",
     "pt": "XIII"
   },
-  "13.3": {
+  "13.2c": {
     "pi": 13,
     "si": 6,
+    "title": "Conflicting Genuine Suffering Claims",
+    "pt": "XIII"
+  },
+  "13.3": {
+    "pi": 13,
+    "si": 7,
     "title": "Trade-offs as Permanent Features of Complex Systems",
     "pt": "XIII"
   },
   "13.4": {
     "pi": 13,
-    "si": 7,
+    "si": 8,
     "title": "Limits of This Framework",
     "pt": "XIII"
   },
   "13.4b": {
     "pi": 13,
-    "si": 8,
+    "si": 9,
     "title": "The Meaning Problem of Abundance: Becoming Without Constraint",
     "pt": "XIII"
   },
   "13.4c": {
     "pi": 13,
-    "si": 9,
+    "si": 10,
     "title": "The Subject Boundary at the Horizon: PMN Without a Human Subject",
     "pt": "XIII"
   },
   "13.4d": {
     "pi": 13,
-    "si": 10,
+    "si": 11,
     "title": "The Strategic Equilibrium Problem: Between Preservation and Transformation",
     "pt": "XIII"
   },
   "13.4e": {
     "pi": 13,
-    "si": 11,
+    "si": 12,
     "title": "The Variation-Deficit Tension: When Does Difference Become Deficiency?",
     "pt": "XIII"
   },
   "13.4f": {
     "pi": 13,
-    "si": 12,
+    "si": 13,
     "title": "The Accommodation-Transformation Tension: Ramp or Redesign?",
     "pt": "XIII"
   },
   "13.4g": {
     "pi": 13,
-    "si": 13,
+    "si": 14,
     "title": "The Agency-Structure Tension in Internalized Norms: The Apology Problem",
     "pt": "XIII"
   },
   "13.4h": {
     "pi": 13,
-    "si": 14,
+    "si": 15,
     "title": "The Moral-Functional Tension: When Killing the Institution Kills What It Was Doing",
     "pt": "XIII"
   },
   "13.4i": {
     "pi": 13,
-    "si": 15,
+    "si": 16,
     "title": "Triage Protocol for High-Urgency Cases",
+    "pt": "XIII"
+  },
+  "13.4j": {
+    "pi": 13,
+    "si": 17,
+    "title": "When All Available Options Produce Structural Suffering: The Structural Tragedy Problem",
     "pt": "XIII"
   },
   "13.5": {
     "pi": 13,
-    "si": 16,
+    "si": 18,
     "title": "Closing: The Framework That Must Be Surpassed",
     "pt": "XIII"
   },
@@ -1223,9 +1253,15 @@
     "title": "Technology, Meaning Infrastructure, and the Acceleration Problem",
     "pt": "XVI"
   },
-  "16.5": {
+  "16.4b": {
     "pi": 15,
     "si": 5,
+    "title": "Effective Accelerationism and the Generational Sacrifice Problem",
+    "pt": "XVI"
+  },
+  "16.5": {
+    "pi": 15,
+    "si": 6,
     "title": "Reproductive Technology and the Commodification Problem",
     "pt": "XVI"
   },
@@ -1289,21 +1325,33 @@
     "title": "On Detecting Your Own Drift",
     "pt": "XVII"
   },
-  "17.7d": {
+  "17.7c-ii": {
     "pi": 16,
     "si": 10,
+    "title": "From Diagnostic to Practice: Drift Detection as Technology of the Self",
+    "pt": "XVII"
+  },
+  "17.7d": {
+    "pi": 16,
+    "si": 11,
     "title": "On Meaning Infrastructure and the Sustainability of Analysis",
     "pt": "XVII"
   },
   "17.7e": {
     "pi": 16,
-    "si": 11,
+    "si": 12,
     "title": "On Communicating Across Frameworks",
+    "pt": "XVII"
+  },
+  "17.7f": {
+    "pi": 16,
+    "si": 13,
+    "title": "On Weaponized Stoicism: Jurisdictional Demarcation",
     "pt": "XVII"
   },
   "17.8": {
     "pi": 16,
-    "si": 12,
+    "si": 14,
     "title": "How a Framework Travels: The Transmission Problem",
     "pt": "XVII"
   },

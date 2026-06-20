@@ -36,9 +36,9 @@ def run_diagnostics():
     # 1. CORE FILES EXISTENCE CHECK
     # ----------------------------------------------------
     core_files = {
-        "index.ui.html": "UI Layout Skeleton",
+        "legacy/index.ui.html": "UI Layout Skeleton",
         "style.css": "Core Style System",
-        "app.js": "Interactive Logic Script",
+        "legacy/app.js": "Interactive Logic Script",
         "modularizer.py": "Stitching Compiler",
         "data/gl.json": "Glossary Dictionary Data",
         "data/glg.json": "Glossary Group Taxonomy Data",
@@ -59,7 +59,7 @@ def run_diagnostics():
     # ----------------------------------------------------
     # 2. VERSION telemetry
     # ----------------------------------------------------
-    ui_path = "index.ui.html"
+    ui_path = "legacy/index.ui.html"
     if os.path.exists(ui_path):
         try:
             with open(ui_path, "r", encoding="utf-8") as f:
@@ -237,7 +237,7 @@ def run_diagnostics():
     # ----------------------------------------------------
     # 6. SKELETON LAYOUT INTEGRITY (index.ui.html)
     # ----------------------------------------------------
-    ui_path = os.path.join(root_dir, "index.ui.html")
+    ui_path = os.path.join(root_dir, "legacy/index.ui.html")
     if os.path.exists(ui_path):
         try:
             with open(ui_path, "r", encoding="utf-8") as f:

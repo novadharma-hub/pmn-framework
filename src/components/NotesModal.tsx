@@ -17,6 +17,7 @@ interface NoteEntry {
 
 export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModalProps) {
   const [notes, setNotes] = useState<NoteEntry[]>([])
+  const [status, setStatus] = useState('')
 
   // Load notes on open or local storage changes
   useEffect(() => {
@@ -64,20 +65,24 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
   const handleCopyAll = () => {
     const text = notes.map(n => `[Section ${n.id} — ${n.title}]\n${n.note}`).join('\n\n---\n\n')
     navigator.clipboard.writeText(text).then(() => {
-      alert('All notes copied to clipboard!')
+      setStatus('All notes copied.')
+      window.setTimeout(() => setStatus(''), 1800)
     })
   }
 
   const handleCopyNote = (note: string) => {
     navigator.clipboard.writeText(note).then(() => {
-      alert('Note copied to clipboard!')
+      setStatus('Note copied.')
+      window.setTimeout(() => setStatus(''), 1800)
     })
   }
 
   const handleDeleteNote = (id: string) => {
-    if (window.confirm(`Hapus catatan untuk bab ${id}?`)) {
+    if (window.confirm(`Delete the note for section ${id}?`)) {
       localStorage.removeItem(`pmn-an-${id}`)
       setNotes(prev => prev.filter(n => n.id !== id))
+      setStatus('Note deleted.')
+      window.setTimeout(() => setStatus(''), 1800)
     }
   }
 
@@ -197,7 +202,7 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
                 padding: '2.5rem 0',
               }}
             >
-              Belum ada catatan yang tersimpan. Silakan baca manuskrip dan simpan catatan Anda di bagian bawah halaman bacaan.
+              No saved notes yet. Read the manuscript and save notes from the bottom of any reader section.
             </div>
           ) : (
             notes.map(n => (
@@ -321,7 +326,7 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
             background: 'var(--bg2)',
           }}
         >
-          Jumlah catatan: {notes.length} · Tekan <strong style={{ color: 'var(--acc)' }}>ESC</strong> untuk keluar
+          Notes: {notes.length} - Press <strong style={{ color: 'var(--acc)' }}>ESC</strong> to close
         </div>
       </div>
 
