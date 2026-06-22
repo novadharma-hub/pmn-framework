@@ -1739,6 +1739,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 .focus-mode #sidebar { display: none !important; }
 .focus-mode #reader-col { margin: 0 auto; max-width: 800px; }
 .focus-mode #hdr { transform: translateY(-100%); transition: transform 0.3s; }
+.focus-mode .page-shell { height: 100vh !important; margin-top: -52px; transition: margin-top 0.3s; }
 .focus-mode-btn.on {
   background: var(--acc) !important;
   color: var(--bg) !important;

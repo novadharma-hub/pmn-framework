@@ -426,6 +426,42 @@ Do not become smoother than the evidence allows.`
         <div className="closing">
           The right PMN-AI workflow makes the model more disciplined, not just more articulate. If the answer gets smoother while the manuscript disappears, the deployment has failed. Keep the text present, keep the section IDs alive, and make the model earn every conclusion.
         </div>
+
+        {/* ABOUT + PRIVACY */}
+        <div className="page-section" style={{ marginTop: '3rem' }}>
+          <h2 className="page-h2">About This Site</h2>
+          <p className="page-body">
+            This is the web reader for <em>Progressive Materialist Naturalism</em> (PMN) v{version}, a philosophical framework by Nova Dharma. The full manuscript, source code, and release history are available on{' '}
+            <a href="https://github.com/novadharma-hub/pmn-framework" target="_blank" rel="noopener noreferrer" className="text-pmn-acc hover:underline">GitHub</a>.
+          </p>
+          <p className="page-body">
+            The site is a static Progressive Web App (PWA) hosted on GitHub Pages — no backend server, no database, no accounts required.
+          </p>
+
+          <h2 className="page-h2" style={{ marginTop: '2rem' }}>Privacy &amp; Local Storage</h2>
+          <p className="page-body">
+            This site stores reading preferences <strong>locally in your browser only</strong>. Nothing is sent to any external server.
+          </p>
+          <div className="guide-tip-row" style={{ display: 'flex', flexDirection: 'column', gap: '.6rem', marginTop: '1rem' }}>
+            {[
+              ['pmn-page / pmn-sub', 'Last page and sub-view (reader, contents, glossary)'],
+              ['pmn-pos', 'Last section position — used to resume reading'],
+              ['pmn-read', 'Which sections you have marked as read'],
+              ['pmn-theme', 'Dark or light mode preference'],
+              ['pmn-content-width', 'Narrow / medium / wide reader setting'],
+              ['pmn-history', 'Recent navigation history (last 5 sections)'],
+              ['pmn-tip-dismissed', 'Whether the orientation tip has been closed'],
+            ].map(([key, desc]) => (
+              <div key={key} style={{ display: 'flex', gap: '1rem', alignItems: 'baseline' }}>
+                <code style={{ fontFamily: 'var(--f-mono)', fontSize: '.7rem', color: 'var(--acc)', whiteSpace: 'nowrap', flexShrink: 0 }}>{key}</code>
+                <span style={{ fontFamily: 'var(--f-body)', fontSize: '.85rem', color: 'var(--mute)', lineHeight: 1.5 }}>{desc}</span>
+              </div>
+            ))}
+          </div>
+          <p className="page-body" style={{ marginTop: '1.2rem', opacity: .7 }}>
+            To clear all stored data, open browser DevTools → Application → Local Storage → delete entries prefixed with <code style={{ fontFamily: 'var(--f-mono)', fontSize: '.75rem' }}>pmn-</code>.
+          </p>
+        </div>
       </div>
 
       <footer className="py-12 border-t border-pmn-rule text-center text-xs font-pmn-mono text-pmn-mute uppercase tracking-[0.3em] bg-pmn-bg">
