@@ -340,10 +340,10 @@ export default function ReaderView({
           className="select-none sticky top-0 z-20 bg-pmn-bg w-full border-b border-pmn-rule/60" 
           style={{ height: '68px', boxSizing: 'border-box' }}
         >
-          {/* Full-width container: title centers and buttons use natural flex positions */}
-          <div className="w-full max-w-[1400px] mx-auto h-full relative flex items-center justify-between px-6 sm:px-8 lg:px-12">
+          {/* 3-column grid: equal 1fr sides guarantee title is always at true viewport center */}
+          <div className="w-full h-full grid items-center px-4 sm:px-6 lg:px-8" style={{ gridTemplateColumns: '1fr auto 1fr' }}>
             {/* Left: ← Contents button and mobile sections drawer trigger */}
-            <div className="flex items-center gap-2 z-10">
+            <div className="flex items-center gap-2">
               <button
                 className="font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors whitespace-nowrap shrink-0"
                 onClick={onBackHome}
@@ -362,14 +362,14 @@ export default function ReaderView({
               </button>
             </div>
 
-            {/* Center: Part label + title, absolutely centered with max width to avoid collision */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-center pointer-events-none max-w-[32%] sm:max-w-[50vw]">
+            {/* Center: naturally sized, grid places it at exact center */}
+            <div className="flex flex-col items-center justify-center text-center pointer-events-none px-3 overflow-hidden" style={{ maxWidth: '45vw' }}>
               <span className="font-mono text-[0.55rem] sm:text-[0.6rem] lg:text-[0.7rem] text-pmn-acc uppercase tracking-[0.2em] leading-none mb-1 font-bold whitespace-nowrap">Part {p?.part}</span>
               <span className="font-pmn-head text-[0.75rem] sm:text-[0.85rem] lg:text-[1rem] font-bold text-pmn-ink leading-snug truncate w-full">{p?.title}</span>
             </div>
 
-            {/* Right: Mark Read / Completed button */}
-            <div className="flex items-center gap-2 z-10">
+            {/* Right: Mark Read / Completed button — justify-end pushes to right edge */}
+            <div className="flex items-center justify-end gap-2">
               <button
                 onClick={() => onMarkRead(pIdx, sIdx)}
                 className={`font-mono text-[0.58rem] lg:text-[0.65rem] uppercase tracking-widest border transition-all shrink-0 whitespace-nowrap ${isRead ? 'border-pmn-acc text-pmn-acc bg-pmn-acc/5' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink'}`}
