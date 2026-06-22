@@ -33,7 +33,7 @@ const shortenId = (id: string) => {
   return id
 }
 
-export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth, version = '117.9' }: ContentsViewProps) {
+export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth, version = '' }: ContentsViewProps) {
   const activeTab = subView
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [quoteVisible, setQuoteVisible] = useState(true)
@@ -277,6 +277,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
               <div className="mb-20 text-center w-full">
                 <h3 className="font-pmn-head text-4xl lg:text-5xl font-normal text-pmn-ink opacity-90 leading-tight">
                   {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} for &ldquo;{searchQuery || '...'}&rdquo;
+                  {searchPartFilter && <span className="block text-xl mt-3 opacity-50 font-mono uppercase tracking-widest">in Part {searchPartFilter}</span>}
                 </h3>
               </div>
 

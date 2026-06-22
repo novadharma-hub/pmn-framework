@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/pmn-framework/sw.js', { scope: '/pmn-framework/' })})}
