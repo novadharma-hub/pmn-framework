@@ -64,31 +64,31 @@
    Tanpa ini, bg-pmn-bg = #0d0d0d (hitam) bahkan di light mode.
    ================================================================ */
 :root:not([data-theme=dark]) {
-  /* Backgrounds */
-  --color-pmn-bg:    #fdfbf7; /* Clean warm eggshell white */
-  --color-pmn-bg2:   #f5efe0; /* Rich oatmeal tan */
-  --color-pmn-bg3:   #ebdcb9; /* Archival book paper */
-  --color-pmn-sb:    #f2ebdb; /* Reader sidebar warm ivory */
+  /* Backgrounds — aged paper, not stark white */
+  --color-pmn-bg:    #e8dcc8; /* Warm amber paper */
+  --color-pmn-bg2:   #ddd0b6; /* Aged parchment */
+  --color-pmn-bg3:   #cfc09e; /* Archival tan */
+  --color-pmn-sb:    #e2d4bc; /* Sidebar warm ivory */
 
   /* Text */
-  --color-pmn-ink:   #1e140f; /* Deep print ink black */
-  --color-pmn-ink2:  #3a2a1f; /* Warm espresso */
+  --color-pmn-ink:   #1a100a; /* Deep print ink */
+  --color-pmn-ink2:  #322014; /* Warm espresso */
 
-  /* Accent */
-  --color-pmn-acc:   #184a1a; /* Deep forest green */
-  --color-pmn-acc2:  #103412;
+  /* Accent — deep red, consistent with dark mode brand */
+  --color-pmn-acc:   #8b1e14;
+  --color-pmn-acc2:  #6a1610;
 
   /* Muted */
-  --color-pmn-mute:  #7c6957; /* Warm leather-brown */
-  --color-pmn-mute2: #625141;
-  --color-pmn-mute3: #a6917c;
+  --color-pmn-mute:  #7a6048;
+  --color-pmn-mute2: #5e4832;
+  --color-pmn-mute3: #9e8468;
 
   /* Borders */
-  --color-pmn-rule:  #e6dcc5; /* Warm soft tan */
-  --color-pmn-rule2: #cbbda2;
+  --color-pmn-rule:  #c8b898;
+  --color-pmn-rule2: #b0a080;
 
   /* Header */
-  --color-pmn-hdr:   #fdfbf7;
+  --color-pmn-hdr:   #e8dcc8;
 }
 
 /* === GLOBAL DECORATIVE OVERLAYS (Recovery v84+) === */

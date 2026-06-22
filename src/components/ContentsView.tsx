@@ -244,8 +244,12 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                           <div 
                             key={term} 
                             className="gl-card border border-pmn-rule bg-pmn-bg2 p-10 space-y-5 shadow-2xl transition-all hover:border-pmn-acc/40 text-left w-full min-h-[140px] flex flex-col group cursor-pointer"
-                            onClick={() => { if (onSearch) onSearch(term) }}
-                            title={`Search for "${term}" in all modules`}>
+                            onClick={() => {
+                              const src = findSourceForTerm(term, def)
+                              if (src) onSelectSection(src.pIdx, src.sIdx)
+                              else if (onSearch) onSearch(term)
+                            }}
+                            title={source ? `Go to source section for "${term}"` : `Search for "${term}" in all modules`}>
                             <div className="flex justify-between items-start">
                               <h4 className="gl-term font-pmn-head font-bold text-pmn-ink text-xl transition-colors group-hover:text-pmn-acc" style={{textTransform: 'capitalize'}}>{term}</h4>
                               {source && (
@@ -302,7 +306,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                     {r.snippet && (
                       <p className="res-snip font-pmn-body text-[1.05rem] text-pmn-mute italic leading-relaxed opacity-70 mt-2" 
                          dangerouslySetInnerHTML={{ 
-                           __html: r.snippet.replace(new RegExp(`(${searchQuery})`, 'gi'), '<span style="color:var(--pmn-acc);font-weight:600;font-style:normal;border-bottom:1px solid var(--pmn-acc)">$1</span>') 
+                           __html: r.snippet.replace(new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'), '<span style="color:var(--pmn-acc);font-weight:600;font-style:normal;border-bottom:1px solid var(--pmn-acc)">$1</span>')
                          }} 
                       />
                     )}

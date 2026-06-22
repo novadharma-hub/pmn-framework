@@ -1188,6 +1188,8 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .theses-lead{padding:2.9rem 1rem 1.1rem;box-shadow:none}
   .theses-tier-chip,.thesis-tier-hdr{font-size:.72rem}
   .reading-paths{padding:2rem 1.4rem 3rem}
+  .reading-paths-hdr{grid-template-columns:1fr;gap:.6rem}
+  .reading-paths-hdr p{font-size:.85rem;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .reading-paths-grid{grid-template-columns:1fr}
   .reading-paths-meta{display:grid;grid-template-columns:1fr}
   .path-card:nth-child(2n){transform:none}
@@ -1272,7 +1274,7 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
     position:fixed;
     bottom:0;left:0;right:0;
     width:100%;
-    height:52px;
+    height:58px;
     background:var(--bg);
     border-top:1px solid var(--rule);
     z-index:150;
@@ -1283,9 +1285,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   .mob-nav-btn{
     flex:1;
     min-width:0;
-    display:flex;align-items:center;justify-content:center;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
     background:none;border:none;
-    font-size:1.4rem;
+    font-size:1.15rem;
     color:var(--mute);cursor:pointer;
     transition:color .15s,background .15s;
     -webkit-tap-highlight-color:transparent;
@@ -1293,6 +1295,8 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
   }
   .mob-nav-btn:active{color:var(--acc);background:var(--bg2)}
   .mob-nav-btn:disabled{opacity:.22;cursor:default}
+  .mob-nav-btn.active{color:var(--acc)}
+  .mob-nav-lbl{font-family:'Source Code Pro',monospace;font-size:.42rem;letter-spacing:.08em;text-transform:uppercase;line-height:1}
   #mob-mid{
     border-left:1px solid var(--rule);
     border-right:1px solid var(--rule);
