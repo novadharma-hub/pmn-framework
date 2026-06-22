@@ -11,7 +11,12 @@ import AITerminal from './components/AITerminal'
 
 
 export default function App() {
-  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide'>('home')
+  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide'>(() => {
+    try {
+      const s = localStorage.getItem('pmn-page')
+      return (s === 'reader' || s === 'contents' || s === 'guide') ? s : 'home'
+    } catch { return 'home' }
+  })
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<any>(null)
@@ -21,7 +26,12 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchPartFilter, setSearchPartFilter] = useState('')
   const [paletteTrigger, setPaletteTrigger] = useState(0)
-  const [contentsSub, setContentsSub] = useState<'map' | 'glossary' | 'search'>('map')
+  const [contentsSub, setContentsSub] = useState<'map' | 'glossary' | 'search'>(() => {
+    try {
+      const s = localStorage.getItem('pmn-sub')
+      return (s === 'glossary' || s === 'search') ? s : 'map'
+    } catch { return 'map' }
+  })
   const [kbdOpen, setKbdOpen] = useState(false)
   const [notesOpen, setNotesOpen] = useState(false)
   const [contentWidth, setContentWidth] = useState<'narrow' | 'medium' | 'wide'>('wide')
@@ -141,6 +151,14 @@ export default function App() {
     const savedHist = JSON.parse(localStorage.getItem('pmn-history') || '[]')
     setHistory(savedHist)
   }, [])
+
+  useEffect(() => {
+    try { localStorage.setItem('pmn-page', page) } catch {}
+  }, [page])
+
+  useEffect(() => {
+    try { localStorage.setItem('pmn-sub', contentsSub) } catch {}
+  }, [contentsSub])
 
   const toggleTheme = () => {
     const nt = theme === 'dark' ? 'light' : 'dark'
