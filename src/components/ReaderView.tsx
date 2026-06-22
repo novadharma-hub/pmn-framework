@@ -42,7 +42,7 @@ const shortenId = (id: string) => {
 
 export default function ReaderView({ 
   data, partIdx, secIdx, curPos, readMap, onMarkRead, onSavePosition, onBackHome, onToggleTheme, theme, forceOpenPalette,
-  contentWidth = 'narrow', onChangeWidth, history = [], version = '117.9'
+  contentWidth = 'narrow', onChangeWidth, history = [], version = ''
 }: ReaderViewProps) {
   const [sbOpen, setSbOpen] = useState(window.innerWidth > 1024)
   const [focusMode, setFocusMode] = useState(false)
@@ -290,7 +290,7 @@ export default function ReaderView({
 
   useEffect(() => {
     if (!s || isRead) return
-    const timer = setTimeout(() => { onMarkRead(pIdx, sIdx) }, 3000)
+    const timer = setTimeout(() => { onMarkRead(pIdx, sIdx) }, 10000)
     return () => clearTimeout(timer)
   }, [pIdx, sIdx, s, isRead])
 
@@ -341,7 +341,7 @@ export default function ReaderView({
           style={{ height: '68px', boxSizing: 'border-box' }}
         >
           {/* Full-width container: title centers and buttons use natural flex positions */}
-          <div className="w-full h-full relative flex items-center justify-between px-4 sm:px-6 lg:px-12">
+          <div className="w-full max-w-[1400px] mx-auto h-full relative flex items-center justify-between px-6 sm:px-8 lg:px-12">
             {/* Left: ← Contents button and mobile sections drawer trigger */}
             <div className="flex items-center gap-2 z-10">
               <button
@@ -454,7 +454,7 @@ export default function ReaderView({
                     onClick={() => setFocusMode(!focusMode)}
                     className={`px-4 py-1.5 font-mono text-[0.65rem] uppercase tracking-widest cursor-pointer border transition-all rounded-xs w-full sm:w-auto ${focusMode ? 'bg-pmn-acc text-white border-pmn-acc shadow-md' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink bg-transparent'}`}
                   >
-                    {focusMode ? 'EX-FOC' : 'FOCUS'}
+                    {focusMode ? 'EXIT' : 'FOCUS'}
                   </button>
                 </section>
               </div>

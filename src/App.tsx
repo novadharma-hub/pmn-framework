@@ -246,7 +246,7 @@ export default function App() {
           <button id="srch-clr" onClick={() => { setSearchQuery(''); setSearchPartFilter('') }}>&times;</button>
         </div>
         {/* DEEP SCAN after search (rapi samping logo, not pushing srch to tengah) */}
-        <button className="hbtn text-[10px] opacity-70" onClick={() => { if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }}>DEEP SCAN</button>
+        <button className="hbtn text-[10px] opacity-70" onClick={() => { if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }}>JUMP ↗</button>
         <div id="hdr-r">
           <button id="focus-btn" className="focus-mode-btn" onClick={() => document.body.classList.toggle('focus-mode')}>FOCUS</button>
           <button id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
@@ -323,9 +323,19 @@ export default function App() {
         </div>
 
         <nav id="mob-nav">
-          <button className="mob-nav-btn" onClick={() => setPage(page === 'reader' ? 'contents' : 'home')}>&#8592;</button>
-          <button className="mob-nav-btn" onClick={() => setPage('contents')}>&#9776;</button>
-          <button className="mob-nav-btn" onClick={() => setPage('reader')}>&#8594;</button>
+          <button className={`mob-nav-btn${page === 'home' ? ' active' : ''}`} onClick={() => setPage('home')}>
+            <span>&#8962;</span><span className="mob-nav-lbl">Home</span>
+          </button>
+          <button className={`mob-nav-btn${page === 'contents' ? ' active' : ''}`} onClick={() => setPage('contents')}>
+            <span>&#9776;</span><span className="mob-nav-lbl">Contents</span>
+          </button>
+          <button className={`mob-nav-btn${page === 'reader' ? ' active' : ''}`} onClick={() => setPage('reader')}>
+            <span>&#9654;</span><span className="mob-nav-lbl">Read</span>
+          </button>
+          <button className="mob-nav-btn" onClick={toggleTheme}>
+            <span>{theme === 'dark' ? '☀' : '☾'}</span>
+            <span className="mob-nav-lbl">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+          </button>
         </nav>
       </div>
 
