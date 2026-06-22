@@ -990,6 +990,7 @@ mark{background:transparent;color:var(--acc2);text-decoration:underline;text-dec
 #reader-main{flex:1;overflow-y:auto;height:100%;min-width:0;background:var(--bg)}
 [data-theme=dark] #reader-main{background:linear-gradient(180deg,rgba(192,39,26,.018),rgba(192,39,26,0) 12%),#0f0f0f}
 #reader-col{max-width:var(--reader-measure);margin:0 auto;padding:3.5rem 2.5rem 8rem}
+#reader-nav>div:first-child{padding-inline:max(1rem,calc((100% - 960px) / 2))}
 
 /* ── Breadcrumb ── */
 .bc{display:flex;align-items:center;gap:.4rem;margin-bottom:2.5rem;flex-wrap:wrap}

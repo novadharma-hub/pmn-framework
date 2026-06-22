@@ -340,8 +340,8 @@ export default function ReaderView({
           className="select-none sticky top-0 z-20 bg-pmn-bg w-full border-b border-pmn-rule/60" 
           style={{ height: '68px', boxSizing: 'border-box' }}
         >
-          {/* 3-col grid: 1fr auto 1fr guarantees title at exact midpoint of nav */}
-          <div className="w-full h-full grid items-center px-4 sm:px-6 lg:px-8" style={{ gridTemplateColumns: '1fr auto 1fr' }}>
+          {/* 3-col grid: 1fr auto 1fr guarantees title at exact midpoint; padding set via #reader-nav>div in style.css */}
+          <div className="w-full h-full grid items-center" style={{ gridTemplateColumns: '1fr auto 1fr' }}>
             {/* Left: ← Contents button and mobile sections drawer trigger */}
             <div className="flex items-center gap-2">
               <button
