@@ -30,7 +30,8 @@ export default function App() {
     try { return localStorage.getItem('pmn-tip-dismissed') !== '1' } catch { return true }
   }) // persist until X (mengikuti user, not reset on reload/nav back to cover)
 
-  const [version, setVersion] = useState('117.9')
+  const [version, setVersion] = useState('')
+  const [loadedCount, setLoadedCount] = useState(0)
 
   // Global hotkeys: Alt+K = keyboard modal, Alt+N = notes modal, Alt+/ = command palette, Alt+F = focus, Alt+C = contents, Alt+? = glossary, Alt+R = resume
   useEffect(() => {
@@ -85,16 +86,36 @@ export default function App() {
   // Data loading
   useEffect(() => {
     const dataFiles = ['parts', 'gl', 'glg', 'rel', 'look', 'quotes', 'ci', 'version']
-    Promise.all(dataFiles.map(f => fetch(`./data/${f}.json`).then(r => r.json()).catch(() => null)))
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
+
+    const loadFile = (name: string) =>
+      fetch(`./data/${name}.json`, { signal: controller.signal })
+        .then(r => r.json())
+        .then((d: any) => { setLoadedCount(c => c + 1); return d })
+        .catch((e: any) => {
+          setLoadedCount(c => c + 1)
+          if (e?.name === 'AbortError') throw e
+          return null
+        })
+
+    Promise.all(dataFiles.map(loadFile))
       .then(([parts, gl, glg, rel, look, quotes, ci, verData]) => {
+        clearTimeout(timeoutId)
         setData({ parts: parts || [], gl: gl || {}, glg: glg || {}, rel: rel || {}, look: look || {}, quotes: quotes || [], ci: ci || {} })
-        if (verData && verData.version) {
-          setVersion(verData.version.replace(/^v/i, ''))
-        }
+        if (verData?.version) setVersion(verData.version.replace(/^v/i, ''))
         setLoadError((parts && parts.length > 0) ? null : 'Failed to load manuscript data. Check the network path or public data files.')
         setLoading(false)
       })
-      .catch(e => { setLoadError('Error memuat data: ' + (e?.message || e)); setLoading(false) })
+      .catch((e: any) => {
+        clearTimeout(timeoutId)
+        setLoadError(e?.name === 'AbortError'
+          ? 'Load timed out after 15s. Check network or data files.'
+          : 'Error memuat data: ' + (e?.message || e))
+        setLoading(false)
+      })
+
+    return () => { clearTimeout(timeoutId); controller.abort() }
   }, [])
 
   // Theme, local storage sync & content-width CSS variable init (all on mount)
@@ -159,8 +180,12 @@ export default function App() {
   }
 
   if (loading) return (
-    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh',background:'#0d0d0d',color:'#c0271a',fontFamily:"'Source Code Pro',monospace",fontSize:'.65rem',letterSpacing:'.3em',textTransform:'uppercase'}}>
-      &gt;&gt; Initializing PMN Core...
+    <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'100vh',background:'#0d0d0d',color:'#c0271a',fontFamily:"'Source Code Pro',monospace",letterSpacing:'.2em',textTransform:'uppercase',gap:'1.5rem'}}>
+      <div style={{fontSize:'.75rem'}}>&gt;&gt; PMN Core</div>
+      <div style={{width:'180px',height:'2px',background:'#1c1c1c',borderRadius:'1px',overflow:'hidden'}}>
+        <div style={{height:'100%',background:'#c0271a',width:`${Math.round((loadedCount / 8) * 100)}%`,transition:'width .3s ease'}} />
+      </div>
+      <div style={{fontSize:'.5rem',color:'#3a3a3a',letterSpacing:'.3em'}}>{loadedCount}/8 FILES</div>
     </div>
   )
 
