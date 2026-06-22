@@ -743,6 +743,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
       {/* HOME FOOTER */}
       <div className="home-footer-bar">
         <span>[C] 2026 Nova Dharma // PMN Collective</span>
+        <span style={{opacity:.45,fontSize:'.65rem',fontWeight:400,textTransform:'none',letterSpacing:'.02em'}}>Reading preferences stored locally in your browser — no data is sent to any server.</span>
         <span>V{version} &mdash; Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+?</kbd> for Glossary &mdash; <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+K</kbd> for Keys</span>
       </div>
     </div>
