@@ -81,6 +81,13 @@ export default function ReaderView({
   }, [focusMode])
 
   useEffect(() => {
+    if (!focusMode) return
+    const onEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') setFocusMode(false) }
+    document.addEventListener('keydown', onEsc)
+    return () => document.removeEventListener('keydown', onEsc)
+  }, [focusMode])
+
+  useEffect(() => {
     document.documentElement.style.setProperty('--reader-scale', String(readerScale))
   }, [])
 
@@ -304,6 +311,15 @@ export default function ReaderView({
 
   return (
     <div className="flex h-full bg-pmn-bg overflow-hidden relative select-text">
+      {focusMode && (
+        <button
+          onClick={() => setFocusMode(false)}
+          title="Exit focus mode (ESC)"
+          className="fixed top-3 right-4 z-[300] font-mono text-[0.58rem] uppercase tracking-widest px-3 py-1.5 bg-pmn-acc text-white border-none cursor-pointer transition-opacity opacity-20 hover:opacity-90 rounded-xs"
+        >
+          ✕ Exit Focus
+        </button>
+      )}
       {sbOpen && (
         <Sidebar 
           parts={data.parts} 
@@ -400,22 +416,22 @@ export default function ReaderView({
                 <section className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full md:w-auto">
                   <div className="flex items-center justify-between sm:justify-start gap-3">
                     <span className="font-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest">Measure</span>
-                    <div className="flex bg-pmn-bg2 border border-pmn-rule p-0.5 rounded-sm gap-1 select-none">
-                      <button 
-                        onClick={() => onChangeWidth?.('narrow')} 
-                        className={`px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs transition-all ${contentWidth === 'narrow' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                    <div className="flex bg-pmn-bg2 border border-pmn-rule p-1 rounded-sm gap-0.5 select-none">
+                      <button
+                        onClick={() => onChangeWidth?.('narrow')}
+                        className={`w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'narrow' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
                       >
                         N
                       </button>
-                      <button 
-                        onClick={() => onChangeWidth?.('medium')} 
-                        className={`px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs transition-all ${contentWidth === 'medium' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                      <button
+                        onClick={() => onChangeWidth?.('medium')}
+                        className={`w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'medium' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
                       >
                         M
                       </button>
-                      <button 
-                        onClick={() => onChangeWidth?.('wide')} 
-                        className={`px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs transition-all ${contentWidth === 'wide' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                      <button
+                        onClick={() => onChangeWidth?.('wide')}
+                        className={`w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'wide' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
                       >
                         W
                       </button>
@@ -426,22 +442,22 @@ export default function ReaderView({
                   
                   <div className="flex items-center justify-between sm:justify-start gap-3">
                     <span className="font-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest">Zoom</span>
-                    <div className="flex bg-pmn-bg2 border border-pmn-rule p-0.5 rounded-sm gap-1 select-none">
-                      <button 
-                        onClick={() => changeReaderScale(-0.1)} 
-                        className="px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
+                    <div className="flex bg-pmn-bg2 border border-pmn-rule p-1 rounded-sm gap-0.5 select-none">
+                      <button
+                        onClick={() => changeReaderScale(-0.1)}
+                        className="w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
                       >
                         A-
                       </button>
-                      <button 
-                        onClick={() => { setReaderScale(1); document.documentElement.style.setProperty('--reader-scale','1'); localStorage.setItem('pmn-reader-scale','1'); }} 
-                        className="px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs bg-pmn-bg text-pmn-ink hover:text-pmn-acc transition-all border-none font-bold"
+                      <button
+                        onClick={() => { setReaderScale(1); document.documentElement.style.setProperty('--reader-scale','1'); localStorage.setItem('pmn-reader-scale','1'); }}
+                        className="w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs bg-pmn-bg text-pmn-ink hover:text-pmn-acc transition-all border-none font-bold"
                       >
                         A
                       </button>
-                      <button 
-                        onClick={() => changeReaderScale(0.1)} 
-                        className="px-3 py-1 font-mono text-[0.7rem] cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
+                      <button
+                        onClick={() => changeReaderScale(0.1)}
+                        className="w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
                       >
                         A+
                       </button>
