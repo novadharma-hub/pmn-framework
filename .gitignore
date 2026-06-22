@@ -55,6 +55,12 @@ private/
 backup/
 *.enc
 
+# Database schema — keep local only, not for public repo
+supabase/
+
+# Internal product/planning docs
+PRD.md
+
 # Ignore versioned release assets to prevent Git history bloat
 dist/PMN_Framework_v*.pdf
 dist/PMN_Framework_v*.md
