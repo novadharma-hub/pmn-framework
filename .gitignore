@@ -70,3 +70,4 @@ public_static/PMN_Framework_v*.md
 # Internal-only backup snapshots (stale, not for public repo)
 src/txt/
 index.ui.2.html
+legacy/

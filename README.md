@@ -1,6 +1,6 @@
 # Progressive Materialist Naturalism (PMN) — Reader Platform
 
-[![Version](https://img.shields.io/badge/Release-v117.9-blueviolet.svg?style=flat-square)](#)
+[![Version](https://img.shields.io/badge/Release-v118.1-blueviolet.svg?style=flat-square)](#)
 [![Stack](https://img.shields.io/badge/Stack-React%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-Corpus%20Enabled-orange.svg?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](#)
