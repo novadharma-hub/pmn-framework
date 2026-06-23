@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ParticlesBackground from './components/ParticlesBackground'
 import ReaderView from './components/ReaderView'
+import ReaderView2 from './components/ReaderView2'
 import ContentsView from './components/ContentsView'
 import VersionManager from './components/VersionManager'
 import KeyboardModal from './components/KeyboardModal'
@@ -11,6 +12,8 @@ import AITerminal from './components/AITerminal'
 
 
 export default function App() {
+  // Strangler-fig flag: ?v2 → Reader baru (Tailwind-only). Lama tetap default.
+  const ReaderComp = new URLSearchParams(window.location.search).has('v2') ? ReaderView2 : ReaderView
   const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide'>(() => {
     try {
       const s = localStorage.getItem('pmn-page')
@@ -314,7 +317,7 @@ export default function App() {
           )}
 
           {page === 'reader' && (
-            <ReaderView
+            <ReaderComp
               data={data} readMap={readMap} curPos={curPos}
               onMarkRead={(p, s) => {
                 const key = `${p}-${s}`
