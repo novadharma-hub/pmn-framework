@@ -51,6 +51,7 @@ class Para:
     para_id: str  # w14:paraId, mis. "27B90CDE"
     text: str  # teks polos, run sudah digabung
     style: str  # nama style Word, mis. "Heading1" / "Normal"
+    md: str = ""  # teks yang sama dalam Markdown (bold/italic dipertahankan)
 
     # Diisi oleh assign_structure()
     part: str = ""  # mis. "XVII"
@@ -119,6 +120,54 @@ def _para_text(p_el: ET.Element) -> str:
         elif tag in (f"{{{W}}}br", f"{{{W}}}cr"):
             out.append("\n")
     return "".join(out)
+
+
+def _para_markdown(p_el: ET.Element) -> str:
+    """Ubah satu paragraf jadi Markdown, mempertahankan bold dan italic.
+
+    Naskah ini memakai bold secara semantik, bukan hiasan — banyak paragraf
+    dibuka dengan label tebal ("Negative feedback (stabilizing): ..."). Kalau
+    diratakan jadi teks polos, penanda struktur itu hilang.
+
+    Run yang formatnya sama digabung dulu, supaya tidak menghasilkan
+    "**a****b**" yang tidak dirender Markdown.
+    """
+    potongan: list[tuple[bool, bool, str]] = []
+    for r in p_el.iter(f"{{{W}}}r"):
+        rPr = r.find(f"{{{W}}}rPr")
+        bold = italic = False
+        if rPr is not None:
+            b, i = rPr.find(f"{{{W}}}b"), rPr.find(f"{{{W}}}i")
+            bold = b is not None and b.get(f"{{{W}}}val") not in ("0", "false")
+            italic = i is not None and i.get(f"{{{W}}}val") not in ("0", "false")
+        teks = []
+        for node in r.iter():
+            if node.tag == f"{{{W}}}t":
+                teks.append(node.text or "")
+            elif node.tag == f"{{{W}}}tab":
+                teks.append("\t")
+            elif node.tag in (f"{{{W}}}br", f"{{{W}}}cr"):
+                teks.append("\n")
+        isi = "".join(teks)
+        if not isi:
+            continue
+        if potongan and potongan[-1][0] == bold and potongan[-1][1] == italic:
+            potongan[-1] = (bold, italic, potongan[-1][2] + isi)
+        else:
+            potongan.append((bold, italic, isi))
+
+    keluar = []
+    for bold, italic, isi in potongan:
+        # Penanda harus menempel ke teks, spasi tepi dikeluarkan dari penanda.
+        inti = isi.strip()
+        if not inti:
+            keluar.append(isi)
+            continue
+        kiri = isi[: len(isi) - len(isi.lstrip())]
+        kanan = isi[len(isi.rstrip()):]
+        tanda = "***" if (bold and italic) else "**" if bold else "*" if italic else ""
+        keluar.append(f"{kiri}{tanda}{inti}{tanda}{kanan}")
+    return "".join(keluar)
 
 
 def _para_style(p_el: ET.Element) -> str:
@@ -196,6 +245,7 @@ def load(path: str | Path) -> Doc:
                 para_id=pid.upper(),
                 text=_para_text(p_el),
                 style=_para_style(p_el),
+                md=_para_markdown(p_el),
             )
         )
     assign_structure(paras)
