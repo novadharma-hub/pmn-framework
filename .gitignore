@@ -71,3 +71,6 @@ public_static/PMN_Framework_v*.md
 src/txt/
 index.ui.2.html
 legacy/
+
+# Claude Code agent config (lokal saja)
+.claude/

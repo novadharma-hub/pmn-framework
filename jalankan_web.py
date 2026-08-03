@@ -65,9 +65,9 @@ def main():
     # Buka index.ui.html di browser default
     webbrowser.open(f"http://localhost:{PORT}/index.ui.html")
 
-    # Jalankan server
+    # Jalankan server (hanya localhost — jangan expose ke network)
     socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    with socketserver.TCPServer(("127.0.0.1", PORT), Handler) as httpd:
         print("\n[INFO] Web sedang berjalan! Biarkan jendela hitam ini terbuka.")
         print("[INFO] Tekan CTRL+C di jendela ini jika ingin mematikan web.")
         try:

@@ -74,22 +74,9 @@ def clear_screen():
 
 
 def get_backup_path():
-    """Return the correct path for index.offline.html.bak.
-    Prefers private/backups/ when running inside the pmn-workspace layout.
-    Falls back to local index.offline.html.bak for single-folder usage.
-    """
-    try:
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        if os.path.basename(script_dir).lower() == "public":
-            parent = os.path.dirname(script_dir)  # parent of public/ in workspace layout
-            private_dir = os.path.join(parent, "private")
-            if os.path.exists(private_dir):
-                private_bak = os.path.join(private_dir, "backups", "index.offline.html.bak")
-                os.makedirs(os.path.dirname(private_bak), exist_ok=True)
-                return private_bak
-    except Exception:
-        pass
-    return "index.offline.html.bak"
+    """Return the correct path for index.offline.html.bak."""
+    from scripts.shared_utils import get_backup_path as _gbp
+    return _gbp("index.offline.html.bak")
 
 def get_system_stats():
     stats = {
