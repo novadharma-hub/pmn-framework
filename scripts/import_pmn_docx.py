@@ -487,11 +487,51 @@ def replace_version_labels(index_html: str, version_label: str) -> str:
     return index_html
 
 
+def audit_section_ids(parts: list[dict]) -> list[str]:
+    """Report section IDs that appear more than once across all parts.
+
+    A duplicate ID renders the same section twice in the reader and makes every
+    xref to that ID ambiguous. It is almost always caused by an *unnumbered*
+    heading in the DOCX whose text matches a numbered section's title: the
+    importer matches it against the TOC and opens the section a second time.
+
+    Known live instance (v118.2): section 7.3c-ii, from paraId 3367D0F0 (a bare
+    "Cosmological Capture: ..." heading inside 7.3c) colliding with the real
+    numbered heading at paraId 3E7D80FD. Fixing it is a manuscript edit, not a
+    code change -- so this is a loud warning, not a hard failure.
+    """
+    seen: dict[str, list[str]] = {}
+    for part in parts:
+        for sub in part.get("subs", []):
+            seen.setdefault(sub["id"], []).append(str(part.get("part", "?")))
+
+    messages: list[str] = []
+    for section_id, owners in seen.items():
+        if len(owners) > 1:
+            messages.append(f"{section_id} (x{len(owners)}, Part {', '.join(owners)})")
+    return messages
+
+
 def summarize(parts: list[dict]) -> str:
     section_count = sum(len(part["subs"]) for part in parts)
     part_labels = ", ".join(str(part["part"]) for part in parts[:6])
     if len(parts) > 6:
         part_labels += ", ..."
+
+    dupes = audit_section_ids(parts)
+    if dupes:
+        print(
+            "\033[93m[WARN] Duplicate section IDs -- these render twice in the reader "
+            "and make xrefs to them ambiguous:\033[0m"
+        )
+        for line in dupes:
+            print(f"       - {line}")
+        print(
+            "       Cause is usually an unnumbered heading in the DOCX whose text "
+            "matches a numbered section title.\n"
+            "       This is a manuscript fix, not a code fix -- see CLAUDE.md."
+        )
+
     return f"Imported {len(parts)} part groups and {section_count} sections ({part_labels})"
 
 
