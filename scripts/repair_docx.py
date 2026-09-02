@@ -452,7 +452,11 @@ def main():
             
         fixed_xml_bytes = (XML_HEADER + DOCUMENT_TAG + raw_xml[end_idx + 1:]).encode("utf-8")
         
-        with open(doc_xml_path, "wb") as f:
+        # Tulis lewat Path.open dengan nama berkas konstan tervalidasi:
+        # target selalu di dalam temp_dir, tidak pernah dari input pengguna.
+        if doc_xml_path.name != "document.xml" or ".." in str(doc_xml_path):
+            raise ValueError(f"unsafe document.xml path: {doc_xml_path!r}")
+        with doc_xml_path.open("wb") as f:
             f.write(fixed_xml_bytes)
             
         print("[*] Document XML successfully rewritten.")

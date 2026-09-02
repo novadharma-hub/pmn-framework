@@ -19,7 +19,17 @@ import sys
 import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree as ET  # dipakai untuk anotasi tipe saja
+
+from lxml import etree as _LXML_ETREE
+
+# Parser terjaga: entitas eksternal dimatikan (XXE), tanpa akses jaringan.
+# remove_comments/remove_pis menyamakan perilaku dengan ElementTree, supaya
+# hasil _para_text dan _para_markdown identik dengan versi sebelumnya.
+_XML_GUARDED_PARSER = _LXML_ETREE.XMLParser(
+    resolve_entities=False, no_network=True, huge_tree=False,
+    remove_comments=True, remove_pis=True,
+)
 
 W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 W14 = "http://schemas.microsoft.com/office/word/2010/wordml"
@@ -231,7 +241,7 @@ def load(path: str | Path) -> Doc:
         raise FileNotFoundError(f"DOCX tidak ditemukan: {path}")
     with zipfile.ZipFile(path) as z:
         xml = z.read(DOC_XML)
-    root = ET.fromstring(xml)
+    root = _LXML_ETREE.fromstring(xml, _XML_GUARDED_PARSER)
     body = root.find(f"{{{W}}}body")
     if body is None:
         raise ValueError(f"document.xml tanpa <w:body>: {path}")

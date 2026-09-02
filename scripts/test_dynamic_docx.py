@@ -7,12 +7,6 @@ import re
 import zipfile
 from pathlib import Path
 
-def run_cmd(command: str) -> str:
-    res = subprocess.run(command, shell=True, capture_output=True, text=True, encoding="utf-8")
-    if res.returncode != 0:
-        raise RuntimeError(f"Command failed: {command}\nError: {res.stderr}")
-    return res.stdout
-
 def main():
     print("============================================================")
     print("      PMN DYNAMIC SCHEMA & PART EXPANSION STRESS TEST       ")
@@ -96,11 +90,23 @@ def main():
     try:
         # 4. RUN THE PIPELINE TARGETING THE TEMP DOCX
         print("[INFO] Running import_pmn_docx.py on the test manuscript...")
-        import_output = run_cmd(f"python scripts/import_pmn_docx.py --docx {temp_docx_path}")
+        res = subprocess.run(
+            [sys.executable, "scripts/import_pmn_docx.py", "--docx", temp_docx_path],
+            shell=False, capture_output=True, text=True, encoding="utf-8",
+        )
+        if res.returncode != 0:
+            raise RuntimeError(f"Import failed:\n{res.stderr}")
+        import_output = res.stdout
         print("   [OK] Import parsed test manuscript successfully!")
 
         print("[INFO] Running modularizer.py compile on the expanded database...")
-        compile_output = run_cmd("python modularizer.py compile")
+        res = subprocess.run(
+            [sys.executable, "modularizer.py", "compile"],
+            shell=False, capture_output=True, text=True, encoding="utf-8",
+        )
+        if res.returncode != 0:
+            raise RuntimeError(f"Compile failed:\n{res.stderr}")
+        compile_output = res.stdout
         print("   [OK] Compiled new monolithic index.html!")
 
         # 5. RUN SYSTEM VALIDATIONS AND ASSERTIONS
@@ -145,8 +151,14 @@ def main():
             print("   [OK] Temporary test manuscript file deleted.")
         
         print("[INFO] Re-running import and compile to restore clean production site...")
-        run_cmd("python scripts/import_pmn_docx.py")
-        run_cmd("python modularizer.py compile")
+        subprocess.run(
+            [sys.executable, "scripts/import_pmn_docx.py"],
+            shell=False, capture_output=True, text=True, encoding="utf-8",
+        )
+        subprocess.run(
+            [sys.executable, "modularizer.py", "compile"],
+            shell=False, capture_output=True, text=True, encoding="utf-8",
+        )
         print("   [OK] Workspace fully restored to clean, pristine v116.2 state!")
         print("============================================================")
 
