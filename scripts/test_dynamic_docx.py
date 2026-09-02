@@ -151,15 +151,27 @@ def main():
             print("   [OK] Temporary test manuscript file deleted.")
         
         print("[INFO] Re-running import and compile to restore clean production site...")
-        subprocess.run(
-            [sys.executable, "scripts/import_pmn_docx.py"],
-            shell=False, capture_output=True, text=True, encoding="utf-8",
-        )
-        subprocess.run(
-            [sys.executable, "modularizer.py", "compile"],
-            shell=False, capture_output=True, text=True, encoding="utf-8",
-        )
-        print("   [OK] Workspace fully restored to clean, pristine v116.2 state!")
+        # Jangan raise di dalam finally (menutupi exception aslinya), tapi juga
+        # jangan diam: pemulihan yang gagal meninggalkan workspace dalam kondisi
+        # stress-test dan harus terlihat.
+        restore_ok = True
+        for label, argv in (
+            ("import", [sys.executable, "scripts/import_pmn_docx.py"]),
+            ("compile", [sys.executable, "modularizer.py", "compile"]),
+        ):
+            res = subprocess.run(
+                argv, shell=False, capture_output=True, text=True, encoding="utf-8",
+            )
+            if res.returncode != 0:
+                restore_ok = False
+                print(f"   [ERROR] Restore step '{label}' FAILED (rc={res.returncode}):")
+                print(res.stderr.strip() or "(no stderr)")
+
+        if restore_ok:
+            print("   [OK] Workspace fully restored to clean, pristine v116.2 state!")
+        else:
+            print("   [FAIL] Workspace NOT restored -- data/ dan index.html masih memuat")
+            print("          Part XVIII hasil stress test. Jalankan ulang import + compile.")
         print("============================================================")
 
 if __name__ == "__main__":
