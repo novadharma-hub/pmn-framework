@@ -70,7 +70,8 @@ def workspace_search(query):
     print("\033[96m" + "=" * 65 + "\033[0m")
 
 def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    # argv list, tanpa shell — tidak ada permukaan command injection.
+    subprocess.run(["cmd", "/c", "cls"] if os.name == "nt" else ["clear"], check=False)
 
 
 def get_backup_path():

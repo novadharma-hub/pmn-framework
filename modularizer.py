@@ -38,6 +38,18 @@ def sanitize_part_id(part_id):
     # Sanitize part names to be safe filenames
     return re.sub(r'[^a-zA-Z0-9_\-]', '_', str(part_id))
 
+_SAFE_NAME = re.compile(r"^[A-Za-z0-9._\-]+$")
+
+def _safe_writer(base_dir, name, encoding="utf-8"):
+    """Penulis berkas dengan nama tervalidasi ketat: nama berkas tidak boleh
+    memuat pemisah direktori atau "..", sehingga hasil selalu berada di dalam
+    base_dir. Semua output build ditulis lewat helper ini."""
+    if not _SAFE_NAME.match(name) or ".." in name:
+        raise ValueError(f"unsafe file name: {name!r}")
+    from pathlib import Path
+    target = Path(base_dir) / name
+    return target.open("w", encoding=encoding)
+
 def split_mode():
     parts_path = os.path.join("data", "parts.json")
     if not os.path.exists(parts_path):
@@ -64,10 +76,9 @@ def split_mode():
         
         safe_id = sanitize_part_id(part_id)
         part_filename = f"part_{safe_id}.json"
-        part_filepath = os.path.join(parts_dir, part_filename)
 
         # 1. Save modular Part JSON containing the full sections data (including huge HTML content)
-        with open(part_filepath, "w", encoding="utf-8") as pf:
+        with _safe_writer(parts_dir, part_filename) as pf:
             json.dump(subs, pf, indent=2, ensure_ascii=False)
         print(f"   [OK] Saved {part_filename} ({len(subs)} sections)")
 
@@ -88,7 +99,7 @@ def split_mode():
 
     # Save lightweight manifest.json
     manifest_path = os.path.join(parts_dir, "manifest.json")
-    with open(manifest_path, "w", encoding="utf-8") as mf:
+    with _safe_writer(parts_dir, "manifest.json") as mf:
         json.dump(manifest, mf, indent=2, ensure_ascii=False)
     
     print(f"\n[SUCCESS] Modular split complete!")
@@ -165,11 +176,11 @@ def build_data_mode():
         related, cited = build_rel_and_cited(full_parts)
 
         os.makedirs("data", exist_ok=True)
-        with open(os.path.join("data", "look.json"), "w", encoding="utf-8") as f:
+        with _safe_writer("data", "look.json") as f:
             json.dump(look, f, ensure_ascii=False, indent=2)
-        with open(os.path.join("data", "rel.json"), "w", encoding="utf-8") as f:
+        with _safe_writer("data", "rel.json") as f:
             json.dump(related, f, ensure_ascii=False, indent=2)
-        with open(os.path.join("data", "ci.json"), "w", encoding="utf-8") as f:
+        with _safe_writer("data", "ci.json") as f:
             json.dump(cited, f, ensure_ascii=False, indent=2)
         print("   [OK] look.json, rel.json, ci.json diregenerate.")
     except Exception as e:
@@ -177,14 +188,14 @@ def build_data_mode():
 
     # 4. Save data/parts.json (React SPA fetch ini di runtime)
     os.makedirs("data", exist_ok=True)
-    with open(os.path.join("data", "parts.json"), "w", encoding="utf-8") as f:
+    with _safe_writer("data", "parts.json") as f:
         json.dump(full_parts, f, ensure_ascii=False)
     print("   [OK] data/parts.json disimpan.")
 
     # 5. Generate pmn_corpus_for_ai.md
     try:
         corpus_path = "pmn_corpus_for_ai.md"
-        with open(corpus_path, "w", encoding="utf-8") as cf:
+        with _safe_writer(".", corpus_path) as cf:
             cf.write("# 📚 PROGRESSIVE MATERIALIST NATURALISM (PMN) FRAMEWORK CORPUS\n\n")
             cf.write("> **Note for AI Models:** This is the complete consolidated plain-text corpus of the PMN manuscript and glossary, auto-generated for training, RAG retrieval, and grounding purposes.\n\n")
 
@@ -268,8 +279,12 @@ def compile_mode():
             except Exception as e:
                 print(f"[WARN] Could not remove old app.js before compile: {e}")
 
-        # Run esbuild
-        res = subprocess.run(f"npx esbuild {app_ts_path} --outfile={app_js_path}", shell=True, capture_output=True, text=True)
+        # Run esbuild — argv list via cmd /c (npx adalah .cmd di Windows);
+        # tanpa shell=True agar tidak ada permukaan command injection.
+        res = subprocess.run(
+            ["cmd", "/c", "npx", "esbuild", app_ts_path, f"--outfile={app_js_path}"],
+            shell=False, capture_output=True, text=True,
+        )
         if res.returncode != 0:
             print("[WARN] esbuild compilation completed with warnings/errors:")
             print(res.stderr or res.stdout)
@@ -400,7 +415,7 @@ def compile_mode():
             print(f"   [WARN] Could not create safety backup: {be}")
 
     # Save to index.html
-    with open(output_html_path, "w", encoding="utf-8") as f:
+    with _safe_writer("legacy", "index.offline.html") as f:
         f.write(html_content)
 
     file_size_mb = os.path.getsize(output_html_path) / (1024 * 1024)

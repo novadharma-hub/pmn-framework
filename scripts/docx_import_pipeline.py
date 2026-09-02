@@ -24,6 +24,10 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+from lxml import etree as _LXML_ETREE
+
+# Parser XML terjaga: entitas DTD tidak diekspansi, tanpa akses jaringan.
+_XML_GUARDED_PARSER = _LXML_ETREE.XMLParser(resolve_entities=False, no_network=True, huge_tree=False)
 
 # Reuse some utilities from the existing importer when possible
 # (we import specific functions to avoid circular issues for now)
@@ -125,7 +129,7 @@ def stage_1_extract_paragraphs(docx_path: Path) -> PipelineResult:
     try:
         with zipfile.ZipFile(docx_path) as archive:
             document_xml = archive.read("word/document.xml")
-        root = ET.fromstring(document_xml)
+        root = _LXML_ETREE.fromstring(document_xml, _XML_GUARDED_PARSER)
 
         for para in root.findall(".//w:p", NS):
             text = "".join(node.text or "" for node in para.findall(".//w:t", NS))

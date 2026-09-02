@@ -4,6 +4,7 @@ import sys
 import json
 import re
 import traceback
+from pathlib import Path
 
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -283,7 +284,7 @@ def run_diagnostics():
     # ----------------------------------------------------
     print(f"\n[*] Generating central Diagnostic Report at '{report_path}'...")
     
-    with open(report_path, "w", encoding="utf-8") as f:
+    with Path(report_path).open("w", encoding="utf-8") as f:
         f.write("# 🩺 DIAGNOSTIK MENYELURUH & PAKET PENYELAMATAN AI (PMN ECOSYSTEM)\n\n")
         f.write("> **Panduan untuk Pengguna:** Salin (copy) seluruh isi file ini dan tempelkan (paste) langsung ke chat AI mana pun di web (ChatGPT Free, Claude Web, Gemini Web, dll.) jika Anda mendeteksi error di website atau kegagalan kompilasi. AI web tersebut akan langsung mengerti masalahnya dan memberikan solusi perbaikan kode yang tepat secara offline!\n\n")
         

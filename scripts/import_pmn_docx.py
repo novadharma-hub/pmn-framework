@@ -11,7 +11,11 @@ import zipfile
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
+from lxml import etree as _LXML_ETREE
 
+# Parser XML terjaga: entitas DTD tidak diekspansi, tanpa akses jaringan —
+# dokumen DOCX tidak boleh bisa memicu entity expansion saat diimpor.
+_XML_GUARDED_PARSER = _LXML_ETREE.XMLParser(resolve_entities=False, no_network=True, huge_tree=False)
 
 NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
 W_NS = "{%s}" % NS["w"]
@@ -19,6 +23,16 @@ SPECIAL_PARTS = {"Preface", "Coda", "Intellectual Debts", "Bibliography"}
 BACKMATTER_HEADINGS = ["Coda", "Intellectual Debts", "Bibliography"]
 RED_FILLS = {"FFF5F5"}
 RED_BORDERS = {"F87171"}
+
+_SAFE_NAME = re.compile(r"^[A-Za-z0-9._\-]+$")
+
+def _safe_writer(base_dir, name, encoding="utf-8"):
+    """Penulis berkas dengan nama tervalidasi ketat: nama berkas tidak boleh
+    memuat pemisah direktori atau "..", sehingga hasil selalu berada di dalam
+    base_dir. Semua output impor ditulis lewat helper ini."""
+    if not _SAFE_NAME.match(name) or ".." in name:
+        raise ValueError(f"unsafe file name: {name!r}")
+    return (Path(base_dir) / name).open("w", encoding=encoding)
 
 
 @dataclass
@@ -55,8 +69,8 @@ def extract_paragraphs(docx_path: Path) -> list[Paragraph]:
         raise ValueError(f"Invalid DOCX/ZIP file: {docx_path}") from exc
 
     try:
-        root = ET.fromstring(document_xml)
-    except ET.ParseError as exc:
+        root = _LXML_ETREE.fromstring(document_xml, _XML_GUARDED_PARSER)
+    except Exception as exc:
         raise ValueError(f"Could not parse XML inside {docx_path}") from exc
 
     paragraphs: list[Paragraph] = []
@@ -689,7 +703,7 @@ def main() -> int:
     # Save parsed parts list directly to data/parts.json
     try:
         os.makedirs("data", exist_ok=True)
-        with open(os.path.join("data", "parts.json"), "w", encoding="utf-8") as f:
+        with _safe_writer("data", "parts.json") as f:
             json.dump(parts, f, ensure_ascii=False, indent=2)
         print("   [OK] data/parts.json successfully synchronized from DOCX.")
     except Exception as e:
@@ -697,7 +711,7 @@ def main() -> int:
 
     # Save parsed version info directly to data/version.json
     try:
-        with open(os.path.join("data", "version.json"), "w", encoding="utf-8") as f:
+        with _safe_writer("data", "version.json") as f:
             json.dump({"version": version_label}, f, ensure_ascii=False, indent=2)
         print(f"   [OK] data/version.json successfully saved with version {version_label}.")
     except Exception as e:

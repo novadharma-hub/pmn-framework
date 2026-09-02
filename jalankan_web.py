@@ -3,6 +3,15 @@ import sys
 import webbrowser
 import http.server
 import socketserver
+from pathlib import Path
+
+def _safe_writer(base_dir, name, encoding="utf-8"):
+    """Penulis berkas dengan nama tervalidasi ketat: tanpa pemisah direktori
+    dan tanpa ".." sehingga hasil selalu berada di dalam base_dir."""
+    name = str(name)
+    if "/" in name or "\\" in name or ".." in name:
+        raise ValueError(f"unsafe file name: {name!r}")
+    return (Path(base_dir) / name).open("w", encoding=encoding)
 
 # Ensure stdout handles UTF-8 correctly on Windows
 if sys.platform.startswith('win'):
@@ -51,7 +60,7 @@ def main():
 """
         footer = "\n})();"
         
-        with open('app.js', 'w', encoding='utf-8') as f:
+        with _safe_writer(".", "app.js") as f:
             f.write(wrapper + js_content + footer)
         print("✅ app.js berhasil diperbaiki!")
 

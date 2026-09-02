@@ -5,6 +5,7 @@ import sys
 import shutil
 import subprocess
 import requests
+from pathlib import Path
 from dotenv import dotenv_values
 
 # --------------------------------------------------------------------
@@ -79,7 +80,7 @@ def clean_pdf_metadata(input_path, output_path):
         }
         writer.add_metadata(clean_meta)
         
-        with open(output_path, "wb") as f:
+        with Path(output_path).open("wb") as f:
             writer.write(f)
             
         print(f"[v] Pembersihan PDF Sukses: '{os.path.basename(output_path)}' bersih!")
@@ -154,9 +155,14 @@ def send_to_telegram(file_path, bot_token, chat_id, topic_id):
     
     if topic_id:
         payload["message_thread_id"] = topic_id
-        
+
+    # SSRF guard: hanya endpoint resmi Telegram yang boleh dihubungi.
+    if not url.startswith("https://api.telegram.org/"):
+        print("[WARN] URL Telegram tidak valid — pengiriman dibatalkan.")
+        return False
+
     try:
-        with open(file_path, "rb") as f:
+        with Path(file_path).open("rb") as f:
             files = {"document": f}
             res = requests.post(url, data=payload, files=files, timeout=60)
             res_json = res.json()

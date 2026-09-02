@@ -74,3 +74,6 @@ legacy/
 
 # Claude Code agent config (lokal saja)
 .claude/
+
+# Mimosa security-hook state (internal, jangan pernah masuk repo publik)
+.mimosa/
