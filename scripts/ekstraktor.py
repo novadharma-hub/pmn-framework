@@ -4,6 +4,18 @@ import re
 INPUT_FILE = "index.html"
 OUTPUT_HTML = "index_bersih.html"
 
+_SAFE_NAME = re.compile(r"^[A-Za-z0-9._\-]+$")
+
+def _safe_writer(base_dir, name, encoding="utf-8"):
+    """Penulis berkas dengan nama tervalidasi ketat: nama berkas tidak boleh
+    memuat pemisah direktori atau "..", sehingga hasil selalu berada di dalam
+    base_dir. Semua penulisan output lewat helper ini."""
+    if not _SAFE_NAME.match(name) or ".." in name:
+        raise ValueError(f"unsafe file name: {name!r}")
+    from pathlib import Path
+    target = Path(base_dir) / name
+    return target.open("w", encoding=encoding)
+
 def main():
     if not os.path.exists(INPUT_FILE):
         print(f"❌ Error: File {INPUT_FILE} tidak ditemukan di folder ini!")
@@ -23,7 +35,7 @@ def main():
     css_pattern = re.compile(r'<style>(.*?)</style>', re.DOTALL | re.IGNORECASE)
     css_match = css_pattern.search(content)
     if css_match:
-        with open('style.css', 'w', encoding='utf-8') as f:
+        with _safe_writer(".", "style.css") as f:
             f.write(css_match.group(1).strip())
         content = css_pattern.sub('<!-- PANGGIL CSS EKSTERNAL -->\n<link rel="stylesheet" href="style.css">', content)
         print("✅ style.css berhasil diekstrak.")
@@ -41,7 +53,7 @@ def main():
             id_match = re.search(r'id=["\']d-([^"\']+)["\']', attrs)
             if id_match:
                 file_name = id_match.group(1)
-                with open(f"data/{file_name}.json", 'w', encoding='utf-8') as jf:
+                with _safe_writer("data", f"{file_name}.json") as jf:
                     jf.write(inner_text.strip())
                 print(f"✅ data/{file_name}.json berhasil diekstrak.")
             return "" # Hapus dari HTML
@@ -57,7 +69,7 @@ def main():
 
     # Simpan semua JS yang terkumpul menjadi satu file app.js
     if js_codes:
-        with open('app.js', 'w', encoding='utf-8') as f:
+        with _safe_writer(".", "app.js") as f:
             # Menggabungkan semua blok JS dengan pembatas
             f.write("\n\n/* ========================================= */\n\n".join(js_codes))
         
@@ -67,7 +79,7 @@ def main():
 
     # 4. SIMPAN HTML BERSIH
     content = re.sub(r'\n\s*\n', '\n', content) # Hapus baris kosong berlebih
-    with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
+    with _safe_writer(".", OUTPUT_HTML) as f:
         f.write(content)
     
     print(f"\n🎉 SELESAI! Buka '{OUTPUT_HTML}' untuk mengecek.")

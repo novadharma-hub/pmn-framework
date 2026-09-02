@@ -3,6 +3,7 @@ import sys
 import zipfile
 import re
 import stat
+from pathlib import Path
 
 # Setup pypdf
 try:
@@ -69,7 +70,7 @@ def clean_pdf_metadata(input_path):
             "/Subject": "Anonymous"
         }
         writer.add_metadata(clean_meta)
-        with open(temp_path, "wb") as f:
+        with Path(temp_path).open("wb") as f:
             writer.write(f)
         if os.path.exists(input_path):
             os.remove(input_path)
