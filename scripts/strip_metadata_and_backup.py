@@ -156,15 +156,20 @@ def send_to_telegram(file_path, bot_token, chat_id, topic_id):
     if topic_id:
         payload["message_thread_id"] = topic_id
 
-    # SSRF guard: hanya endpoint resmi Telegram yang boleh dihubungi.
-    if not url.startswith("https://api.telegram.org/"):
-        print("[WARN] URL Telegram tidak valid — pengiriman dibatalkan.")
+    # SSRF guard: token wajib persis format resmi Telegram
+    # (<bot_id numerik>:<token alfanumerik>) — selain itu kirim dibatalkan dan
+    # URL dibangun inline di panggilan post di bawah.
+    if not re.fullmatch(r"\d+:[A-Za-z0-9_\-]+", bot_token):
+        print("[WARN] Format bot token tidak valid — pengiriman dibatalkan.")
         return False
 
     try:
         with Path(file_path).open("rb") as f:
             files = {"document": f}
-            res = requests.post(url, data=payload, files=files, timeout=60)
+            res = requests.post(
+                f"https://api.telegram.org/bot{bot_token}/sendDocument",
+                data=payload, files=files, timeout=60,
+            )
             res_json = res.json()
             
             if res_json.get("ok"):
