@@ -397,6 +397,16 @@ export default function App() {
           <button className={`mob-nav-btn${page === 'reader' ? ' active' : ''}`} onClick={() => setPage('reader')}>
             <span>&#9654;</span><span className="mob-nav-lbl">Read</span>
           </button>
+          {/* A1: di bawah 768px baris #hdr-r meluber ke luar layar (lebarnya
+              661px pada viewport 390px), sehingga Glossary sama sekali tidak
+              bisa dijangkau dari HP. Handler-nya sama persis dengan #hb-gl —
+              jangan buat jalur pembuka Glossary yang kedua. */}
+          <button
+            className={`mob-nav-btn${page === 'contents' && contentsSub === 'glossary' ? ' active' : ''}`}
+            onClick={() => { setContentsSub('glossary'); setPage('contents') }}
+          >
+            <span>&#167;</span><span className="mob-nav-lbl">Glossary</span>
+          </button>
           <button className="mob-nav-btn" onClick={toggleTheme}>
             <span>{theme === 'dark' ? '☀' : '☾'}</span>
             <span className="mob-nav-lbl">{theme === 'dark' ? 'Light' : 'Dark'}</span>

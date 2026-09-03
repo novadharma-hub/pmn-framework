@@ -2694,3 +2694,25 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--mask-start));
           mask-image: linear-gradient(to bottom, transparent 0, #000 var(--mask-start));
 }
+
+/* A1: #hdr-r punya flex-shrink:0 (style.css:414) dan lebarnya 661px, jadi
+   pada viewport 390px tombol Glossary (right=481), theme (542), dan Keys
+   (661) terdorong ke luar layar TANPA JEJAK — bukan mengecil, bukan
+   terlipat, hilang begitu saja. Sementara #mob-nav tidak punya entri
+   Glossary sama sekali, sehingga glossary dan panel pintasan tidak bisa
+   dijangkau dari HP.
+   Di bawah 768px ketiganya dikeluarkan dari header; Glossary dan tema
+   dilayani #mob-nav, dan panel pintasan memang tidak berguna di layar
+   sentuh. */
+@media (max-width: 767px) {
+  #hdr-r #hb-gl,
+  #hdr-r #theme-tog,
+  #hdr-r #hb-kbd { display: none; }
+  /* #hdr lebar 390 dengan padding 12px (kotak konten 366) sementara
+     anak-anaknya berjumlah 370, dan #hdr-r tidak boleh menyusut - jadi
+     tetap meluber 9px meski tiga tombol di atas sudah disembunyikan.
+     Yang dibuang adalah yang DUPLIKAT: tombol Table of Contents sudah
+     diwakili entri Contents di #mob-nav. FOCUS dipertahankan karena tidak
+     ada duanya di mana pun pada layar sempit. */
+  #hdr-r #hb-home { display: none; }
+}
