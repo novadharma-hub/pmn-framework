@@ -139,7 +139,7 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
               fontSize: '.65rem',
               letterSpacing: '.2em',
               textTransform: 'uppercase',
-              color: 'var(--acc)',
+              color: 'var(--acc-text)',
               fontWeight: 700,
             }}
           >
@@ -237,7 +237,7 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
                       style={{
                         fontFamily: 'var(--f-mono)',
                         fontSize: '.72rem',
-                        color: 'var(--acc)',
+                        color: 'var(--acc-text)',
                         fontWeight: 'bold',
                       }}
                     >
@@ -326,7 +326,7 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
             background: 'var(--bg2)',
           }}
         >
-          Notes: {notes.length} - Press <strong style={{ color: 'var(--acc)' }}>ESC</strong> to close
+          Notes: {notes.length} - Press <strong style={{ color: 'var(--acc-text)' }}>ESC</strong> to close
         </div>
       </div>
 
