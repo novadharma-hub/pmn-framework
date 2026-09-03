@@ -34,14 +34,21 @@
   --color-pmn-ink:   #f5f0e8;
   --color-pmn-ink2:  #c8bfb2;
 
-  /* Accent (PMN Red) */
-  --color-pmn-acc:   #c0271a;
-  --color-pmn-acc2:  #961f14;
+  /* Accent (PMN Red)
+     --acc      = warna ISIAN: latar blok, garis, penanda aktif. Bukan untuk teks.
+     --acc-text = warna TEKS/ikon di atas bg/bg2/bg3/sb. Wajib lolos WCAG AA.
+     Dipisah karena satu merah tidak bisa melayani keduanya: #c0271a hanya
+     3.28 di atas --bg, jauh di bawah ambang 4.5 untuk teks berukuran normal.
+     Gerbang: scripts/check_contrast.py */
+  --color-pmn-acc:      #c0271a;
+  --color-pmn-acc2:     #961f14;
+  --color-pmn-acc-text: #e8604d;
 
-  /* Muted text */
-  --color-pmn-mute:  #8a7d6e;
-  --color-pmn-mute2: #7c7064;
-  --color-pmn-mute3: #3a3530;
+  /* Muted text — dinaikkan agar lolos AA sampai di atas bg3.
+     mute3 sebelumnya #3a3530 = 1.48 kontras di atas bg2, praktis tak terlihat. */
+  --color-pmn-mute:  #9c8f80;
+  --color-pmn-mute2: #93877a;
+  --color-pmn-mute3: #8d8376;
 
   /* Borders */
   --color-pmn-rule:  #302b27;
@@ -75,13 +82,14 @@
   --color-pmn-ink2:  #322014; /* Warm espresso */
 
   /* Accent — deep red, consistent with dark mode brand */
-  --color-pmn-acc:   #8b1e14;
-  --color-pmn-acc2:  #6a1610;
+  --color-pmn-acc:      #8b1e14;
+  --color-pmn-acc2:     #6a1610;
+  --color-pmn-acc-text: #7a1810;
 
-  /* Muted */
-  --color-pmn-mute:  #7a6048;
-  --color-pmn-mute2: #5e4832;
-  --color-pmn-mute3: #9e8468;
+  /* Muted — dinaikkan agar lolos AA sampai di atas bg3 */
+  --color-pmn-mute:  #63482f;
+  --color-pmn-mute2: #54402c;
+  --color-pmn-mute3: #6b5138;
 
   /* Borders */
   --color-pmn-rule:  #c8b898;

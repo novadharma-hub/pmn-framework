@@ -80,7 +80,7 @@ export default function KeyboardModal({ isOpen, onClose }: KeyboardModalProps) {
             fontSize: '.65rem',
             letterSpacing: '.2em',
             textTransform: 'uppercase',
-            color: 'var(--acc)',
+            color: 'var(--acc-text)',
             fontWeight: 700,
           }}>
             ⌨ Keyboard Shortcuts
@@ -132,7 +132,7 @@ export default function KeyboardModal({ isOpen, onClose }: KeyboardModalProps) {
                       fontSize: '.68rem',
                       background: 'var(--bg2)',
                       border: '1px solid var(--rule2)',
-                      color: 'var(--acc)',
+                      color: 'var(--acc-text)',
                       padding: '.15rem .55rem',
                       whiteSpace: 'nowrap',
                       flexShrink: 0,
@@ -156,7 +156,7 @@ export default function KeyboardModal({ isOpen, onClose }: KeyboardModalProps) {
           color: 'var(--mute)',
           textTransform: 'uppercase',
         }}>
-          Press <strong style={{color:'var(--acc)'}}>Alt+K</strong> anytime to toggle · <strong style={{color:'var(--acc)'}}>ESC</strong> to dismiss
+          Press <strong style={{color:'var(--acc-text)'}}>Alt+K</strong> anytime to toggle · <strong style={{color:'var(--acc-text)'}}>ESC</strong> to dismiss
         </div>
       </div>
 

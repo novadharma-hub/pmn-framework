@@ -40,7 +40,7 @@ export default class ErrorBoundary extends Component<Props, State> {
         }}>
           <div style={{
             fontFamily: "'Source Code Pro', monospace",
-            color: 'var(--acc)',
+            color: 'var(--acc-text)',
             fontSize: '.85rem',
             letterSpacing: '.2em',
             textTransform: 'uppercase'

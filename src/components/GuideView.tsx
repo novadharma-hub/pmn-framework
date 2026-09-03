@@ -118,7 +118,7 @@ Do not become smoother than the evidence allows.`
 
       <div className="guide-page">
         <div className="page-eyebrow">PMN v{version} - Nova Dharma</div>
-        <h1 className="page-h1">Using PMN<br /><em style={{ color: 'var(--acc)' }}>as an AI Agent</em></h1>
+        <h1 className="page-h1">Using PMN<br /><em style={{ color: 'var(--acc-text)' }}>as an AI Agent</em></h1>
         <p className="page-subtitle">A practical guide to deploying the framework through Claude, DeepSeek, ChatGPT, Gemini, and similar systems without letting the manuscript dissolve into generic ideology talk.</p>
 
         <div className="page-actions">
@@ -453,7 +453,7 @@ Do not become smoother than the evidence allows.`
               ['pmn-tip-dismissed', 'Whether the orientation tip has been closed'],
             ].map(([key, desc]) => (
               <div key={key} style={{ display: 'flex', gap: '1rem', alignItems: 'baseline' }}>
-                <code style={{ fontFamily: 'var(--f-mono)', fontSize: '.7rem', color: 'var(--acc)', whiteSpace: 'nowrap', flexShrink: 0 }}>{key}</code>
+                <code style={{ fontFamily: 'var(--f-mono)', fontSize: '.7rem', color: 'var(--acc-text)', whiteSpace: 'nowrap', flexShrink: 0 }}>{key}</code>
                 <span style={{ fontFamily: 'var(--f-body)', fontSize: '.85rem', color: 'var(--mute)', lineHeight: 1.5 }}>{desc}</span>
               </div>
             ))}
