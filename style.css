@@ -2654,3 +2654,27 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 @media (max-width: 767px) {
   .hero-orientation-tip { display: none; }
 }
+
+/* A3: petunjuk gulir (.hero-scroll, position:absolute bottom:3.2rem)
+   duduk 53px DI DALAM blok CTA — teks "Scroll to enter" menimpa tombol
+   MY NOTES. Terukur pada 1280x860: petunjuk y757-812, MY NOTES y769-809.
+   Blok CTA diberi ruang bawah agar petunjuk punya jalurnya sendiri, dan
+   petunjuk tidak lagi menangkap klik yang seharusnya masuk ke tombol. */
+.hero-ctas { margin-bottom: 128px; }
+.hero-scroll { bottom: 16px; pointer-events: none; }
+/* Konten sampul lebih tinggi daripada ruang viewport pendek, jadi menambah
+   margin saja tidak cukup: konten ditengahkan vertikal sehingga tiap
+   tambahan margin hanya terpakai separuh. Terukur: jarak petunjuk-ke-CTA
+   +88px pada tinggi 1000, +3px pada 860, -61px pada 700 (~0,5px per 1px
+   tinggi viewport). Di bawah ~880px petunjuk pasti menimpa tombol, jadi
+   di sana ia tidak ditampilkan. Ia dekoratif (aria-hidden="true");
+   menutupi kontrol yang bisa diklik lebih buruk daripada hilang. */
+@media (max-height: 880px) {
+  .hero-scroll { display: none; }
+}
+
+/* Keluarga cacat yang sama dengan A5: .cta-s adalah display:inline-flex,
+   dan flex container membuang simpul teks berisi spasi saja di antara
+   item — sehingga "Key Terms <span>[Alt+?]</span>" terbaca sebagai
+   "KEY TERMS[ALT+?]" meski spasinya ada di JSX. */
+.cta-s { gap: 6px; }
