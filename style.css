@@ -2601,3 +2601,26 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 [class~="hover:text-pmn-acc"]:hover { color: var(--acc-text); }
 [class~="group-hover:text-pmn-acc"]:is(:where(.group):hover *) { color: var(--acc-text); }
 [class~="text-pmn-acc/80"] { color: color-mix(in oklab, var(--acc-text) 80%, transparent); }
+
+/* A5: .hai-tabs / .hai-tab / .hai-panel dirujuk AITerminal.tsx sebagai
+   "Legacy .hai-tabs", tetapi CSS-nya tidak ada di mana pun — bukan sekadar
+   kurang gap, seluruh strip tab memang tak bergaya, sehingga terbaca
+   menyatu: "Backend RequiredChatGPT ↗Gemini ↗".
+   Dipulihkan seminimal mungkin memakai pola tombol UI proyek ini
+   (.claude/skills/pmn-design.md), bukan desain baru. */
+.hai-tabs { display: flex; flex-wrap: wrap; gap: 12px; }
+.hai-tab {
+  font-family: var(--f-mono);
+  font-size: .65rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background: var(--bg2);
+  color: var(--ink2);
+  border: 1px solid var(--rule2);
+  padding: 8px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+.hai-tab:hover { background: var(--bg3); color: var(--acc-text); border-color: var(--acc); }
+.hai-tab.active { background: var(--bg3); color: var(--acc-text); border-color: var(--acc); }

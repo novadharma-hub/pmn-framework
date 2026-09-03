@@ -697,7 +697,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
                   <button className="annot-btn" onClick={() => { setDeskNotes(''); try { localStorage.removeItem('pmn-desk-notes') } catch {} }}>Clear</button>
                 </div>
               </div>
-              <textarea className="home-bottom-notes" placeholder="Your notes on this section\u2026" value={deskNotes} onChange={e => { setDeskNotes(e.target.value); try { localStorage.setItem('pmn-desk-notes', e.target.value) } catch {} }} />
+              <textarea className="home-bottom-notes" placeholder="Your notes on this section…" value={deskNotes} onChange={e => { setDeskNotes(e.target.value); try { localStorage.setItem('pmn-desk-notes', e.target.value) } catch {} }} />
             </article>
             <article className="home-bottom-card compact-card" style={{gridColumn: 'span 4'}}>
               <h3>Useful next moves</h3>
