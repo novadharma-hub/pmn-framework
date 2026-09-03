@@ -70,6 +70,23 @@ export default function App() {
     return () => homeView.removeEventListener('scroll', onScroll)
   }, [page, showTip, data])
 
+  // A8: peredaran tepi atas wadah gulir (lihat blok RONDE 0 di style.css)
+  // hanya boleh aktif SETELAH wadahnya benar-benar tergulir; kalau tidak,
+  // baris teratas ikut memudar padahal tak ada apa pun yang lewat di
+  // baliknya. Dipasang sebagai listener capture di document karena event
+  // scroll tidak menggelembung, dan ketiga wadah ini mount/unmount
+  // mengikuti view yang sedang aktif.
+  useEffect(() => {
+    const WADAH = ['reader-main', 'sb-list', 'toc-panel', 'glossary-panel', 'sv-body-scroll']
+    const onAnyScroll = (e: Event) => {
+      const el = e.target as HTMLElement
+      if (!el || !el.id || !WADAH.includes(el.id)) return
+      el.style.setProperty('--scrolled', el.scrollTop > 4 ? '1' : '0')
+    }
+    document.addEventListener('scroll', onAnyScroll, true)
+    return () => document.removeEventListener('scroll', onAnyScroll, true)
+  }, [])
+
   const [version, setVersion] = useState('')
   const [loadedCount, setLoadedCount] = useState(0)
 

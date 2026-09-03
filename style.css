@@ -2678,3 +2678,19 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
    item — sehingga "Key Terms <span>[Alt+?]</span>" terbaca sebagai
    "KEY TERMS[ALT+?]" meski spasinya ada di JSX. */
 .cta-s { gap: 6px; }
+
+/* A8: konten tergulir masuk ke bawah sub-header lengket tanpa peredaran,
+   sehingga baris teratas selalu terpotong separuh tinggi-x. Terjadi di
+   TOC, reader desktop, dan reader mobile, di kedua tema.
+   Mask hanya aktif setelah wadah benar-benar tergulir: --scrolled
+   di-set 0/1 oleh App agar posisi paling atas tetap tegas, tidak
+   memudar padahal tak ada apa pun yang lewat di baliknya. */
+#reader-main,
+#sb-list,
+#toc-panel,
+#glossary-panel,
+#sv-body-scroll {
+  --mask-start: calc(20px * var(--scrolled, 0));
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--mask-start));
+          mask-image: linear-gradient(to bottom, transparent 0, #000 var(--mask-start));
+}
