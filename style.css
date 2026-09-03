@@ -2624,3 +2624,33 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 }
 .hai-tab:hover { background: var(--bg3); color: var(--acc-text); border-color: var(--acc); }
 .hai-tab.active { background: var(--bg3); color: var(--acc-text); border-color: var(--acc); }
+
+/* A2: kartu orientasi melekat di kanan-bawah dengan z-index 999 dan
+   menimpa konten di SETIAP posisi gulir — teks aksioma, tombol form AI
+   terminal, statistik Release Snapshot, dan teks footer. Di bawah 768px
+   ia menutupi seluruh area CTA cover termasuk tombol START READING yang
+   ia sendiri duplikasi.
+   Penataan letak dipindah dari inline style ke sini agar media query
+   bisa bekerja: inline style mengalahkan stylesheet. */
+.hero-orientation-tip {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  max-width: 275px;
+  z-index: 999;
+  background: var(--bg2);
+  border: 1px solid var(--rule);
+  padding: 16px;
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, .25);
+}
+/* Di bawah 768px kartu ini TIDAK dirender sama sekali. position:static
+   sempat dicoba dan justru lebih buruk: karena kartu adalah sibling di luar
+   #home-view sementara body tidak menggulir, ia mendarat di luar viewport
+   (top 868 pada tinggi 844) - jadi hantu yang tak terlihat dan tak bisa
+   ditutup. Dan sebagai kartu melayang ia menutupi CTA sampul.
+   Di layar sempit isinya memang tidak unik: START READING sudah ada di CTA
+   sampul, OPEN AI GUIDE ada di kartu "Useful next moves", dan sisanya
+   anjuran pintasan papan ketik yang tak berlaku di layar sentuh. */
+@media (max-width: 767px) {
+  .hero-orientation-tip { display: none; }
+}

@@ -43,6 +43,33 @@ export default function App() {
     try { return localStorage.getItem('pmn-tip-dismissed') !== '1' } catch { return true }
   }) // persist until X (mengikuti user, not reset on reload/nav back to cover)
 
+  // Perangkat dengan penunjuk presisi (mouse/trackpad) saja yang punya papan
+  // ketik; menganjurkan Alt+K di layar sentuh adalah saran yang tak bisa
+  // dijalankan. Dihitung sekali karena jenis penunjuk praktis tidak berubah
+  // dalam satu sesi.
+  const [hasFinePointer] = useState<boolean>(() => {
+    try { return window.matchMedia('(pointer: fine)').matches } catch { return true }
+  })
+
+  // Kartu orientasi adalah milik halaman SAMPUL. Begitu pembaca menggulir
+  // melewati sampul tugasnya selesai; membiarkannya melayang membuatnya
+  // menimpa teks aksioma, tombol form AI terminal, statistik Release
+  // Snapshot, dan teks footer di setiap posisi gulir.
+  const [pastCover, setPastCover] = useState(false)
+  useEffect(() => {
+    if (page !== 'home' || !showTip) return
+    const homeView = document.getElementById('home-view')
+    if (!homeView) return
+    const stage = document.getElementById('hero-stage')
+    const onScroll = () => {
+      const batas = Math.max((stage?.offsetHeight ?? homeView.clientHeight) * 0.6, 200)
+      setPastCover(homeView.scrollTop > batas)
+    }
+    homeView.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => homeView.removeEventListener('scroll', onScroll)
+  }, [page, showTip, data])
+
   const [version, setVersion] = useState('')
   const [loadedCount, setLoadedCount] = useState(0)
 
@@ -362,25 +389,21 @@ export default function App() {
 
       <KeyboardModal isOpen={kbdOpen} onClose={() => setKbdOpen(false)} />
       <NotesModal isOpen={notesOpen} onClose={() => setNotesOpen(false)} data={data} onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }} />
-      {page === 'home' && showTip && (
-        <div className="hero-orientation-tip animate-in fade-in zoom-in duration-300" style={{
-          position: 'fixed',
-          bottom: '1.6rem',
-          right: '1.6rem',
-          background: 'var(--bg2)',
-          border: '1px solid var(--rule)',
-          padding: '0.95rem 1.05rem',
-          maxWidth: 275,
-          boxShadow: '10px 10px 0 rgba(0,0,0,.25)',
-          zIndex: 999
-        }}>
+      {/* Penataan letak kartu orientasi sengaja TIDAK inline: inline style
+          mengalahkan stylesheet, sehingga media query tidak bisa menghentikan
+          kartu ini melayang di atas CTA pada layar sempit. Lihat
+          .hero-orientation-tip di blok RONDE 0 style.css. */}
+      {page === 'home' && showTip && !pastCover && (
+        <div className="hero-orientation-tip animate-in fade-in zoom-in duration-300">
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.3rem'}}>
             <div style={{fontFamily:'var(--f-mono)',fontSize:'.62rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc-text)'}}>&#9679; ORIENTATION TIP</div>
             <button onClick={() => { try{localStorage.setItem('pmn-tip-dismissed','1')}catch{}; setShowTip(false) }} style={{background:'none',border:'none',color:'var(--mute)',cursor:'pointer',fontSize:'1.05rem',lineHeight:1}} title="Close tip">×</button>
           </div>
           <div style={{fontFamily:'var(--f-head)',fontSize:'.95rem',color:'var(--ink)',marginBottom:'.3rem'}}>Welcome to PMN Framework</div>
           <p style={{fontFamily:'var(--f-body)',fontSize:'.78rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
-            Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>Alt+K</kbd> anytime for shortcuts, or visit the <button onClick={() => setPage('guide')} style={{color:'var(--acc-text)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
+            {hasFinePointer && <>Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>Alt+K</kbd> anytime for shortcuts, or visit </>}
+            {!hasFinePointer && <>Visit </>}
+            the <button onClick={() => setPage('guide')} style={{color:'var(--acc-text)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
           </p>
           <div style={{display:'flex',gap:'.5rem'}}>
             <button onClick={() => setPage('contents')} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
