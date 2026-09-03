@@ -2660,7 +2660,13 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
    MY NOTES. Terukur pada 1280x860: petunjuk y757-812, MY NOTES y769-809.
    Blok CTA diberi ruang bawah agar petunjuk punya jalurnya sendiri, dan
    petunjuk tidak lagi menangkap klik yang seharusnya masuk ke tombol. */
-.hero-ctas { margin-bottom: 128px; }
+/* Ruang bawah ini HANYA dipasang di viewport yang benar-benar menampilkan
+   petunjuk gulir. Dipasang tanpa syarat, ia membuat konten sampul (919px)
+   melebihi ruang yang ada pada tinggi 860 (808px) sehingga banner tagline
+   terpotong di tepi atas - regresi yang tertangkap saat verifikasi. */
+@media (min-height: 881px) {
+  .hero-ctas { margin-bottom: 128px; }
+}
 .hero-scroll { bottom: 16px; pointer-events: none; }
 /* Konten sampul lebih tinggi daripada ruang viewport pendek, jadi menambah
    margin saja tidak cukup: konten ditengahkan vertikal sehingga tiap
