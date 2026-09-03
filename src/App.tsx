@@ -212,7 +212,7 @@ export default function App() {
 
   if (loadError || !data) return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'100vh',background:'var(--bg)',color:'var(--ink)',padding:'1.5rem',textAlign:'center'}}>
-      <div style={{fontFamily:"'Source Code Pro',monospace",color:'var(--acc)',fontSize:'.85rem',letterSpacing:'.2em',marginBottom:'1rem'}}>DATA LOAD FAILED</div>
+      <div style={{fontFamily:"'Source Code Pro',monospace",color:'var(--acc-text)',fontSize:'.85rem',letterSpacing:'.2em',marginBottom:'1rem'}}>DATA LOAD FAILED</div>
       <div style={{maxWidth:'420px',marginBottom:'1.5rem'}}>{loadError || 'No manuscript data is available.'}</div>
       <button onClick={() => window.location.reload()} style={{fontFamily:"'Source Code Pro',monospace",fontSize:'.75rem',border:'1px solid var(--rule)',padding:'.5rem 1.2rem',background:'none',color:'var(--ink)',cursor:'pointer'}}>RELOAD</button>
     </div>
@@ -375,12 +375,12 @@ export default function App() {
           zIndex: 999
         }}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.3rem'}}>
-            <div style={{fontFamily:'var(--f-mono)',fontSize:'.62rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc)'}}>&#9679; ORIENTATION TIP</div>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'.62rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc-text)'}}>&#9679; ORIENTATION TIP</div>
             <button onClick={() => { try{localStorage.setItem('pmn-tip-dismissed','1')}catch{}; setShowTip(false) }} style={{background:'none',border:'none',color:'var(--mute)',cursor:'pointer',fontSize:'1.05rem',lineHeight:1}} title="Close tip">×</button>
           </div>
           <div style={{fontFamily:'var(--f-head)',fontSize:'.95rem',color:'var(--ink)',marginBottom:'.3rem'}}>Welcome to PMN Framework</div>
           <p style={{fontFamily:'var(--f-body)',fontSize:'.78rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
-            Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>Alt+K</kbd> anytime for shortcuts, or visit the <button onClick={() => setPage('guide')} style={{color:'var(--acc)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
+            Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>Alt+K</kbd> anytime for shortcuts, or visit the <button onClick={() => setPage('guide')} style={{color:'var(--acc-text)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
           </p>
           <div style={{display:'flex',gap:'.5rem'}}>
             <button onClick={() => setPage('contents')} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
@@ -625,7 +625,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
                   <div style={{fontFamily:'var(--f-mono)',fontSize:'.7rem',marginBottom:'1rem',display:'flex',flexDirection:'column',gap:'.2rem'}}>
                     {(selectedPart.subs || []).slice(0, 7).map((s: any) => (
                       <div key={s.id} style={{padding:'.25rem 0',borderBottom:'1px solid var(--rule)'}}>
-                        <span style={{color:'var(--acc)'}}>{s.id}</span>
+                        <span style={{color:'var(--acc-text)'}}>{s.id}</span>
                         <span style={{color:'var(--ink2)',marginLeft:'.5rem'}}>{s.title}</span>
                       </div>
                     ))}
@@ -719,19 +719,19 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
               <div style={{display:'flex', gap:'2rem', flexWrap:'wrap', flex: '2', justifyContent: 'flex-end'}}>
                 <div style={{textAlign: 'center'}}>
                   <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Parts</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>{data.parts.length}</strong>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc-text)'}}>{data.parts.length}</strong>
                 </div>
                 <div style={{textAlign: 'center'}}>
                   <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Sections</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>{totalSections}</strong>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc-text)'}}>{totalSections}</strong>
                 </div>
                 <div style={{textAlign: 'center'}}>
                   <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Read</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>{readPct}%</strong>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc-text)'}}>{readPct}%</strong>
                 </div>
                 <div style={{textAlign: 'center'}}>
                   <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Release</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc)'}}>V{version}</strong>
+                  <strong style={{fontSize: '1.8rem', color: 'var(--acc-text)'}}>V{version}</strong>
                 </div>
               </div>
             </div>
@@ -796,7 +796,7 @@ function AdminLogin({ onLogin, onBack }: any) {
             style={{width:'100%',background:'var(--bg)',border:'1px solid var(--rule)',padding:'1rem',fontFamily:'var(--f-body)',fontSize:'.9rem',outline:'none',color:'var(--ink)'}}
             type="password" placeholder="Passphrase" value={p} onChange={e => setP(e.target.value)}
           />
-          {err && <p style={{color:'var(--acc)',fontSize:'.8rem',fontStyle:'italic'}}>{err}</p>}
+          {err && <p style={{color:'var(--acc-text)',fontSize:'.8rem',fontStyle:'italic'}}>{err}</p>}
           <button onClick={submit} className="cta-p cta-main" style={{width:'100%',padding:'1rem',marginTop:'.5rem'}}>Authorize &uarr;</button>
           <button onClick={onBack} style={{width:'100%',background:'none',border:'none',color:'var(--mute)',fontFamily:'var(--f-mono)',fontSize:'.72rem',textTransform:'uppercase',letterSpacing:'.15em',cursor:'pointer',marginTop:'.5rem'}}>&larr; Cancel</button>
         </div>
