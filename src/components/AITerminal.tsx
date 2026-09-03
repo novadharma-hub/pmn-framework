@@ -49,9 +49,6 @@ export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerm
     <div className="home-ai-inner" style={{width: '100%'}}>
       <div className="home-ai-hdr mb-4 flex flex-wrap items-center gap-3">
         <span>PMN Agent Terminal ✦</span>
-        <span className="text-[9px] font-mono tracking-widest bg-pmn-acc/10 border border-pmn-acc/50 text-pmn-acc px-2.5 py-0.5 rounded-xs uppercase select-none">
-          ✖ Under Development / Maintenance
-        </span>
       </div>
       <p className="home-ai-desc mb-6 italic text-xs opacity-70">Build a manuscript context pack and send it to ChatGPT or Gemini.</p>
       {copyStatus && (
