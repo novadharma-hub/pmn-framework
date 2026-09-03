@@ -251,7 +251,7 @@ export default function App() {
           <span id="srch-icon">&#8981;</span>
           <input
             id="srch-in" type="search"
-            placeholder="Search or jump to section… (e.g. 3.4b)"
+            placeholder="Search — e.g. 3.4b"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             onFocus={() => {
