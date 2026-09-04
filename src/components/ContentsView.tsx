@@ -35,6 +35,30 @@ const shortenId = (id: string) => {
 
 export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth, version = '' }: ContentsViewProps) {
   const activeTab = subView
+  // --contents-scale sudah dipakai 9 aturan CSS (TOC, glosarium, hasil cari)
+  // tetapi tidak pernah ada yang menyetelnya - nilainya permanen 1. Pipanya
+  // sudah terpasang sejak lama, hanya tak pernah disambungkan ke kontrol.
+  const [contentsScale, setContentsScale] = useState<number>(() => {
+    try { return Number(localStorage.getItem('pmn-contents-scale')) || 1 } catch { return 1 }
+  })
+  useEffect(() => {
+    document.documentElement.style.setProperty('--contents-scale', String(contentsScale))
+    try { localStorage.setItem('pmn-contents-scale', String(contentsScale)) } catch {}
+  }, [contentsScale])
+
+  // Halaman glosarium merender dari KATEGORI (data.glg), bukan dari kamus
+  // (data.gl). Akibatnya istilah yang tidak masuk kategori mana pun punya
+  // definisi tapi tidak pernah bisa dilihat siapa pun - 11 dari 134 pada
+  // v118.5. Kategorinya adalah keputusan taksonomi penulis, jadi di sini
+  // mereka tidak dikarang-karang, hanya dibuat terjangkau.
+  const glGroups = useMemo(() => {
+    const groups = Object.entries(data.glg || {}) as [string, string[]][]
+    const sudahBerkategori = new Set<string>()
+    groups.forEach(([, terms]) => (terms || []).forEach(t => sudahBerkategori.add(String(t).toLowerCase())))
+    const sisa = Object.keys(data.gl || {}).filter(t => !sudahBerkategori.has(t.toLowerCase()))
+    return sisa.length ? ([...groups, ['Other Terms', sisa]] as [string, string[]][]) : groups
+  }, [data.glg, data.gl])
+
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [quoteVisible, setQuoteVisible] = useState(true)
 
@@ -130,6 +154,18 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
           <h2 className="font-pmn-head font-normal text-[1.15rem] lg:text-[1.35rem] text-pmn-ink whitespace-nowrap leading-none tracking-tight" id="sv-hdr">
             {activeTab === 'map' ? 'Table of Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : 'Search Analysis'}
           </h2>
+
+          {/* Satu kontrol ukuran untuk SELURUH permukaan contents: daftar isi,
+              glosarium, dan hasil pencarian sama-sama memakai
+              --contents-scale. Bukan kluster kontrol baru. */}
+          <div className="sv-scale absolute flex items-center gap-2" style={{ right: 'max(1.5rem, calc(50% - 640px + 1.5rem))' }}>
+            <span className="sv-scale-lbl">Size</span>
+            <div className="sv-scale-grp" role="group" aria-label="Contents text size">
+              <button type="button" onClick={() => setContentsScale(v => Math.max(0.85, +(v - 0.1).toFixed(2)))} aria-label="Smaller">A-</button>
+              <button type="button" onClick={() => setContentsScale(1)} aria-label="Reset size">A</button>
+              <button type="button" onClick={() => setContentsScale(v => Math.min(1.4, +(v + 0.1).toFixed(2)))} aria-label="Larger">A+</button>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -235,7 +271,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
           {activeTab === 'glossary' && (
             <div id="glossary-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[1300px] mx-auto">
               <div className="space-y-20">
-                {Object.entries(data.glg).map(([group, terms]: [string, any], gIdx) => (
+                {glGroups.map(([group, terms]: [string, any], gIdx) => (
                   <div key={group} className="gl-group" style={{marginTop: gIdx === 0 ? '0' : '6rem'}}>
                     <div className="flex items-center gap-6 mb-12 pb-3 border-b border-pmn-rule/50">
                       <h3 className="font-pmn-mono text-[1.2rem] text-pmn-acc uppercase tracking-[0.4em] font-bold" style={{marginBottom: '0'}}>{group}</h3>
@@ -257,19 +293,23 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                             title={source ? `Go to source section for "${term}"` : `Search for "${term}" in all modules`}>
                             <div className="flex justify-between items-start">
                               <h4 className="gl-term font-pmn-head font-bold text-pmn-ink text-xl transition-colors group-hover:text-pmn-acc" style={{textTransform: 'capitalize'}}>{term}</h4>
-                              {source && (
-                                <button 
-                                  className="text-[0.6rem] font-mono text-pmn-acc opacity-40 group-hover:opacity-100 transition-opacity uppercase tracking-widest hover:underline"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    onSelectSection(source.pIdx, source.sIdx)
-                                  }}
-                                >
-                                  Source &rarr;
-                                </button>
-                              )}
+                              {/* Dulu tautan ini hanya muncul kalau seksi
+                                  sumbernya ketemu, sehingga sebagian kartu
+                                  punya dan sebagian tidak - terbaca rusak,
+                                  bukan disengaja. Kini setiap kartu punya
+                                  padanan aksi yang jujur menyebut tujuannya. */}
+                              <button
+                                className="gl-act text-[0.6rem] font-mono opacity-40 group-hover:opacity-100 transition-opacity uppercase tracking-widest hover:underline"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  if (source) onSelectSection(source.pIdx, source.sIdx)
+                                  else if (onSearch) onSearch(term)
+                                }}
+                              >
+                                {source ? 'Source →' : 'Search →'}
+                              </button>
                             </div>
-                            <p className="gl-def font-pmn-body text-[0.95rem] text-pmn-mute leading-relaxed italic opacity-85 mt-auto">{def || 'Definition pending.'}</p>
+                            <p className="gl-def font-pmn-body text-[0.95rem] text-pmn-mute leading-relaxed opacity-85 mt-auto">{def || 'Definition pending.'}</p>
                           </div>
                         )
                       })}
