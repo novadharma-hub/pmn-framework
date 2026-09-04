@@ -1,0 +1,47 @@
+diff --git b/src/index.css a/src/index.css
+index 4dda525..5c9cdeb 100644
+--- b/src/index.css
++++ a/src/index.css
+@@ -103,12 +103,7 @@
+ .vignette-overlay {
+   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+   pointer-events: none; z-index: 1;
+-  /* Tema terang dulunya rgba(100,60,30,0.07) menyebar 200px - tujuh persen,
+-     praktis tak terlihat - sementara tema gelap memakai 0.70 menyebar 300px.
+-     Selisih SEPULUH KALI LIPAT pada satu-satunya isyarat kedalaman terbesar
+-     di halaman sampul; itulah sebabnya tema terang terasa datar. Dinaikkan
+-     memakai cokelat hangat, bukan hitam, supaya kertasnya tidak jadi keruh. */
+-  box-shadow: inset 0 0 280px rgba(104,72,38,0.24);
++  box-shadow: inset 0 0 200px rgba(100,60,30,0.07);
+ }
+ [data-theme=dark] .vignette-overlay {
+   box-shadow: inset 0 0 300px rgba(0,0,0,0.7);
+diff --git b/style.css a/style.css
+index d349f29..0a091f9 100644
+--- b/style.css
++++ a/style.css
+@@ -2427,11 +2427,8 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
+ :root {
+   --pmn-surface-soft: rgba(255,255,255,.42);
+   --pmn-surface-raised: rgba(255,255,255,.58);
+-  /* Bayangan tema terang dulunya .10/.08 lawan .46/.34 di tema gelap -
+-     empat sampai lima kali lebih lemah, sehingga kartu tampak menempel
+-     rata di halaman. Dinaikkan dan dilebarkan, tetap cokelat hangat. */
+-  --pmn-shadow-soft: 0 20px 52px rgba(92,67,38,.20);
+-  --pmn-shadow-tight: 0 12px 30px rgba(92,67,38,.15);
++  --pmn-shadow-soft: 0 18px 48px rgba(92,67,38,.10);
++  --pmn-shadow-tight: 0 10px 26px rgba(92,67,38,.08);
+   --pmn-focus-ring: 0 0 0 3px rgba(24,74,26,.14);
+ }
+ [data-theme=dark] {
+@@ -2507,9 +2504,7 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
+ }
+ 
+ #sidebar {
+-  /* Bayangan sidebar tema terang .08 lawan .38 di gelap. Dinaikkan dan
+-     diberi rona cokelat agar tidak terlihat kotor di atas kertas. */
+-  box-shadow: 10px 0 34px rgba(92,67,38,.16);
++  box-shadow: 10px 0 32px rgba(0,0,0,.08);
+ }
+ [data-theme=dark] #sidebar {
+   box-shadow: 12px 0 36px rgba(0,0,0,.38);
