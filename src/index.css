@@ -72,14 +72,16 @@
    ================================================================ */
 :root:not([data-theme=dark]) {
   /* Backgrounds — aged paper, not stark white */
-  --color-pmn-bg:    #e8dcc8; /* Warm amber paper */
-  --color-pmn-bg2:   #ddd0b6; /* Aged parchment */
-  --color-pmn-bg3:   #cfc09e; /* Archival tan */
-  --color-pmn-sb:    #e2d4bc; /* Sidebar warm ivory */
+  /* Tangga permukaan dilebarkan: bg->bg3 dulu cuma 1.327 sehingga ketiga
+     tingkat nyaris tak terbedakan. Sekarang 1.603. */
+  --color-pmn-bg:    #eee3d0; /* Warm amber paper */
+  --color-pmn-bg2:   #dccdac; /* Aged parchment */
+  --color-pmn-bg3:   #c6b48d; /* Archival tan */
+  --color-pmn-sb:    #e6d9c1; /* Sidebar warm ivory */
 
   /* Text */
-  --color-pmn-ink:   #1a100a; /* Deep print ink */
-  --color-pmn-ink2:  #322014; /* Warm espresso */
+  --color-pmn-ink:   #170e08; /* Deep print ink */
+  --color-pmn-ink2:  #2b1b10; /* Warm espresso */
 
   /* Accent — deep red, consistent with dark mode brand */
   --color-pmn-acc:      #8b1e14;
@@ -87,16 +89,17 @@
   --color-pmn-acc-text: #7a1810;
 
   /* Muted — dinaikkan agar lolos AA sampai di atas bg3 */
-  --color-pmn-mute:  #63482f;
-  --color-pmn-mute2: #54402c;
-  --color-pmn-mute3: #6b5138;
+  --color-pmn-mute:  #533a21;
+  --color-pmn-mute2: #4c381f;
+  --color-pmn-mute3: #63492c;
 
   /* Borders */
-  --color-pmn-rule:  #c8b898;
-  --color-pmn-rule2: #b0a080;
+  /* Garis tepi dulu 1.440 di atas bg - nyaris tak terlihat. Sekarang 1.819. */
+  --color-pmn-rule:  #bda882;
+  --color-pmn-rule2: #a08d68;
 
   /* Header */
-  --color-pmn-hdr:   #e8dcc8;
+  --color-pmn-hdr:   #eee3d0;
 }
 
 /* === GLOBAL DECORATIVE OVERLAYS (Recovery v84+) === */
@@ -117,6 +120,12 @@
 .noise-overlay {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  /* PENYEBAB "bercak kotor" di sampul: SVG derau ini punya viewBox 200x200
+     TANPA background-size, sehingga ia diregangkan mengisi seluruh panggung
+     (~1280x900). Butiran halus berubah jadi gumpalan besar. Diberi ukuran
+     ubin supaya kembali jadi butiran sungguhan. */
+  background-size: 168px 168px;
+  background-repeat: repeat;
   opacity: 0.05; mix-blend-mode: color-burn;
   pointer-events: none; z-index: 2;
 }
