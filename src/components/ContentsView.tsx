@@ -89,6 +89,21 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
         const sIdx = data.parts[pIdx].subs.findIndex(s => s.title.toLowerCase() === lowerTerm)
         if (sIdx !== -1) return { pIdx, sIdx }
       }
+      // Pencocokan longgar. Menuntut judul seksi PERSIS sama dengan istilah
+      // terlalu ketat: "Inaction As Choice" tidak akan pernah cocok dengan
+      // seksi "Inaction and Its Costs", padahal itu memang sumbernya. Audit
+      // (scripts/audit_glossary.py) menemukan 54 entri yang bisa dipetakan
+      // hanya dengan melonggarkan ini - tanpa menyentuh data sama sekali.
+      // Istilah pendek dikecualikan supaya tidak asal menempel.
+      if (lowerTerm.length >= 6) {
+        for (let pIdx = 0; pIdx < data.parts.length; pIdx++) {
+          const sIdx = data.parts[pIdx].subs.findIndex(s => {
+            const t = s.title.toLowerCase()
+            return t.includes(lowerTerm) || lowerTerm.includes(t)
+          })
+          if (sIdx !== -1) return { pIdx, sIdx }
+        }
+      }
     }
     return null
   }
