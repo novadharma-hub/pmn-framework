@@ -1,0 +1,43 @@
+diff --git b/style.css a/style.css
+index 3b40ca1..a349a4d 100644
+--- b/style.css
++++ a/style.css
+@@ -2941,38 +2941,3 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
+   font-size: calc(.84rem * var(--sidebar-scale));
+ }
+ .sb-ilbl.on { font-weight: 600; }
+-
+-/* ===================================================================
+-   RONDE 5c — sampul & header (2026-09-04)
+-   =================================================================== */
+-
+-/* Ketujuh tombol header memakai satu gaya identik - latar terisi, garis
+-   tepi, bayangan offset - sehingga semuanya berteriak sama keras dan tak
+-   ada yang terbaca sebagai tujuan utama. Dipisah dua tingkat:
+-   TUJUAN NAVIGASI (daftar isi, glosarium) tetap berkotak;
+-   SAKLAR MODE (fokus, tema, pintasan) jadi tenang dan baru menguat saat
+-   disentuh. Tidak ada yang dihilangkan - hanya bobotnya yang dibedakan. */
+-#hdr-r #focus-btn,
+-#hdr-r #theme-tog,
+-#hdr-r #hb-kbd {
+-  background: transparent;
+-  border-color: transparent;
+-  box-shadow: none;
+-  color: var(--mute);
+-}
+-#hdr-r #focus-btn:hover,
+-#hdr-r #theme-tog:hover,
+-#hdr-r #hb-kbd:hover {
+-  background: var(--bg2);
+-  border-color: var(--rule2);
+-  box-shadow: 2px 2px 0 var(--rule2);
+-  color: var(--acc-text);
+-}
+-/* Saat mode fokus menyala, saklarnya harus terlihat menyala. */
+-#hdr-r #focus-btn.on,
+-body.focus-mode #hdr-r #focus-btn {
+-  background: var(--bg3);
+-  border-color: var(--acc);
+-  color: var(--acc-text);
+-  box-shadow: 2px 2px 0 var(--acc2);
+-}
