@@ -52,7 +52,13 @@
     "consistency standard",
     "manipulation",
     "becoming",
-    "surpassability"
+    "surpassability",
+    "chosen vs imposed suffering",
+    "functional vs disfunctional suffering",
+    "material vs existential suffering",
+    "structural vs incidental suffering",
+    "the foundation of value",
+    "better and worse"
   ],
   "Power": [
     "power as structural position",
@@ -67,7 +73,11 @@
     "elite circulation",
     "adaptive capacity (C)",
     "repressive capacity (Rc)",
-    "rent-seeking"
+    "rent-seeking",
+    "stage 1 capture",
+    "stage 2 capture",
+    "stage 3 capture",
+    "stage 4 capture"
   ],
   "Politics & Institutions": [
     "the state problem",
@@ -77,7 +87,9 @@
     "noble lie",
     "path dependence",
     "system",
-    "intersectional analysis"
+    "intersectional analysis",
+    "the anti-technocratic guardrail",
+    "scale as a structural variable"
   ],
   "Culture & Society": [
     "governing narrative",
@@ -85,14 +97,16 @@
     "anti-naive universalism",
     "meaning infrastructure",
     "narrative infrastructure",
-    "the seeker"
+    "the seeker",
+    "meaning as material condition"
   ],
   "Geopolitics": [
     "material geography",
     "historical divergence",
     "parallel development framework",
     "structural realism",
-    "geopolitical power concentration"
+    "geopolitical power concentration",
+    "the material basis of international order"
   ],
   "System Change": [
     "transformation pressure",
@@ -116,7 +130,9 @@
     "ecological constraint",
     "coalition width (W)",
     "institutional fragmentation (If)",
-    "absolute structural exclusion (E)"
+    "absolute structural exclusion (E)",
+    "horizon and instrument",
+    "the organizational form problem"
   ],
   "Methodology": [
     "stress-testing",
@@ -124,7 +140,11 @@
     "genealogical interrogation",
     "framework failure",
     "tensions",
-    "structural tendency analysis"
+    "structural tendency analysis",
+    "diagnostic boundary",
+    "elimination conditions",
+    "generating conditions",
+    "domain-specific formulas"
   ],
   "Summary": [
     "progressive materialist naturalism",
@@ -148,15 +168,13 @@
     "biological floor",
     "acceleration problem"
   ],
-  "Epistemology & Knowledge": [
-    "epistemic infrastructure"
-  ],
   "Institutional Analysis": [
     "institutional capture",
     "cosmological capture"
   ],
   "Framework Architecture": [
     "inaction as choice",
-    "visibility variable"
+    "visibility variable",
+    "technocratic drift constraints"
   ]
 }
