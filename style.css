@@ -2844,3 +2844,58 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
    memakai flex-1, meninggalkan ~300px ruang kosong yang memutus kaitan
    antara judul dan tandanya. Kini tanda mengikuti judul. */
 .toc-sub .toc-sname { flex: 0 1 auto; }
+
+/* ===================================================================
+   RONDE 4 — glosarium (2026-09-04)
+   =================================================================== */
+
+/* DESIGN.md menganjurkan italic untuk teks bacaan, tapi satu halaman penuh
+   definisi miring melelahkan dan menghapus fungsi italic sebagai penekanan.
+   Diputuskan penulis 2026-09-04: definisi glosarium TIDAK miring.
+   DESIGN.md diperbarui agar dokumen dan kode tidak saling bertentangan. */
+.gl-def { font-style: normal; }
+
+/* Kontrol ukuran permukaan contents (daftar isi + glosarium + hasil cari). */
+.sv-scale-lbl {
+  font-family: var(--f-mono);
+  font-size: .58rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.sv-scale-grp {
+  display: flex;
+  gap: 2px;
+  background: var(--bg2);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px;
+}
+.sv-scale-grp button {
+  width: 30px;
+  padding: 4px 0;
+  font-family: var(--f-mono);
+  font-size: .68rem;
+  text-align: center;
+  background: none;
+  border: none;
+  color: var(--mute);
+  cursor: pointer;
+  border-radius: 2px;
+}
+.sv-scale-grp button:hover { color: var(--acc-text); background: var(--bg3); }
+
+/* Tautan aksi kartu terlempar ke baris sendiri saat judul memakan dua
+   baris - panahnya terpisah dari labelnya. */
+.gl-act {
+  white-space: nowrap;
+  flex-shrink: 0;
+  color: var(--acc-text);
+  align-self: flex-start;
+}
+
+/* Kartu pendek diregangkan menyamai kartu tertinggi di barisnya, sehingga
+   menyisakan ruang kosong di bawah definisi yang singkat. Dibiarkan
+   setinggi isinya masing-masing. */
+#glossary-panel .grid { align-items: start; }
+.gl-card { min-height: 0; }
