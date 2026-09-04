@@ -2751,3 +2751,60 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 .w-narrow #reader-col, .w-narrow #sv-body { max-width: 580px; }
 .w-medium #reader-col, .w-medium #sv-body { max-width: 680px; }
 .w-wide   #reader-col, .w-wide   #sv-body { max-width: 780px; }
+
+/* Kartu judul reader: 292px tinggi untuk isi yang cuma 204px. 49px di
+   antaranya ruang mati di bawah baris kontrol, karena .reader-meta punya
+   padding-bottom DAN margin-bottom padahal ia elemen terakhir di kartu -
+   pemisah yang tidak memisahkan apa pun. Kartu diberi padding bawah yang
+   wajar dan sisa ruang matinya dicabut. */
+.reader-title-card {
+  padding: 24px 24px 20px;
+}
+.reader-title-card .reader-meta {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+/* Pemisah antara judul dan kontrol dipindah ke ATAS baris kontrol, tempat
+   ia benar-benar memisahkan dua hal. */
+.reader-title-card .reader-meta {
+  border-top: 1px solid color-mix(in srgb, var(--rule) 60%, transparent);
+  padding-top: 16px;
+}
+
+/* Header part jadi tombol lipat. Dijadikan lengket supaya pembaca selalu
+   tahu ia sedang di part mana saat menyusuri daftar panjang. Reset tombol
+   diperlukan karena elemen ini dulunya <div>. */
+.sb-plbl-btn {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  appearance: none;
+  cursor: pointer;
+  font: inherit;
+  border-top: none;
+  border-right: none;
+  backdrop-filter: blur(6px);
+}
+.sb-plbl-chev {
+  font-size: .7rem;
+  opacity: .55;
+  width: 12px;
+  display: inline-block;
+}
+.sb-plbl-btn:hover .sb-plbl-chev { opacity: 1; }
+
+/* Filter sidebar. Ditulis sebagai CSS, BUKAN utility Tailwind, karena
+   berkas ini memuat reset universal `*,::before,::after{padding:0}` yang
+   tidak berlapis - sementara utility Tailwind berada di dalam @layer, dan
+   urutan lapis mengalahkan spesifisitas. Akibatnya px-4/py-3 dan kawan-
+   kawannya tidak pernah berlaku di komponen mana pun. */
+.sb-filter-wrap {
+  padding: 12px 16px;
+}
+#sb-filter {
+  padding: 8px 10px;
+  border-radius: 2px;
+}
+#sb-filter::placeholder { color: var(--mute3); }
+#sb-filter:focus { border-color: var(--acc); }
