@@ -27,6 +27,9 @@ interface ReaderViewProps {
   onChangeWidth?: (w: 'narrow' | 'medium' | 'wide') => void
   history?: [number, number][]
   version?: string
+  /** Mode fokus dikendalikan App agar hanya ada satu sumber kebenaran. */
+  focusMode?: boolean
+  setFocusMode?: (v: boolean) => void
 }
 
 const SPECIAL: Record<string, boolean> = { 'Preface': true, 'Coda': true, 'Intellectual Debts': true, 'Bibliography': true }
@@ -42,10 +45,10 @@ const shortenId = (id: string) => {
 
 export default function ReaderView({ 
   data, partIdx, secIdx, curPos, readMap, onMarkRead, onSavePosition, onBackHome, onToggleTheme, theme, forceOpenPalette,
-  contentWidth = 'narrow', onChangeWidth, history = [], version = ''
+  contentWidth = 'narrow', onChangeWidth, history = [], version = '',
+  focusMode = false, setFocusMode = (_v: boolean) => {}
 }: ReaderViewProps) {
   const [sbOpen, setSbOpen] = useState(window.innerWidth > 1024)
-  const [focusMode, setFocusMode] = useState(false)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
   const [noteText, setNoteText] = useState('')
   const [noteSavedStatus, setNoteSavedStatus] = useState('')
@@ -74,11 +77,6 @@ export default function ReaderView({
     document.documentElement.style.setProperty('--reader-scale', String(next))
     localStorage.setItem('pmn-reader-scale', String(next))
   }
-
-  useEffect(() => {
-    if (focusMode) document.body.classList.add('focus-mode')
-    else document.body.classList.remove('focus-mode')
-  }, [focusMode])
 
   useEffect(() => {
     if (!focusMode) return
@@ -405,9 +403,9 @@ export default function ReaderView({
               <p className="sec-eye uppercase tracking-[0.4em] font-mono text-[0.62rem] text-pmn-acc opacity-80 mb-6 border-b border-pmn-acc/20 pb-2 inline-block">
                 {SPECIAL[p?.part] ? `SYSTEM DOC // ${shortenId(s?.id || '')}` : `MODULE // ${shortenId(s?.id || '')}`}
               </p>
-              <h1 className="font-pmn-head font-bold text-pmn-ink text-3xl lg:text-5xl leading-tight mb-8 text-center">{s?.title}</h1>
+              <h1 className="font-pmn-head font-bold text-pmn-ink text-2xl lg:text-4xl leading-tight mb-5 text-center">{s?.title}</h1>
 
-              <div className="reader-meta flex flex-col md:flex-row md:items-center justify-between border-b border-pmn-rule/60 pb-6 mb-10 select-none gap-6">
+              <div className="reader-meta flex flex-col md:flex-row md:items-center justify-between pb-0 mb-0 select-none gap-4">
                 <span className="font-mono text-[0.65rem] text-pmn-mute opacity-60 uppercase tracking-widest italic">
                   {s?.text ? `${Math.ceil(s.text.split(/\s+/).length / 200)} min read` : '1 min read'}
                 </span>
@@ -415,23 +413,23 @@ export default function ReaderView({
                 {/* section wrapper used instead of div to bypass the legacy .reader-meta > div styling */}
                 <section className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full md:w-auto">
                   <div className="flex items-center justify-between sm:justify-start gap-3">
-                    <span className="font-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest">Measure</span>
+                    <span className="font-mono text-[0.58rem] text-pmn-mute uppercase tracking-[0.12em]">Measure</span>
                     <div className="flex bg-pmn-bg2 border border-pmn-rule p-1 rounded-sm gap-0.5 select-none">
                       <button
                         onClick={() => onChangeWidth?.('narrow')}
-                        className={`w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'narrow' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                        className={`w-9 py-1.5 font-mono text-[0.7rem] text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'narrow' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
                       >
                         N
                       </button>
                       <button
                         onClick={() => onChangeWidth?.('medium')}
-                        className={`w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'medium' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                        className={`w-9 py-1.5 font-mono text-[0.7rem] text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'medium' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
                       >
                         M
                       </button>
                       <button
                         onClick={() => onChangeWidth?.('wide')}
-                        className={`w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'wide' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
+                        className={`w-9 py-1.5 font-mono text-[0.7rem] text-center cursor-pointer rounded-xs transition-all ${contentWidth === 'wide' ? 'bg-pmn-acc text-white border-none' : 'text-pmn-mute hover:text-pmn-ink bg-transparent border-none'}`}
                       >
                         W
                       </button>
@@ -441,37 +439,33 @@ export default function ReaderView({
                   <div className="hidden sm:block w-px h-6 bg-pmn-rule/40" />
                   
                   <div className="flex items-center justify-between sm:justify-start gap-3">
-                    <span className="font-mono text-[0.6rem] text-pmn-mute uppercase tracking-widest">Zoom</span>
+                    <span className="font-mono text-[0.58rem] text-pmn-mute uppercase tracking-[0.12em]">Zoom</span>
                     <div className="flex bg-pmn-bg2 border border-pmn-rule p-1 rounded-sm gap-0.5 select-none">
                       <button
                         onClick={() => changeReaderScale(-0.1)}
-                        className="w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
+                        className="w-9 py-1.5 font-mono text-[0.7rem] text-center cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
                       >
                         A-
                       </button>
                       <button
                         onClick={() => { setReaderScale(1); document.documentElement.style.setProperty('--reader-scale','1'); localStorage.setItem('pmn-reader-scale','1'); }}
-                        className="w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs bg-pmn-bg text-pmn-ink hover:text-pmn-acc transition-all border-none font-bold"
+                        className="w-9 py-1.5 font-mono text-[0.7rem] text-center cursor-pointer rounded-xs bg-pmn-bg text-pmn-ink hover:text-pmn-acc transition-all border-none font-bold"
                       >
                         A
                       </button>
                       <button
                         onClick={() => changeReaderScale(0.1)}
-                        className="w-10 py-2 font-mono text-xs text-center cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
+                        className="w-9 py-1.5 font-mono text-[0.7rem] text-center cursor-pointer rounded-xs text-pmn-mute hover:text-pmn-ink transition-all bg-transparent border-none"
                       >
                         A+
                       </button>
                     </div>
                   </div>
                   
-                  <div className="hidden sm:block w-px h-6 bg-pmn-rule/40" />
-                  
-                  <button 
-                    onClick={() => setFocusMode(!focusMode)}
-                    className={`px-4 py-1.5 font-mono text-[0.65rem] uppercase tracking-widest cursor-pointer border transition-all rounded-xs w-full sm:w-auto ${focusMode ? 'bg-pmn-acc text-white border-pmn-acc shadow-md' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink bg-transparent'}`}
-                  >
-                    {focusMode ? 'EXIT' : 'FOCUS'}
-                  </button>
+                  {/* Tombol FOCUS dibuang dari sini: sudah ada di header
+                      global, dan saat mode fokus menyala ada tombol keluar
+                      melayang di kanan atas. Tiga tempat untuk satu saklar
+                      membuat baris kontrol ini berdesakan sampai terpotong. */}
                 </section>
               </div>
             </div> {/* /reader-title-card */}
@@ -482,7 +476,10 @@ export default function ReaderView({
               id="prose" 
               ref={proseRef} 
               className="prose font-pmn-body text-pmn-ink" 
-              style={{ fontSize: `calc(1.15rem * var(--reader-scale, ${readerScale}))` }}
+              // Ukuran teks isi hidup DI SINI, bukan di style.css. Inline style
+              // mengalahkan stylesheet, jadi aturan font-size untuk .prose di
+              // style.css selama ini tidak pernah berlaku untuk #prose.
+              style={{ fontSize: `calc(1.1875rem * var(--reader-scale, ${readerScale}))` }}
               dangerouslySetInnerHTML={{ __html: processedHTML }} 
               onClick={handleProseClick}
               onMouseUp={handleProseMouseUp}
