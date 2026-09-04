@@ -27,6 +27,9 @@ interface ReaderViewProps {
   onChangeWidth?: (w: 'narrow' | 'medium' | 'wide') => void
   history?: [number, number][]
   version?: string
+  /** Mode fokus dikendalikan App agar hanya ada satu sumber kebenaran. */
+  focusMode?: boolean
+  setFocusMode?: (v: boolean) => void
 }
 
 const SPECIAL: Record<string, boolean> = { 'Preface': true, 'Coda': true, 'Intellectual Debts': true, 'Bibliography': true }
@@ -42,10 +45,10 @@ const shortenId = (id: string) => {
 
 export default function ReaderView({ 
   data, partIdx, secIdx, curPos, readMap, onMarkRead, onSavePosition, onBackHome, onToggleTheme, theme, forceOpenPalette,
-  contentWidth = 'narrow', onChangeWidth, history = [], version = ''
+  contentWidth = 'narrow', onChangeWidth, history = [], version = '',
+  focusMode = false, setFocusMode = (_v: boolean) => {}
 }: ReaderViewProps) {
   const [sbOpen, setSbOpen] = useState(window.innerWidth > 1024)
-  const [focusMode, setFocusMode] = useState(false)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
   const [noteText, setNoteText] = useState('')
   const [noteSavedStatus, setNoteSavedStatus] = useState('')
@@ -74,11 +77,6 @@ export default function ReaderView({
     document.documentElement.style.setProperty('--reader-scale', String(next))
     localStorage.setItem('pmn-reader-scale', String(next))
   }
-
-  useEffect(() => {
-    if (focusMode) document.body.classList.add('focus-mode')
-    else document.body.classList.remove('focus-mode')
-  }, [focusMode])
 
   useEffect(() => {
     if (!focusMode) return
@@ -464,14 +462,10 @@ export default function ReaderView({
                     </div>
                   </div>
                   
-                  <div className="hidden sm:block w-px h-6 bg-pmn-rule/40" />
-                  
-                  <button 
-                    onClick={() => setFocusMode(!focusMode)}
-                    className={`px-4 py-1.5 font-mono text-[0.65rem] uppercase tracking-widest cursor-pointer border transition-all rounded-xs w-full sm:w-auto ${focusMode ? 'bg-pmn-acc text-white border-pmn-acc shadow-md' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink bg-transparent'}`}
-                  >
-                    {focusMode ? 'EXIT' : 'FOCUS'}
-                  </button>
+                  {/* Tombol FOCUS dibuang dari sini: sudah ada di header
+                      global, dan saat mode fokus menyala ada tombol keluar
+                      melayang di kanan atas. Tiga tempat untuk satu saklar
+                      membuat baris kontrol ini berdesakan sampai terpotong. */}
                 </section>
               </div>
             </div> {/* /reader-title-card */}
