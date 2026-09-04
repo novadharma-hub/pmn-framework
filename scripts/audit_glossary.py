@@ -130,7 +130,13 @@ def audit():
         # namanya tanpa simbol.
         return re.sub(r"\s*\([^)]{1,4}\)\s*$", "", t).strip().lower()
 
-    mati = [t for t in gl if normalkan(t) not in naskah]
+    # Judul seksi ikut dihitung sebagai "ada di naskah". Sebuah istilah yang
+    # namanya persis judul seksi jelas bukan istilah mati - tapi badan teks
+    # tidak selalu mengulang judulnya sendiri, sehingga pemeriksaan yang
+    # hanya melihat badan teks melaporkan positif palsu.
+    judul_gabung = " | ".join((j or "").lower() for (_i, j, _p, _s) in seksi)
+    mati = [t for t in gl
+            if normalkan(t) not in naskah and normalkan(t) not in judul_gabung]
     if mati:
         for t in sorted(mati):
             laporan.append(f"- `{t}`")
@@ -278,7 +284,12 @@ def audit():
             continue
         if BUKAN_KONSEP.search(j):
             continue
-        n = naskah.count(jl)
+        # Hitung dari judul PENUH, bukan dari bentuk ternormalkan. Bentuk
+        # ternormalkan memotong subjudul setelah titik dua, sehingga
+        # "The Framework: Adaptive Naturalism" menyusut jadi "the framework"
+        # dan tercatat muncul 1.270 kali. Normalisasi untuk MEMBANDINGKAN
+        # duplikat; penghitungan tetap memakai judul apa adanya.
+        n = naskah.count(j.strip().lower())
         kandidat.append((n, sid, j))
     kandidat.sort(reverse=True)
     laporan.append("| muncul | seksi | judul |")
