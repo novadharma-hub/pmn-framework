@@ -266,6 +266,18 @@ def audit():
 
     gl_lower = {t.lower() for t in gl}
     gl_norm = {norm_judul(t) for t in gl}
+
+    # Sebuah seksi terhitung SUDAH TERTUTUP bila ada definisi yang
+    # menyitasi ID-nya. Ini ukuran yang benar; mencocokkan JUDUL saja
+    # gagal karena nama istilah sering sengaja berbeda dari judul seksi -
+    # "formula limits" untuk seksi berjudul "What the Formulas Cannot Do".
+    # Tanpa ini, seksi yang sudah diberi entri tetap dihitung sebagai
+    # kandidat, dan angka sisa kandidat jadi menyesatkan.
+    tersitasi = set()
+    for definisi in gl.values():
+        for m in re.finditer(r"\((\d+\.\d+[a-z\-]*(?:-[ivx]+)?)\)", definisi or ""):
+            tersitasi.add(m.group(1))
+
     kandidat = []
     for (sid, judul, pi, si) in seksi:
         j = judul.strip()
@@ -277,12 +289,21 @@ def audit():
         # karena DIAKRITIK dan SUBJUDUL setelah titik dua - kandidat
         # duplikat pun lolos. Ketahuan saat penjaga assert gelombang kedua
         # menolak entri yang ternyata sudah ada.
+        # Bandingkan KEDUA sisi titik dua. Istilah yang bermakna sering
+        # justru ada SESUDAH titik dua: "From Description to Evaluation:
+        # The Is-Ought Bridge" - yang jadi istilah adalah bagian kedua.
+        # Membandingkan bagian pertama saja membuat entri yang sudah ada
+        # tetap muncul sebagai kandidat.
+        sisi = [norm_judul(bagian) for bagian in j.split(":")]
+        sisi = [x for x in sisi if len(x) >= 6]
+        if any(x in gl_norm for x in sisi):
+            continue
+        if any(x in t or t in x for x in sisi for t in gl_norm if len(t) >= 6):
+            continue
         jl = norm_judul(j)
-        if jl in gl_norm:
-            continue
-        if any(jl in t or t in jl for t in gl_norm if len(t) >= 6):
-            continue
         if BUKAN_KONSEP.search(j):
+            continue
+        if sid in tersitasi:
             continue
         # Hitung dari judul PENUH, bukan dari bentuk ternormalkan. Bentuk
         # ternormalkan memotong subjudul setelah titik dua, sehingga
@@ -294,7 +315,7 @@ def audit():
     kandidat.sort(reverse=True)
     laporan.append("| muncul | seksi | judul |")
     laporan.append("|---|---|---|")
-    for n, sid, j in kandidat[:35]:
+    for n, sid, j in kandidat:
         laporan.append(f"| {n} | `{sid}` | {j} |")
     laporan.append("")
     laporan.append(f"**{len(kandidat)} judul seksi tanpa entri glosarium.**")
