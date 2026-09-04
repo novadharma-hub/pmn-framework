@@ -42,6 +42,16 @@ export default function App() {
       return (s === 'glossary' || s === 'search') ? s : 'map'
     } catch { return 'map' }
   })
+  // Mode fokus punya SATU sumber kebenaran di sini. Sebelumnya ada dua:
+  // tombol global menyalakan class body.focus-mode langsung tanpa state,
+  // sementara ReaderView memegang state `focusMode` sendiri yang
+  // menyinkronkan class yang sama - sehingga label FOCUS/EXIT di reader
+  // bisa berbohong tentang keadaan sebenarnya.
+  const [focusMode, setFocusMode] = useState(false)
+  useEffect(() => {
+    document.body.classList.toggle('focus-mode', focusMode)
+  }, [focusMode])
+
   const [kbdOpen, setKbdOpen] = useState(false)
   const [notesOpen, setNotesOpen] = useState(false)
   const [contentWidth, setContentWidth] = useState<'narrow' | 'medium' | 'wide'>('wide')
@@ -167,7 +177,7 @@ export default function App() {
       if (key === 'k') { e.preventDefault(); setKbdOpen(v => !v) }
       if (key === 'n') { e.preventDefault(); setNotesOpen(v => !v) }
       if (key === '/') { e.preventDefault(); if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }
-      if (key === 'f') { e.preventDefault(); document.body.classList.toggle('focus-mode') } // global focus toggle
+      if (key === 'f') { e.preventDefault(); setFocusMode(v => !v) } // global focus toggle
       if (key === 'c') { e.preventDefault(); setContentsSub('map'); setPage('contents') }
       if (key === '?' || (key === '/' && e.shiftKey)) { e.preventDefault(); setContentsSub('glossary'); setPage('contents') }
       if (key === 'r') { e.preventDefault(); setPage('reader') }
@@ -381,7 +391,7 @@ export default function App() {
         {/* DEEP SCAN after search (rapi samping logo, not pushing srch to tengah) */}
         <button className="hbtn text-[10px] opacity-70" onClick={() => { if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }}>JUMP ↗</button>
         <div id="hdr-r">
-          <button id="focus-btn" className="focus-mode-btn" onClick={() => document.body.classList.toggle('focus-mode')}>FOCUS</button>
+          <button id="focus-btn" className="focus-mode-btn" onClick={() => setFocusMode(v => !v)}>FOCUS</button>
           <button id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
           <button id="hb-gl" onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
           <button id="theme-tog" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
@@ -444,6 +454,8 @@ export default function App() {
               forceOpenPalette={paletteTrigger}
               contentWidth={contentWidth}
               onChangeWidth={changeWidth}
+              focusMode={focusMode}
+              setFocusMode={setFocusMode}
               history={history}
               version={version}
             />
