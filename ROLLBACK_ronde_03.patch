@@ -1,0 +1,126 @@
+diff --git b/src/components/ContentsView.tsx a/src/components/ContentsView.tsx
+index 32fecdf..9933c07 100644
+--- b/src/components/ContentsView.tsx
++++ a/src/components/ContentsView.tsx
+@@ -138,6 +138,31 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
+ 
+           {activeTab === 'map' && (
+             <div id="toc-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[1200px] mx-auto">
++              <div id="quote-strip" className={quoteVisible ? '' : 'collapsed'}>
++                <div id="quote-strip-hdr">
++                  <span id="quote-strip-lbl">— PMN —</span>
++                  <div style={{display:'flex', gap:'.5rem', alignItems:'center'}}>
++                    <button onClick={() => setQuoteIdx(p => (p - 1 + data.quotes.length) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>‹</button>
++                    <button onClick={() => setQuoteIdx(p => (p + 1) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>›</button>
++                    <button id="quote-tog" onClick={() => setQuoteVisible(!quoteVisible)} style={{marginLeft:'.5rem'}}>{quoteVisible ? '−' : '+'}</button>
++                  </div>
++                </div>
++                {quoteVisible && (
++                  <div id="quote-inner">
++                    <div id="quote-body" className="italic font-serif leading-relaxed text-sm">
++                      &ldquo;{currentQuote.body || currentQuote}&rdquo;
++                    </div>
++                    <div id="quote-title" className="text-right font-mono text-[0.6rem] uppercase tracking-widest mt-2 opacity-60">
++                      — On the &ldquo;{currentQuote.title || 'Source'}&rdquo;
++                    </div>
++                    <div className="quote-dots flex justify-center gap-1.5 mt-4">
++                      {data.quotes.map((_, i) => (
++                        <div key={i} className={`qdot w-1.5 h-1.5 rounded-full ${i === quoteIdx ? 'bg-pmn-acc' : 'bg-pmn-rule'}`} />
++                      ))}
++                    </div>
++                  </div>
++                )}
++              </div>
+ 
+               <div className="toc-intro grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-12 mb-20">
+                 <div className="toc-intro-copy">
+@@ -189,7 +214,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
+                               className={`toc-sub w-full text-left py-2 px-4 flex items-baseline gap-4 transition-all hover:bg-pmn-acc/5 rounded-r-xs group ${s.is_intro ? 'bg-pmn-acc/5' : ''} ${isActive ? 'on' : ''}`}
+                             >
+                               {!s.is_intro && <span className={`toc-sid font-mono text-[0.75rem] min-w-[35px] ${isR ? 'text-pmn-mute/50' : 'text-pmn-mute'}`}>{shortenId(s.id)}</span>}
+-                              <span className={`toc-sname font-pmn-body text-[0.95rem] leading-snug ${isR ? 'text-pmn-mute' : 'text-pmn-ink2'} group-hover:text-pmn-ink`}>{s.title}</span>
++                              <span className={`toc-sname font-pmn-body text-[0.95rem] leading-snug flex-1 ${isR ? 'text-pmn-mute' : 'text-pmn-ink2'} group-hover:text-pmn-ink`}>{s.title}</span>
+                               {isR && <span className="text-pmn-acc font-bold text-[0.7rem]">✓</span>}
+                             </button>
+                           )
+@@ -199,36 +224,6 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
+                   )
+                 })}
+               </div>
+-
+-              {/* Karusel kutipan dipindah ke BAWAH. Sebelumnya ia
+-                  menghadang di puncak halaman navigasi dan mendorong
+-                  indeks sebenarnya ke bawah lipatan - kutipan adalah
+-                  bacaan tambahan, bukan alat navigasi. */}
+-              <div id="quote-strip" className={quoteVisible ? '' : 'collapsed'}>
+-                <div id="quote-strip-hdr">
+-                  <span id="quote-strip-lbl">— PMN —</span>
+-                  <div style={{display:'flex', gap:'.5rem', alignItems:'center'}}>
+-                    <button onClick={() => setQuoteIdx(p => (p - 1 + data.quotes.length) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>‹</button>
+-                    <button onClick={() => setQuoteIdx(p => (p + 1) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>›</button>
+-                    <button id="quote-tog" onClick={() => setQuoteVisible(!quoteVisible)} style={{marginLeft:'.5rem'}}>{quoteVisible ? '−' : '+'}</button>
+-                  </div>
+-                </div>
+-                {quoteVisible && (
+-                  <div id="quote-inner">
+-                    <div id="quote-body" className="italic font-serif leading-relaxed text-sm">
+-                      &ldquo;{currentQuote.body || currentQuote}&rdquo;
+-                    </div>
+-                    <div id="quote-title" className="text-right font-mono text-[0.6rem] uppercase tracking-widest mt-2 opacity-60">
+-                      — On the &ldquo;{currentQuote.title || 'Source'}&rdquo;
+-                    </div>
+-                    {/* 21 titik mungil tak terbaca sebagai posisi;
+-                        penghitung menyampaikan hal yang sama. */}
+-                    <div className="quote-count">
+-                      {quoteIdx + 1} / {data.quotes.length}
+-                    </div>
+-                  </div>
+-                )}
+-              </div>
+             </div>
+           )}
+ 
+diff --git b/style.css a/style.css
+index b25c566..2ff9a64 100644
+--- b/style.css
++++ a/style.css
+@@ -2808,39 +2808,3 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
+ }
+ #sb-filter::placeholder { color: var(--mute3); }
+ #sb-filter:focus { border-color: var(--acc); }
+-
+-/* ===================================================================
+-   RONDE 3 — daftar isi (2026-09-04)
+-   =================================================================== */
+-
+-/* Grid 3 kolom mengalir MENYAMPING: 3.4c -> 3.4c-ii -> 3.4d lalu turun,
+-   sehingga mata zig-zag ~1000px untuk daftar yang urutannya menurun.
+-   Kolom-majemuk CSS mengalir ke bawah dulu lalu pindah kolom - itulah
+-   arah baca yang benar untuk indeks bernomor. Lebar kolom dipakai
+-   (bukan jumlah tetap) supaya part berisi 2 seksi tidak dipaksa jadi 3
+-   kolom dengan satu kolom kosong. */
+-.toc-subs {
+-  display: block;
+-  columns: 320px 3;
+-  column-gap: 32px;
+-}
+-.toc-sub {
+-  break-inside: avoid;
+-  page-break-inside: avoid;
+-}
+-.toc-sub.intro { column-span: all; }
+-
+-/* Penghitung kutipan menggantikan 21 titik indikator. */
+-.quote-count {
+-  margin-top: 12px;
+-  text-align: center;
+-  font-family: var(--f-mono);
+-  font-size: .62rem;
+-  letter-spacing: .16em;
+-  color: var(--mute);
+-}
+-
+-/* Tanda baca-selesai dulunya terlempar ke tepi kanan kolom karena judul
+-   memakai flex-1, meninggalkan ~300px ruang kosong yang memutus kaitan
+-   antara judul dan tandanya. Kini tanda mengikuti judul. */
+-.toc-sub .toc-sname { flex: 0 1 auto; }
