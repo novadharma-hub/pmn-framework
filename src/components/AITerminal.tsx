@@ -59,23 +59,28 @@ export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerm
       
       {/* MODE TABS (Legacy .hai-tabs) */}
       <div className="hai-tabs mb-6" id="hai-tabs">
-        <button className={`hai-tab ${activeTab === 'claude' ? 'active' : ''}`} onClick={() => setActiveTab('claude')}>Backend Required</button>
         <button className={`hai-tab ${activeTab === 'chatgpt' ? 'active' : ''}`} onClick={() => setActiveTab('chatgpt')}>ChatGPT ↗</button>
         <button className={`hai-tab ${activeTab === 'gemini' ? 'active' : ''}`} onClick={() => setActiveTab('gemini')}>Gemini ↗</button>
+        <button className={`hai-tab ${activeTab === 'claude' ? 'active' : ''}`} onClick={() => setActiveTab('claude')}>Inline chat — planned</button>
       </div>
 
       {/* CLAUDE PANEL */}
       {activeTab === 'claude' && (
         <div id="hai-panel-claude" className="hai-panel animate-in fade-in duration-300">
           <div id="home-chat-log" className="home-chat-log min-h-[160px] border border-pmn-rule bg-pmn-bg p-5 mb-4 shadow-inner overflow-y-auto">
-             <div className="hcl-placeholder text-xs opacity-40 italic">
-                &gt;&gt; STATIC BUILD DETECTED — inline provider is parked.<br />
-                &gt;&gt; Use ChatGPT/Gemini tabs for grounded handoff.
+             <div className="hcl-placeholder text-xs italic">
+                &gt;&gt; Chat inside this page needs a server to hold the API key.
+                This site is a static build on GitHub Pages — no backend, by design.<br />
+                &gt;&gt; The two tabs on the left are not a workaround. They already do
+                the substantive part: PMN assembles a prompt grounded in the section
+                you are reading, then hands it to your own AI account.<br />
+                &gt;&gt; Inline chat would only remove the paste step, and would require
+                hosting with a server plus an API budget.
              </div>
           </div>
           <div className="home-ai-row flex gap-2">
-            <input type="text" className="home-ai-input flex-1" placeholder="Backend required in this build." disabled />
-            <button className="home-ai-btn" disabled>Locked</button>
+            <input type="text" className="home-ai-input flex-1" placeholder="Needs a backend — use ChatGPT or Gemini above." disabled />
+            <button className="home-ai-btn" disabled>Not in this build</button>
           </div>
         </div>
       )}
