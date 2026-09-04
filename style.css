@@ -2427,8 +2427,11 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 :root {
   --pmn-surface-soft: rgba(255,255,255,.42);
   --pmn-surface-raised: rgba(255,255,255,.58);
-  --pmn-shadow-soft: 0 18px 48px rgba(92,67,38,.10);
-  --pmn-shadow-tight: 0 10px 26px rgba(92,67,38,.08);
+  /* Bayangan tema terang dulunya .10/.08 lawan .46/.34 di tema gelap -
+     empat sampai lima kali lebih lemah, sehingga kartu tampak menempel
+     rata di halaman. Dinaikkan dan dilebarkan, tetap cokelat hangat. */
+  --pmn-shadow-soft: 0 20px 52px rgba(92,67,38,.20);
+  --pmn-shadow-tight: 0 12px 30px rgba(92,67,38,.15);
   --pmn-focus-ring: 0 0 0 3px rgba(24,74,26,.14);
 }
 [data-theme=dark] {
@@ -2504,7 +2507,9 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 }
 
 #sidebar {
-  box-shadow: 10px 0 32px rgba(0,0,0,.08);
+  /* Bayangan sidebar tema terang .08 lawan .38 di gelap. Dinaikkan dan
+     diberi rona cokelat agar tidak terlihat kotor di atas kertas. */
+  box-shadow: 10px 0 34px rgba(92,67,38,.16);
 }
 [data-theme=dark] #sidebar {
   box-shadow: 12px 0 36px rgba(0,0,0,.38);
