@@ -2808,3 +2808,39 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 }
 #sb-filter::placeholder { color: var(--mute3); }
 #sb-filter:focus { border-color: var(--acc); }
+
+/* ===================================================================
+   RONDE 3 — daftar isi (2026-09-04)
+   =================================================================== */
+
+/* Grid 3 kolom mengalir MENYAMPING: 3.4c -> 3.4c-ii -> 3.4d lalu turun,
+   sehingga mata zig-zag ~1000px untuk daftar yang urutannya menurun.
+   Kolom-majemuk CSS mengalir ke bawah dulu lalu pindah kolom - itulah
+   arah baca yang benar untuk indeks bernomor. Lebar kolom dipakai
+   (bukan jumlah tetap) supaya part berisi 2 seksi tidak dipaksa jadi 3
+   kolom dengan satu kolom kosong. */
+.toc-subs {
+  display: block;
+  columns: 320px 3;
+  column-gap: 32px;
+}
+.toc-sub {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.toc-sub.intro { column-span: all; }
+
+/* Penghitung kutipan menggantikan 21 titik indikator. */
+.quote-count {
+  margin-top: 12px;
+  text-align: center;
+  font-family: var(--f-mono);
+  font-size: .62rem;
+  letter-spacing: .16em;
+  color: var(--mute);
+}
+
+/* Tanda baca-selesai dulunya terlempar ke tepi kanan kolom karena judul
+   memakai flex-1, meninggalkan ~300px ruang kosong yang memutus kaitan
+   antara judul dan tandanya. Kini tanda mengikuti judul. */
+.toc-sub .toc-sname { flex: 0 1 auto; }

@@ -138,31 +138,6 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
 
           {activeTab === 'map' && (
             <div id="toc-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[1200px] mx-auto">
-              <div id="quote-strip" className={quoteVisible ? '' : 'collapsed'}>
-                <div id="quote-strip-hdr">
-                  <span id="quote-strip-lbl">— PMN —</span>
-                  <div style={{display:'flex', gap:'.5rem', alignItems:'center'}}>
-                    <button onClick={() => setQuoteIdx(p => (p - 1 + data.quotes.length) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>‹</button>
-                    <button onClick={() => setQuoteIdx(p => (p + 1) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>›</button>
-                    <button id="quote-tog" onClick={() => setQuoteVisible(!quoteVisible)} style={{marginLeft:'.5rem'}}>{quoteVisible ? '−' : '+'}</button>
-                  </div>
-                </div>
-                {quoteVisible && (
-                  <div id="quote-inner">
-                    <div id="quote-body" className="italic font-serif leading-relaxed text-sm">
-                      &ldquo;{currentQuote.body || currentQuote}&rdquo;
-                    </div>
-                    <div id="quote-title" className="text-right font-mono text-[0.6rem] uppercase tracking-widest mt-2 opacity-60">
-                      — On the &ldquo;{currentQuote.title || 'Source'}&rdquo;
-                    </div>
-                    <div className="quote-dots flex justify-center gap-1.5 mt-4">
-                      {data.quotes.map((_, i) => (
-                        <div key={i} className={`qdot w-1.5 h-1.5 rounded-full ${i === quoteIdx ? 'bg-pmn-acc' : 'bg-pmn-rule'}`} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
 
               <div className="toc-intro grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-12 mb-20">
                 <div className="toc-intro-copy">
@@ -214,7 +189,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                               className={`toc-sub w-full text-left py-2 px-4 flex items-baseline gap-4 transition-all hover:bg-pmn-acc/5 rounded-r-xs group ${s.is_intro ? 'bg-pmn-acc/5' : ''} ${isActive ? 'on' : ''}`}
                             >
                               {!s.is_intro && <span className={`toc-sid font-mono text-[0.75rem] min-w-[35px] ${isR ? 'text-pmn-mute/50' : 'text-pmn-mute'}`}>{shortenId(s.id)}</span>}
-                              <span className={`toc-sname font-pmn-body text-[0.95rem] leading-snug flex-1 ${isR ? 'text-pmn-mute' : 'text-pmn-ink2'} group-hover:text-pmn-ink`}>{s.title}</span>
+                              <span className={`toc-sname font-pmn-body text-[0.95rem] leading-snug ${isR ? 'text-pmn-mute' : 'text-pmn-ink2'} group-hover:text-pmn-ink`}>{s.title}</span>
                               {isR && <span className="text-pmn-acc font-bold text-[0.7rem]">✓</span>}
                             </button>
                           )
@@ -223,6 +198,36 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                     </div>
                   )
                 })}
+              </div>
+
+              {/* Karusel kutipan dipindah ke BAWAH. Sebelumnya ia
+                  menghadang di puncak halaman navigasi dan mendorong
+                  indeks sebenarnya ke bawah lipatan - kutipan adalah
+                  bacaan tambahan, bukan alat navigasi. */}
+              <div id="quote-strip" className={quoteVisible ? '' : 'collapsed'}>
+                <div id="quote-strip-hdr">
+                  <span id="quote-strip-lbl">— PMN —</span>
+                  <div style={{display:'flex', gap:'.5rem', alignItems:'center'}}>
+                    <button onClick={() => setQuoteIdx(p => (p - 1 + data.quotes.length) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>‹</button>
+                    <button onClick={() => setQuoteIdx(p => (p + 1) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>›</button>
+                    <button id="quote-tog" onClick={() => setQuoteVisible(!quoteVisible)} style={{marginLeft:'.5rem'}}>{quoteVisible ? '−' : '+'}</button>
+                  </div>
+                </div>
+                {quoteVisible && (
+                  <div id="quote-inner">
+                    <div id="quote-body" className="italic font-serif leading-relaxed text-sm">
+                      &ldquo;{currentQuote.body || currentQuote}&rdquo;
+                    </div>
+                    <div id="quote-title" className="text-right font-mono text-[0.6rem] uppercase tracking-widest mt-2 opacity-60">
+                      — On the &ldquo;{currentQuote.title || 'Source'}&rdquo;
+                    </div>
+                    {/* 21 titik mungil tak terbaca sebagai posisi;
+                        penghitung menyampaikan hal yang sama. */}
+                    <div className="quote-count">
+                      {quoteIdx + 1} / {data.quotes.length}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
