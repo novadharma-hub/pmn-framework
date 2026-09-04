@@ -1,0 +1,182 @@
+diff --git b/DESIGN.md a/DESIGN.md
+index 8ab234e..aa6d7c1 100644
+--- b/DESIGN.md
++++ a/DESIGN.md
+@@ -50,14 +50,7 @@
+ | Role | Font | Stack |
+ |------|------|-------|
+ | Heading | Libre Baskerville | serif |
+-| Body / Reading | Lora — upright by default | serif |
+-
+-> **Revisi 2026-09-04 (keputusan penulis).** Baris ini sebelumnya berbunyi
+-> "Lora (italic encouraged)", dan halaman Glosarium memang mencetak seluruh
+-> definisinya miring. Satu halaman penuh italic melelahkan dibaca dan
+-> menghapus fungsi italic sebagai penekanan — kalau semua miring, tidak ada
+-> yang ditekankan. Italic tetap dipakai untuk penekanan, kutipan blok, dan
+-> judul karya; bukan sebagai gaya bawaan teks bacaan.
++| Body / Reading | Lora (italic encouraged) | serif |
+ | UI Chrome | Source Code Pro | monospace |
+ 
+ **Scale:** `clamp()` for headings. Body reading text: 1rem–1.05rem, line-height 1.65–1.75.  
+diff --git b/src/components/ContentsView.tsx a/src/components/ContentsView.tsx
+index 446cec0..32fecdf 100644
+--- b/src/components/ContentsView.tsx
++++ a/src/components/ContentsView.tsx
+@@ -35,30 +35,6 @@ const shortenId = (id: string) => {
+ 
+ export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth, version = '' }: ContentsViewProps) {
+   const activeTab = subView
+-  // --contents-scale sudah dipakai 9 aturan CSS (TOC, glosarium, hasil cari)
+-  // tetapi tidak pernah ada yang menyetelnya - nilainya permanen 1. Pipanya
+-  // sudah terpasang sejak lama, hanya tak pernah disambungkan ke kontrol.
+-  const [contentsScale, setContentsScale] = useState<number>(() => {
+-    try { return Number(localStorage.getItem('pmn-contents-scale')) || 1 } catch { return 1 }
+-  })
+-  useEffect(() => {
+-    document.documentElement.style.setProperty('--contents-scale', String(contentsScale))
+-    try { localStorage.setItem('pmn-contents-scale', String(contentsScale)) } catch {}
+-  }, [contentsScale])
+-
+-  // Halaman glosarium merender dari KATEGORI (data.glg), bukan dari kamus
+-  // (data.gl). Akibatnya istilah yang tidak masuk kategori mana pun punya
+-  // definisi tapi tidak pernah bisa dilihat siapa pun - 11 dari 134 pada
+-  // v118.5. Kategorinya adalah keputusan taksonomi penulis, jadi di sini
+-  // mereka tidak dikarang-karang, hanya dibuat terjangkau.
+-  const glGroups = useMemo(() => {
+-    const groups = Object.entries(data.glg || {}) as [string, string[]][]
+-    const sudahBerkategori = new Set<string>()
+-    groups.forEach(([, terms]) => (terms || []).forEach(t => sudahBerkategori.add(String(t).toLowerCase())))
+-    const sisa = Object.keys(data.gl || {}).filter(t => !sudahBerkategori.has(t.toLowerCase()))
+-    return sisa.length ? ([...groups, ['Other Terms', sisa]] as [string, string[]][]) : groups
+-  }, [data.glg, data.gl])
+-
+   const [quoteIdx, setQuoteIdx] = useState(0)
+   const [quoteVisible, setQuoteVisible] = useState(true)
+ 
+@@ -154,18 +130,6 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
+           <h2 className="font-pmn-head font-normal text-[1.15rem] lg:text-[1.35rem] text-pmn-ink whitespace-nowrap leading-none tracking-tight" id="sv-hdr">
+             {activeTab === 'map' ? 'Table of Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : 'Search Analysis'}
+           </h2>
+-
+-          {/* Satu kontrol ukuran untuk SELURUH permukaan contents: daftar isi,
+-              glosarium, dan hasil pencarian sama-sama memakai
+-              --contents-scale. Bukan kluster kontrol baru. */}
+-          <div className="sv-scale absolute flex items-center gap-2" style={{ right: 'max(1.5rem, calc(50% - 640px + 1.5rem))' }}>
+-            <span className="sv-scale-lbl">Size</span>
+-            <div className="sv-scale-grp" role="group" aria-label="Contents text size">
+-              <button type="button" onClick={() => setContentsScale(v => Math.max(0.85, +(v - 0.1).toFixed(2)))} aria-label="Smaller">A-</button>
+-              <button type="button" onClick={() => setContentsScale(1)} aria-label="Reset size">A</button>
+-              <button type="button" onClick={() => setContentsScale(v => Math.min(1.4, +(v + 0.1).toFixed(2)))} aria-label="Larger">A+</button>
+-            </div>
+-          </div>
+         </div>
+       </div>
+       
+@@ -271,7 +235,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
+           {activeTab === 'glossary' && (
+             <div id="glossary-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[1300px] mx-auto">
+               <div className="space-y-20">
+-                {glGroups.map(([group, terms]: [string, any], gIdx) => (
++                {Object.entries(data.glg).map(([group, terms]: [string, any], gIdx) => (
+                   <div key={group} className="gl-group" style={{marginTop: gIdx === 0 ? '0' : '6rem'}}>
+                     <div className="flex items-center gap-6 mb-12 pb-3 border-b border-pmn-rule/50">
+                       <h3 className="font-pmn-mono text-[1.2rem] text-pmn-acc uppercase tracking-[0.4em] font-bold" style={{marginBottom: '0'}}>{group}</h3>
+@@ -293,23 +257,19 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
+                             title={source ? `Go to source section for "${term}"` : `Search for "${term}" in all modules`}>
+                             <div className="flex justify-between items-start">
+                               <h4 className="gl-term font-pmn-head font-bold text-pmn-ink text-xl transition-colors group-hover:text-pmn-acc" style={{textTransform: 'capitalize'}}>{term}</h4>
+-                              {/* Dulu tautan ini hanya muncul kalau seksi
+-                                  sumbernya ketemu, sehingga sebagian kartu
+-                                  punya dan sebagian tidak - terbaca rusak,
+-                                  bukan disengaja. Kini setiap kartu punya
+-                                  padanan aksi yang jujur menyebut tujuannya. */}
+-                              <button
+-                                className="gl-act text-[0.6rem] font-mono opacity-40 group-hover:opacity-100 transition-opacity uppercase tracking-widest hover:underline"
+-                                onClick={(e) => {
+-                                  e.stopPropagation()
+-                                  if (source) onSelectSection(source.pIdx, source.sIdx)
+-                                  else if (onSearch) onSearch(term)
+-                                }}
+-                              >
+-                                {source ? 'Source →' : 'Search →'}
+-                              </button>
++                              {source && (
++                                <button 
++                                  className="text-[0.6rem] font-mono text-pmn-acc opacity-40 group-hover:opacity-100 transition-opacity uppercase tracking-widest hover:underline"
++                                  onClick={(e) => {
++                                    e.stopPropagation()
++                                    onSelectSection(source.pIdx, source.sIdx)
++                                  }}
++                                >
++                                  Source &rarr;
++                                </button>
++                              )}
+                             </div>
+-                            <p className="gl-def font-pmn-body text-[0.95rem] text-pmn-mute leading-relaxed opacity-85 mt-auto">{def || 'Definition pending.'}</p>
++                            <p className="gl-def font-pmn-body text-[0.95rem] text-pmn-mute leading-relaxed italic opacity-85 mt-auto">{def || 'Definition pending.'}</p>
+                           </div>
+                         )
+                       })}
+diff --git b/style.css a/style.css
+index 678243d..b25c566 100644
+--- b/style.css
++++ a/style.css
+@@ -2844,58 +2844,3 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
+    memakai flex-1, meninggalkan ~300px ruang kosong yang memutus kaitan
+    antara judul dan tandanya. Kini tanda mengikuti judul. */
+ .toc-sub .toc-sname { flex: 0 1 auto; }
+-
+-/* ===================================================================
+-   RONDE 4 — glosarium (2026-09-04)
+-   =================================================================== */
+-
+-/* DESIGN.md menganjurkan italic untuk teks bacaan, tapi satu halaman penuh
+-   definisi miring melelahkan dan menghapus fungsi italic sebagai penekanan.
+-   Diputuskan penulis 2026-09-04: definisi glosarium TIDAK miring.
+-   DESIGN.md diperbarui agar dokumen dan kode tidak saling bertentangan. */
+-.gl-def { font-style: normal; }
+-
+-/* Kontrol ukuran permukaan contents (daftar isi + glosarium + hasil cari). */
+-.sv-scale-lbl {
+-  font-family: var(--f-mono);
+-  font-size: .58rem;
+-  letter-spacing: .12em;
+-  text-transform: uppercase;
+-  color: var(--mute);
+-}
+-.sv-scale-grp {
+-  display: flex;
+-  gap: 2px;
+-  background: var(--bg2);
+-  border: 1px solid var(--rule);
+-  border-radius: 2px;
+-  padding: 2px;
+-}
+-.sv-scale-grp button {
+-  width: 30px;
+-  padding: 4px 0;
+-  font-family: var(--f-mono);
+-  font-size: .68rem;
+-  text-align: center;
+-  background: none;
+-  border: none;
+-  color: var(--mute);
+-  cursor: pointer;
+-  border-radius: 2px;
+-}
+-.sv-scale-grp button:hover { color: var(--acc-text); background: var(--bg3); }
+-
+-/* Tautan aksi kartu terlempar ke baris sendiri saat judul memakan dua
+-   baris - panahnya terpisah dari labelnya. */
+-.gl-act {
+-  white-space: nowrap;
+-  flex-shrink: 0;
+-  color: var(--acc-text);
+-  align-self: flex-start;
+-}
+-
+-/* Kartu pendek diregangkan menyamai kartu tertinggi di barisnya, sehingga
+-   menyisakan ruang kosong di bawah definisi yang singkat. Dibiarkan
+-   setinggi isinya masing-masing. */
+-#glossary-panel .grid { align-items: start; }
+-.gl-card { min-height: 0; }
