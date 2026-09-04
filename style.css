@@ -2722,3 +2722,32 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
      ada duanya di mana pun pada layar sempit. */
   #hdr-r #hb-home { display: none; }
 }
+
+/* ===================================================================
+   RONDE 2 — reader (2026-09-04)
+   Spec: docs/superpowers/specs/2026-09-04-pmn-frontend-redesign-design.md
+   =================================================================== */
+
+/* Terukur sebelum perubahan: font 17.6px, line-height 1.88 (jarak baris
+   33px), tapi .prose p margin-bottom 1.42em (25px). Pemisah ALINEA lebih
+   rapat daripada pemisah BARIS, jadi batas alinea kalah kuat dan teks
+   terbaca sebagai satu blok abu. Aturan pengikatnya: jarak antar-alinea
+   harus lebih besar dari jarak antar-baris. */
+/* CATATAN: font-size teks isi TIDAK diatur di sini. ReaderView.tsx:485
+   memasangnya sebagai inline style pada #prose, dan inline mengalahkan
+   stylesheet - jadi kedua aturan font-size untuk .prose di berkas ini
+   selama ini kode mati untuk reader. Ukurannya diubah di komponen. */
+.prose {
+  line-height: 1.55;                                   /* jarak baris ~29px */
+}
+.prose p {
+  margin-bottom: 1.9em;                                /* ~36px > 29px */
+}
+
+/* Preset lebar: --reader-measure 68ch sudah benar, tapi ketiga preset ini
+   menimpanya dengan lebar piksel mati. Yang "wide" 1280px setara ~135
+   karakter per baris - dua kali lipat batas nyaman baca (45-75). Preset
+   diperkecil agar ketiganya jatuh di rentang yang bisa dibaca. */
+.w-narrow #reader-col, .w-narrow #sv-body { max-width: 580px; }
+.w-medium #reader-col, .w-medium #sv-body { max-width: 680px; }
+.w-wide   #reader-col, .w-wide   #sv-body { max-width: 780px; }

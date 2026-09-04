@@ -482,7 +482,10 @@ export default function ReaderView({
               id="prose" 
               ref={proseRef} 
               className="prose font-pmn-body text-pmn-ink" 
-              style={{ fontSize: `calc(1.15rem * var(--reader-scale, ${readerScale}))` }}
+              // Ukuran teks isi hidup DI SINI, bukan di style.css. Inline style
+              // mengalahkan stylesheet, jadi aturan font-size untuk .prose di
+              // style.css selama ini tidak pernah berlaku untuk #prose.
+              style={{ fontSize: `calc(1.1875rem * var(--reader-scale, ${readerScale}))` }}
               dangerouslySetInnerHTML={{ __html: processedHTML }} 
               onClick={handleProseClick}
               onMouseUp={handleProseMouseUp}
