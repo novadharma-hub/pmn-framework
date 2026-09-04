@@ -249,16 +249,32 @@ def audit():
         "makin sering diulang, makin layak punya entri."
     )
     laporan.append("")
+    import unicodedata
+
+    def norm_judul(x):
+        """Huruf kecil, diakritik dibuang, subjudul setelah titik dua dipotong."""
+        x = x.split(":")[0]
+        x = unicodedata.normalize("NFKD", x)
+        x = "".join(c for c in x if not unicodedata.combining(c))
+        return x.strip().lower()
+
     gl_lower = {t.lower() for t in gl}
+    gl_norm = {norm_judul(t) for t in gl}
     kandidat = []
     for (sid, judul, pi, si) in seksi:
         j = judul.strip()
         if not j or len(j) < 6:
             continue
-        jl = j.lower()
-        if jl in gl_lower:
+        # Normalkan sebelum membandingkan. Tanpa ini judul seksi
+        # "Anti-Naive Universalism: What the Universal Standard Actually
+        # Requires" tidak cocok dengan istilah "anti-naive universalism"
+        # karena DIAKRITIK dan SUBJUDUL setelah titik dua - kandidat
+        # duplikat pun lolos. Ketahuan saat penjaga assert gelombang kedua
+        # menolak entri yang ternyata sudah ada.
+        jl = norm_judul(j)
+        if jl in gl_norm:
             continue
-        if any(jl in t or t in jl for t in gl_lower if len(t) >= 6):
+        if any(jl in t or t in jl for t in gl_norm if len(t) >= 6):
             continue
         if BUKAN_KONSEP.search(j):
             continue
