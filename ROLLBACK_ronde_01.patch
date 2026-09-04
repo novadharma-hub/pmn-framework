@@ -1,0 +1,226 @@
+diff --git b/src/App.tsx a/src/App.tsx
+index 7aaa0c5..aea6f24 100644
+--- b/src/App.tsx
++++ a/src/App.tsx
+@@ -1,4 +1,4 @@
+-import React, { useState, useEffect, useRef } from 'react'
++import React, { useState, useEffect } from 'react'
+ import ParticlesBackground from './components/ParticlesBackground'
+ import ReaderView from './components/ReaderView'
+ import ReaderView2 from './components/ReaderView2'
+@@ -8,19 +8,13 @@ import KeyboardModal from './components/KeyboardModal'
+ import NotesModal from './components/NotesModal'
+ import GuideView from './components/GuideView'
+ import AITerminal from './components/AITerminal'
+-import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl } from './routing'
+ 
+ 
+ 
+ export default function App() {
+   // Strangler-fig flag: ?v2 → Reader baru (Tailwind-only). Lama tetap default.
+   const ReaderComp = new URLSearchParams(window.location.search).has('v2') ? ReaderView2 : ReaderView
+-  // URL menang atas localStorage. Sebelum ini reload memulihkan view terakhir
+-  // dari localStorage, sehingga tautan yang dibagikan selalu membuka halaman
+-  // terakhir SI PENERIMA, bukan halaman yang dimaksud pengirim.
+-  const rutAwal = hashToRoute(window.location.hash)
+   const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide'>(() => {
+-    if (rutAwal) return rutAwal.page
+     try {
+       const s = localStorage.getItem('pmn-page')
+       return (s === 'reader' || s === 'contents' || s === 'guide') ? s : 'home'
+@@ -36,7 +30,6 @@ export default function App() {
+   const [searchPartFilter, setSearchPartFilter] = useState('')
+   const [paletteTrigger, setPaletteTrigger] = useState(0)
+   const [contentsSub, setContentsSub] = useState<'map' | 'glossary' | 'search'>(() => {
+-    if (rutAwal) return rutAwal.contentsSub
+     try {
+       const s = localStorage.getItem('pmn-sub')
+       return (s === 'glossary' || s === 'search') ? s : 'map'
+@@ -94,67 +87,6 @@ export default function App() {
+     return () => document.removeEventListener('scroll', onAnyScroll, true)
+   }, [])
+ 
+-  // ── Routing URL ────────────────────────────────────────────────────────
+-  // Rute seksi (#/s/1.1) baru bisa diterapkan setelah data naskah tiba,
+-  // karena ID seksi harus dipetakan ke posisi [part, seksi]. Sekali saja:
+-  // sesudah itu URL mengikuti navigasi, bukan sebaliknya.
+-  const rutSeksiSudahDipakai = useRef(false)
+-  useEffect(() => {
+-    if (!data?.parts?.length || rutSeksiSudahDipakai.current) return
+-    rutSeksiSudahDipakai.current = true
+-    const mentah = hashToRoute(window.location.hash)              // tanpa validasi
+-    const sah = hashToRoute(window.location.hash, data.parts)     // divalidasi
+-    if (mentah?.page !== 'reader' || !mentah.sectionId) return
+-
+-    const pos = sah?.sectionId ? findSection(data.parts, sah.sectionId) : null
+-    if (pos) {
+-      setCurPos(pos)
+-      setPage('reader')
+-      return
+-    }
+-    // Tautan menunjuk seksi yang tidak ada - naskah ini disunting terus, jadi
+-    // tautan lama pasti akan basi. Membuka reader pada posisi default berarti
+-    // membawa pembaca ke bagian yang tidak pernah ia minta tanpa tanda apa
+-    // pun; daftar isi setidaknya jujur bahwa tujuannya tidak ditemukan.
+-    setPage('contents')
+-    setContentsSub('map')
+-  }, [data])
+-
+-  // State -> URL. Sinkronisasi pertama memakai replaceState supaya tidak
+-  // menyisipkan entri riwayat palsu sebelum pengguna menavigasi apa pun
+-  // (termasuk saat #/reader berubah jadi #/s/<id> begitu data selesai muat).
+-  const sinkronPertama = useRef(true)
+-  useEffect(() => {
+-    if (!bolehMasukUrl(page)) return
+-    // Jangan sentuh URL selama ID seksi belum bisa dipetakan. Tanpa penjaga
+-    // ini, memuat #/s/3.4c akan menulis ulang URL jadi #/reader sebelum data
+-    // tiba - ID-nya hilang sebelum sempat dipulihkan.
+-    if (page === 'reader' && !data?.parts?.length) return
+-    const sectionId = page === 'reader' ? sectionIdAt(data?.parts, curPos[0], curPos[1]) : null
+-    const hashBaru = routeToHash({ page, contentsSub, sectionId })
+-    if (hashBaru === window.location.hash) { sinkronPertama.current = false; return }
+-    const url = window.location.pathname + window.location.search + hashBaru
+-    if (sinkronPertama.current) window.history.replaceState(null, '', url)
+-    else window.history.pushState(null, '', url)
+-    sinkronPertama.current = false
+-  }, [page, contentsSub, curPos, data])
+-
+-  // URL -> state. Tanpa ini tombol Back browser tidak melakukan apa pun.
+-  useEffect(() => {
+-    const onPop = () => {
+-      const r = hashToRoute(window.location.hash, data?.parts)
+-      if (!r) return
+-      setPage(r.page)
+-      setContentsSub(r.contentsSub)
+-      if (r.page === 'reader' && r.sectionId) {
+-        const pos = findSection(data?.parts, r.sectionId)
+-        if (pos) setCurPos(pos)
+-      }
+-    }
+-    window.addEventListener('popstate', onPop)
+-    return () => window.removeEventListener('popstate', onPop)
+-  }, [data])
+-
+   const [version, setVersion] = useState('')
+   const [loadedCount, setLoadedCount] = useState(0)
+ 
+diff --git b/src/routing.ts a/src/routing.ts
+deleted file mode 100644
+index 7c338d3..0000000
+--- b/src/routing.ts
++++ /dev/null
+@@ -1,114 +0,0 @@
+-/**
+- * PMN — pemetaan antara state navigasi dan location.hash.
+- *
+- * Sebelum ini seluruh view berbagi satu URL: location.hash selalu kosong,
+- * sehingga tidak ada deep-link ke bagian mana pun dari naskah 600 halaman,
+- * tombol Back browser mati, dan reload memulihkan view terakhir dari
+- * localStorage - tak bisa diprediksi maupun dibagikan.
+- *
+- * Rute memakai ID seksi yang sudah ada di data (`1.1`, `3.4c`, `preface`),
+- * BUKAN indeks [part, seksi]. Indeks bergeser setiap kali naskah disunting;
+- * ID tidak. Tautan yang dibagikan hari ini harus tetap sahih di v119.
+- *
+- * Fungsi di berkas ini murni: tidak menyentuh DOM, window, maupun state
+- * React, sehingga bisa diperiksa terpisah dari aplikasi.
+- */
+-
+-export type PmnPage = 'home' | 'contents' | 'reader' | 'guide'
+-export type ContentsSub = 'map' | 'glossary' | 'search'
+-
+-export interface RouteState {
+-  page: PmnPage
+-  contentsSub: ContentsSub
+-  /** ID seksi untuk halaman reader; null untuk halaman lain. */
+-  sectionId: string | null
+-}
+-
+-/** Bentuk minimum data naskah yang dibutuhkan router. */
+-export interface PartLike {
+-  subs?: Array<{ id?: string }>
+-}
+-
+-/**
+- * Halaman yang TIDAK pernah masuk URL. 'login' dan 'admin' adalah pintu
+- * pengelolaan; menaruhnya di URL berarti membagikannya secara tak sengaja
+- * lewat tautan yang di-copy.
+- */
+-const HALAMAN_PRIVAT = ['login', 'admin']
+-
+-export function bolehMasukUrl(page: string): page is PmnPage {
+-  return !HALAMAN_PRIVAT.includes(page)
+-}
+-
+-/** Cari posisi [indeks part, indeks seksi] dari sebuah ID seksi. */
+-export function findSection(parts: PartLike[] | null | undefined, sectionId: string): [number, number] | null {
+-  if (!parts || !sectionId) return null
+-  for (let pi = 0; pi < parts.length; pi++) {
+-    const subs = parts[pi]?.subs
+-    if (!subs) continue
+-    for (let si = 0; si < subs.length; si++) {
+-      if (subs[si]?.id === sectionId) return [pi, si]
+-    }
+-  }
+-  return null
+-}
+-
+-/** Kebalikannya: ID seksi pada posisi tertentu, atau null bila di luar jangkauan. */
+-export function sectionIdAt(parts: PartLike[] | null | undefined, pi: number, si: number): string | null {
+-  return parts?.[pi]?.subs?.[si]?.id ?? null
+-}
+-
+-/**
+- * Susun hash dari state. Home menghasilkan string kosong supaya URL beranda
+- * tetap bersih tanpa ekor '#'.
+- */
+-export function routeToHash(state: RouteState): string {
+-  switch (state.page) {
+-    case 'home':
+-      return ''
+-    case 'guide':
+-      return '#/guide'
+-    case 'contents':
+-      if (state.contentsSub === 'glossary') return '#/glossary'
+-      if (state.contentsSub === 'search') return '#/search'
+-      return '#/contents'
+-    case 'reader':
+-      return state.sectionId ? '#/s/' + encodeURIComponent(state.sectionId) : '#/reader'
+-  }
+-}
+-
+-/**
+- * Urai hash menjadi state. Mengembalikan null bila hash tidak dikenali,
+- * supaya pemanggil bisa membedakan "tidak ada rute" dari "rute home" dan
+- * jatuh kembali ke localStorage.
+- *
+- * `parts` hanya dipakai untuk memvalidasi ID seksi. Bila belum termuat,
+- * ID tetap dikembalikan apa adanya agar pemanggil dapat menerapkannya
+- * setelah data tiba.
+- */
+-export function hashToRoute(hash: string, parts?: PartLike[] | null): RouteState | null {
+-  const bersih = (hash || '').replace(/^#\/?/, '').replace(/\/+$/, '')
+-
+-  if (bersih === '') return { page: 'home', contentsSub: 'map', sectionId: null }
+-  if (bersih === 'guide') return { page: 'guide', contentsSub: 'map', sectionId: null }
+-  if (bersih === 'contents') return { page: 'contents', contentsSub: 'map', sectionId: null }
+-  if (bersih === 'glossary') return { page: 'contents', contentsSub: 'glossary', sectionId: null }
+-  if (bersih === 'search') return { page: 'contents', contentsSub: 'search', sectionId: null }
+-  if (bersih === 'reader') return { page: 'reader', contentsSub: 'map', sectionId: null }
+-
+-  if (bersih.startsWith('s/')) {
+-    let id: string
+-    try {
+-      id = decodeURIComponent(bersih.slice(2))
+-    } catch {
+-      return null // hash cacat, jangan paksa
+-    }
+-    if (!id) return null
+-    // Bila data sudah ada, tolak ID yang tidak dikenal supaya tautan basi
+-    // tidak membuka reader pada bagian yang salah tanpa penjelasan.
+-    if (parts && !findSection(parts, id)) return null
+-    return { page: 'reader', contentsSub: 'map', sectionId: id }
+-  }
+-
+-  return null
+-}

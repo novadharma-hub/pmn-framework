@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ParticlesBackground from './components/ParticlesBackground'
 import ReaderView from './components/ReaderView'
 import ReaderView2 from './components/ReaderView2'
@@ -8,13 +8,19 @@ import KeyboardModal from './components/KeyboardModal'
 import NotesModal from './components/NotesModal'
 import GuideView from './components/GuideView'
 import AITerminal from './components/AITerminal'
+import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl } from './routing'
 
 
 
 export default function App() {
   // Strangler-fig flag: ?v2 → Reader baru (Tailwind-only). Lama tetap default.
   const ReaderComp = new URLSearchParams(window.location.search).has('v2') ? ReaderView2 : ReaderView
+  // URL menang atas localStorage. Sebelum ini reload memulihkan view terakhir
+  // dari localStorage, sehingga tautan yang dibagikan selalu membuka halaman
+  // terakhir SI PENERIMA, bukan halaman yang dimaksud pengirim.
+  const rutAwal = hashToRoute(window.location.hash)
   const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide'>(() => {
+    if (rutAwal) return rutAwal.page
     try {
       const s = localStorage.getItem('pmn-page')
       return (s === 'reader' || s === 'contents' || s === 'guide') ? s : 'home'
@@ -30,6 +36,7 @@ export default function App() {
   const [searchPartFilter, setSearchPartFilter] = useState('')
   const [paletteTrigger, setPaletteTrigger] = useState(0)
   const [contentsSub, setContentsSub] = useState<'map' | 'glossary' | 'search'>(() => {
+    if (rutAwal) return rutAwal.contentsSub
     try {
       const s = localStorage.getItem('pmn-sub')
       return (s === 'glossary' || s === 'search') ? s : 'map'
@@ -86,6 +93,67 @@ export default function App() {
     document.addEventListener('scroll', onAnyScroll, true)
     return () => document.removeEventListener('scroll', onAnyScroll, true)
   }, [])
+
+  // ── Routing URL ────────────────────────────────────────────────────────
+  // Rute seksi (#/s/1.1) baru bisa diterapkan setelah data naskah tiba,
+  // karena ID seksi harus dipetakan ke posisi [part, seksi]. Sekali saja:
+  // sesudah itu URL mengikuti navigasi, bukan sebaliknya.
+  const rutSeksiSudahDipakai = useRef(false)
+  useEffect(() => {
+    if (!data?.parts?.length || rutSeksiSudahDipakai.current) return
+    rutSeksiSudahDipakai.current = true
+    const mentah = hashToRoute(window.location.hash)              // tanpa validasi
+    const sah = hashToRoute(window.location.hash, data.parts)     // divalidasi
+    if (mentah?.page !== 'reader' || !mentah.sectionId) return
+
+    const pos = sah?.sectionId ? findSection(data.parts, sah.sectionId) : null
+    if (pos) {
+      setCurPos(pos)
+      setPage('reader')
+      return
+    }
+    // Tautan menunjuk seksi yang tidak ada - naskah ini disunting terus, jadi
+    // tautan lama pasti akan basi. Membuka reader pada posisi default berarti
+    // membawa pembaca ke bagian yang tidak pernah ia minta tanpa tanda apa
+    // pun; daftar isi setidaknya jujur bahwa tujuannya tidak ditemukan.
+    setPage('contents')
+    setContentsSub('map')
+  }, [data])
+
+  // State -> URL. Sinkronisasi pertama memakai replaceState supaya tidak
+  // menyisipkan entri riwayat palsu sebelum pengguna menavigasi apa pun
+  // (termasuk saat #/reader berubah jadi #/s/<id> begitu data selesai muat).
+  const sinkronPertama = useRef(true)
+  useEffect(() => {
+    if (!bolehMasukUrl(page)) return
+    // Jangan sentuh URL selama ID seksi belum bisa dipetakan. Tanpa penjaga
+    // ini, memuat #/s/3.4c akan menulis ulang URL jadi #/reader sebelum data
+    // tiba - ID-nya hilang sebelum sempat dipulihkan.
+    if (page === 'reader' && !data?.parts?.length) return
+    const sectionId = page === 'reader' ? sectionIdAt(data?.parts, curPos[0], curPos[1]) : null
+    const hashBaru = routeToHash({ page, contentsSub, sectionId })
+    if (hashBaru === window.location.hash) { sinkronPertama.current = false; return }
+    const url = window.location.pathname + window.location.search + hashBaru
+    if (sinkronPertama.current) window.history.replaceState(null, '', url)
+    else window.history.pushState(null, '', url)
+    sinkronPertama.current = false
+  }, [page, contentsSub, curPos, data])
+
+  // URL -> state. Tanpa ini tombol Back browser tidak melakukan apa pun.
+  useEffect(() => {
+    const onPop = () => {
+      const r = hashToRoute(window.location.hash, data?.parts)
+      if (!r) return
+      setPage(r.page)
+      setContentsSub(r.contentsSub)
+      if (r.page === 'reader' && r.sectionId) {
+        const pos = findSection(data?.parts, r.sectionId)
+        if (pos) setCurPos(pos)
+      }
+    }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [data])
 
   const [version, setVersion] = useState('')
   const [loadedCount, setLoadedCount] = useState(0)
