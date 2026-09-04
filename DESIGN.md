@@ -50,7 +50,14 @@
 | Role | Font | Stack |
 |------|------|-------|
 | Heading | Libre Baskerville | serif |
-| Body / Reading | Lora (italic encouraged) | serif |
+| Body / Reading | Lora — upright by default | serif |
+
+> **Revisi 2026-09-04 (keputusan penulis).** Baris ini sebelumnya berbunyi
+> "Lora (italic encouraged)", dan halaman Glosarium memang mencetak seluruh
+> definisinya miring. Satu halaman penuh italic melelahkan dibaca dan
+> menghapus fungsi italic sebagai penekanan — kalau semua miring, tidak ada
+> yang ditekankan. Italic tetap dipakai untuk penekanan, kutipan blok, dan
+> judul karya; bukan sebagai gaya bawaan teks bacaan.
 | UI Chrome | Source Code Pro | monospace |
 
 **Scale:** `clamp()` for headings. Body reading text: 1rem–1.05rem, line-height 1.65–1.75.  
