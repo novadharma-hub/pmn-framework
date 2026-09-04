@@ -509,20 +509,34 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   isolation:isolate;
 
   /* Light mode: premium warm illuminated parchment radial glow */
-  background: 
-    radial-gradient(circle at 50% 50%, 
-      rgba(184, 58, 27, 0.07) 0%, 
-      rgba(232, 220, 196, 0.35) 45%, 
-      rgba(253, 251, 247, 0) 80%),
+  /* Dulu praktis rata: titik tengahnya cuma merah 7% dan titik tengah-luar
+     memakai warna bg itu sendiri pada 35% - tidak menghasilkan apa pun.
+     Sekarang pendar sungguhan dari terang di pusat ke hangat-gelap di tepi,
+     dengan cukup banyak titik henti agar tidak berpita. */
+  background:
+    radial-gradient(circle at 50% 42%,
+      rgba(255, 251, 242, 0.85) 0%,
+      rgba(250, 242, 226, 0.62) 18%,
+      rgba(238, 226, 200, 0.42) 34%,
+      rgba(222, 205, 172, 0.30) 52%,
+      rgba(203, 183, 145, 0.24) 70%,
+      rgba(186, 165, 126, 0.22) 88%,
+      rgba(178, 156, 116, 0.22) 100%),
     var(--bg);
 }
 [data-theme=dark] .hero{
   /* Dark mode: Beautiful seamless terracotta reading orb fading into the dark */
+  /* Titik henti diperbanyak: tiga titik pada lingkaran sebesar ini
+     menghasilkan pita warna yang terlihat pada layar 8-bit. */
   background:
-    radial-gradient(circle at 50% 50%,
-      rgba(192, 39, 26, 0.18) 0%,
-      rgba(30, 10, 10, 0.08) 45%,
-      rgba(13, 13, 13, 0) 80%),
+    radial-gradient(circle at 50% 42%,
+      rgba(196, 44, 30, 0.20) 0%,
+      rgba(168, 38, 26, 0.15) 16%,
+      rgba(112, 28, 20, 0.11) 32%,
+      rgba(58, 18, 14, 0.08) 50%,
+      rgba(28, 13, 12, 0.05) 66%,
+      rgba(16, 13, 13, 0.02) 82%,
+      rgba(13, 13, 13, 0) 100%),
     var(--bg);
 }
 
