@@ -29,6 +29,10 @@ export default defineConfig({
       workbox: {
         // Cache app shell (JS/CSS/HTML)
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        navigateFallbackDenylist: [
+          /\.(txt|md|pdf|json|xml|docx|png|jpg|jpeg|svg|webp|ico)$/i,
+          /\/data\//,
+        ],
         // Data JSON: stale-while-revalidate so reader gets offline access
         // but new content loads when online
         runtimeCaching: [
