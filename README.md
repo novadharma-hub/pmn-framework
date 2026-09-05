@@ -1,6 +1,6 @@
 # Progressive Materialist Naturalism (PMN) — Reader Platform
 
-[![Version](https://img.shields.io/badge/Release-v118.6-blueviolet.svg?style=flat-square)](#)
+[![Version](https://img.shields.io/badge/Release-v118.6-blueviolet.svg?style=flat-square)](https://github.com/novadharma-hub/pmn-framework/releases)
 [![Stack](https://img.shields.io/badge/Stack-React%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-Corpus%20Enabled-orange.svg?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](#)
@@ -8,6 +8,8 @@
 A fully interactive, offline-capable reader platform for the PMN philosophical manuscript — a framework for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming.
 
 Built as a **React + TypeScript + Vite** single-page application, with a cozy bookstore aesthetic, full dark/light theme, keyboard-first navigation, AI grounding corpus, and a complete build pipeline driven by a single `.bat` launcher.
+
+**[Read online](https://novadharma-hub.github.io/pmn-framework/)** · [Download PDF/Markdown](https://github.com/novadharma-hub/pmn-framework/releases) · [AI grounding corpus](./pmn_corpus_for_ai.md)
 
 ---
 
@@ -44,7 +46,7 @@ pmn-framework/
 │   ├── quotes.json                 ← Notable quotes for display
 │   └── version.json                ← Current live version tag
 │
-├── style.css                       ← Master CSS (109KB). ALWAYS read before editing.
+├── style.css                       ← Master CSS. ALWAYS read before editing.
 ├── index.html                      ← Vite entry shell
 ├── vite.config.js
 ├── package.json
@@ -115,11 +117,13 @@ The full pipeline is orchestrated by `00_PMN_WORKSPACE.bat` (one file, one entry
 
 ---
 
-## AI Grounding
+## AI Grounding & Machine Endpoints
 
-The repository maintains `pmn_corpus_for_ai.md` — a plain-text, HTML-stripped flat export of the entire manuscript, optimized for direct use as AI context. Updated automatically on each import/build cycle.
-
-AI agents and automated tools can refer to [`llms.txt`](./llms.txt) and [`pmn_corpus_for_ai.md`](./pmn_corpus_for_ai.md) for complete structural and contextual grounding.
+The repository provides multiple machine-readable formats for AI ingestion and grounding:
+- [`llms.txt`](./llms.txt) — Standard AI discovery index ([llmstxt.org](https://llmstxt.org/)).
+- [`llms.json`](./llms.json) — Structured API manifest with module endpoints, section counts, and metadata.
+- [`llms.md`](./llms.md) — Comprehensive Markdown reference with complete architectural tables.
+- [`pmn_corpus_for_ai.md`](./pmn_corpus_for_ai.md) — Plain-text, HTML-stripped flat export of the entire ~330k-word manuscript, optimized for direct use as AI context. Updated automatically on each import/build cycle.
 
 ---
 

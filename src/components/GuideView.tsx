@@ -121,10 +121,22 @@ Do not become smoother than the evidence allows.`
         <h1 className="page-h1">Using PMN<br /><em style={{ color: 'var(--acc-text)' }}>as an AI Agent</em></h1>
         <p className="page-subtitle">A practical guide to deploying the framework through Claude, DeepSeek, ChatGPT, Gemini, and similar systems without letting the manuscript dissolve into generic ideology talk.</p>
 
-        <div className="page-actions">
+        <div className="page-actions" style={{ flexWrap: 'wrap', gap: '0.6rem' }}>
+          <a className="btn-dl" href="https://novadharma-hub.github.io/pmn-framework/llms.txt" target="_blank" rel="noopener noreferrer">
+            <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.75rem', fontWeight: 700, marginRight: '0.4rem', color: 'var(--acc-text)' }}>TXT</span>
+            llms.txt
+          </a>
+          <a className="btn-dl" href="https://novadharma-hub.github.io/pmn-framework/llms.json" target="_blank" rel="noopener noreferrer">
+            <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.75rem', fontWeight: 700, marginRight: '0.4rem', color: 'var(--acc-text)' }}>JSON</span>
+            llms.json
+          </a>
+          <a className="btn-dl" href="https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md" target="_blank" rel="noopener noreferrer">
+            <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.75rem', fontWeight: 700, marginRight: '0.4rem', color: 'var(--acc-text)' }}>MD</span>
+            Raw AI Corpus
+          </a>
           <a className="btn-dl" href="https://github.com/novadharma-hub/pmn-framework/releases/latest" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="inline mr-2"><path d="M8 2v8M5 7l3 3 3-3M2 11v1a2 2 0 002 2h8a2 2 0 002-2v-1"/></svg>
-            Download PDF / Markdown
+            PDF / Markdown
           </a>
           <button className="btn-dl cursor-pointer" onClick={onBackHome}>
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="inline mr-2"><path d="M10 8H2M5 5L2 8l3 3M14 4v8"/></svg>
@@ -420,6 +432,86 @@ Do not become smoother than the evidence allows.`
               <strong>3. Rely on Grounded Files</strong>
               <span>Make the model earn every conclusion by explicitly prompting: <em>"Search the uploaded PMN file for section IDs and quote the exact passage before answering."</em></span>
             </div>
+          </div>
+        </div>
+
+        <div className="step">
+          <span className="step-num">Step 09</span>
+          <h2 className="step-h2">Official Machine &amp; AI Grounding Endpoints</h2>
+          <p>For automated agents, web crawlers, LangChain/LlamaIndex pipelines, or direct prompt feeding, use the canonical endpoints below. These are static, fast, CORS-enabled, and never blocked by client-side single-page application routing.</p>
+
+          <div className="workflow-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', marginTop: '1.2rem' }}>
+            {[
+              {
+                id: 'ep-txt',
+                format: 'TXT',
+                name: 'llms.txt (Standard Index)',
+                url: 'https://novadharma-hub.github.io/pmn-framework/llms.txt',
+                desc: 'Official llmstxt.org discovery index with clean summaries and links to all architectural modules.'
+              },
+              {
+                id: 'ep-json',
+                format: 'JSON',
+                name: 'llms.json (API Manifest)',
+                url: 'https://novadharma-hub.github.io/pmn-framework/llms.json',
+                desc: 'Machine-readable JSON schema with 21 part endpoints, statistics, and metadata for automated code.'
+              },
+              {
+                id: 'ep-md',
+                format: 'MD',
+                name: 'llms.md (AI Documentation)',
+                url: 'https://novadharma-hub.github.io/pmn-framework/llms.md',
+                desc: 'Rich Markdown documentation with architectural tables, section counts, and priming prompts.'
+              },
+              {
+                id: 'ep-corpus',
+                format: 'CORPUS',
+                name: 'pmn_corpus_for_ai.md',
+                url: 'https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md',
+                desc: 'Flat, uncompressed ~330,000-word manuscript export without HTML tags, ideal for full LLM upload.'
+              },
+              {
+                id: 'ep-manifest',
+                format: 'DATA',
+                name: 'manifest.json (Parts & Subs)',
+                url: 'https://novadharma-hub.github.io/pmn-framework/data/parts/manifest.json',
+                desc: 'Structural hierarchy of all 21 parts, titles, section IDs, and subsection markers.'
+              },
+              {
+                id: 'ep-gl',
+                format: 'DATA',
+                name: 'gl.json (237 Glossary Terms)',
+                url: 'https://novadharma-hub.github.io/pmn-framework/data/gl.json',
+                desc: 'Complete philosophical vocabulary definitions with section cross-reference citations.'
+              }
+            ].map(ep => (
+              <div key={ep.id} className="workflow-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '1rem' }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                    <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.45rem', borderRadius: '3px', background: 'var(--acc)', color: 'var(--bg)' }}>
+                      {ep.format}
+                    </span>
+                    <a href={ep.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.75rem', color: 'var(--acc-text)', textDecoration: 'none' }}>
+                      Open &rarr;
+                    </a>
+                  </div>
+                  <div className="workflow-name" style={{ fontSize: '0.92rem', fontWeight: 600 }}>{ep.name}</div>
+                  <div className="workflow-note" style={{ fontSize: '0.8rem', marginTop: '0.3rem', color: 'var(--mute)', lineHeight: 1.45 }}>{ep.desc}</div>
+                </div>
+                <div style={{ marginTop: '0.8rem', paddingTop: '0.6rem', borderTop: '1px solid var(--rule)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <code style={{ fontSize: '0.68rem', color: 'var(--mute)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '170px' }}>
+                    {ep.url.replace('https://novadharma-hub.github.io/pmn-framework', '')}
+                  </code>
+                  <button
+                    className={`copy-btn ${copiedStates[ep.id] ? 'copied' : ''}`}
+                    style={{ position: 'static', padding: '0.2rem 0.5rem', fontSize: '0.68rem' }}
+                    onClick={() => copyText(ep.id, ep.url)}
+                  >
+                    {copiedStates[ep.id] ? 'Copied' : 'Copy URL'}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
