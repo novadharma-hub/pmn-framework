@@ -44,7 +44,7 @@ def rata(s):
 
 
 def main():
-    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)
     seksi = muat()
     badan = rata(" ".join(t for _i, _j, t in seksi))
     kutipan = json.load(io.open(AKAR + r"\data\quotes.json", encoding="utf-8"))
@@ -52,17 +52,17 @@ def main():
     print("=== A. quotes.json vs naskah ===")
     print("kutipan pilihan: %d" % len(kutipan))
     hilang = []
+    # Ambil irisan dari badan yang sudah diratakan (instan, tanpa alokasi berulang)
+    step = 100
+    irisan = [badan[i:i + 100] for i in range(0, len(badan) - 100, step)]
     for q in kutipan:
         badan_q = rata(q.get("body", ""))
         if badan_q and badan_q in badan:
             continue
-        # Cari kalimat termirip supaya bisa dibedakan: benar-benar hilang,
-        # atau hanya berubah sedikit.
         potongan = badan_q[:70]
-        mirip = difflib.get_close_matches(
-            potongan,
-            [badan[i:i + 70] for i in range(0, len(badan) - 70, 40)],
-            n=1, cutoff=0.6)
+        kata_q = set(potongan.split())
+        kandidat = [s for s in irisan if len(kata_q.intersection(s.split())) >= max(1, int(len(kata_q) * 0.4))]
+        mirip = difflib.get_close_matches(potongan, kandidat, n=1, cutoff=0.6) if kandidat else []
         hilang.append((q.get("title", "(tanpa judul)"), badan_q, mirip))
     if not hilang:
         print("  semua kutipan pilihan masih ada persis di naskah.")
@@ -82,10 +82,16 @@ def main():
     print("kutipan dalam tanda petik (40-240 huruf): %d unik" % len(kunci))
     dilihat, temuan = set(), 0
     for i, a in enumerate(kunci):
+        len_a = len(a)
+        kata_a = set(a.split())
         for b in kunci[i + 1:]:
-            if abs(len(a) - len(b)) > 40:
+            len_b = len(b)
+            if abs(len_a - len_b) > int(max(len_a, len_b) * 0.12):
                 continue
-            r = difflib.SequenceMatcher(None, a, b).ratio()
+            if len(kata_a.intersection(b.split())) < len(kata_a) * 0.7:
+                continue
+            sm = difflib.SequenceMatcher(None, a, b)
+            r = sm.ratio()
             if 0.88 <= r < 1.0 and (a, b) not in dilihat:
                 dilihat.add((a, b))
                 temuan += 1
