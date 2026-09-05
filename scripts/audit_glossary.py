@@ -277,6 +277,10 @@ def audit():
     for definisi in gl.values():
         for m in re.finditer(r"\((\d+\.\d+[a-z\-]*(?:-[ivx]+)?)\)", definisi or ""):
             tersitasi.add(m.group(1))
+        # Sitasi rentang "(1.8-1.12)" tidak tertangkap pola di atas, sehingga
+        # kedua ujungnya terhitung belum tertutup padahal sudah disitasi.
+        for m in re.finditer(r"\((\d+\.\d+)-(\d+\.\d+)\)", definisi or ""):
+            tersitasi.update(m.groups())
 
     kandidat = []
     for (sid, judul, pi, si) in seksi:
