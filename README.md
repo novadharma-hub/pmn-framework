@@ -102,34 +102,36 @@ with urllib.request.urlopen(url) as response:
 
 For complete prompts, role profiles, and diagnostic instructions, visit the in-app **[AI Guide (`#/guide`)](https://novadharma-hub.github.io/pmn-framework/#/guide)**.
 
-### 1. Cloud Frontier AI Deployment
+### 1. Cloud Frontier AI Deployment (2026 Lineup)
 
-- **Claude 3.7 Sonnet (Extended Thinking):** Upload `pmn_corpus_for_ai.md` as Project Knowledge. Ideal for deep institutional forensics, red-teaming arguments, and philosophical tension audits.
-- **Google NotebookLM:** Import `https://novadharma-hub.github.io/pmn-framework/llms.txt` and `pmn_corpus_for_ai.md`. Generates grounded study guides, audio overviews, and source-cited Q&A.
-- **Gemini 2.5 Flash / Pro (2M Token Window):** Ingest the full flat corpus in a single prompt for systemic cross-part synthesis across all 21 parts simultaneously.
-- **OpenAI o1 / o3-mini / GPT-4.5:** Leverage for rigorous mathematical and logical derivations of the transfer formula $T = S \cdot D \cdot P \cdot G$ and economic contestability models.
+- **Anthropic Claude (Fable 5.1 / Sonnet 5 / Opus 5):** 1M-token context with Adaptive Thinking. Upload `pmn_corpus_for_ai.md` into Project Knowledge. Ideal for sustained philosophical dialectics, assumption archaeology (§12.1), and institutional red-teaming.
+- **Google DeepMind (Gemini 3.1 Pro / 3.8 Flash / NotebookLM):** 1M–2M token context windows. Ingests the full ~330k-word uncompressed corpus in a single prompt. NotebookLM provides zero-hallucination grounded page citations and Audio Overview podcasts.
+- **DeepSeek (DeepSeek-V4-Pro / V4-Flash / R1):** 1.6T MoE (49B active) with Hybrid Attention & mHC, alongside pure RL reasoning models. Industry-leading capture sequence diagnostics (§7.3c-i) and anti-ideology forensics.
+- **OpenAI (GPT-6 Astra / o3 / o3-pro / GPT-5.6 Sol):** 1M context with advanced multi-step reasoning. Formalizes and simulates the non-linear Transformation Pressure Formula ($T = S \cdot D \cdot P \cdot G$) via Code Interpreter.
+- **Alibaba Qwen & Zhipu GLM (Qwen 3.8-Max / GLM-5.3 / GLM-5.2):** 1M-token agentic architectures for multi-tool workflows, automated data pipelining, and enterprise compliance audits.
 
-### 2. Local AI & Private Deployment (Ollama / LM Studio)
+### 2. Local AI & Sovereign Deployment (Ollama / vLLM / SGLang)
 
-Run a sovereign, air-gapped PMN analyst locally using [Ollama](https://ollama.ai):
+Run a sovereign, air-gapped PMN analyst locally with zero cloud telemetry using [Ollama](https://ollama.ai) or high-throughput [vLLM](https://github.com/vllm-project/vllm):
 
 #### Step 1: Download Corpus
 ```bash
-curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o pmn_corpus.md
+curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o pmn_corpus_v118.6.md
 ```
 
-#### Step 2: Create `Modelfile`
+#### Step 2: Create `Modelfile` (Ollama 64K Context)
 ```dockerfile
-FROM qwen2.5:32b-instruct
-# Alternative: FROM deepseek-r1:14b or llama3.3:70b
+FROM qwen2.5:32b
+# Alternatives: FROM qwq:32b, deepseek-r1:32b, or llama3.3:70b
 
-PARAMETER temperature 0.3
-PARAMETER top_p 0.9
+PARAMETER temperature 0.25
+PARAMETER top_p 0.85
+PARAMETER num_ctx 65536
 
 SYSTEM """
-You are an expert analyst in Progressive Materialist Naturalism (PMN v118.6).
+You are an expert analyst in Progressive Materialist Naturalism (PMN v118.6 by Nova Dharma).
 Ground your analysis in material reality, the biological floor (§3.4), and institutional capture diagnostics (§7.3c-i).
-Always cite specific PMN section numbers (e.g., §1.6, §7.3, §15.15) and resist ideological capture or narrative inflation.
+Always cite specific PMN section numbers (e.g., §1.3, §3.4c, §6.5, §7.3c-i, §15.15) and resist ideological capture or narrative inflation.
 """
 ```
 
