@@ -24,6 +24,21 @@ interface ContentsViewProps {
   version?: string
 }
 
+// ID seksi PMN memakai akhiran huruf dan romawi: 7.1b, 3.4c-ii, 10.10c-ii.
+// Pola sebelumnya hanya menerima "angka.angka", jadi 55 entri yang SUDAH
+// menyitasi sumbernya tetap jatuh ke pencocokan judul.
+//
+// Yang diambil adalah sitasi TERAKHIR, bukan yang pertama. Definisi kerap
+// merujuk seksi lain di tengah kalimat lalu menutup dengan sumbernya sendiri:
+// "assumption archaeology" menyebut (12.1) sebagai rujukan silang dan (12.1c)
+// sebagai sumber, dan mengambil yang pertama membuang pembaca ke seksi yang
+// salah.
+const POLA_ID = /\((\d+\.\d+[a-z]*(?:-[ivx]+)?)(?:-\d+\.\d+[a-z]*)?\)/g
+export const idSumber = (def: string): RegExpMatchArray | null => {
+  const semua = [...String(def || '').matchAll(POLA_ID)]
+  return semua.length ? semua[semua.length - 1] : null
+}
+
 const shortenId = (id: string) => {
   if (id === 'how-to-read-this-document') return 'HTR'
   if (id === 'intellectual-debts') return 'DEBT'
@@ -59,6 +74,64 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
     return sisa.length ? ([...groups, ['Other Terms', sisa]] as [string, string[]][]) : groups
   }, [data.glg, data.gl])
 
+  // Glosarium sudah 214 istilah. Kisi kartu memuat satu paragraf penuh per
+  // istilah, jadi mencari SATU istilah berarti menggulir melewati ribuan kata:
+  // bagus untuk menjelajah, buruk untuk mencari. Default kini indeks ringkas -
+  // satu baris per istilah, definisi dibuka saat diminta. Kartu tetap ada.
+  const [glView, setGlView] = useState<'index' | 'cards'>(() => {
+    try { return (localStorage.getItem('pmn-gl-view') as 'index' | 'cards') || 'index' } catch { return 'index' }
+  })
+  const [glSort, setGlSort] = useState<'az' | 'cat'>(() => {
+    try { return (localStorage.getItem('pmn-gl-sort') as 'az' | 'cat') || 'az' } catch { return 'az' }
+  })
+  const [glFilter, setGlFilter] = useState('')
+  const [glOpen, setGlOpen] = useState<Set<string>>(new Set())
+  useEffect(() => { try { localStorage.setItem('pmn-gl-view', glView) } catch {} }, [glView])
+  useEffect(() => { try { localStorage.setItem('pmn-gl-sort', glSort) } catch {} }, [glSort])
+
+  const glKategori = useMemo(() => {
+    const m: Record<string, string> = {}
+    glGroups.forEach(([kat, terms]) => (terms || []).forEach(t => { m[String(t).toLowerCase()] = kat }))
+    return m
+  }, [glGroups])
+
+  // Penyaring mencari di NAMA dan DEFINISI. Membatasi ke nama saja akan
+  // menyembunyikan istilah yang justru dicari lewat konsepnya.
+  const glCocok = useMemo(() => {
+    const q = glFilter.trim().toLowerCase()
+    if (!q) return null
+    const set = new Set<string>()
+    Object.entries(data.gl || {}).forEach(([t, d]) => {
+      if (t.toLowerCase().includes(q) || String(d || '').toLowerCase().includes(q)) set.add(t)
+    })
+    return set
+  }, [glFilter, data.gl])
+
+  const glAbjad = useMemo(() => {
+    const semua = glGroups.flatMap(([, terms]) => (terms || []).map(String))
+    const unik = [...new Set(semua)].filter(t => !glCocok || glCocok.has(t))
+    unik.sort((a, b) => a.replace(/^the /i, '').localeCompare(b.replace(/^the /i, '')))
+    const huruf: [string, string[]][] = []
+    unik.forEach(t => {
+      const h = t.replace(/^the /i, '').charAt(0).toUpperCase()
+      const kunci = /[A-Z]/.test(h) ? h : '#'
+      if (!huruf.length || huruf[huruf.length - 1][0] !== kunci) huruf.push([kunci, []])
+      huruf[huruf.length - 1][1].push(t)
+    })
+    return huruf
+  }, [glGroups, glCocok])
+
+  const glGroupsTersaring = useMemo(
+    () => glGroups
+      .map(([kat, terms]) => [kat, (terms || []).map(String).filter(t => !glCocok || glCocok.has(t))] as [string, string[]])
+      .filter(([, terms]) => terms.length),
+    [glGroups, glCocok]
+  )
+
+  const glJumlah = useMemo(
+    () => glAbjad.reduce((n, [, ts]) => n + ts.length, 0), [glAbjad]
+  )
+
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [quoteVisible, setQuoteVisible] = useState(true)
 
@@ -75,11 +148,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
   }, [data.quotes])
 
   const findSourceForTerm = (term: string, def: string) => {
-    // ID seksi PMN memakai akhiran huruf dan romawi: 7.1b, 3.4c-ii, 10.10c-ii.
-    // Pola lama hanya menerima "angka.angka", jadi 55 entri yang SUDAH
-    // menyitasi sumbernya tetap jatuh ke pencocokan judul - dan yang tidak
-    // punya judul serupa tidak dapat tautan sama sekali.
-    const idMatch = def.match(/\((\d+\.\d+[a-z]*(?:-[ivx]+)?)(?:-\d+\.\d+[a-z]*)?\)/)
+    const idMatch = idSumber(def)
     if (idMatch && data.parts) {
       const sid = idMatch[1]
       for (let pIdx = 0; pIdx < data.parts.length; pIdx++) {
@@ -289,8 +358,96 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
 
           {activeTab === 'glossary' && (
             <div id="glossary-panel" className="animate-in fade-in slide-in-from-bottom-2 max-w-[1300px] mx-auto">
-              <div className="space-y-20">
-                {glGroups.map(([group, terms]: [string, any], gIdx) => (
+
+              <div className="gl-bar">
+                <input
+                  className="gl-cari"
+                  type="search"
+                  value={glFilter}
+                  placeholder="Filter terms and definitions"
+                  aria-label="Filter glossary"
+                  onChange={e => setGlFilter(e.target.value)}
+                />
+                <div className="gl-seg" role="group" aria-label="Glossary layout">
+                  <button type="button" aria-pressed={glView === 'index'} onClick={() => setGlView('index')}>Index</button>
+                  <button type="button" aria-pressed={glView === 'cards'} onClick={() => setGlView('cards')}>Cards</button>
+                </div>
+                <div className="gl-seg" role="group" aria-label="Glossary order">
+                  <button type="button" aria-pressed={glSort === 'az'} onClick={() => setGlSort('az')}>A–Z</button>
+                  <button type="button" aria-pressed={glSort === 'cat'} onClick={() => setGlSort('cat')}>Category</button>
+                </div>
+                <span className="gl-hitung">{glJumlah} of {Object.keys(data.gl || {}).length} terms</span>
+              </div>
+
+              {glView === 'index' && glSort === 'az' && glAbjad.length > 1 && (
+                <nav className="gl-abjad" aria-label="Jump to letter">
+                  {glAbjad.map(([h]) => (
+                    <a key={h} href={`#gl-h-${h}`} onClick={e => {
+                      e.preventDefault()
+                      document.getElementById(`gl-h-${h}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }}>{h}</a>
+                  ))}
+                </nav>
+              )}
+
+              {glJumlah === 0 && (
+                <p className="gl-kosong">No term matches &ldquo;{glFilter}&rdquo;.</p>
+              )}
+
+              {glView === 'index' && (
+                <div className="gl-indeks">
+                  {(glSort === 'az' ? glAbjad : glGroupsTersaring).map(([judul, terms]) => (
+                    <section key={judul} className="gl-blok" id={glSort === 'az' ? `gl-h-${judul}` : undefined}>
+                      <h3 className="gl-blok-jdl">{judul}</h3>
+                      <ul className="gl-daftar">
+                        {terms.map(term => {
+                          const def = data.gl[term] || ''
+                          const source = findSourceForTerm(term, def)
+                          const sid = idSumber(def)?.[1]
+                          const terbuka = glOpen.has(term)
+                          return (
+                            <li key={term} className={terbuka ? 'gl-item terbuka' : 'gl-item'}>
+                              <button
+                                type="button"
+                                className="gl-baris"
+                                aria-expanded={terbuka}
+                                onClick={() => setGlOpen(prev => {
+                                  const n = new Set(prev)
+                                  if (n.has(term)) n.delete(term); else n.add(term)
+                                  return n
+                                })}
+                              >
+                                <span className="gl-baris-ist">{term}</span>
+                                {glSort === 'az' && glKategori[term.toLowerCase()] && (
+                                  <span className="gl-baris-kat">{glKategori[term.toLowerCase()]}</span>
+                                )}
+                                <span className="gl-baris-titik" aria-hidden="true" />
+                                <span className="gl-baris-id">{sid || '—'}</span>
+                              </button>
+                              {terbuka && (
+                                <div className="gl-buka">
+                                  <p className="gl-buka-def">{def || 'Definition pending.'}</p>
+                                  <button
+                                    type="button"
+                                    className="gl-buka-akt"
+                                    onClick={() => {
+                                      if (source) onSelectSection(source.pIdx, source.sIdx)
+                                      else if (onSearch) onSearch(term)
+                                    }}
+                                  >{source ? 'Read source →' : 'Search →'}</button>
+                                </div>
+                              )}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
+              )}
+
+              <div className="space-y-20" hidden={glView !== 'cards'}>
+                {glGroupsTersaring.map(([group, terms]: [string, any], gIdx) => (
                   <div key={group} className="gl-group" style={{marginTop: gIdx === 0 ? '0' : '6rem'}}>
                     <div className="flex items-center gap-6 mb-12 pb-3 border-b border-pmn-rule/50">
                       <h3 className="font-pmn-mono text-[1.2rem] text-pmn-acc uppercase tracking-[0.4em] font-bold" style={{marginBottom: '0'}}>{group}</h3>
