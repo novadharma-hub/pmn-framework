@@ -5,7 +5,7 @@
 [![Stack](https://img.shields.io/badge/Stack-React%2019%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#quick-start)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-llms.txt%20%7C%20json%20%7C%20md-orange.svg?style=flat-square)](#official-ai-grounding--machine-endpoints)
 [![Corpus Scale](https://img.shields.io/badge/Corpus-21%20Parts%20%7C%20235%20Sections%20%7C%20~330k%20Words-blue.svg?style=flat-square)](#overview)
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/Manuscript-CC%20BY--NC%204.0-lightgrey.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/Manuscript-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![License: MIT](https://img.shields.io/badge/Platform%20Code-MIT-yellow.svg?style=flat-square)](./LICENSE)
 
 ---
@@ -322,7 +322,7 @@ Dharma, N. (2026). Progressive Materialist Naturalism: A Framework for Minimizin
 ## License
 
 - **Platform Code:** The reader application software, UI components, and build tools are released under the **[MIT License](./LICENSE)**.
-- **Manuscript Content:** The PMN manuscript, theoretical corpus, glossary definitions, and AI grounding texts are licensed under **[Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)**.
+- **Manuscript Content:** The PMN manuscript, theoretical corpus, glossary definitions, and AI grounding texts are licensed under **[Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/)**.
 
 ---
 
