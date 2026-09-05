@@ -1,0 +1,45 @@
+# Progressive Materialist Naturalism (PMN)
+
+> A naturalist philosophical framework for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming. Authored by Nova Dharma.
+
+PMN is a comprehensive, non-ideal structural philosophy spanning epistemology, ontology, institutional critique, political strategy, and existential praxis.
+
+## Canonical Manuscript & AI Grounding Corpus
+
+- [Full Manuscript (Markdown)](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.md): Complete ~330k word uncompressed corpus of PMN Framework v118.6 from Preface through Coda, Intellectual Debts, and Bibliography.
+- [Full Manuscript (PDF)](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf): Official typeset publication (~660 pages).
+- [Interactive Reader Platform](https://novadharma-hub.github.io/pmn-framework/): Offline-capable React reader with keyboard navigation, search, and glossary.
+- [GitHub Repository](https://github.com/novadharma-hub/pmn-framework): Source repository and release assets.
+- [Active Version Metadata](https://novadharma-hub.github.io/pmn-framework/data/version.json): Current canonical release version.
+
+## Core Architectural Modules
+
+- [Preface & Reader Guide](https://novadharma-hub.github.io/pmn-framework/data/parts/part_Preface.json): How to read the framework, methodological warnings, and intellectual debt boundaries.
+- [Part I — Epistemological Foundation](https://novadharma-hub.github.io/pmn-framework/data/parts/part_I.json): Probabilistic determinism, epistemic authority, and information asymmetry.
+- [Part II — Ontological Foundation](https://novadharma-hub.github.io/pmn-framework/data/parts/part_II.json): Materialist ontology, adaptive materialism, and open passage.
+- [Part III — Biological Foundation](https://novadharma-hub.github.io/pmn-framework/data/parts/part_III.json): The biological floor, typology of suffering, and non-human sentients (§3.4c-ii).
+- [Part IV — Ethics and Value](https://novadharma-hub.github.io/pmn-framework/data/parts/part_IV.json): Becoming as primary evaluative criterion, dignity, autonomy, and the minimal anchor.
+- [Part V — Culture, Meaning, and Religion](https://novadharma-hub.github.io/pmn-framework/data/parts/part_V.json): Meaning infrastructure (§5.6b), acute meaning-collapse triage (§5.6c).
+- [Part VI — Power and Asymmetry](https://novadharma-hub.github.io/pmn-framework/data/parts/part_VI.json): Institutional power, asymmetry, complexity as power resource, systemic opacity.
+- [Part VII — Capture Sequence & Institutional Degradation](https://novadharma-hub.github.io/pmn-framework/data/parts/part_VII.json): The authoritative 5-stage capture sequence (§7.3c-i) and early detection matrix (§7.3b).
+- [Part VIII — Culture & Society](https://novadharma-hub.github.io/pmn-framework/data/parts/part_VIII.json): Intersectional analysis, meritocracy critique, and structural visibility suppression.
+- [Part IX — Geopolitics & Material Geography](https://novadharma-hub.github.io/pmn-framework/data/parts/part_IX.json): Resource flows, material selection, critical minerals, and state dynamics.
+- [Part X — Political Strategy & Transformation](https://novadharma-hub.github.io/pmn-framework/data/parts/part_X.json): Threshold conditions, reform vs revolution, counter-power, and coalition width.
+- [Part XI — Economics & Material Reproduction](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XI.json): Economics without prior commitments, structural incentives.
+- [Part XII — Methodology & Epistemic Traps](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XII.json): Stress-testing, genealogical critique, technocratic drift safeguards.
+- [Part XIII — Permanent Tensions & Horizon Boundaries](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XIII.json): Irreducible tensions, horizon boundaries, and PMN limits.
+- [Part XIV — Framework Transmission & Institutional Integrity](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XIV.json): Self-capture diagnosis (§14.6) and transmission conditions.
+- [Part XV — Diagnostic Formulas & Compressed Core](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XV.json): Canonical term definitions (§15.0b), master transformation pressure formula ($T = S \cdot D \cdot P \cdot G$), adaptive surplus, and the compressed core (§15.15).
+- [Part XVI — Technology & The Post-Biological Horizon](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XVI.json): AI, automation, and distributed cognition.
+- [Part XVII — Individual Conduct & Praxis](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XVII.json): Acting within institutions, detecting personal drift, and praxis.
+- [Coda & Scholarly Context](https://novadharma-hub.github.io/pmn-framework/data/parts/part_Coda.json): Framework summary and closing remarks.
+- [Intellectual Debts](https://novadharma-hub.github.io/pmn-framework/data/parts/part_Intellectual_Debts.json): Scholarly engagement with historical and contemporary traditions.
+- [Bibliography](https://novadharma-hub.github.io/pmn-framework/data/parts/part_Bibliography.json): Complete academic references (97 scholarly sources).
+
+## Structured Data Endpoints
+
+- [Glossary (237 Terms)](https://novadharma-hub.github.io/pmn-framework/data/gl.json): Canonical vocabulary definitions with section cross-references.
+- [Glossary Categories](https://novadharma-hub.github.io/pmn-framework/data/glg.json): Grouped terminology across 16 conceptual domains.
+- [Parts Manifest](https://novadharma-hub.github.io/pmn-framework/data/parts/manifest.json): Hierarchical structure of all 21 parts and 235 sections.
+- [Semantic Graph](https://novadharma-hub.github.io/pmn-framework/data/rel.json): Relationship graph linking conceptual sections.
+- [Analytical Quotes](https://novadharma-hub.github.io/pmn-framework/data/quotes.json): 25 core analytical aphorisms.
