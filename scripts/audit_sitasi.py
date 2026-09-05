@@ -32,28 +32,30 @@ def muat():
     seksi = []
     for f in sorted(glob.glob(AKAR + r"\data\parts\part_*.json")):
         for s in json.load(io.open(f, encoding="utf-8")):
-            t = re.sub(r"<[^>]+>", " ", s["html"] or "")
+            raw = s["html"] or ""
+            t = re.sub(r"</?p[^>]*>", "\n", raw)
+            t = re.sub(r"<[^>]+>", " ", t)
             t = (t.replace("&amp;", "&").replace("&#x27;", "'")
                   .replace("&quot;", '"').replace("&lt;", "<")
                   .replace("&gt;", ">").replace("&nbsp;", " ")
                   .replace("\u2019", "'"))
-            seksi.append((s["id"], s["title"], re.sub(r"\s+", " ", t)))
+            seksi.append((s["id"], s["title"], t))
     return seksi
 
 
 def entri_bibliografi(teks):
     """Nama belakang + tahun tiap entri Bibliography.
 
-    Entri dipotong pada batas "Nama, " lebih dulu, baru tahunnya diambil di
-    dalam potongan. Mencocokkan nama dan tahun dalam satu pola gagal untuk
-    entri berinisial - "Ambedkar, B. R. 1936." memuat titik di antara
-    keduanya, sehingga pola yang melarang titik melewatkannya sama sekali.
+    Entri dipotong pada batas "Nama, " di awal paragraf lebih dulu, baru tahunnya
+    diambil di dalam potongan. Mengikat pencocokan ke awal baris mencegah
+    nama penerjemah di tengah entri (mis. "Trans. Anne Cohler, Basia Miller, Harold Stone")
+    terbaca sebagai penulis bibliografi tersendiri.
     """
     # Lookahead HARUS menerima kapital beraksen. "Durkheim, \u00c9mile. 1912"
     # terlewat sama sekali karena \u00c9 tidak termasuk [A-Z], sehingga entri yang
     # jelas ada dilaporkan hilang.
     batas = [m for m in re.finditer(
-        r"(?:^|\s)([A-Z\u00c0-\u00de][\w\u00c0-\u017f'-]{2,}),\s+(?=[A-Z\u00c0-\u00de])", teks)]
+        r"(?:^|\n)\s*([A-Z\u00c0-\u00de][\w\u00c0-\u017f'-]{2,}),\s+(?=[A-Z\u00c0-\u00de])", teks)]
     hasil = collections.defaultdict(set)
     for i, m in enumerate(batas):
         akhir = batas[i + 1].start() if i + 1 < len(batas) else len(teks)
@@ -63,17 +65,14 @@ def entri_bibliografi(teks):
             hasil[m.group(1).lower()].update(tahun[:1])
 
     # Lintasan kedua untuk entri tanpa koma setelah nama belakang, mis.
-    # "Luthfi Assyaukanie. 2009." Tanpa ini entri yang ada dilaporkan hilang.
-    #
-    # Hasilnya DIPISAH, tidak digabung. Pola ini juga menangkap nama depan -
-    # "Weber, Max. 1919" menyumbang kunci "max" - yang tidak berbahaya saat
-    # memeriksa "sitasi ini ada entrinya?" tetapi merusak pemeriksaan
-    # sebaliknya, "entri ini pernah disitasi?", dengan puluhan nama depan
-    # yang memang tidak pernah muncul sebagai sitasi.
+    # "Luthfi Assyaukanie. 2009.", "John Paul II. 1987.", "Zhao Tingyang. 2005."
+    # Mengikat pencocokan ke awal baris memastikan hanya nama pembuka entri
+    # yang diambil, bukan frase di tengah teks.
     longgar = collections.defaultdict(set)
     for m in re.finditer(
-            r"([A-Z\u00c0-\u00de][\w\u00c0-\u017f'-]{2,})\.\s+((?:1[5-9]|20)\d{2})[a-z]?\.", teks):
-        longgar[m.group(1).lower()].add(m.group(2))
+            r"(?:^|\n)\s*([A-Z\u00c0-\u00de][\w\u00c0-\u017f'\s-]+?)\.\s+((?:1[5-9]|20)\d{2})[a-z]?\.", teks):
+        for t in m.group(1).lower().split():
+            longgar[t].add(m.group(2))
     return hasil, longgar
 
 
