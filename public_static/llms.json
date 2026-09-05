@@ -1,0 +1,450 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "Progressive Materialist Naturalism (PMN)",
+  "version": "118.6",
+  "release_date": "2026-09-05",
+  "author": "Nova Dharma",
+  "license": "CC BY-NC 4.0",
+  "description": "A naturalist philosophical framework for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming.",
+  "repository": "https://github.com/novadharma-hub/pmn-framework",
+  "homepage": "https://novadharma-hub.github.io/pmn-framework/",
+  "canonical_artifacts": {
+    "llms_txt": "https://novadharma-hub.github.io/pmn-framework/llms.txt",
+    "llms_json": "https://novadharma-hub.github.io/pmn-framework/llms.json",
+    "llms_md": "https://novadharma-hub.github.io/pmn-framework/llms.md",
+    "flat_corpus_for_ai": "https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md",
+    "full_manuscript_markdown": "https://novadharma-hub.github.io/pmn-framework/PMN_Latest.md",
+    "full_manuscript_pdf": "https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf"
+  },
+  "data_endpoints": {
+    "version": "https://novadharma-hub.github.io/pmn-framework/data/version.json",
+    "manifest": "https://novadharma-hub.github.io/pmn-framework/data/parts/manifest.json",
+    "glossary": "https://novadharma-hub.github.io/pmn-framework/data/gl.json",
+    "glossary_grouped": "https://novadharma-hub.github.io/pmn-framework/data/glg.json",
+    "section_lookup": "https://novadharma-hub.github.io/pmn-framework/data/look.json",
+    "cross_references": "https://novadharma-hub.github.io/pmn-framework/data/ci.json",
+    "semantic_graph": "https://novadharma-hub.github.io/pmn-framework/data/rel.json",
+    "quotes": "https://novadharma-hub.github.io/pmn-framework/data/quotes.json"
+  },
+  "statistics": {
+    "parts_count": 21,
+    "sections_count": 235,
+    "approximate_words": 330000,
+    "scholarly_sources": 97
+  },
+  "modules": [
+    {
+      "part": "Preface",
+      "title": "Preface",
+      "sections_count": 2,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_Preface.json",
+      "description": "How to read the framework, methodological warnings, and intellectual debt boundaries.",
+      "sample_sections": [
+        {
+          "id": "preface",
+          "title": "Preface"
+        },
+        {
+          "id": "how-to-read-this-document",
+          "title": "How to Read This Document"
+        }
+      ]
+    },
+    {
+      "part": "I",
+      "title": "How We Know: The Epistemological Foundation",
+      "sections_count": 13,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_I.json",
+      "description": "Probabilistic determinism, epistemic authority, and information asymmetry.",
+      "sample_sections": [
+        {
+          "id": "1.1",
+          "title": "The Prior Question"
+        },
+        {
+          "id": "1.2",
+          "title": "The Primary Diagnostic"
+        },
+        {
+          "id": "1.3",
+          "title": "Probabilistic Determinism"
+        }
+      ]
+    },
+    {
+      "part": "II",
+      "title": "What Exists: The Ontological Foundation",
+      "sections_count": 10,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_II.json",
+      "description": "Materialist ontology, adaptive materialism, and open passage.",
+      "sample_sections": [
+        {
+          "id": "2.1",
+          "title": "Reality as Primary"
+        },
+        {
+          "id": "2.2",
+          "title": "Adaptive Materialism"
+        },
+        {
+          "id": "2.3",
+          "title": "On Necessary Being"
+        }
+      ]
+    },
+    {
+      "part": "III",
+      "title": "The Biological Foundation: From Physiology to Institution",
+      "sections_count": 26,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_III.json",
+      "description": "The biological floor, typology of suffering, and non-human sentients (§3.4c-ii).",
+      "sample_sections": [
+        {
+          "id": "3.0",
+          "title": "The Normative Status of Biological Constraints: Conditional, Not Derived"
+        },
+        {
+          "id": "3.0b",
+          "title": "The Naturalistic Fallacy Objection and Why It Does Not Apply Here"
+        },
+        {
+          "id": "3.0c",
+          "title": "The Stability Argument: The Bridge That Is Not a Derivation"
+        }
+      ]
+    },
+    {
+      "part": "IV",
+      "title": "What Matters: Ethics, Value, and the Evaluative Commitment",
+      "sections_count": 10,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_IV.json",
+      "description": "Becoming as primary evaluative criterion, dignity, autonomy, and the minimal anchor.",
+      "sample_sections": [
+        {
+          "id": "4.1",
+          "title": "The Foundation of Value"
+        },
+        {
+          "id": "4.1b",
+          "title": "The Maqasid al-Shariah: An Independent Derivation of the Floor/Becoming Structure"
+        },
+        {
+          "id": "4.1c",
+          "title": "The Failure of Divine Mandate as Universal Anchor"
+        }
+      ]
+    },
+    {
+      "part": "V",
+      "title": "The Metaphysical Dimension: Meaning, Religion, and Material Reality",
+      "sections_count": 10,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_V.json",
+      "description": "Culture, meaning, and religion: meaning infrastructure (§5.6b), acute meaning-collapse triage (§5.6c).",
+      "sample_sections": [
+        {
+          "id": "5.1",
+          "title": "What the Materialist Tradition Got Wrong About Religion"
+        },
+        {
+          "id": "5.2",
+          "title": "Two Levels of the Same Question"
+        },
+        {
+          "id": "5.3",
+          "title": "Interface-Emergent Phenomena"
+        }
+      ]
+    },
+    {
+      "part": "VI",
+      "title": "Power: The Variable That Cannot Be Left Implicit",
+      "sections_count": 8,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_VI.json",
+      "description": "Institutional power, asymmetry, complexity as power resource, systemic opacity.",
+      "sample_sections": [
+        {
+          "id": "6.1",
+          "title": "Why Power Must Be Named"
+        },
+        {
+          "id": "6.2",
+          "title": "Power as Structural Position"
+        },
+        {
+          "id": "6.3",
+          "title": "Asymmetry, Capture, and Information"
+        }
+      ]
+    },
+    {
+      "part": "VII",
+      "title": "How to Organize: Politics, Institutions, and the State",
+      "sections_count": 18,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_VII.json",
+      "description": "The authoritative 5-stage capture sequence (§7.3c-i) and early detection matrix (§7.3b).",
+      "sample_sections": [
+        {
+          "id": "7.0",
+          "title": "What We Mean by System"
+        },
+        {
+          "id": "7.0b",
+          "title": "Levels of Analysis"
+        },
+        {
+          "id": "7.0c",
+          "title": "Scale as a Structural Variable"
+        }
+      ]
+    },
+    {
+      "part": "VIII",
+      "title": "Society, Culture, and the Politics of Material Outcomes",
+      "sections_count": 10,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_VIII.json",
+      "description": "Intersectional analysis, meritocracy critique, and structural visibility suppression.",
+      "sample_sections": [
+        {
+          "id": "8.1",
+          "title": "Evaluating Cultural Practices"
+        },
+        {
+          "id": "8.2",
+          "title": "Marginalized Groups and the Material Frame"
+        },
+        {
+          "id": "8.2b",
+          "title": "Intersectional Analysis as Methodological Procedure"
+        }
+      ]
+    },
+    {
+      "part": "IX",
+      "title": "The International Dimension: Geopolitics and Global Order",
+      "sections_count": 10,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_IX.json",
+      "description": "Geopolitics, resource flows, material selection, critical minerals, and state dynamics.",
+      "sample_sections": [
+        {
+          "id": "9.0",
+          "title": "The Material Basis of International Order"
+        },
+        {
+          "id": "9.0b",
+          "title": "The Historical Divergence: How the Distribution Was Produced"
+        },
+        {
+          "id": "9.1",
+          "title": "Realism and Direction"
+        }
+      ]
+    },
+    {
+      "part": "X",
+      "title": "How Systems Change: Adaptive Dynamics and Historical Transformation",
+      "sections_count": 25,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_X.json",
+      "description": "Political strategy, threshold conditions, reform vs revolution, counter-power, and coalition width.",
+      "sample_sections": [
+        {
+          "id": "10.1",
+          "title": "Why Systems Change"
+        },
+        {
+          "id": "10.2",
+          "title": "Suffering as the Signal of System Stress"
+        },
+        {
+          "id": "10.3",
+          "title": "Technology and System Transition"
+        }
+      ]
+    },
+    {
+      "part": "XI",
+      "title": "The Economic Doctrine",
+      "sections_count": 8,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_XI.json",
+      "description": "Economics without prior commitments, structural incentives, and accountability-contestability.",
+      "sample_sections": [
+        {
+          "id": "11.0",
+          "title": "Two Levels of Economic Analysis"
+        },
+        {
+          "id": "11.0b",
+          "title": "Incentive Structures in Economic Arrangements"
+        },
+        {
+          "id": "11.1",
+          "title": "Economics Without Prior Commitments"
+        }
+      ]
+    },
+    {
+      "part": "XII",
+      "title": "How This Framework Operates",
+      "sections_count": 17,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_XII.json",
+      "description": "Methodology, stress-testing, genealogical critique, and technocratic drift safeguards.",
+      "sample_sections": [
+        {
+          "id": "12.1",
+          "title": "The Methodology of Stress-Testing"
+        },
+        {
+          "id": "12.1b",
+          "title": "Second-Order Effects as Analytical Obligation: The Multi-Level Consequence Procedure"
+        },
+        {
+          "id": "12.1c",
+          "title": "Extreme Scenario Testing as Assumption Archaeology"
+        }
+      ]
+    },
+    {
+      "part": "XIII",
+      "title": "Tensions That Cannot Be Resolved — Only Managed",
+      "sections_count": 19,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_XIII.json",
+      "description": "Permanent tensions, horizon boundaries, and PMN analytical limits.",
+      "sample_sections": [
+        {
+          "id": "13.1",
+          "title": "The Nature of Permanent Tension"
+        },
+        {
+          "id": "13.1b",
+          "title": "The Relationship Between Contradictions and Tensions"
+        },
+        {
+          "id": "13.1c",
+          "title": "Diagnostic: Is This a Tension or a Contradiction?"
+        }
+      ]
+    },
+    {
+      "part": "XV",
+      "title": "The Formula Architecture",
+      "sections_count": 17,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_XV.json",
+      "description": "Diagnostic formulas (§15.0b), transformation pressure ($T = S \\cdot D \\cdot P \\cdot G$), and compressed core (§15.15).",
+      "sample_sections": [
+        {
+          "id": "15.0",
+          "title": "The Input Architecture of Structural Tendency Analysis"
+        },
+        {
+          "id": "15.1",
+          "title": "Complexity & Systems Dynamics: The Operator Decomposed"
+        },
+        {
+          "id": "15.0b",
+          "title": "Canonical Term Definitions"
+        }
+      ]
+    },
+    {
+      "part": "XVI",
+      "title": "Technology as Structural Variable",
+      "sections_count": 7,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_XVI.json",
+      "description": "Technology, AI, automation, and distributed post-biological cognition.",
+      "sample_sections": [
+        {
+          "id": "16.0",
+          "title": "Technology as Constraint-Modifier, Not Tool"
+        },
+        {
+          "id": "16.1",
+          "title": "The Capture Problem at Technological Leverage Points"
+        },
+        {
+          "id": "16.2",
+          "title": "Artificial Intelligence as Institutional Architecture"
+        }
+      ]
+    },
+    {
+      "part": "XVII",
+      "title": "Cases and the Individual: Pattern, Drift, and the Demands of the Framework",
+      "sections_count": 15,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_XVII.json",
+      "description": "Individual conduct, praxis, detecting personal drift, and acting within institutions.",
+      "sample_sections": [
+        {
+          "id": "17.0",
+          "title": "Why Cases and Why the Individual"
+        },
+        {
+          "id": "17.1",
+          "title": "The Prohibition Case: When Moral Clarity Produces Structural Harm"
+        },
+        {
+          "id": "17.2",
+          "title": "The Labour Movement Case: Institutional Capture Through Incremental Drift"
+        }
+      ]
+    },
+    {
+      "part": "XIV",
+      "title": "Summary: Framework, Doctrine, and What Remains Open",
+      "sections_count": 7,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_XIV.json",
+      "description": "Framework transmission, institutional integrity, and self-capture diagnosis (§14.6).",
+      "sample_sections": [
+        {
+          "id": "14.1",
+          "title": "The Framework: Adaptive Naturalism"
+        },
+        {
+          "id": "14.2",
+          "title": "Current Analytical Positions: The Framework Applied"
+        },
+        {
+          "id": "14.3",
+          "title": "Argument, Assumption, and Open Question"
+        }
+      ]
+    },
+    {
+      "part": "Coda",
+      "title": "Coda",
+      "sections_count": 1,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_Coda.json",
+      "description": "Framework synthesis and closing scholarly context.",
+      "sample_sections": [
+        {
+          "id": "coda",
+          "title": "Coda"
+        }
+      ]
+    },
+    {
+      "part": "Intellectual Debts",
+      "title": "Intellectual Debts",
+      "sections_count": 1,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_Intellectual_Debts.json",
+      "description": "Scholarly engagement with historical and contemporary traditions.",
+      "sample_sections": [
+        {
+          "id": "intellectual-debts",
+          "title": "Intellectual Debts"
+        }
+      ]
+    },
+    {
+      "part": "Bibliography",
+      "title": "Bibliography",
+      "sections_count": 1,
+      "endpoint": "https://novadharma-hub.github.io/pmn-framework/data/parts/part_Bibliography.json",
+      "description": "Complete academic references and citations (97 scholarly sources).",
+      "sample_sections": [
+        {
+          "id": "bibliography",
+          "title": "Bibliography"
+        }
+      ]
+    }
+  ]
+}

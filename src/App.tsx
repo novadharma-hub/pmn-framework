@@ -647,7 +647,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
               <div className="cta-row-s">
                 <button id="cta-gl" className="cta-s" onClick={onOpenGlossary}>Key Terms <span style={{opacity:.76, fontSize:'.68rem'}}>[Alt+?]</span></button>
                 <a href="https://github.com/novadharma-hub/pmn-framework/releases/latest" className="cta-s" target="_blank" rel="noopener">Download Manuscript &darr;</a>
-                <button className="cta-s" onClick={onOpenGuide}>AI Agent Guide &rarr;</button>
+                <button className="cta-s" onClick={onOpenGuide}>AI Guide & Endpoints [v{version}] &rarr;</button>
               </div>
               <div className="cta-row-util">
                 <button id="cta-notes" className="cta-util" onClick={onOpenNotes}>My Notes</button>
