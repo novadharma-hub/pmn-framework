@@ -10,10 +10,11 @@ import collections
 import glob
 import io
 import json
+import os
 import re
 import sys
 
-AKAR = r"D:\Master-Universe\pmn-workspace\public"
+AKAR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ANGKA = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7,
          "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12}

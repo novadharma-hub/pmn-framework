@@ -15,10 +15,11 @@ import difflib
 import glob
 import io
 import json
+import os
 import re
 import sys
 
-AKAR = r"D:\Master-Universe\pmn-workspace\public"
+AKAR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def muat():

@@ -5,7 +5,7 @@ Mengurai token dari src/index.css (blok @theme = nilai dark mode, blok
 pasangan teks-di-atas-latar terhadap ambang WCAG.
 
 Jalankan dari folder public/:
-    D:\\Master-Universe\\.venv\\Scripts\\python.exe scripts/check_contrast.py
+    python scripts/check_contrast.py
 
 Keluar 0 bila semua pasangan lolos, 1 bila ada yang gagal atau token hilang.
 """

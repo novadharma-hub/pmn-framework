@@ -2,10 +2,10 @@
 
 [![Version](https://img.shields.io/badge/Release-v118.6%20Canonical-795290.svg?style=flat-square)](https://github.com/novadharma-hub/pmn-framework/releases)
 [![Live Reader](https://img.shields.io/badge/Live%20Reader-GitHub%20Pages-2ea44f.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
-[![Stack](https://img.shields.io/badge/Stack-React%2019%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#quick-start)
+[![Stack](https://img.shields.io/badge/Stack-React%2018%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#quick-start)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-llms.txt%20%7C%20json%20%7C%20md-orange.svg?style=flat-square)](#official-ai-grounding--machine-endpoints)
 [![Corpus Scale](https://img.shields.io/badge/Corpus-21%20Parts%20%7C%20235%20Sections%20%7C%20~330k%20Words-blue.svg?style=flat-square)](#overview)
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/Manuscript-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](https://creativecommons.org/licenses/by-sa/4.0/)
+[![License: CC BY-SA 4.0](https://img.shields.io/badge/Manuscript-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![License: MIT](https://img.shields.io/badge/Platform%20Code-MIT-yellow.svg?style=flat-square)](./LICENSE)
 
 ---
@@ -42,7 +42,7 @@ Progressive Materialist Naturalism (PMN) proceeds from a fundamental thesis: *mo
 ```mermaid
 graph TD
     A["Mind-Independent Reality<br/>(Ontological Realism)"] --> B["Biological Floor<br/>(Minimizing Structural Suffering)"]
-    A --> C["Evaluative Ceiling<br/>(Maximizing Genuine Becoming)"]
+    A --> C["Anti-Foreclosure Criterion<br/>(Maximizing Genuine Becoming)"]
     B --> D["Diagnostic Power Mechanics<br/>T = S · D · P · G"]
     C --> D
     D --> E["Institutional Contestability<br/>& Anti-Capture Architecture"]
@@ -51,10 +51,10 @@ graph TD
 ### Core Philosophical Pillars
 
 1. **Epistemic Authority & Ontological Realism (§1.6):** Reality is mind-independent. Analytical rigor requires prioritizing material constraints, thermodynamic limits, and empirical feedback over narrative comforting or scholastic theology.
-2. **The Biological Floor (§3.4):** Sentient vulnerability is not subjective preference. The minimization of non-consensual biological and structural suffering serves as the non-negotiable moral foundation.
-3. **The Evaluative Ceiling:** Human flourishing and developmental expansion (*becoming*) represent the aspirational vector, conditioned upon the security of the biological floor.
+2. **The Biological Floor (§3.0–§3.3):** Sentient vulnerability is not subjective preference. The minimization of non-consensual biological and structural suffering serves as the non-negotiable moral foundation.
+3. **The Anti-Foreclosure Criterion:** Human flourishing and developmental expansion (*becoming*) represent the aspirational vector, conditioned upon the security of the biological floor.
 4. **Structural Power Mechanics & Institutional Capture (§7.3c-i):** Power asymmetries systematically convert protective institutions into self-preserving extraction apparatuses through a predictable 5-stage capture sequence.
-5. **Universal Contestability & Accountability (§11.x):** No doctrine, office, custodian, or ideology holds immunity from empirical auditing, dissent, and non-violent procedural revision.
+5. **Universal Contestability & Accountability (§12.5):** No doctrine, office, custodian, or ideology holds immunity from empirical auditing, dissent, and non-violent procedural revision.
 
 ---
 
@@ -105,7 +105,7 @@ For complete prompts, role profiles, and diagnostic instructions, visit the in-a
 ### 1. Cloud Frontier AI Deployment (2026 Lineup)
 
 - **Anthropic Claude (Fable 5.1 / Sonnet 5 / Opus 5):** 1M-token context with Adaptive Thinking. Upload `pmn_corpus_for_ai.md` into Project Knowledge. Ideal for sustained philosophical dialectics, assumption archaeology (§12.1), and institutional red-teaming.
-- **Google DeepMind (Gemini 3.1 Pro / 3.8 Flash / NotebookLM):** 1M–2M token context windows. Ingests the full ~330k-word uncompressed corpus in a single prompt. NotebookLM provides zero-hallucination grounded page citations and Audio Overview podcasts.
+- **Google DeepMind (Gemini 3.1 Pro / 3.8 Flash / NotebookLM):** 1M–2M token context windows. Ingests the full ~330k-word uncompressed corpus in a single prompt. NotebookLM provides grounded source citations linked back to the manuscript.
 - **DeepSeek (DeepSeek-V4-Pro / V4-Flash / R1):** 1.6T MoE (49B active) with Hybrid Attention & mHC, alongside pure RL reasoning models. Industry-leading capture sequence diagnostics (§7.3c-i) and anti-ideology forensics.
 - **OpenAI (GPT-6 Astra / o3 / o3-pro / GPT-5.6 Sol):** 1M context with advanced multi-step reasoning. Formalizes and simulates the non-linear Transformation Pressure Formula ($T = S \cdot D \cdot P \cdot G$) via Code Interpreter.
 - **Alibaba Qwen & Zhipu GLM (Qwen 3.8-Max / GLM-5.3 / GLM-5.2):** 1M-token agentic architectures for multi-tool workflows, automated data pipelining, and enterprise compliance audits.
@@ -145,7 +145,7 @@ ollama run pmn-analyst "Explain how custodian advantage leads to institutional c
 
 ## Reader Platform Architecture
 
-The reader platform is built as a zero-dependency-runtime Single-Page Application (SPA) powered by Vite, React 19, and TypeScript:
+The reader platform is built as a zero-dependency-runtime Single-Page Application (SPA) powered by Vite, React 18, and TypeScript:
 
 ```
 public/
@@ -182,7 +182,7 @@ public/
 ├── data/                           # Canonical manuscript JSON data
 │   ├── parts.json                  # Complete bundled manuscript
 │   ├── parts/                      # Chunked part JSONs for fast lazy-loading
-│   ├── gl.json                     # Glossary dictionary (180+ terms)
+│   ├── gl.json                     # Glossary dictionary (237 terms)
 │   ├── glg.json                    # Categorical glossary grouping
 │   ├── look.json                   # Instant section lookup index (ID -> Part/Sub)
 │   ├── ci.json                     # Cross-reference bidirectional citation map
