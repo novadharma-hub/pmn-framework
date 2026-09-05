@@ -47,6 +47,8 @@ index.html.bak
 legacy/index.offline.html
 legacy/app.js
 LENGKAPI_DIAGNOSIS_UNTUK_AI.md
+*.patch
+ROLLBACK_*
 
 # PMN Workspace specific
 pmn_system_log.txt
