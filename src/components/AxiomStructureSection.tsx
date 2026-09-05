@@ -4,7 +4,7 @@ interface AxiomItem {
   code: string
   tier: 1 | 2 | 3
   tierName: string
-  domain: 'Epistemologi' | 'Etika & Sentience' | 'Kekuasaan & Lembaga' | 'Ekonomi & Kontestasi'
+  domain: 'Epistemology' | 'Ethics & Sentience' | 'Power & Institutions' | 'Economics & Contestability'
   title: string
   summary: string
   anchor: string
@@ -19,50 +19,50 @@ interface AxiomStructureSectionProps {
 }
 
 const AXIOMS: AxiomItem[] = [
-  // TIER 1 — FOUNDATIONAL
+  // TIER 1 — FOUNDATIONAL AXIOMS
   {
     code: '1a',
     tier: 1,
     tierName: 'Tier 1 — Foundational Axioms',
-    domain: 'Epistemologi',
+    domain: 'Epistemology',
     title: 'MIND-INDEPENDENT MATERIAL REALITY IS PRIMARY',
-    summary: 'Dunia material dan hukum-hukum fisik ada secara objektif terlepas dari persepsi atau wacana manusia. Menetapkan kondisi material adalah langkah paling awal sebelum menganalisis wacana.',
+    summary: 'The physical universe and thermodynamic constraints exist objectively regardless of human perception, language, or social construction. Establishing material conditions is the prior analytical move before analyzing narrative formations.',
     anchor: '1.6',
-    defense: 'Menolak solipsisme, idealisme metafisik, dan relativisme wacana radikal. Kesadaran dan narasi selalu membutuhkan substrat biologis dan energi fisik untuk beroperasi.',
-    falsification: 'Dapat digugurkan jika dibuktikan secara empiris adanya fenomena mental sadar yang eksis secara otonom tanpa memerlukan energi atau substrat fisik.',
+    defense: 'Rejects solipsism, metaphysical idealism, and radical discursive constructivism. Consciousness and discourse strictly require biological substrates and thermodynamic throughput to exist.',
+    falsification: 'Falsified if conscious mental phenomena are empirically demonstrated to operate autonomously without requiring energy, physical substrates, or biological embodiment.',
   },
   {
     code: '1b',
     tier: 1,
     tierName: 'Tier 1 — Foundational Axioms',
-    domain: 'Etika & Sentience',
-    title: 'SUFFERING HAS NEGATIVE EVALUATIVE VALENCE',
-    summary: 'Penderitaan somatik pada makhluk bersaraf adalah fakta material, bukan preferensi subjektif. Kerentanan rasa sakit berfungsi sebagai jangkar moral non-arbitrer (lantai dasar).',
+    domain: 'Ethics & Sentience',
+    title: 'BIOLOGICAL SUFFERING HAS NEGATIVE EVALUATIVE VALENCE',
+    summary: 'Somatic trauma and suffering in sentient nervous systems represent an objective material reality, not a subjective preference. The minimization of non-consensual structural suffering serves as our non-arbitrary moral floor.',
     anchor: '3.4',
-    defense: 'Menghindari jurang nihilisme moral tanpa membutuhkan dogma pewahyuan. Semua organisme sentient secara biologis terprogram menghindari trauma somatik.',
-    falsification: 'Dapat digugurkan jika ditemukan populasi sentient yang secara konsisten dan intrinsik memilih kerusakan somatik tanpa kompensasi fungsional apa pun.',
+    defense: 'Evades both moral nihilism and relativism without requiring scholastic theology or divine revelation. Sentient neural systems are evolutionarily hardwired to avoid somatic damage.',
+    falsification: 'Falsified if sentient populations are discovered that intrinsically and consistently seek uncompensated bodily destruction absent any functional benefit.',
   },
   {
     code: '1c',
     tier: 1,
     tierName: 'Tier 1 — Foundational Axioms',
-    domain: 'Etika & Sentience',
+    domain: 'Ethics & Sentience',
     title: 'GENUINE BECOMING IS EVALUATIVELY SIGNIFICANT',
-    summary: 'Ekspansi kapasitas manusia untuk mencipta, memahami, dan berelasi secara otonom adalah batas atas evaluatif yang berpasangan dengan lantai pengurangan penderitaan.',
+    summary: 'The expansion of human developmental capacity to create, comprehend, and relate with autonomy represents the evaluative ceiling that pairs with the baseline floor of suffering reduction.',
     anchor: '5.1',
-    defense: 'Etika tidak boleh berhenti pada pencegahan rasa sakit semata (utilitarianisme negatif pasif); pembebasan sejati menuntut ruang penyingkapan kapasitas kreatif.',
-    falsification: 'Dapat digugurkan jika ekspansi kapasitas perkembangan manusia terbukti selalu berkorelasi positif dengan peningkatan penderitaan netto yang tak terelakkan.',
+    defense: 'Ethics cannot stagnate into passive negative utilitarianism. Authentic emancipation requires securing positive developmental headroom once the survival floor is established.',
+    falsification: 'Falsified if expanding human creative and developmental capacities is shown to inevitably and monotonically increase net systemic suffering across all horizons.',
   },
   {
     code: '1d',
     tier: 1,
     tierName: 'Tier 1 — Foundational Axioms',
-    domain: 'Epistemologi',
+    domain: 'Epistemology',
     title: 'ANTI-DOGMATIC DESIGN & ZERO AUTHORITY PRIVILEGE',
-    summary: 'Tidak ada doktrin, teks, gelar, atau penjaga ideologi yang kebal dari audit empiris dan revisi prosedural bila berhadapan dengan bukti kegagalan.',
+    summary: 'No office, text, canonized founder, or ideological custodian holds immunity from empirical auditing, dissent, and procedural revision when confronted with demonstrated predictive failure.',
     anchor: '1.4',
-    defense: 'Mencegah pembekuan intelektual skolastik. Menjaga PMN tetap sebagai instrumen penyelidikan yang adaptif terhadap dinamika material zaman.',
-    falsification: 'Dapat digugurkan jika dibuktikan adanya prinsip filosofis yang mampu mempertahankan kebenaran mutlak tanpa memerlukan verifikasi empiris berulang.',
+    defense: 'Prevents scholastic ossification and custodian capture. Keeps PMN fundamentally calibrated as an adaptive instrument of real-world investigation rather than an inviolable dogma.',
+    falsification: 'Falsified if any philosophical postulate is proven capable of retaining absolute veridical authority without requiring ongoing empirical feedback and verification.',
   },
 
   // TIER 2 — STRUCTURAL COMMITMENTS
@@ -70,45 +70,45 @@ const AXIOMS: AxiomItem[] = [
     code: '2a',
     tier: 2,
     tierName: 'Tier 2 — Structural Commitments',
-    domain: 'Etika & Sentience',
+    domain: 'Ethics & Sentience',
     title: 'CONDITIONAL BIOLOGICAL CONSTRAINTS',
-    summary: 'Kognisi dan perilaku manusia beroperasi di dalam batas-batas biologis evolusioner yang nyata dan terukur, namun bersifat probabilistik, bukan fatalistis.',
+    summary: 'Human cognition and social behavior operate within measurable evolutionary biological constraints that are probabilistically determined, rather than fatalistically fixed.',
     anchor: '3.2',
-    defense: 'Menolak utopianisme tabula-rasa yang berasumsi manusia dapat dibentuk tanpa batas, sekaligus menolak determinisme genetik yang melegitimasi ketidakadilan.',
-    falsification: 'Dapat direvisi jika ilmu saraf membuktikan perilaku sosial manusia sepenuhnya kaku ditentukan oleh program genetika tanpa elastisitas lingkungan.',
+    defense: 'Rejects naive tabula-rasa utopianism that assumes human nature is infinitely plastic, while rejecting reactionary genetic determinism that naturalizes institutional oppression.',
+    falsification: 'Revisable if neurobiology demonstrates human social behavior is rigidly locked by genetic programming with zero phenotypic plasticity or cultural responsiveness.',
   },
   {
     code: '2b',
     tier: 2,
     tierName: 'Tier 2 — Structural Commitments',
-    domain: 'Kekuasaan & Lembaga',
+    domain: 'Power & Institutions',
     title: 'NON-COLLAPSIBLE LAYERED ARCHITECTURE',
-    summary: 'Penyelidikan berlangsung dalam 3 lapisan: Kondisi Material Termodinamika → Medan Kekuatan Struktural & Lembaga → Agensi Subjektif. Tidak ada tier yang boleh runtuh ke tier lain.',
+    summary: 'Rigorous investigation proceeds across distinct, non-reducible tiers: Thermodynamic Constraints → Institutional Force Fields → Subjective Agency. No layer collapses into another.',
     anchor: '2.4',
-    defense: 'Menghindari reduksionisme fisik murni (yang gagal membaca hukum dan pranata) serta kulturalisme murni (yang melupakan batasan fisik).',
-    falsification: 'Dapat direvisi jika dinamika sosiopolitik terbukti dapat diprediksi secara tuntas hanya melalui kalkulasi fisika kuantum atau kimia biologis murni.',
+    defense: 'Avoids crude physical reductionism (which is blind to emergent legal/economic dynamics) and culturalism (which ignores thermodynamic and resource boundaries).',
+    falsification: 'Revisable if macro-sociopolitical dynamics can be completely derived and forecasted exclusively through quantum mechanics or molecular chemistry.',
   },
   {
     code: '2c',
     tier: 2,
     tierName: 'Tier 2 — Structural Commitments',
-    domain: 'Kekuasaan & Lembaga',
+    domain: 'Power & Institutions',
     title: 'UNIVERSAL INSTITUTIONAL CONTESTABILITY',
-    summary: 'Setiap tatanan institusional yang mengklaim mewakili kepentingan bersama wajib secara struktural menyediakan instrumen audit dan jalur perlawanan damai bagi pihak yang diatur.',
+    summary: 'Any institutional arrangement claiming legitimacy must structurally provide accessible, low-cost procedures for external audit, grievance redress, and peaceful non-compliance.',
     anchor: '11.2',
-    defense: 'Lembaga yang menutup jalur kontestasi niscaya mengalami degradasi informasi dan berubah menjadi instrumen ekstraksi kelompok penjaga (kustodian).',
-    falsification: 'Dapat direvisi jika ditemukan masyarakat tanpa mekanisme oposisi yang mampu mempertahankan keadilan dan adaptabilitas jangka panjang.',
+    defense: 'Institutions that insulate themselves from contestation suffer information degradation and systematically mutate into extractive apparatuses for incumbent custodians.',
+    falsification: 'Revisable if closed, incontestable societies are empirically demonstrated to maintain long-term equity, institutional adaptation, and zero predatory capture.',
   },
   {
     code: '2d',
     tier: 2,
     tierName: 'Tier 2 — Structural Commitments',
-    domain: 'Kekuasaan & Lembaga',
+    domain: 'Power & Institutions',
     title: 'BOUNDS OF COERCIVE PROPORTIONALITY',
-    summary: 'Penggunaan instrumen pemaksa hanya sah sejauh diperlukan secara proporsional untuk mengamankan lantai biologis; kelebihan paksaan bermutasi menjadi dominasi ekstraktif.',
+    summary: 'The application of coercive power is legitimate only to the strict minimum necessary to secure the biological floor; any surplus coercion degenerates into predatory domination.',
     anchor: '7.4',
-    defense: 'Mencegah normalisasi kekerasan lembaga di bawah dalih stabilitas abstrak yang mengabaikan hak hidup konstituen.',
-    falsification: 'Dapat direvisi jika peningkatan represi terbukti secara konsisten memperluas kebebasan dan flourishing umum dalam jangka panjang.',
+    defense: 'Blocks the normalization of state or custodian violence under rhetoric of abstract collective stability or emergency exceptions.',
+    falsification: 'Revisable if escalated state coercion and punitive monopolies reliably generate wider long-term autonomy and flourishing for vulnerable constituents.',
   },
 
   // TIER 3 — EMPIRICAL HYPOTHESES
@@ -116,34 +116,34 @@ const AXIOMS: AxiomItem[] = [
     code: '3a',
     tier: 3,
     tierName: 'Tier 3 — Empirical Hypotheses',
-    domain: 'Kekuasaan & Lembaga',
+    domain: 'Power & Institutions',
     title: 'INFORMATION ASYMMETRY AS STRUCTURAL POWER',
-    summary: 'Keuntungan kustodian melalui kontrol selektif atas data, arsip, dan prosedur teknis merupakan mekanisme kausal paling dominan dalam proses pembajakan institusi.',
+    summary: 'Custodian advantage achieved through selective data hoarding, procedural complexity, and archival opacity is the primary causal driver of institutional capture.',
     anchor: '7.3',
-    defense: 'Berdasarkan telaah historis organisasi: tanpa transparansi radikal, informasi selalu diakumulasi di puncak hirarki untuk mempertahankan kekuasaan.',
-    falsification: 'Dapat difalsifikasi jika audit data menunjukkan pembajakan institusi terjadi secara merata terlepas dari apakah sistem informasi lembaga tersebut tertutup atau terbuka.',
+    defense: 'Rooted in organizational sociology: absent radical transparency, bureaucratic information invariably clusters at the hierarchy peak to entrench incumbency.',
+    falsification: 'Falsified if empirical audits reveal that institutional capture occurs at identical rates and severities across fully transparent versus closed information regimes.',
   },
   {
     code: '3b',
     tier: 3,
     tierName: 'Tier 3 — Empirical Hypotheses',
-    domain: 'Epistemologi',
+    domain: 'Epistemology',
     title: 'NARRATIVE INERTIA & DISCOURSE RETARDATION',
-    summary: 'Kerangka ideologis dan wacana budaya cenderung bertahan puluhan tahun setelah kondisi material yang melahirkannya telah runtuh secara fundamental.',
+    summary: 'Ideological frameworks, cultural rationalizations, and moral doctrines persist across multi-generational horizons long after their underlying material conditions have dissolved.',
     anchor: '8.2',
-    defense: 'Menjelaskan kepatuhan masyarakat terhadap doktrin usang yang bertentangan langsung dengan kepentingan material mereka saat ini.',
-    falsification: 'Dapat difalsifikasi bila ditemukan korelasi seketika tanpa jeda waktu adaptasi antara perubahan kondisi material dan transformasi keyakinan publik.',
+    defense: 'Explains constituent obedience to obsolete theological or economic doctrines that run directly counter to their immediate material survival interests.',
+    falsification: 'Falsified if changes in underlying material/economic conditions are observed to instantaneously transform public cultural and normative belief systems without lag.',
   },
   {
     code: '3c',
     tier: 3,
     tierName: 'Tier 3 — Empirical Hypotheses',
-    domain: 'Ekonomi & Kontestasi',
+    domain: 'Economics & Contestability',
     title: 'MULTIPLICATIVE TRANSFER EQUATION (T = S · D · P · G)',
-    summary: 'Ekstraksi surplus struktural bekerja secara multiplikatif: jika transparansi (G) atau exit penalty (P) ditekan ke nol, potensi dominasi monopoli lumpuh.',
+    summary: 'Structural surplus extraction operates multiplicatively rather than additively: if governance opacity (G) or exit penalties (P) approach zero, extractive leverage collapses.',
     anchor: '6.3',
-    defense: 'Menghubungkan ekonomi politik dengan teori informasi: transparansi radikal dan kemudahan keluar mampu melumpuhkan potensi pemerasan kustodian.',
-    falsification: 'Dapat difalsifikasi jika pengujian data ekonomi menunjukkan hubungan linier terpisah antar-variabel tanpa efek pengali pada ekstraksi surplus riil.',
+    defense: 'Bridges political economy with information theory: radical procedural transparency and guaranteed exit rights disarm monopolistic extraction.',
+    falsification: 'Falsified if econometric modeling reveals that power factors operate independently and additively without compound multiplier effects on extracted surplus.',
   },
 ]
 
@@ -197,10 +197,13 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
   const tier2Count = AXIOMS.filter(a => a.tier === 2).length
   const tier3Count = AXIOMS.filter(a => a.tier === 3).length
 
-  // Group by tier for clean sectioning if no specific tier filter is active
   const groupedTiers = useMemo(() => {
     if (tierFilter !== 0) {
-      return [{ tier: tierFilter, title: tierFilter === 1 ? 'Tier 1 — Foundational Axioms' : tierFilter === 2 ? 'Tier 2 — Structural Commitments' : 'Tier 3 — Empirical Hypotheses', items: filteredAxioms }]
+      return [{ 
+        tier: tierFilter, 
+        title: tierFilter === 1 ? 'Tier 1 — Foundational Axioms' : tierFilter === 2 ? 'Tier 2 — Structural Commitments' : 'Tier 3 — Empirical Hypotheses', 
+        items: filteredAxioms 
+      }]
     }
     return [
       { tier: 1, title: 'Tier 1 — Foundational Axioms', items: filteredAxioms.filter(a => a.tier === 1) },
@@ -213,7 +216,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
     <div className="theses-section">
       <div className="theses-inner">
 
-        {/* COLUMN 1: SIDEBAR LEAD CARD (Matches original layout exactly) */}
+        {/* COLUMN 1: SIDEBAR LEAD CARD */}
         <div className="theses-lead">
           <h2>Axiom Structure</h2>
           <p className="theses-lead-sub">
@@ -244,7 +247,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
           </div>
         </div>
 
-        {/* COLUMN 2: WIDE MAIN CONTENT (Controls + Theses List) */}
+        {/* COLUMN 2: WIDE MAIN CONTENT */}
         <div className="theses-main" style={{minWidth: 0, display: 'flex', flexDirection: 'column', gap: '1.25rem'}}>
 
           {/* CONTROLS BAR: TIER FILTER PILLS + DOMAIN SELECTOR + SEARCH */}
@@ -296,10 +299,10 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                 }}
               >
                 <option value="all">All Domains</option>
-                <option value="Epistemologi">Epistemologi</option>
-                <option value="Etika & Sentience">Etika & Sentience</option>
-                <option value="Kekuasaan & Lembaga">Kekuasaan & Lembaga</option>
-                <option value="Ekonomi & Kontestasi">Ekonomi & Kontestasi</option>
+                <option value="Epistemology">Epistemology</option>
+                <option value="Ethics & Sentience">Ethics & Sentience</option>
+                <option value="Power & Institutions">Power & Institutions</option>
+                <option value="Economics & Contestability">Economics & Contestability</option>
               </select>
 
               <input
@@ -372,7 +375,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                           <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:'.85rem', marginBottom:'1rem'}}>
                             <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.9rem 1rem'}}>
                               <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.62rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
-                                Landasan Argumentatif:
+                                Defensive Grounding:
                               </strong>
                               <p style={{fontFamily:'var(--f-body)', fontSize:'.86rem', lineHeight:1.6, color:'var(--ink2)', margin:0}}>
                                 {ax.defense}
@@ -381,7 +384,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
 
                             <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.9rem 1rem'}}>
                               <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.62rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.35rem'}}>
-                                Standar Falsifikasi / Uji Stres:
+                                Falsification Standard:
                               </strong>
                               <p style={{fontFamily:'var(--f-body)', fontSize:'.86rem', lineHeight:1.6, color:'var(--ink2)', margin:0}}>
                                 {ax.falsification}
@@ -408,7 +411,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                               onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--acc)'; e.currentTarget.style.color = 'var(--acc-text)' }}
                               onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--rule2)'; e.currentTarget.style.color = 'var(--ink)' }}
                             >
-                              Buka Pembuktian di §{ax.anchor} &rarr;
+                              Open Proof in §{ax.anchor} &rarr;
                             </button>
                           </div>
 
