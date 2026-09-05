@@ -3022,3 +3022,127 @@ body.focus-mode #hdr-r #focus-btn {
 /* Jarak strip tab ke panel di bawahnya: `mb-6` pada .hai-tabs juga inert
    karena reset universal yang sama. */
 .hai-tabs { margin-bottom: 24px; }
+
+/* ============================================================
+   RONDE 15 — Glosarium: indeks sebagai tampilan baku
+   214 istilah dalam kisi kartu = tembok teks. Satu baris per istilah,
+   definisi dibuka saat diminta. Semua jarak ditulis eksplisit karena
+   reset universal di berkas ini melumpuhkan utility spasi Tailwind.
+   ============================================================ */
+
+.gl-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  margin-bottom: 20px; padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.gl-cari {
+  flex: 1 1 240px; min-width: 180px;
+  padding: 9px 12px;
+  background: var(--bg2); color: var(--ink);
+  border: 1px solid var(--rule);
+  font-family: var(--font-pmn-mono, ui-monospace, monospace);
+  font-size: 0.82rem;
+}
+.gl-cari::placeholder { color: var(--mute3); }
+.gl-cari:focus-visible { outline: 2px solid var(--acc-text); outline-offset: 1px; }
+
+.gl-seg { display: flex; border: 1px solid var(--rule); }
+.gl-seg button {
+  padding: 8px 14px;
+  background: transparent; color: var(--mute);
+  font-family: var(--font-pmn-mono, ui-monospace, monospace);
+  font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.16em;
+  cursor: pointer; border: 0;
+}
+.gl-seg button + button { border-left: 1px solid var(--rule); }
+.gl-seg button:hover { color: var(--ink); }
+.gl-seg button[aria-pressed="true"] { background: var(--bg3); color: var(--acc-text); }
+
+.gl-hitung {
+  margin-left: auto;
+  font-family: var(--font-pmn-mono, ui-monospace, monospace);
+  font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--mute3); white-space: nowrap;
+}
+
+.gl-abjad {
+  display: flex; flex-wrap: wrap; gap: 2px;
+  margin-bottom: 22px;
+}
+.gl-abjad a {
+  min-width: 26px; padding: 4px 0; text-align: center;
+  font-family: var(--font-pmn-mono, ui-monospace, monospace);
+  font-size: 0.68rem; color: var(--mute2); text-decoration: none;
+  border: 1px solid transparent;
+}
+.gl-abjad a:hover { color: var(--acc-text); border-color: var(--rule); }
+
+.gl-kosong {
+  padding: 40px 0; text-align: center; color: var(--mute2);
+  font-family: var(--font-pmn-body, Georgia, serif);
+}
+
+.gl-blok + .gl-blok { margin-top: 34px; }
+.gl-blok-jdl {
+  margin: 0 0 10px;
+  font-family: var(--font-pmn-mono, ui-monospace, monospace);
+  font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.34em;
+  color: var(--acc-text);
+}
+.gl-daftar { list-style: none; margin: 0; padding: 0; }
+.gl-item { border-bottom: 1px solid var(--rule2, var(--rule)); }
+.gl-item.terbuka { background: var(--bg2); }
+
+.gl-baris {
+  display: flex; align-items: baseline; gap: 10px;
+  width: 100%; padding: 9px 10px;
+  background: transparent; border: 0; cursor: pointer; text-align: left;
+}
+.gl-baris:hover { background: var(--bg2); }
+.gl-baris:focus-visible { outline: 2px solid var(--acc-text); outline-offset: -2px; }
+.gl-baris-ist {
+  font-family: var(--font-pmn-head, Georgia, serif);
+  font-size: calc(1rem * var(--contents-scale, 1));
+  color: var(--ink); text-transform: capitalize;
+}
+.gl-item.terbuka .gl-baris-ist, .gl-baris:hover .gl-baris-ist { color: var(--acc-text); }
+.gl-baris-kat {
+  font-family: var(--font-pmn-mono, ui-monospace, monospace);
+  font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--mute3); white-space: nowrap;
+}
+.gl-baris-titik {
+  flex: 1 1 auto; min-width: 18px;
+  border-bottom: 1px dotted var(--rule);
+  transform: translateY(-3px);
+}
+.gl-baris-id {
+  font-family: var(--font-pmn-mono, ui-monospace, monospace);
+  font-size: 0.66rem; color: var(--mute2); white-space: nowrap;
+}
+
+.gl-buka { padding: 2px 10px 14px 10px; }
+.gl-buka-def {
+  margin: 0 0 10px;
+  max-width: 68ch;
+  font-family: var(--font-pmn-body, Georgia, serif);
+  font-size: calc(0.94rem * var(--contents-scale, 1));
+  line-height: 1.62; color: var(--mute);
+}
+.gl-buka-akt {
+  padding: 0; background: transparent; border: 0; cursor: pointer;
+  font-family: var(--font-pmn-mono, ui-monospace, monospace);
+  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.18em;
+  color: var(--acc-text);
+}
+.gl-buka-akt:hover { text-decoration: underline; }
+
+/* SATU kolom, disengaja. Dua percobaan multi-kolom sudah dicoba dan dibuang:
+   `columns` menyeimbangkan tinggi kolom, jadi membuka satu definisi
+   memindahkan istilah lain menyeberang kolom dan pembaca kehilangan tempatnya;
+   grid dua kolom membuat istilah panjang membungkus dua baris dan meninggalkan
+   lubang kosong sebesar definisi yang dibuka. Satu kolom menukar panjang
+   gulir - yang sudah ditangani penyaring dan bilah huruf - dengan urutan yang
+   tidak pernah bergeser. */
+.gl-daftar { max-width: 940px; }

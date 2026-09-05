@@ -191,9 +191,24 @@ export default function ReaderView({
 
     // Check for glossary match
     const lowerTxt = txt.toLowerCase()
-    const matchedKey = Object.keys(data.gl).find(k => 
-      lowerTxt === k.toLowerCase() || lowerTxt.includes(k.toLowerCase()) || k.toLowerCase().includes(lowerTxt)
-    )
+    // Dulu ini `find` dengan tiga syarat setara, jadi yang menang adalah kunci
+    // PERTAMA di gl.json - bukan yang paling cocok. Seleksi 3 huruf seperti
+    // "the" pun lolos lewat k.includes(sel) dan memunculkan istilah yang tidak
+    // ada hubungannya. Sekarang berperingkat: sama persis, lalu istilah
+    // terpanjang yang termuat di dalam seleksi, baru seleksi yang termuat di
+    // dalam istilah - itu pun hanya bila cukup panjang dan berhenti di batas
+    // kata, supaya "power" tidak menarik istilah pertama yang kebetulan
+    // mengandungnya.
+    const kunci = Object.keys(data.gl)
+    const batasKata = (k: string, s: string) => new RegExp(`(^|\\W)${s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\W|$)`).test(k)
+    const terpanjang = (a: string[]) => a.sort((x, y) => y.length - x.length)[0]
+    const terpendek = (a: string[]) => a.sort((x, y) => x.length - y.length)[0]
+    const matchedKey =
+      kunci.find(k => k.toLowerCase() === lowerTxt) ||
+      terpanjang(kunci.filter(k => lowerTxt.includes(k.toLowerCase()))) ||
+      (lowerTxt.length >= 8
+        ? terpendek(kunci.filter(k => batasKata(k.toLowerCase(), lowerTxt)))
+        : undefined)
 
     if (matchedKey) {
       setGlossaryTooltip({
