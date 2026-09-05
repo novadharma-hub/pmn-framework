@@ -343,7 +343,13 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                       &ldquo;{currentQuote.body || currentQuote}&rdquo;
                     </div>
                     <div id="quote-title" className="text-right font-mono text-[0.6rem] uppercase tracking-widest mt-2 opacity-60">
-                      — On the &ldquo;{currentQuote.title || 'Source'}&rdquo;
+                      {/* Judul di quotes.json SUDAH berbentuk "On co-optation",
+                          "On drift", dan seterusnya - semuanya 25. Membungkusnya
+                          dengan 'On the "..."' menghasilkan 'On the "On
+                          co-optation"': On ganda, dan tanda kutip yang
+                          menyiratkan petikan padahal tidak satu pun dari 25
+                          kutipan ini muncul persis di naskah. */}
+                      — {currentQuote.title || 'Source'}
                     </div>
                     {/* 21 titik mungil tak terbaca sebagai posisi;
                         penghitung menyampaikan hal yang sama. */}
