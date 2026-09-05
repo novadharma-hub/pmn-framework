@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/Release-v118.6-blueviolet.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-Corpus%20Enabled-orange.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/llms.txt)
-[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
+[![License](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
 
 > **A naturalist philosophical framework for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming.**  
 > *Authored by Nova Dharma — Canonical Release v118.6 (2026-09-05)*
