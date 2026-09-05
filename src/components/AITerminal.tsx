@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 
 interface SubSection { id: string; title: string; html?: string; text?: string }
 interface Part { part: string; title: string; subs: SubSection[] }
-interface Message { role: 'user' | 'assistant'; content: string }
 
 interface AITerminalProps {
   parts: Part[]
@@ -11,124 +10,231 @@ interface AITerminalProps {
   onOpenGuide?: () => void
 }
 
-export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerminalProps) {
-  const [activeTab, setActiveTab] = useState<'claude' | 'chatgpt' | 'gemini'>('chatgpt')
-  const [messages, setMessages] = useState<Message[]>([])
-  const [copyStatus, setCopyStatus] = useState('')
-  const chatLogRef = useRef<HTMLDivElement>(null)
+type PlatformKey = 'claude' | 'chatgpt' | 'gemini' | 'deepseek' | 'local'
 
-  // Build a grounded prompt from current section + glossary context (simple version for now)
+export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerminalProps) {
+  const [activeTab, setActiveTab] = useState<PlatformKey>('claude')
+  const [selectedMode, setSelectedMode] = useState<string>('analyst')
+  const [userQuestion, setUserQuestion] = useState<string>('')
+  const [copyStatus, setCopyStatus] = useState<string>('')
+
+  // Build a grounded structural prompt using active section + glossary references
   const buildPrompt = (userQ: string, mode: string) => {
     const sec = activeSec
-    const context = sec ? `Section ${sec.id}: ${sec.title}\n\n${(sec.html || sec.text || '').replace(/<[^>]+>/g, ' ').slice(0, 1800)}` : 'No active section.'
-    const modeNote = mode === 'diagnostic' ? 'Focus on structural diagnosis only.' : mode === 'debate' ? 'Challenge the analysis from counter perspectives.' : 'Provide PMN-style dialectical analysis.'
-    return `You are a Progressive Materialist Naturalism (PMN) analyst.\n\n${modeNote}\n\nCurrent context:\n${context}\n\nUser question: ${userQ || 'Explain the core idea of this section using PMN.'}\n\nRespond with clear structure, references to PMN axioms/sections where possible, and actionable insight.`
+    let context = 'Global PMN Architectural Context (No specific section selected).'
+    if (sec) {
+      const cleanText = (sec.html || sec.text || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+      context = `TARGET MANUSCRIPT SECTION:
+Section ID: §${sec.id}
+Section Title: ${sec.title}
+Section Excerpt:
+"${cleanText.slice(0, 2200)}${cleanText.length > 2200 ? '… [continued in full text]' : ''}"`
+    }
+
+    let modeInstruction = ''
+    if (mode === 'diagnostic') {
+      modeInstruction = `OPERATIONAL DIRECTIVE: FORENSIC CAPTURE DIAGNOSTICS (§7.3c-i)
+- Test the arrangement against the 5-Stage Institutional Capture Sequence.
+- Trace how technical complexity is being mobilized as an intentional opacity resource (§6.5).
+- Identify who bears the material costs at the biological floor (§3.4).
+- End with an explicit empirical test that would falsify your diagnosis.`
+    } else if (mode === 'adversarial') {
+      modeInstruction = `OPERATIONAL DIRECTIVE: ADVERSARIAL RED-TEAM & ASSUMPTION ARCHAEOLOGY (§12.1)
+- Reconstruct the strongest structural counter-argument against the prevailing consensus.
+- Test for the 'Technocratic Drift Trap' (§12.5b) and 'Paralysis by Complexity' (§12.5d).
+- Name the unstated empirical assumptions required for this claim to hold.`
+    } else if (mode === 'equation') {
+      modeInstruction = `OPERATIONAL DIRECTIVE: TRANSFORMATION PRESSURE FORMULA ($T = S \cdot D \cdot P \cdot G$)
+- Evaluate the arrangement through PMN's Multiplicative Transfer Equation (§6.3 / §15.8).
+- Analyze how changes in opacity (G) or exit penalties (P) scale extractive leverage multiplicatively.
+- State required material preconditions for irreversible structural transition (§10.8).`
+    } else {
+      modeInstruction = `OPERATIONAL DIRECTIVE: PMN STRUCTURAL MATERIALIST ANALYST
+- Trace underlying material resource flows, power asymmetries, and incentive structures.
+- Evaluate impacts on the biological floor (minimizing structural suffering) vs genuine becoming (§3.4, §4.2).
+- Distinguish verified empirical evidence from self-serving institutional PR framing.`
+    }
+
+    return `You are operating as an authoritative Progressive Materialist Naturalism (PMN) analyst.
+Ground your reasoning in PMN Framework v118.6 (Nova Dharma).
+
+${modeInstruction}
+
+${context}
+
+ANALYTICAL QUERY:
+${userQ.trim() || 'Provide a comprehensive PMN structural diagnosis of this section, identifying its material mechanisms, potential capture vulnerabilities, and non-arbitrary evaluative criteria.'}
+
+FORMAT REQUIREMENTS:
+1. Grounded Diagnosis (cite specific PMN sections §X.Y).
+2. Institutional Asymmetry & Power Flows.
+3. Biological Floor & Becoming Evaluation.
+4. Concrete Falsification Threshold.`
   }
 
-  const handleCopyPrompt = (platform: 'chatgpt' | 'gemini') => {
-    const qInput = (document.getElementById(platform === 'chatgpt' ? 'hai-chatgpt-q' : 'hai-gemini-q') as HTMLInputElement)?.value || ''
-    const sel = (document.querySelector(`#hai-panel-${platform} select`) as HTMLSelectElement)?.value || 'agent'
-    const prompt = buildPrompt(qInput, sel)
+  const handleCopyPrompt = () => {
+    const prompt = buildPrompt(userQuestion, selectedMode)
     navigator.clipboard.writeText(prompt).then(() => {
-      setCopyStatus('Prompt copied for ' + platform.toUpperCase() + '.')
-      window.setTimeout(() => setCopyStatus(''), 2200)
+      setCopyStatus(`Prompt copied for ${activeTab.toUpperCase()}!`)
+      window.setTimeout(() => setCopyStatus(''), 2500)
     }).catch(() => {
-      // fallback
       window.prompt('Copy this prompt manually:', prompt)
     })
   }
 
-  const handleOpenPlatform = (platform: 'chatgpt' | 'gemini') => {
-    handleCopyPrompt(platform)
-    const url = platform === 'chatgpt' ? 'https://chat.openai.com' : 'https://gemini.google.com'
-    window.open(url, '_blank')
+  const handleOpenPlatform = () => {
+    handleCopyPrompt()
+    let url = ''
+    switch (activeTab) {
+      case 'claude':
+        url = 'https://claude.ai'
+        break
+      case 'chatgpt':
+        url = 'https://chatgpt.com'
+        break
+      case 'gemini':
+        url = 'https://gemini.google.com'
+        break
+      case 'deepseek':
+        url = 'https://chat.deepseek.com'
+        break
+      case 'local':
+        url = 'http://localhost:8080' // default OpenWebUI / local port
+        break
+    }
+    if (url) {
+      window.open(url, '_blank')
+    }
   }
 
-  // Reconstruction to match .home-ai-section structure
   return (
-    <div className="home-ai-inner" style={{width: '100%'}}>
-      <div className="home-ai-hdr mb-4 flex flex-wrap items-center gap-3">
-        <span>PMN Agent Terminal ✦</span>
+    <div className="home-ai-inner" style={{ width: '100%' }}>
+      <div className="home-ai-hdr mb-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="font-pmn-head text-base text-pmn-ink font-bold">PMN Agent Terminal</span>
+          <span className="font-mono text-[0.65rem] px-2 py-0.5 rounded bg-pmn-acc text-white uppercase tracking-widest font-bold">
+            Live Grounding
+          </span>
+        </div>
+        {activeSec && (
+          <span className="font-mono text-[0.72rem] text-pmn-acc border border-pmn-rule px-2 py-0.5 bg-pmn-bg2">
+            Locked to §{activeSec.id} ({activeSec.title.slice(0, 30)}…)
+          </span>
+        )}
       </div>
-      <p className="home-ai-desc mb-6 italic text-xs opacity-70">Build a manuscript context pack and send it to ChatGPT or Gemini.</p>
+
+      <p className="home-ai-desc mb-4 text-xs text-pmn-ink2 opacity-80">
+        Generate a precision context pack from the current manuscript section and dispatch it directly to frontier or sovereign AI models with zero sycophancy.
+      </p>
+
       {copyStatus && (
-        <div className="font-mono text-[0.65rem] uppercase tracking-widest text-pmn-acc border border-pmn-rule bg-pmn-bg px-3 py-2 mb-4">
-          {copyStatus}
+        <div className="font-mono text-[0.7rem] uppercase tracking-wider text-pmn-acc border border-pmn-acc bg-pmn-bg px-3 py-1.5 mb-4 animate-in fade-in">
+          ✓ {copyStatus}
         </div>
       )}
-      
-      {/* MODE TABS (Legacy .hai-tabs) */}
-      <div className="hai-tabs mb-6" id="hai-tabs">
-        <button className={`hai-tab ${activeTab === 'chatgpt' ? 'active' : ''}`} onClick={() => setActiveTab('chatgpt')}>ChatGPT ↗</button>
-        <button className={`hai-tab ${activeTab === 'gemini' ? 'active' : ''}`} onClick={() => setActiveTab('gemini')}>Gemini ↗</button>
-        <button className={`hai-tab ${activeTab === 'claude' ? 'active' : ''}`} onClick={() => setActiveTab('claude')}>Inline chat — planned</button>
+
+      {/* PLATFORM SELECTOR TABS */}
+      <div className="hai-tabs mb-4 flex flex-wrap gap-1" id="hai-tabs">
+        <button
+          className={`hai-tab ${activeTab === 'claude' ? 'active' : ''}`}
+          onClick={() => setActiveTab('claude')}
+        >
+          Claude (Fable / Sonnet) ↗
+        </button>
+        <button
+          className={`hai-tab ${activeTab === 'deepseek' ? 'active' : ''}`}
+          onClick={() => setActiveTab('deepseek')}
+        >
+          DeepSeek (V4 / R1) ↗
+        </button>
+        <button
+          className={`hai-tab ${activeTab === 'chatgpt' ? 'active' : ''}`}
+          onClick={() => setActiveTab('chatgpt')}
+        >
+          ChatGPT (GPT-6 / o3) ↗
+        </button>
+        <button
+          className={`hai-tab ${activeTab === 'gemini' ? 'active' : ''}`}
+          onClick={() => setActiveTab('gemini')}
+        >
+          Gemini (3.1 Pro / 3.8) ↗
+        </button>
+        <button
+          className={`hai-tab ${activeTab === 'local' ? 'active' : ''}`}
+          onClick={() => setActiveTab('local')}
+        >
+          Local AI (Ollama / vLLM)
+        </button>
       </div>
 
-      {/* CLAUDE PANEL */}
-      {activeTab === 'claude' && (
-        <div id="hai-panel-claude" className="hai-panel animate-in fade-in duration-300">
-          <div id="home-chat-log" className="home-chat-log min-h-[160px] border border-pmn-rule bg-pmn-bg p-5 mb-4 shadow-inner overflow-y-auto">
-             <div className="hcl-placeholder text-xs italic">
-                &gt;&gt; Chat inside this page needs a server to hold the API key.
-                This site is a static build on GitHub Pages — no backend, by design.<br />
-                &gt;&gt; The two tabs on the left are not a workaround. They already do
-                the substantive part: PMN assembles a prompt grounded in the section
-                you are reading, then hands it to your own AI account.<br />
-                &gt;&gt; Inline chat would only remove the paste step, and would require
-                hosting with a server plus an API budget.
-             </div>
-          </div>
-          <div className="home-ai-row flex gap-2">
-            <input type="text" className="home-ai-input flex-1" placeholder="Needs a backend — use ChatGPT or Gemini above." disabled />
-            <button className="home-ai-btn" disabled>Not in this build</button>
-          </div>
-        </div>
-      )}
-
-      {/* CHATGPT REDIRECT PANEL */}
-      {activeTab === 'chatgpt' && (
-        <div id="hai-panel-chatgpt" className="hai-panel animate-in fade-in duration-300 space-y-5">
-          <p className="hai-redirect-desc text-xs text-pmn-ink opacity-80 leading-relaxed italic">PMN will prepare a grounded prompt from the manuscript context, then open ChatGPT. Just paste it there.</p>
-          <div className="hai-redirect-config">
-            <select className="home-ai-select w-full max-w-[240px]">
-              <option value="agent">Mode: PMN Analyst</option>
-              <option value="diagnostic">Mode: Diagnostic Only</option>
-              <option value="debate">Mode: Debate Partner</option>
+      {/* INPUT & CONFIGURATION PANEL */}
+      <div className="hai-panel p-4 border border-pmn-rule bg-pmn-bg2 rounded space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-1 min-w-[240px]">
+            <label className="font-mono text-[0.68rem] uppercase tracking-wider text-pmn-mute">
+              Operational Role:
+            </label>
+            <select
+              className="home-ai-select text-xs p-1.5 bg-pmn-bg border border-pmn-rule text-pmn-ink rounded"
+              value={selectedMode}
+              onChange={e => setSelectedMode(e.target.value)}
+            >
+              <option value="analyst">Structural Materialist Analyst</option>
+              <option value="diagnostic">Forensic Capture Diagnostician (§7.3c-i)</option>
+              <option value="adversarial">Adversarial Red-Team &amp; Dialectical Stress-Tester</option>
+              <option value="equation">Transformation Pressure Formula ($T = S · D · P · G$)</option>
             </select>
           </div>
-          <div className="home-ai-row flex gap-2">
-            <input type="text" id="hai-chatgpt-q" className="home-ai-input flex-1" placeholder="Your question for ChatGPT with PMN context…" />
-            <button id="hai-chatgpt-btn" className="home-ai-btn whitespace-nowrap px-6" onClick={() => handleOpenPlatform('chatgpt')}>Open ChatGPT ↗</button>
-          </div>
-          <div className="home-ai-actions flex gap-4 pt-4 border-t border-pmn-rule/40">
-            <button className="pmn-agent-btn primary" onClick={() => handleCopyPrompt('chatgpt')}>Copy prompt only</button>
-            <button className="pmn-agent-btn" onClick={() => handleOpenPlatform('chatgpt')}>Open ChatGPT ↗</button>
-            {onOpenGuide && <button className="pmn-agent-btn" onClick={onOpenGuide}>Open guide</button>}
-          </div>
-        </div>
-      )}
 
-      {/* GEMINI REDIRECT PANEL */}
-      {activeTab === 'gemini' && (
-        <div id="hai-panel-gemini" className="hai-panel animate-in fade-in duration-300 space-y-5">
-          <p className="hai-redirect-desc text-xs text-pmn-ink opacity-80 leading-relaxed italic">PMN will prepare a grounded prompt from the manuscript context, then open Gemini. Just paste it there.</p>
-          <div className="hai-redirect-config">
-            <select className="home-ai-select w-full max-w-[240px]">
-              <option value="agent">Mode: PMN Analyst</option>
-              <option value="diagnostic">Mode: Diagnostic Only</option>
-              <option value="debate">Mode: Debate Partner</option>
-            </select>
-          </div>
-          <div className="home-ai-row flex gap-2">
-            <input type="text" id="hai-gemini-q" className="home-ai-input flex-1" placeholder="Your question for Gemini with PMN context…" />
-            <button id="hai-gemini-btn" className="home-ai-btn whitespace-nowrap px-6" onClick={() => handleOpenPlatform('gemini')}>Open Gemini ↗</button>
-          </div>
-          <div className="home-ai-actions flex gap-4 pt-4 border-t border-pmn-rule/40">
-            <button className="pmn-agent-btn primary" onClick={() => handleCopyPrompt('gemini')}>Copy prompt only</button>
-            {onOpenGuide && <button className="pmn-agent-btn" onClick={onOpenGuide}>Open guide</button>}
+          <div className="font-mono text-[0.68rem] text-pmn-mute">
+            {activeSec ? 'Section Context: Injected' : 'Context: Global Corpus Architecture'}
           </div>
         </div>
-      )}
+
+        <div className="home-ai-row flex flex-wrap gap-2">
+          <input
+            type="text"
+            className="home-ai-input flex-1 min-w-[260px] p-2 bg-pmn-bg border border-pmn-rule text-xs text-pmn-ink rounded font-pmn-body placeholder:text-pmn-mute"
+            placeholder={
+              activeSec
+                ? `Ask a structural question about §${activeSec.id}: ${activeSec.title}…`
+                : 'Formulate an institutional or philosophical question with PMN context…'
+            }
+            value={userQuestion}
+            onChange={e => setUserQuestion(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') handleOpenPlatform()
+            }}
+          />
+        </div>
+
+        {/* ACTION BUTTONS */}
+        <div className="home-ai-actions flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-pmn-rule/50">
+          <div className="flex flex-wrap gap-2">
+            <button
+              className="pmn-agent-btn primary px-4 py-1.5 text-xs font-mono font-bold bg-pmn-acc text-white rounded hover:opacity-90 cursor-pointer"
+              onClick={handleOpenPlatform}
+            >
+              {activeTab === 'local' ? 'Copy Local Prompt' : `Copy & Open ${activeTab.toUpperCase()} ↗`}
+            </button>
+            <button
+              className="pmn-agent-btn px-3 py-1.5 text-xs font-mono bg-pmn-bg border border-pmn-rule text-pmn-ink rounded hover:border-pmn-acc cursor-pointer"
+              onClick={handleCopyPrompt}
+            >
+              Copy Prompt Only
+            </button>
+          </div>
+
+          {onOpenGuide && (
+            <button
+              className="font-mono text-[0.7rem] uppercase tracking-wider text-pmn-mute hover:text-pmn-acc cursor-pointer"
+              onClick={onOpenGuide}
+            >
+              Full AI Guide &amp; Endpoints &rarr;
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
