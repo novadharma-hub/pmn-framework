@@ -12,11 +12,12 @@ import collections
 import glob
 import io
 import json
+import os
 import re
 import sys
 import unicodedata
 
-AKAR = r"D:\Master-Universe\pmn-workspace\public"
+AKAR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Kurung yang memuat tahun empat digit. Dipecah pada ';' karena sitasi
 # majemuk lazim: "(Olson 1965; Stigler 1971)".

@@ -98,7 +98,20 @@ def clean_pdf_metadata(input_path, output_path):
 # ====================================================================
 def verify_cleanliness(file_path):
     ext = os.path.splitext(file_path)[1].lower()
-    sensitive_terms = [REDACTED_TERMS]
+    sensitive_terms = [t.strip() for t in os.environ.get("PMN_SENSITIVE_TERMS", "").split(",") if t.strip()]
+    if not sensitive_terms:
+        # Fail-secure: tanpa daftar istilah, audit tidak dapat menjamin steril.
+        # Set PMN_SENSITIVE_TERMS di .env privat (tidak ter-push), dipisah koma.
+        for cand in (os.path.join(os.getcwd(), ".env"),
+                     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")):
+            if os.path.exists(cand):
+                from dotenv import dotenv_values as _dv
+                sensitive_terms = [t.strip() for t in (_dv(cand).get("PMN_SENSITIVE_TERMS") or "").split(",") if t.strip()]
+                break
+    if not sensitive_terms:
+        print("[FAIL-SECURE] PMN_SENSITIVE_TERMS tidak ditemukan di .env privat — "
+              "audit tidak dapat menjamin steril dari identitas. Tangani manual.")
+        return False
     
     if ext == '.docx':
         try:
@@ -222,7 +235,7 @@ def process_single_file(input_file, clean_dir, env):
             os.remove(output_file)
         return False
         
-    print(f"[OK] AUDIT LOLOS: Berkas '{filename}' terbukti 100% steril dari nama the author!")
+    print(f"[OK] AUDIT LOLOS: Berkas '{filename}' terbukti steril dari seluruh istilah sensitif terverifikasi!")
     print(f"    Disimpan di -> {output_file}")
     
     # C. Kirim berkas steril tersebut ke Telegram Log Group

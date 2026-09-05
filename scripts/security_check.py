@@ -152,7 +152,11 @@ def check_metadata_leaks() -> tuple[list[str], list[str]]:
             seen.add(resolved)
             unique_paths.append(resolved)
             
-    personal_re = re.compile(r"\b(redacted)\b", re.IGNORECASE)
+    terms = [t.strip() for t in os.environ.get("PMN_SENSITIVE_TERMS", "").split(",") if t.strip()]
+    if not terms:
+        print("[WARN] PMN_SENSITIVE_TERMS tidak diset (.env privat, tidak ter-push) — "
+              "pemeriksaan istilah personal dilewati pada ronde ini.")
+    personal_re = re.compile("|".join(re.escape(t) for t in terms), re.IGNORECASE) if terms else re.compile(r"(?!)")
     
     for path in unique_paths:
         rel_str = rel(path)
@@ -183,7 +187,7 @@ def check_metadata_leaks() -> tuple[list[str], list[str]]:
             except ImportError:
                 try:
                     content = path.read_bytes()
-                    for term in [REDACTED_TERMS]:
+                    for term in (t.encode() for t in terms):
                         if term in content.lower():
                             findings_list.append(f"{rel_str}: potential personal term found in raw PDF content")
                             break

@@ -13,7 +13,9 @@ except ImportError:
     subprocess.run([sys.executable, "-m", "pip", "install", "pypdf"], check=True)
     import pypdf
 
-sensitive_terms = [REDACTED_TERMS]
+sensitive_terms = [t.strip() for t in os.environ.get("PMN_SENSITIVE_TERMS", "").split(",") if t.strip()]
+if not sensitive_terms:
+    print("[WARN] PMN_SENSITIVE_TERMS tidak diset (.env privat, tidak ter-push) — sanitasi identitas dilewati.")
 
 def clear_readonly(path):
     # Bersihkan atribut Read-Only pada Windows agar berkas bisa ditimpa
