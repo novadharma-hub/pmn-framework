@@ -54,6 +54,16 @@ export default function App() {
   useEffect(() => {
     document.body.classList.toggle('focus-mode', focusMode)
   }, [focusMode])
+  // Hint "cara keluar" muncul saat fokus menyala, memudar setelah 4,5 dtk;
+  // chip exit tetap tersedia selama fokus menyala (dua-duanya hasil UX pass
+  // setelah laporan user: fokus tak sengaja menyala tanpa jalan keluar terlihat).
+  const [focusHint, setFocusHint] = useState(false)
+  useEffect(() => {
+    if (!focusMode) { setFocusHint(false); return }
+    setFocusHint(true)
+    const t = setTimeout(() => setFocusHint(false), 4500)
+    return () => clearTimeout(t)
+  }, [focusMode])
 
   const [kbdOpen, setKbdOpen] = useState(false)
   const [notesOpen, setNotesOpen] = useState(false)
@@ -171,16 +181,26 @@ export default function App() {
   const [version, setVersion] = useState('')
   const [loadedCount, setLoadedCount] = useState(0)
 
-  // Global hotkeys: Alt+K = keyboard modal, Alt+N = notes modal, Alt+/ = command palette, Alt+F = focus, Alt+C = contents, Alt+? = glossary, Alt+R = resume
+  const toggleTheme = () => {
+    const nt = theme === 'dark' ? 'light' : 'dark'
+    setTheme(nt)
+    document.documentElement.setAttribute('data-theme', nt)
+    localStorage.setItem('pmn-theme', nt)
+  }
+
+  // Global hotkeys: Alt+K = keyboard modal, Alt+N = notes modal, Alt+/ = command palette, Alt+F = focus, Alt+T = theme, Alt+C = contents, Alt+? = glossary, Alt+R = resume; Esc exits focus
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) return
+      // Escape exits Focus Mode (modals close themselves via their own Escape handlers)
+      if (e.key === 'Escape' && focusMode) { e.preventDefault(); setFocusMode(false); return }
       if (!e.altKey || e.ctrlKey || e.metaKey) return // Must press Alt, must NOT press Ctrl or Meta
       const key = e.key.toLowerCase()
       if (key === 'k') { e.preventDefault(); setKbdOpen(v => !v) }
       if (key === 'n') { e.preventDefault(); setNotesOpen(v => !v) }
       if (key === '/') { e.preventDefault(); if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }
       if (key === 'f') { e.preventDefault(); setFocusMode(v => !v) } // global focus toggle
+      if (key === 't') { e.preventDefault(); toggleTheme() }
       if (key === 'c') { e.preventDefault(); setContentsSub('map'); setPage('contents') }
       if (key === '?' || (key === '/' && e.shiftKey)) { e.preventDefault(); setContentsSub('glossary'); setPage('contents') }
       if (key === 'r') { e.preventDefault(); setPage('reader') }
@@ -219,7 +239,7 @@ export default function App() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [page, data, curPos])
+  }, [page, data, curPos, theme, focusMode, toggleTheme])
 
   // Data loading
   useEffect(() => {
@@ -287,13 +307,6 @@ export default function App() {
   useEffect(() => {
     try { localStorage.setItem('pmn-sub', contentsSub) } catch {}
   }, [contentsSub])
-
-  const toggleTheme = () => {
-    const nt = theme === 'dark' ? 'light' : 'dark'
-    setTheme(nt)
-    document.documentElement.setAttribute('data-theme', nt)
-    localStorage.setItem('pmn-theme', nt)
-  }
 
   const handleGlobalSearchJump = () => {
     const q = searchQuery.trim()
@@ -496,6 +509,17 @@ export default function App() {
           </button>
         </nav>
       </div>
+
+      {focusMode && (
+        <>
+          <div className={'focus-exit-hint' + (focusHint ? ' on' : '')} role="status">
+            Focus mode — press <kbd>Esc</kbd> or <kbd>Alt+F</kbd> to exit
+          </div>
+          <button className="focus-exit-chip" onClick={() => setFocusMode(false)}>
+            ✕&nbsp;Exit Focus
+          </button>
+        </>
+      )}
 
       <KeyboardModal isOpen={kbdOpen} onClose={() => setKbdOpen(false)} />
       <NotesModal isOpen={notesOpen} onClose={() => setNotesOpen(false)} data={data} onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }} />

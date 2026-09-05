@@ -286,7 +286,11 @@ export default function ReaderView({
     const handleSaveKey = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault()
-        saveNote()
+        // Simpan hanya saat textarea catatan sedang aktif — di luar itu
+        // Ctrl+S ditekan pelan-pelan (dialog simpan browser dikalahkan)
+        // tanpa menulis catatan kosong.
+        const el = document.activeElement
+        if (el instanceof HTMLTextAreaElement && el.classList.contains('annot-ta')) saveNote()
       }
     }
     window.addEventListener('keydown', handleSaveKey)
