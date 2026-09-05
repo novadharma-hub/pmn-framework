@@ -75,7 +75,11 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
   }, [data.quotes])
 
   const findSourceForTerm = (term: string, def: string) => {
-    const idMatch = def.match(/\((\d+\.\d+)(?:-\d+\.\d+)?\)/)
+    // ID seksi PMN memakai akhiran huruf dan romawi: 7.1b, 3.4c-ii, 10.10c-ii.
+    // Pola lama hanya menerima "angka.angka", jadi 55 entri yang SUDAH
+    // menyitasi sumbernya tetap jatuh ke pencocokan judul - dan yang tidak
+    // punya judul serupa tidak dapat tautan sama sekali.
+    const idMatch = def.match(/\((\d+\.\d+[a-z]*(?:-[ivx]+)?)(?:-\d+\.\d+[a-z]*)?\)/)
     if (idMatch && data.parts) {
       const sid = idMatch[1]
       for (let pIdx = 0; pIdx < data.parts.length; pIdx++) {
