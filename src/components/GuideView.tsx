@@ -697,9 +697,9 @@ if ANTHROPIC_API_KEY:
     >
       {/* STICKY HEADER */}
       <div className="sv-hdr-wrap border-b border-pmn-rule bg-pmn-bg sticky top-0 z-20">
-        <div className="max-w-[1040px] mx-auto flex items-center justify-between px-4 lg:px-8 py-3.5">
+        <div className="max-w-[1040px] mx-auto flex items-center justify-between gap-4 px-6 sm:px-8 lg:px-14 py-4">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-[0.7rem] uppercase tracking-widest px-2 py-0.5 rounded bg-pmn-acc text-white font-bold">
+            <span className="font-mono text-[0.7rem] uppercase tracking-widest px-2.5 py-1 rounded bg-pmn-acc text-white font-bold">
               AI LAB
             </span>
             <p className="sv-hdr !border-none !p-0 !m-0 font-pmn-head text-[1.35rem] text-pmn-ink font-semibold">
@@ -707,7 +707,7 @@ if ANTHROPIC_API_KEY:
             </p>
           </div>
           <button
-            className="hbtn font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors cursor-pointer"
+            className="hbtn font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink border border-pmn-rule hover:border-pmn-acc rounded px-3.5 py-2 transition-colors cursor-pointer whitespace-nowrap"
             onClick={onBackHome}
           >
             &larr; Return Home
@@ -932,6 +932,32 @@ if ANTHROPIC_API_KEY:
           <p>
             Modern AI families feature multiple distinct tiers across generations: heavy **Pro** models for deep synthesis, high-throughput **Flash** models for fast agentic loops, and **Reasoning** models for formal mathematical deduction. Filter and search the matrix below:
           </p>
+
+          {/* HEAVY-REASONING RECOMMENDATION PANEL — task-focused, not a catalog */}
+          <div style={{ border: '1px solid var(--rule)', borderLeft: '3px solid var(--acc)', borderRadius: '4px', padding: '1.1rem 1.2rem', margin: '1.2rem 0 1.6rem', background: 'var(--bg2)' }}>
+            <p style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--acc-text)', fontWeight: 700, margin: '0 0 0.55rem' }}>
+              Heavy philosophical reasoning — what to actually pick
+            </p>
+            <p style={{ margin: '0 0 0.6rem', fontSize: '0.92rem', lineHeight: 1.65 }}>
+              The matrix below is a catalog; catalogs do not answer the question you came here with. For PMN work, three demands decide the choice, and benchmark scores decide almost none of them:
+            </p>
+            <ol style={{ margin: '0 0 0.7rem', paddingLeft: '1.25rem', fontSize: '0.9rem', lineHeight: 1.65 }}>
+              <li><strong>Whole-corpus holding.</strong> The manuscript is ~330k words. Models under 1M context must chunk it via the RAG discipline (llms.json), and chunking severs cross-part tracing — §7.3's capture mechanics only bite when Part I is read against Part XV.</li>
+              <li><strong>Sycophancy resistance.</strong> A model that agrees with you is worthless here. §12.5 requires applying the same capture diagnostics to your own commitments — if the model flatters your position instead of stress-testing it, it fails the framework's central demand.</li>
+              <li><strong>Anchor discipline.</strong> It must cite §-numbers verbatim and say plainly when it is paraphrasing from memory rather than the corpus. Invented anchors are worse than no anchors.</li>
+            </ol>
+            <p style={{ margin: '0 0 0.45rem', fontSize: '0.9rem', lineHeight: 1.65 }}>
+              <strong>Recommendation order for the heavy-reasoning workload</strong> — sustained dialectic, counter-argument generation, falsification pressure (the Part V, VIII, and §12.5 work):
+            </p>
+            <ol style={{ margin: '0 0 0.7rem', paddingLeft: '1.25rem', fontSize: '0.9rem', lineHeight: 1.75 }}>
+              <li><strong>Frontier Pro class with ≥1M context</strong> — Gemini 3.1 Pro (2M), Claude Opus 5, GPT-6 Astra: single-pass whole-corpus grounding without chunking loss.</li>
+              <li><strong>Reasoning class</strong> — DeepSeek-R1, OpenAI o3-pro: slower and sometimes context-limited, but built for sustained multi-step deduction; strongest on capture-sequence proofs and §15 formula discipline. Pair with corpus chunking.</li>
+              <li><strong>Flash tier — explicitly not for this workload.</strong> Its throughput is for batch audits and section lookup. Flash models compress multi-step proofs into summaries under output caps — their own failure-mode notes below say so.</li>
+            </ol>
+            <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--ink2)' }}>
+              One honesty requirement before you trust any of this: vendor claims in this matrix are unverified by the platform. The honest test is §12.5 applied to the model itself — run the falsification prompts from the Question Bank (Step 06) on your chosen model, and demote it the first time it flatters you instead of answering.
+            </p>
+          </div>
 
           {/* MATRIX CONTROLS: FILTER TABS & SEARCH */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', margin: '1.5rem 0 1rem' }}>
