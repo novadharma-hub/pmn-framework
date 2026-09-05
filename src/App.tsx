@@ -8,6 +8,9 @@ import KeyboardModal from './components/KeyboardModal'
 import NotesModal from './components/NotesModal'
 import GuideView from './components/GuideView'
 import AITerminal from './components/AITerminal'
+import ReadingPathsSection from './components/ReadingPathsSection'
+import TheoreticalAnatomySection from './components/TheoreticalAnatomySection'
+import AxiomStructureSection from './components/AxiomStructureSection'
 import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl } from './routing'
 
 
@@ -529,26 +532,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
   const readCount = Object.keys(readMap).length
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
 
-  const [anatTab, setAnatTab] = useState(0)
   const [deskNotes, setDeskNotes] = useState(() => { try { return localStorage.getItem('pmn-desk-notes') || '' } catch { return '' } })
-
-  const romanToVal = (r: string): number => {
-    const map: Record<string, number> = { i: 1, v: 5, x: 10, l: 50, c: 100, d: 500, m: 1000 };
-    let val = 0, prev = 0;
-    const s = r.toLowerCase();
-    for (let i = s.length - 1; i >= 0; i--) {
-      const curr = map[s[i]] || 0;
-      if (curr < prev) val -= curr;
-      else val += curr;
-      prev = curr;
-    }
-    return val;
-  };
-
-  const anatParts = [...data.parts]
-    .filter((p: any) => /^[IVXLCDM]+$/i.test(p.part))
-    .sort((a: any, b: any) => romanToVal(a.part) - romanToVal(b.part));
-  const selectedPart = anatParts[anatTab] || null
 
   // Restored cover scroll parallax logic in React
   useEffect(() => {
@@ -677,129 +661,26 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
       </div>
 
       {/* READING PATHS */}
-      <div className="reading-paths">
-        <div className="reading-paths-hdr">
-          <h2>Reading Paths</h2>
-          <p>Not every reader needs to start the same way. These entry paths give faster on-ramps into PMN depending on whether you want foundations, power analysis, formula compression, or applied cases.</p>
-        </div>
-        <div className="reading-paths-meta">
-          <div className="reading-stat"><strong>Entry Logic</strong><span>Choose by task, not by obligation.</span></div>
-          <div className="reading-stat"><strong>Fastest Route</strong><span>15.15 for compression, then backfill.</span></div>
-          <div className="reading-stat"><strong>Best for First Pass</strong><span>Start with foundations, not slogans.</span></div>
-        </div>
-        <div className="reading-paths-grid">
-          {([
-            {num:'01', kicker:'Foundation First', desc:'Start with epistemology, ontology, and the biological floor before touching doctrine or applied cases.', cta:'Open Part I'},
-            {num:'02', kicker:'Power and Institutions', desc:'Jump straight into how power, legitimacy, and institutional capture shape the arrangement beneath the narrative.', cta:'Open Part VI'},
-            {num:'03', kicker:'Compressed Core', desc:'Use the short-form PMN core when you need the framework fast before going back for the full architecture.', cta:'Open 15.15'},
-            {num:'04', kicker:'Cases and the Individual', desc:'Move from abstract structure into historical cases and the practical demands PMN places on a person who holds it.', cta:'Open Part XVII'},
-            {num:'05', kicker:'Analyzing Situations', desc:'Apply the structural, power, and agent typology diagnostic checklists to understand the forces in play in a specific context.', cta:'Open Part VII'},
-            {num:'06', kicker:'Economic Analysis', desc:'Examine the provisional economic doctrine, accountability-contestability diagnostic, and how power operates beyond ownership.', cta:'Open Part XI'},
-          ] as const).map(path => (
-            <div key={path.num} className="path-card" data-ghost={path.num}>
-              <span className="path-kicker">PATH {path.num}</span>
-              <h3>{path.kicker}</h3>
-              <p>{path.desc}</p>
-              <button className="path-btn" onClick={() => {
-                if (onJump && data) {
-                  if (path.cta.startsWith('Open Part ')) {
-                    const targetPart = path.cta.replace('Open Part ', '').trim();
-                    const idx = data.parts.findIndex((pp: any) => pp.part === targetPart);
-                    if (idx >= 0) { onJump(idx, 0); return; }
-                  }
+      <ReadingPathsSection
+        data={data}
+        readMap={readMap}
+        onJump={onJump}
+        onStartReading={onStartReading}
+      />
 
-                  // Special case for compressed core 15.15
-                  if (path.cta.includes('15.15') || path.cta.includes('15,15')) {
-                    const look = data.look?.['15.15'] || data.look?.['15,15'];
-                    if (look) { 
-                      onJump(look.pi, look.si); 
-                      return; 
-                    }
-                  }
-                }
-                onStartReading();
-              }}>{path.cta}</button>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* THEORETICAL ANATOMY */}
+      <TheoreticalAnatomySection
+        data={data}
+        onJump={onJump}
+        onStartReading={onStartReading}
+      />
 
-      {/* ANATOMY TERMINAL — interactive, wired to real parts data */}
-      <div className="anatomy-section">
-        <div className="anatomy-section-inner">
-          <div className="anatomy-section-hdr">
-            <h2>Theoretical Anatomy</h2>
-            <span>Structural Log: Active</span>
-          </div>
-          <div className="anatomy-terminal">
-            <div className="anatomy-sidebar">
-              <div style={{background:'var(--acc)',color:'var(--bg)',fontFamily:'var(--f-mono)',fontSize:'.68rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'.1em',padding:'.6rem 1rem',flexShrink:0}}>
-                Theoretical Anatomy
-              </div>
-              {anatParts.map((p: any, i: number) => (
-                <button key={p.part} className={`anatomy-tab${anatTab === i ? ' on' : ''}`} onClick={() => setAnatTab(i)}>
-                  Part {p.part}
-                </button>
-              ))}
-            </div>
-            <div className="anatomy-content">
-              {selectedPart && (
-                <div className="anatomy-panel on">
-                  <div className="ap-badge">Part {selectedPart.part}</div>
-                  <h3>{selectedPart.title}</h3>
-                  <p style={{marginBottom:'.85rem'}}>
-                    {selectedPart.subs?.[0]?.text
-                      ? selectedPart.subs[0].text.slice(0, 260) + '\u2026'
-                      : `This part contains ${selectedPart.subs?.length || 0} analytical modules.`}
-                  </p>
-                  <div style={{fontFamily:'var(--f-mono)',fontSize:'.7rem',marginBottom:'1rem',display:'flex',flexDirection:'column',gap:'.2rem'}}>
-                    {(selectedPart.subs || []).slice(0, 7).map((s: any) => (
-                      <div key={s.id} style={{padding:'.25rem 0',borderBottom:'1px solid var(--rule)'}}>
-                        <span style={{color:'var(--acc-text)'}}>{s.id}</span>
-                        <span style={{color:'var(--ink2)',marginLeft:'.5rem'}}>{s.title}</span>
-                      </div>
-                    ))}
-                    {(selectedPart.subs?.length || 0) > 7 && <div style={{color:'var(--mute)',paddingTop:'.3rem'}}>+ {selectedPart.subs.length - 7} more</div>}
-                  </div>
-                  <button className="btn-anatomy-more" onClick={() => {
-                    if (onJump && data) {
-                      const pIdx = data.parts.findIndex((pp: any) => pp.part === selectedPart.part)
-                      if (pIdx >= 0) { onJump(pIdx, 0); return }
-                    }
-                    onStartReading()
-                  }}>Open in Reader &rarr;</button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CORE THESES: ACCORDION */}
-      <div className="theses-section">
-        <div className="theses-inner">
-          <div className="theses-lead">
-            <h2>Axiom Structure</h2>
-            <p className="theses-lead-sub">PMN operates on three tiers. Tier 1 axioms are design choices defended by argument. Tier 2 are structural commitments. Tier 3 are empirical hypotheses (revisable).</p>
-            <div className="theses-tier-list">
-              <span className="theses-tier-chip tier-1">&#9679; Tier 1 &mdash; Foundational</span>
-              <span className="theses-tier-chip tier-2">&#9679; Tier 2 &mdash; Structural</span>
-              <span className="theses-tier-chip tier-3">&#9679; Tier 3 &mdash; Empirical</span>
-            </div>
-          </div>
-          <div className="theses-list" id="theses-list">
-            <div className="thesis-tier-hdr tier-1 first">Tier 1 &mdash; Foundational Axioms</div>
-            <ThesisItem num="1a" title="MIND-INDEPENDENT MATERIAL REALITY IS PRIMARY">Reality exists independently of perception. Establishing material conditions is the prior move.</ThesisItem>
-            <ThesisItem num="1b" title="SUFFERING HAS NEGATIVE EVALUATIVE VALENCE">Biological suffering is our non-arbitrary moral anchor. Pain is materially avoided by all sentient systems.</ThesisItem>
-            <ThesisItem num="1c" title="BECOMING IS EVALUATIVELY SIGNIFICANT">The expansion of development capacity is the evaluative ceiling that pairs with the floor of suffering reduction.</ThesisItem>
-            <div className="thesis-tier-hdr tier-2">Tier 2 &mdash; Structural Commitments</div>
-            <ThesisItem num="2a" title="CONDITIONAL BIOLOGICAL CONSTRAINTS">Human behavior and cognition operate within probabilistic biological constraints that are real but not fatalist.</ThesisItem>
-            <ThesisItem num="2b" title="LAYERED ANALYTICAL ARCHITECTURE">Analysis proceeds across tiers: material conditions &#8594; structural forces &#8594; individual agency. No tier collapses into another.</ThesisItem>
-            <div className="thesis-tier-hdr tier-3">Tier 3 &mdash; Empirical Hypotheses</div>
-            <ThesisItem num="3a" title="INFORMATION ASYMMETRY AS STRUCTURAL POWER">Custodian advantage through selective access to information is a primary mechanism of institutional capture.</ThesisItem>
-          </div>
-        </div>
-      </div>
+      {/* AXIOM STRUCTURE */}
+      <AxiomStructureSection
+        data={data}
+        onJump={onJump}
+        onStartReading={onStartReading}
+      />
 
       {/* HOME AI MODULE — Integrated React Terminal */}
       <div className="home-ai-section">
@@ -879,26 +760,6 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
         <span style={{opacity:.45,fontSize:'.65rem',fontWeight:400,textTransform:'none',letterSpacing:'.02em'}}>Reading preferences stored locally in your browser — no data is sent to any server.</span>
         <span>V{version} &mdash; Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+?</kbd> for Glossary &mdash; <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+K</kbd> for Keys</span>
       </div>
-    </div>
-  )
-}
-
-// ─── ThesisItem ───────────────────────────────────────────────────────────────
-
-function ThesisItem({ num, title, children }: any) {
-  const [open, setOpen] = useState(false)
-  return (
-    <div className={`thesis-item border-b border-pmn-rule ${open ? 'open bg-pmn-acc/[0.02]' : ''}`}>
-      <button className="thesis-toggle w-full flex items-baseline gap-6 py-6 text-left hover:bg-pmn-acc/[0.03] transition-colors" onClick={() => setOpen(!open)}>
-        <span className="thesis-num font-pmn-mono text-pmn-acc font-bold text-[0.75rem] tracking-widest">{num}</span>
-        <span className="thesis-title font-pmn-head text-[1.05rem] text-pmn-ink uppercase tracking-tight flex-1">{title}</span>
-        <span className="thesis-arrow font-pmn-mono text-[0.8rem] text-pmn-mute transition-transform duration-300" style={{ transform: open ? 'rotate(90deg)' : 'none' }}>&rsaquo;</span>
-      </button>
-      {open && (
-        <div className="thesis-body pb-8 pl-16 pr-6 font-pmn-body text-[0.98rem] text-pmn-ink2 leading-relaxed italic animate-in fade-in slide-in-from-top-1">
-          {children}
-        </div>
-      )}
     </div>
   )
 }
