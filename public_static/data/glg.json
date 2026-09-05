@@ -13,7 +13,8 @@
     "knowledge production",
     "the evaluative standard for metaphysical claims",
     "the naturalistic fallacy objection",
-    "strategic communication"
+    "strategic communication",
+    "essentialist foreclosure"
   ],
   "Epistemic Infrastructure": [
     "epistemic infrastructure",
@@ -65,10 +66,10 @@
     "manipulation",
     "becoming",
     "surpassability",
-    "chosen vs imposed suffering",
-    "functional vs disfunctional suffering",
-    "material vs existential suffering",
-    "structural vs incidental suffering",
+    "chosen versus imposed",
+    "functional versus disfunctional",
+    "material versus existential",
+    "structural versus incidental",
     "the foundation of value",
     "better and worse",
     "the loop model",
@@ -160,7 +161,6 @@
     "institutional drift",
     "distributed accountability",
     "self-neutralization",
-    "political window",
     "fracture lines",
     "the watcher problem",
     "ecological constraint",
@@ -175,7 +175,8 @@
     "drift mechanisms",
     "adaptation, not optimization",
     "the sequencing problem",
-    "micro-politics"
+    "micro-politics",
+    "shadow institutions"
   ],
   "Methodology": [
     "stress-testing",
@@ -190,7 +191,15 @@
     "domain-specific formulas",
     "the suffering variable",
     "rational micro, problematic macro",
-    "the seven diagnostic questions"
+    "the seven diagnostic questions",
+    "boundary violation detection",
+    "the multi-level consequence procedure",
+    "assumption archaeology",
+    "defeasible inference",
+    "non-bypassable diagnostic triggers",
+    "deficit estimation protocol",
+    "accumulated pressure (A)",
+    "transformation window (Tw)"
   ],
   "Summary": [
     "progressive materialist naturalism",
@@ -219,7 +228,9 @@
     "algorithmic governance",
     "biological floor",
     "acceleration problem",
-    "technology as redistributor of material power"
+    "technology as redistributor of material power",
+    "the commodification problem",
+    "effective accelerationism"
   ],
   "Institutional Analysis": [
     "institutional capture",
@@ -230,6 +241,10 @@
     "inaction as choice",
     "visibility variable",
     "technocratic drift constraints",
-    "conditional normative framework"
+    "conditional normative framework",
+    "framework and doctrine",
+    "anti-closure",
+    "framework institutionalization",
+    "self-capture"
   ]
 }
