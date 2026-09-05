@@ -124,11 +124,14 @@ def audit():
     )
     laporan.append("")
     def normalkan(t):
-        # Buang akhiran simbol dalam kurung, mis. 'institutional
-        # fragmentation (If)' -> 'institutional fragmentation'. Tanpa ini
-        # entri yang sehat dilaporkan mati hanya karena naskah menulis
-        # namanya tanpa simbol.
-        return re.sub(r"\s*\([^)]{1,4}\)\s*$", "", t).strip().lower()
+        # Buang keterangan dalam kurung di akhir nama, mis. 'institutional
+        # fragmentation (If)' -> 'institutional fragmentation', dan
+        # 'preferential access (capture stage 1)' -> 'preferential access'.
+        # Tanpa ini entri yang sehat dilaporkan mati hanya karena naskah
+        # menulis namanya tanpa keterangan itu. Ini juga menyelaraskan audit
+        # dengan pencocok tooltip di ReaderView, yang menyala ketika KUNCI
+        # memuat frasa yang diseleksi - bukan hanya ketika keduanya sama.
+        return re.sub(r"\s*\([^)]{1,24}\)\s*$", "", t).strip().lower()
 
     # Judul seksi ikut dihitung sebagai "ada di naskah". Sebuah istilah yang
     # namanya persis judul seksi jelas bukan istilah mati - tapi badan teks
