@@ -16,12 +16,14 @@ const SHORTCUTS = [
     { key: '→', desc: 'Next section' },
     { key: '←', desc: 'Previous section' },
     { key: 'Alt+F', desc: 'Toggle Focus Mode (hide sidebar)' },
+    { key: 'Esc', desc: 'Exit Focus Mode (also the ✕ chip, top right)' },
     { key: 'Alt+N', desc: 'Toggle Quick Notes modal' },
   ]},
   { section: 'Content', items: [
     { key: 'Alt+?', desc: 'Jump to Glossary' },
     { key: 'Alt+R', desc: 'Resume last reading position' },
-    { key: 'Ctrl+S', desc: 'Save note (Reader View)' },
+    { key: 'Alt+T', desc: 'Toggle dark / light theme' },
+    { key: 'Ctrl+S', desc: 'Save note while editing it (Reader View)' },
   ]},
 ]
 
