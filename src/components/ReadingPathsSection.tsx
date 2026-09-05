@@ -172,61 +172,46 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
   }
 
   return (
-    <div className="reading-paths" style={{padding:'4rem 2rem', background:'var(--bg)', borderTop:'1px solid var(--rule)'}}>
-      <div className="reading-paths-inner" style={{maxWidth:1120, margin:'0 auto'}}>
-        
-        {/* HEADER */}
-        <div className="reading-paths-hdr" style={{display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:'1.5rem', marginBottom:'2rem', borderBottom:'1px solid var(--rule)', paddingBottom:'1.5rem'}}>
-          <div>
-            <div style={{fontFamily:'var(--f-mono)', fontSize:'.72rem', letterSpacing:'.2em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.4rem'}}>
-              ● ONBOARDING & JALUR TELAAH
-            </div>
-            <h2 style={{fontFamily:'var(--f-head)', fontSize:'clamp(1.8rem, 3.5vw, 2.4rem)', color:'var(--ink)', margin:0}}>
-              Reading Paths Terarah
-            </h2>
-          </div>
-          <p style={{fontFamily:'var(--f-body)', fontSize:'.95rem', color:'var(--ink2)', maxWidth:'520px', margin:0, lineHeight:1.6}}>
-            Setiap pembaca mendekati PMN dengan pertanyaan yang berbeda. Pilih rute kurasi multi-langkah di bawah untuk navigasi fokus sesuai agenda penyelidikan Anda.
-          </p>
+    <div className="reading-paths">
+      {/* HEADER */}
+      <div className="reading-paths-hdr">
+        <div>
+          <span style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.18em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
+            ● ONBOARDING &amp; JALUR TELAAH
+          </span>
+          <h2>Reading Paths</h2>
         </div>
+        <p>
+          Setiap pembaca mendekati PMN dengan agenda yang berbeda. Rute kurasi terarah di bawah memberikan pijakan cepat sesuai fokus penyelidikan Anda: fondasi epistemik, forensik kekuasaan, kompresi formula, atau praksis etika.
+        </p>
+      </div>
 
-        {/* META STATS BAR */}
-        <div className="reading-paths-meta" style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(240px, 1fr))', gap:'1rem', marginBottom:'2.5rem'}}>
-          <div className="reading-stat" style={{border:'1px solid var(--rule)', padding:'.8rem 1rem', background:'var(--bg2)'}}>
-            <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.15em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.3rem'}}>Logika Jalur</strong>
-            <span style={{fontFamily:'var(--f-body)', fontSize:'.85rem', color:'var(--ink)'}}>Navigasi berbasis tugas dan peran, bukan keharusan membaca linear dari nol.</span>
-          </div>
-          <div className="reading-stat" style={{border:'1px solid var(--rule)', padding:'.8rem 1rem', background:'var(--bg2)'}}>
-            <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.15em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.3rem'}}>Rute Kilat 25 Menit</strong>
-            <span style={{fontFamily:'var(--f-body)', fontSize:'.85rem', color:'var(--ink)'}}>Pilih Jalur 03 untuk intisari formulasi §15.15 sebelum menelaah detail arsitektur.</span>
-          </div>
-          <div className="reading-stat" style={{border:'1px solid var(--rule)', padding:'.8rem 1rem', background:'var(--bg2)'}}>
-            <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.15em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.3rem'}}>Pelacakan Progres</strong>
-            <span style={{fontFamily:'var(--f-body)', fontSize:'.85rem', color:'var(--ink)'}}>Indikator progres diperbarui otomatis berdasarkan modul yang Anda tandai telah dibaca.</span>
-          </div>
+      {/* META STATS BAR */}
+      <div className="reading-paths-meta">
+        <div className="reading-stat">
+          <strong>Logika Jalur</strong>
+          <span>Navigasi berbasis tugas dan peran, bukan keharusan membaca linear dari nol.</span>
         </div>
+        <div className="reading-stat">
+          <strong>Rute Kilat 25 Menit</strong>
+          <span>Pilih Jalur 03 untuk intisari formulasi §15.15 sebelum menelaah detail arsitektur.</span>
+        </div>
+        <div className="reading-stat">
+          <strong>Pelacakan Progres</strong>
+          <span>Indikator progres diperbarui otomatis berdasarkan modul yang telah Anda baca.</span>
+        </div>
+      </div>
 
-        {/* GRID OF PATH CARDS */}
-        <div className="reading-paths-grid" style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(320px, 1fr))', gap:'1.5rem'}}>
-          {READING_PATHS.map((path, idx) => {
-            const progress = computePathProgress(path)
-            return (
-              <div 
-                key={path.num} 
-                className="path-card" 
-                data-ghost={path.num}
-                style={{
-                  border:'1px solid var(--rule)',
-                  background:'var(--bg2)',
-                  padding:'1.6rem 1.4rem',
-                  display:'flex',
-                  flexDirection:'column',
-                  position:'relative',
-                  overflow:'hidden',
-                  boxShadow:'6px 6px 0 rgba(0,0,0,0.05)',
-                  transition:'transform .2s ease, border-color .2s ease'
-                }}
-              >
+      {/* GRID OF PATH CARDS */}
+      <div className="reading-paths-grid">
+        {READING_PATHS.map((path, idx) => {
+          const progress = computePathProgress(path)
+          return (
+            <div 
+              key={path.num} 
+              className="path-card" 
+              data-ghost={path.num}
+            >
                 {/* TOP ROW: Kicker + Badge + Est Time */}
                 <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'.8rem', flexWrap:'wrap', gap:'.5rem'}}>
                   <span style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.16em', textTransform:'uppercase', color:'var(--acc-text)', fontWeight:700}}>
@@ -334,8 +319,6 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
             )
           })}
         </div>
-
       </div>
-    </div>
-  )
-}
+    )
+  }
