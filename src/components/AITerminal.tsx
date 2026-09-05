@@ -10,7 +10,7 @@ interface AITerminalProps {
   onOpenGuide?: () => void
 }
 
-type PlatformKey = 'claude' | 'chatgpt' | 'gemini' | 'deepseek' | 'local'
+type PlatformKey = 'claude' | 'gemini' | 'deepseek' | 'chatgpt' | 'api'
 
 export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerminalProps) {
   const [activeTab, setActiveTab] = useState<PlatformKey>('claude')
@@ -18,7 +18,7 @@ export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerm
   const [userQuestion, setUserQuestion] = useState<string>('')
   const [copyStatus, setCopyStatus] = useState<string>('')
 
-  // Build a grounded structural prompt using active section + glossary references
+  // Build a grounded structural prompt using active section + operational directive
   const buildPrompt = (userQ: string, mode: string) => {
     const sec = activeSec
     let context = 'Global PMN Architectural Context (No specific section selected).'
@@ -72,34 +72,48 @@ FORMAT REQUIREMENTS:
 4. Concrete Falsification Threshold.`
   }
 
+  const buildCurlPayload = () => {
+    const prompt = buildPrompt(userQuestion, selectedMode).replace(/"/g, '\\"').replace(/\n/g, '\\n')
+    return `curl https://api.anthropic.com/v1/messages \\
+  -H "x-api-key: $ANTHROPIC_API_KEY" \\
+  -H "anthropic-version: 2023-06-01" \\
+  -H "content-type: application/json" \\
+  -d '{
+    "model": "claude-sonnet-5",
+    "max_tokens": 2500,
+    "messages": [{"role": "user", "content": "${prompt.slice(0, 800)}..."}]
+  }'`
+  }
+
   const handleCopyPrompt = () => {
-    const prompt = buildPrompt(userQuestion, selectedMode)
-    navigator.clipboard.writeText(prompt).then(() => {
-      setCopyStatus(`Prompt copied for ${activeTab.toUpperCase()}!`)
+    const textToCopy = activeTab === 'api' ? buildCurlPayload() : buildPrompt(userQuestion, selectedMode)
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      setCopyStatus(activeTab === 'api' ? 'cURL API Payload copied!' : `Prompt copied for ${activeTab.toUpperCase()}!`)
       window.setTimeout(() => setCopyStatus(''), 2500)
     }).catch(() => {
-      window.prompt('Copy this prompt manually:', prompt)
+      window.prompt('Copy this manually:', textToCopy)
     })
   }
 
   const handleOpenPlatform = () => {
+    if (activeTab === 'api') {
+      handleCopyPrompt()
+      return
+    }
     handleCopyPrompt()
     let url = ''
     switch (activeTab) {
       case 'claude':
         url = 'https://claude.ai'
         break
-      case 'chatgpt':
-        url = 'https://chatgpt.com'
-        break
       case 'gemini':
-        url = 'https://gemini.google.com'
+        url = 'https://aistudio.google.com'
         break
       case 'deepseek':
         url = 'https://chat.deepseek.com'
         break
-      case 'local':
-        url = 'http://localhost:8080' // default OpenWebUI / local port
+      case 'chatgpt':
+        url = 'https://chatgpt.com'
         break
     }
     if (url) {
@@ -124,7 +138,7 @@ FORMAT REQUIREMENTS:
       </div>
 
       <p className="home-ai-desc mb-4 text-xs text-pmn-ink2 opacity-80">
-        Generate a precision context pack from the current manuscript section and dispatch it directly to frontier or sovereign AI models with zero sycophancy.
+        Generate precision context packs directly from the active manuscript section for interactive Web Portals or local Developer API Harnesses.
       </p>
 
       {copyStatus && (
@@ -142,6 +156,12 @@ FORMAT REQUIREMENTS:
           Claude (Fable / Sonnet) ↗
         </button>
         <button
+          className={`hai-tab ${activeTab === 'gemini' ? 'active' : ''}`}
+          onClick={() => setActiveTab('gemini')}
+        >
+          Gemini (3.1 Pro / 3.8) ↗
+        </button>
+        <button
           className={`hai-tab ${activeTab === 'deepseek' ? 'active' : ''}`}
           onClick={() => setActiveTab('deepseek')}
         >
@@ -154,16 +174,10 @@ FORMAT REQUIREMENTS:
           ChatGPT (GPT-6 / o3) ↗
         </button>
         <button
-          className={`hai-tab ${activeTab === 'gemini' ? 'active' : ''}`}
-          onClick={() => setActiveTab('gemini')}
+          className={`hai-tab ${activeTab === 'api' ? 'active' : ''}`}
+          onClick={() => setActiveTab('api')}
         >
-          Gemini (3.1 Pro / 3.8) ↗
-        </button>
-        <button
-          className={`hai-tab ${activeTab === 'local' ? 'active' : ''}`}
-          onClick={() => setActiveTab('local')}
-        >
-          Local AI (Ollama / vLLM)
+          Developer API / cURL
         </button>
       </div>
 
@@ -215,13 +229,13 @@ FORMAT REQUIREMENTS:
               className="pmn-agent-btn primary px-4 py-1.5 text-xs font-mono font-bold bg-pmn-acc text-white rounded hover:opacity-90 cursor-pointer"
               onClick={handleOpenPlatform}
             >
-              {activeTab === 'local' ? 'Copy Local Prompt' : `Copy & Open ${activeTab.toUpperCase()} ↗`}
+              {activeTab === 'api' ? 'Copy cURL API Request' : `Copy & Open ${activeTab.toUpperCase()} ↗`}
             </button>
             <button
               className="pmn-agent-btn px-3 py-1.5 text-xs font-mono bg-pmn-bg border border-pmn-rule text-pmn-ink rounded hover:border-pmn-acc cursor-pointer"
               onClick={handleCopyPrompt}
             >
-              Copy Prompt Only
+              {activeTab === 'api' ? 'Copy Raw Prompt' : 'Copy Prompt Only'}
             </button>
           </div>
 
