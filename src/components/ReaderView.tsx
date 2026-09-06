@@ -279,6 +279,7 @@ export default function ReaderView({
     const saved = localStorage.getItem(`pmn-an-${s.id}`) || ''
     setNoteText(saved)
     setNoteSavedStatus('')
+    if (mainRef.current) mainRef.current.scrollTop = 0
   }, [s?.id])
 
   // Global hotkey: Ctrl+S to save note
@@ -524,23 +525,72 @@ export default function ReaderView({
               </div>
 
               <div className="reader-endcap-grid">
+                {/* ── Outbound: Structural Relations ── */}
                 <section className="reader-panel">
-                  <span className="reader-tools-lbl">Structural Relations</span>
-                  <div className="reader-tools-list">
-                    {(data.rel[s?.id || ''] || []).map(rid => (
-                      <button key={rid} className="reader-tool-link" onClick={() => {
-                        const hit = data.look[rid]
-                        if (hit) onSavePosition(hit.pi, hit.si)
-                      }}>
-                        <span className="tool-id">{rid}</span>
-                        <span className="tool-ttl">{data.look[rid]?.title || 'Module'}</span>
-                      </button>
-                    ))}
+                  <div className="flex justify-between items-baseline mb-6 border-b border-pmn-rule pb-2">
+                    <span className="reader-tools-lbl" style={{ borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+                      Structural Relations
+                    </span>
+                    {((data.rel[s?.id || ''] || []).length > 0) && (
+                      <span className="font-mono text-[0.65rem] text-pmn-mute opacity-70">
+                        {(data.rel[s?.id || ''] || []).length}
+                      </span>
+                    )}
+                  </div>
+                  <div className="reader-tools-list max-h-[380px] overflow-y-auto custom-scrollbar pr-1">
+                    {(data.rel[s?.id || ''] || []).length > 0 ? (
+                      (data.rel[s?.id || ''] || []).map(rid => (
+                        <button key={rid} className="reader-tool-link" onClick={() => {
+                          const hit = data.look[rid]
+                          if (hit) onSavePosition(hit.pi, hit.si)
+                        }}>
+                          <span className="tool-id">{rid}</span>
+                          <span className="tool-ttl">{data.look[rid]?.title || 'Module'}</span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="py-2 text-pmn-mute font-mono text-xs italic opacity-70">
+                        Belum merujuk ke seksi lain
+                      </div>
+                    )}
                   </div>
                 </section>
+
+                {/* ── Inbound: Dirujuk Oleh (Referenced By) ── */}
                 <section className="reader-panel">
+                  <div className="flex justify-between items-baseline mb-6 border-b border-pmn-rule pb-2">
+                    <span className="reader-tools-lbl" style={{ borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+                      Dirujuk Oleh // Referenced By
+                    </span>
+                    {((data.ci && data.ci[s?.id || '']) || []).length > 0 && (
+                      <span className="font-mono text-[0.65rem] text-pmn-acc font-bold">
+                        {((data.ci && data.ci[s?.id || '']) || []).length}
+                      </span>
+                    )}
+                  </div>
+                  <div className="reader-tools-list max-h-[380px] overflow-y-auto custom-scrollbar pr-1">
+                    {((data.ci && data.ci[s?.id || '']) || []).length > 0 ? (
+                      ((data.ci && data.ci[s?.id || '']) || []).map(rid => (
+                        <button key={rid} className="reader-tool-link" onClick={() => {
+                          const hit = data.look[rid]
+                          if (hit) onSavePosition(hit.pi, hit.si)
+                        }}>
+                          <span className="tool-id">{rid}</span>
+                          <span className="tool-ttl">{data.look[rid]?.title || 'Module'}</span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="py-2 text-pmn-mute font-mono text-xs italic opacity-70">
+                        Belum dirujuk dari seksi lain
+                      </div>
+                    )}
+                  </div>
+                </section>
+
+                {/* ── Full Width: Analytical Notes ── */}
+                <section className="reader-panel" style={{ gridColumn: '1 / -1' }}>
                   <div className="annot-hdr">
-                    <span className="reader-tools-lbl">Notes</span>
+                    <span className="reader-tools-lbl">Analytical Notes</span>
                     <div className="annot-actions">
                       <button className="annot-btn" onClick={saveNote}>{noteSavedStatus || 'Save'}</button>
                     </div>

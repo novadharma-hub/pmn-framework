@@ -330,7 +330,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                   bacaan tambahan, bukan alat navigasi. */}
               <div id="quote-strip" className={quoteVisible ? '' : 'collapsed'}>
                 <div id="quote-strip-hdr">
-                  <span id="quote-strip-lbl">— PMN —</span>
+                  <span id="quote-strip-lbl">— PMN APHORISMS —</span>
                   <div style={{display:'flex', gap:'.5rem', alignItems:'center'}}>
                     <button onClick={() => setQuoteIdx(p => (p - 1 + data.quotes.length) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>‹</button>
                     <button onClick={() => setQuoteIdx(p => (p + 1) % data.quotes.length)} style={{background:'none', border:'none', color:'var(--mute)', cursor:'pointer', fontSize:'1rem'}}>›</button>
@@ -340,15 +340,13 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                 {quoteVisible && (
                   <div id="quote-inner">
                     <div id="quote-body" className="italic font-serif leading-relaxed text-sm">
-                      &ldquo;{currentQuote.body || currentQuote}&rdquo;
+                      {currentQuote.body || currentQuote}
                     </div>
                     <div id="quote-title" className="text-right font-mono text-[0.6rem] uppercase tracking-widest mt-2 opacity-60">
-                      {/* Judul di quotes.json SUDAH berbentuk "On co-optation",
-                          "On drift", dan seterusnya - semuanya 25. Membungkusnya
-                          dengan 'On the "..."' menghasilkan 'On the "On
-                          co-optation"': On ganda, dan tanda kutip yang
-                          menyiratkan petikan padahal tidak satu pun dari 25
-                          kutipan ini muncul persis di naskah. */}
+                      {/* Judul di quotes.json berbentuk "On co-optation",
+                          "On drift", dll. Tanda kutip dibuang dari badan karena
+                          kutipan ini adalah aforisme tematis, bukan petikan verbatim
+                          dari teks naskah. */}
                       — {currentQuote.title || 'Source'}
                     </div>
                     {/* 21 titik mungil tak terbaca sebagai posisi;
