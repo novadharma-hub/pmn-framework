@@ -118,6 +118,28 @@ def definisi_kanonik(seksi):
     return kanon, ada, hilang, menyimpang
 
 
+def rujukan_format_huruf(seksi):
+    """Gerbang regresi A.6: rujukan berpola [A-Z].angka (murni pencegah regresi)."""
+    pola = re.compile(r"\b([A-Z]\.\d{1,2})\b")
+    return [(sid, m) for sid, _j, t in seksi for m in pola.findall(t)]
+
+
+def ngram_berulang(seksi, n=8, min_seksi=5):
+    """Detektor n-gram berulang: frasa >= n kata yang muncul di >= min_seksi seksi berbeda.
+    Mendeteksi artefak penggantian global (errata tingkat D: 20 kalimat di 17 seksi)."""
+    ngram_seksi = collections.defaultdict(set)
+    for sid, _j, t in seksi:
+        words = [re.sub(r"[^\w]", "", w.lower()) for w in t.split()]
+        words = [w for w in words if w]
+        seen = set()
+        for i in range(len(words) - n + 1):
+            gram = " ".join(words[i:i + n])
+            if gram not in seen:
+                seen.add(gram)
+                ngram_seksi[gram].add(sid)
+    return {g: sorted(sids) for g, sids in ngram_seksi.items() if len(sids) >= min_seksi}
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     seksi = muat()
@@ -145,10 +167,25 @@ def main():
         print("    BELUM      %-4s %s" % (simbol, nama))
     for simbol, nama, k, himpit in menyimpang:
         print("    MENYIMPANG %-4s %-30s entri '%s' (himpitan kata %.0f%%)"
-              % (simbol, nama, k, himpit * 100))
+          % (simbol, nama, k, himpit * 100))
     if not hilang and not menyimpang:
         print("  semua definisi kanonik terwakili dan sejalan.")
+
+    print("\n=== D. Rujukan berformat huruf (gerbang regresi A.6) ===")
+    huruf = rujukan_format_huruf(seksi)
+    if not huruf:
+        print("  (tidak ada)")
+    for sid, m in huruf:
+        print("  %-8s rujukan: %s (diketahui: A.6 di 10.6 -> errata A7)" % (sid, m))
+
+    print("\n=== E. Frasa berulang lintas seksi (n-gram >= 8 kata di >= 5 seksi) ===")
+    ngrams = ngram_berulang(seksi)
+    if not ngrams:
+        print("  (tidak ada)")
+    for g, sids in sorted(ngrams.items(), key=lambda x: len(x[1]), reverse=True):
+        print("  %2d seksi: '%s' -> %s" % (len(sids), g, ", ".join(sids[:5]) + ("..." if len(sids) > 5 else "")))
 
 
 if __name__ == "__main__":
     main()
+

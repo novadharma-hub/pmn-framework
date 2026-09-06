@@ -413,10 +413,11 @@ def build_rel_and_cited(parts: list[dict]) -> tuple[dict[str, list[str]], dict[s
     if not section_ids:
         return {}, {}
 
-    ordered_ids = sorted(section_ids, key=lambda value: (-len(value), value))
-    pattern = re.compile(
-        r"(?<![\w.])(" + "|".join(re.escape(section_id) for section_id in ordered_ids) + r")(?![\w.])"
-    )
+    # Pola rujukan silang PMN persis alat_graf_rujukan.py:
+    # \b(\d{1,2}\.\d{1,2}[a-z]?(?:-[ivx]+)?)\b
+    # Batas kata mencegah "3.4" mencocoki "3.4b", dan tidak terganggu titik penutup kalimat.
+    pattern = re.compile(r"\b(\d{1,2}\.\d{1,2}[a-z]?(?:-[ivx]+)?)\b")
+    valid_ids = set(section_ids)
 
     related: dict[str, list[str]] = {}
     cited: dict[str, list[str]] = {}
@@ -428,7 +429,7 @@ def build_rel_and_cited(parts: list[dict]) -> tuple[dict[str, list[str]], dict[s
             seen: set[str] = set()
             for match in pattern.finditer(plain_text):
                 section_id = match.group(1)
-                if section_id == sub["id"] or section_id in seen:
+                if section_id not in valid_ids or section_id == sub["id"] or section_id in seen:
                     continue
                 seen.add(section_id)
                 refs.append(section_id)
