@@ -4,11 +4,12 @@ interface TheoreticalAnatomySectionProps {
   data: any
   onJump: (pIdx: number, sIdx: number) => void
   onStartReading: () => void
+  version?: string
 }
 
 type AnatomyMode = 'layers' | 'formula' | 'capture' | 'parts'
 
-export default function TheoreticalAnatomySection({ data, onJump, onStartReading }: TheoreticalAnatomySectionProps) {
+export default function TheoreticalAnatomySection({ data, onJump, onStartReading, version = '120' }: TheoreticalAnatomySectionProps) {
   const [activeMode, setActiveMode] = useState<AnatomyMode>('layers')
   const [selectedLayer, setSelectedLayer] = useState<number>(0)
   const [selectedVar, setSelectedVar] = useState<'S' | 'D' | 'P' | 'G'>('S')
@@ -214,7 +215,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
             </h2>
           </div>
           <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', color:'var(--mute)', background:'var(--bg)', border:'1px solid var(--rule)', padding:'.4rem .75rem', textTransform:'uppercase', letterSpacing:'.1em'}}>
-            Engine Status: Verified v118.6 Canonical
+            Engine Status: Verified v{version} Canonical
           </div>
         </div>
 

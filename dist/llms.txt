@@ -13,7 +13,7 @@ PMN is a comprehensive, non-ideal structural philosophy spanning epistemology, o
 
 ## Canonical Manuscript & Publications
 
-- [Full Manuscript (Markdown)](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.md): Complete ~330k word uncompressed corpus of PMN Framework v118.6 from Preface through Coda, Intellectual Debts, and Bibliography.
+- [Full Manuscript (Markdown)](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.md): Complete ~330k word uncompressed corpus of PMN Framework v120 from Preface through Coda, Intellectual Debts, and Bibliography.
 - [Full Manuscript (PDF)](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf): Official typeset publication (~660 pages).
 - [Interactive Reader Platform](https://novadharma-hub.github.io/pmn-framework/): Offline-capable React reader with keyboard navigation, search, and glossary.
 - [GitHub Repository](https://github.com/novadharma-hub/pmn-framework): Source repository and release assets.

@@ -690,6 +690,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
         readMap={readMap}
         onJump={onJump}
         onStartReading={onStartReading}
+        version={version}
       />
 
       {/* THEORETICAL ANATOMY */}
@@ -697,6 +698,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
         data={data}
         onJump={onJump}
         onStartReading={onStartReading}
+        version={version}
       />
 
       {/* AXIOM STRUCTURE */}

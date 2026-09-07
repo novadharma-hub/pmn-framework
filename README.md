@@ -166,7 +166,7 @@ curl -sL https://novadharma-hub.github.io/pmn-framework/llms.txt
 curl -sL https://novadharma-hub.github.io/pmn-framework/llms.json | jq '.modules[0]'
 
 # 3. Download full flat corpus for local RAG / indexing (~2.3MB)
-curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o pmn_corpus_v118.6.md
+curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o pmn_corpus_v120.md
 ```
 
 #### Python Ingestion (REST & Modular Query):
@@ -220,7 +220,7 @@ def fetch_pmn_corpus():
 def audit_institution_with_pmn(policy_document: str, api_key: str):
     corpus_text = fetch_pmn_corpus()
     system_prompt = (
-        "You are an expert institutional auditor grounded in Progressive Materialist Naturalism (PMN v118.6).\n"
+        "You are an expert institutional auditor grounded in Progressive Materialist Naturalism (PMN v120).\n"
         "Analyze the provided institutional policy against the PMN 5-stage capture cycle (§7.3c-i) "
         "and calculate potential transfer pressure using T = S · D · P · G (§6.3).\n"
         "Strictly cite PMN section anchors."
@@ -235,7 +235,7 @@ Run a sovereign, air-gapped PMN analyst locally with zero cloud telemetry using 
 
 #### Step 1: Download Corpus
 ```bash
-curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o pmn_corpus_v118.6.md
+curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o pmn_corpus_v120.md
 ```
 
 #### Step 2: Create `Modelfile` (Ollama 64K Context)
@@ -248,7 +248,7 @@ PARAMETER top_p 0.85
 PARAMETER num_ctx 65536
 
 SYSTEM """
-You are an expert analyst in Progressive Materialist Naturalism (PMN v118.6 by Nova Dharma).
+You are an expert analyst in Progressive Materialist Naturalism (PMN v120 by Nova Dharma).
 Ground your analysis in material reality, the biological floor (§3.4), and institutional capture diagnostics (§7.3c-i).
 Always cite specific PMN section numbers (e.g., §1.3, §3.4c, §6.5, §7.3c-i, §15.15) and resist ideological capture or narrative inflation.
 """
@@ -414,10 +414,10 @@ The design system enforces strict semantic CSS tokens declared in `style.css`. *
 
 The PMN publication workflow enforces a rigorous, automated verification gate:
 
-1. **DOCX Extraction:** Python pipeline (`scripts/docx_import_pipeline.py`) parses the canonical manuscript (`private/docx_source/PMN_Framework_v118.6.docx`).
+1. **DOCX Extraction:** Python pipeline (`scripts/docx_import_pipeline.py`) parses the canonical manuscript (`private/docx_source/PMN_Framework_v120.docx`).
 2. **Structural Integrity Audit:** Run `pmn_check.py` to audit section numbering, broken cross-references, orphan bibliography items, and duplicate anchors:
    ```bash
-   python scripts/pmn_tools/pmn_check.py v118.6
+   python scripts/pmn_tools/pmn_check.py v120
    ```
 3. **Frontend Compilation:** Vite compiles TypeScript and bundles assets into `dist/`:
    ```bash
@@ -445,7 +445,7 @@ If you reference, analyze, or cite Progressive Materialist Naturalism in academi
 
 ### APA (7th ed.)
 ```text
-Dharma, N. (2026). Progressive Materialist Naturalism: A Framework for Minimizing Structural Suffering and Maximizing Genuine Becoming (Version 118.6) [Manuscript]. Novadharma Hub. https://novadharma-hub.github.io/pmn-framework/
+Dharma, N. (2026). Progressive Materialist Naturalism: A Framework for Minimizing Structural Suffering and Maximizing Genuine Becoming (Version 120) [Manuscript]. Novadharma Hub. https://novadharma-hub.github.io/pmn-framework/
 ```
 
 ### BibTeX
@@ -454,7 +454,7 @@ Dharma, N. (2026). Progressive Materialist Naturalism: A Framework for Minimizin
   author    = {Nova Dharma and PMN Working Group},
   title     = {Progressive Materialist Naturalism: A Framework for Minimizing Structural Suffering and Maximizing Genuine Becoming},
   year      = {2026},
-  version   = {v118.6},
+  version   = {v120},
   url       = {https://novadharma-hub.github.io/pmn-framework/},
   publisher = {Novadharma Hub}
 }

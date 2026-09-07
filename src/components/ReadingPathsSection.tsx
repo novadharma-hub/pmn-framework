@@ -22,6 +22,7 @@ interface ReadingPathsSectionProps {
   readMap: Record<string, boolean>
   onJump: (pIdx: number, sIdx: number) => void
   onStartReading: () => void
+  version?: string
 }
 
 const READING_PATHS: ReadingPath[] = [
@@ -116,11 +117,15 @@ const READING_PATHS: ReadingPath[] = [
   },
 ]
 
-export default function ReadingPathsSection({ data, readMap, onJump, onStartReading }: ReadingPathsSectionProps) {
+export default function ReadingPathsSection({ data, readMap, onJump, onStartReading, version = '120' }: ReadingPathsSectionProps) {
+  const [selectedPath, setSelectedPath] = useState<ReadingPath | null>(null)
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
 
   const jumpToSectionId = (secId: string) => {
-    if (!data) { onStartReading(); return }
+    if (!data) {
+      onStartReading()
+      return
+    }
     const cleanId = secId.trim()
     const lookHit = data.look?.[cleanId] || data.look?.[cleanId.replace('.', ',')]
     if (lookHit && typeof lookHit.pi === 'number') {
@@ -148,7 +153,7 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
       ...path.steps.map((s, i) => `${i + 1}. **${s.label}**: ${s.desc} [https://novadharma-hub.github.io/pmn-framework/#/s/${encodeURIComponent(s.id)}]`),
       '',
       '---',
-      'Progressive Materialist Naturalism (PMN v118.6) — https://novadharma-hub.github.io/pmn-framework/'
+      `Progressive Materialist Naturalism (PMN v${version}) — https://novadharma-hub.github.io/pmn-framework/`
     ].join('\n')
 
     navigator.clipboard.writeText(text).then(() => {
