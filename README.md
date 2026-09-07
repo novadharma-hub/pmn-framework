@@ -1,6 +1,6 @@
 # Progressive Materialist Naturalism (PMN) — Reader Platform & AI Grounding Ecosystem
 
-[![Version](https://img.shields.io/badge/Release-v118.6%20Canonical-795290.svg?style=flat-square)](https://github.com/novadharma-hub/pmn-framework/releases)
+[![Version](https://img.shields.io/badge/Release-v119%20Canonical-795290.svg?style=flat-square)](https://github.com/novadharma-hub/pmn-framework/releases)
 [![Live Reader](https://img.shields.io/badge/Live%20Reader-GitHub%20Pages-2ea44f.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
 [![Stack](https://img.shields.io/badge/Stack-React%2018%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#quick-start)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-llms.txt%20%7C%20json%20%7C%20md-orange.svg?style=flat-square)](#official-ai-grounding--machine-endpoints)
@@ -10,9 +10,9 @@
 
 ---
 
-### [📖 Read Online (Web App)](https://novadharma-hub.github.io/pmn-framework/) &nbsp;·&nbsp; [🤖 AI Guide & Grounding](https://novadharma-hub.github.io/pmn-framework/#/guide) &nbsp;·&nbsp; [📥 Download Release (PDF & MD)](https://github.com/novadharma-hub/pmn-framework/releases/tag/v118.6)
+### [📖 Read Online (Web App)](https://novadharma-hub.github.io/pmn-framework/) &nbsp;·&nbsp; [🤖 AI Guide & Grounding](https://novadharma-hub.github.io/pmn-framework/#/guide) &nbsp;·&nbsp; [📥 Download Release (PDF & MD)](https://github.com/novadharma-hub/pmn-framework/releases/tag/v119)
 
-A high-performance, offline-capable interactive reader platform and AI grounding ecosystem for the **Progressive Materialist Naturalism (PMN)** philosophical manuscript (v118.6 Canonical by **Nova Dharma**).
+A high-performance, offline-capable interactive reader platform and AI grounding ecosystem for the **Progressive Materialist Naturalism (PMN)** philosophical manuscript (v119 Canonical by **Nova Dharma**).
 
 PMN is a post-theistic, materialist philosophical framework engineered to analyze institutional power, dismantle structural capture, minimize non-consensual biological suffering, and maximize genuine human becoming across multi-generational horizons.
 
@@ -290,7 +290,7 @@ pmn-framework/
 │   ├── ci.json                     # Cross-reference bidirectional citation graph
 │   ├── quotes.json                 # Curated canonical thesis quotes
 │   ├── rel.json                    # Relational conceptual graph across analytical domains
-│   └── version.json                # Canonical release version metadata (v118.6)
+│   └── version.json                # Canonical release version metadata (v119)
 │
 ├── public_static/                  # Static assets mirrored to the domain root
 │   ├── llms.txt                    # Standard LLM discovery index (llmstxt.org)
