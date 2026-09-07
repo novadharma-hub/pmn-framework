@@ -194,13 +194,13 @@ with urllib.request.urlopen(part_vi_url) as response:
 
 For complete prompts, role profiles, and diagnostic instructions, visit the in-app **[AI Guide (`#/guide`)](https://novadharma-hub.github.io/pmn-framework/#/guide)**.
 
-### 1. Cloud Frontier AI Deployment (2026 Lineup)
+### 1. Cloud Frontier AI Deployment
 
-- **Anthropic Claude (Opus 5 / Sonnet 5 / Fable 5.1):** 1M-token context with Adaptive Thinking. Upload `pmn_corpus_for_ai.md` into Project Knowledge. Ideal for sustained philosophical dialectics, assumption archaeology (§12.1), and institutional red-teaming.
-- **Google DeepMind (Gemini 3.1 Pro / Gemini 3.8 Flash / NotebookLM):** 1M–2M token context windows. Ingests the full ~330k-word uncompressed corpus in a single prompt. NotebookLM provides grounded source citations linked directly back to section anchors.
-- **DeepSeek (DeepSeek-V4-Pro / DeepSeek-V4-Flash / DeepSeek-R1):** 1.6T MoE (49B active) with Hybrid Attention & Multi-Head Latent Attention, alongside pure RL reasoning models. Industry-leading capture sequence diagnostics (§7.3c-i) and anti-ideology forensics.
-- **OpenAI (GPT-6 Astra / o3 / o3-pro / GPT-5.6 Sol):** 1M context with advanced multi-step reasoning. Formalizes and simulates the non-linear Transformation Pressure Formula ($T = S \cdot D \cdot P \cdot G$) via Code Interpreter.
-- **Alibaba Qwen & Zhipu GLM (Qwen 3.8-Max / GLM-5.3 / GLM-5.2):** High-capacity agentic architectures for multi-tool workflows, automated data pipelining, and institutional compliance audits.
+- **Anthropic Claude (Claude 3.7 Sonnet / Claude 3.5 Sonnet):** Hybrid Standard and Extended Thinking. Upload `pmn_corpus_for_ai.md` into Project Knowledge. Ideal for sustained philosophical dialectics, holding permanent tensions (Part XIII), and assumption archaeology (§12.1).
+- **Google DeepMind (Gemini 1.5 Pro / Gemini 2.0 Flash):** 1M–2M token context windows. Gemini 1.5 Pro ingests the full ~330k-word uncompressed corpus in a single prompt without RAG loss. NotebookLM provides grounded scholarly citations linked directly back to section anchors.
+- **DeepSeek (DeepSeek-V3 / DeepSeek-R1):** 671B MoE architecture alongside pure RL reasoning models. Industry-leading cost-efficiency for capture sequence diagnostics (§7.3c-i) and anti-ideology forensics (noting Chinese regulatory guardrails on sensitive political economy).
+- **OpenAI (o1 / o3-mini / GPT-4o):** Advanced multi-step deliberation engines. Formalizes and simulates the non-linear Transformation Pressure Formula ($T = S \cdot D \cdot P \cdot G$) via Code Interpreter and high reasoning effort.
+- **Alibaba Qwen, Zhipu GLM & Meta Llama (Qwen 2.5 72B / GLM-4-Plus / Llama 3.3 70B):** High-capacity open-weight and frontier architectures for sovereign air-gapped hosting, multi-tool workflows, and multi-polar institutional audits.
 
 ### 2. Developer API Harness
 
@@ -264,10 +264,10 @@ ollama run pmn-analyst "Explain how custodian advantage leads to institutional c
 
 | Task Category | Recommended Frontier Tier | Recommended Fast / Economy Tier | Recommended Local / Sovereign Tier |
 |---|---|---|---|
-| **Deep Dialectic Red-Teaming** | Claude Opus 5 / Gemini 3.1 Pro | Claude Sonnet 5 / DeepSeek V4-Pro | Qwen 2.5 72B / DeepSeek-R1 70B |
-| **Institutional Capture Audits** | DeepSeek R1 / OpenAI o3 | Gemini 3.8 Flash / GPT-5.6 Sol | QwQ 32B / DeepSeek-R1 32B |
-| **Whole-Corpus RAG & Retrieval** | Gemini 3.1 Pro (2M) / Claude Sonnet 5 | Gemini 3.8 Flash (1M) | vLLM + Qwen2.5-32B (64k-128k) |
-| **Formula & Econometric Modeling** | OpenAI o3-pro / GPT-6 Astra | Claude 3.7 Sonnet / DeepSeek V4 | Qwen2.5-Coder-32B |
+| **Deep Dialectic Red-Teaming** | Claude 3.7 Sonnet (Thinking) | Claude 3.5 Sonnet | Qwen 2.5 72B / Llama 3.3 70B |
+| **Institutional Capture Audits** | OpenAI o1 / o3-mini | DeepSeek-V3 / DeepSeek-R1 | Qwen 2.5 72B / Llama 3.3 70B |
+| **Whole-Corpus RAG & Retrieval** | Gemini 1.5 Pro (2M Context) | Gemini 2.0 Flash (1M Context) | vLLM + Qwen 2.5 32B (64k-128k) |
+| **Formula & Econometric Modeling** | OpenAI o3-mini (High Effort) | Gemini 2.0 Flash Thinking | Qwen 2.5-Coder-32B |
 
 ---
 
