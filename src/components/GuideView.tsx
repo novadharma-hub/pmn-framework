@@ -22,10 +22,25 @@ interface ModelSpec {
   thirdPartyRank: string
 }
 
+// Curated set of models capable of sustained heavy philosophical reasoning, dialectical tension, and forensic capture analysis
+const PHILOSOPHICAL_CHAMPIONS = new Set([
+  'claude-fable-51',
+  'claude-opus-5',
+  'claude-sonnet-5',
+  'claude-37-sonnet',
+  'deepseek-r1',
+  'deepseek-v4-pro',
+  'openai-o3-series',
+  'openai-gpt6-astra',
+  'gemini-31-pro',
+  'gemini-notebooklm',
+  'qwq-32b'
+])
+
 export default function GuideView({ onBackHome, version }: GuideViewProps) {
   const [activeDeployTab, setActiveDeployTab] = useState<'web' | 'api'>('web')
   const [modelFilter, setModelFilter] = useState<string>('all')
-  const [tierFilter, setTierFilter] = useState<string>('all')
+  const [tierFilter, setTierFilter] = useState<string>('philosophical-champions')
   const [modelSearch, setModelSearch] = useState<string>('')
   const [activeRoleTab, setActiveRoleTab] = useState<
     | 'priming'
@@ -157,7 +172,7 @@ export default function GuideView({ onBackHome, version }: GuideViewProps) {
       architecture: 'Document Grounding & Audio Synthesis Engine',
       strongestArena: 'Absolute zero-hallucination document retrieval, clickable inline page citations, and Audio Overview podcasts.',
       failureMode: 'Cannot run autonomous API loops or multi-turn adversarial persona simulation.',
-      ingestionStrategy: 'Upload official typeset PMN_Framework_v118.6.pdf directly as a notebook source.',
+      ingestionStrategy: `Upload official typeset PMN_Framework_v${version}.pdf directly as a notebook source.`,
       thirdPartyRank: 'Gold standard for zero-hallucination scholarly PDF citation'
     },
 
@@ -495,7 +510,12 @@ export default function GuideView({ onBackHome, version }: GuideViewProps) {
   const filteredModels = useMemo(() => {
     return MODELS.filter(m => {
       const matchFamily = modelFilter === 'all' || m.family === modelFilter
-      const matchTier = tierFilter === 'all' || m.tierCategory === tierFilter
+      const matchTier =
+        tierFilter === 'all'
+          ? true
+          : tierFilter === 'philosophical-champions'
+          ? PHILOSOPHICAL_CHAMPIONS.has(m.id)
+          : m.tierCategory === tierFilter
       const matchSearch =
         modelSearch === '' ||
         m.name.toLowerCase().includes(modelSearch.toLowerCase()) ||
@@ -680,42 +700,88 @@ if ANTHROPIC_API_KEY:
   return (
     <div
       id="guide-view"
-      className="view on bg-pmn-bg select-text"
-      style={{
-        display: 'block',
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        overflowY: 'auto',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        maxWidth: '1040px',
-        width: '100%'
-      }}
+      className="view on flex flex-col h-full bg-pmn-bg select-text w-full overflow-hidden"
     >
-      {/* STICKY HEADER */}
-      <div className="sv-hdr-wrap border-b border-pmn-rule bg-pmn-bg sticky top-0 z-20">
-        <div className="max-w-[1040px] mx-auto flex items-center justify-between gap-4 px-6 sm:px-8 lg:px-14 py-4">
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[0.7rem] uppercase tracking-widest px-2.5 py-1 rounded bg-pmn-acc text-white font-bold">
+      {/* STICKY FULL-WIDTH HEADER */}
+      <div className="sv-hdr-wrap flex-none w-full sticky top-0 z-50 border-b border-pmn-rule bg-pmn-bg">
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '1280px',
+            margin: '0 auto',
+            height: '64px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingLeft: 'clamp(1.25rem, 3.5vw, 2.75rem)',
+            paddingRight: 'clamp(1.25rem, 3.5vw, 2.75rem)',
+            gap: '1rem'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 0 }}>
+            <span
+              style={{
+                fontFamily: 'var(--f-mono)',
+                fontSize: '0.72rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                padding: '0.35rem 0.65rem',
+                borderRadius: '4px',
+                backgroundColor: 'var(--acc)',
+                color: '#ffffff',
+                fontWeight: 700,
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                lineHeight: 1,
+                display: 'inline-block'
+              }}
+            >
               AI LAB
             </span>
-            <p className="sv-hdr !border-none !p-0 !m-0 font-pmn-head text-[1.35rem] text-pmn-ink font-semibold">
+            <p
+              className="sv-hdr !border-none !p-0 !m-0 font-pmn-head text-[1.15rem] sm:text-[1.35rem] text-pmn-ink font-semibold"
+              style={{
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+            >
               PMN Agent &amp; Deployment Guide
             </p>
           </div>
           <button
             className="hbtn font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink border border-pmn-rule hover:border-pmn-acc rounded px-3.5 py-2 transition-colors cursor-pointer whitespace-nowrap"
             onClick={onBackHome}
+            style={{
+              flexShrink: 0,
+              backgroundColor: 'var(--bg2)',
+              padding: '0.45rem 1rem'
+            }}
           >
             &larr; Return Home
           </button>
         </div>
       </div>
 
-      <div className="guide-page" style={{ padding: '2.5rem 1.5rem 6rem' }}>
+      {/* SCROLLABLE VIEWPORT CONTAINER */}
+      <div
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+      >
+        <div
+          className="guide-page"
+          style={{
+            width: '100%',
+            maxWidth: '1040px',
+            padding: '2.5rem clamp(1.25rem, 3.5vw, 2.5rem) 6rem'
+          }}
+        >
         {/* HERO BANNER */}
         <div className="page-eyebrow">PMN Framework v{version} &bull; Canonical AI Grounding Specification</div>
         <h1 className="page-h1">
@@ -828,7 +894,7 @@ if ANTHROPIC_API_KEY:
                 <div className="workflow-card">
                   <div className="workflow-name">Google NotebookLM (Document Grounding)</div>
                   <div className="workflow-note">
-                    Upload typeset <code>PMN_Framework_v118.6.pdf</code> (~660 pages) directly as a notebook source. Ingests all 21 parts with zero hallucination, exact inline page references, and multi-speaker Audio Overview generation.
+                    Upload typeset <code>PMN_Framework_v{version}.pdf</code> (~660 pages) directly as a notebook source. Ingests all 21 parts with zero hallucination, exact inline page references, and multi-speaker Audio Overview generation.
                   </div>
                   <span className="workflow-badge badge-best">Best for Verified Citations</span>
                 </div>
@@ -934,29 +1000,123 @@ if ANTHROPIC_API_KEY:
           </p>
 
           {/* HEAVY-REASONING RECOMMENDATION PANEL — task-focused, not a catalog */}
-          <div style={{ border: '1px solid var(--rule)', borderLeft: '3px solid var(--acc)', borderRadius: '4px', padding: '1.1rem 1.2rem', margin: '1.2rem 0 1.6rem', background: 'var(--bg2)' }}>
-            <p style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--acc-text)', fontWeight: 700, margin: '0 0 0.55rem' }}>
-              Heavy philosophical reasoning — what to actually pick
+          <div style={{ border: '1px solid var(--rule)', borderLeft: '4px solid var(--acc)', borderRadius: '4px', padding: '1.25rem 1.4rem', margin: '1.4rem 0 1.8rem', background: 'var(--bg2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.6rem' }}>
+              <p style={{ fontFamily: 'var(--f-mono)', fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--acc-text)', fontWeight: 700, margin: 0 }}>
+                ⭐ Champion Models for Heavy Philosophical Reasoning &amp; Forensics
+              </p>
+              <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.65rem', background: 'rgba(173,52,30,0.1)', color: 'var(--acc-text)', padding: '0.15rem 0.5rem', borderRadius: '3px', fontWeight: 600 }}>
+                Curated Recommendation
+              </span>
+            </div>
+            
+            <p style={{ margin: '0 0 0.8rem', fontSize: '0.92rem', lineHeight: 1.65, color: 'var(--ink)' }}>
+              A raw catalog of 20+ models does not answer the central question: <em>Which AI possesses the epistemic discipline to reason through PMN's dense materialist ontology without degenerating into superficial corporate platitudes?</em> PMN imposes three non-negotiable demands that eliminate most consumer and flash models:
             </p>
-            <p style={{ margin: '0 0 0.6rem', fontSize: '0.92rem', lineHeight: 1.65 }}>
-              The matrix below is a catalog; catalogs do not answer the question you came here with. For PMN work, three demands decide the choice, and benchmark scores decide almost none of them:
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0.9rem', marginBottom: '1.4rem' }}>
+              <div style={{ background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.9rem 1rem', borderRadius: '4px' }}>
+                <strong style={{ display: 'block', fontSize: '0.88rem', color: 'var(--ink)', marginBottom: '0.25rem', fontFamily: 'var(--f-mono)' }}>
+                  1. Whole-Corpus Holding (~330k Words)
+                </strong>
+                <span style={{ fontSize: '0.82rem', color: 'var(--mute)', lineHeight: 1.55, display: 'block' }}>
+                  PMN's 21 parts are causally interlocked. Institutional capture in Part VII only bites when evaluated against Part I's naturalism and Part XI's political economy. Models with &lt;1M context rely on chunked RAG, which severs these deep cross-part causal traces.
+                </span>
+              </div>
+              <div style={{ background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.9rem 1rem', borderRadius: '4px' }}>
+                <strong style={{ display: 'block', fontSize: '0.88rem', color: 'var(--ink)', marginBottom: '0.25rem', fontFamily: 'var(--f-mono)' }}>
+                  2. Anti-Sycophancy &amp; Permanent Tension
+                </strong>
+                <span style={{ fontSize: '0.82rem', color: 'var(--mute)', lineHeight: 1.55, display: 'block' }}>
+                  Standard LLMs instinctively synthesize opposing arguments into polite, centrist diplomatic compromises. PMN demands sustaining unresolved permanent tensions (Part XIII) and running assumption archaeology (§12.1) without persona decay.
+                </span>
+              </div>
+              <div style={{ background: 'var(--bg)', border: '1px solid var(--rule)', padding: '0.9rem 1rem', borderRadius: '4px' }}>
+                <strong style={{ display: 'block', fontSize: '0.88rem', color: 'var(--ink)', marginBottom: '0.25rem', fontFamily: 'var(--f-mono)' }}>
+                  3. Forensic Deductive Skepticism
+                </strong>
+                <span style={{ fontSize: '0.82rem', color: 'var(--mute)', lineHeight: 1.55, display: 'block' }}>
+                  The 5-Stage Capture Sequence (§7.3c-i) and Transformation Pressure Formula ($T = S \cdot D \cdot P \cdot G$, §6.3/§15.8) require formal mathematical and structural derivations, completely unclouded by prestige bias or institutional PR claims.
+                </span>
+              </div>
+            </div>
+
+            {/* THE THREE CHAMPION TIERS */}
+            <p style={{ fontFamily: 'var(--f-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink)', fontWeight: 700, margin: '0 0 0.6rem' }}>
+              The 3 Architectural Champions for PMN Inquiry:
             </p>
-            <ol style={{ margin: '0 0 0.7rem', paddingLeft: '1.25rem', fontSize: '0.9rem', lineHeight: 1.65 }}>
-              <li><strong>Whole-corpus holding.</strong> The manuscript is ~330k words. Models under 1M context must chunk it via the RAG discipline (llms.json), and chunking severs cross-part tracing — §7.3's capture mechanics only bite when Part I is read against Part XV.</li>
-              <li><strong>Sycophancy resistance.</strong> A model that agrees with you is worthless here. §12.5 requires applying the same capture diagnostics to your own commitments — if the model flatters your position instead of stress-testing it, it fails the framework's central demand.</li>
-              <li><strong>Anchor discipline.</strong> It must cite §-numbers verbatim and say plainly when it is paraphrasing from memory rather than the corpus. Invented anchors are worse than no anchors.</li>
-            </ol>
-            <p style={{ margin: '0 0 0.45rem', fontSize: '0.9rem', lineHeight: 1.65 }}>
-              <strong>Recommendation order for the heavy-reasoning workload</strong> — sustained dialectic, counter-argument generation, falsification pressure (the Part V, VIII, and §12.5 work):
-            </p>
-            <ol style={{ margin: '0 0 0.7rem', paddingLeft: '1.25rem', fontSize: '0.9rem', lineHeight: 1.75 }}>
-              <li><strong>Frontier Pro class with ≥1M context</strong> — Gemini 3.1 Pro (2M), Claude Opus 5, GPT-6 Astra: single-pass whole-corpus grounding without chunking loss.</li>
-              <li><strong>Reasoning class</strong> — DeepSeek-R1, OpenAI o3-pro: slower and sometimes context-limited, but built for sustained multi-step deduction; strongest on capture-sequence proofs and §15 formula discipline. Pair with corpus chunking.</li>
-              <li><strong>Flash tier — explicitly not for this workload.</strong> Its throughput is for batch audits and section lookup. Flash models compress multi-step proofs into summaries under output caps — their own failure-mode notes below say so.</li>
-            </ol>
-            <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--ink2)' }}>
-              One honesty requirement before you trust any of this: vendor claims in this matrix are unverified by the platform. The honest test is §12.5 applied to the model itself — run the falsification prompts from the Question Bank (Step 06) on your chosen model, and demote it the first time it flatters you instead of answering.
-            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: '0.85rem', marginBottom: '1.2rem' }}>
+              {/* TIER 1 */}
+              <div style={{ background: 'var(--bg)', border: '1px solid var(--rule)', borderTop: '3px solid var(--acc)', padding: '1rem 1.1rem', borderRadius: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
+                  <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.65rem', fontWeight: 700, color: 'var(--acc-text)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    Tier 1: Dialectics &amp; Ethics
+                  </span>
+                  <span className="workflow-badge badge-best" style={{ fontSize: '0.6rem', padding: '0.08rem 0.35rem' }}>
+                    #1 Qualitative Depth
+                  </span>
+                </div>
+                <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>
+                  Claude 3.7 Sonnet / Fable 5.1 / Opus 5
+                </strong>
+                <p style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: 1.55, margin: '0 0 0.5rem' }}>
+                  <strong>Why it wins:</strong> Adaptive &amp; Extended Thinking maintains philosophical rigor across multi-turn exchanges without diluting non-ideal naturalist premises. Unrivaled at holding Part XIII permanent tensions without superficial harmony.
+                </p>
+                <div style={{ fontFamily: 'var(--f-mono)', fontSize: '0.7rem', color: 'var(--mute)', background: 'var(--bg2)', padding: '0.4rem 0.6rem', borderRadius: '3px' }}>
+                  <strong>Deployment:</strong> Claude Projects with <code>pmn_corpus_for_ai.md</code> in Knowledge + Extended Thinking on.
+                </div>
+              </div>
+
+              {/* TIER 2 */}
+              <div style={{ background: 'var(--bg)', border: '1px solid var(--rule)', borderTop: '3px solid #5a9a5a', padding: '1rem 1.1rem', borderRadius: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
+                  <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.65rem', fontWeight: 700, color: '#5a9a5a', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    Tier 2: Deductive Anti-Capture
+                  </span>
+                  <span className="workflow-badge badge-best" style={{ fontSize: '0.6rem', padding: '0.08rem 0.35rem' }}>
+                    #1 Formal Logic
+                  </span>
+                </div>
+                <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>
+                  DeepSeek-R1 &amp; OpenAI o3 / o3-pro
+                </strong>
+                <p style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: 1.55, margin: '0 0 0.5rem' }}>
+                  <strong>Why it wins:</strong> Pure RL Chain-of-Thought strips away corporate PR. Coldly traces the 5-Stage Institutional Capture sequence (§7.3c-i) and computes multi-variable pressure thresholds in the Transfer Equation ($T = S \cdot D \cdot P \cdot G$).
+                </p>
+                <div style={{ fontFamily: 'var(--f-mono)', fontSize: '0.7rem', color: 'var(--mute)', background: 'var(--bg2)', padding: '0.4rem 0.6rem', borderRadius: '3px' }}>
+                  <strong>Deployment:</strong> DeepSeek API / ChatGPT o3 with high reasoning budget + target section JSON.
+                </div>
+              </div>
+
+              {/* TIER 3 */}
+              <div style={{ background: 'var(--bg)', border: '1px solid var(--rule)', borderTop: '3px solid #3b82f6', padding: '1rem 1.1rem', borderRadius: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
+                  <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.65rem', fontWeight: 700, color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    Tier 3: Whole Corpus (2M)
+                  </span>
+                  <span className="workflow-badge badge-best" style={{ fontSize: '0.6rem', padding: '0.08rem 0.35rem' }}>
+                    #1 Zero-Chunking
+                  </span>
+                </div>
+                <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>
+                  Gemini 3.1 Pro &amp; Google NotebookLM
+                </strong>
+                <p style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: 1.55, margin: '0 0 0.5rem' }}>
+                  <strong>Why it wins:</strong> 2M-token context ingests the entire ~330,000-word uncompressed text in a single prompt. Traces unbroken causal threads from Part I to Part XVII. NotebookLM provides 100% verified, hallucination-free inline page citations.
+                </p>
+                <div style={{ fontFamily: 'var(--f-mono)', fontSize: '0.7rem', color: 'var(--mute)', background: 'var(--bg2)', padding: '0.4rem 0.6rem', borderRadius: '3px' }}>
+                  <strong>Deployment:</strong> Google AI Studio (Gemini 3.1 Pro, temp 0.2) or NotebookLM (upload <code>PMN_Framework_v{version}.pdf</code>).
+                </div>
+              </div>
+            </div>
+
+            {/* BLUNT ADVISORY ON FLASH MODELS */}
+            <div style={{ border: '1px solid var(--rule)', background: 'rgba(155,95,95,0.06)', padding: '0.75rem 0.95rem', borderRadius: '3px', display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
+              <span style={{ fontSize: '1rem', lineHeight: 1 }}>⚠️</span>
+              <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.55, color: 'var(--ink2)' }}>
+                <strong style={{ color: '#9b5f5f' }}>Why Flash &amp; Small Models are NOT recommended for heavy philosophy:</strong> High-throughput models (Gemini 3.8 Flash, Claude Haiku 4.5, GPT-4o-mini, Qwen Flash) are built for sub-second token velocity, JSON parsing, and rapid batch lookups. When tasked with dense non-ideal ontology or institutional conflict, they systematically compress multi-step proofs into superficial bullet points, drop structural variables, and fall victim to sycophantic alignment. Use Flash models for programmatic automation and glossary lookups; reserve Pro and RL-Reasoning models for philosophical analysis.
+              </p>
+            </div>
           </div>
 
           {/* MATRIX CONTROLS: FILTER TABS & SEARCH */}
@@ -994,13 +1154,14 @@ if ANTHROPIC_API_KEY:
             {/* TIER FILTER BUTTONS */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', alignItems: 'center' }}>
               <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.65rem', textTransform: 'uppercase', color: 'var(--mute)', marginRight: '0.4rem' }}>
-                Tier:
+                Filter Tier:
               </span>
               {[
-                ['all', 'All Tiers'],
+                ['philosophical-champions', '🧠 Heavy Philosophy Champions (Recommended)'],
+                ['all', 'All 22 Models (Full Catalog)'],
                 ['pro', 'Pro / Flagship'],
-                ['flash', 'Flash / High-Velocity'],
-                ['reasoning', 'Pure Reasoning (CoT)'],
+                ['reasoning', 'Pure Reasoning (RL CoT)'],
+                ['flash', 'Flash / Utility (High-Velocity)'],
                 ['predecessor', 'Active Predecessors']
               ].map(([key, label]) => (
                 <button
@@ -1009,12 +1170,14 @@ if ANTHROPIC_API_KEY:
                   style={{
                     fontFamily: 'var(--f-mono)',
                     fontSize: '0.65rem',
-                    padding: '0.2rem 0.55rem',
-                    background: tierFilter === key ? 'var(--ink)' : 'var(--bg)',
-                    color: tierFilter === key ? 'var(--bg)' : 'var(--ink2)',
-                    border: '1px solid var(--rule2)',
+                    padding: '0.25rem 0.6rem',
+                    background: tierFilter === key ? 'var(--acc)' : 'var(--bg)',
+                    color: tierFilter === key ? '#ffffff' : 'var(--ink2)',
+                    border: '1px solid ' + (tierFilter === key ? 'var(--acc)' : 'var(--rule2)'),
                     cursor: 'pointer',
-                    borderRadius: '3px'
+                    borderRadius: '3px',
+                    fontWeight: tierFilter === key ? 700 : 400,
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   {label}
@@ -1100,9 +1263,43 @@ if ANTHROPIC_API_KEY:
                       <div style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', color: 'var(--acc-text)', marginBottom: '0.35rem' }}>
                         <code>{m.apiString}</code>
                       </div>
-                      <span className={`workflow-badge ${m.tierClass}`} style={{ fontSize: '0.62rem', padding: '0.1rem 0.4rem' }}>
-                        {m.tierBadge}
-                      </span>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', alignItems: 'center', marginTop: '0.2rem' }}>
+                        <span className={`workflow-badge ${m.tierClass}`} style={{ fontSize: '0.62rem', padding: '0.1rem 0.4rem' }}>
+                          {m.tierBadge}
+                        </span>
+                        {PHILOSOPHICAL_CHAMPIONS.has(m.id) ? (
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              background: 'rgba(173,52,30,0.09)',
+                              color: 'var(--acc-text)',
+                              border: '1px solid var(--acc)',
+                              fontSize: '0.6rem',
+                              padding: '0.1rem 0.4rem',
+                              borderRadius: '3px',
+                              fontFamily: 'var(--f-mono)',
+                              fontWeight: 700
+                            }}
+                          >
+                            🧠 Heavy Philosophy Pick
+                          </span>
+                        ) : m.tierCategory === 'flash' ? (
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              background: 'var(--bg)',
+                              color: 'var(--mute)',
+                              border: '1px solid var(--rule2)',
+                              fontSize: '0.6rem',
+                              padding: '0.1rem 0.35rem',
+                              borderRadius: '3px',
+                              fontFamily: 'var(--f-mono)'
+                            }}
+                          >
+                            ⚡ Fast Scraper Only
+                          </span>
+                        ) : null}
+                      </div>
                       <div style={{ fontFamily: 'var(--f-mono)', fontSize: '0.63rem', color: 'var(--mute)', marginTop: '0.35rem', lineHeight: 1.3 }}>
                         {m.familyName} &bull; {m.thirdPartyRank}
                       </div>
@@ -1183,7 +1380,7 @@ if ANTHROPIC_API_KEY:
                 Add a <code>.cursorrules</code> or <code>CLAUDE.md</code> in your workspace root:
                 <br />
                 <code style={{ fontSize: '0.72rem', display: 'inline-block', marginTop: '0.3rem' }}>
-                  Always ground structural institutional audits in PMN Framework v118.6 (ref: https://novadharma-hub.github.io/pmn-framework/llms.txt). Never evaluate institutions by stated good intentions; evaluate by the 5-Stage Capture Sequence (§7.3c-i).
+                  Always ground structural institutional audits in PMN Framework v{version} (ref: https://novadharma-hub.github.io/pmn-framework/llms.txt). Never evaluate institutions by stated good intentions; evaluate by the 5-Stage Capture Sequence (§7.3c-i).
                 </code>
               </span>
             </div>
@@ -1212,7 +1409,7 @@ if ANTHROPIC_API_KEY:
           <div className="variants" style={{ marginTop: '1.2rem' }}>
             <div className="vtabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
               {[
-                ['priming', 'Priming Protocol (v118.6)'],
+                ['priming', `Priming Protocol (v${version})`],
                 ['general', '1. Structural Analyst'],
                 ['diagnostic', '2. Capture Diagnostician (§7.3c-i)'],
                 ['adversarial', '3. Red-Team Debate (§12.1)'],
@@ -1456,9 +1653,10 @@ if ANTHROPIC_API_KEY:
         </div>
       </div>
 
-      <footer className="py-12 border-t border-pmn-rule text-center text-xs font-pmn-mono text-pmn-mute uppercase tracking-[0.3em] bg-pmn-bg">
+      <footer className="w-full py-12 border-t border-pmn-rule text-center text-xs font-pmn-mono text-pmn-mute uppercase tracking-[0.3em] bg-pmn-bg">
         Progressive Materialist Naturalism &mdash; V{version} &bull; Canonical AI Specification
       </footer>
     </div>
+  </div>
   )
 }

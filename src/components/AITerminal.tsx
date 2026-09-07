@@ -8,11 +8,12 @@ interface AITerminalProps {
   gl: Record<string, string>
   activeSec: SubSection | null
   onOpenGuide?: () => void
+  version?: string
 }
 
 type PlatformKey = 'claude' | 'gemini' | 'deepseek' | 'chatgpt' | 'api'
 
-export default function AITerminal({ parts, gl, activeSec, onOpenGuide }: AITerminalProps) {
+export default function AITerminal({ parts, gl, activeSec, onOpenGuide, version = '120' }: AITerminalProps) {
   const [activeTab, setActiveTab] = useState<PlatformKey>('claude')
   const [selectedMode, setSelectedMode] = useState<string>('analyst')
   const [userQuestion, setUserQuestion] = useState<string>('')
@@ -39,14 +40,14 @@ Section Excerpt:
 - Identify who bears the material costs at the biological floor (§3.4).
 - End with an explicit empirical test that would falsify your diagnosis.`
     } else if (mode === 'adversarial') {
-      modeInstruction = `OPERATIONAL DIRECTIVE: ADVERSARIAL RED-TEAM & ASSUMPTION ARCHAEOLOGY (§12.1)
-- Reconstruct the strongest structural counter-argument against the prevailing consensus.
-- Test for the 'Technocratic Drift Trap' (§12.5b) and 'Paralysis by Complexity' (§12.5d).
-- Name the unstated empirical assumptions required for this claim to hold.`
+      modeInstruction = `OPERATIONAL DIRECTIVE: ADVERSARIAL DIALECTICAL STRESS-TESTER (§12.1)
+- Formulate the strongest possible materialist or pragmatic objection to this section's claims.
+- Identify latent technocratic assumptions or unstated boundary conditions.
+- Test whether the proposal risks technocratic drift, moralizing substitution, or paralysis by complexity (§12.5).`
     } else if (mode === 'equation') {
-      modeInstruction = `OPERATIONAL DIRECTIVE: TRANSFORMATION PRESSURE FORMULA ($T = S \cdot D \cdot P \cdot G$)
-- Evaluate the arrangement through PMN's Multiplicative Transfer Equation (§6.3 / §15.8).
-- Analyze how changes in opacity (G) or exit penalties (P) scale extractive leverage multiplicatively.
+      modeInstruction = `OPERATIONAL DIRECTIVE: TRANSFORMATION PRESSURE FORMULA ($T = S · D · P · G$)
+- Deconstruct systemic power dynamics using the multiplicative equation (§6.3, §15.8).
+- Analyze how Surplus extraction (S), Disparity (D), Probability of enforcement (P), and Growth of extraction rate (G) interact.
 - State required material preconditions for irreversible structural transition (§10.8).`
     } else {
       modeInstruction = `OPERATIONAL DIRECTIVE: PMN STRUCTURAL MATERIALIST ANALYST
@@ -56,7 +57,7 @@ Section Excerpt:
     }
 
     return `You are operating as an authoritative Progressive Materialist Naturalism (PMN) analyst.
-Ground your reasoning in PMN Framework v118.6 (Nova Dharma).
+Ground your reasoning in PMN Framework v${version} (Nova Dharma).
 
 ${modeInstruction}
 

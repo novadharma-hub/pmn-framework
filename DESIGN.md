@@ -1,6 +1,6 @@
 # PMN Framework — Design System & Platform Architecture
 
-**Specification Version:** 2.0 (Aligned with Canonical Manuscript v118.6)  
+**Specification Version:** 2.0 (Aligned with Canonical Manuscript v120)  
 **Aesthetic:** Warm Editorial / Archival Minimalism / Print-Grade Precision  
 **Character:** Scholarly, book-grade reading environment engineered for high cognitive endurance. Deep crimson on near-black (dark mode) or aged archival parchment (light mode). Serif typography for sustained reading; crisp monospace for analytical UI chrome.
 
