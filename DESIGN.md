@@ -103,7 +103,7 @@ The platform features four interactive on-ramps preceding the reader prose colum
 * **Purpose:** Operational interface for researchers and developers to ground frontier and sovereign LLMs without epistemic sycophancy.
 * **Architecture:**
   - Dual Deployment: Interactive Web Portals (NotebookLM, Claude Projects, AI Studio) vs. Local Developer Harnesses & APIs (Python, Cursor, Claude Code, LiteLLM).
-  - Multi-tier Model Matrix: Pro vs. Flash vs. Pure Reasoning with explicit API strings (`gemini-3.8-flash`, `deepseek-v4-pro`, `claude-fable-5-1`, `gpt-6-astra`).
+  - Multi-tier Model Matrix: Pro vs. Flash vs. Pure Reasoning with explicit API strings (`claude-3-7-sonnet-20250219`, `gemini-1.5-pro`, `o1`, `deepseek-chat`).
   - In-Reader `AITerminal`: Prepares precision context packs locked to the active section with direct dispatch to Claude, Gemini, DeepSeek, ChatGPT, or cURL API payloads.
 
 ---

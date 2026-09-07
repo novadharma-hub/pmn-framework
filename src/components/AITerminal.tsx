@@ -80,7 +80,7 @@ FORMAT REQUIREMENTS:
   -H "anthropic-version: 2023-06-01" \\
   -H "content-type: application/json" \\
   -d '{
-    "model": "claude-sonnet-5",
+    "model": "claude-3-7-sonnet-20250219",
     "max_tokens": 2500,
     "messages": [{"role": "user", "content": "${prompt.slice(0, 800)}..."}]
   }'`
@@ -154,25 +154,25 @@ FORMAT REQUIREMENTS:
           className={`hai-tab ${activeTab === 'claude' ? 'active' : ''}`}
           onClick={() => setActiveTab('claude')}
         >
-          Claude (Fable / Sonnet) ↗
+          Claude (3.7 Sonnet) ↗
         </button>
         <button
           className={`hai-tab ${activeTab === 'gemini' ? 'active' : ''}`}
           onClick={() => setActiveTab('gemini')}
         >
-          Gemini (3.1 Pro / 3.8) ↗
+          Gemini (1.5 Pro / 2.0) ↗
         </button>
         <button
           className={`hai-tab ${activeTab === 'deepseek' ? 'active' : ''}`}
           onClick={() => setActiveTab('deepseek')}
         >
-          DeepSeek (V4 / R1) ↗
+          DeepSeek (V3 / R1) ↗
         </button>
         <button
           className={`hai-tab ${activeTab === 'chatgpt' ? 'active' : ''}`}
           onClick={() => setActiveTab('chatgpt')}
         >
-          ChatGPT (GPT-6 / o3) ↗
+          ChatGPT (o3-mini / 4o) ↗
         </button>
         <button
           className={`hai-tab ${activeTab === 'api' ? 'active' : ''}`}
