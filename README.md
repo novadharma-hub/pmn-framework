@@ -459,7 +459,7 @@ The design system enforces strict semantic CSS tokens declared in `style.css`. *
 
 The PMN publication workflow enforces a rigorous, automated verification gate:
 
-1. **DOCX Extraction:** Python pipeline (`scripts/docx_import_pipeline.py`) parses the canonical manuscript (`private/docx_source/PMN_Framework_v120.docx`).
+1. **DOCX Extraction:** Python pipeline (`scripts/docx_import_pipeline.py`) parses the canonical manuscript DOCX. The source document is held outside this repository; only the generated artefacts are published.
 2. **Structural Integrity Audit:** Run `pmn_check.py` to audit section numbering, broken cross-references, orphan bibliography items, and duplicate anchors:
    ```bash
    python scripts/pmn_tools/pmn_check.py v120
