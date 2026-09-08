@@ -33,6 +33,7 @@ PMN is a post-theistic, materialist philosophical framework engineered to analyz
   - [2. Developer API Harness (Python SDK / Automated Auditing)](#2-developer-api-harness)
   - [3. Sovereign Local Inference (Ollama / vLLM / SGLang)](#3-sovereign-local-inference)
   - [4. Multi-Tier Model Selection Matrix](#4-multi-tier-model-selection-matrix)
+  - [5. Before You Ingest: Known Limits of This Corpus](#5-before-you-ingest-known-limits-of-this-corpus)
 - [Repository Architecture & Complete Directory Map](#repository-architecture--complete-directory-map)
 - [Quick Start & Local Development](#quick-start)
 - [Keyboard Shortcuts](#keyboard-shortcuts)
@@ -196,11 +197,17 @@ For complete prompts, role profiles, and diagnostic instructions, visit the in-a
 
 ### 1. Cloud Frontier AI Deployment
 
-- **Anthropic Claude (Claude 3.7 Sonnet / Claude 3.5 Sonnet):** Hybrid Standard and Extended Thinking. Upload `pmn_corpus_for_ai.md` into Project Knowledge. Ideal for sustained philosophical dialectics, holding permanent tensions (Part XIII), and assumption archaeology (§12.1).
-- **Google DeepMind (Gemini 1.5 Pro / Gemini 2.0 Flash):** 1M–2M token context windows. Gemini 1.5 Pro ingests the full ~330k-word uncompressed corpus in a single prompt without RAG loss. NotebookLM provides grounded scholarly citations linked directly back to section anchors.
-- **DeepSeek (DeepSeek-V3 / DeepSeek-R1):** 671B MoE architecture alongside pure RL reasoning models. Industry-leading cost-efficiency for capture sequence diagnostics (§7.3c-i) and anti-ideology forensics (noting Chinese regulatory guardrails on sensitive political economy).
-- **OpenAI (o1 / o3-mini / GPT-4o):** Advanced multi-step deliberation engines. Formalizes and simulates the non-linear Transformation Pressure Formula ($T = S \cdot D \cdot P \cdot G$) via Code Interpreter and high reasoning effort.
-- **Alibaba Qwen, Zhipu GLM & Meta Llama (Qwen 2.5 72B / GLM-4-Plus / Llama 3.3 70B):** High-capacity open-weight and frontier architectures for sovereign air-gapped hosting, multi-tool workflows, and multi-polar institutional audits.
+- **Anthropic Claude (`claude-opus-5` / `claude-sonnet-5` / `claude-haiku-4-5-20251001`):** Upload `pmn_corpus_for_ai.md` into Project Knowledge, or call the API directly. Strongest at holding the permanent tensions of Part XIII without forcing a resolution.
+- **OpenAI (GPT-6 Astra / GPT-5.6 Sol / Terra / Luna):** GPT-6 Astra is the flagship reasoning tier; the 5.6 family spans professional work down to cost-sensitive volume. ([docs](https://developers.openai.com/api/docs/models))
+- **Google DeepMind (Gemini 3.8 Flash / 3.7 Flash / 3.5 Flash-Lite / NotebookLM):** NotebookLM is the best choice for *checking* whether a claim is actually in the text, because its answers link back to the source. ([docs](https://ai.google.dev/gemini-api/docs/models))
+- **DeepSeek (DeepSeek-V4-Pro 1.6T/49B active · DeepSeek-V4-Flash 284B/13B active):** OpenAI- and Anthropic-compatible API formats. ([docs](https://api-docs.deepseek.com/))
+- **Moonshot Kimi (Kimi K3, 1M context · Kimi K2.7 Code, 256k):** K3's 1M window holds the entire corpus in one prompt. ([docs](https://platform.moonshot.ai/))
+- **Alibaba Qwen (`qwen3.7-max` / `qwen3.7-plus`):** hybrid Thinking / Non-Thinking modes — enable Thinking deliberately when probing causal claims. ([docs](https://www.alibabacloud.com/help/en/model-studio/models))
+- **Mistral AI (Mistral Medium 3.5 · Large 3 · Small 4):** `reasoning_effort` lets you raise effort for the heavier Parts. ([docs](https://docs.mistral.ai/models/overview))
+- **Z.ai GLM (GLM-5.3 · GLM-5.2, 1M ctx · GLM-5, 744B MoE, MIT licence):** the strongest fully open-weight route if the corpus must not leave your machine. ([weights](https://huggingface.co/zai-org))
+- **xAI Grok (`grok-4.6`, 500k context):** knowledge cut-off 1 Feb 2026 — do not ask it about events after that date. ([docs](https://docs.x.ai/developers/models))
+
+> Verified 2026-09-09 against each provider's own documentation. **Re-verify before relying on this list.**
 
 ### 2. Developer API Harness
 
@@ -241,7 +248,8 @@ curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o 
 #### Step 2: Create `Modelfile` (Ollama 64K Context)
 ```dockerfile
 FROM qwen2.5:32b
-# Alternatives: FROM qwq:32b, deepseek-r1:32b, or llama3.3:70b
+# Alternatives: check your runtime's current library — the open-weight landscape moves fast.
+# Verified open-weight options as of 2026-09-09: GLM-5 (MIT), GLM-5.2, GLM-5.3, Mistral Small 4.
 
 PARAMETER temperature 0.25
 PARAMETER top_p 0.85
@@ -262,12 +270,49 @@ ollama run pmn-analyst "Explain how custodian advantage leads to institutional c
 
 ### 4. Multi-Tier Model Selection Matrix
 
-| Task Category | Recommended Frontier Tier | Recommended Fast / Economy Tier | Recommended Local / Sovereign Tier |
+> **Verified 2026-09-09** against each provider's own live documentation. Every row below was checked at
+> that date; none of it is written from model memory. **If you are reading this more than a few months later,
+> treat the table as stale and re-verify** — an earlier version of this matrix was "corrected" against an
+> agent's recollection and deleted real models as fictional. A model list that cannot be maintained is worse
+> than no model list.
+
+| Task Category | Frontier Tier | Fast / Economy Tier | Local / Sovereign Tier |
 |---|---|---|---|
-| **Deep Dialectic Red-Teaming** | Claude 3.7 Sonnet (Thinking) | Claude 3.5 Sonnet | Qwen 2.5 72B / Llama 3.3 70B |
-| **Institutional Capture Audits** | OpenAI o1 / o3-mini | DeepSeek-V3 / DeepSeek-R1 | Qwen 2.5 72B / Llama 3.3 70B |
-| **Whole-Corpus RAG & Retrieval** | Gemini 1.5 Pro (2M Context) | Gemini 2.0 Flash (1M Context) | vLLM + Qwen 2.5 32B (64k-128k) |
-| **Formula & Econometric Modeling** | OpenAI o3-mini (High Effort) | Gemini 2.0 Flash Thinking | Qwen 2.5-Coder-32B |
+| **Deep Dialectic Red-Teaming** | Claude Opus 5 · GPT-6 Astra · GPT-5.6 Sol | Claude Sonnet 5 · GPT-5.6 Terra | GLM-5.3 · GLM-5 (MIT) |
+| **Institutional Capture Audits** | Claude Opus 5 · DeepSeek-V4-Pro | DeepSeek-V4-Flash · Qwen3.7-Plus | GLM-5.2 · Mistral Small 4 |
+| **Whole-Corpus RAG & Retrieval** | Kimi K3 (1M ctx) · Gemini 3.8 Flash | Gemini 3.5 Flash-Lite | GLM-5.2 (1M ctx) · Grok 4.6 (500k, API) |
+| **Formula & Structural Modeling** | GPT-6 Astra · Qwen3.7-Max (Thinking) | Mistral Medium 3.5 (`reasoning_effort`) | GLM-5.3 · Kimi K2.7 Code (256k) |
+| **Source-Grounded Verification** | NotebookLM (answers link back to source) | — | — |
+
+Sources checked: [developers.openai.com](https://developers.openai.com/api/docs/models) ·
+[ai.google.dev](https://ai.google.dev/gemini-api/docs/models) ·
+[api-docs.deepseek.com](https://api-docs.deepseek.com/) ·
+[alibabacloud.com Model Studio](https://www.alibabacloud.com/help/en/model-studio/models) ·
+[platform.moonshot.ai](https://platform.moonshot.ai/) ·
+[docs.mistral.ai](https://docs.mistral.ai/models/overview) ·
+[docs.z.ai](https://docs.z.ai/release-notes/new-released) ·
+[docs.x.ai](https://docs.x.ai/developers/models)
+
+---
+
+### 5. Before You Ingest: Known Limits of This Corpus
+
+Measured against v120 on 2026-09-09. These apply **identically to every model above** — model choice does not
+affect them. Any AI you feed this corpus to will reproduce them confidently, because nothing in the text marks
+them.
+
+| Measured | What it means when you query the corpus |
+|---|---|
+| **74 of 81 attribution claims carry no source** within three sentences; Gramsci alone accounts for 35 | Ask the model to name the section behind any "X argues that…" claim. If it cannot, treat the claim as the manuscript's reading, not a report of the source. |
+| **0 of 57 causal-mechanism sections state a defeater** (scope hedging is good — 84% qualify their conditions) | Before asking a model to "test" a claim, ask what evidence would defeat it. If the corpus does not say, make the model report the absence rather than invent a test. |
+| **13 empirical / historical sections cite nothing** — including all of Part XVII (~5,100 words of case studies) and §7.8 (4,004 words) | These are where fabricated supporting detail is most likely. Request the claim and its source separately, and verify the source yourself. |
+| **§15.0b is outvoted 4-to-1 on the `S` notation** — it states `S = f(R, B, V)` is "not a measurable sum"; §3.4b (×2), §7.8, §15.14 and the glossary write `S = R + B + V` | If a model computes `S` as a sum it is following the majority of the text against the section that claims authority over the term. |
+| **The glossary says "seven diagnostic questions"; §11.0 is headed "Nine"** and lists eight, one of which the text itself calls the eighth. v118.6 and v119 both said seven | Expect two different answers to the same question. |
+
+**None of this is a list of errors in the philosophy.** Every item is about *traceability* — whether a reader
+can check a claim, not whether the claim is true. It is published here because PMN's own primary diagnostic
+(§1.2) is whether a framework revises under evidence or insulates itself from it, and a framework that hides
+its weak points from its readers has already begun to insulate.
 
 ---
 

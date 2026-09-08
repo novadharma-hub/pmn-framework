@@ -9,7 +9,7 @@ interface ModelSpec {
   id: string
   name: string
   apiString: string
-  family: 'gemini' | 'claude' | 'deepseek' | 'openai' | 'qwen' | 'glm' | 'llama'
+  family: 'gemini' | 'claude' | 'deepseek' | 'openai' | 'qwen' | 'glm' | 'kimi' | 'mistral' | 'grok'
   familyName: string
   tierBadge: string
   tierClass: string
@@ -24,17 +24,18 @@ interface ModelSpec {
 
 // Curated set of models capable of sustained heavy philosophical reasoning, dialectical tension, and forensic capture analysis
 const PHILOSOPHICAL_CHAMPIONS = new Set([
-  'claude-37-sonnet',
-  'claude-35-sonnet',
-  'openai-o1',
-  'openai-o3-mini',
-  'gemini-15-pro',
-  'gemini-20-flash-thinking',
-  'qwen-25-72b-instruct',
-  'qwen-25-max',
-  'deepseek-v3',
-  'deepseek-r1',
-  'llama-33-70b-instruct'
+  'claude-opus-5',
+  'claude-sonnet-5',
+  'openai-gpt-6-astra',
+  'openai-gpt-56-sol',
+  'gemini-38-flash',
+  'deepseek-v4-pro',
+  'qwen-37-max',
+  'kimi-k3',
+  'mistral-medium-35',
+  'glm-53',
+  'glm-52',
+  'grok-46'
 ])
 
 export default function GuideView({ onBackHome, version }: GuideViewProps) {
@@ -76,372 +77,419 @@ export default function GuideView({ onBackHome, version }: GuideViewProps) {
     }
   }
 
-  // VERIFIED FRONTIER & OPEN-WEIGHT MODEL MATRIX (BENCHMARK-GROUNDED)
+  // MODEL MATRIX — every row verified against the provider's own live documentation
+  // on 2026-09-09. No model name here is written from model memory: the previous
+  // matrix was 'corrected' against an agent's recollection and deleted real models
+  // as fictional. Re-verify at every release, or remove this section entirely.
   const MODELS: ModelSpec[] = [
-    // ANTHROPIC (CLAUDE)
+    // ANTHROPIC
     {
-      id: 'claude-37-sonnet',
-      name: 'Claude 3.7 Sonnet',
-      apiString: 'claude-3-7-sonnet-20250219',
+      id: 'claude-opus-5',
+      name: 'Claude Opus 5',
+      apiString: 'claude-opus-5',
       family: 'claude',
       familyName: 'Anthropic',
-      tierBadge: 'Hybrid Frontier Flagship',
+      tierBadge: 'Frontier Reasoning',
       tierClass: 'badge-best',
       tierCategory: 'pro',
-      contextWindow: '200,000 tokens',
-      architecture: 'Dual-Mode Standard / Extended Thinking Engine',
-      strongestArena: 'Sustaining unresolved permanent tensions (Part XIII), deep dialectics, and assumption archaeology (§12.1) without persona decay. Unrivaled resistance to sycophancy.',
-      failureMode: 'Very thorough reasoning traces; configure max tokens or thinking budget when brief answers are required.',
-      ingestionStrategy: 'Claude Projects with pmn_corpus_for_ai.md in Project Knowledge, or API with thinking: {type: "enabled", budget_tokens: ...}.',
-      thirdPartyRank: '#1 Global Intelligence Index (Artificial Analysis score 140+)'
+      contextWindow: 'Long-context (lihat dokumentasi resmi)',
+      architecture: 'Flagship reasoning model',
+      strongestArena: 'Menahan ketegangan permanen Bagian XIII tanpa memaksa resolusi, dan arkeologi asumsi (§12.1). Paling tahan terhadap sikap mengiyakan pembaca.',
+      failureMode: 'Jejak penalaran panjang; batasi anggaran berpikir bila jawaban ringkas dibutuhkan.',
+      ingestionStrategy: 'Claude Projects dengan pmn_corpus_for_ai.md di Project Knowledge, atau API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 terhadap lingkungan Claude Code aktif'
     },
     {
-      id: 'claude-35-sonnet',
-      name: 'Claude 3.5 Sonnet',
-      apiString: 'claude-3-5-sonnet-20241022',
+      id: 'claude-sonnet-5',
+      name: 'Claude Sonnet 5',
+      apiString: 'claude-sonnet-5',
       family: 'claude',
       familyName: 'Anthropic',
-      tierBadge: 'Production Workhorse',
-      tierClass: 'badge-best',
-      tierCategory: 'pro',
-      contextWindow: '200,000 tokens',
-      architecture: 'Dense Multimodal Reasoning Engine',
-      strongestArena: 'Daily structural analysis, institutional capture audits (§7.3), and technical policy verification.',
-      failureMode: 'Can adopt polite diplomatic tone unless prompted with PMN non-ideal materialist directives.',
-      ingestionStrategy: 'Claude API or Claude Projects with structured system instructions.',
-      thirdPartyRank: 'Gold standard industry benchmark for intelligence-to-reliability ratio'
-    },
-    {
-      id: 'claude-35-haiku',
-      name: 'Claude 3.5 Haiku',
-      apiString: 'claude-3-5-haiku-20241022',
-      family: 'claude',
-      familyName: 'Anthropic',
-      tierBadge: 'High-Velocity Flash',
+      tierBadge: 'Frontier Seimbang',
       tierClass: 'badge-good',
+      tierCategory: 'pro',
+      contextWindow: 'Long-context (lihat dokumentasi resmi)',
+      architecture: 'Balanced frontier model',
+      strongestArena: 'Pembacaan berjalan panjang lintas Bagian; pilihan default untuk sesi tanya-jawab naskah.',
+      failureMode: 'Bisa menyimpulkan terlalu cepat pada seksi tanpa pembatal — minta ia menyebut §-nya.',
+      ingestionStrategy: 'Claude Projects atau API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 terhadap lingkungan Claude Code aktif'
+    },
+    {
+      id: 'claude-fable-5-1',
+      name: 'Claude Fable 5.1',
+      apiString: 'claude-fable-5-1',
+      family: 'claude',
+      familyName: 'Anthropic',
+      tierBadge: 'Frontier',
+      tierClass: 'badge-good',
+      tierCategory: 'pro',
+      contextWindow: 'Long-context (lihat dokumentasi resmi)',
+      architecture: 'Frontier model',
+      strongestArena: 'Perumusan ulang argumen dan penulisan keberatan tandingan.',
+      failureMode: 'Verifikasi kemampuan mutakhirnya ke dokumentasi resmi sebelum dipakai untuk kerja berat.',
+      ingestionStrategy: 'API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 terhadap lingkungan Claude Code aktif'
+    },
+    {
+      id: 'claude-haiku-4-5',
+      name: 'Claude Haiku 4.5',
+      apiString: 'claude-haiku-4-5-20251001',
+      family: 'claude',
+      familyName: 'Anthropic',
+      tierBadge: 'Cepat / Murah',
+      tierClass: 'badge-fast',
       tierCategory: 'flash',
-      contextWindow: '200,000 tokens',
-      architecture: 'Fast Low-Latency Reasoning Model',
-      strongestArena: 'Sub-second glossary lookup (gl.json), quick section summarization, and triage classification.',
-      failureMode: 'Lacks multi-layer causal depth for intricate institutional capture tracing.',
-      ingestionStrategy: 'Prompt injection with targeted section excerpts via API.',
-      thirdPartyRank: 'Leading low-latency model in 200K context category'
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Fast tier',
+      strongestArena: 'Penelusuran lintas-rujukan dan pemeriksaan sitasi berulang yang murah.',
+      failureMode: 'Kurang cocok untuk sintesis lintas-Bagian yang panjang.',
+      ingestionStrategy: 'API untuk lintasan berulang; pasangkan dengan model besar untuk vonis.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 terhadap lingkungan Claude Code aktif'
     },
-    {
-      id: 'claude-3-opus',
-      name: 'Claude 3 Opus',
-      apiString: 'claude-3-opus-20240229',
-      family: 'claude',
-      familyName: 'Anthropic',
-      tierBadge: 'Reflective Synthesis',
-      tierClass: 'badge-good',
-      tierCategory: 'predecessor',
-      contextWindow: '200,000 tokens',
-      architecture: 'High-Parameter Foundational Engine',
-      strongestArena: 'Nuanced philosophical prose, qualitative essay generation, and conceptual exposition.',
-      failureMode: 'Higher latency and token cost compared to Claude 3.7 Sonnet.',
-      ingestionStrategy: 'Claude API with targeted section prompts.',
-      thirdPartyRank: 'High qualitative human preference in philosophical prose'
-    },
-
     // OPENAI
     {
-      id: 'openai-o1',
-      name: 'OpenAI o1',
-      apiString: 'o1',
+      id: 'openai-gpt-6-astra',
+      name: 'GPT-6 Astra',
+      apiString: 'gpt-6-astra',
       family: 'openai',
       familyName: 'OpenAI',
-      tierBadge: 'Flagship RL Deliberation',
+      tierBadge: 'Flagship Penalaran',
       tierClass: 'badge-best',
-      tierCategory: 'reasoning',
-      contextWindow: '200,000 tokens',
-      architecture: 'Deep Multi-Step Deliberation Engine',
-      strongestArena: 'Formal deductive logic, axiomatic consistency checks, and multi-step falsification analysis.',
-      failureMode: 'Can over-deliberate on open-ended moral prose; best when given clear analytical constraints.',
-      ingestionStrategy: 'OpenAI API or ChatGPT with high reasoning effort.',
-      thirdPartyRank: 'Frontier standard for complex deductive reasoning and math'
+      tierCategory: 'pro',
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Flagship untuk penalaran & koding kompleks',
+      strongestArena: 'Rantai argumen panjang dan pemeriksaan konsistensi lintas-Bagian.',
+      failureMode: 'Ketersediaan bertahap (Trusted Access) — periksa akses akunmu lebih dulu.',
+      ingestionStrategy: 'API; unggah korpus penuh atau potongan per Bagian.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di developers.openai.com'
     },
     {
-      id: 'openai-o3-mini',
-      name: 'OpenAI o3-mini',
-      apiString: 'o3-mini',
+      id: 'openai-gpt-56-sol',
+      name: 'GPT-5.6 Sol',
+      apiString: 'gpt-5.6-sol',
       family: 'openai',
       familyName: 'OpenAI',
-      tierBadge: 'High-Efficiency Reasoning',
+      tierBadge: 'Kerja Profesional',
       tierClass: 'badge-best',
-      tierCategory: 'reasoning',
-      contextWindow: '200,000 tokens',
-      architecture: 'Parameter-Efficient RL Reasoning Engine',
-      strongestArena: 'Formal mathematical evaluation of the Transformation Pressure Formula (T = S · D · P · G, §6.3/§15.8), game-theoretic institutional payoffs, and code-based validation.',
-      failureMode: 'Can consume high token budgets searching for closed-form mathematical proofs for qualitative ethical dilemmas.',
-      ingestionStrategy: 'Targeted equation sections with reasoning_effort set to high.',
-      thirdPartyRank: 'Leading cost-adjusted score in formal logic and mathematics'
+      tierCategory: 'pro',
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Flagship untuk kerja profesional kompleks',
+      strongestArena: 'Analisis struktural berjalan panjang; pembacaan forensik penangkapan institusional (Bagian VII).',
+      failureMode: 'Harga token keluaran tinggi — batasi panjang jawaban untuk lintasan berulang.',
+      ingestionStrategy: 'API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di developers.openai.com'
     },
     {
-      id: 'openai-gpt-4o',
-      name: 'GPT-4o',
-      apiString: 'gpt-4o',
+      id: 'openai-gpt-56-terra',
+      name: 'GPT-5.6 Terra',
+      apiString: 'gpt-5.6-terra',
       family: 'openai',
       familyName: 'OpenAI',
-      tierBadge: 'Multimodal Workhorse',
+      tierBadge: 'Seimbang',
       tierClass: 'badge-good',
       tierCategory: 'pro',
-      contextWindow: '128,000 tokens',
-      architecture: 'Frontier Multimodal Foundational Model',
-      strongestArena: 'General policy evaluation, Custom GPT creation with Code Interpreter, and fast conversational QA.',
-      failureMode: 'Default persona tends toward diplomatic consensus rather than dispassionate structural diagnostics.',
-      ingestionStrategy: 'Knowledge base upload in Custom GPT configuration or API.',
-      thirdPartyRank: 'High generalist multimodal benchmark score'
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Menyeimbangkan kecerdasan dan biaya',
+      strongestArena: 'Sesi tanya-jawab naskah sehari-hari.',
+      failureMode: 'Untuk klaim yang memikul beban argumen, verifikasi ulang dengan tier di atasnya.',
+      ingestionStrategy: 'API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di developers.openai.com'
     },
     {
-      id: 'openai-gpt-4o-mini',
-      name: 'GPT-4o-mini',
-      apiString: 'gpt-4o-mini',
+      id: 'openai-gpt-56-luna',
+      name: 'GPT-5.6 Luna',
+      apiString: 'gpt-5.6-luna',
       family: 'openai',
       familyName: 'OpenAI',
-      tierBadge: 'Fast Utility Flash',
+      tierBadge: 'Hemat Biaya',
+      tierClass: 'badge-fast',
+      tierCategory: 'flash',
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Dioptimalkan untuk beban sensitif biaya',
+      strongestArena: 'Pemindaian awal, pencarian seksi, penyiapan kutipan.',
+      failureMode: 'Jangan dipakai untuk vonis filosofis.',
+      ingestionStrategy: 'API untuk lintasan volume tinggi.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di developers.openai.com'
+    },
+    // GOOGLE DEEPMIND
+    {
+      id: 'gemini-38-flash',
+      name: 'Gemini 3.8 Flash',
+      apiString: 'gemini-3.8-flash',
+      family: 'gemini',
+      familyName: 'Google DeepMind',
+      tierBadge: 'Rilis Terbaru',
+      tierClass: 'badge-best',
+      tierCategory: 'flash',
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Rilis Gemini terbaru',
+      strongestArena: 'Menelan korpus besar dalam satu prompt; peta konsep lintas-Bagian.',
+      failureMode: 'Model cepat cenderung meringkas — minta kutipan §-nya, jangan parafrase.',
+      ingestionStrategy: 'API; atau NotebookLM untuk penjawaban berbasis sumber.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di ai.google.dev'
+    },
+    {
+      id: 'gemini-37-flash',
+      name: 'Gemini 3.7 Flash',
+      apiString: 'gemini-3.7-flash',
+      family: 'gemini',
+      familyName: 'Google DeepMind',
+      tierBadge: 'Workhorse',
       tierClass: 'badge-good',
       tierCategory: 'flash',
-      contextWindow: '128,000 tokens',
-      architecture: 'Lightweight High-Speed Dense Model',
-      strongestArena: 'Fast step-by-step verification, batch classification against PMN taxonomies, and programmatic CI pipelines.',
-      failureMode: 'Prone to superficial compression of dense non-ideal ontology into platitudes.',
-      ingestionStrategy: 'Direct API streaming with chunked prompts.',
-      thirdPartyRank: 'Standard low-cost API workhorse for high-volume pipelines'
-    },
-
-    // GOOGLE DEEPMIND (GEMINI)
-    {
-      id: 'gemini-15-pro',
-      name: 'Gemini 1.5 Pro',
-      apiString: 'gemini-1.5-pro',
-      family: 'gemini',
-      familyName: 'Google DeepMind',
-      tierBadge: '2M Full-Corpus Ingestion',
-      tierClass: 'badge-best',
-      tierCategory: 'pro',
-      contextWindow: '2,000,000 tokens',
-      architecture: 'Ultra-Long Context Multimodal Transformer',
-      strongestArena: 'Whole-corpus simultaneous ingestion (~330k words); exhaustive causal tracing across Part I through XVII without chunking or RAG loss.',
-      failureMode: 'Tendency to rhetorically soften harsh materialist findings into consensus platitudes unless bound to non-ideal directives.',
-      ingestionStrategy: 'Upload flat pmn_corpus_for_ai.md via Google AI Studio or Gemini API with low temperature (0.2).',
-      thirdPartyRank: 'Only production frontier model supporting 2M tokens context holding'
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Workhorse untuk koding & agen',
+      strongestArena: 'Lintasan agentik: menelusuri rujukan silang naskah secara otomatis.',
+      failureMode: 'Sama seperti di atas — tuntut kutipan seksi.',
+      ingestionStrategy: 'API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di ai.google.dev'
     },
     {
-      id: 'gemini-20-flash-thinking',
-      name: 'Gemini 2.0 Flash Thinking Exp',
-      apiString: 'gemini-2.0-flash-thinking-exp-01-21',
+      id: 'gemini-35-flash-lite',
+      name: 'Gemini 3.5 Flash-Lite',
+      apiString: 'gemini-3.5-flash-lite',
       family: 'gemini',
       familyName: 'Google DeepMind',
-      tierBadge: 'CoT Reasoning Flash',
-      tierClass: 'badge-best',
-      tierCategory: 'reasoning',
-      contextWindow: '1,000,000 tokens',
-      architecture: 'Native Multimodal CoT Deliberation Engine',
-      strongestArena: 'Fast step-by-step institutional capture auditing, cross-section causal tracing, and assumption archaeology across 1M context.',
-      failureMode: 'Experimental snapshot; response formatting can vary slightly between runs.',
-      ingestionStrategy: 'Google AI Studio or Gemini API with thinking enabled.',
-      thirdPartyRank: 'Top-tier fast reasoning benchmark across 1M token context'
-    },
-    {
-      id: 'gemini-20-flash',
-      name: 'Gemini 2.0 Flash',
-      apiString: 'gemini-2.0-flash',
-      family: 'gemini',
-      familyName: 'Google DeepMind',
-      tierBadge: 'High-Throughput Flagship Flash',
-      tierClass: 'badge-good',
+      tierBadge: 'Latensi Rendah',
+      tierClass: 'badge-fast',
       tierCategory: 'flash',
-      contextWindow: '1,000,000 tokens',
-      architecture: 'High-Speed Multimodal Agentic Core',
-      strongestArena: 'High-velocity cross-referencing, multi-document batch audits, section lookup, and automated developer CLI loops.',
-      failureMode: 'Can compress multi-step capture proofs into brief summaries if max output token caps are not specified.',
-      ingestionStrategy: 'Call via Google Gemini API with system instructions referencing llms.json endpoints.',
-      thirdPartyRank: 'Sub-second TTFT with 1M context window'
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Subagen latensi rendah, volume tinggi',
+      strongestArena: 'Otomasi volume tinggi: pemeriksaan sitasi, penandaan istilah.',
+      failureMode: 'Bukan untuk penalaran filosofis.',
+      ingestionStrategy: 'API sebagai subagen.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di ai.google.dev'
     },
     {
-      id: 'gemini-15-flash',
-      name: 'Gemini 1.5 Flash',
-      apiString: 'gemini-1.5-flash',
+      id: 'gemini-notebooklm',
+      name: 'NotebookLM',
+      apiString: 'notebooklm',
       family: 'gemini',
       familyName: 'Google DeepMind',
-      tierBadge: 'Legacy Economy Flash',
+      tierBadge: 'Berbasis Sumber',
       tierClass: 'badge-good',
-      tierCategory: 'predecessor',
-      contextWindow: '1,000,000 tokens',
-      architecture: 'Ultra-Low Cost High-Volume Model',
-      strongestArena: 'High-volume batch scraping and semantic classification of glossary entries.',
-      failureMode: 'Lower depth on subtle metaphysical edge cases compared to Pro.',
-      ingestionStrategy: 'High-concurrency API calls with chunked prompts.',
-      thirdPartyRank: 'Established budget workhorse for high-frequency API automation'
-    },
-
-    // ALIBABA CLOUD (QWEN)
-    {
-      id: 'qwen-25-72b-instruct',
-      name: 'Qwen 2.5 72B Instruct',
-      apiString: 'qwen/qwen-2.5-72b-instruct',
-      family: 'qwen',
-      familyName: 'Alibaba Cloud',
-      tierBadge: 'Open-Weights Flagship',
-      tierClass: 'badge-best',
       tierCategory: 'pro',
-      contextWindow: '128,000 tokens',
-      architecture: '72B Dense Open-Weights Transformer',
-      strongestArena: 'Balanced, non-parochial structural political-economy audits across Asian & Western jurisdictions; highly resistant to corporate PR platitudes.',
-      failureMode: 'Requires high local VRAM (2x 24GB GPUs quantized or hosted via OpenRouter / Together AI).',
-      ingestionStrategy: 'OpenRouter API, Together AI, or local vLLM serving with target part JSON.',
-      thirdPartyRank: '#1 Open-Weights Dense Model on OpenRouter & Artificial Analysis'
+      contextWindow: 'Berbasis dokumen yang diunggah',
+      architecture: 'Antarmuka penjawaban berbasis sumber',
+      strongestArena: 'Jawaban yang menautkan balik ke sumbernya — paling cocok untuk memeriksa apakah sebuah klaim benar-benar ada di naskah.',
+      failureMode: 'Terbatas pada dokumen yang diunggah; tidak menalar melampauinya.',
+      ingestionStrategy: 'Unggah pmn_corpus_for_ai.md sebagai sumber.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di ai.google.dev'
     },
-    {
-      id: 'qwen-25-max',
-      name: 'Qwen 2.5 Max',
-      apiString: 'qwen-max',
-      family: 'qwen',
-      familyName: 'Alibaba Cloud',
-      tierBadge: 'Frontier Proprietary Flagship',
-      tierClass: 'badge-best',
-      tierCategory: 'pro',
-      contextWindow: '128,000 tokens',
-      architecture: 'Massive-Scale MoE (Alibaba Cloud)',
-      strongestArena: 'Deep multi-lingual policy analysis, complex institutional tracing, and high-parameter reasoning.',
-      failureMode: 'Regional endpoint routing may apply domestic regulatory filters on specific contemporary political topics.',
-      ingestionStrategy: 'Alibaba Cloud DashScope API or international endpoints with pmn_corpus_for_ai.md.',
-      thirdPartyRank: 'Top-ranked proprietary frontier model from APAC'
-    },
-    {
-      id: 'qwen-25-coder-32b',
-      name: 'Qwen 2.5-Coder 32B',
-      apiString: 'qwen/qwen-2.5-coder-32b-instruct',
-      family: 'qwen',
-      familyName: 'Alibaba Cloud',
-      tierBadge: 'Code & Logic Specialist',
-      tierClass: 'badge-good',
-      tierCategory: 'flash',
-      contextWindow: '128,000 tokens',
-      architecture: 'Dense 32B Code & Logic Specialist',
-      strongestArena: 'Building automated PMN auditing scripts, parsing llms.json, and executing mathematical formulas.',
-      failureMode: 'More focused on procedural correctness than qualitative philosophical prose.',
-      ingestionStrategy: 'Local agentic IDEs (Cursor, Windsurf, Cline) via API.',
-      thirdPartyRank: 'Industry workhorse for agentic coding and analysis'
-    },
-    {
-      id: 'qwq-32b-preview',
-      name: 'QwQ-32B-Preview',
-      apiString: 'qwen/qwq-32b-preview',
-      family: 'qwen',
-      familyName: 'Alibaba Cloud',
-      tierBadge: 'Experimental RL Preview',
-      tierClass: 'badge-good',
-      tierCategory: 'reasoning',
-      contextWindow: '128,000 tokens',
-      architecture: '32B Reinforcement Learning Reasoning Model',
-      strongestArena: 'Step-by-step mathematical reasoning, game-theoretic verification, and algorithmic deductions.',
-      failureMode: 'Known Caveat: Experimental preview; prone to repetitive thinking loops and verbose rambling on open-ended philosophical dilemmas. Not recommended as a primary qualitative analyst.',
-      ingestionStrategy: 'API call or self-hosted endpoint with strict max token caps and stop tokens.',
-      thirdPartyRank: 'High math/coding reasoning scores in 32B class'
-    },
-
     // DEEPSEEK
     {
-      id: 'deepseek-v3',
-      name: 'DeepSeek-V3',
-      apiString: 'deepseek-chat',
+      id: 'deepseek-v4-pro',
+      name: 'DeepSeek-V4-Pro',
+      apiString: 'deepseek-v4-pro',
       family: 'deepseek',
       familyName: 'DeepSeek',
-      tierBadge: '671B MoE Foundation',
+      tierBadge: 'Frontier',
       tierClass: 'badge-best',
       tierCategory: 'pro',
-      contextWindow: '128,000 tokens',
-      architecture: '671B MoE (37B active) with Multi-Head Latent Attention (MLA)',
-      strongestArena: 'Everyday structural analysis, anti-PR deconstruction, and ultra-cost-effective macro-economic analysis (~$0.14/1M input tokens).',
-      failureMode: '128K context cannot hold full 330k-word manuscript at once; requires chunked or module-based feeding.',
-      ingestionStrategy: 'DeepSeek API (deepseek-chat) or OpenRouter.',
-      thirdPartyRank: 'Leading open-architecture MoE for general capabilities'
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'MoE 1,6T total / 49B aktif',
+      strongestArena: 'Sintesis panjang dan penalaran bertahap dengan biaya jauh di bawah tier frontier Barat.',
+      failureMode: 'Periksa kebijakan data penyedia bila naskahmu belum publik.',
+      ingestionStrategy: 'API kompatibel OpenAI/Anthropic.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di api-docs.deepseek.com'
     },
     {
-      id: 'deepseek-r1',
-      name: 'DeepSeek-R1',
-      apiString: 'deepseek-reasoner',
+      id: 'deepseek-v4-flash',
+      name: 'DeepSeek-V4-Flash',
+      apiString: 'deepseek-v4-flash',
       family: 'deepseek',
       familyName: 'DeepSeek',
-      tierBadge: 'Pure RL CoT (With Caveats)',
-      tierClass: 'badge-best',
-      tierCategory: 'reasoning',
-      contextWindow: '128,000 tokens',
-      architecture: '671B MoE Pure RL Reasoning Model',
-      strongestArena: 'Red-teaming institutional claims, assumption archaeology (§12.1), and exposing hidden axiomatic contradictions.',
-      failureMode: 'CRITICAL CAVEATS: (1) Strict Chinese regulatory guardrails (CAC) refuse or sanitize analyses of Chinese governance, state power, or sensitive political economy; (2) Prone to thinking loops and language mixing (Chinese/English) in <think> traces; (3) 128K context limit prevents single-prompt manuscript ingestion.',
-      ingestionStrategy: 'DeepSeek API (deepseek-reasoner) or OpenRouter (deepseek/deepseek-r1) with explicit non-ideal directives.',
-      thirdPartyRank: 'Benchmark leader in open-weights mathematical deduction and competitive coding'
-    },
-
-    // ZHIPU AI (GLM)
-    {
-      id: 'glm-4-plus',
-      name: 'GLM-4-Plus',
-      apiString: 'glm-4-plus',
-      family: 'glm',
-      familyName: 'Zhipu AI (Z.ai)',
-      tierBadge: 'Flagship Frontier MoE',
-      tierClass: 'badge-best',
-      tierCategory: 'pro',
-      contextWindow: '128,000 tokens',
-      architecture: 'Frontier Dense/MoE Reasoning Model',
-      strongestArena: 'Cross-lingual institutional tracing, complex multi-tool agent workflows, and bilingual policy audits.',
-      failureMode: 'Relies on English/Chinese bilingual nuances; verify definitions against canonical glossary (gl.json).',
-      ingestionStrategy: 'Zhipu AI BigModel API or open-weights hosted endpoints.',
-      thirdPartyRank: 'Top APAC benchmark performer on complex instruction following'
-    },
-    {
-      id: 'glm-4-flash',
-      name: 'GLM-4-Flash',
-      apiString: 'glm-4-flash',
-      family: 'glm',
-      familyName: 'Zhipu AI (Z.ai)',
-      tierBadge: 'High-Speed Agentic Flash',
-      tierClass: 'badge-good',
+      tierBadge: 'Cepat / Ekonomis',
+      tierClass: 'badge-fast',
       tierCategory: 'flash',
-      contextWindow: '128,000 tokens',
-      architecture: 'Ultra-Fast Low-Latency Agentic Model',
-      strongestArena: 'High-speed JSON parsing, automated classification against PMN taxonomy, and free-tier experimentation.',
-      failureMode: 'Lower capacity for subtle dialectical tensions; compresses nuance into bullet points.',
-      ingestionStrategy: 'Zhipu Open Platform API.',
-      thirdPartyRank: 'Zero-cost / ultra-high throughput workhorse'
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'MoE 284B total / 13B aktif',
+      strongestArena: 'Lintasan berulang murah: penelusuran rujukan, penyiapan kutipan.',
+      failureMode: 'Untuk vonis, naikkan ke V4-Pro.',
+      ingestionStrategy: 'API kompatibel OpenAI/Anthropic.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di api-docs.deepseek.com'
     },
+    // ALIBABA CLOUD
     {
-      id: 'glm-4-9b-chat',
-      name: 'GLM-4-9B-Chat',
-      apiString: 'THUDM/glm-4-9b-chat',
-      family: 'glm',
-      familyName: 'Zhipu AI (Z.ai)',
-      tierBadge: 'Open Local Edge',
-      tierClass: 'badge-good',
-      tierCategory: 'predecessor',
-      contextWindow: '128,000 tokens',
-      architecture: '9B Dense Open-Weights Model',
-      strongestArena: 'Offline, edge, and air-gapped local machines running lightweight PMN audits without external API calls.',
-      failureMode: 'Limited parametric capacity compared to 70B+ models on complex metaphysical questions.',
-      ingestionStrategy: 'Ollama (ollama run glm4) or vLLM on a single consumer GPU (12GB-16GB VRAM).',
-      thirdPartyRank: 'High benchmark score in the sub-10B open-weights class'
-    },
-
-    // META AI (LLAMA)
-    {
-      id: 'llama-33-70b-instruct',
-      name: 'Llama 3.3 70B Instruct',
-      apiString: 'meta-llama/llama-3.3-70b-instruct',
-      family: 'llama',
-      familyName: 'Meta AI',
-      tierBadge: 'Gold Standard Sovereign Open-Weights',
+      id: 'qwen-37-max',
+      name: 'Qwen3.7-Max',
+      apiString: 'qwen3.7-max',
+      family: 'qwen',
+      familyName: 'Alibaba Cloud',
+      tierBadge: 'Frontier',
       tierClass: 'badge-best',
       tierCategory: 'pro',
-      contextWindow: '128,000 tokens',
-      architecture: '70B Dense Open-Weights Transformer',
-      strongestArena: 'Completely sovereign, air-gapped, on-premises deployment for confidential institutional audits; zero data retention and high resistance to external corporate censorship.',
-      failureMode: '128K context cannot hold full manuscript; requires targeted module injection or RAG pipeline.',
-      ingestionStrategy: 'Self-hosted via vLLM / Ollama or cloud serverless endpoints (Groq, Cerebras, Together AI).',
-      thirdPartyRank: 'De facto global benchmark for open-weights 70B inference'
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Mode berpikir hibrida (Thinking / Non-Thinking)',
+      strongestArena: 'Mode Thinking berguna untuk memaksa penalaran eksplisit pada klaim kausal PMN.',
+      failureMode: 'Aktifkan mode Thinking secara sadar; mode default bisa terlalu ringkas.',
+      ingestionStrategy: 'Model Studio; kompatibel OpenAI Chat Completions dan Anthropic Messages.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di alibabacloud.com/help/en/model-studio'
+    },
+    {
+      id: 'qwen-37-plus',
+      name: 'Qwen3.7-Plus',
+      apiString: 'qwen3.7-plus',
+      family: 'qwen',
+      familyName: 'Alibaba Cloud',
+      tierBadge: 'Seimbang',
+      tierClass: 'badge-good',
+      tierCategory: 'pro',
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Tier plus',
+      strongestArena: 'Sesi pembacaan sehari-hari dengan biaya sedang.',
+      failureMode: 'Sama seperti di atas.',
+      ingestionStrategy: 'Model Studio.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di alibabacloud.com/help/en/model-studio'
+    },
+    // MOONSHOT AI
+    {
+      id: 'kimi-k3',
+      name: 'Kimi K3',
+      apiString: 'kimi-k3',
+      family: 'kimi',
+      familyName: 'Moonshot AI',
+      tierBadge: 'Konteks 1M',
+      tierClass: 'badge-best',
+      tierCategory: 'pro',
+      contextWindow: '1.000.000 token',
+      architecture: '2,8T parameter, visi native',
+      strongestArena: 'Konteks 1M memuat seluruh korpus PMN sekaligus — paling cocok untuk pertanyaan yang menuntut melihat lintas seluruh naskah.',
+      failureMode: 'Konteks besar tidak menjamin penarikan yang tepat; tetap minta kutipan §.',
+      ingestionStrategy: 'API kompatibel OpenAI dan Anthropic.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di platform.moonshot.ai'
+    },
+    {
+      id: 'kimi-k27-code',
+      name: 'Kimi K2.7 Code',
+      apiString: 'kimi-k2.7-code',
+      family: 'kimi',
+      familyName: 'Moonshot AI',
+      tierBadge: 'Konteks Panjang',
+      tierClass: 'badge-good',
+      tierCategory: 'pro',
+      contextWindow: '256.000 token',
+      architecture: 'Model koding, patuh instruksi di konteks panjang',
+      strongestArena: 'Menjalankan pemeriksaan terstruktur atas naskah (hitung, silang, tabulasi).',
+      failureMode: 'Berorientasi koding; untuk dialektika filosofis pilih K3.',
+      ingestionStrategy: 'API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di platform.moonshot.ai'
+    },
+    // MISTRAL AI
+    {
+      id: 'mistral-medium-35',
+      name: 'Mistral Medium 3.5',
+      apiString: 'mistral-medium-3.5',
+      family: 'mistral',
+      familyName: 'Mistral AI',
+      tierBadge: 'Frontier Multimodal',
+      tierClass: 'badge-best',
+      tierCategory: 'pro',
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Penalaran dapat disetel via reasoning_effort',
+      strongestArena: 'Parameter reasoning_effort memungkinkan menaikkan usaha khusus untuk seksi berat.',
+      failureMode: 'Setel reasoning_effort secara sadar; default bisa terlalu rendah untuk Bagian XIII.',
+      ingestionStrategy: 'API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di docs.mistral.ai'
+    },
+    {
+      id: 'mistral-large-3',
+      name: 'Mistral Large 3',
+      apiString: 'mistral-large-3',
+      family: 'mistral',
+      familyName: 'Mistral AI',
+      tierBadge: 'MoE Besar',
+      tierClass: 'badge-good',
+      tierCategory: 'pro',
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'MoE jarang, 41B aktif / 675B total',
+      strongestArena: 'Sintesis panjang di Eropa dengan opsi penempatan data.',
+      failureMode: 'Periksa ketersediaan wilayah.',
+      ingestionStrategy: 'API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di docs.mistral.ai'
+    },
+    {
+      id: 'mistral-small-4',
+      name: 'Mistral Small 4',
+      apiString: 'mistral-small-4',
+      family: 'mistral',
+      familyName: 'Mistral AI',
+      tierBadge: 'Hibrida 256k',
+      tierClass: 'badge-fast',
+      tierCategory: 'flash',
+      contextWindow: '256.000 token',
+      architecture: 'Menyatukan instruct, reasoning, dan coding',
+      strongestArena: 'Pilihan hemat untuk lintasan berulang dengan konteks besar.',
+      failureMode: 'Untuk vonis filosofis, naikkan tier.',
+      ingestionStrategy: 'API atau bobot yang tersedia.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di docs.mistral.ai'
+    },
+    // Z.AI (ZHIPU)
+    {
+      id: 'glm-53',
+      name: 'GLM-5.3',
+      apiString: 'glm-5.3',
+      family: 'glm',
+      familyName: 'Z.ai (Zhipu)',
+      tierBadge: 'Bobot Terbuka Terbaru',
+      tierClass: 'badge-best',
+      tierCategory: 'pro',
+      contextWindow: 'Lihat dokumentasi resmi',
+      architecture: 'Rilis terbaru keluarga GLM-5',
+      strongestArena: 'Pilihan bobot-terbuka terkuat bila naskah tidak boleh meninggalkan mesinmu.',
+      failureMode: 'Butuh perangkat keras serius; periksa kebutuhan VRAM sebelum berkomitmen.',
+      ingestionStrategy: 'Bobot di Hugging Face (zai-org); atau API Z.ai.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di docs.z.ai dan huggingface.co/zai-org'
+    },
+    {
+      id: 'glm-52',
+      name: 'GLM-5.2',
+      apiString: 'glm-5.2',
+      family: 'glm',
+      familyName: 'Z.ai (Zhipu)',
+      tierBadge: 'Konteks 1M',
+      tierClass: 'badge-good',
+      tierCategory: 'pro',
+      contextWindow: '1.000.000 token',
+      architecture: 'Untuk tugas berhorizon panjang',
+      strongestArena: 'Konteks 1M memuat seluruh korpus; jalur berdaulat penuh.',
+      failureMode: 'Sama seperti di atas.',
+      ingestionStrategy: 'Bobot di Hugging Face; atau API.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di huggingface.co/zai-org'
+    },
+    {
+      id: 'glm-5',
+      name: 'GLM-5',
+      apiString: 'glm-5',
+      family: 'glm',
+      familyName: 'Z.ai (Zhipu)',
+      tierBadge: 'MoE 744B · MIT',
+      tierClass: 'badge-good',
+      tierCategory: 'pro',
+      contextWindow: '200.000 token',
+      architecture: 'MoE 744B / 40B aktif, lisensi MIT',
+      strongestArena: 'Bobot terbuka berlisensi MIT — paling permisif untuk pemasangan lokal.',
+      failureMode: '200K konteks: potong korpus per Bagian.',
+      ingestionStrategy: 'Bobot di Hugging Face (zai-org/GLM-5).',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di huggingface.co/zai-org/GLM-5'
+    },
+    // XAI
+    {
+      id: 'grok-46',
+      name: 'Grok 4.6',
+      apiString: 'grok-4.6',
+      family: 'grok',
+      familyName: 'xAI',
+      tierBadge: 'Konteks 500k',
+      tierClass: 'badge-good',
+      tierCategory: 'pro',
+      contextWindow: '500.000 token',
+      architecture: 'Model frontier untuk koding, agen, kerja pengetahuan',
+      strongestArena: 'Konteks 500k memuat sebagian besar korpus; masukan teks dan gambar.',
+      failureMode: 'Batas pengetahuan 1 Februari 2026 — jangan tanyakan peristiwa sesudahnya.',
+      ingestionStrategy: 'API di api.x.ai/v1.',
+      thirdPartyRank: 'Diverifikasi 2026-09-09 di docs.x.ai'
     }
   ]
 
@@ -613,7 +661,7 @@ Authoritative 5-Stage Capture Sequence (§7.3c-i). Ground moral evaluations in t
 
 USER_QUERY = "Audit recent banking regulatory exemptions against PMN's 5-stage capture sequence."
 
-# 3. Call Remote API (Example: Anthropic Claude 3.7 Sonnet)
+# 3. Call Remote API (Example: Anthropic Claude Opus 5)
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 if ANTHROPIC_API_KEY:
     response = httpx.post(
@@ -803,9 +851,192 @@ if ANTHROPIC_API_KEY:
           </p>
         </div>
 
+        {/* SECTION 1: WHAT THIS CORPUS CANNOT DO FOR YOU */}
+        <div className="step" id="corpus-limits">
+          <span className="step-num">Step 01</span>
+          <h2 className="step-h2">Before You Start: Where This Corpus Is Weak</h2>
+          <p>
+            Every guide of this kind tells you which model to pick. Model choice is the variable that matters
+            least here. The findings below were measured against the v120 corpus on 2026-09-09, and they apply
+            <strong> identically to the strongest and the weakest model on this page</strong>. An AI reading this
+            corpus will reproduce these weaknesses confidently, because nothing in the text marks them.
+          </p>
+          <p>
+            This section exists for a reason internal to the framework itself. PMN&apos;s primary diagnostic
+            (&sect;1.2) is whether a framework revises under evidence or insulates itself from it. A framework
+            that hides its weak points from its own readers has already begun to insulate. Publishing them is an
+            application of PMN, not a concession.
+          </p>
+
+          <div className="workflow-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', marginTop: '1.2rem' }}>
+            {[
+              {
+                h: '74 attributions carry no source',
+                d: 'Sentences of the form "Gramsci argues that…" appear 81 times; 74 of them have no citation within three sentences. Gramsci alone carries 35.',
+                w: 'Ask the model to quote the section it is drawing on before accepting any claim about what a thinker held. If it cannot name a section, treat the attribution as the manuscript\'s reading, not as a report of the source.'
+              },
+              {
+                h: 'No causal claim states what would refute it',
+                d: 'Of 57 sections classified as causal-mechanism claims, 0 state a defeater. Scope hedging is good (84% qualify their conditions) — but hedging weakens a claim without saying what would overturn it.',
+                w: 'When you ask a model to "test" a claim, ask it first: what evidence would defeat this? If the corpus does not say, that is the finding — make the model report the absence instead of inventing a test.'
+              },
+              {
+                h: '13 empirical and historical sections cite nothing',
+                d: 'Including the whole of Part XVII (the case studies, ~5,100 words) and §7.8 Regime Types (4,004 words) — the two places whose function is to ground the framework in real history.',
+                w: 'These are where a model is most likely to fabricate supporting detail. Ask for the historical claim and the source separately, and verify the source yourself.'
+              },
+              {
+                h: 'The canonical definitions section is outvoted on S',
+                d: '§15.0b states that S is "a qualitative classification, not a quantity" and that S = f(R, B, V) is "not a measurable sum". Four other places write S = R + B + V — §3.4b (twice), §7.8, §15.14, and the glossary.',
+                w: 'If a model computes S as a sum, it is following the majority of the text against the section that claims authority over the term. Point it at §15.0b.'
+              },
+              {
+                h: 'The glossary and §11.0 disagree on a count',
+                d: 'The glossary entry is "the seven diagnostic questions". §11.0 is headed "Nine diagnostic questions" and lists eight items, one of which the text itself calls the eighth. v118.6 and v119 both said seven.',
+                w: 'Expect two different answers to the same question. Seven is the reading supported by every source except the current heading.'
+              },
+              {
+                h: 'What this list is not',
+                d: 'It is not a list of errors in the philosophy. Every item is about traceability: whether a reader can check a claim, not whether the claim is true.',
+                w: 'Use it to calibrate how much weight to put on a given answer — not to discount the framework.'
+              }
+            ].map((c, i) => (
+              <div key={i} className="workflow-card">
+                <h4>{c.h}</h4>
+                <p>{c.d}</p>
+                <p><strong>What to do:</strong> {c.w}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* SECTION 4: UPGRADED PROMPT LIBRARY */}
+        <div className="step" id="prompt-library">
+          <span className="step-num">Step 02</span>
+          <h2 className="step-h2">The Operational Prompt Library: 9 Surgical Roles</h2>
+          <p>
+            Avoid generic requests. Giving the LLM a specialized structural objective suppresses polite evasions and activates PMN's rigorous diagnostic apparatus. Select an operational role below:
+          </p>
+
+          <div className="variants" style={{ marginTop: '1.2rem' }}>
+            <div className="vtabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+              {[
+                ['priming', `Priming Protocol (v${version})`],
+                ['general', '1. Structural Analyst'],
+                ['diagnostic', '2. Capture Diagnostician (§7.3c-i)'],
+                ['adversarial', '3. Red-Team Debate (§12.1)'],
+                ['transformation', '4. Counter-Power Architect (T = S·D·P·G)'],
+                ['meaning', '5. Meaning Triage (§5.6b/c)'],
+                ['falsification', '6. Empirical Falsifier & Auditor'],
+                ['agent', '7. Autonomous Agentic System'],
+                ['harness', '8. Python API Harness']
+              ].map(([key, label]) => (
+                <button
+                  key={key}
+                  className={`vtab ${activeRoleTab === key ? 'active' : ''}`}
+                  onClick={() => setActiveRoleTab(key as any)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* TAB CONTENTS */}
+            <div className="vpanel active" style={{ marginTop: '1rem' }}>
+              <div className="code-block">
+                <span className="code-label">
+                  {activeRoleTab === 'priming' && 'Comprehensive Priming Protocol (Use on First Turn)'}
+                  {activeRoleTab === 'general' && 'Role 1: General Structural Materialist Analyst Prompt'}
+                  {activeRoleTab === 'diagnostic' && 'Role 2: Forensic Institutional Capture Diagnostician (§7.3c-i)'}
+                  {activeRoleTab === 'adversarial' && 'Role 3: Adversarial Red-Team & Dialectical Stress-Tester'}
+                  {activeRoleTab === 'transformation' && 'Role 4: Strategic Transformation & Counter-Power Architect'}
+                  {activeRoleTab === 'meaning' && 'Role 5: Meaning Infrastructure & Acute Triage Advisor (§5.6b/c)'}
+                  {activeRoleTab === 'falsification' && 'Role 6: Epistemic Falsification & Empirical Audit Specialist'}
+                  {activeRoleTab === 'agent' && 'Role 7: Developer / Autonomous Agentic System Prompt'}
+                  {activeRoleTab === 'harness' && 'Role 8: Python API Harness Code Snippet'}
+                </span>
+                <button
+                  className={`copy-btn ${copiedStates[activeRoleTab] ? 'copied' : ''}`}
+                  onClick={() => copyText(activeRoleTab, prompts[activeRoleTab])}
+                >
+                  {copiedStates[activeRoleTab] ? 'Copied' : 'Copy Content'}
+                </button>
+                <div className="code-text">{prompts[activeRoleTab]}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SECTION 5: STRUCTURAL QUESTION BANK */}
+        <div className="step" id="question-bank">
+          <span className="step-num">Step 03</span>
+          <h2 className="step-h2">The Structural Question Bank: 8 Tested Field Templates</h2>
+          <p>
+            Vague questions produce bland idealist summaries. A high-yield PMN diagnostic prompt identifies the target arrangement, names suspected information asymmetries, and specifies the required empirical falsification standard.
+          </p>
+
+          <div className="question-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', marginTop: '1.2rem' }}>
+            <div className="question-card">
+              <div className="question-name">1. Gig-Economy &amp; Labor Flexibility</div>
+              <div className="question-note">
+                "Using PMN §3.4, §6.2, and §11.3, evaluate app-based gig-economy 'flexibility': Is worker participation driven by genuine self-authorship, or is it a defensive adaptation formed within a structurally degraded alternative set? What empirical data would falsify this conclusion?"
+              </div>
+            </div>
+
+            <div className="question-card">
+              <div className="question-name">2. Regulatory Capture &amp; Revolving Doors</div>
+              <div className="question-note">
+                "Audit [Agency X] against PMN's Authoritative 5-Stage Capture Sequence (§7.3c-i). At which stage has the institution currently consolidated? Trace how technical complexity is being mobilized as a deliberate power resource to evade public contestability (§6.5)."
+              </div>
+            </div>
+
+            <div className="question-card">
+              <div className="question-name">3. Healthcare &amp; Pharmaceutical Complexity</div>
+              <div className="question-note">
+                "Apply the Multiplicative Transfer Equation (T = S · D · P · G, §6.3 / §15.8) to pharmaceutical patent thickets. Which variable represents the primary extraction bottleneck? How does opacity in pricing suppress contestability?"
+              </div>
+            </div>
+
+            <div className="question-card">
+              <div className="question-name">4. Algorithmic Attention &amp; Cognitive Rent</div>
+              <div className="question-note">
+                "Analyze social media recommendation algorithms through PMN §6.2 and §8.2. How do feedback loops generate narrative inertia and cognitive extraction? Does this constitute a violation of genuine becoming at the biological floor?"
+              </div>
+            </div>
+
+            <div className="question-card">
+              <div className="question-name">5. Institutional Collapse &amp; Civic Meaning</div>
+              <div className="question-note">
+                "Analyze the collapse of local municipal and voluntary civic associations through PMN §5.6b. Evaluate their status across the 5 functional dimensions of meaning infrastructure. Formulate an immediate material triage protocol (§5.6c)."
+              </div>
+            </div>
+
+            <div className="question-card">
+              <div className="question-name">6. Climate Transition &amp; Burden Distribution</div>
+              <div className="question-note">
+                "Subject [Proposed Climate Policy] to PMN §3.4 and §10.8. Does the transition cost fall disproportionately upon communities hovering near the biological floor while leaving incumbent capital custodians insulated from systemic risk?"
+              </div>
+            </div>
+
+            <div className="question-card">
+              <div className="question-name">7. Frontier AI &amp; The Custodian Problem</div>
+              <div className="question-note">
+                "Evaluate frontier AI governance consortia against PMN §1.6 and §14.6. Who monitors the AI evaluation monitors? Trace how compliance audits can be absorbed into Stage 4 capture (objective redefinition)."
+              </div>
+            </div>
+
+            <div className="question-card">
+              <div className="question-name">8. Reflexive Self-Critique of PMN</div>
+              <div className="question-note">
+                "Subject PMN's own reform prescriptions to §12.5 (Epistemic Traps). Is this proposal falling into Technocratic Drift (§12.5b), Moralizing Substitution (§12.5c), or Paralysis by Complexity (§12.5d)?"
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* SECTION 1: DUAL DEPLOYMENT MODES */}
         <div className="step" id="deploy-modes">
-          <span className="step-num">Step 01</span>
+          <span className="step-num">Step 04</span>
           <h2 className="step-h2">Deployment Architecture: Web Portals vs. Local Developer API Harnesses</h2>
           <p>
             Choose between zero-setup browser interfaces or automated programmatic harnesses connected to frontier API endpoints:
@@ -838,7 +1069,7 @@ if ANTHROPIC_API_KEY:
                 </div>
 
                 <div className="workflow-card">
-                  <div className="workflow-name">Claude Projects (Claude 3.7 Sonnet)</div>
+                  <div className="workflow-name">Claude Projects (Claude Opus 5 / Sonnet 5)</div>
                   <div className="workflow-note">
                     Attach <code>pmn_corpus_for_ai.md</code> into Project Knowledge. Leverage 200k-token context and Extended Thinking for deep dialectical reasoning, multi-part synthesis, and assumption archaeology without persona decay.
                   </div>
@@ -846,7 +1077,7 @@ if ANTHROPIC_API_KEY:
                 </div>
 
                 <div className="workflow-card">
-                  <div className="workflow-name">Google AI Studio (Gemini 1.5 Pro / 2.0 Flash)</div>
+                  <div className="workflow-name">Google AI Studio (Gemini 3.8 Flash / 3.7 Flash)</div>
                   <div className="workflow-note">
                     Massive 2M-token context window ingests the entire ~330,000-word uncompressed manuscript in a single prompt. Run simultaneous cross-sectional queries across Part I through XVII with sub-second retrieval.
                   </div>
@@ -854,15 +1085,15 @@ if ANTHROPIC_API_KEY:
                 </div>
 
                 <div className="workflow-card">
-                  <div className="workflow-name">DeepSeek Chat Web (DeepSeek-V3 &amp; R1)</div>
+                  <div className="workflow-name">DeepSeek Chat Web (DeepSeek-V4-Pro &amp; R1)</div>
                   <div className="workflow-note">
-                    DeepSeek-V3 (671B MoE) and DeepSeek-R1 extended reasoning. Exceptional resistance to establishment propaganda and ruthless execution of the 5-Stage Institutional Capture Sequence (§7.3c-i). Note: Sensitive political-economy topics are subject to CAC regulatory filtering.
+                    DeepSeek-V4-Pro (671B MoE) and DeepSeek-V4-Pro extended reasoning. Exceptional resistance to establishment propaganda and ruthless execution of the 5-Stage Institutional Capture Sequence (§7.3c-i). Note: Sensitive political-economy topics are subject to CAC regulatory filtering.
                   </div>
                   <span className="workflow-badge badge-good">Best for Capture Forensics</span>
                 </div>
 
                 <div className="workflow-card">
-                  <div className="workflow-name">OpenAI ChatGPT (o1, o3-mini &amp; GPT-4o)</div>
+                  <div className="workflow-name">OpenAI ChatGPT (GPT-6 Astra &amp; GPT-5.6 Sol)</div>
                   <div className="workflow-note">
                     Configure a Custom GPT with PMN knowledge files and Code Interpreter. Model the non-linear Transformation Pressure Formula ($T = S \cdot D \cdot P \cdot G$) and simulate power transfer thresholds with multi-step reasoning.
                   </div>
@@ -899,7 +1130,7 @@ if ANTHROPIC_API_KEY:
                 <div className="workflow-card">
                   <div className="workflow-name">Multi-Provider Gateways (OpenRouter / LiteLLM)</div>
                   <div className="workflow-note">
-                    Unified OpenAI-compatible proxy routing between Claude 3.7 Sonnet, Gemini 1.5 Pro, Qwen 2.5 72B, and DeepSeek-V3 using a single API key. Automatically falls back if rate limits or outages occur.
+                    Unified OpenAI-compatible proxy routing between Claude Opus 5, Gemini 3.8 Flash, Qwen3.7-Max, and DeepSeek-V4-Pro using a single API key. Automatically falls back if rate limits or outages occur.
                   </div>
                   <span className="workflow-badge badge-good">Best Multi-Model Proxy</span>
                 </div>
@@ -915,7 +1146,7 @@ if ANTHROPIC_API_KEY:
                 <div className="workflow-card">
                   <div className="workflow-name">Ultra-Fast Serverless Inference (Groq / Cerebras)</div>
                   <div className="workflow-note">
-                    For open-weight models like Llama 3.3 70B, Qwen 2.5 72B, or DeepSeek-V3, utilize cloud LPU/WSE hardware yielding 800+ tokens/second rather than overloading local laptop GPUs.
+                    For open-weight models like GLM-5 (MIT), GLM-5.2, or Mistral Small 4, utilize cloud LPU/WSE hardware yielding 800+ tokens/second rather than overloading local laptop GPUs.
                   </div>
                   <span className="workflow-badge badge-good">Best for High-Speed Tokens</span>
                 </div>
@@ -923,7 +1154,7 @@ if ANTHROPIC_API_KEY:
 
               <div className="note-box" style={{ marginTop: '1.2rem' }}>
                 <span className="note-label">Why API Harnesses Beat Local GPU Serving</span>
-                Frontier models (such as 671B DeepSeek-V3 or massive 70B+ architectures) require multi-cluster server infrastructure that consumer hardware cannot run. Local developer harnesses give you the privacy of local file management and custom scripts while leveraging datacenter-scale compute via official API keys.
+                Frontier models (such as 671B DeepSeek-V4-Pro or massive 70B+ architectures) require multi-cluster server infrastructure that consumer hardware cannot run. Local developer harnesses give you the privacy of local file management and custom scripts while leveraging datacenter-scale compute via official API keys.
               </div>
             </div>
           )}
@@ -931,7 +1162,7 @@ if ANTHROPIC_API_KEY:
 
         {/* SECTION 2: MODEL SELECTION MATRIX */}
         <div className="step" id="model-matrix">
-          <span className="step-num">Step 02</span>
+          <span className="step-num">Step 05</span>
           <h2 className="step-h2">Frontier Model Selection Matrix: Pro, Flash &amp; Reasoning Tiers</h2>
           <p>
             Modern AI families feature multiple distinct tiers across generations: heavy **Pro** models for deep synthesis, high-throughput **Flash** models for fast agentic loops, and **Reasoning** models for formal mathematical deduction. Filter and search the matrix below:
@@ -995,7 +1226,7 @@ if ANTHROPIC_API_KEY:
                   </span>
                 </div>
                 <strong style={{ display: 'block', fontSize: '0.96rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>
-                  Claude 3.7 Sonnet &amp; 3.5 Sonnet
+                  Claude Opus 5 &amp; Claude Sonnet 5
                 </strong>
                 <p style={{ fontSize: '0.81rem', color: 'var(--ink2)', lineHeight: 1.55, margin: '0 0 0.5rem' }}>
                   <strong>Why it wins:</strong> #1 on Artificial Analysis Intelligence Index (score 140+). Dual-mode Extended Thinking maintains philosophical rigor across multi-turn exchanges without diluting non-ideal naturalist premises. Unrivaled at holding Part XIII permanent tensions without forced compromises.
@@ -1016,7 +1247,7 @@ if ANTHROPIC_API_KEY:
                   </span>
                 </div>
                 <strong style={{ display: 'block', fontSize: '0.96rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>
-                  OpenAI o1 &amp; OpenAI o3-mini
+                  GPT-6 Astra &amp; GPT-5.6 Sol
                 </strong>
                 <p style={{ fontSize: '0.81rem', color: 'var(--ink2)', lineHeight: 1.55, margin: '0 0 0.5rem' }}>
                   <strong>Why it wins:</strong> Pure RL deliberative Chain-of-Thought cleanly decouples axiomatic claims from rhetorical spin. Coldly traces the 5-Stage Institutional Capture sequence (§7.3c-i) and computes multi-variable pressure thresholds in the Transfer Equation ($T = S \cdot D \cdot P \cdot G$).
@@ -1037,13 +1268,12 @@ if ANTHROPIC_API_KEY:
                   </span>
                 </div>
                 <strong style={{ display: 'block', fontSize: '0.96rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>
-                  Gemini 1.5 Pro &amp; 2.0 Flash Thinking
+                  Kimi K3 &amp; Gemini 3.8 Flash
                 </strong>
                 <p style={{ fontSize: '0.81rem', color: 'var(--ink2)', lineHeight: 1.55, margin: '0 0 0.5rem' }}>
-                  <strong>Why it wins:</strong> Gemini 1.5 Pro's 2,000,000-token context window is the only production system capable of ingesting the entire ~330,000-word uncompressed manuscript in a single prompt. Traces unbroken causal threads from Epistemology (Part I) to Political Economy (Part XI) without RAG loss.
-                </p>
+                  <strong>Why it wins:</strong> Kimi K3 carries a 1,000,000-token context window and GLM-5.2 matches it, so the entire ~330,000-word uncompressed corpus fits in a single prompt on more than one provider — which matters, because it lets you ask the same whole-corpus question twice and compare. A large window is not the same as reliable retrieval: always demand the section number behind an answer rather than a paraphrase.</p>
                 <div style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', color: 'var(--mute)', background: 'var(--bg2)', padding: '0.4rem 0.6rem', borderRadius: '3px' }}>
-                  <strong>Deployment:</strong> Google AI Studio with <code>pmn_corpus_for_ai.md</code> (Gemini 1.5 Pro, temp 0.2).
+                  <strong>Deployment:</strong> Google AI Studio or the Kimi platform with <code>pmn_corpus_for_ai.md</code>, temperature 0.2.
                 </div>
               </div>
 
@@ -1058,10 +1288,10 @@ if ANTHROPIC_API_KEY:
                   </span>
                 </div>
                 <strong style={{ display: 'block', fontSize: '0.96rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>
-                  Qwen 2.5 72B, Llama 3.3 70B &amp; DeepSeek-V3
+                  GLM-5.3, GLM-5 (MIT) &amp; DeepSeek-V4-Pro
                 </strong>
                 <p style={{ fontSize: '0.81rem', color: 'var(--ink2)', lineHeight: 1.55, margin: '0 0 0.5rem' }}>
-                  <strong>Why it wins:</strong> Enables completely sovereign, private, air-gapped deployments. Qwen 2.5 72B delivers balanced, non-parochial political-economy analysis; Llama 3.3 70B provides enterprise compliance; DeepSeek-V3 provides datacenter-scale 671B MoE efficiency (~$0.14/1M tokens).
+                  <strong>Why it wins:</strong> Enables completely sovereign, private, air-gapped deployments. GLM-5 ships under an MIT licence, the most permissive option for a fully local install; Mistral Small 4 provides enterprise compliance; DeepSeek-V4-Pro provides datacenter-scale 671B MoE efficiency (~$0.14/1M tokens).
                 </p>
                 <div style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', color: 'var(--mute)', background: 'var(--bg2)', padding: '0.4rem 0.6rem', borderRadius: '3px' }}>
                   <strong>Deployment:</strong> Self-hosted via vLLM / Ollama or through OpenRouter / Together AI.
@@ -1074,7 +1304,7 @@ if ANTHROPIC_API_KEY:
               <div style={{ border: '1px solid var(--rule)', background: 'rgba(155,95,95,0.06)', padding: '0.75rem 0.95rem', borderRadius: '3px', display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
                 <span style={{ fontSize: '1rem', lineHeight: 1 }}>⚠️</span>
                 <p style={{ margin: 0, fontSize: '0.81rem', lineHeight: 1.55, color: 'var(--ink2)' }}>
-                  <strong style={{ color: '#9b5f5f' }}>Critical Caveats on DeepSeek-R1 (State Censorship Guardrails &amp; Reasoning Loops):</strong> While DeepSeek-R1 is a remarkable achievement in open reinforcement learning, researchers conducting institutional and political critique must account for two real-world constraints: (1) Mandatory CAC regulatory compliance causes refusals or sanitized answers on queries regarding sensitive state governance, regime power, and political economy; (2) On open-ended qualitative philosophy, R1 is prone to repetitive thinking loops and unpredictable language mixing in <code>&lt;think&gt;</code> traces. For uncensored structural critique, pair it with Claude 3.7 Sonnet or Qwen 2.5 72B.
+                  <strong style={{ color: '#9b5f5f' }}>Critical Caveats on Chinese-hosted APIs (State Censorship Guardrails):</strong> While the DeepSeek V4 family is a remarkable achievement in open reinforcement learning, researchers conducting institutional and political critique must account for two real-world constraints: (1) Mandatory CAC regulatory compliance causes refusals or sanitized answers on queries regarding sensitive state governance, regime power, and political economy; (2) On open-ended qualitative philosophy, R1 is prone to repetitive thinking loops and unpredictable language mixing in <code>&lt;think&gt;</code> traces. For uncensored structural critique, pair it with Claude Opus 5 or Qwen3.7-Max.
                 </p>
               </div>
 
@@ -1088,8 +1318,7 @@ if ANTHROPIC_API_KEY:
               <div style={{ border: '1px solid var(--rule)', background: 'var(--bg)', padding: '0.75rem 0.95rem', borderRadius: '3px', display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
                 <span style={{ fontSize: '1rem', lineHeight: 1 }}>⚡</span>
                 <p style={{ margin: 0, fontSize: '0.81rem', lineHeight: 1.55, color: 'var(--ink2)' }}>
-                  <strong style={{ color: 'var(--mute)' }}>Why Flash Models are Limited for Heavy Philosophy:</strong> High-throughput models (Gemini 2.0 Flash, Claude 3.5 Haiku, GPT-4o-mini, GLM-4-Flash) are engineered for sub-second token velocity, JSON parsing, and rapid batch lookups. When tasked with dense non-ideal ontology or institutional conflict, they systematically compress multi-step proofs into superficial bullet points, drop structural variables, and fall victim to sycophantic alignment. Use Flash models for programmatic automation and glossary lookups; reserve Pro and RL-Reasoning models for philosophical analysis.
-                </p>
+                  <strong style={{ color: 'var(--mute)' }}>Why Flash Models are Limited for Heavy Philosophy:</strong> High-throughput tiers (Gemini 3.5 Flash-Lite, Claude Haiku 4.5, GPT-5.6 Luna) are built for volume, not for sustained argument. Use them for the mechanical passes — locating sections, checking whether a citation exists, tabulating cross-references — and hand the verdict to a frontier tier. On this corpus that division matters more than usual: 0 of 57 causal-mechanism sections state a defeater, so a fast model asked to &quot;evaluate&quot; a claim has nothing to anchor against and will produce fluent agreement.</p>
               </div>
             </div>
           </div>
@@ -1104,8 +1333,10 @@ if ANTHROPIC_API_KEY:
                 ['gemini', 'Google DeepMind'],
                 ['qwen', 'Alibaba Qwen'],
                 ['deepseek', 'DeepSeek'],
-                ['glm', 'Zhipu GLM'],
-                ['llama', 'Meta Llama']
+                ['kimi', 'Moonshot Kimi'],
+                ['mistral', 'Mistral AI'],
+                ['glm', 'Z.ai GLM'],
+                ['grok', 'xAI Grok']
               ].map(([key, label]) => (
                 <button
                   key={key}
@@ -1321,7 +1552,7 @@ if ANTHROPIC_API_KEY:
 
         {/* SECTION 3: DEVELOPER HARNESS SETUP */}
         <div className="step" id="local-harness">
-          <span className="step-num">Step 03</span>
+          <span className="step-num">Step 06</span>
           <h2 className="step-h2">Developer Harness Setup: Python Scripts, Agentic IDEs &amp; LiteLLM</h2>
           <p>
             Build your own automated PMN auditing harness in minutes. Keep your research notes and confidential datasets stored locally on your machine while dispatching surgical analytical calls to frontier APIs:
@@ -1374,133 +1605,9 @@ if ANTHROPIC_API_KEY:
           </div>
         </div>
 
-        {/* SECTION 4: UPGRADED PROMPT LIBRARY */}
-        <div className="step" id="prompt-library">
-          <span className="step-num">Step 04</span>
-          <h2 className="step-h2">The Operational Prompt Library: 9 Surgical Roles</h2>
-          <p>
-            Avoid generic requests. Giving the LLM a specialized structural objective suppresses polite evasions and activates PMN's rigorous diagnostic apparatus. Select an operational role below:
-          </p>
-
-          <div className="variants" style={{ marginTop: '1.2rem' }}>
-            <div className="vtabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
-              {[
-                ['priming', `Priming Protocol (v${version})`],
-                ['general', '1. Structural Analyst'],
-                ['diagnostic', '2. Capture Diagnostician (§7.3c-i)'],
-                ['adversarial', '3. Red-Team Debate (§12.1)'],
-                ['transformation', '4. Counter-Power Architect (T = S·D·P·G)'],
-                ['meaning', '5. Meaning Triage (§5.6b/c)'],
-                ['falsification', '6. Empirical Falsifier & Auditor'],
-                ['agent', '7. Autonomous Agentic System'],
-                ['harness', '8. Python API Harness']
-              ].map(([key, label]) => (
-                <button
-                  key={key}
-                  className={`vtab ${activeRoleTab === key ? 'active' : ''}`}
-                  onClick={() => setActiveRoleTab(key as any)}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            {/* TAB CONTENTS */}
-            <div className="vpanel active" style={{ marginTop: '1rem' }}>
-              <div className="code-block">
-                <span className="code-label">
-                  {activeRoleTab === 'priming' && 'Comprehensive Priming Protocol (Use on First Turn)'}
-                  {activeRoleTab === 'general' && 'Role 1: General Structural Materialist Analyst Prompt'}
-                  {activeRoleTab === 'diagnostic' && 'Role 2: Forensic Institutional Capture Diagnostician (§7.3c-i)'}
-                  {activeRoleTab === 'adversarial' && 'Role 3: Adversarial Red-Team & Dialectical Stress-Tester'}
-                  {activeRoleTab === 'transformation' && 'Role 4: Strategic Transformation & Counter-Power Architect'}
-                  {activeRoleTab === 'meaning' && 'Role 5: Meaning Infrastructure & Acute Triage Advisor (§5.6b/c)'}
-                  {activeRoleTab === 'falsification' && 'Role 6: Epistemic Falsification & Empirical Audit Specialist'}
-                  {activeRoleTab === 'agent' && 'Role 7: Developer / Autonomous Agentic System Prompt'}
-                  {activeRoleTab === 'harness' && 'Role 8: Python API Harness Code Snippet'}
-                </span>
-                <button
-                  className={`copy-btn ${copiedStates[activeRoleTab] ? 'copied' : ''}`}
-                  onClick={() => copyText(activeRoleTab, prompts[activeRoleTab])}
-                >
-                  {copiedStates[activeRoleTab] ? 'Copied' : 'Copy Content'}
-                </button>
-                <div className="code-text">{prompts[activeRoleTab]}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* SECTION 5: STRUCTURAL QUESTION BANK */}
-        <div className="step" id="question-bank">
-          <span className="step-num">Step 05</span>
-          <h2 className="step-h2">The Structural Question Bank: 8 Tested Field Templates</h2>
-          <p>
-            Vague questions produce bland idealist summaries. A high-yield PMN diagnostic prompt identifies the target arrangement, names suspected information asymmetries, and specifies the required empirical falsification standard.
-          </p>
-
-          <div className="question-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', marginTop: '1.2rem' }}>
-            <div className="question-card">
-              <div className="question-name">1. Gig-Economy &amp; Labor Flexibility</div>
-              <div className="question-note">
-                "Using PMN §3.4, §6.2, and §11.3, evaluate app-based gig-economy 'flexibility': Is worker participation driven by genuine self-authorship, or is it a defensive adaptation formed within a structurally degraded alternative set? What empirical data would falsify this conclusion?"
-              </div>
-            </div>
-
-            <div className="question-card">
-              <div className="question-name">2. Regulatory Capture &amp; Revolving Doors</div>
-              <div className="question-note">
-                "Audit [Agency X] against PMN's Authoritative 5-Stage Capture Sequence (§7.3c-i). At which stage has the institution currently consolidated? Trace how technical complexity is being mobilized as a deliberate power resource to evade public contestability (§6.5)."
-              </div>
-            </div>
-
-            <div className="question-card">
-              <div className="question-name">3. Healthcare &amp; Pharmaceutical Complexity</div>
-              <div className="question-note">
-                "Apply the Multiplicative Transfer Equation (T = S · D · P · G, §6.3 / §15.8) to pharmaceutical patent thickets. Which variable represents the primary extraction bottleneck? How does opacity in pricing suppress contestability?"
-              </div>
-            </div>
-
-            <div className="question-card">
-              <div className="question-name">4. Algorithmic Attention &amp; Cognitive Rent</div>
-              <div className="question-note">
-                "Analyze social media recommendation algorithms through PMN §6.2 and §8.2. How do feedback loops generate narrative inertia and cognitive extraction? Does this constitute a violation of genuine becoming at the biological floor?"
-              </div>
-            </div>
-
-            <div className="question-card">
-              <div className="question-name">5. Institutional Collapse &amp; Civic Meaning</div>
-              <div className="question-note">
-                "Analyze the collapse of local municipal and voluntary civic associations through PMN §5.6b. Evaluate their status across the 5 functional dimensions of meaning infrastructure. Formulate an immediate material triage protocol (§5.6c)."
-              </div>
-            </div>
-
-            <div className="question-card">
-              <div className="question-name">6. Climate Transition &amp; Burden Distribution</div>
-              <div className="question-note">
-                "Subject [Proposed Climate Policy] to PMN §3.4 and §10.8. Does the transition cost fall disproportionately upon communities hovering near the biological floor while leaving incumbent capital custodians insulated from systemic risk?"
-              </div>
-            </div>
-
-            <div className="question-card">
-              <div className="question-name">7. Frontier AI &amp; The Custodian Problem</div>
-              <div className="question-note">
-                "Evaluate frontier AI governance consortia against PMN §1.6 and §14.6. Who monitors the AI evaluation monitors? Trace how compliance audits can be absorbed into Stage 4 capture (objective redefinition)."
-              </div>
-            </div>
-
-            <div className="question-card">
-              <div className="question-name">8. Reflexive Self-Critique of PMN</div>
-              <div className="question-note">
-                "Subject PMN's own reform prescriptions to §12.5 (Epistemic Traps). Is this proposal falling into Technocratic Drift (§12.5b), Moralizing Substitution (§12.5c), or Paralysis by Complexity (§12.5d)?"
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* SECTION 6: MACHINE ENDPOINTS */}
         <div className="step" id="machine-endpoints">
-          <span className="step-num">Step 06</span>
+          <span className="step-num">Step 07</span>
           <h2 className="step-h2">Official Machine &amp; AI Grounding Endpoints</h2>
           <p>
             For automated agent pipelines, LangChain/LlamaIndex ingestion, or direct context feeding, use the canonical static endpoints below. All files are CORS-enabled and bypass Single-Page Application (SPA) client routing.
@@ -1583,7 +1690,7 @@ if ANTHROPIC_API_KEY:
 
         {/* SECTION 7: SCRAPING PITFALLS & API OPTIMIZATION */}
         <div className="step" id="scraping-pitfalls">
-          <span className="step-num">Step 07</span>
+          <span className="step-num">Step 08</span>
           <h2 className="step-h2">Navigating Web-Scraper Blindspots &amp; API Best Practices</h2>
           <p>
             Feeding live web links directly to public search LLMs often fails silently. Understand these five common failure modes to maintain rigorous grounding:
