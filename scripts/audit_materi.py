@@ -119,8 +119,10 @@ def definisi_kanonik(seksi):
 
 
 def rujukan_format_huruf(seksi):
-    """Gerbang regresi A.6: rujukan berpola [A-Z].angka (murni pencegah regresi)."""
-    pola = re.compile(r"\b([A-Z]\.\d{1,2})\b")
+    """Gerbang deteksi rujukan berformat huruf: [A-Z].angka dan [A-Z]{1,2}.angka (mis. A.6, CS.1-CS.8, E.2).
+    Batas alat: Pemeriksa ini menjawab 'apakah format alamat ini ada di naskah?',
+    bukan 'apakah isinya sesuai?'. Validasi atribusi semantik ditangani jalur terpisah."""
+    pola = re.compile(r"\b([A-Z]{1,2}\.\d+[a-z]?)\b")
     return [(sid, m) for sid, _j, t in seksi for m in pola.findall(t)]
 
 
@@ -171,12 +173,12 @@ def main():
     if not hilang and not menyimpang:
         print("  semua definisi kanonik terwakili dan sejalan.")
 
-    print("\n=== D. Rujukan berformat huruf (gerbang regresi A.6) ===")
+    print("\n=== D. Rujukan berformat huruf (gerbang deteksi [A-Z]{1,2}.\\d+) ===")
     huruf = rujukan_format_huruf(seksi)
     if not huruf:
         print("  (tidak ada)")
     for sid, m in huruf:
-        print("  %-8s rujukan: %s (diketahui: A.6 di 10.6 -> errata A7)" % (sid, m))
+        print("  %-8s rujukan berformat huruf: %s" % (sid, m))
 
     print("\n=== E. Frasa berulang lintas seksi (n-gram >= 8 kata di >= 5 seksi) ===")
     ngrams = ngram_berulang(seksi)
