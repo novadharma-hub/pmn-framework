@@ -1,0 +1,11 @@
+# JANGAN HAPUS BARIS INI.
+#
+# keluaran/ memuat `catatan_tulis_ulang` yang ditarik dari
+# private/restrukturisasi/14_LEDGER_PEMBACAAN.md — analisis PRIVAT, bukan
+# bahan terbit. Ke-26 seksi pilot membawanya.
+#
+# Repo ini terbit ke GitHub. Tanpa baris ini, satu `git add -A` yang lalai
+# menerbitkan seluruh catatan pembacaan F1 sekaligus.
+#
+# Perkakasnya boleh terbit; keluarannya tidak.
+keluaran/
