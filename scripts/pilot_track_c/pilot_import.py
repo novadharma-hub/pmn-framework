@@ -36,7 +36,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 import import_pmn_docx as imp  # noqa: E402
-from pilot_schema import validate_corpus  # noqa: E402
+from pilot_schema import validate_corpus, validate_parts  # noqa: E402
 
 W14_PARAID = "{http://schemas.microsoft.com/office/word/2010/wordml}paraId"
 
@@ -115,6 +115,7 @@ def build_parts_with_paraids(paragraphs, toc_headings, body_start):
             flush_sub()
             part_code, title = imp.parse_part_heading(heading)
             current_part = imp.start_part(parts, part_code, title)
+            current_part["preambul"] = []
             current_sub = None
             continue
 
@@ -151,6 +152,18 @@ def build_parts_with_paraids(paragraphs, toc_headings, body_start):
             continue
 
         if current_sub is None:
+            # DI SINILAH build_parts() ASLINYA MEMBUANG PARAGRAF.
+            # Sesudah judul Bagian, current_sub = None. Paragraf yang berdiri
+            # sebelum judul seksi pertama jatuh ke `continue` dan hilang dari
+            # terbitan - sembilan paragraf, 1.053 kata, lima Bagian
+            # (31_PARAGRAF_HILANG_DARI_TERBITAN.md).
+            #
+            # Kita TANGKAP, bukan buang - tetapi ke wadah TERPISAH supaya html
+            # seksi tetap identik dengan parts.json v120 dan G5 tetap nol.
+            if current_part is not None:
+                r = row(para)
+                if r["html"]:
+                    current_part.setdefault("preambul", []).append(r)
             continue
 
         r = row(para)
@@ -342,6 +355,26 @@ def main() -> int:
 
     records = [bangun_rekaman(sub, code, rel) for code, sub in pasangan]
 
+    # --- Entitas Bagian: preambul yang build_parts() buang -----------------
+    bagian: list[dict] = []
+    for p in parts:
+        code = part_code_of(p)
+        if code not in PILOT_PARTS:
+            continue
+        pre = p.get("preambul", [])
+        bagian.append({
+            "part": code,
+            "part_title": p.get("title", ""),
+            "source_paragraph_ids": [r["paraId"] for r in pre if r["paraId"]],
+            "paragraf": [{"paraId": r["paraId"], "kelas": r["kelas"], "html": r["html"]}
+                         for r in pre],
+            "catatan": ("Preambul Bagian. TIDAK ADA di parts.json v120 - build_parts() "
+                        "membuangnya. Lihat 31_PARAGRAF_HILANG_DARI_TERBITAN.md.")
+            if pre else "",
+        })
+    n_pre = sum(len(b["paragraf"]) for b in bagian)
+    print(f"preambul Bagian ditangkap: {n_pre} paragraf di {len(bagian)} Bagian")
+
     # --- Isi claim_type + catatan_tulis_ulang dari ledger F1 ---------------
     led_path = Path(args.ledger) if args.ledger else (
         SCRIPTS.parent.parent / "private" / "restrukturisasi" / "14_LEDGER_PEMBACAAN.md")
@@ -407,10 +440,16 @@ def main() -> int:
         if not rec.get("status"):
             rec["status"] = STATUS_DEFAULT.get(rec["claim_type"], "[SCHEMA]")
     hasil = validate_corpus(records)
+    hasil_b = validate_parts(bagian)
     print(f"\n=== VALIDATOR SKEMA ===")
     print(f"  seksi divalidasi : {hasil['seksi']}")
-    print(f"  error            : {hasil['error']}")
+    print(f"  error seksi      : {hasil['error']}")
     for e in hasil["daftar_error"][:10]:
+        print(f"    - {e}")
+    print(f"  bagian divalidasi: {hasil_b['bagian']}")
+    print(f"  paragraf preambul: {hasil_b['paragraf_preambul']}")
+    print(f"  error bagian     : {hasil_b['error']}")
+    for e in hasil_b["daftar_error"][:10]:
         print(f"    - {e}")
 
     if args.keluaran:
@@ -418,7 +457,8 @@ def main() -> int:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(
             {"_pilot": "Track C F4 — Bagian VI+VII", "_docx": docx_path.name,
-             "_total": total, "seksi": records},
+             "_total": total, "_preambul_paragraf": n_pre,
+             "bagian": bagian, "seksi": records},
             ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"\nkeluaran: {out}")
 

@@ -83,6 +83,14 @@ def g1(sumber: dict, docx: Path) -> dict:
     dipakai: list[str] = []
     for r in rec:
         dipakai.extend(x.upper() for x in r["source_paragraph_ids"])
+    # Entitas Bagian (preambul) ikut dihitung sejak 2026-09-10. Sebelum entitas
+    # ini ada, epigraf Bagian VI muncul sebagai "sisa" - dan sisa itulah yang
+    # membongkar sembilan paragraf hilang dari terbitan.
+    n_pre = 0
+    for b in sumber.get("bagian", []):
+        ids = [x.upper() for x in b.get("source_paragraph_ids", [])]
+        dipakai.extend(ids)
+        n_pre += len(ids)
 
     ganda = sorted({x for x in dipakai if dipakai.count(x) > 1})
     A = set(dipakai)
@@ -93,18 +101,27 @@ def g1(sumber: dict, docx: Path) -> dict:
     sisa_docx = sorted(B - A)      # ada di DOCX, tak terpakai
     sisa_sumber = sorted(A - B)    # diklaim sumber, tak ada di irisan DOCX
 
-    # Paragraf DOCX yang tak terpakai HAMPIR SELURUHNYA judul (Bagian + seksi),
+    # Paragraf DOCX yang tak terpakai HARUS seluruhnya judul (Bagian + seksi),
     # yang importir memang konsumsi sebagai batas, bukan isi. Ditampilkan
     # terbuka supaya bisa diperiksa, bukan disembunyikan di balik angka lulus.
+    #
+    # Gerbang otomatis: sisa yang TIDAK berbentuk judul dihitung tersendiri.
+    # Sebelum entitas Bagian ada, angka ini 1 - epigraf Gramsci Bagian VI.
+    judul_re = re.compile(r"^(Part [IVXLC]+:|\d+\.\d)")
+    bukan_judul = [(p, d["teks"].get(p, "")) for p in sisa_docx
+                   if not judul_re.match(d["teks"].get(p, ""))]
     contoh_sisa = [(p, d["teks"].get(p, "")[:70]) for p in sisa_docx[:15]]
 
     return {
         "id_dipakai_sumber": len(dipakai),
+        "id_dari_preambul_bagian": n_pre,
         "id_unik_sumber": len(A),
         "id_dipakai_lebih_dari_sekali": len(ganda),
         "paragraf_berteks_di_irisan_docx": len(B),
         "sisa_arah_docx_ke_sumber": len(sisa_docx),
         "sisa_arah_sumber_ke_docx": len(sisa_sumber),
+        "sisa_BUKAN_judul": len(bukan_judul),
+        "daftar_bukan_judul": [(p, t[:70]) for p, t in bukan_judul[:10]],
         "contoh_sisa_docx": contoh_sisa,
     }
 
@@ -181,10 +198,12 @@ def main() -> int:
     print("=" * 70)
     r1 = g1(sumber, docx)
     for k, v in r1.items():
-        if k == "contoh_sisa_docx":
+        if k in ("contoh_sisa_docx", "daftar_bukan_judul"):
             print(f"  {k}:")
             for p, t in v:
                 print(f"      {p}  {t!r}")
+            if k == "daftar_bukan_judul" and not v:
+                print("      (tak ada - seluruh sisa berbentuk judul)")
         else:
             print(f"  {k:34s}: {v}")
 
@@ -213,10 +232,13 @@ def main() -> int:
     print(f"  G1 sisa arah sumber -> docx          : {r1['sisa_arah_sumber_ke_docx']}   (harus 0)")
     print(f"  G1 id dipakai lebih dari sekali      : {r1['id_dipakai_lebih_dari_sekali']}   (harus 0)")
     print(f"  G3 error skema                       : {r3['error_skema']}   (harus 0)")
+    print(f"  G1 sisa BUKAN judul                  : {r1['sisa_BUKAN_judul']}   (harus 0)")
     print()
-    print("  CATATAN: 'G1 sisa arah docx -> sumber' TIDAK harus 0 — paragraf judul")
-    print("  Bagian dan judul seksi dikonsumsi sebagai batas, bukan isi. Periksa")
-    print("  contoh_sisa_docx di atas: bila ada yang BUKAN judul, G1 gagal sungguhan.")
+    print("  CATATAN: 'G1 sisa arah docx -> sumber' TIDAK harus 0 — judul Bagian dan")
+    print("  judul seksi dikonsumsi sebagai batas, bukan isi. Yang HARUS 0 adalah")
+    print("  'sisa BUKAN judul'. Angka itu bernilai 1 sampai 2026-09-10, dan satu itu")
+    print("  epigraf Gramsci Bagian VI — pintu masuk ke sembilan paragraf yang hilang")
+    print("  dari terbitan (31_PARAGRAF_HILANG_DARI_TERBITAN.md).")
     return 0
 
 

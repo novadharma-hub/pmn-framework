@@ -76,6 +76,46 @@ REQUIRED_FIELDS = (
 )
 
 
+# --- Entitas BAGIAN -------------------------------------------------------
+# Ditambahkan 2026-09-10. Skema semula beralamat per SEKSI saja, dan itu
+# lubang terukur: sembilan paragraf naskah kanonik berdiri di antara judul
+# Bagian dan judul seksi pertama, sehingga tak punya pemilik dan hilang dari
+# terbitan (31_PARAGRAF_HILANG_DARI_TERBITAN.md).
+#
+# Preambul disimpan sebagai entitas TERPISAH, bukan disuntikkan ke html seksi
+# pertama. Alasannya mengikat: G5 membandingkan html seksi terhadap parts.json
+# v120 dan menuntut selisih NOL. Menyuntikkannya ke seksi akan memecahkan G5
+# dan menyamarkan pemulihan sebagai perubahan teks. Dipisahkan, keduanya benar
+# sekaligus: seksi tetap identik, preambul terselamatkan.
+PART_REQUIRED_FIELDS = (
+    "part",
+    "part_title",
+    "source_paragraph_ids",
+    "paragraf",
+    "catatan",
+)
+
+
+def validate_part(rec: dict) -> list[str]:
+    """Validasi satu entitas Bagian (preambul)."""
+    err: list[str] = []
+    pid = rec.get("part", "<tanpa part>")
+    for field in PART_REQUIRED_FIELDS:
+        if field not in rec:
+            err.append(f"Bagian {pid}: field wajib hilang: {field}")
+    if err:
+        return err
+    if not isinstance(rec["part"], str) or not rec["part"]:
+        err.append(f"Bagian {pid}: part harus string tak kosong")
+    if not isinstance(rec["paragraf"], list):
+        err.append(f"Bagian {pid}: paragraf harus list")
+    if not isinstance(rec["source_paragraph_ids"], list):
+        err.append(f"Bagian {pid}: source_paragraph_ids harus list")
+    if len(rec.get("source_paragraph_ids", [])) != len(rec.get("paragraf", [])):
+        err.append(f"Bagian {pid}: jumlah source_paragraph_ids != jumlah paragraf")
+    return err
+
+
 def parse_status(raw: str) -> list[str]:
     """Pecah status majemuk '[A]+[B]' jadi ['[A]', '[B]']."""
     if not isinstance(raw, str):
@@ -180,4 +220,18 @@ def validate_corpus(records: list[dict], *, strict_defeaters: bool = False) -> d
         "daftar_error": errors,
         "r8_defeasible_tanpa_pembatal": len(r8_pelanggar),
         "r8_daftar": r8_pelanggar,
+    }
+
+
+def validate_parts(parts: list[dict]) -> dict:
+    """Validasi entitas Bagian. Angka mentah, bukan status."""
+    errors: list[str] = []
+    for rec in parts:
+        errors.extend(validate_part(rec))
+    n_para = sum(len(p.get("paragraf", [])) for p in parts)
+    return {
+        "bagian": len(parts),
+        "paragraf_preambul": n_para,
+        "error": len(errors),
+        "daftar_error": errors,
     }
