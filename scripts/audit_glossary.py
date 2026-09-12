@@ -21,7 +21,7 @@ Empat sumbu yang diperiksa:
   F. Kategori yang mencurigakan (terlalu kecil / tumpang tindih)
 
 Jalankan dari folder public/:
-    D:\\Master-Universe\\.venv\\Scripts\\python.exe scripts/audit_glossary.py
+    python scripts/audit_glossary.py
     ... --markdown laporan.md      (tulis laporan ke berkas)
 """
 import argparse
