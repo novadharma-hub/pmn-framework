@@ -11,6 +11,7 @@ import AITerminal from './components/AITerminal'
 import ReadingPathsSection from './components/ReadingPathsSection'
 import TheoreticalAnatomySection from './components/TheoreticalAnatomySection'
 import AxiomStructureSection from './components/AxiomStructureSection'
+import PolicyModal, { PolicyTab } from './components/PolicyModal'
 import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl } from './routing'
 
 
@@ -67,6 +68,12 @@ export default function App() {
 
   const [kbdOpen, setKbdOpen] = useState(false)
   const [notesOpen, setNotesOpen] = useState(false)
+  const [policyOpen, setPolicyOpen] = useState(false)
+  const [policyTab, setPolicyTab] = useState<PolicyTab>('privacy')
+  const openPolicy = (tab: PolicyTab = 'privacy') => {
+    setPolicyTab(tab)
+    setPolicyOpen(true)
+  }
   const [contentWidth, setContentWidth] = useState<'narrow' | 'medium' | 'wide'>('wide')
   const [history, setHistory] = useState<[number, number][]>([])
   const [showTip, setShowTip] = useState<boolean>(() => {
@@ -177,6 +184,20 @@ export default function App() {
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [data])
+
+  useEffect(() => {
+    const checkPolicyHash = () => {
+      const h = (window.location.hash || '').toLowerCase()
+      if (h === '#/privacy') openPolicy('privacy')
+      else if (h === '#/terms') openPolicy('terms')
+      else if (h === '#/disclaimer' || h === '#/disclaimers') openPolicy('disclaimer')
+      else if (h === '#/ai' || h === '#/ai-policy' || h === '#/ai-ethics') openPolicy('ai')
+      else if (h === '#/policies' || h === '#/policy') openPolicy('privacy')
+    }
+    checkPolicyHash()
+    window.addEventListener('hashchange', checkPolicyHash)
+    return () => window.removeEventListener('hashchange', checkPolicyHash)
+  }, [])
 
   const [version, setVersion] = useState('')
   const [loadedCount, setLoadedCount] = useState(0)
@@ -428,6 +449,7 @@ export default function App() {
               onOpenNotes={() => setNotesOpen(true)}
               onOpenGuide={() => setPage('guide')}
               onOpenGlossary={() => { setContentsSub('glossary'); setPage('contents') }}
+              onOpenPolicy={openPolicy}
               onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }}
               showTip={showTip} setShowTip={setShowTip}
               version={version}
@@ -474,6 +496,7 @@ export default function App() {
               setFocusMode={setFocusMode}
               history={history}
               version={version}
+              onOpenPolicy={openPolicy}
             />
           )}
 
@@ -483,20 +506,17 @@ export default function App() {
 
         </div>
 
-        <nav id="mob-nav">
+        {/* BOTTOM / MOBILE NAVIGATION BAR */}
+        <nav className="mob-nav" aria-label="Mobile Navigation">
           <button className={`mob-nav-btn${page === 'home' ? ' active' : ''}`} onClick={() => setPage('home')}>
-            <span>&#8962;</span><span className="mob-nav-lbl">Home</span>
+            <span>&#8962;</span><span className="mob-nav-lbl">Cover</span>
           </button>
-          <button className={`mob-nav-btn${page === 'contents' ? ' active' : ''}`} onClick={() => setPage('contents')}>
-            <span>&#9776;</span><span className="mob-nav-lbl">Contents</span>
+          <button className={`mob-nav-btn${page === 'contents' && contentsSub === 'map' ? ' active' : ''}`} onClick={() => { setContentsSub('map'); setPage('contents') }}>
+            <span>&#9776;</span><span className="mob-nav-lbl">Map</span>
           </button>
           <button className={`mob-nav-btn${page === 'reader' ? ' active' : ''}`} onClick={() => setPage('reader')}>
             <span>&#9654;</span><span className="mob-nav-lbl">Read</span>
           </button>
-          {/* A1: di bawah 768px baris #hdr-r meluber ke luar layar (lebarnya
-              661px pada viewport 390px), sehingga Glossary sama sekali tidak
-              bisa dijangkau dari HP. Handler-nya sama persis dengan #hb-gl —
-              jangan buat jalur pembuka Glossary yang kedua. */}
           <button
             className={`mob-nav-btn${page === 'contents' && contentsSub === 'glossary' ? ' active' : ''}`}
             onClick={() => { setContentsSub('glossary'); setPage('contents') }}
@@ -523,6 +543,7 @@ export default function App() {
 
       <KeyboardModal isOpen={kbdOpen} onClose={() => setKbdOpen(false)} />
       <NotesModal isOpen={notesOpen} onClose={() => setNotesOpen(false)} data={data} onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }} />
+      <PolicyModal isOpen={policyOpen} initialTab={policyTab} onClose={() => setPolicyOpen(false)} version={version} />
       {/* Penataan letak kartu orientasi sengaja TIDAK inline: inline style
           mengalahkan stylesheet, sehingga media query tidak bisa menghentikan
           kartu ini melayang di atas CTA pada layar sempit. Lihat
@@ -551,7 +572,7 @@ export default function App() {
 
 // ─── HomeView ─────────────────────────────────────────────────────────────────
 
-function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onOpenGlossary, onJump, showTip, setShowTip, version }: any) {
+function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onOpenGlossary, onOpenPolicy, onJump, showTip, setShowTip, version }: any) {
   const totalSections = data.parts.reduce((a: number, p: any) => a + (p.subs?.length || 0), 0)
   const readCount = Object.keys(readMap).length
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
@@ -738,10 +759,11 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
             </article>
             <article className="home-bottom-card compact-card" style={{gridColumn: 'span 4'}}>
               <h3>Useful next moves</h3>
-              <p>Keep one foot in the manuscript while you move between orientation and guidance.</p>
+              <p>Keep one foot in the manuscript while you move between orientation, guidance, and platform governance.</p>
               <div className="home-bottom-actions">
                 <button className="home-bottom-link" onClick={onStartReading}>Open orientation</button>
                 <button className="home-bottom-link" onClick={onOpenGuide}>Open AI Guide</button>
+                <button className="home-bottom-link" onClick={() => onOpenPolicy?.('privacy')}>Transparency &amp; Policy</button>
               </div>
             </article>
           </div>
@@ -782,9 +804,28 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
 
       {/* HOME FOOTER */}
       <div className="home-footer-bar">
-        <span>[C] 2026 Nova Dharma // PMN Collective</span>
-        <span style={{opacity:.45,fontSize:'.65rem',fontWeight:400,textTransform:'none',letterSpacing:'.02em'}}>Reading preferences stored locally in your browser — no data is sent to any server.</span>
-        <span>V{version} &mdash; Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+?</kbd> for Glossary &mdash; <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+K</kbd> for Keys</span>
+        <div style={{display:'flex',flexDirection:'column',gap:'.35rem'}}>
+          <span>[C] 2026 Nova Dharma // PMN Collective</span>
+          <span style={{opacity:.55,fontSize:'.68rem',fontWeight:400,textTransform:'none',letterSpacing:'.02em'}}>Zero cookies &bull; Zero trackers &bull; 100% Client-side sovereignty</span>
+        </div>
+
+        <div style={{display:'flex',gap:'.85rem',alignItems:'center',flexWrap:'wrap',fontSize:'.72rem'}}>
+          <button onClick={() => onOpenPolicy?.('privacy')} style={{background:'none',border:'none',color:'var(--ink2)',cursor:'pointer',padding:0,font:'inherit',textTransform:'uppercase',letterSpacing:'.06em'}} className="hover:text-[var(--acc-text)] transition-colors">Privacy &amp; Data</button>
+          <span style={{color:'var(--rule)'}}>•</span>
+          <button onClick={() => onOpenPolicy?.('terms')} style={{background:'none',border:'none',color:'var(--ink2)',cursor:'pointer',padding:0,font:'inherit',textTransform:'uppercase',letterSpacing:'.06em'}} className="hover:text-[var(--acc-text)] transition-colors">Terms &amp; Citation</button>
+          <span style={{color:'var(--rule)'}}>•</span>
+          <button onClick={() => onOpenPolicy?.('disclaimer')} style={{background:'none',border:'none',color:'var(--ink2)',cursor:'pointer',padding:0,font:'inherit',textTransform:'uppercase',letterSpacing:'.06em'}} className="hover:text-[var(--acc-text)] transition-colors">Methodological Limits</button>
+          <span style={{color:'var(--rule)'}}>•</span>
+          <button onClick={() => onOpenPolicy?.('ai')} style={{background:'none',border:'none',color:'var(--ink2)',cursor:'pointer',padding:0,font:'inherit',textTransform:'uppercase',letterSpacing:'.06em'}} className="hover:text-[var(--acc-text)] transition-colors">AI Ethics</button>
+        </div>
+
+        <div style={{display:'flex',alignItems:'center',gap:'.5rem',flexWrap:'wrap'}}>
+          <span>V{version}</span>
+          <span style={{color:'var(--rule)'}}>&mdash;</span>
+          <span><kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+?</kbd> Glossary</span>
+          <span style={{color:'var(--rule)'}}>&mdash;</span>
+          <span><kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .4rem',fontSize:'.7rem'}}>Alt+K</kbd> Keys</span>
+        </div>
       </div>
     </div>
   )

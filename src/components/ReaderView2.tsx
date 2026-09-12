@@ -43,6 +43,7 @@ interface ReaderViewProps {
   /** Diterima agar sepadan dengan ReaderView; varian ini belum memakainya. */
   focusMode?: boolean
   setFocusMode?: (v: boolean) => void
+  onOpenPolicy?: (tab?: 'privacy' | 'terms' | 'disclaimer' | 'ai') => void
 }
 
 const SPECIAL: Record<string, boolean> = { 'Preface': true, 'Coda': true, 'Intellectual Debts': true, 'Bibliography': true }
