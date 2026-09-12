@@ -687,6 +687,19 @@ if ANTHROPIC_API_KEY:
     <div
       id="guide-view"
       className="view on flex flex-col h-full bg-pmn-bg select-text w-full overflow-hidden"
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%',
+        overflow: 'hidden',
+        background: 'var(--bg)'
+      }}
     >
       {/* STICKY FULL-WIDTH HEADER */}
       <div className="sv-hdr-wrap flex-none w-full sticky top-0 z-50 border-b border-pmn-rule bg-pmn-bg">

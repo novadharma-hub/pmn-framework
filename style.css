@@ -457,7 +457,8 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 /* Each active view fills views-shell completely */
 #home-view.on,
 #srch-view.on,
-#reader-view.on{
+#reader-view.on,
+#guide-view.on{
   position:absolute;
   top:0;left:0;right:0;bottom:0;
 }
@@ -468,6 +469,9 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 
 /* reader-view: flex row (sidebar + main) on desktop */
 #reader-view.on{display:flex;flex-direction:row;overflow:hidden;background:var(--bg)}
+
+/* guide-view: flex column */
+#guide-view.on{display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
 
 /* home-view: scrollable block */
 #home-view.on{display:block;overflow-y:auto}
@@ -1286,9 +1290,9 @@ html[data-layout="desktop"] .rnav-btn{width:auto;text-align:left;padding:.55rem 
 }
 
 /* ── Mobile bottom nav bar (reader only) ── */
-#mob-nav{display:none}
+#mob-nav, .mob-nav{display:none}
 @media (max-width: 680px) {
-  #mob-nav{
+  #mob-nav, .mob-nav{
     display:flex;
     position:fixed;
     bottom:0;left:0;right:0;
@@ -2308,8 +2312,10 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 
 /* ── AI Agent Guide View Sizing & Layout (React) ── */
 #guide-view {
-  overflow-y: auto;
+  display: flex !important;
+  flex-direction: column;
   height: 100%;
+  overflow: hidden;
 }
 #guide-view .guide-page { max-width: 920px; margin: 0 auto; padding: 3.5rem 2rem 8rem; }
 #guide-view .page-eyebrow {
@@ -2729,8 +2735,14 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
    Di bawah 768px ketiganya dikeluarkan dari header; Glossary dan tema
    dilayani #mob-nav, dan panel pintasan memang tidak berguna di layar
    sentuh. */
+@media (max-width: 960px) {
+  #hdr-r #hb-policy,
+  #hdr-r #hb-guide { display: none; }
+}
 @media (max-width: 767px) {
   #hdr-r #hb-gl,
+  #hdr-r #hb-guide,
+  #hdr-r #hb-policy,
   #hdr-r #theme-tog,
   #hdr-r #hb-kbd { display: none; }
   /* #hdr lebar 390 dengan padding 12px (kotak konten 366) sementara
