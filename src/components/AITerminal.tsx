@@ -14,12 +14,12 @@ interface AITerminalProps {
 export type AIProviderId = 
   | 'claude' 
   | 'chatgpt' 
-  | 'gemini' 
-  | 'deepseek' 
+  | 'glm'
   | 'grok' 
-  | 'perplexity' 
-  | 'mistral' 
-  | 'openrouter' 
+  | 'kimi'
+  | 'gemini' 
+  | 'qwen'
+  | 'deepseek' 
   | 'api'
 
 interface ProviderItem {
@@ -32,15 +32,15 @@ interface ProviderItem {
 }
 
 const PROVIDERS: ProviderItem[] = [
-  { id: 'claude', name: 'Claude', company: 'Anthropic', badge: '3.7 / 3.5 Sonnet', url: 'https://claude.ai', desc: 'Deep systemic synthesis, long-context reasoning & dialectics' },
-  { id: 'chatgpt', name: 'ChatGPT', company: 'OpenAI', badge: 'GPT-4o / o3-mini', url: 'https://chatgpt.com', desc: 'Universal reasoning, code synthesis & counterfactual stress-testing' },
-  { id: 'gemini', name: 'Gemini', company: 'Google', badge: '2.5 Pro / 2.0 Flash', url: 'https://aistudio.google.com', desc: 'Multimodal analysis, massive 2M token context & deep research' },
-  { id: 'deepseek', name: 'DeepSeek', company: 'DeepSeek', badge: 'V3 / R1 Reasoner', url: 'https://chat.deepseek.com', desc: 'Open reasoning models, mathematical logic & structural rigor' },
-  { id: 'grok', name: 'Grok', company: 'xAI', badge: 'Grok 3 / Grok 2', url: 'https://grok.com', desc: 'Real-time grounding, direct philosophical critique & unfiltered analysis' },
-  { id: 'perplexity', name: 'Perplexity', company: 'Perplexity', badge: 'Deep Research', url: 'https://www.perplexity.ai', desc: 'Live web synthesis, empirical citation audit & cross-referencing' },
-  { id: 'mistral', name: 'Mistral', company: 'Mistral AI', badge: 'Le Chat / Large 2', url: 'https://chat.mistral.ai', desc: 'European sovereign AI, dense architectural reasoning' },
-  { id: 'openrouter', name: 'OpenRouter', company: 'Multi-Model', badge: 'Llama 3.3 / Qwen', url: 'https://openrouter.ai', desc: 'Route to hundreds of open-weights models and custom endpoints' },
-  { id: 'api', name: 'Developer API', company: 'Harness', badge: 'cURL / Python SDK', url: '', desc: 'Direct code snippets and payloads for local or server-side pipelines' },
+  { id: 'claude', name: 'Claude', company: 'Anthropic', badge: 'Fable 5.1 / Opus 5', url: 'https://claude.ai', desc: 'Rank #1 on AA Index (53.37): unyielding dialectical tension & systemic reasoning' },
+  { id: 'chatgpt', name: 'ChatGPT', company: 'OpenAI', badge: 'GPT-6 Astra / Sol', url: 'https://chatgpt.com', desc: 'Rank #2 on AA Index (52.81): multi-step deductive rigor & consistency audits' },
+  { id: 'glm', name: 'GLM', company: 'Zhipu AI', badge: 'GLM-5.3 / Flash', url: 'https://chatglm.cn', desc: 'Rank #7 on AA Index (44.86): sovereign open-weights leader for private on-prem analysis' },
+  { id: 'grok', name: 'Grok', company: 'xAI', badge: 'Grok 4.6 (500k)', url: 'https://grok.com', desc: 'Rank #8 on AA Index (44.41): direct dialectical challenge & uninhibited institutional critique' },
+  { id: 'kimi', name: 'Kimi', company: 'Moonshot AI', badge: 'Kimi K3 (1M)', url: 'https://kimi.moonshot.cn', desc: 'Rank #9 on AA Index (43.78): massive 1M token window holding entire PMN corpus' },
+  { id: 'gemini', name: 'Gemini', company: 'Google', badge: 'Gemini 3.8 Flash', url: 'https://aistudio.google.com', desc: 'Rank #12 on AA Index (41.19): high-velocity cross-Part concept mapping & NotebookLM' },
+  { id: 'qwen', name: 'Qwen', company: 'Alibaba Cloud', badge: 'Qwen3.8 (2.4T)', url: 'https://chat.qwen.ai', desc: 'Rank #13 on AA Index (40.04): explicit Thinking mode for materialist causal chains' },
+  { id: 'deepseek', name: 'DeepSeek', company: 'DeepSeek', badge: 'V4.1 Flash / Pro', url: 'https://chat.deepseek.com', desc: 'Rank #14 on AA Index (39.55): high-efficiency MoE reasoning & structural logic' },
+  { id: 'api', name: 'Developer API', company: 'Harness', badge: 'cURL / Python SDK', url: '', desc: 'Direct code snippets and payloads for local scripts or server-side RAG pipelines' },
 ]
 
 interface ModeItem {
@@ -161,8 +161,8 @@ FORMAT REQUIREMENTS:
   -H "anthropic-version: 2023-06-01" \\
   -H "content-type: application/json" \\
   -d '{
-    "model": "claude-3-7-sonnet-20250219",
-    "max_tokens": 2500,
+    "model": "claude-fable-5-1",
+    "max_tokens": 4000,
     "messages": [
       {
         "role": "user",
@@ -187,8 +187,8 @@ response = requests.post(
         "content-type": "application/json"
     },
     json={
-        "model": "claude-3-7-sonnet-20250219",
-        "max_tokens": 3000,
+        "model": "claude-fable-5-1",
+        "max_tokens": 4000,
         "messages": [{"role": "user", "content": prompt}]
     }
 )
@@ -198,7 +198,7 @@ print(response.json()["content"][0]["text"])`
 
     return JSON.stringify({
       system: `PMN Framework v${version} Grounded Agent`,
-      model: "claude-3-7-sonnet-20250219",
+      model: "claude-fable-5-1",
       temperature: 0.2,
       messages: [{ role: "user", content: prompt }]
     }, null, 2)

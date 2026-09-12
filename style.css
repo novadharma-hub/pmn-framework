@@ -3245,3 +3245,34 @@ body.focus-mode #hdr-r #focus-btn {
   .focus-exit-hint { font-size: 0.66rem; top: 10px; }
   .focus-exit-chip { top: 10px; right: 10px; font-size: 0.62rem; }
 }
+
+/* === HOME AI TERMINAL WORKBENCH MODULE === */
+.home-ai-section {
+  padding: 4.5rem 1.5rem 4rem;
+  border-top: 1px solid var(--rule);
+  background: var(--bg);
+  position: relative;
+}
+.home-ai-inner {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.hai-panel {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.hai-tab:hover {
+  border-color: var(--acc) !important;
+  color: var(--acc-text) !important;
+}
+.hai-btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+.hai-btn-primary:active {
+  transform: translateY(1px);
+}
+.hai-btn-secondary:hover {
+  border-color: var(--acc) !important;
+  color: var(--acc-text) !important;
+}
