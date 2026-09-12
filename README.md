@@ -26,7 +26,7 @@ PMN is a post-theistic, materialist philosophical framework engineered to analyz
   - [2. Theoretical Anatomy Inspector (4 Diagnostic Modes)](#2-theoretical-anatomy-inspector)
   - [3. Axiomatic Architecture (11 Axioms in 3 Tiers)](#3-axiomatic-architecture)
   - [4. In-Reader AI Grounding Terminal](#4-in-reader-ai-grounding-terminal)
-- [Zero-Tracking Private Reading Desk & Offline PWA](#zero-tracking-private-reading-desk--offline-pwa)
+- [Zero-Tracking Private Reading Desk, Policy & Offline PWA](#zero-tracking-private-reading-desk-policy--offline-pwa)
 - [Official AI Grounding & Machine Endpoints](#official-ai-grounding--machine-endpoints)
 - [Frontier & Developer API Ingestion Guide](#frontier--developer-api-ingestion-guide)
   - [1. Cloud Frontier AI Deployment (2026 Lineup)](#1-cloud-frontier-ai-deployment-2026-lineup)
@@ -134,12 +134,15 @@ An integrated workbench accessible directly inside the reader modal (`AITerminal
 
 ---
 
-## Zero-Tracking Private Reading Desk & Offline PWA
+## Zero-Tracking Private Reading Desk, Policy & Offline PWA
 
 The PMN reader platform operates under strict **Privacy by Architectural Design**:
 
-- **Zero Telemetry & Zero Analytics:** No Google Analytics, no tracking pixels, no telemetry scripts, and no third-party network requests.
-- **Client-Side Local Storage Desk:** Margin notes (<kbd>Alt</kbd> + <kbd>N</kbd>), reading progress markers, bookmarks, and font preferences are stored strictly inside the client's browser `localStorage`. Your thoughts and reading habits never leave your machine.
+- **Zero Telemetry & Zero Trackers:** No Google Analytics, no tracking pixels, no telemetry scripts, and no third-party network requests.
+- **Zero Cookies & Compliance Exemption:** The web client sets zero cookies (`document.cookie` is unused). Under GDPR (ePrivacy Directive Art. 5(3)) and Indonesia's UU PDP No. 27/2022, storage used exclusively for user-requested preferences (`localStorage`) is *strictly necessary* and legally exempt from invasive cookie consent popups.
+- **Client-Side Local Storage Sovereignty:** Margin notes (<kbd>Alt</kbd> + <kbd>N</kbd>), reading progress markers, bookmarks, and font preferences are stored strictly inside browser `localStorage`. Your thoughts and reading habits never leave your machine.
+- **Data Sovereignty Tools:** Built-in JSON export (`Export My Data`) and one-click data purge (`Clear All Local Data`) accessible directly from the Platform Policy modal.
+- **Platform Governance & Transparency Modal (`#/privacy`, `#/terms`, `#/disclaimer`, `#/ai`):** Instant access to complete storage inventories, canonical citation formats (1-click APA 7th & BibTeX), methodological limits (§15.0/§15.13 rejection of formula fetishism), and AI ingestion ethics.
 - **Offline Progressive Web App (PWA):** Equipped with a robust Service Worker (`vite-plugin-pwa` + `Workbox`) caching all 21 parts, glossary entries, search indexes, and styling tokens. Once loaded, the reader functions completely air-gapped without an internet connection.
 
 ---

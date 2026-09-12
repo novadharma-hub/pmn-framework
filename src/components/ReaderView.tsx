@@ -30,6 +30,7 @@ interface ReaderViewProps {
   /** Mode fokus dikendalikan App agar hanya ada satu sumber kebenaran. */
   focusMode?: boolean
   setFocusMode?: (v: boolean) => void
+  onOpenPolicy?: (tab?: 'privacy' | 'terms' | 'disclaimer' | 'ai') => void
 }
 
 const SPECIAL: Record<string, boolean> = { 'Preface': true, 'Coda': true, 'Intellectual Debts': true, 'Bibliography': true }
@@ -46,7 +47,7 @@ const shortenId = (id: string) => {
 export default function ReaderView({ 
   data, partIdx, secIdx, curPos, readMap, onMarkRead, onSavePosition, onBackHome, onToggleTheme, theme, forceOpenPalette,
   contentWidth = 'narrow', onChangeWidth, history = [], version = '',
-  focusMode = false, setFocusMode = (_v: boolean) => {}
+  focusMode = false, setFocusMode = (_v: boolean) => {}, onOpenPolicy
 }: ReaderViewProps) {
   const [sbOpen, setSbOpen] = useState(window.innerWidth > 1024)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
@@ -599,8 +600,17 @@ export default function ReaderView({
                 </section>
               </div>
 
-              <footer className="doc-footer border-t border-pmn-rule/40 py-16 flex justify-between items-center select-none font-mono text-[0.7rem] text-pmn-mute uppercase tracking-[0.4em]">
-                <span>PMN CORE &mdash; REV V{version}</span>
+              <footer className="doc-footer border-t border-pmn-rule/40 py-16 flex justify-between items-center select-none font-mono text-[0.7rem] text-pmn-mute uppercase tracking-[0.3em] flex-wrap gap-4">
+                <div style={{ display: 'flex', gap: '1.2rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <span>PMN CORE &mdash; REV V{version}</span>
+                  <button 
+                    onClick={() => onOpenPolicy?.('privacy')}
+                    style={{ background: 'none', border: 'none', color: 'var(--mute)', cursor: 'pointer', fontFamily: 'inherit', fontSize: 'inherit', textTransform: 'uppercase', letterSpacing: 'inherit' }}
+                    className="hover:text-pmn-acc transition-colors underline"
+                  >
+                    Policies &amp; Data
+                  </button>
+                </div>
                 <button className="hover:text-pmn-acc transition-colors border-b border-transparent hover:border-pmn-acc pb-1" onClick={onBackHome}>Return to Table of Contents &uarr;</button>
               </footer>
             </div>
@@ -612,6 +622,7 @@ export default function ReaderView({
         parts={data.parts} glossary={data.gl} isOpen={commandPaletteOpen} 
         onSelectSection={(p, s) => { onSavePosition(p, s); setCommandPaletteOpen(false) }} 
         onToggleTheme={onToggleTheme} onToggleFocus={() => setFocusMode(!focusMode)}
+        onOpenPolicy={onOpenPolicy}
         onClose={() => setCommandPaletteOpen(false)} 
       />
 

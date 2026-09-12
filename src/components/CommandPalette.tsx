@@ -19,11 +19,12 @@ interface CommandPaletteProps {
   onSelectSection: (partIdx: number, secIdx: number) => void
   onToggleTheme: () => void
   onToggleFocus: () => void
+  onOpenPolicy?: (tab?: 'privacy' | 'terms' | 'disclaimer' | 'ai') => void
   isOpen: boolean
   onClose: () => void
 }
 
-export default function CommandPalette({ parts, glossary, onSelectSection, onToggleTheme, onToggleFocus, isOpen, onClose }: CommandPaletteProps) {
+export default function CommandPalette({ parts, glossary, onSelectSection, onToggleTheme, onToggleFocus, onOpenPolicy, isOpen, onClose }: CommandPaletteProps) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<{ type: 'section' | 'glossary' | 'action'; label?: string; title: string; desc?: string; pIdx?: number; sIdx?: number; id?: string }[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
@@ -32,6 +33,10 @@ export default function CommandPalette({ parts, glossary, onSelectSection, onTog
   const actions = [
     { type: 'action' as const, title: 'Toggle Dark / Light Theme', desc: 'Switch between vintage bookstore and sleek dark mode', handler: onToggleTheme },
     { type: 'action' as const, title: 'Toggle Focus Mode', desc: 'Hide sidebars and read with zero distraction', handler: onToggleFocus },
+    { type: 'action' as const, title: 'Privacy Policy & Local Data Storage', desc: 'Zero cookies, client-side data inspection, export & reset', handler: () => onOpenPolicy?.('privacy') },
+    { type: 'action' as const, title: 'Terms of Use & Academic Citation', desc: 'Open access licensing, canon integrity, and APA/BibTeX formats', handler: () => onOpenPolicy?.('terms') },
+    { type: 'action' as const, title: 'Methodological & Epistemic Disclaimers', desc: 'Section 15.0 & 15.13 qualitative limits, non-deterministic heuristics', handler: () => onOpenPolicy?.('disclaimer') },
+    { type: 'action' as const, title: 'AI Ingestion & Ethics Policy', desc: 'Machine readability standards, anti-cherry-picking, and errata channels', handler: () => onOpenPolicy?.('ai') },
     { type: 'action' as const, title: 'Reset Reading Progress', desc: 'Clear local history and restart reading logs', handler: () => { if(confirm("Reset progress?")) { localStorage.removeItem('pmn-read'); window.location.reload(); } } },
   ]
 
