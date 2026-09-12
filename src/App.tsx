@@ -182,7 +182,11 @@ export default function App() {
       }
     }
     window.addEventListener('popstate', onPop)
-    return () => window.removeEventListener('popstate', onPop)
+    window.addEventListener('hashchange', onPop)
+    return () => {
+      window.removeEventListener('popstate', onPop)
+      window.removeEventListener('hashchange', onPop)
+    }
   }, [data])
 
   useEffect(() => {
@@ -429,8 +433,10 @@ export default function App() {
         <button className="hbtn text-[10px] opacity-70" onClick={() => { if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }}>JUMP ↗</button>
         <div id="hdr-r">
           <button id="focus-btn" className="focus-mode-btn" onClick={() => setFocusMode(v => !v)}>FOCUS</button>
-          <button id="hb-home" onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
-          <button id="hb-gl" onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
+          <button id="hb-home" className={page === 'contents' && contentsSub === 'map' ? 'on' : ''} onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
+          <button id="hb-gl" className={page === 'contents' && contentsSub === 'glossary' ? 'on' : ''} onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
+          <button id="hb-guide" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>AI Guide</button>
+          <button id="hb-policy" className={policyOpen ? 'on' : ''} onClick={() => openPolicy('privacy')}>Rules &amp; Data</button>
           <button id="theme-tog" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
           <button id="hb-kbd" onClick={() => setKbdOpen(true)}>Keys [Alt+K]</button>
         </div>
@@ -507,7 +513,7 @@ export default function App() {
         </div>
 
         {/* BOTTOM / MOBILE NAVIGATION BAR */}
-        <nav className="mob-nav" aria-label="Mobile Navigation">
+        <nav id="mob-nav" className="mob-nav" aria-label="Mobile Navigation">
           <button className={`mob-nav-btn${page === 'home' ? ' active' : ''}`} onClick={() => setPage('home')}>
             <span>&#8962;</span><span className="mob-nav-lbl">Cover</span>
           </button>
@@ -522,6 +528,18 @@ export default function App() {
             onClick={() => { setContentsSub('glossary'); setPage('contents') }}
           >
             <span>&#167;</span><span className="mob-nav-lbl">Glossary</span>
+          </button>
+          <button
+            className={`mob-nav-btn${page === 'guide' ? ' active' : ''}`}
+            onClick={() => setPage('guide')}
+          >
+            <span>&#9881;</span><span className="mob-nav-lbl">Guide</span>
+          </button>
+          <button
+            className={`mob-nav-btn${policyOpen ? ' active' : ''}`}
+            onClick={() => openPolicy('privacy')}
+          >
+            <span>&#9878;</span><span className="mob-nav-lbl">Rules</span>
           </button>
           <button className="mob-nav-btn" onClick={toggleTheme}>
             <span>{theme === 'dark' ? '☀' : '☾'}</span>
