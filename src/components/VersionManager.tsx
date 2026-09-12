@@ -45,7 +45,7 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
       const savedAudits = localStorage.getItem(AUDIT_KEY)
       if (savedAudits) setAuditEntries(JSON.parse(savedAudits))
     } catch (e) {
-      console.error('Gagal memuat data versi lokal:', e)
+      console.error('Failed to load local version data:', e)
     }
   }, [])
 
@@ -90,20 +90,20 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
     
     setVersions(updated)
     localStorage.setItem(VERSIONS_KEY, JSON.stringify(updated))
-    appendAudit(target ? 'update-version' : 'create-version', `v${data.version} disimpan ke arsip lokal.`)
+    appendAudit(target ? 'update-version' : 'create-version', `v${data.version} saved to local archive.`)
     setView('list')
-    showToast(target ? 'Versi diperbarui.' : 'Versi baru dipublikasikan.')
+    showToast(target ? 'Version updated.' : 'New version published.')
     setTarget(null)
   }
 
   const handleDelete = (id: string) => {
-    if (!confirm('Hapus versi ini dari penyimpanan lokal?')) return
+    if (!confirm('Delete this version from local storage?')) return
     const doomed = versions.find(v => v.id === id)
     const updated = versions.filter(v => v.id !== id)
     setVersions(updated)
     localStorage.setItem(VERSIONS_KEY, JSON.stringify(updated))
-    appendAudit('delete-version', doomed ? `v${doomed.version} dihapus dari arsip lokal.` : 'Satu versi dihapus.')
-    showToast('Versi berhasil dihapus.')
+    appendAudit('delete-version', doomed ? `v${doomed.version} deleted from local archive.` : 'One version deleted.')
+    showToast('Version successfully deleted.')
   }
 
   const handleExport = () => {
@@ -118,8 +118,8 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
     a.download = `pmn-versions-backup-${new Date().toISOString().slice(0, 10)}.json`
     a.click()
     URL.revokeObjectURL(href)
-    appendAudit('export-backup', `${versions.length} versi diexport ke backup JSON.`)
-    showToast('Backup JSON berhasil diunduh.')
+    appendAudit('export-backup', `${versions.length} versions exported to JSON backup.`)
+    showToast('JSON backup successfully downloaded.')
   }
 
   const handleImportClick = () => {
@@ -135,28 +135,28 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
       try {
         const parsed = JSON.parse(String(reader.result || '{}'))
         const importedList = Array.isArray(parsed) ? parsed : parsed.versions
-        if (!Array.isArray(importedList)) throw new Error('Format backup tidak dikenali.')
+        if (!Array.isArray(importedList)) throw new Error('Unrecognized backup format.')
         
         setVersions(importedList)
         localStorage.setItem(VERSIONS_KEY, JSON.stringify(importedList))
-        appendAudit('import-backup', `${importedList.length} versi diimpor dari file backup.`)
-        showToast(`Backup berhasil diimpor: ${importedList.length} versi.`)
+        appendAudit('import-backup', `${importedList.length} versions imported from backup file.`)
+        showToast(`Backup successfully imported: ${importedList.length} versions.`)
       } catch (e: any) {
-        showToast(e.message || 'Gagal mengimpor backup.')
+        showToast(e.message || 'Failed to import backup.')
       }
     }
     reader.readAsText(file)
   }
 
   const handleLogout = () => {
-    appendAudit('logout', 'Admin keluar dari panel.')
+    appendAudit('logout', 'Admin signed out of panel.')
     sessionStorage.removeItem('pmn-admin-session')
     onBack()
   }
 
   const fmtDate = (iso: string) => {
     if (!iso) return ''
-    return new Date(iso).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })
+    return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   }
 
   return (
@@ -167,12 +167,12 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
           <span className="font-pmn-mono text-[0.65rem] tracking-[0.2em] uppercase text-pmn-acc font-bold">PMN Admin Panel</span>
           {view !== 'list' && (
             <button onClick={() => { setView('list'); setTarget(null) }} className="font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-wider hover:text-pmn-acc cursor-pointer">
-              ← Daftar Versi
+              ← Version List
             </button>
           )}
         </div>
         <button onClick={handleLogout} className="font-pmn-mono text-[0.6rem] text-pmn-mute uppercase tracking-[0.14em] hover:text-pmn-acc cursor-pointer">
-          Keluar →
+          Sign Out →
         </button>
       </div>
 
@@ -186,7 +186,7 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
         {view === 'list' && (
           <>
             <div className="flex justify-between items-center flex-wrap gap-4 mb-10">
-              <span className="font-pmn-mono text-xs uppercase tracking-widest text-pmn-mute font-bold">Semua Versi ({versions.length})</span>
+              <span className="font-pmn-mono text-xs uppercase tracking-widest text-pmn-mute font-bold">All Versions ({versions.length})</span>
               <div className="flex gap-2.5 flex-wrap">
                 <button onClick={handleImportClick} className="font-pmn-mono text-[0.66rem] border border-pmn-rule px-3 py-2 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all bg-pmn-bg2">
                   Import Backup
@@ -195,7 +195,7 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
                   Export JSON
                 </button>
                 <button onClick={() => { setTarget(null); setView('add') }} className="font-pmn-mono text-[0.66rem] bg-pmn-acc text-white dark:text-black px-5 py-2 tracking-widest font-bold hover:opacity-85 shadow-lg cursor-pointer transition-all">
-                  + Versi Baru
+                  + New Version
                 </button>
                 <input ref={fileRef} type="file" accept="application/json" onChange={handleImportFile} className="hidden" />
               </div>
@@ -203,7 +203,7 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
 
             {versions.length === 0 ? (
               <div className="border border-dashed border-pmn-rule p-16 text-center font-pmn-body italic text-pmn-mute bg-pmn-bg2/30 rounded-sm">
-                Belum ada versi rilis yang terdaftar. Klik '+ Versi Baru' untuk menambahkan.
+                No release versions registered yet. Click '+ New Version' to add one.
               </div>
             ) : (
               <div className="space-y-6">
@@ -213,7 +213,7 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
                       <div className="space-y-3 flex-1 min-w-[280px]">
                         <div className="flex items-center gap-4 flex-wrap">
                           <span className="font-pmn-head text-xl font-bold text-pmn-ink">PMN v{v.version}</span>
-                          {i === 0 && <span className="bg-pmn-acc/10 text-pmn-acc border border-pmn-acc/30 font-pmn-mono text-[0.58rem] px-2 py-0.5 uppercase tracking-widest font-bold">TERKINI</span>}
+                          {i === 0 && <span className="bg-pmn-acc/10 text-pmn-acc border border-pmn-acc/30 font-pmn-mono text-[0.58rem] px-2 py-0.5 uppercase tracking-widest font-bold">LATEST</span>}
                           <span className="font-pmn-mono text-[0.63rem] text-pmn-mute opacity-60 font-bold">{fmtDate(v.date)}</span>
                         </div>
                         {v.subtitle && <p className="font-pmn-body italic text-[0.92rem] text-pmn-mute/80">{v.subtitle}</p>}
@@ -222,7 +222,7 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
                       </div>
                       <div className="flex gap-2">
                         <button onClick={() => { setTarget(v); setView('edit') }} className="font-pmn-mono text-[0.62rem] border border-pmn-rule px-3 py-1.5 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-colors bg-pmn-bg font-bold uppercase tracking-wider">Edit</button>
-                        <button onClick={() => handleDelete(v.id)} className="font-pmn-mono text-[0.62rem] bg-red-950/20 text-red-400 border border-red-900/50 px-3 py-1.5 cursor-pointer hover:bg-red-900/40 transition-colors font-bold uppercase tracking-wider">Hapus</button>
+                        <button onClick={() => handleDelete(v.id)} className="font-pmn-mono text-[0.62rem] bg-red-950/20 text-red-400 border border-red-900/50 px-3 py-1.5 cursor-pointer hover:bg-red-900/40 transition-colors font-bold uppercase tracking-wider">Delete</button>
                       </div>
                     </div>
                   </div>
@@ -232,7 +232,7 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
 
             {/* Audit Logs */}
             <section className="mt-20 border-t border-pmn-rule pt-10">
-              <span className="block font-pmn-mono text-[0.65rem] uppercase tracking-[0.2em] text-pmn-mute font-bold mb-6">Aktivitas Lokal Terakhir</span>
+              <span className="block font-pmn-mono text-[0.65rem] uppercase tracking-[0.2em] text-pmn-mute font-bold mb-6">Recent Local Activity</span>
               <div className="space-y-3 max-h-[350px] overflow-y-auto pr-3 custom-scrollbar">
                 {auditEntries.length > 0 ? auditEntries.map(entry => (
                   <div key={entry.id} className="border border-pmn-rule bg-pmn-bg2/50 p-5 text-xs font-pmn-body leading-relaxed shadow-xs">
@@ -241,11 +241,11 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
                       <span className="opacity-50">{fmtDate(entry.at)}</span>
                     </div>
                     <p className="text-pmn-ink opacity-90">{entry.details}</p>
-                    <span className="block font-pmn-mono text-[0.52rem] text-pmn-mute mt-2 uppercase tracking-tighter opacity-40">Oleh: {entry.actor}</span>
+                    <span className="block font-pmn-mono text-[0.52rem] text-pmn-mute mt-2 uppercase tracking-tighter opacity-40">By: {entry.actor}</span>
                   </div>
                 )) : (
                   <div className="border border-dashed border-pmn-rule p-6 text-center font-pmn-mono text-[0.65rem] text-pmn-mute/50 uppercase tracking-widest">
-                    Belum ada aktivitas yang tercatat dalam log audit.
+                    No activity recorded in audit log yet.
                   </div>
                 )}
               </div>
@@ -265,7 +265,7 @@ export default function VersionManager({ onBack }: VersionManagerProps) {
   )
 }
 
-// ─── FORM TAMBAH / EDIT RILIS ───
+// ─── FORM ADD / EDIT RELEASE ───
 interface VersionFormProps {
   initial: VersionRecord | null
   onSave: (data: VersionRecord) => void
@@ -283,7 +283,7 @@ function VersionForm({ initial, onSave, onCancel }: VersionFormProps) {
 
   const submit = () => {
     if (!ver.trim() || !sum.trim()) {
-      setErr('Nomor versi dan Ringkasan wajib diisi.')
+      setErr('Version number and Summary are required.')
       return
     }
     
@@ -304,33 +304,33 @@ function VersionForm({ initial, onSave, onCancel }: VersionFormProps) {
   return (
     <div className="space-y-6 animate-fade-in">
       <span className="block font-pmn-mono text-[0.7rem] uppercase tracking-[0.2em] text-pmn-acc font-bold mb-4">
-        {initial ? `⚙️ Edit Manuskrip v${initial.version}` : '📡 Publikasikan Versi Baru'}
+        {initial ? `⚙️ Edit Manuscript v${initial.version}` : '📡 Publish New Version'}
       </span>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Nomor Versi</label>
-          <input className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-3 outline-none focus:border-pmn-acc shadow-xs transition-colors" placeholder="contoh: 117.6" value={ver} onChange={e => { setVer(e.target.value); setErr('') }} />
+          <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Version Number</label>
+          <input className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-3 outline-none focus:border-pmn-acc shadow-xs transition-colors" placeholder="e.g. 120" value={ver} onChange={e => { setVer(e.target.value); setErr('') }} />
         </div>
         <div className="space-y-2">
-          <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Tanggal Rilis</label>
+          <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Release Date</label>
           <input className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-3 outline-none focus:border-pmn-acc shadow-xs transition-colors color-scheme-dark" type="date" value={date} onChange={e => setDate(e.target.value)} />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Subjudul (Opsional)</label>
+        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Subtitle (Optional)</label>
         <input className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-3 outline-none focus:border-pmn-acc shadow-xs transition-colors" placeholder="A Framework for Navigating Material Reality" value={sub} onChange={e => setSub(e.target.value)} />
       </div>
 
       <div className="space-y-2">
-        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Ringkasan Singkat</label>
-        <textarea className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-4 outline-none focus:border-pmn-acc shadow-xs transition-colors min-h-[100px] resize-y" placeholder="Deskripsikan inti perubahan di rilis ini..." value={sum} onChange={e => { setSum(e.target.value); setErr('') }} />
+        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Brief Summary</label>
+        <textarea className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-4 outline-none focus:border-pmn-acc shadow-xs transition-colors min-h-[100px] resize-y" placeholder="Describe core changes in this release..." value={sum} onChange={e => { setSum(e.target.value); setErr('') }} />
       </div>
 
       <div className="space-y-2">
-        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Detail Changelog (Opsional)</label>
-        <textarea className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-4 outline-none focus:border-pmn-acc shadow-xs transition-colors min-h-[140px] resize-y" placeholder="- Penambahan Subbab X&#10;- Koreksi istilah Y..." value={log} onChange={e => setLog(e.target.value)} />
+        <label className="block font-pmn-mono text-[0.6rem] uppercase text-pmn-mute font-bold tracking-widest">Changelog Details (Optional)</label>
+        <textarea className="w-full bg-pmn-bg border border-pmn-rule text-pmn-ink font-pmn-body p-4 outline-none focus:border-pmn-acc shadow-xs transition-colors min-h-[140px] resize-y" placeholder="- Added subsection X&#10;- Corrected terminology Y..." value={log} onChange={e => setLog(e.target.value)} />
       </div>
 
       <div className="space-y-2">
@@ -342,10 +342,10 @@ function VersionForm({ initial, onSave, onCancel }: VersionFormProps) {
 
       <div className="flex gap-4 pt-6">
         <button onClick={submit} className="bg-pmn-acc text-white dark:text-black font-pmn-mono text-[0.72rem] font-bold uppercase px-8 py-3 tracking-[0.15em] shadow-lg hover:translate-y-[-1px] active:translate-y-[1px] cursor-pointer transition-all">
-          {initial ? 'Simpan Perubahan' : 'Publikasikan'}
+          {initial ? 'Save Changes' : 'Publish'}
         </button>
         <button onClick={onCancel} className="border border-pmn-rule text-pmn-mute font-pmn-mono text-[0.72rem] font-bold uppercase px-6 py-3 hover:text-pmn-acc hover:border-pmn-acc cursor-pointer transition-all">
-          Batal
+          Cancel
         </button>
       </div>
     </div>
