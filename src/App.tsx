@@ -749,8 +749,8 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
 
       {/* HOME AI MODULE — Integrated React Terminal */}
       <div className="home-ai-section">
-        <div className="home-ai-inner" style={{maxWidth:1000, margin:'0 auto'}}>
-          <AITerminal parts={data.parts} gl={data.gl} activeSec={null} onOpenGuide={onOpenGuide} />
+        <div className="home-ai-inner" style={{maxWidth:1040, margin:'0 auto'}}>
+          <AITerminal parts={data.parts} gl={data.gl} activeSec={null} onOpenGuide={onOpenGuide} version={version} />
         </div>
       </div>
 
