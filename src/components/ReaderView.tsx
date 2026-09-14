@@ -493,6 +493,39 @@ export default function ReaderView({
 
             {/* ── Prose Content Box ── */}
             <div className="reader-prose-box">
+
+            {/* Preambul Bagian — paragraf tingkat-Bagian yang di naskah berdiri
+                sebelum seksi mana pun. Hilang dari terbitan sampai 2026-09-15;
+                lihat catatan pemulihan di modularizer.py. Hanya muncul di seksi
+                PERTAMA sebuah Bagian: di seksi lain ia pengulangan, dan di luar
+                reader ia terputus dari Bagiannya. */}
+            {sIdx === 0 && Array.isArray((p as any)?.preamble_html) && (p as any).preamble_html.length > 0 && (
+              <div
+                className="reader-part-preamble prose font-pmn-body text-pmn-mute"
+                style={{
+                  fontSize: `calc(1.0625rem * var(--reader-scale, ${readerScale}))`,
+                  borderLeft: '2px solid var(--color-pmn-acc)',
+                  paddingLeft: '1.25rem',
+                  marginBottom: '2.5rem',
+                  opacity: 0.92,
+                }}
+              >
+                <div
+                  className="reader-part-preamble-kicker font-mono"
+                  style={{
+                    fontSize: '0.62rem',
+                    letterSpacing: '0.34em',
+                    textTransform: 'uppercase',
+                    marginBottom: '0.9rem',
+                    opacity: 0.75,
+                  }}
+                >
+                  Part {p?.part} — opening
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: (p as any).preamble_html.join('\n') }} />
+              </div>
+            )}
+
             <div 
               id="prose" 
               ref={proseRef} 
