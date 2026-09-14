@@ -817,59 +817,67 @@ if ANTHROPIC_API_KEY:
           </p>
         </div>
 
-        {/* SECTION 1: WHAT THIS CORPUS CANNOT DO FOR YOU */}
+        {/* SECTION 1: WHAT THE TEXT DOES NOT MARK */}
         <div className="step" id="corpus-limits">
           <span className="step-num">Step 01</span>
-          <h2 className="step-h2">Before You Start: Where This Corpus Is Weak</h2>
+          <h2 className="step-h2">Five Things the Text Does Not Mark</h2>
           <p>
             Every guide of this kind tells you which model to pick. Model choice is the variable that matters
-            least here. The findings below were measured against the v120 corpus on 2026-09-09, and they apply
-            <strong> identically to the strongest and the weakest model on this page</strong>. An AI reading this
-            corpus will reproduce these weaknesses confidently, because nothing in the text marks them.
+            least here. Five properties of the v120 text are invisible to any model reading it &mdash; the
+            strongest and the weakest on this page alike will reproduce them with equal confidence, because
+            nothing in the text flags them. Knowing where to ask a second question is worth more than the
+            model you ask it with.
           </p>
           <p>
-            This section exists for a reason internal to the framework itself. PMN&apos;s primary diagnostic
-            (&sect;1.2) is whether a framework revises under evidence or insulates itself from it. A framework
-            that hides its weak points from its own readers has already begun to insulate. Publishing them is an
-            application of PMN, not a concession.
+            Each item below is about <strong>traceability</strong> &mdash; whether you can check a claim, not
+            whether the claim is true. None is a defect in the philosophy. These are dated measurements against
+            the v120 text (2026-09-09, revised 2026-09-14), and each carries its current status: the next
+            edition closes most of them.
           </p>
 
           <div className="workflow-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', marginTop: '1.2rem' }}>
             {[
               {
-                h: '74 attributions carry no source',
-                d: 'Sentences of the form "Gramsci argues that…" appear 81 times; 74 of them have no citation within three sentences. Gramsci alone carries 35.',
-                w: 'Ask the model to quote the section it is drawing on before accepting any claim about what a thinker held. If it cannot name a section, treat the attribution as the manuscript\'s reading, not as a report of the source.'
+                h: 'Attributions rarely name a source',
+                d: 'Sentences of the form "Gramsci argues that\u2026" appear 81 times; 74 of them have no citation within three sentences. Gramsci alone carries 35.',
+                s: 'Sourcing in progress. A worklist of every unsourced attribution was built 2026-09-14 and is being resolved entry by entry for the next edition.',
+                w: 'Ask the model to quote the section it is drawing on before accepting any claim about what a thinker held. If it cannot name a section, treat the attribution as the manuscript\u2019s reading, not as a report of the source.'
               },
               {
                 h: 'No causal claim states what would refute it',
-                d: 'Of 57 sections classified as causal-mechanism claims, 0 state a defeater. Scope hedging is good (84% qualify their conditions) — but hedging weakens a claim without saying what would overturn it.',
-                w: 'When you ask a model to "test" a claim, ask it first: what evidence would defeat this? If the corpus does not say, that is the finding — make the model report the absence instead of inventing a test.'
+                d: 'Of 57 sections classified as causal-mechanism claims, 0 state a defeater. Scope hedging is good \u2014 84% qualify their conditions \u2014 but hedging weakens a claim without saying what would overturn it.',
+                s: 'Open. Defeater conditions are a drafting requirement for the next edition, not a patch to v120.',
+                w: 'When you ask a model to "test" a claim, ask it first: what evidence would defeat this? If the corpus does not say, that is the finding \u2014 make the model report the absence instead of inventing a test.'
               },
               {
-                h: '13 empirical and historical sections cite nothing',
-                d: 'Including the whole of Part XVII (the case studies, ~5,100 words) and §7.8 Regime Types (4,004 words) — the two places whose function is to ground the framework in real history.',
-                w: 'These are where a model is most likely to fabricate supporting detail. Ask for the historical claim and the source separately, and verify the source yourself.'
+                h: 'Thirteen empirical sections cite nothing',
+                d: 'Including the whole of Part XVII (the case studies, ~5,100 words) and \u00a77.8 Regime Types (4,004 words) \u2014 the two places whose function is to ground the framework in real history.',
+                s: 'Open, and it is where the sourcing work starts: these sections carry the highest fabrication risk for any model.',
+                w: 'Ask for the historical claim and the source separately, and verify the source yourself.'
               },
               {
-                h: 'The canonical definitions section is outvoted on S',
-                d: '§15.0b states that S is "a qualitative classification, not a quantity" and that S = f(R, B, V) is "not a measurable sum". Four other places write S = R + B + V — §3.4b (twice), §7.8, §15.14, and the glossary.',
-                w: 'If a model computes S as a sum, it is following the majority of the text against the section that claims authority over the term. Point it at §15.0b.'
+                h: 'S is a classification, not a sum \u2014 and the text is uneven about it',
+                d: '\u00a715.0b, the canonical definitions section, states that S is "a qualitative classification, not a quantity". Four sections write S = R + B + V, but two of them (\u00a73.4b, \u00a77.8) write it to say what that form fails to capture; only \u00a73.4b elsewhere, \u00a715.14 and the glossary use it as a quantity. A Part XV preamble says the same as \u00a715.0b at Part level \u2014 "the formulas use variables and relational notation, but they are not mathematical equations in the formal sense" \u2014 and that paragraph is present in the manuscript but missing from the corpus files this site ships, along with nine others at the same structural position.',
+                s: 'Resolved 2026-09-10: \u00a715.0b governs the term, and Part-level statements outrank sections. The next edition carries the rule and restores the missing preambles.',
+                w: 'Read S as a classification. If a model computes it as a sum, it is following the arithmetic form rather than the section that defines the term \u2014 point it at \u00a715.0b.'
               },
               {
-                h: 'The glossary and §11.0 disagree on a count',
-                d: 'The glossary entry is "the seven diagnostic questions". §11.0 is headed "Nine diagnostic questions" and lists eight items, one of which the text itself calls the eighth. v118.6 and v119 both said seven.',
+                h: 'The glossary and \u00a711.0 disagree on a count',
+                d: 'The glossary entry is "the seven diagnostic questions". \u00a711.0 is headed "Nine diagnostic questions" and lists eight items, one of which the text itself calls the eighth. v118.6 and v119 both said seven, and roughly 23 mentions of "seven" survive across nine sections.',
+                s: 'Open, and it is an author decision rather than an editing task: whether the extra diagnostic folds into the seven or stands as a numbered ninth.',
                 w: 'Expect two different answers to the same question. Seven is the reading supported by every source except the current heading.'
               },
               {
                 h: 'What this list is not',
-                d: 'It is not a list of errors in the philosophy. Every item is about traceability: whether a reader can check a claim, not whether the claim is true.',
-                w: 'Use it to calibrate how much weight to put on a given answer — not to discount the framework.'
+                d: 'It is not a list of errors in the philosophy, and not a disclaimer. It is the set of places where the text does not carry its own audit trail \u2014 which is exactly where an AI reading it will sound most confident and be least checkable.',
+                s: '\u2014',
+                w: 'Use it to calibrate how much weight to put on a given answer, and which answers to verify at the source.'
               }
             ].map((c, i) => (
               <div key={i} className="workflow-card">
                 <h4>{c.h}</h4>
                 <p>{c.d}</p>
+                {c.s !== '\u2014' && <p><strong>Status:</strong> {c.s}</p>}
                 <p><strong>What to do:</strong> {c.w}</p>
               </div>
             ))}
