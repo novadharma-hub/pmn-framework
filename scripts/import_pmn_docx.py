@@ -347,6 +347,16 @@ def build_parts(paragraphs: list[Paragraph], toc_headings: list[str], body_start
             continue
 
         if current_sub is None:
+            # Part-level paragraph: stands between the Part heading and the first
+            # section heading. These were dropped silently here -- ten paragraphs,
+            # 1,199 words across Parts IV, V, VI, XIV and XV, including the
+            # manuscript's only page-numbered citation and the Part-level scope
+            # statement that governs the S notation. The DOCX has always had them;
+            # only the published artefacts lost them.
+            if current_part is not None:
+                rendered = paragraph_html(para.element)
+                if rendered:
+                    current_part.setdefault("preamble_html", []).append(rendered)
             continue
 
         rendered = paragraph_html(para.element)

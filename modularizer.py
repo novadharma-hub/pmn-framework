@@ -91,11 +91,18 @@ def split_mode():
                     manifest_sub[key] = val
             manifest_subs.append(manifest_sub)
 
-        manifest.append({
+        manifest_entry = {
             "part": part_id,
             "title": title,
             "subs": manifest_subs
-        })
+        }
+        # Part-level preamble: paragraphs standing between the Part heading and
+        # the first section heading. Carried through the manifest because the
+        # compile step rebuilds parts.json from here -- dropping it at this
+        # boundary is what erased ten paragraphs from every published artefact.
+        if part.get("preamble_html"):
+            manifest_entry["preamble_html"] = part["preamble_html"]
+        manifest.append(manifest_entry)
 
     # Save lightweight manifest.json
     manifest_path = os.path.join(parts_dir, "manifest.json")
@@ -162,6 +169,8 @@ def build_data_mode():
             "title": part.get("title", ""),
             "subs": part_subs
         }
+        if part.get("preamble_html"):
+            full_part["preamble_html"] = part["preamble_html"]
         full_parts.append(full_part)
 
     print(f"   [OK] {len(full_parts)} parts divalidasi.")
@@ -213,6 +222,17 @@ def build_data_mode():
                 part_title = part.get("title", "")
                 part_id = part.get("part", "")
                 cf.write(f"### Part {part_id}: {part_title}\n\n")
+
+                # Part-level preamble, if any. It precedes every section and in
+                # several Parts it states the scope that governs them.
+                for pre_html in part.get("preamble_html", []):
+                    pre_text = re.sub(r'<[^>]+>', '', pre_html)
+                    pre_text = re.sub(r'\s+', ' ', pre_text).strip()
+                    pre_text = pre_text.replace("&ldquo;", '"').replace("&rdquo;", '"')
+                    pre_text = pre_text.replace("&lsquo;", "'").replace("&rsquo;", "'")
+                    pre_text = pre_text.replace("&mdash;", "\u2014").replace("&ndash;", "\u2013")
+                    if pre_text:
+                        cf.write(f"{pre_text}\n\n")
 
                 for sub in part.get("subs", []):
                     sub_id = sub.get("id", "")

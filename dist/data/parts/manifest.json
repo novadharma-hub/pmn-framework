@@ -332,6 +332,11 @@
         "title": "Becoming as Epistemic Capacity",
         "is_intro": false
       }
+    ],
+    "preamble_html": [
+      "<p>The examples are not limited to markets. Electoral systems in which each voter rationally abstains — because the probability that any individual vote decides an outcome is vanishingly small, while the costs of voting are real — produce low-turnout equilibria that are collectively irrational for any population whose interests require high participation. Common-pool resource arrangements in which each individual actor rationally extracts more than their sustainable share — because the costs of restraint fall on the restraining individual while the benefits of restraint are distributed across all users — produce collective depletion that harms all users including the individually rational ones. Arms races in which each state rationally increases its military capacity in response to the increases of potential adversaries — because unilateral restraint produces vulnerability while matched increases produce only the same relative position at higher cost — produce collectively irrational expenditure patterns that leave all parties less secure. The structural form is the same across cases: individual rationality under conditions of distributed consequence and absent coordination.</p>",
+      "<p>The implication for institutional design is specific and does not follow from the observation alone. It is not that individual rationality should be replaced by collective obligation, or that incentive structures can be designed perfectly enough to eliminate the problem. It is that the conditions under which individual rationality produces collectively harmful outcomes can be identified in advance — they have a recognizable structure — and that identified conditions are the appropriate target of institutional intervention. Coordination mechanisms, credible commitment devices, monitoring and enforcement arrangements, and the redesign of consequence distribution are the tools. They work better in some domains than others, and they introduce their own capture risks that require separate analysis. What they do not do is eliminate the underlying tension: any arrangement complex enough to coordinate behavior at scale will generate some domain in which the micro-macro gap reappears in a new form.</p>",
+      "<p>This is one reason the framework treats institutional redesign as a permanent activity rather than a problem to be solved. The rational micro, problematic macro dynamic is not a correctable error in a system that could otherwise be designed to avoid it. It is a structural feature of any system composed of agents with local information and distributed consequences. The appropriate orientation is not to design the system that finally eliminates it but to maintain the institutional capacity to identify where it is currently operating, what interventions are available, and what second-order consequences those interventions are likely to produce. That capacity is itself a collective good subject to the same dynamic it is meant to address — which is why it requires explicit maintenance rather than emerging spontaneously from the individual interests of those who would benefit from it.</p>"
     ]
   },
   {
@@ -388,6 +393,9 @@
         "title": "Al-Farabi and the Islamic Political Philosophy Tradition",
         "is_intro": false
       }
+    ],
+    "preamble_html": [
+      "<p>The materialist tradition has consistently handled the metaphysical dimension badly — not because the questions are unanswerable, but because the tradition imported an answer before it asked the question. For the majority of the world’s population, metaphysical commitments are not intellectual puzzles to be held lightly pending further evidence. They are the organizing framework of existence, the source of obligation, the context in which suffering acquires meaning and action acquires moral weight. A framework that treats this as a variable to be managed without acknowledging what it is treating will lose the analytical and political access it needs. What follows engages seriously with the metaphysical dimension without either adopting it uncritically or dismissing it in ways that guarantee the dismissal will not be heard.</p>"
     ]
   },
   {
@@ -434,6 +442,9 @@
         "title": "Elite Circulation and Structural Continuity",
         "is_intro": false
       }
+    ],
+    "preamble_html": [
+      "<p class=\"box-blue\"><em>The supremacy of a social group manifests itself in two ways: as domination and as intellectual and moral leadership.</em>  (Gramsci 1971, p. 57)</p>"
     ]
   },
   {
@@ -1102,6 +1113,12 @@
         "title": "The Compressed Core: PMN Without the Architecture",
         "is_intro": false
       }
+    ],
+    "preamble_html": [
+      "<p>The framework developed in Parts I through XIII is a tool for understanding how material reality is organized, how it moves, and what it produces. But a framework that remains purely interpretive — that can explain the past without generating structural expectations about the present — has not completed its work. Part XV provides a set of analytical scaffolding: heuristic variable structures that organize the framework&#x27;s causal claims into comparable form. These are not mathematical models and do not generate quantitative predictions. They are a vocabulary for structural comparison — a way of making explicit which variables matter, in which direction, and how they relate — that complements the narrative analysis of Parts I through XIII without replacing it. Part XV makes explicit what the preceding parts imply but do not formalize: a set of structural formulas for anticipating the direction of change. Part X already developed the structural account of thresholds, counter-power accumulation, and transformation windows in prose form. Part XV formalizes that account into a formula set — the concepts are continuous with Part X, the formulas are new.</p>",
+      "<p>The relationship between Part X and Part XV is not redundancy — it is a shift in analytical register. Part X is a narrative of mechanism: it explains how threshold dynamics work, what counter-power accumulation looks like, and why political time is not uniform. That narrative produces understanding. Part XV is an architecture of variables: it makes explicit which variables drive each mechanism, how they relate to each other, and what changes in which variable would alter the trajectory. That architecture produces comparability. An analyst who has absorbed Part X understands why systems approach threshold. An analyst using Part XV can compare two systems — or the same system at two points in time — by examining where their variable profiles diverge, and can identify which specific variable would most change the trajectory if it shifted. The formula set does not replace the prose account; it operationalizes it for structured comparison across cases.</p>",
+      "<p>These are not predictions in the sense of specific events at specific times. They are predictions in the sense that physics predicts the behavior of gases under pressure — not which molecule will move where, but what the aggregate will do under specified conditions. The social analogue of thermodynamic law is not prophecy but structural tendency: given these inputs, these outputs become significantly more probable than their alternatives.</p>",
+      "<p class=\"box-blue\"><em>The formulas use variables and relational notation, but they are not mathematical equations in the formal sense. They express causal and structural relationships between identified variables. Coefficients exist — some variables are more powerful than others — but they cannot be assigned with current knowledge. The formulas are honest about this: they specify the direction and sign of relationships, not their precise magnitude.</em></p>"
     ]
   },
   {
@@ -1265,6 +1282,9 @@
         "title": "Self-Capture Risk Assessment for the PMN Community",
         "is_intro": false
       }
+    ],
+    "preamble_html": [
+      "<p>This Part is positioned last for a specific reason: its self-assessment of the framework is most credible after the full argument has been read, not before it. Part XIV states the framework’s methodology (14.1), its current doctrinal positions across major domains (14.2), what it has demonstrated versus what it assumes versus what it does not know (14.3), the conditions under which it would be surpassed rather than merely revised (14.4), and the institutional requirements for transmitting it without capturing it (14.5–6). The positions in 14.2 are conditional and temporal — the current best reading given current evidence, not permanent commitments. They are held at the level of Tier 3 empirical-hypothetical assumptions (14.3) except where marked otherwise. Part XIV is updated as the framework develops. It is not a conclusion. It is a current position.</p>"
     ]
   },
   {
