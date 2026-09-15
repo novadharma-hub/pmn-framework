@@ -99,7 +99,11 @@ def check_requirements_encoding() -> None:
 
 
 def check_word() -> None:
-    """Konversi PDF memakai otomasi COM -- butuh MS Word betulan terpasang."""
+    """Konversi PDF memakai otomasi COM -- butuh MS Word betulan terpasang.
+
+    Jika COM Word gagal, build_pdf.py (reportlab fallback) dipakai sebagai
+    pengganti; jangan gagalkan rilis hanya karena tipografi Word tidak ada.
+    """
     print("\n[3/5] MS Word (untuk konversi PDF)")
     try:
         import win32com.client  # noqa: F401
@@ -111,9 +115,11 @@ def check_word() -> None:
         word.Quit()
         ok(f"MS Word {version} tersedia")
     except Exception as exc:
-        fail(
+        warn(
             f"MS Word tidak bisa dijalankan: {exc}",
-            "pasang MS Word, atau lewati PDF dan unggah manual",
+            "PDF akan diregenerasi memakai scripts/build_pdf.py (fallback reportlab, "
+            "tipografi lebih datar dari Word). Jalankan build_pdf.py setelah "
+            "modularizer compile, lalu npm run build.",
         )
 
 
