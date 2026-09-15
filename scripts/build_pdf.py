@@ -69,6 +69,8 @@ REPO_ROOT = HERE.parent
 CORPUS = REPO_ROOT / "pmn_corpus_for_ai.md"
 OUT_PRIMARY = REPO_ROOT / "dist" / "PMN_Latest.pdf"
 OUT_MIRROR = REPO_ROOT / "public_static" / "PMN_Latest.pdf"
+# Canonical source DOCX (parent of public/). T4.1 staleness guard.
+DOCX = REPO_ROOT.parent / "private" / "clean_outputs" / "PMN_Framework_v120.docx"
 
 MANUSCRIPT_MARKER = "## \U0001f4dd MANUSCRIPT PARTS & SECTIONS"
 TITLE = "PMN Framework v120"
@@ -166,7 +168,18 @@ def build_pdf(blocks, out_path: Path) -> int:
 def is_stale() -> bool:
     if not OUT_PRIMARY.exists() or not CORPUS.exists():
         return True
-    return CORPUS.stat().st_mtime > OUT_PRIMARY.stat().st_mtime
+    if CORPUS.stat().st_mtime > OUT_PRIMARY.stat().st_mtime:
+        return True
+    # T4.1: the corpus itself must be current with the canonical DOCX. If the
+    # DOCX is newer than the corpus, someone edited the source without running
+    # `modularizer compile` — the corpus (and therefore the site AND the PDF)
+    # would both be consistently wrong. Detect it, don't inherit it.
+    if DOCX.exists() and DOCX.stat().st_mtime > CORPUS.stat().st_mtime:
+        print("[WARN] canonical DOCX is newer than the compiled corpus.")
+        print("[WARN] run `python3 modularizer.py compile` before building, or the")
+        print("[WARN] site and PDF will agree with each other and both be wrong.")
+        return True
+    return False
 
 
 def main() -> int:
