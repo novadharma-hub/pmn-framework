@@ -70,7 +70,22 @@ CORPUS = REPO_ROOT / "pmn_corpus_for_ai.md"
 OUT_PRIMARY = REPO_ROOT / "dist" / "PMN_Latest.pdf"
 OUT_MIRROR = REPO_ROOT / "public_static" / "PMN_Latest.pdf"
 # Canonical source DOCX (parent of public/). T4.1 staleness guard.
-DOCX = REPO_ROOT.parent / "private" / "clean_outputs" / "PMN_Framework_v120.docx"
+def _docx_kanonik():
+    """DOCX kanonik = versi TERTINGGI di clean_outputs, bukan nama yang dikeraskan.
+
+    T4.1 semula menuliskan v120 apa adanya. Kenaikan ke v121 mematahkannya diam-diam:
+    penjaga akan membandingkan korpus terhadap berkas LAMA dan selalu lolos.
+    Penjaga yang namanya dikeraskan berhenti menjaga pada rilis berikutnya.
+    """
+    d = REPO_ROOT.parent / "private" / "clean_outputs"
+    def kunci(q):
+        m = re.search(r"PMN_Framework_v(\d+(?:[._]\d+)*)\.docx$", q.name, re.I)
+        return tuple(int(x) for x in re.split(r"[._]", m.group(1))) if m else ()
+    c = sorted(d.glob("PMN_Framework_v*.docx"), key=kunci, reverse=True) if d.exists() else []
+    return c[0] if c else d / "PMN_Framework_v120.docx"
+
+
+DOCX = _docx_kanonik()
 
 MANUSCRIPT_MARKER = "## \U0001f4dd MANUSCRIPT PARTS & SECTIONS"
 TITLE = "PMN Framework v120"
