@@ -35,8 +35,8 @@ const READING_PATHS: ReadingPath[] = [
     summary: 'Ground your inquiry in mind-independent material realism, physicalist limits, and the biological floor of suffering before engaging doctrine or applied cases.',
     leadPart: 'I',
     steps: [
-      { id: '1.1', label: '§1.1 Ontological Realism', desc: 'Mind-independent physical reality as the primary ground.' },
-      { id: '1.6', label: '§1.6 Epistemic Authority', desc: 'Rejection of revelation, theological dogma, and scholastic immunity.' },
+      { id: '2.1', label: '§2.1 Reality as Primary', desc: 'Mind-independent physical reality as the primary ground.' },
+      { id: '1.9', label: '§1.9 Epistemic Authority', desc: 'Rejection of revelation, theological dogma, and scholastic immunity.' },
       { id: '2.4', label: '§2.4 Layered Architecture', desc: 'Thermodynamic, structural, and agent tiers without reductive collapse.' },
       { id: '3.4', label: '§3.4 The Biological Floor', desc: 'Sentient vulnerability and non-negotiable suffering minimization.' },
     ],
@@ -51,9 +51,9 @@ const READING_PATHS: ReadingPath[] = [
     leadPart: 'VI',
     steps: [
       { id: '6.2', label: '§6.2 Resource Asymmetry', desc: 'Material disparities that construct uneven bargaining fields.' },
-      { id: '7.1', label: '§7.1 Custodian Dilemma', desc: 'How protective stewardship mutates into self-preserving interest.' },
-      { id: '7.3c-i', label: '§7.3 5-Stage Capture Cycle', desc: 'The canonical lifecycle sequence from protective mandate to predatory extraction.' },
-      { id: '8.2', label: '§8.2 Narrative Inertia', desc: 'Ideological lag and false consciousness legitimizing status-quo capture.' },
+      { id: '7.3', label: '§7.3 The Custodian Problem', desc: 'How protective stewardship mutates into self-preserving interest.' },
+      { id: '7.3c-i', label: '§7.3c-i The Capture Sequence', desc: 'The canonical account of capture: mechanism, stages, and detection.' },
+      { id: '8.4b', label: '§8.4b Narrative Typology', desc: 'Ideological lag and false consciousness legitimizing status-quo capture.' },
     ],
   },
   {
@@ -65,7 +65,7 @@ const READING_PATHS: ReadingPath[] = [
     summary: 'The most compressed formulation of PMN’s core thesis, diagnostic power mechanics, and materialist ethics in under thirty minutes.',
     steps: [
       { id: '15.15', label: '§15.15 Doctrinal Core', desc: 'The definitive, high-density summary of PMN metaphysics and ethics.' },
-      { id: '1.6', label: '§1.6 Epistemic Anchor', desc: 'Empirical evidentiary standards and common-sense accountability.' },
+      { id: '1.9', label: '§1.9 Epistemic Authority', desc: 'Empirical evidentiary standards and common-sense accountability.' },
       { id: '3.4', label: '§3.4 Physical Suffering', desc: 'The non-arbitrary biological floor of moral valuation.' },
       { id: '7.3', label: '§7.3 Institutional Diagnostic', desc: 'Methods for auditing custodian advantage and capture signatures.' },
     ],
@@ -80,9 +80,8 @@ const READING_PATHS: ReadingPath[] = [
     leadPart: 'XVII',
     steps: [
       { id: '3.4', label: '§3.4 Sentience & Pain', desc: 'The moral bedrock: unavoidable biological aversion to somatic trauma.' },
-      { id: '5.1', label: '§5.1 Vector of Becoming', desc: 'Optimal developmental capacity expansion as the evaluative ceiling.' },
+      { id: '4.5', label: '§4.5 Anti-Foreclosure Criterion', desc: 'Optimal developmental capacity expansion as the evaluative ceiling.' },
       { id: '17.1', label: '§17.1 Ethics in Historical Practice', desc: 'Moral action and systemic trade-offs under material resource constraints.' },
-      { id: '18.2', label: '§18.2 Agentic Resilience', desc: 'Preserving individual integrity and navigating structural coercion.' },
     ],
   },
   {
@@ -95,9 +94,9 @@ const READING_PATHS: ReadingPath[] = [
     leadPart: 'VII',
     steps: [
       { id: '2.4', label: '§2.4 3-Tier Analysis', desc: 'Separating thermodynamic limits, structural incentives, and individual agency.' },
-      { id: '6.3', label: '§6.3 Transfer Formula T', desc: 'Quantifying surplus extraction via T = S · D · P · G.' },
+      { id: '15.2', label: '§15.2 Transformation Pressure T', desc: 'Quantifying surplus extraction via T = S · D · P · G.' },
       { id: '7.3', label: '§7.3 Capture Checklist', desc: 'Empirical audit indicators for institutional integrity degradation.' },
-      { id: '11.2', label: '§11.2 Contestability Engineering', desc: 'Designing viable, low-cost institutional channels for dissent.' },
+      { id: '11.0', label: '§11.0 Contestability Diagnostics', desc: 'Designing viable, low-cost institutional channels for dissent.' },
     ],
   },
   {
@@ -112,7 +111,7 @@ const READING_PATHS: ReadingPath[] = [
       { id: '11.1', label: '§11.1 Beyond Ownership', desc: 'Real power is determined by allocation control, not nominal title deeds.' },
       { id: '11.3', label: '§11.3 Accountability Diagnostics', desc: 'Mechanisms for surplus auditing and monopolistic capture restriction.' },
       { id: '11.5', label: '§11.5 Unconditional Living Floor', desc: 'Basic material security as an inalienable prerequisite for civic participation.' },
-      { id: '12.1', label: '§12.1 Ecology & Thermodynamics', desc: 'Biospheric carrying capacity and thermodynamic limits on production.' },
+      { id: '3.10', label: '§3.10 Ecological Constraints', desc: 'Biospheric carrying capacity and thermodynamic limits on production.' },
     ],
   },
 ]
