@@ -69,8 +69,8 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
         'Rejection of radical idealism: material conditions always precede and constrain consciousness.',
       ],
       keySections: [
-        { id: '1.1', title: 'Ontological Realism' },
-        { id: '1.6', title: 'Epistemic Authority' },
+        { id: '2.1', title: 'Reality as Primary' },
+        { id: '1.9', title: 'Epistemic Authority' },
         { id: '2.4', title: 'Non-Reductive Layered Architecture' },
         { id: '3.4', title: 'The Biological Floor of Suffering' },
       ],
@@ -89,9 +89,9 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
       ],
       keySections: [
         { id: '6.2', title: 'Resource & Capacity Asymmetry' },
-        { id: '7.1', title: 'The Custodian Dilemma' },
-        { id: '7.3c-i', title: '5-Stage Capture Lifecycle' },
-        { id: '11.2', title: 'Universal Contestability Engineering' },
+        { id: '7.3', title: 'The Custodian Problem' },
+        { id: '7.3c-i', title: 'The Capture Sequence' },
+        { id: '11.0', title: 'The Economic Diagnostics' },
       ],
     },
     {
@@ -107,97 +107,116 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
         'Institutional reconstruction through coordinated dissent and counter-design.',
       ],
       keySections: [
-        { id: '5.1', title: 'Evaluation of Genuine Becoming' },
+        { id: '4.5', title: 'The Anti-Foreclosure Criterion' },
         { id: '17.1', title: 'Ethics in Historical Situations' },
-        { id: '18.2', title: 'Autonomous Agentic Integrity' },
-        { id: '20.1', title: 'Prospects for Systemic Transformation' },
+        { id: '10.10c', title: 'The Extended Agent Typology' },
+        { id: '10.1', title: 'Why Systems Change' },
       ],
     },
   ]
 
-  // 2. DATA: Transfer Formula Variables
+  // 2. DATA: primary-formula variables, transcribed from 15.2-15.4.
+  //
+  // An earlier version of this block described T as "structural surplus
+  // extraction" and glossed S, D, P, G as scale asymmetry, unrotated tenure,
+  // exit penalties and governance opacity. None of those are the manuscript's
+  // variables: "exit penalties" and "governance opacity" occur zero times in
+  // the corpus. T is Transformation Pressure, the net force pushing a system
+  // toward reorganization. See private/restrukturisasi/audit/AUD-23.
+  //
+  // `behaviour` replaced a `counterMeasure` field that attributed per-variable
+  // policy prescriptions to PMN. The manuscript states how these variables
+  // behave; it does not issue remedies for them one by one.
   const FORMULA_VARS = {
     S: {
       symbol: 'S',
-      name: 'Scale & Capacity Asymmetry',
-      anchor: '6.2',
-      def: 'The disparity in material resources, technological leverage, and organizational capacity between incumbent custodians and constituents.',
-      fieldTest: 'Do constituents possess equivalent capacity to independently verify or counter custodian decisions?',
-      counterMeasure: 'Audit capacity decentralization, independent constituent federations, and open machine-auditable public repositories.',
+      name: 'Structural Suffering',
+      anchor: '15.3',
+      def: 'Resource Deprivation (R) + Institutional Betrayal (B), with Visibility Suppression (V) operating as a political-conversion modifier rather than an additive component. Resource deprivation is the gap between what a population requires to meet the minimal anchor and what the system actually provides.',
+      fieldTest: 'Is the deprivation understood by those experiencing it as structural, differential, and produced by identifiable arrangements — or as natural, shared, and temporary?',
+      behaviour: 'Populations can sustain extraordinary material hardship without generating transformation pressure when the deprivation reads as natural or temporary. This formula tracks what feeds systemic change; the four-way typology at 3.4b tracks what the framework evaluates as wrong. They are complementary, not substitutes.',
     },
     D: {
       symbol: 'D',
-      name: 'Duration of Unrotated Tenure',
-      anchor: '7.1',
-      def: 'Prolonged tenure without mandatory rotation, enabling patronage crystallization and internal interest entrenchment.',
-      fieldTest: 'How long have incumbent decision-makers held office without binding external audits?',
-      counterMeasure: 'Term limits, staggered lot-based rotation, and mandatory external citizen audits.',
+      name: 'Duration',
+      anchor: '15.4',
+      def: 'The multiplier by which persistence raises suffering’s political weight. Suffering that persists across years generates different political consequences than equivalent suffering concentrated in a brief crisis.',
+      fieldTest: 'Has the condition persisted long enough to alter behavioural dispositions, life expectations, and institutional trust — or is it still being absorbed as an acute episode?',
+      behaviour: 'Acute crises are absorbed more readily than chronic conditions, because acute crises do not degrade the dispositions and trust that chronic suffering erodes.',
     },
     P: {
       symbol: 'P',
-      name: 'Exit Penalty (Cost of Non-Compliance)',
-      anchor: '6.4',
-      def: 'The material, legal, or social damage a constituent incurs when attempting to exit the system or contest authority.',
-      fieldTest: 'If a member rejects an extractive directive, do they lose access to their fundamental living necessities?',
-      counterMeasure: 'Unconditional living floor guarantee (§11.5) independent of organizational loyalty, and safe exit rights without penalization.',
+      name: 'Scale',
+      anchor: '15.4',
+      def: 'The proportion of a relevant population experiencing the suffering. Below certain thresholds it is politically managed as a minority problem; above them it becomes the majority’s problem and the political arithmetic changes.',
+      fieldTest: 'What share of the relevant population is affected, and has that share crossed the threshold at which the arrangement can no longer treat it as a minority concern?',
+      behaviour: 'Scale amplifies pressure non-linearly as it crosses political thresholds. Where the threshold sits varies by political system, cultural context, and the capacity of affected populations to form coalitions.',
     },
     G: {
       symbol: 'G',
-      name: 'Governance Opacity (Information Asymmetry)',
-      anchor: '7.3',
-      def: 'The degree of procedural secrecy, bureaucratic obfuscation, and verification monopolization held by inner custodian circles.',
-      fieldTest: 'How accessible and comprehensible are transaction records and policy deliberation minutes to ordinary citizens?',
-      counterMeasure: 'Radical procedural transparency, machine-auditable public ledgers, and robust whistleblower safeguards.',
+      name: 'Intergenerational Transmission',
+      anchor: '15.4',
+      def: 'The degree to which suffering passes from parents to children through structural mechanisms rather than being resolved within a generation.',
+      fieldTest: 'Do the mechanisms that produced the condition also reproduce it in the next generation, or does each generation face it afresh?',
+      behaviour: 'Always implied in the primary formula even where cross-references write the shorthand T = S × D × P for legibility.',
     },
+
   }
 
   // 3. DATA: 5 Capture Stages
+  // CAPTURE_STAGES: the authoritative five-stage sequence, transcribed from
+  // 7.3c-i. An earlier version presented a different lifecycle entirely
+  // (protective mandate -> custodian entrenchment -> information asymmetry ->
+  // extraction normalization), which is not the manuscript's model. The
+  // `remedy` field now carries what 7.3d and 7.3c-i actually say, including
+  // the finding that remedies stop being available after stage three.
   const CAPTURE_STAGES = [
     {
       num: '01',
-      title: 'Initial Protective Mandate',
-      anchor: '7.3',
-      subtitle: 'Chartered Protection for Shared Vulnerabilities',
-      symptoms: 'Focus on safeguarding constituents from shared existential threats (famine, external predation, disorder). The relationship between custodians and constituents is functional and high-trust.',
-      indicators: 'High civic legitimacy, lean operational structure, direct communication, voluntary compliance driven by demonstrable shared benefit.',
-      remedy: 'Lock in sunset clauses, universal contestability protocols (§11.2), and radical transparency requirements from day one of institutional creation.',
+      title: 'Access Asymmetry',
+      anchor: '7.3c-i',
+      subtitle: 'Systematic informational, technical and relational advantage',
+      symptoms: 'Concentrated interests establish an advantage over institutional overseers. Regulators and decision-makers come to rely on the regulated for specialized expertise, data models, and professional career pipelines.',
+      indicators: 'Capture presents innocuously as technical competence and administrative efficiency. Nothing yet looks like wrongdoing.',
+      remedy: 'One of only two tractable windows. 7.3d: sunset provisions and mandatory re-authorization force an arrangement to demonstrate continued justification for its authority rather than assuming it.',
     },
     {
       num: '02',
-      title: 'Custodian Entrenchment',
-      anchor: '7.3',
-      subtitle: 'Bureaucratic Specialization & Emergent Internal Interests',
-      symptoms: 'Administrators segregate into a distinct professional class. Institutional survival and internal staff perks begin to take precedence over the founding charter.',
-      indicators: 'Growth of exclusive executive allowances, budget disproportionately diverted toward institutional PR and brand defense over direct constituent protection.',
-      remedy: 'Enforce mandatory term limits, lot-based rotational leadership, and independent citizen inspection panels selected at random.',
+      title: 'Decision-Filter Capture & Preference Expression',
+      anchor: '7.3c-i',
+      subtitle: 'Procedural filters narrow around the dominant interest',
+      symptoms: 'Actors with asymmetric access express preferences through institutional channels. The institution’s cognitive and procedural filters narrow, systematically excluding information and policy choices that threaten the dominant interest.',
+      indicators: 'Decisions remain locally defensible as pragmatic or legally prudent, but cumulatively bias institutional direction. The bias is visible only in aggregate.',
+      remedy: 'The last tractable window. 7.3d: external independent review with genuine enforcement capacity — authority to compel disclosure, impose consequences, and act without the consent of the reviewed entity.',
     },
     {
       num: '03',
-      title: 'Information Asymmetry Accumulation',
-      anchor: '7.3',
-      subtitle: 'Archival Monopoly, Secrecy & Technical Complexity',
-      symptoms: 'Custodians claim institutional operations are "too technically complex and sensitive" for public scrutiny. Performance reporting is curated selectively.',
-      indicators: 'External audits denied under the pretext of operational secrecy; informed public critique dismissed as unprofessional or uncredentialed.',
-      remedy: 'Institutionalize radical open data: all deliberative minutes, fiscal transfers, and decision trees must be published to machine-readable public repositories.',
+      title: 'Personnel Alignment',
+      anchor: '7.3c-i',
+      subtitle: 'Veto points staffed with sympathetic custodians',
+      symptoms: 'Recruitment, promotion, and retention systematically select for personnel whose orientations fit the narrowed decision filter, while dissenting personnel are marginalized, reassigned, or driven out.',
+      indicators: 'Internal alignment cements the access asymmetry. Internal reform capacity is now severely impaired.',
+      remedy: 'Randomized selection for oversight bodies removes the self-selection bias that allows capture through strategic placement of personnel — but 7.3d warns the mechanism depends on how the eligible pool is constructed: randomizing within an exclusionary pool replicates the exclusion.',
     },
     {
       num: '04',
-      title: 'Extraction Normalization & Ideological Defense',
+      title: 'Objective Redefinition & Output Reorientation',
       anchor: '7.3c-i',
-      subtitle: 'Public Surplus Diverted to Preserve Incumbent Power',
-      symptoms: 'Structural extraction is rationalized as "the necessary sacrifice for collective stability." Moralistic rhetoric is deployed to silence constituent dissent.',
-      indicators: 'Criminalization or stigmatization of whistleblowers and critics; permanent invocation of emergency states to suspend normal accountability.',
-      remedy: 'Organized civil non-cooperation, selective withdrawal of compliance, and constructing independent parallel institutions.',
+      subtitle: 'The founding legitimacy vocabulary is absorbed and repurposed',
+      symptoms: 'Operative goals diverge decisively from the statutory mandate. What was previously defined as regulatory evasion or mission failure is formally rearticulated as modern, flexible mandate fulfillment.',
+      indicators: 'Outputs consistently serve the captured interest while maintaining symbolic fidelity to public purposes.',
+      remedy: 'No longer reversible from within the institution’s own rules. Reversal requires either severe systemic crisis or organized external counter-power (10.9) capable of overriding captured procedures.',
     },
     {
       num: '05',
-      title: 'Systemic Rigidity & Catastrophic Capture',
+      title: 'Accountability Capture & Consolidation',
       anchor: '7.3c-i',
-      subtitle: 'Institutions Predate Upon the Constituents They Were Chartered to Protect',
-      symptoms: 'The institution operates strictly as an extractive instrument for incumbent factions. Internal correction is impossible absent massive external shock.',
-      indicators: 'Functional collapse, compliance enforced purely through coercive threats or economic denial, mass constituent flight and loss of legitimacy.',
-      remedy: 'Radical delegitimation and dismantling; material reconstruction from below based on newly forged, verifiable constitutional charters.',
+      subtitle: 'The beneficiaries adjudicate grievances against themselves',
+      symptoms: 'Channels of review, contestation, and appellate correction are dismantled, defunded, or captured by the same interests.',
+      indicators: 'Institutional lock-in: beneficiaries control adjudication of claims against themselves and command institutional resources to suppress counter-claims.',
+      remedy: 'Self-insulating. The standing diagnostics from 7.3 still apply — who benefits from the output distribution, who audits the auditors, what counts as failure, and whether revision from outside is legally and materially possible — but answering them no longer produces reform from inside.',
     },
+
   ]
 
   return (
@@ -380,13 +399,13 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
           <div style={{background:'var(--bg)', border:'1px solid var(--rule)', padding:'2rem', boxShadow:'8px 8px 0 rgba(0,0,0,0.05)'}}>
             <div style={{textAlign:'center', padding:'1.8rem 1rem', background:'var(--bg2)', border:'1px solid var(--rule)', marginBottom:'2rem'}}>
               <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.2em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.6rem'}}>
-                STRUCTURAL SURPLUS TRANSFER EQUATION (PMN §6.3, §11.3)
+                THE PRIMARY FORMULA — TRANSFORMATION PRESSURE (PMN §15.2)
               </div>
               <div style={{fontFamily:'var(--f-head)', fontSize:'clamp(2.2rem, 5vw, 3.4rem)', color:'var(--acc-text)', letterSpacing:'.1em', margin:'0 0 .6rem 0'}}>
-                T = S &middot; D &middot; P &middot; G
+                T = S &times; D &times; P &times; G
               </div>
               <p style={{fontFamily:'var(--f-body)', fontSize:'.95rem', color:'var(--ink2)', maxWidth:'640px', margin:'0 auto', lineHeight:1.65}}>
-                The magnitude of structural surplus extraction (<strong style={{color:'var(--ink)'}}>T</strong>) scales multiplicatively with scale asymmetry (<strong style={{color:'var(--ink)'}}>S</strong>), unrotated duration of tenure (<strong style={{color:'var(--ink)'}}>D</strong>), exit penalties for constituents (<strong style={{color:'var(--ink)'}}>P</strong>), and opacity of governance/verification (<strong style={{color:'var(--ink)'}}>G</strong>).
+                Transformation pressure (<strong style={{color:'var(--ink)'}}>T</strong>) is the net force pushing a system toward significant reorganization. It is structural suffering (<strong style={{color:'var(--ink)'}}>S</strong>) multiplied by duration (<strong style={{color:'var(--ink)'}}>D</strong>), scale (<strong style={{color:'var(--ink)'}}>P</strong>), and intergenerational transmission (<strong style={{color:'var(--ink)'}}>G</strong>). When T crosses a system&rsquo;s threshold for non-linear change — a threshold that is itself variable and not known in advance — rapid reorganization becomes probable.
               </p>
             </div>
 
@@ -470,10 +489,10 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
 
                   <div style={{gridColumn:'1 / -1', background:'var(--bg)', border:'1px solid var(--rule)', padding:'1rem 1.2rem', marginTop:'.5rem'}}>
                     <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.4rem'}}>
-                      PMN Counter-Measures &amp; Reform Protocols:
+                      How the manuscript says it behaves:
                     </strong>
                     <p style={{fontFamily:'var(--f-body)', fontSize:'.92rem', lineHeight:1.65, color:'var(--ink)', margin:0}}>
-                      {FORMULA_VARS[selectedVar].counterMeasure}
+                      {FORMULA_VARS[selectedVar].behaviour}
                     </p>
                   </div>
                 </div>
