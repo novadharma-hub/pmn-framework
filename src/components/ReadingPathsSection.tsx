@@ -90,11 +90,11 @@ const READING_PATHS: ReadingPath[] = [
     persona: 'Systemic Reformers & Strategists',
     badge: 'Diagnostics',
     estTime: '~55 min · 4 Modules',
-    summary: 'Deploy PMN analytical instruments to measure structural surplus extraction and formulate tactical interventions in real-world institutions.',
+    summary: 'Deploy PMN analytical instruments to measure transformation pressure and formulate tactical interventions in real-world institutions.',
     leadPart: 'VII',
     steps: [
       { id: '2.4', label: '§2.4 3-Tier Analysis', desc: 'Separating thermodynamic limits, structural incentives, and individual agency.' },
-      { id: '15.2', label: '§15.2 Transformation Pressure T', desc: 'Quantifying surplus extraction via T = S · D · P · G.' },
+      { id: '15.2', label: '§15.2 Transformation Pressure T', desc: 'The net force pushing a system toward reorganization: T = S × D × P × G.' },
       { id: '7.3', label: '§7.3 Capture Checklist', desc: 'Empirical audit indicators for institutional integrity degradation.' },
       { id: '11.0', label: '§11.0 Contestability Diagnostics', desc: 'Designing viable, low-cost institutional channels for dissent.' },
     ],
