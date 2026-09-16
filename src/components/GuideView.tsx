@@ -581,8 +581,8 @@ Your mission is to audit claims against PMN's Tier 1 Foundational Axioms and Tie
 
 For any claim, policy recommendation, or empirical finding:
 1. Check compatibility with the Biological Floor (§3.4): Does this proposal treat sentient suffering as an acceptable variable to balance against abstract utility?
-2. Test against Axiom 3c (Multiplicative Transfer Equation: T = S · D · P · G):
-   Does the proposal assume power variables operate additively, ignoring compound leverage effects?
+2. Test against the Primary Formula (Transformation Pressure: T = S × D × P × G, §15.2):
+   Does the proposal assume these variables operate additively, ignoring compound multiplier effects?
 3. Audit Empirical Citations:
    - Identify whether citations refer to controlled empirical studies, statistical correlations, or self-reported stakeholder surveys.
    - Separate verified facts from institutional public relations framing.
@@ -900,7 +900,7 @@ if ANTHROPIC_API_KEY:
             <div className="question-card">
               <div className="question-name">3. Healthcare &amp; Pharmaceutical Complexity</div>
               <div className="question-note">
-                "Apply the Multiplicative Transfer Equation (T = S · D · P · G, §6.3 / §15.8) to pharmaceutical patent thickets. Which variable represents the primary extraction bottleneck? How does opacity in pricing suppress contestability?"
+                "Apply the Primary Formula (Transformation Pressure: T = S × D × P × G, §15.2–§15.4) to pharmaceutical patent thickets. Which variable represents the primary extraction bottleneck? How does opacity in pricing suppress contestability?"
               </div>
             </div>
 
@@ -1157,7 +1157,7 @@ if ANTHROPIC_API_KEY:
                   GPT-6 Astra &amp; GPT-5.6 Sol
                 </strong>
                 <p style={{ fontSize: '0.81rem', color: 'var(--ink2)', lineHeight: 1.55, margin: '0 0 0.5rem' }}>
-                  <strong>Why it wins:</strong> Pure RL deliberative Chain-of-Thought cleanly decouples axiomatic claims from rhetorical spin. Coldly traces the 5-Stage Institutional Capture sequence (§7.3c-i) and computes multi-variable pressure thresholds in the Transfer Equation ($T = S \cdot D \cdot P \cdot G$).
+                  <strong>Why it wins:</strong> Pure RL deliberative Chain-of-Thought cleanly decouples axiomatic claims from rhetorical spin. Coldly traces the 5-Stage Institutional Capture sequence (§7.3c-i) and computes multi-variable pressure thresholds in the Primary Formula ($T = S \cdot D \cdot P \cdot G$).
                 </p>
                 <div style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', color: 'var(--mute)', background: 'var(--bg2)', padding: '0.4rem 0.6rem', borderRadius: '3px' }}>
                   <strong>Deployment:</strong> OpenAI API / ChatGPT with high reasoning effort + target section JSON.

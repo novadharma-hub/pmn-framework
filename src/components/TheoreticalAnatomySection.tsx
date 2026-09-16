@@ -243,7 +243,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
           {[
             { id: 'layers', label: '1. 3-Layer Analytical Stack' },
             { id: 'formula', label: '2. Power Transfer Formula (T = S · D · P · G)' },
-            { id: 'capture', label: '3. 5-Stage Institutional Capture (§7.3)' },
+            { id: 'capture', label: '3. The Capture Sequence (§7.3c-i)' },
             { id: 'parts', label: '4. Module Directory (Parts I–XXI)' },
           ].map(tab => (
             <button
@@ -582,7 +582,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
 
                   <div style={{gridColumn:'1 / -1', background:'var(--bg)', border:'1px solid var(--rule)', padding:'1.2rem'}}>
                     <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.5rem'}}>
-                      PMN Counter-Measures &amp; Anti-Capture Protocols:
+                      What can be done at this stage:
                     </strong>
                     <p style={{fontFamily:'var(--f-body)', fontSize:'.95rem', lineHeight:1.68, color:'var(--ink)', margin:0}}>
                       {CAPTURE_STAGES[selectedStage].remedy}
