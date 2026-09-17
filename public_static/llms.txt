@@ -6,6 +6,12 @@ PMN is a comprehensive, non-ideal structural philosophy spanning epistemology, o
 
 ## Machine-Readable Manifests & Endpoints
 
+> **Fetcher note.** GitHub Pages serves `.md` files as `text/markdown`, and
+> several AI web fetchers drop that media type before reading the body — the
+> file is present and current, it simply never arrives. Every Markdown artifact
+> below is therefore also published complete in one `text/plain` file.
+
+- [Complete Content, Single File (text/plain)](https://novadharma-hub.github.io/pmn-framework/llms-full.txt): AI grounding documentation plus the full ~330k word corpus in one file, served as text/plain for fetchers that refuse text/markdown. Use this if a `.md` URL fails.
 - [Standard AI Discovery Index (Text)](https://novadharma-hub.github.io/pmn-framework/llms.txt): Standard llms.txt entry point.
 - [Structured API Manifest (JSON)](https://novadharma-hub.github.io/pmn-framework/llms.json): Machine-readable JSON index with metadata, part schemas, and data endpoints.
 - [AI Grounding Documentation (Markdown)](https://novadharma-hub.github.io/pmn-framework/llms.md): Formatted Markdown reference with complete architectural tables.
