@@ -77,13 +77,19 @@ VERSION IS READ, NEVER WRITTEN IN
 hardcoded-v120 found on 2026-09-17, and it was stamped into the Title metadata
 of the v126 PDF. The version now comes from data/version.json.
 
-METADATA STAYS ANONYMOUS
-------------------------
-Author/Creator/Producer/Subject have been "Anonymous" since a5b45f3 and remain
-so, and the cover carries no byline. The name is public on the site and in
-llms.txt, but printing it onto the face of a document whose metadata someone
-deliberately scrubbed would quietly undo that decision. One line to change if
-it is ever wanted.
+AUTHORSHIP: PEN NAME EVERYWHERE, REAL NAME NOWHERE
+--------------------------------------------------
+Until 2026-09-17 every metadata field read "Anonymous" and the cover carried no
+byline, while the site and llms.txt named the author four times over. That was
+not protection, it was an inconsistency: the same name sat one click from the
+file. Worse for a document meant to be cited, `/Author: Anonymous` enters every
+reference manager as an author literally called "Anonymous".
+
+Nova's rule, 2026-09-17: no real name anywhere; the pen name "Nova Dharma" is
+the only name used. So /Author and the cover now carry the pen name, and
+/Creator, /Producer and /Subject stay "Anonymous" because those are TOOL
+fields — filling them only adds a fingerprint of the machine that built the
+file, which is the thing actually worth withholding.
 
 PIPELINE POSITION
 -----------------
@@ -495,6 +501,8 @@ def cerita_sampul(g, lebar, label, data):
         Spacer(1, 6 * mm),
         Garis(lebar, 0.7, RULE, 0),
         Spacer(1, 4 * mm),
+        Paragraph("Nova Dharma", g["coversub"]),
+        Spacer(1, 1 * mm),
         Paragraph("%s &#183; %d parts &#183; %d sections"
                   % (label, len(data), sum(len(p.get("subs", [])) for p in data)),
                   g["coversub"]),
@@ -577,7 +585,14 @@ def dokumen(path, font, label, outline=True):
         leftMargin=23 * mm, rightMargin=23 * mm,
         topMargin=27 * mm, bottomMargin=25 * mm,
         title="PMN Framework %s" % label,
-        author="Anonymous", creator="Anonymous",
+        # /Author memakai NAMA PENA. Nova 2026-09-17: tidak boleh ada nama
+        # asli di mana pun; "Nova Dharma" adalah nama pena dan sudah terbit
+        # di situs dan llms.txt sejak lama.
+        #
+        # /Creator, /Producer dan /Subject tetap Anonymous: itu medan
+        # PERKAKAS, bukan penulis, dan mengisinya hanya menambah sidik jari
+        # tentang mesin yang membangun berkas ini.
+        author="Nova Dharma", creator="Anonymous",
         producer="Anonymous", subject="Anonymous",
         font=font, outline=outline,
     )
