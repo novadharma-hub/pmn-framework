@@ -10,6 +10,7 @@
   "homepage": "https://novadharma-hub.github.io/pmn-framework/",
   "canonical_artifacts": {
     "llms_txt": "https://novadharma-hub.github.io/pmn-framework/llms.txt",
+    "llms_full_txt": "https://novadharma-hub.github.io/pmn-framework/llms-full.txt",
     "llms_json": "https://novadharma-hub.github.io/pmn-framework/llms.json",
     "llms_md": "https://novadharma-hub.github.io/pmn-framework/llms.md",
     "flat_corpus_for_ai": "https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md",
@@ -446,5 +447,6 @@
         }
       ]
     }
-  ]
+  ],
+  "fetch_note": "GitHub Pages serves .md as text/markdown; some AI fetchers reject that media type before reading the body. llms_full_txt carries the same content as text/plain."
 }

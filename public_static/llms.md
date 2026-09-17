@@ -17,6 +17,7 @@
 | **Structured API Manifest** | [`llms.json`](https://novadharma-hub.github.io/pmn-framework/llms.json) | JSON schema containing all module endpoints, stats, and metadata for automated pipelines. |
 | **AI Documentation** | [`llms.md`](https://novadharma-hub.github.io/pmn-framework/llms.md) | Rich Markdown overview with complete architectural tables. |
 | **Raw AI Corpus** | [`pmn_corpus_for_ai.md`](https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md) | Flat, uncompressed ~330k-word text corpus stripped of HTML, optimal for single-file context upload. |
+| **Complete Content (text/plain)** | [`llms-full.txt`](https://novadharma-hub.github.io/pmn-framework/llms-full.txt) | Everything in one file at a media type every fetcher accepts. GitHub Pages serves `.md` as `text/markdown`, which some AI fetchers reject unread. |
 | **Canonical Markdown** | [`PMN_Latest.md`](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.md) | Complete manuscript in formatted Markdown. |
 | **Canonical PDF** | [`PMN_Latest.pdf`](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf) | Official 632-page typeset publication. |
 
