@@ -231,6 +231,27 @@ def main() -> int:
 
     print(f"[ok] {OUT_PRIMARY} ({size:,} bytes)")
     print(f"[ok] {OUT_MIRROR} (mirror)")
+
+    # Salinan BERVERSI. `create_release.py` mencari
+    # dist/PMN_Framework_<tag>.pdf dan .md; sejak PDF jadi keluaran build
+    # (a5b45f3) build hanya menulis PMN_Latest.*, sehingga otomasi rilis
+    # tak pernah menemukan asetnya. Enam versi terbit tanpa tag maupun
+    # release, dan halaman GitHub tetap mengiklankan v120 sebagai "Latest".
+    #
+    # "Latest" juga nama yang salah untuk aset release: ia sasaran bergerak,
+    # dan menempelkannya pada tag tetap membuatnya keliru begitu versi
+    # berikutnya terbit. Aset release wajib berversi.
+    try:
+        import json
+        vf = REPO_ROOT / "data" / "version.json"
+        tag = json.loads(vf.read_text(encoding="utf-8"))["version"]
+        vpdf = REPO_ROOT / "dist" / f"PMN_Framework_{tag}.pdf"
+        vmd = REPO_ROOT / "dist" / f"PMN_Framework_{tag}.md"
+        vpdf.write_bytes(OUT_PRIMARY.read_bytes())
+        vmd.write_text(CORPUS.read_text(encoding="utf-8"), encoding="utf-8")
+        print(f"[ok] {vpdf.name} + {vmd.name} (aset release berversi)")
+    except Exception as e:
+        print(f"[warn] salinan berversi gagal: {e}")
     print("[ok] PDF is now a build output of the corpus.")
     return 2 if stale else 0
 
