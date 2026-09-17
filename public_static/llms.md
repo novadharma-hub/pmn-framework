@@ -1,11 +1,11 @@
 # Progressive Materialist Naturalism (PMN) — AI Grounding Reference
 
-[![Version](https://img.shields.io/badge/Release-v120-blueviolet.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
+[![Version](https://img.shields.io/badge/Release-v126-blueviolet.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
 [![AI-Ready](https://img.shields.io/badge/AI--Grounding-Corpus%20Enabled-orange.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/llms.txt)
 [![License](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
 
 > **A naturalist philosophical framework for analyzing material reality, minimizing structural suffering, and maximizing genuine becoming.**  
-> *Authored by Nova Dharma — Canonical Release v120 (2026-09-07)*
+> *Authored by Nova Dharma — Canonical Release v126 (2026-09-17)*
 
 ---
 
@@ -18,7 +18,7 @@
 | **AI Documentation** | [`llms.md`](https://novadharma-hub.github.io/pmn-framework/llms.md) | Rich Markdown overview with complete architectural tables. |
 | **Raw AI Corpus** | [`pmn_corpus_for_ai.md`](https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md) | Flat, uncompressed ~330k-word text corpus stripped of HTML, optimal for single-file context upload. |
 | **Canonical Markdown** | [`PMN_Latest.md`](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.md) | Complete manuscript in formatted Markdown. |
-| **Canonical PDF** | [`PMN_Latest.pdf`](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf) | Official 660-page typeset publication. |
+| **Canonical PDF** | [`PMN_Latest.pdf`](https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf) | Official 553-page typeset publication. |
 
 ---
 
@@ -67,7 +67,7 @@
 To ground any LLM (Claude, ChatGPT, Gemini, DeepSeek) with high architectural fidelity, provide the following priming prompt along with `pmn_corpus_for_ai.md` or the relevant module JSON:
 
 ```text
-I am attaching PMN (Progressive Materialist Naturalism) v120 by Nova Dharma. Read it as a framework to reason with, not as a document to summarize.
+I am attaching PMN (Progressive Materialist Naturalism) v126 by Nova Dharma. Read it as a framework to reason with, not as a document to summarize.
 
 Your task is to internalize its architecture:
 - Epistemology and revision discipline (Part I)
