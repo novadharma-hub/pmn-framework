@@ -30,6 +30,11 @@ EXCLUDED_DIRS = {
     "backups",
     "__pycache__",
     "dist",
+    # 2026-09-17: .mimosa/ adalah jurnal alat lokal, gitignored, dan tak pernah
+    # bisa terbit. Ia menyumbang 34 dari 34 peringatan "possible secret" pada
+    # pemeriksaan ini. Alat yang seluruh keluarannya derau berhenti dibaca,
+    # dan yang hilang bersamanya adalah peringatan yang sungguhan.
+    ".mimosa",
 }
 
 EXCLUDED_FILES = {
@@ -123,6 +128,38 @@ def check_tracked_cache() -> list[str]:
     return bad
 
 
+def muat_env() -> int:
+    """Muat ROOT/.env ke os.environ. Mengembalikan jumlah kunci yang dimuat.
+
+    TIDAK ADA yang memuatnya sebelum 2026-09-17. PMN_SENSITIVE_TERMS hidup di
+    .env, sehingga check_metadata_leaks() membaca daftar kosong pada SETIAP
+    pemanggilan, membangun regex `(?!)` yang tak pernah cocok dengan apa pun,
+    dan ringkasannya tetap mencetak "[OK] Public metadata leaks (Critical)".
+
+    Peringatan "dilewati" dan lampu hijau itu dicetak dalam jalan yang sama.
+    Pemeriksaan yang tak mungkin gagal bukan pemeriksaan; ia dekorasi yang
+    dibaca orang sebagai jaminan.
+    """
+    p = ROOT / ".env"
+    if not p.exists():
+        return 0
+    n = 0
+    try:
+        isi = p.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return 0
+    for baris in isi.splitlines():
+        baris = baris.strip()
+        if not baris or baris.startswith("#") or "=" not in baris:
+            continue
+        k, _, v = baris.partition("=")
+        k = k.strip()
+        if k and k not in os.environ:
+            os.environ[k] = v.strip().strip('"').strip("'")
+            n += 1
+    return n
+
+
 def check_metadata_leaks() -> tuple[list[str], list[str]]:
     critical_findings: list[str] = []
     info_findings: list[str] = []
@@ -152,10 +189,18 @@ def check_metadata_leaks() -> tuple[list[str], list[str]]:
             seen.add(resolved)
             unique_paths.append(resolved)
             
+    muat_env()
     terms = [t.strip() for t in os.environ.get("PMN_SENSITIVE_TERMS", "").split(",") if t.strip()]
     if not terms:
-        print("[WARN] PMN_SENSITIVE_TERMS tidak diset (.env privat, tidak ter-push) — "
-              "pemeriksaan istilah personal dilewati pada ronde ini.")
+        # Dulu ini mencetak peringatan lalu MELANJUTKAN, dan ringkasan tetap
+        # melaporkan [OK]. Sekarang ia jadi temuan kritis: daftar istilah yang
+        # kosong berarti perbandingannya tidak berjalan, dan "tidak berjalan"
+        # tidak boleh terbaca sama dengan "lulus".
+        critical_findings.append(
+            "PMN_SENSITIVE_TERMS kosong: pemindaian istilah personal TIDAK "
+            "berjalan. Pemeriksaan ini tak bisa lulus tanpa daftar istilah "
+            "(lihat .env, yang gitignored dan tak ter-push).")
+        return critical_findings, info_findings
     personal_re = re.compile("|".join(re.escape(t) for t in terms), re.IGNORECASE) if terms else re.compile(r"(?!)")
     
     for path in unique_paths:
