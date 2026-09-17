@@ -195,47 +195,74 @@ TINT = HexColor("#dccdac")
 # --------------------------------------------------------------------------
 # Fonts — detect and fall back. See module docstring.
 # --------------------------------------------------------------------------
-FONT_SETS = [
-    ("Lora", "Lora-Regular.ttf", "Lora-Bold.ttf",
-     "Lora-Italic.ttf", "Lora-BoldItalic.ttf"),
-    ("LibreBaskerville", "LibreBaskerville-Regular.ttf",
-     "LibreBaskerville-Bold.ttf", "LibreBaskerville-Italic.ttf",
-     "LibreBaskerville-Italic.ttf"),
-]
+# The site splits the two roles (style.css): Libre Baskerville sets headings,
+# Lora sets body. The PDF follows the same split rather than using one face for
+# everything, so a reader who knows the site recognises the document.
+#
+# Both are SIL OFL. google/fonts ships them ONLY as variable fonts, and
+# reportlab cannot select a weight axis — it renders the default instance. So
+# static masters are cut locally with fontTools (OFL permits modification) and
+# vendored under assets/fonts/ with each family's OFL.txt.
+#
+# THE TRAP THAT COST AN HOUR, RECORDED SO IT IS NOT REPEATED: cutting the
+# statics with `updateFontNames=False` leaves Lora-Bold.ttf carrying the
+# internal PostScript name "Lora-Regular". Two font resources in the PDF then
+# share one BaseFont, the renderer resolves both to the same embedded face, and
+# bold is REGISTERED but never bold. Nothing errors. Measured ink coverage of
+# "HHnnoo" was 1.00x against regular where Times-Bold is 1.53x; after
+# `updateFontNames=True` it is 1.60x. Metadata said 700 the whole time.
+KELUARGA = {
+    "Lora": ("Lora-Regular.ttf", "Lora-Bold.ttf",
+             "Lora-Italic.ttf", "Lora-BoldItalic.ttf"),
+    "LibreBaskerville": ("LibreBaskerville-Regular.ttf",
+                         "LibreBaskerville-Bold.ttf",
+                         "LibreBaskerville-Italic.ttf",
+                         "LibreBaskerville-BoldItalic.ttf"),
+}
 
 BASE14 = ("Times-Roman", "Times-Bold", "Times-Italic", "Times-BoldItalic")
 
 _FONT_CACHE = []
 
 
-def daftarkan_font():
-    """Register vendored OFL faces if present.
+def _daftar(family):
+    """Register one vendored family. Returns its 4 names, or None."""
+    berkas = KELUARGA.get(family)
+    if not berkas:
+        return None
+    paths = [FONT_DIR / f for f in berkas]
+    if not all(p.exists() for p in paths):
+        return None
+    try:
+        names = []
+        for suffix, p in zip(("", "-Bold", "-Italic", "-BoldItalic"), paths):
+            n = family + suffix
+            pdfmetrics.registerFont(TTFont(n, str(p)))
+            names.append(n)
+        pdfmetrics.registerFontFamily(
+            family, normal=names[0], bold=names[1],
+            italic=names[2], boldItalic=names[3])
+        return tuple(names)
+    except Exception as e:
+        print(f"[warn] vendored font {family} unusable, falling back: {e}")
+        return None
 
-    Returns (regular, bold, italic, bolditalic, embedded: bool).
-    Any failure falls back to base-14 rather than raising: on the deploy runner
-    a missing font must degrade the typography, never the build.
+
+def daftarkan_font():
+    """Resolve the body and heading faces, each falling back on its own.
+
+    Returns (body4, head2, embedded: bool). Any failure degrades to base-14
+    rather than raising: on the deploy runner a missing font must cost
+    typography, never the build.
     """
     if _FONT_CACHE:
         return _FONT_CACHE[0]
-    hasil = (*BASE14, False)
-    for family, reg, bold, ital, bi in FONT_SETS:
-        paths = [FONT_DIR / f for f in (reg, bold, ital, bi)]
-        if not all(p.exists() for p in paths):
-            continue
-        try:
-            names = []
-            for suffix, p in zip(("", "-Bold", "-Italic", "-BoldItalic"), paths):
-                n = family + suffix
-                pdfmetrics.registerFont(TTFont(n, str(p)))
-                names.append(n)
-            pdfmetrics.registerFontFamily(
-                family, normal=names[0], bold=names[1],
-                italic=names[2], boldItalic=names[3])
-            hasil = (*names, True)
-            break
-        except Exception as e:
-            print(f"[warn] vendored font {family} unusable, falling back: {e}")
-            continue
+    body = _daftar("Lora")
+    head = _daftar("LibreBaskerville")
+    tertanam = bool(body or head)
+    body = body or BASE14
+    head2 = (head[0], head[1]) if head else (body[0], body[1])
+    hasil = (body, head2, tertanam)
     _FONT_CACHE.append(hasil)
     return hasil
 
@@ -401,37 +428,38 @@ def polos(canv, doc):
 # --------------------------------------------------------------------------
 # Styles
 # --------------------------------------------------------------------------
-def gaya(font):
+def gaya(font, head):
     reg, bold, ital, bi = font
+    hreg, hbold = head
     body = ParagraphStyle(
         "body", fontName=reg, fontSize=10.3, leading=14.8,
         alignment=4, spaceAfter=7, textColor=INK)
     return {
         "body": body,
         "sec": ParagraphStyle(
-            "PMNSec", parent=body, fontName=bold, fontSize=11.6, leading=15,
+            "PMNSec", parent=body, fontName=hbold, fontSize=11.6, leading=15,
             spaceBefore=15, spaceAfter=2, alignment=0, textColor=ACC2,
             keepWithNext=1),
         "part": ParagraphStyle(
-            "PMNPart", parent=body, fontName=bold, fontSize=21, leading=26,
+            "PMNPart", parent=body, fontName=hbold, fontSize=21, leading=26,
             spaceBefore=5, spaceAfter=5, alignment=0, textColor=ACC),
         "partnum": ParagraphStyle(
-            "partnum", parent=body, fontName=bold, fontSize=9.4, leading=12,
+            "partnum", parent=body, fontName=hbold, fontSize=9.4, leading=12,
             alignment=0, textColor=MUTE, spaceAfter=2),
         "pre": ParagraphStyle(
             "pre", parent=body, fontName=ital, fontSize=10.2, leading=15.2,
             textColor=INK2, leftIndent=8 * mm, rightIndent=8 * mm, spaceAfter=8),
         "cover": ParagraphStyle(
-            "cover", parent=body, fontName=bold, fontSize=29, leading=34,
+            "cover", parent=body, fontName=hbold, fontSize=29, leading=34,
             alignment=0, textColor=INK, spaceAfter=4),
         "coversub": ParagraphStyle(
             "coversub", parent=body, fontName=ital, fontSize=12.2, leading=17.5,
             alignment=0, textColor=MUTE, spaceAfter=3),
         "hdr": ParagraphStyle(
-            "hdr", parent=body, fontName=bold, fontSize=17, leading=21,
+            "hdr", parent=body, fontName=hbold, fontSize=17, leading=21,
             alignment=0, textColor=ACC, spaceAfter=3),
         "toc0": ParagraphStyle(
-            "toc0", parent=body, fontName=bold, fontSize=9.9, leading=13.6,
+            "toc0", parent=body, fontName=hbold, fontSize=9.9, leading=13.6,
             spaceBefore=6, textColor=ACC2, alignment=0),
         "toc1": ParagraphStyle(
             "toc1", parent=body, fontName=reg, fontSize=9.0, leading=12.2,
@@ -566,9 +594,8 @@ def dokumen(path, font, label, outline=True):
 
 
 def bangun(data, out_path: Path, label: str):
-    reg, bold, ital, bi, tertanam = daftarkan_font()
-    font = (reg, bold, ital, bi)
-    g = gaya(font)
+    font, head, tertanam = daftarkan_font()
+    g = gaya(font, head)
 
     tmpdir = tempfile.mkdtemp(prefix="pmnpdf_")
     t1 = Path(tmpdir) / "pass1.pdf"
@@ -578,7 +605,7 @@ def bangun(data, out_path: Path, label: str):
     d1, lebar = dokumen(t1, font, label, outline=False)
     s1 = cerita_sampul(g, lebar, label, data)
     s1.append(NextPageTemplate("isi"))
-    isi1, n_sec, n_par = cerita_isi(g, lebar, data, bold)
+    isi1, n_sec, n_par = cerita_isi(g, lebar, data, head[1])
     d1.build(s1 + isi1)
     rekam = list(d1.rekam)
     hal_tanpa_toc = d1.page
@@ -594,7 +621,7 @@ def bangun(data, out_path: Path, label: str):
     s3.append(NextPageTemplate("isi"))
     s3.append(PageBreak())
     s3 += cerita_daftar_isi(g, lebar, rekam, hal_toc)
-    isi3, _, _ = cerita_isi(g, lebar, data, bold)
+    isi3, _, _ = cerita_isi(g, lebar, data, head[1])
     d3.build(s3 + isi3)
 
     # Gate: the shift is only exact if pass 3 placed every heading exactly
