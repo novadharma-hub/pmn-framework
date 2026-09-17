@@ -11,6 +11,7 @@ import AITerminal from './components/AITerminal'
 import ReadingPathsSection from './components/ReadingPathsSection'
 import TheoreticalAnatomySection from './components/TheoreticalAnatomySection'
 import AxiomStructureSection from './components/AxiomStructureSection'
+import MobileCollapse from './components/MobileCollapse'
 import PolicyModal, { PolicyTab } from './components/PolicyModal'
 import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl } from './routing'
 
@@ -723,29 +724,45 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
         </div>
       </div>
 
-      {/* READING PATHS */}
-      <ReadingPathsSection
-        data={data}
-        readMap={readMap}
-        onJump={onJump}
-        onStartReading={onStartReading}
-        version={version}
-      />
+      {/* READING PATHS — dilipat HANYA di ponsel; di atas 640px
+          MobileCollapse mengembalikan anaknya apa adanya. */}
+      <MobileCollapse
+        judul="Reading Paths"
+        ringkas="Suggested routes in, by what you came looking for"
+      >
+        <ReadingPathsSection
+          data={data}
+          readMap={readMap}
+          onJump={onJump}
+          onStartReading={onStartReading}
+          version={version}
+        />
+      </MobileCollapse>
 
       {/* THEORETICAL ANATOMY */}
-      <TheoreticalAnatomySection
-        data={data}
-        onJump={onJump}
-        onStartReading={onStartReading}
-        version={version}
-      />
+      <MobileCollapse
+        judul="Theoretical Anatomy &amp; Causal Engine"
+        ringkas="Layers, the formula architecture, and the five-stage capture sequence"
+      >
+        <TheoreticalAnatomySection
+          data={data}
+          onJump={onJump}
+          onStartReading={onStartReading}
+          version={version}
+        />
+      </MobileCollapse>
 
       {/* AXIOM STRUCTURE */}
-      <AxiomStructureSection
-        data={data}
-        onJump={onJump}
-        onStartReading={onStartReading}
-      />
+      <MobileCollapse
+        judul="Axiom Structure"
+        ringkas="Twelve commitments across three tiers, as §14.3 states them"
+      >
+        <AxiomStructureSection
+          data={data}
+          onJump={onJump}
+          onStartReading={onStartReading}
+        />
+      </MobileCollapse>
 
       {/* HOME AI MODULE — Integrated React Terminal */}
       <div className="home-ai-section">
