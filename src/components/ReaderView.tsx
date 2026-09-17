@@ -69,6 +69,35 @@ export default function ReaderView({
   const sIdx = (curPos ? curPos[1] : secIdx) ?? 0
   const p = data.parts[pIdx]; const s = p?.subs[sIdx]
   const isRead = !!readMap[`${pIdx}-${sIdx}`]
+
+  // Navigasi seksi-ke-seksi. Reader ini TIDAK PERNAH memilikinya.
+  //
+  // 2026-09-17, dilaporkan Nova sebagai cacat mobile — dan itu bukan cacat
+  // mobile. ReaderView2 (di balik ?v2) punya prev/next; ReaderView, yang
+  // BAKU, punya nol. Di desktop hal itu tak terasa karena sidebar terbuka dan
+  // seksi berikutnya tinggal diklik di sana. Di HP sidebar tertutup, sehingga
+  // satu-satunya jalan maju adalah menggulir ke dasar seksi (terukur 5.923px
+  // pada §1.1 di lebar 390px), menekan "Return to Table of Contents", mencari
+  // entri berikutnya, lalu menekannya — dikali 235 seksi.
+  //
+  // Jadi yang terlihat sebagai regresi tata letak sebenarnya fitur yang belum
+  // pernah ada, yang selama ini tertutupi oleh perabot desktop.
+  const rata = useMemo(() => {
+    const out: { pi: number; si: number }[] = []
+    data.parts.forEach((pt, pi) => pt.subs.forEach((_, si) => out.push({ pi, si })))
+    return out
+  }, [data.parts])
+  const rIdx = rata.findIndex(f => f.pi === pIdx && f.si === sIdx)
+  const sebelum = rIdx > 0 ? rata[rIdx - 1] : null
+  const sesudah = rIdx >= 0 && rIdx < rata.length - 1 ? rata[rIdx + 1] : null
+  const seksiSebelum = sebelum ? data.parts[sebelum.pi]?.subs[sebelum.si] : null
+  const seksiSesudah = sesudah ? data.parts[sesudah.pi]?.subs[sesudah.si] : null
+  // 230 dari 235 id adalah nomor seksi (1.1, 1.6b, 7.3c-i). Lima sisanya slug
+  // -- "preface", "how-to-read-this-document" -- dan masing-masing hanya
+  // kebab-case dari judulnya sendiri, sehingga menampilkannya menghasilkan
+  // "how-to-read-this-document  How to Read This Document".
+  const labelSeksi = (x: SubSection | null) =>
+    !x ? '' : (/^[0-9]/.test(x.id) ? x.id + '  ' : '') + x.title
   const mainRef = useRef<HTMLDivElement>(null)
   const proseRef = useRef<HTMLDivElement>(null)
 
@@ -379,12 +408,17 @@ export default function ReaderView({
           <div className="w-full h-full grid items-center" style={{ gridTemplateColumns: '1fr auto 1fr' }}>
             {/* Left: ← Contents button and mobile sections drawer trigger */}
             <div className="flex items-center gap-2">
+              {/* min-w/min-h wajib: di bawah 640px label "Table of Contents"
+                  disembunyikan sehingga hanya panah yang tersisa, dan tanpa
+                  ukuran minimum tombolnya mengerut ke 7x19 piksel — terukur
+                  pada lebar 390px. Kontrol kembali satu-satunya di halaman
+                  baca, dan praktis mustahil ditekan dengan ibu jari. */}
               <button
-                className="font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors whitespace-nowrap shrink-0"
+                className="font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink transition-colors whitespace-nowrap shrink-0 inline-flex items-center justify-center min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0"
                 onClick={onBackHome}
                 aria-label="Back to Table of Contents"
               >
-                &larr; <span className="hidden sm:inline">Table of Contents</span>
+                &larr; <span className="hidden sm:inline">&nbsp;Table of Contents</span>
               </button>
               <button
                 className="font-mono text-[0.62rem] uppercase tracking-widest text-pmn-acc border border-pmn-rule px-2.5 py-1 sm:hidden shrink-0 transition-all hover:bg-pmn-acc hover:text-white"
@@ -632,6 +666,41 @@ export default function ReaderView({
                   <textarea className="annot-ta" placeholder="Capture your analytical drift on this section..." value={noteText} onChange={e => setNoteText(e.target.value)} />
                 </section>
               </div>
+
+              {/* Prev/next seksi. Sengaja di DASAR seksi dan berukuran penuh:
+                  di sinilah pembaca berada ketika ia butuh, dan target sentuh
+                  pada ponsel harus cukup besar untuk ibu jari. Dua kolom di
+                  layar lebar, menumpuk di bawah 640px. */}
+              {(seksiSebelum || seksiSesudah) && (
+                <nav
+                  aria-label="Section navigation"
+                  className="mt-14 grid gap-3 border-t border-pmn-rule/40 pt-8"
+                  style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}
+                >
+                  {seksiSebelum ? (
+                    <button
+                      onClick={() => { onSavePosition(sebelum!.pi, sebelum!.si) }}
+                      className="group text-left border border-pmn-rule/60 rounded-sm px-4 py-3 hover:border-pmn-acc transition-colors min-h-[64px]"
+                    >
+                      <span className="block font-mono text-[0.6rem] uppercase tracking-[0.18em] text-pmn-mute mb-1">&larr; Previous</span>
+                      <span className="block text-[0.95rem] text-pmn-mute group-hover:text-pmn-ink transition-colors leading-snug">
+                        {labelSeksi(seksiSebelum)}
+                      </span>
+                    </button>
+                  ) : <span />}
+                  {seksiSesudah && (
+                    <button
+                      onClick={() => { onSavePosition(sesudah!.pi, sesudah!.si) }}
+                      className="group text-right border border-pmn-rule/60 rounded-sm px-4 py-3 hover:border-pmn-acc transition-colors min-h-[64px]"
+                    >
+                      <span className="block font-mono text-[0.6rem] uppercase tracking-[0.18em] text-pmn-mute mb-1">Next &rarr;</span>
+                      <span className="block text-[0.95rem] text-pmn-mute group-hover:text-pmn-ink transition-colors leading-snug">
+                        {labelSeksi(seksiSesudah)}
+                      </span>
+                    </button>
+                  )}
+                </nav>
+              )}
 
               <footer className="doc-footer border-t border-pmn-rule/40 py-16 flex justify-between items-center select-none font-mono text-[0.7rem] text-pmn-mute uppercase tracking-[0.3em] flex-wrap gap-4">
                 <div style={{ display: 'flex', gap: '1.2rem', alignItems: 'center', flexWrap: 'wrap' }}>
