@@ -9,3 +9,25 @@
 *.sql text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
+
+# Binary — never line-ending converted.
+#
+# 2026-09-17: `git add` warned "in the working copy of 'dist/PMN_Latest.pdf',
+# LF will be replaced by CRLF the next time Git touches it". The committed blob
+# was verified byte-identical and valid, because `text=auto` detects NUL bytes
+# and treats the file as binary. But that is a content heuristic, and a
+# corrupted PDF is the one artifact a reader has no way to notice is wrong
+# until they try to open it. State the rule instead of relying on the guess.
+*.pdf   binary
+*.docx  binary
+*.zip   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.ttf   binary
+*.otf   binary
+*.woff  binary
+*.woff2 binary
