@@ -28,7 +28,12 @@ export default defineConfig({
       },
       workbox: {
         // Cache app shell (JS/CSS/HTML)
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        // woff2 ditambahkan 2026-09-17. Tipografi dilayani sendiri sejak hari
+        // itu, tetapi tanpa pola ini font tak ikut ter-precache: PWA menyatakan
+        // mampu luring sementara teksnya jatuh ke font sistem begitu jaringan
+        // hilang. Menyatakan luring tanpa menyimpan apa yang dibutuhkan untuk
+        // merender bukan luring.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         navigateFallbackDenylist: [
           /\.(txt|md|pdf|json|xml|docx|png|jpg|jpeg|svg|webp|ico)$/i,
           /\/data\//,

@@ -59,24 +59,23 @@ const shortenId = (id: string) => {
 
 const MEASURE: Record<string, string> = { narrow: '56ch', medium: '66ch', wide: '78ch' }
 
-// Inject Spectral once (slice isolation; pindah ke index.html saat v2 dipromosikan)
-function useSpectralFont() {
-  useEffect(() => {
-    const id = 'rv2-spectral-font'
-    if (document.getElementById(id)) return
-    const link = document.createElement('link')
-    link.id = id
-    link.rel = 'stylesheet'
-    link.href = 'https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,400&display=swap'
-    document.head.appendChild(link)
-  }, [])
-}
+// Spectral dimuat lewat @font-face di src/index.css, bukan disuntikkan.
+//
+// 2026-09-17: fungsi di sini dulu membuat <link rel="stylesheet"> ke CDN font
+// pada saat render pertama ReaderView2. Karena itu terjadi di runtime dan
+// bukan di index.html, ia tak terlihat oleh siapa pun yang memeriksa halaman
+// muka — dan ReaderView2 adalah PERMUKAAN BACA, tempat pembaca menghabiskan
+// hampir seluruh waktunya. Mencabut tautan di index.html saja akan
+// membersihkan sampul sambil membiarkan ruang bacanya tetap mengungkapkan
+// setiap pembaca ke pihak ketiga.
+//
+// Wajahnya (300/400/500 + italic 400) kini disubset, dikemas WOFF2, dan
+// dilayani dari public_static/fonts/ bersama tiga keluarga lainnya.
 
 export default function ReaderView2({
   data, partIdx, secIdx, curPos, readMap, onMarkRead, onSavePosition, onBackHome,
   contentWidth = 'medium', onChangeWidth, history = [], version = ''
 }: ReaderViewProps) {
-  useSpectralFont()
 
   const [sbOpen, setSbOpen] = useState(window.innerWidth > 1024)
   const [focusMode, setFocusMode] = useState(false)
