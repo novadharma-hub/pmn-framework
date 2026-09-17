@@ -490,6 +490,13 @@ def replace_version_labels(index_html: str, version_label: str) -> str:
     generic_replacements = [
         (r"\bVersion\s+\d+(?:\.\d+)?\b", f"Version {version_number}"),
         (r"\bPMN v\d+(?:\.\d+)?\b", f"PMN {version_label}"),
+        # 2026-09-17: meta tag di index.html berbentuk "(PMN) v120" dan
+        # "(PMN) \u2014 v120". Pola di atas tak menjangkau keduanya: ada kurung
+        # tutup, dan pada og:title ada em-dash, di antara "PMN" dan "v120".
+        # Akibatnya kartu berbagi-tautan, Open Graph, dan hasil pencarian
+        # menyebut v120 selama ENAM rilis sementara version.json benar.
+        (r"\(PMN\)\s*v\d+(?:\.\d+)?\b", f"(PMN) {version_label}"),
+        (r"\(PMN\)\s*\u2014\s*v\d+(?:\.\d+)?\b", f"(PMN) \u2014 {version_label}"),
         (r"\bV\d+(?:\.\d+)?\s+MANUSCRIPT\b", f"V{version_number} MANUSCRIPT"),
         (
             r'(<span class="stat-lbl">Version</span><span class="stat-val">)\d+(?:\.\d+)?(</span>)',
@@ -738,6 +745,23 @@ def main() -> int:
             print(f"   [OK] Persistent version {version_label} successfully saved in index.ui.html.")
     except Exception as uie:
         print(f"   [WARN] Could not update version in index.ui.html: {uie}")
+
+    # index.html akar (entri Vite) TAK PERNAH ditambal sebelum 2026-09-17.
+    # Importir menambal index.ui.html dan pmn-agent-guide.html saja, sementara
+    # meta description / og:title / twitter:title hidup di index.html — yaitu
+    # justru yang tampil saat tautan dibagikan dan di hasil pencarian.
+    try:
+        root_index = Path("index.html")
+        if root_index.exists():
+            rt = root_index.read_text(encoding="utf-8")
+            rt2 = replace_version_labels(rt, version_label)
+            if rt2 != rt:
+                root_index.write_text(rt2, encoding="utf-8")
+                print(f"   [OK] Version {version_label} synchronized in index.html (meta tags).")
+            else:
+                print("   [OK] index.html version labels already current.")
+    except Exception as rie:
+        print(f"   [WARN] Could not update version in index.html: {rie}")
 
     # Also update pmn-agent-guide.html if it exists!
     try:
