@@ -571,10 +571,31 @@ def cerita_daftar_isi(g, lebar, rekam, offset):
         ("TOPPADDING", (0, 0), (-1, -1), 0.6),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0.6),
     ]))
+    # Catatan urutan Part, memakai KALIMAT NASKAH SENDIRI.
+    #
+    # Daftar isi berbunyi XIII, XV, XVI, XVII, XIV, dan di halaman cetak itu
+    # terbaca seperti salah cetak. Ia bukan: urutan itu urutan DOCX kanonik.
+    #
+    # Dan naskah sudah menjelaskannya di "How to Read This Document" — saya
+    # mengusulkan menambahkan penjelasan yang ternyata sudah ada, lalu
+    # menemukannya hanya setelah mencari dengan kosakata naskah (AY.1). Yang
+    # benar-benar kurang bukan penjelasannya melainkan KEHADIRANNYA di
+    # permukaan tempat keganjilan itu terlihat. Jadi kalimatnya dikutip, bukan
+    # dikarang, dan atribusinya disebut supaya pembaca bisa memeriksanya.
+    catatan = ParagraphStyle(
+        "tocnote", parent=g["body"], fontName=g["pre"].fontName,
+        fontSize=9.2, leading=13, textColor=MUTE, spaceAfter=0,
+        leftIndent=0, rightIndent=0)
     return [
         Paragraph("Contents", g["hdr"]),
         Garis(lebar, 1.2, ACC, 2),
-        Spacer(1, 3 * mm),
+        Spacer(1, 2.5 * mm),
+        Paragraph(
+            "Part XIV stands after Part XVII. That is the manuscript’s own "
+            "order, not a slip: it is &#8220;the living summary &#8212; positioned last "
+            "because it must be read last to be read honestly&#8221; "
+            "(How to Read This Document).", catatan),
+        Spacer(1, 4 * mm),
         tb,
     ]
 
