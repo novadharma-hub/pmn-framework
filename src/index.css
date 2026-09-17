@@ -15,6 +15,86 @@
 
 @import "tailwindcss";
 
+/* ── TIPOGRAFI: DILAYANI SENDIRI, BUKAN DARI GOOGLE ───────────────────────
+   2026-09-17. Sebelumnya index.html memuat tiga <link> ke fonts.googleapis.com
+   dan fonts.gstatic.com, sehingga SETIAP pengunjung mengirim IP, User-Agent,
+   dan Referer ke pihak ketiga sebelum halaman merender — di situs yang
+   metadata PDF-nya sengaja dianonimkan. Dan PWA ini menyatakan mampu luring
+   sementara tipografinya menuntut jaringan.
+
+   Sepuluh wajah, persis yang dipakai (tak satu pun berat tambahan), disubset
+   ke karakter yang benar-benar dirender plus latin + latin-ext penuh, lalu
+   dikemas WOFF2: 301 KB seluruhnya. Berkasnya di public_static/fonts/ dan
+   diterbitkan vite ke dist/fonts/.
+
+   CATATAN: assets/fonts/*.ttf adalah milik build PDF, waktu-build, dan TIDAK
+   pernah terbit. Jangan menautkannya dari sini.
+   ──────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Libre Baskerville'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/fonts/LibreBaskerville-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Libre Baskerville'; font-style: normal; font-weight: 700;
+  font-display: swap; src: url('/fonts/LibreBaskerville-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Libre Baskerville'; font-style: italic; font-weight: 400;
+  font-display: swap; src: url('/fonts/LibreBaskerville-400i.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lora'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/fonts/Lora-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lora'; font-style: normal; font-weight: 500;
+  font-display: swap; src: url('/fonts/Lora-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lora'; font-style: italic; font-weight: 400;
+  font-display: swap; src: url('/fonts/Lora-400i.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lora'; font-style: italic; font-weight: 500;
+  font-display: swap; src: url('/fonts/Lora-500i.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Source Code Pro'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/fonts/SourceCodePro-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Source Code Pro'; font-style: normal; font-weight: 500;
+  font-display: swap; src: url('/fonts/SourceCodePro-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Source Code Pro'; font-style: normal; font-weight: 700;
+  font-display: swap; src: url('/fonts/SourceCodePro-700.woff2') format('woff2');
+}
+
+/* Spectral — prosa ReaderView2. Keluarga KEEMPAT, dan yang paling mudah
+   terlewat: ia tidak pernah ada di index.html. ReaderView2 menyuntikkan
+   <link>-nya sendiri ke CDN saat runtime (useSpectralFont), sehingga mencabut
+   tautan di index.html saja akan membersihkan halaman muka sambil membiarkan
+   PERMUKAAN BACA — tempat pembaca sebenarnya berada — tetap memanggil pihak
+   ketiga. Ditemukan hanya karena `grep -r` dijalankan ke seluruh src/, bukan
+   ke berkas yang disangka memuatnya. */
+@font-face {
+  font-family: 'Spectral'; font-style: normal; font-weight: 300;
+  font-display: swap; src: url('/fonts/Spectral-300.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Spectral'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/fonts/Spectral-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Spectral'; font-style: normal; font-weight: 500;
+  font-display: swap; src: url('/fonts/Spectral-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Spectral'; font-style: italic; font-weight: 400;
+  font-display: swap; src: url('/fonts/Spectral-400i.woff2') format('woff2');
+}
+
 @theme {
   /* === PMN COLOR TOKENS (Dark mode default values) ===
      Nilai di sini adalah dark mode defaults (karena [data-theme=dark] adalah

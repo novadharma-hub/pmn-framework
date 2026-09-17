@@ -25,12 +25,16 @@
     <!-- Web App Manifest -->
     <link rel="manifest" href="/manifest.webmanifest" />
 
-    <!-- Typography (Google Fonts Preconnect) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/pmn-framework/assets/main-DbTuGoHe.js"></script>
-    <link rel="stylesheet" crossorigin href="/pmn-framework/assets/main-wM9Ijlka.css">
+    <!-- Typography: self-hosted, no third party. Until 2026-09-17 this block
+         loaded webfonts from a CDN, so every visitor was disclosed to it before
+         the page rendered. Rationale and @font-face rules: src/index.css.
+         The two faces that paint first are preloaded to keep the swap short.
+         No CDN hostname is written anywhere in this file on purpose, so a
+         repo-wide search for one returning zero is a check that stays honest. -->
+    <link rel="preload" href="/pmn-framework/fonts/Lora-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/pmn-framework/fonts/LibreBaskerville-700.woff2" as="font" type="font/woff2" crossorigin>
+    <script type="module" crossorigin src="/pmn-framework/assets/main-BjBjIZkH.js"></script>
+    <link rel="stylesheet" crossorigin href="/pmn-framework/assets/main-C-AyggdQ.css">
   <link rel="manifest" href="/pmn-framework/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/pmn-framework/registerSW.js"></script></head>
   <body>
     <div id="root"></div>
