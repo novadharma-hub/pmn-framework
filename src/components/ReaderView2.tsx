@@ -1,3 +1,38 @@
+/*
+  ============================================================================
+  BEKU 2026-09-17 — RUJUKAN ARSITEKTUR, BUKAN PEMBACA YANG HIDUP (papan K24)
+  ============================================================================
+
+  Berkas ini TIDAK lagi terhubung ke aplikasi. Flag `?v2` dicabut dari
+  App.tsx dan impornya dilepas, sehingga bundel berhenti memuatnya.
+
+  KENAPA DIBEKUKAN, BUKAN DILANJUTKAN. Terukur saat keputusan diambil:
+
+      ReaderView (baku)   760 baris  CommandPalette, sorotan+anotasi,
+                                     tooltip glosarium, AITerminal
+      ReaderView2         325 baris  tak satu pun dari keempatnya
+
+  Ia strangler fig yang berhenti tumbuh. Satu-satunya keunggulannya —
+  navigasi prev/next antar-seksi — pindah ke ReaderView pada hari yang sama,
+  sesudah Nova melaporkan ketiadaannya sebagai cacat mobile. Yang ternyata
+  bukan cacat mobile sama sekali: pembaca BAKU tak pernah punya prev/next, dan
+  di desktop hal itu tertutup oleh sidebar yang terbuka.
+
+  KENAPA TIDAK DIHAPUS. Ia satu-satunya bukti kerja bahwa pembaca PMN bisa
+  dibangun Tailwind-saja, tanpa ketergantungan tata letak pada style.css —
+  dan style.css sudah tercatat sebagai berkas yang merusak UI setiap kali
+  disentuh. Itu pengetahuan yang mahal didapat dan murah disimpan.
+
+  KENAPA TIDAK DIBIARKAN HIDUP DI BALIK FLAG. Selama ia bisa dirender, ia
+  permukaan KEDUA yang menyimpang diam-diam dari yang pertama. Penyimpangan
+  itu bukan risiko teoretis: ia sudah terjadi, dan bentuknya adalah bug yang
+  Nova laporkan.
+
+  Membangkitkannya kembali: kembalikan impor di App.tsx dan pasang lagi
+  pemilihan berbasis flag. Tak ada yang dihapus dari berkas ini.
+  ============================================================================
+*/
+
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import Sidebar from './Sidebar'
 

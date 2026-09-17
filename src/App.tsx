@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ParticlesBackground from './components/ParticlesBackground'
 import ReaderView from './components/ReaderView'
-import ReaderView2 from './components/ReaderView2'
 import ContentsView from './components/ContentsView'
 import VersionManager from './components/VersionManager'
 import KeyboardModal from './components/KeyboardModal'
@@ -18,8 +17,21 @@ import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl } fro
 
 
 export default function App() {
-  // Strangler-fig flag: ?v2 → Reader baru (Tailwind-only). Lama tetap default.
-  const ReaderComp = new URLSearchParams(window.location.search).has('v2') ? ReaderView2 : ReaderView
+  // Flag `?v2` DICABUT dari jalur pembaca 2026-09-17 (papan K24).
+  //
+  // ReaderView2 adalah strangler fig yang berhenti tumbuh: 325 baris lawan 760,
+  // dan ia TIDAK punya CommandPalette, sorotan & anotasi, tooltip glosarium,
+  // maupun AITerminal. Satu-satunya keunggulannya — prev/next seksi — pindah
+  // ke ReaderView pada hari yang sama, sesudah Nova melaporkan ketiadaannya
+  // sebagai cacat mobile.
+  //
+  // Selama flag ini hidup, ia adalah permukaan KEDUA yang bisa menyimpang
+  // diam-diam dari yang pertama — dan penyimpangan itu persis bug yang
+  // dilaporkan. Berkasnya TIDAK dihapus: ia satu-satunya bukti kerja bahwa
+  // pembaca bisa dibangun tanpa ketergantungan tata letak pada style.css, dan
+  // itu pengetahuan mahal. Ia dibekukan sebagai rujukan arsitektur, bukan
+  // dipertahankan sebagai pembaca alternatif yang tak dipakai siapa pun.
+  const ReaderComp = ReaderView
   // URL menang atas localStorage. Sebelum ini reload memulihkan view terakhir
   // dari localStorage, sehingga tautan yang dibagikan selalu membuka halaman
   // terakhir SI PENERIMA, bukan halaman yang dimaksud pengirim.
