@@ -731,6 +731,30 @@ def segarkan_llms(label: str, halaman: int) -> list:
     return laporan
 
 
+def pastikan_aset_berversi(label: str) -> int:
+    """Write dist/PMN_Framework_<label>.{pdf,md}; return how many were missing.
+
+    "Latest" is the wrong name for a release asset — it is a moving target and
+    becomes wrong the moment the next version ships — so create_release.py
+    looks for the versioned names. Keeping them present is therefore a
+    precondition of every release, not a side effect of a rebuild.
+    """
+    if not OUT_PRIMARY.exists():
+        return 0
+    dibuat = 0
+    vpdf = REPO_ROOT / "dist" / f"PMN_Framework_{label}.pdf"
+    vmd = REPO_ROOT / "dist" / f"PMN_Framework_{label}.md"
+    if not vpdf.exists() or vpdf.read_bytes() != OUT_PRIMARY.read_bytes():
+        vpdf.write_bytes(OUT_PRIMARY.read_bytes())
+        dibuat += 1
+    if CORPUS.exists():
+        teks = CORPUS.read_text(encoding="utf-8")
+        if not vmd.exists() or vmd.read_text(encoding="utf-8") != teks:
+            vmd.write_text(teks, encoding="utf-8")
+            dibuat += 1
+    return dibuat
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true")
@@ -746,7 +770,17 @@ def main() -> int:
         print("[check] PDF is %s" % ("STALE" if basi else "current"))
         return 2 if basi else 0
     if not basi and not args.force:
+        # The versioned release assets must be recreated even here. vite
+        # empties dist/ and then refills it from public_static/, and the
+        # versioned copies do not live in public_static — so a full
+        # `npm run build` deletes them, and this early return used to leave
+        # them deleted. create_release.py looks for exactly these names; that
+        # is how six releases shipped with no assets and the GitHub page kept
+        # advertising v120 as Latest (BF.48). Same failure, new route.
+        n = pastikan_aset_berversi(versi())
         print("[ok] PDF is current with data/parts.json; nothing to do.")
+        if n:
+            print("[ok] restored %d versioned release asset(s) removed by vite" % n)
         return 0
 
     label = versi()
@@ -799,11 +833,9 @@ def main() -> int:
         if OUT_MIRROR.parent.exists():
             (OUT_MIRROR.parent / OUT_MD.name).write_text(teks, encoding="utf-8")
         print(f"[ok] {OUT_MD.name} (AI corpus, now a build output; both copies)")
-        vmd = REPO_ROOT / "dist" / f"PMN_Framework_{label}.md"
-        vmd.write_text(teks, encoding="utf-8")
-        vpdf = REPO_ROOT / "dist" / f"PMN_Framework_{label}.pdf"
-        vpdf.write_bytes(OUT_PRIMARY.read_bytes())
-        print(f"[ok] {vpdf.name} + {vmd.name} (versioned release assets)")
+        pastikan_aset_berversi(label)
+        print("[ok] PMN_Framework_%s.pdf + .md (versioned release assets)"
+              % label)
 
     disegarkan = segarkan_llms(label, r["hal_total"])
     if disegarkan:
