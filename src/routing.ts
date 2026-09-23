@@ -14,14 +14,48 @@
  * React, sehingga bisa diperiksa terpisah dari aplikasi.
  */
 
-export type PmnPage = 'home' | 'contents' | 'reader' | 'guide'
+export type PmnPage = 'home' | 'contents' | 'reader' | 'guide' | 'rules'
 export type ContentsSub = 'map' | 'glossary' | 'search'
+/** Tab halaman Rules & Data. */
+export type RulesTab = 'privacy' | 'terms' | 'disclaimer' | 'ai'
 
 export interface RouteState {
   page: PmnPage
   contentsSub: ContentsSub
   /** ID seksi untuk halaman reader; null untuk halaman lain. */
   sectionId: string | null
+  /** Tab untuk halaman rules; diabaikan halaman lain. */
+  rulesTab?: RulesTab
+}
+
+/**
+ * Segmen URL tiap tab Rules & Data. 'disclaimer' ditulis 'limits' karena
+ * judul tabnya "Epistemic Limits"; privasi adalah tab bawaan, jadi URL-nya
+ * cukup #/rules.
+ */
+const SEGMEN_TAB: Record<RulesTab, string> = {
+  privacy: '',
+  terms: 'terms',
+  disclaimer: 'limits',
+  ai: 'ai',
+}
+
+/**
+ * Rute lama, dari masa Rules & Data masih jendela melayang (sampai
+ * 2026-09-23). Tautan-tautan ini sudah beredar - di README, llms.*, dan
+ * mungkin di tempat lain - jadi tetap dibuka, lalu URL-nya dirapikan ke
+ * bentuk #/rules/... oleh sinkronisasi state -> URL.
+ */
+const RUTE_LAMA_RULES: Record<string, RulesTab> = {
+  privacy: 'privacy',
+  policy: 'privacy',
+  policies: 'privacy',
+  terms: 'terms',
+  disclaimer: 'disclaimer',
+  disclaimers: 'disclaimer',
+  ai: 'ai',
+  'ai-policy': 'ai',
+  'ai-ethics': 'ai',
 }
 
 /** Bentuk minimum data naskah yang dibutuhkan router. */
@@ -68,6 +102,10 @@ export function routeToHash(state: RouteState): string {
       return ''
     case 'guide':
       return '#/guide'
+    case 'rules': {
+      const seg = SEGMEN_TAB[state.rulesTab ?? 'privacy']
+      return seg ? '#/rules/' + seg : '#/rules'
+    }
     case 'contents':
       if (state.contentsSub === 'glossary') return '#/glossary'
       if (state.contentsSub === 'search') return '#/search'
@@ -95,6 +133,17 @@ export function hashToRoute(hash: string, parts?: PartLike[] | null): RouteState
   if (bersih === 'glossary') return { page: 'contents', contentsSub: 'glossary', sectionId: null }
   if (bersih === 'search') return { page: 'contents', contentsSub: 'search', sectionId: null }
   if (bersih === 'reader') return { page: 'reader', contentsSub: 'map', sectionId: null }
+
+  if (bersih === 'rules' || bersih.startsWith('rules/')) {
+    const seg = bersih.slice('rules/'.length)
+    const tab = bersih === 'rules'
+      ? 'privacy'
+      : (Object.keys(SEGMEN_TAB) as RulesTab[]).find(t => SEGMEN_TAB[t] === seg)
+    if (!tab) return null
+    return { page: 'rules', contentsSub: 'map', sectionId: null, rulesTab: tab }
+  }
+  const lama = RUTE_LAMA_RULES[bersih.toLowerCase()]
+  if (lama) return { page: 'rules', contentsSub: 'map', sectionId: null, rulesTab: lama }
 
   if (bersih.startsWith('s/')) {
     let id: string
