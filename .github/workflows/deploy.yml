@@ -62,3 +62,10 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # Bing, and through it ChatGPT search, Copilot and DuckDuckGo, learns
+      # every URL in sitemap.xml without anyone logging in anywhere. Never
+      # fails the deploy; see scripts/indexnow_ping.py.
+      - name: Notify search engines (IndexNow)
+        continue-on-error: true
+        run: python3 scripts/indexnow_ping.py

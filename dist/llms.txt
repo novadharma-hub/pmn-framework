@@ -4,6 +4,14 @@
 
 PMN is a comprehensive, non-ideal structural philosophy spanning epistemology, ontology, institutional critique, political strategy, and existential praxis.
 
+## Start Here: Small Plain-Text Files
+
+> **Fetcher note (sizes).** The whole corpus is ~330k words (~450k tokens) and most fetchers truncate long files, so `llms-full.txt` is usually read only up to its glossary. Every section is therefore also published as its own `text/plain` file (largest ~55 KB), and every Part as one plain-text file. Start from the index and fetch only what you need.
+
+- [Plain-Text Section Index](https://novadharma-hub.github.io/pmn-framework/txt/index.txt): Every one of the 235 sections in reading order, each with the full URL of its own small `.txt` file and its size. Fetch this first.
+- [Static HTML Edition](https://novadharma-hub.github.io/pmn-framework/read/): The same manuscript as plain HTML pages, one per section, readable without JavaScript. The interactive reader at the site root needs JavaScript; crawlers that do not run it should use this.
+- [Sitemap](https://novadharma-hub.github.io/pmn-framework/sitemap.xml): Every indexable URL of the site.
+
 ## Machine-Readable Manifests & Endpoints
 
 > **Fetcher note.** GitHub Pages serves `.md` files as `text/markdown`, and
@@ -27,32 +35,35 @@ PMN is a comprehensive, non-ideal structural philosophy spanning epistemology, o
 
 ## Core Architectural Modules
 
-- [Preface — Preface](https://novadharma-hub.github.io/pmn-framework/data/parts/part_Preface.json): How to read the framework, methodological warnings, and intellectual debt boundaries.
-- [I — How We Know: The Epistemological Foundation](https://novadharma-hub.github.io/pmn-framework/data/parts/part_I.json): Probabilistic determinism, epistemic authority, and information asymmetry.
-- [II — What Exists: The Ontological Foundation](https://novadharma-hub.github.io/pmn-framework/data/parts/part_II.json): Materialist ontology, adaptive materialism, and open passage.
-- [III — The Biological Foundation: From Physiology to Institution](https://novadharma-hub.github.io/pmn-framework/data/parts/part_III.json): The biological floor, typology of suffering, and non-human sentients (§3.4c-ii).
-- [IV — What Matters: Ethics, Value, and the Evaluative Commitment](https://novadharma-hub.github.io/pmn-framework/data/parts/part_IV.json): Becoming as primary evaluative criterion, dignity, autonomy, and the minimal anchor.
-- [V — The Metaphysical Dimension: Meaning, Religion, and Material Reality](https://novadharma-hub.github.io/pmn-framework/data/parts/part_V.json): Culture, meaning, and religion: meaning infrastructure (§5.6b), acute meaning-collapse triage (§5.6c).
-- [VI — Power: The Variable That Cannot Be Left Implicit](https://novadharma-hub.github.io/pmn-framework/data/parts/part_VI.json): Institutional power, asymmetry, complexity as power resource, systemic opacity.
-- [VII — How to Organize: Politics, Institutions, and the State](https://novadharma-hub.github.io/pmn-framework/data/parts/part_VII.json): The authoritative 5-stage capture sequence (§7.3c-i) and early detection matrix (§7.3b).
-- [VIII — Society, Culture, and the Politics of Material Outcomes](https://novadharma-hub.github.io/pmn-framework/data/parts/part_VIII.json): Intersectional analysis, meritocracy critique, and structural visibility suppression.
-- [IX — The International Dimension: Geopolitics and Global Order](https://novadharma-hub.github.io/pmn-framework/data/parts/part_IX.json): Geopolitics, resource flows, material selection, critical minerals, and state dynamics.
-- [X — How Systems Change: Adaptive Dynamics and Historical Transformation](https://novadharma-hub.github.io/pmn-framework/data/parts/part_X.json): Political strategy, threshold conditions, reform vs revolution, counter-power, and coalition width.
-- [XI — The Economic Doctrine](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XI.json): Economics without prior commitments, structural incentives, and accountability-contestability.
-- [XII — How This Framework Operates](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XII.json): Methodology, stress-testing, genealogical critique, and technocratic drift safeguards.
-- [XIII — Tensions That Cannot Be Resolved — Only Managed](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XIII.json): Permanent tensions, horizon boundaries, and PMN analytical limits.
-- [XV — The Formula Architecture](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XV.json): Diagnostic formulas (§15.0b), transformation pressure ($T = S \cdot D \cdot P \cdot G$), and compressed core (§15.15).
-- [XVI — Technology as Structural Variable](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XVI.json): Technology, AI, automation, and distributed post-biological cognition.
-- [XVII — Cases and the Individual: Pattern, Drift, and the Demands of the Framework](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XVII.json): Individual conduct, praxis, detecting personal drift, and acting within institutions.
-- [XIV — Summary: Framework, Doctrine, and What Remains Open](https://novadharma-hub.github.io/pmn-framework/data/parts/part_XIV.json): Framework transmission, institutional integrity, and self-capture diagnosis (§14.6).
-- [Coda — Coda](https://novadharma-hub.github.io/pmn-framework/data/parts/part_Coda.json): Framework synthesis and closing scholarly context.
-- [Intellectual Debts — Intellectual Debts](https://novadharma-hub.github.io/pmn-framework/data/parts/part_Intellectual_Debts.json): Scholarly engagement with historical and contemporary traditions.
-- [Bibliography — Bibliography](https://novadharma-hub.github.io/pmn-framework/data/parts/part_Bibliography.json): Complete academic references and citations (97 scholarly sources).
+Each link is the whole Part as plain text. Parts III, VII, X, XIII and XV are large (150–300 KB); for those, fetch single sections listed in txt/index.txt instead.
+
+- [Preface — Preface](https://novadharma-hub.github.io/pmn-framework/txt/part_Preface.txt): How to read the framework, methodological warnings, and intellectual debt boundaries.
+- [I — How We Know: The Epistemological Foundation](https://novadharma-hub.github.io/pmn-framework/txt/part_I.txt): Probabilistic determinism, epistemic authority, and information asymmetry.
+- [II — What Exists: The Ontological Foundation](https://novadharma-hub.github.io/pmn-framework/txt/part_II.txt): Materialist ontology, adaptive materialism, and open passage.
+- [III — The Biological Foundation: From Physiology to Institution](https://novadharma-hub.github.io/pmn-framework/txt/part_III.txt): The biological floor, typology of suffering, and non-human sentients (§3.4c-ii).
+- [IV — What Matters: Ethics, Value, and the Evaluative Commitment](https://novadharma-hub.github.io/pmn-framework/txt/part_IV.txt): Becoming as primary evaluative criterion, dignity, autonomy, and the minimal anchor.
+- [V — The Metaphysical Dimension: Meaning, Religion, and Material Reality](https://novadharma-hub.github.io/pmn-framework/txt/part_V.txt): Culture, meaning, and religion: meaning infrastructure (§5.6b), acute meaning-collapse triage (§5.6c).
+- [VI — Power: The Variable That Cannot Be Left Implicit](https://novadharma-hub.github.io/pmn-framework/txt/part_VI.txt): Institutional power, asymmetry, complexity as power resource, systemic opacity.
+- [VII — How to Organize: Politics, Institutions, and the State](https://novadharma-hub.github.io/pmn-framework/txt/part_VII.txt): The authoritative 5-stage capture sequence (§7.3c-i) and early detection matrix (§7.3b).
+- [VIII — Society, Culture, and the Politics of Material Outcomes](https://novadharma-hub.github.io/pmn-framework/txt/part_VIII.txt): Intersectional analysis, meritocracy critique, and structural visibility suppression.
+- [IX — The International Dimension: Geopolitics and Global Order](https://novadharma-hub.github.io/pmn-framework/txt/part_IX.txt): Geopolitics, resource flows, material selection, critical minerals, and state dynamics.
+- [X — How Systems Change: Adaptive Dynamics and Historical Transformation](https://novadharma-hub.github.io/pmn-framework/txt/part_X.txt): Political strategy, threshold conditions, reform vs revolution, counter-power, and coalition width.
+- [XI — The Economic Doctrine](https://novadharma-hub.github.io/pmn-framework/txt/part_XI.txt): Economics without prior commitments, structural incentives, and accountability-contestability.
+- [XII — How This Framework Operates](https://novadharma-hub.github.io/pmn-framework/txt/part_XII.txt): Methodology, stress-testing, genealogical critique, and technocratic drift safeguards.
+- [XIII — Tensions That Cannot Be Resolved — Only Managed](https://novadharma-hub.github.io/pmn-framework/txt/part_XIII.txt): Permanent tensions, horizon boundaries, and PMN analytical limits.
+- [XV — The Formula Architecture](https://novadharma-hub.github.io/pmn-framework/txt/part_XV.txt): Diagnostic formulas (§15.0b), transformation pressure ($T = S \cdot D \cdot P \cdot G$), and compressed core (§15.15).
+- [XVI — Technology as Structural Variable](https://novadharma-hub.github.io/pmn-framework/txt/part_XVI.txt): Technology, AI, automation, and distributed post-biological cognition.
+- [XVII — Cases and the Individual: Pattern, Drift, and the Demands of the Framework](https://novadharma-hub.github.io/pmn-framework/txt/part_XVII.txt): Individual conduct, praxis, detecting personal drift, and acting within institutions.
+- [XIV — Summary: Framework, Doctrine, and What Remains Open](https://novadharma-hub.github.io/pmn-framework/txt/part_XIV.txt): Framework transmission, institutional integrity, and self-capture diagnosis (§14.6).
+- [Coda — Coda](https://novadharma-hub.github.io/pmn-framework/txt/part_Coda.txt): Framework synthesis and closing scholarly context.
+- [Intellectual Debts — Intellectual Debts](https://novadharma-hub.github.io/pmn-framework/txt/part_Intellectual_Debts.txt): Scholarly engagement with historical and contemporary traditions.
+- [Bibliography — Bibliography](https://novadharma-hub.github.io/pmn-framework/txt/part_Bibliography.txt): Complete academic references and citations (97 scholarly sources).
 
 ## Structured Data Endpoints
 
 - [Glossary (237 Terms)](https://novadharma-hub.github.io/pmn-framework/data/gl.json): Canonical vocabulary definitions with section cross-references.
 - [Glossary Categories](https://novadharma-hub.github.io/pmn-framework/data/glg.json): Grouped terminology across 16 conceptual domains.
+- [Per-Part JSON](https://novadharma-hub.github.io/pmn-framework/data/parts/part_VII.json): Each Part as JSON with section HTML (`data/parts/part_<Part>.json`, e.g. part_I, part_Intellectual_Debts). The plain-text files above carry the same text with fewer tokens.
 - [Parts Manifest](https://novadharma-hub.github.io/pmn-framework/data/parts/manifest.json): Hierarchical structure of all 21 parts and 235 sections.
 - [Semantic Graph](https://novadharma-hub.github.io/pmn-framework/data/rel.json): Relationship graph linking conceptual sections.
 - [Analytical Quotes](https://novadharma-hub.github.io/pmn-framework/data/quotes.json): 25 core analytical aphorisms.

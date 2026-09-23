@@ -15,7 +15,10 @@
     "llms_md": "https://novadharma-hub.github.io/pmn-framework/llms.md",
     "flat_corpus_for_ai": "https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md",
     "full_manuscript_markdown": "https://novadharma-hub.github.io/pmn-framework/PMN_Latest.md",
-    "full_manuscript_pdf": "https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf"
+    "full_manuscript_pdf": "https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf",
+    "plain_text_section_index": "https://novadharma-hub.github.io/pmn-framework/txt/index.txt",
+    "static_html_edition": "https://novadharma-hub.github.io/pmn-framework/read/",
+    "sitemap": "https://novadharma-hub.github.io/pmn-framework/sitemap.xml"
   },
   "data_endpoints": {
     "version": "https://novadharma-hub.github.io/pmn-framework/data/version.json",
@@ -25,7 +28,10 @@
     "section_lookup": "https://novadharma-hub.github.io/pmn-framework/data/look.json",
     "cross_references": "https://novadharma-hub.github.io/pmn-framework/data/ci.json",
     "semantic_graph": "https://novadharma-hub.github.io/pmn-framework/data/rel.json",
-    "quotes": "https://novadharma-hub.github.io/pmn-framework/data/quotes.json"
+    "quotes": "https://novadharma-hub.github.io/pmn-framework/data/quotes.json",
+    "section_plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/{section_id}.txt",
+    "part_plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_{Part}.txt",
+    "section_static_html": "https://novadharma-hub.github.io/pmn-framework/read/{section_id}.html"
   },
   "statistics": {
     "parts_count": 21,
@@ -49,7 +55,8 @@
           "id": "how-to-read-this-document",
           "title": "How to Read This Document"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_Preface.txt"
     },
     {
       "part": "I",
@@ -70,7 +77,8 @@
           "id": "1.3",
           "title": "Probabilistic Determinism"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_I.txt"
     },
     {
       "part": "II",
@@ -91,7 +99,8 @@
           "id": "2.3",
           "title": "On Necessary Being"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_II.txt"
     },
     {
       "part": "III",
@@ -112,7 +121,8 @@
           "id": "3.0c",
           "title": "The Stability Argument: The Bridge That Is Not a Derivation"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_III.txt"
     },
     {
       "part": "IV",
@@ -133,7 +143,8 @@
           "id": "4.1c",
           "title": "The Failure of Divine Mandate as Universal Anchor"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_IV.txt"
     },
     {
       "part": "V",
@@ -154,7 +165,8 @@
           "id": "5.3",
           "title": "Interface-Emergent Phenomena"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_V.txt"
     },
     {
       "part": "VI",
@@ -175,7 +187,8 @@
           "id": "6.3",
           "title": "Asymmetry, Capture, and Information"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_VI.txt"
     },
     {
       "part": "VII",
@@ -196,7 +209,8 @@
           "id": "7.0c",
           "title": "Scale as a Structural Variable"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_VII.txt"
     },
     {
       "part": "VIII",
@@ -217,7 +231,8 @@
           "id": "8.2b",
           "title": "Intersectional Analysis as Methodological Procedure"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_VIII.txt"
     },
     {
       "part": "IX",
@@ -238,7 +253,8 @@
           "id": "9.1",
           "title": "Realism and Direction"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_IX.txt"
     },
     {
       "part": "X",
@@ -259,7 +275,8 @@
           "id": "10.3",
           "title": "Technology and System Transition"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_X.txt"
     },
     {
       "part": "XI",
@@ -280,7 +297,8 @@
           "id": "11.1",
           "title": "Economics Without Prior Commitments"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_XI.txt"
     },
     {
       "part": "XII",
@@ -301,7 +319,8 @@
           "id": "12.1c",
           "title": "Extreme Scenario Testing as Assumption Archaeology"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_XII.txt"
     },
     {
       "part": "XIII",
@@ -322,7 +341,8 @@
           "id": "13.1c",
           "title": "Diagnostic: Is This a Tension or a Contradiction?"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_XIII.txt"
     },
     {
       "part": "XV",
@@ -343,7 +363,8 @@
           "id": "15.0b",
           "title": "Canonical Term Definitions"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_XV.txt"
     },
     {
       "part": "XVI",
@@ -364,7 +385,8 @@
           "id": "16.2",
           "title": "Artificial Intelligence as Institutional Architecture"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_XVI.txt"
     },
     {
       "part": "XVII",
@@ -385,7 +407,8 @@
           "id": "17.2",
           "title": "The Labour Movement Case: Institutional Capture Through Incremental Drift"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_XVII.txt"
     },
     {
       "part": "XIV",
@@ -406,7 +429,8 @@
           "id": "14.3",
           "title": "Argument, Assumption, and Open Question"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_XIV.txt"
     },
     {
       "part": "Coda",
@@ -419,7 +443,8 @@
           "id": "coda",
           "title": "Coda"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_Coda.txt"
     },
     {
       "part": "Intellectual Debts",
@@ -432,7 +457,8 @@
           "id": "intellectual-debts",
           "title": "Intellectual Debts"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_Intellectual_Debts.txt"
     },
     {
       "part": "Bibliography",
@@ -445,7 +471,8 @@
           "id": "bibliography",
           "title": "Bibliography"
         }
-      ]
+      ],
+      "plain_text": "https://novadharma-hub.github.io/pmn-framework/txt/part_Bibliography.txt"
     }
   ],
   "fetch_note": "GitHub Pages serves .md as text/markdown; some AI fetchers reject that media type before reading the body. llms_full_txt carries the same content as text/plain."
