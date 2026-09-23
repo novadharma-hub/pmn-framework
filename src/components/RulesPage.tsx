@@ -1,39 +1,40 @@
+/**
+ * Rules & Data — halaman sendiri dengan URL sendiri (#/rules, #/rules/terms,
+ * #/rules/limits, #/rules/ai).
+ *
+ * Sampai 2026-09-23 ini jendela melayang (PolicyModal). Di HP deretan tabnya
+ * terpotong: jendela itu kolom flex dengan maxHeight 88vh, dan baris tab -
+ * anak flex dengan overflow-x:auto, jadi boleh menyusut sampai 0 - diperas
+ * vertikal sampai label "PRIVACY &" terpotong separuh dan tab ketiga keluar
+ * layar. Jendela itu juga menutupi seluruh layar HP tanpa memberi apa pun
+ * yang tidak bisa diberikan halaman biasa, dan tidak punya tautan yang bisa
+ * dibagikan per tab.
+ *
+ * Tab dikendalikan App (satu sumber kebenaran, ikut URL); komponen ini tidak
+ * menyimpan salinannya sendiri.
+ */
 import React, { useState, useEffect } from 'react'
+import type { RulesTab } from '../routing'
 
-export type PolicyTab = 'privacy' | 'terms' | 'disclaimer' | 'ai'
+export type PolicyTab = RulesTab
 
-interface PolicyModalProps {
-  isOpen: boolean
-  initialTab?: PolicyTab
-  onClose: () => void
+interface RulesPageProps {
+  tab: PolicyTab
+  onTabChange: (tab: PolicyTab) => void
+  onBack: () => void
   version?: string
 }
 
-export default function PolicyModal({
-  isOpen,
-  initialTab = 'privacy',
-  onClose,
+export default function RulesPage({
+  tab: activeTab,
+  onTabChange: setActiveTab,
+  onBack,
   version = '120',
-}: PolicyModalProps) {
-  const [activeTab, setActiveTab] = useState<PolicyTab>(initialTab)
+}: RulesPageProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [storageStats, setStorageStats] = useState<{ count: number; sizeKb: string }>({ count: 0, sizeKb: '0' })
 
-  useEffect(() => {
-    if (isOpen) {
-      setActiveTab(initialTab)
-      calcStorageStats()
-    }
-  }, [isOpen, initialTab])
-
-  useEffect(() => {
-    if (!isOpen) return
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
+  useEffect(() => { calcStorageStats() }, [])
 
   const calcStorageStats = () => {
     let totalChars = 0
@@ -107,8 +108,6 @@ export default function PolicyModal({
     }
   }
 
-  if (!isOpen) return null
-
   const apaCitation = `Dharma, N. (2026). Progressive Materialist Naturalism: A Structural Analytic Framework for Non-Ideal Realities (Version ${version}). PMN Collective. https://novadharma-hub.github.io/pmn-framework/`
   const bibtexCitation = `@misc{dharma2026pmn,
   author = {Dharma, Nova},
@@ -121,38 +120,28 @@ export default function PolicyModal({
 
   return (
     <>
-      {/* Backdrop */}
       <div
-        onClick={onClose}
+        id="rules-view"
         style={{
-          position: 'fixed',
+          position: 'absolute',
           inset: 0,
-          zIndex: 9990,
-          background: 'rgba(0,0,0,0.72)',
-          backdropFilter: 'blur(3px)',
-          animation: 'pmn-fade-in .15s ease',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          background: 'var(--bg)',
         }}
-      />
-
-      {/* Modal Dialog */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Platform Policies & Web Standards"
+      >
+      <main
+        aria-label="Rules & Data"
         style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 9991,
-          width: 'min(780px, 94vw)',
-          maxHeight: '88vh',
+          width: '100%',
+          maxWidth: '780px',
+          margin: '0 auto',
           display: 'flex',
           flexDirection: 'column',
           background: 'var(--bg)',
-          border: '1px solid var(--rule)',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
-          animation: 'pmn-slide-up .18s ease',
+          borderLeft: '1px solid var(--rule)',
+          borderRight: '1px solid var(--rule)',
+          minHeight: '100%',
         }}
       >
         {/* Header Bar */}
@@ -161,6 +150,7 @@ export default function PolicyModal({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            gap: '1rem',
             padding: '.9rem 1.4rem',
             borderBottom: '1px solid var(--rule)',
             background: 'var(--bg2)',
@@ -193,7 +183,7 @@ export default function PolicyModal({
             </h2>
           </div>
           <button
-            onClick={onClose}
+            onClick={onBack}
             style={{
               background: 'none',
               border: '1px solid var(--rule)',
@@ -202,27 +192,27 @@ export default function PolicyModal({
               fontFamily: 'var(--f-mono)',
               fontSize: '.72rem',
               padding: '.3rem .6rem',
+              flexShrink: 0,
             }}
-            title="Close [Esc]"
           >
-            [ESC] &times;
+            &larr; Back
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div
+        <nav
+          aria-label="Rules & Data sections"
           style={{
-            display: 'flex',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+            flexShrink: 0,
             borderBottom: '1px solid var(--rule)',
             background: 'var(--bg)',
-            overflowX: 'auto',
           }}
         >
           <button
             onClick={() => setActiveTab('privacy')}
             style={{
-              flex: 1,
-              minWidth: '140px',
               padding: '.75rem .9rem',
               fontFamily: 'var(--f-mono)',
               fontSize: '.7rem',
@@ -241,8 +231,6 @@ export default function PolicyModal({
           <button
             onClick={() => setActiveTab('terms')}
             style={{
-              flex: 1,
-              minWidth: '140px',
               padding: '.75rem .9rem',
               fontFamily: 'var(--f-mono)',
               fontSize: '.7rem',
@@ -261,8 +249,6 @@ export default function PolicyModal({
           <button
             onClick={() => setActiveTab('disclaimer')}
             style={{
-              flex: 1,
-              minWidth: '150px',
               padding: '.75rem .9rem',
               fontFamily: 'var(--f-mono)',
               fontSize: '.7rem',
@@ -281,8 +267,6 @@ export default function PolicyModal({
           <button
             onClick={() => setActiveTab('ai')}
             style={{
-              flex: 1,
-              minWidth: '140px',
               padding: '.75rem .9rem',
               fontFamily: 'var(--f-mono)',
               fontSize: '.7rem',
@@ -298,13 +282,13 @@ export default function PolicyModal({
           >
             🤖 AI Ethics Policy
           </button>
-        </div>
+        </nav>
 
         {/* Content Body */}
         <div
           style={{
             padding: '1.4rem 1.6rem',
-            overflowY: 'auto',
+            flex: 1,
             fontFamily: 'var(--f-body)',
             fontSize: '.88rem',
             lineHeight: 1.65,
@@ -647,7 +631,7 @@ export default function PolicyModal({
         >
           <span>Progressive Materialist Naturalism &mdash; Release v{version}</span>
           <button
-            onClick={onClose}
+            onClick={onBack}
             style={{
               background: 'var(--acc)',
               color: '#fff',
@@ -660,9 +644,10 @@ export default function PolicyModal({
               cursor: 'pointer',
             }}
           >
-            Close Dialog
+            &larr; Back
           </button>
         </div>
+      </main>
       </div>
     </>
   )

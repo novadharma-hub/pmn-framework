@@ -3276,3 +3276,63 @@ body.focus-mode #hdr-r #focus-btn {
   border-color: var(--acc) !important;
   color: var(--acc-text) !important;
 }
+
+/* Rules & Data sebagai halaman (2026-09-23). Di HP #mob-nav (58px, fixed)
+   menutupi dasar wadah gulir; tanpa ruang ini tombol Back di kaki halaman
+   tertutup menu. */
+@media (max-width: 680px) {
+  #rules-view { padding-bottom: 58px; }
+}
+
+/* Header dan menu bawah di rentang tablet (2026-09-23).
+   Terukur sebelum perubahan, di #/contents:
+     681-767px: header hanya logo, cari, JUMP, FOCUS; #mob-nav belum
+                muncul (<=680) - Contents, Glossary, Guide, Rules & Data
+                dan tema tak terjangkau sama sekali.
+     768-960px: Guide dan Rules & Data disembunyikan, Keys meluber ke
+                luar layar (scrollWidth 854 pada 768).
+     1024px:    semua tombol tampil, header tetap meluber 53px.
+   Maka #mob-nav dipakai sampai 960px, persis sampai titik header mulai
+   menyembunyikan tombol, dan header di rentang itu hanya menyisakan FOCUS
+   (satu-satunya yang tidak ada di #mob-nav). Di rentang ini page-shell
+   dipendekkan setinggi menu, supaya menu tidak menutupi konten. */
+@media (min-width: 681px) and (max-width: 960px) {
+  #mob-nav, .mob-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    width: 100%;
+    height: 58px;
+    z-index: 150;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+  #mob-nav.hidden { display: none !important; }
+  .mob-nav-btn {
+    flex: 1;
+    min-width: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    background: none; border: none;
+    font-size: 1.15rem;
+    color: var(--mute); cursor: pointer;
+    padding: 0;
+  }
+  .mob-nav-btn.active { color: var(--acc-text); }
+  .mob-nav-lbl { font-family: 'Source Code Pro', monospace; font-size: .55rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1; }
+  .page-shell { height: calc(100vh - 52px - 58px); }
+  #hdr-r #hb-home,
+  #hdr-r #hb-gl,
+  #hdr-r #hb-guide,
+  #hdr-r #hb-policy,
+  #hdr-r #theme-tog,
+  #hdr-r #hb-kbd { display: none; }
+  /* Kartu orientasi (fixed, bottom 24px, z 999) duduk di atas menu bawah
+     dan menutupi GUIDE, RULES dan tema. Naikkan setinggi menu. */
+  .hero-orientation-tip { bottom: calc(58px + 16px); }
+}
+/* Label pendek untuk dua tombol terpanjang, di bawah 1200px. */
+.lbl-short { display: none; }
+@media (max-width: 1200px) {
+  #hdr-r .lbl-long { display: none; }
+  #hdr-r .lbl-short { display: inline; }
+}
