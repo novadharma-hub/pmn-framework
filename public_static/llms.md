@@ -13,6 +13,8 @@
 
 | Format | URL | Purpose |
 |---|---|---|
+| **Plain-Text Section Index** | [`txt/index.txt`](https://novadharma-hub.github.io/pmn-framework/txt/index.txt) | Start here. All 235 sections in reading order, each as its own small `text/plain` file (largest ~55 KB), so no fetcher has to truncate. |
+| **Static HTML Edition** | [`read/`](https://novadharma-hub.github.io/pmn-framework/read/) | One plain HTML page per section, readable without JavaScript. The interactive reader needs JavaScript. |
 | **Standard LLMs Index** | [`llms.txt`](https://novadharma-hub.github.io/pmn-framework/llms.txt) | Official [llmstxt.org](https://llmstxt.org/) index for AI agents and search bots. |
 | **Structured API Manifest** | [`llms.json`](https://novadharma-hub.github.io/pmn-framework/llms.json) | JSON schema containing all module endpoints, stats, and metadata for automated pipelines. |
 | **AI Documentation** | [`llms.md`](https://novadharma-hub.github.io/pmn-framework/llms.md) | Rich Markdown overview with complete architectural tables. |

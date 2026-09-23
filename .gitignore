@@ -79,3 +79,9 @@ legacy/
 
 # Mimosa security-hook state (internal, jangan pernah masuk repo publik)
 .mimosa/
+
+# Build outputs of scripts/build_ai_surfaces.py (static edition, plain-text
+# sections, sitemap). Regenerated from parts.json on every `npm run build`.
+dist/txt/
+dist/read/
+dist/sitemap.xml

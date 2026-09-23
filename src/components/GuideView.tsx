@@ -1607,10 +1607,10 @@ if ANTHROPIC_API_KEY:
             <span className="note-label">⚠️ The Five Web-Scraping &amp; API Blindspots</span>
             <ul style={{ fontSize: '0.88rem', color: 'var(--ink2)', lineHeight: 1.75, paddingLeft: '1.2rem', margin: '0.5rem 0', listStyleType: 'decimal' }}>
               <li>
-                <strong>Dynamic Single-Page Application (SPA):</strong> Most web crawlers do not execute JavaScript; they receive an empty root container (<code>&lt;div id="root"&gt;&lt;/div&gt;</code>) instead of rendered prose. Always point models or APIs to <code>pmn_corpus_for_ai.md</code> or <code>llms.txt</code>.
+                <strong>Dynamic Single-Page Application (SPA):</strong> Most web crawlers do not execute JavaScript; from this page they receive only a static contents list, not the rendered prose. Point models to <code>llms.txt</code>, to <code>txt/index.txt</code> (every section as its own small plain-text file), or to the static edition under <code>read/</code>.
               </li>
               <li>
-                <strong>Ignored Hash Anchors:</strong> Web crawlers and HTTP scrapers strip URL hashes (e.g., <code>/#/s/1.3</code>). A query directed to a specific section anchor will only retrieve home page metadata. Use REST endpoints like <code>/data/parts/part_I.json</code> instead.
+                <strong>Ignored Hash Anchors:</strong> Web crawlers and HTTP scrapers strip URL hashes (e.g., <code>/#/s/1.3</code>). A query directed to a specific section anchor will only retrieve home page metadata. Use the per-section files instead: <code>/txt/1.3.txt</code> (plain text) or <code>/read/1.3.html</code> (static HTML).
               </li>
               <li>
                 <strong>Interactive UI Concealment:</strong> Accordions, glossary modals, sliding sidebars, and tabbed panels are invisible to basic HTTP scrapers.

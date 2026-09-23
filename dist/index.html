@@ -22,6 +22,35 @@
     <meta name="twitter:title" content="Progressive Materialist Naturalism (PMN) — v126" />
     <meta name="twitter:description" content="Official interactive reader platform and canonical AI grounding specification by Nova Dharma." />
 
+    <!-- Machine-readable entry points. The body below is filled by JavaScript,
+         so these are what a crawler that does not run JS can follow. -->
+    <link rel="alternate" type="text/plain" title="llms.txt" href="https://novadharma-hub.github.io/pmn-framework/llms.txt" />
+    <link rel="sitemap" type="application/xml" href="https://novadharma-hub.github.io/pmn-framework/sitemap.xml" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Book",
+      "name": "Progressive Materialist Naturalism (PMN)",
+      "alternateName": "PMN Framework",
+      "author": { "@type": "Person", "name": "Nova Dharma" },
+      "inLanguage": "en",
+      "genre": "Philosophy",
+      "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "url": "https://novadharma-hub.github.io/pmn-framework/",
+      "sameAs": ["https://github.com/novadharma-hub/pmn-framework"],
+      "workExample": [
+        { "@type": "Book", "bookFormat": "https://schema.org/EBook", "url": "https://novadharma-hub.github.io/pmn-framework/read/" },
+        { "@type": "Book", "bookFormat": "https://schema.org/EBook", "encodingFormat": "application/pdf", "url": "https://novadharma-hub.github.io/pmn-framework/PMN_Latest.pdf" }
+      ]
+    }
+    </script>
+
+    <!-- The static contents list inside #root is for readers without JS
+         (crawlers, AI fetchers). With JS it is hidden before first paint and
+         then replaced by React, so it never flashes. -->
+    <script>document.documentElement.classList.add('js')</script>
+    <style>.js #static-fallback{display:none}#static-fallback{max-width:42rem;margin:0 auto;padding:1.5rem 16px;font-family:Georgia,serif;line-height:1.6}</style>
+
     <!-- Web App Manifest -->
     <link rel="manifest" href="/manifest.webmanifest" />
 
@@ -33,10 +62,21 @@
          repo-wide search for one returning zero is a check that stays honest. -->
     <link rel="preload" href="/pmn-framework/fonts/Lora-400.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/pmn-framework/fonts/LibreBaskerville-700.woff2" as="font" type="font/woff2" crossorigin>
-    <script type="module" crossorigin src="/pmn-framework/assets/main-BtmQxeE4.js"></script>
+    <script type="module" crossorigin src="/pmn-framework/assets/main-CQzxm8he.js"></script>
     <link rel="stylesheet" crossorigin href="/pmn-framework/assets/main-Dpvl6Z_4.css">
   <link rel="manifest" href="/pmn-framework/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/pmn-framework/registerSW.js"></script></head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div id="static-fallback">
+      <h1>Progressive Materialist Naturalism (PMN) v126</h1>
+      <p>A naturalist philosophical framework by Nova Dharma: 21 Parts, 235 sections, about 330,000 words. This page is an interactive reader that needs JavaScript. The same manuscript is available without it:</p>
+      <ul>
+        <li><a href="read/">Static edition, one HTML page per section</a></li>
+        <li><a href="txt/index.txt">Plain-text index: every section as its own small .txt file</a></li>
+        <li><a href="llms.txt">llms.txt</a> and <a href="llms-full.txt">llms-full.txt (everything in one file, 2.4 MB)</a></li>
+        <li><a href="PMN_Latest.pdf">PDF</a></li>
+      </ul>
+      <h2>Contents</h2>
+      <ul><li><a href="read/preface.html">Preface</a></li><li><a href="read/1.1.html">Part I: How We Know: The Epistemological Foundation</a></li><li><a href="read/2.1.html">Part II: What Exists: The Ontological Foundation</a></li><li><a href="read/3.0.html">Part III: The Biological Foundation: From Physiology to Institution</a></li><li><a href="read/4.1.html">Part IV: What Matters: Ethics, Value, and the Evaluative Commitment</a></li><li><a href="read/5.1.html">Part V: The Metaphysical Dimension: Meaning, Religion, and Material Reality</a></li><li><a href="read/6.1.html">Part VI: Power: The Variable That Cannot Be Left Implicit</a></li><li><a href="read/7.0.html">Part VII: How to Organize: Politics, Institutions, and the State</a></li><li><a href="read/8.1.html">Part VIII: Society, Culture, and the Politics of Material Outcomes</a></li><li><a href="read/9.0.html">Part IX: The International Dimension: Geopolitics and Global Order</a></li><li><a href="read/10.1.html">Part X: How Systems Change: Adaptive Dynamics and Historical Transformation</a></li><li><a href="read/11.0.html">Part XI: The Economic Doctrine</a></li><li><a href="read/12.1.html">Part XII: How This Framework Operates</a></li><li><a href="read/13.1.html">Part XIII: Tensions That Cannot Be Resolved — Only Managed</a></li><li><a href="read/15.0.html">Part XV: The Formula Architecture</a></li><li><a href="read/16.0.html">Part XVI: Technology as Structural Variable</a></li><li><a href="read/17.0.html">Part XVII: Cases and the Individual: Pattern, Drift, and the Demands of the Framework</a></li><li><a href="read/14.1.html">Part XIV: Summary: Framework, Doctrine, and What Remains Open</a></li><li><a href="read/coda.html">Coda</a></li><li><a href="read/intellectual-debts.html">Intellectual Debts</a></li><li><a href="read/bibliography.html">Bibliography</a></li></ul>
+    </div></div>
   </body>
 </html>
