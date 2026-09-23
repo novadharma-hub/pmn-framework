@@ -799,6 +799,13 @@ LLMS_FULL = "llms-full.txt"
 KEPALA_FULL = """\
 # PMN Framework {label} — complete content, single file, text/plain
 
+READ THIS FIRST IF YOUR FETCHER TRUNCATES. This file is about 2.4 MB (~450k
+tokens); most fetchers stop long before the end, usually inside the glossary.
+The same manuscript is published in small files, every section on its own
+(largest ~55 KB). The index lists each one's full URL:
+
+  https://novadharma-hub.github.io/pmn-framework/txt/index.txt
+
 This file exists for one reason, and it is a transport reason rather than an
 editorial one.
 
