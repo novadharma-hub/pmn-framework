@@ -60,8 +60,9 @@
     <script>document.documentElement.classList.add('js')</script>
     <style>.js #static-fallback{display:none}#static-fallback{max-width:42rem;margin:0 auto;padding:1.5rem 16px;font-family:Georgia,serif;line-height:1.6}</style>
 
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <!-- Web App Manifest: injected by vite-plugin-pwa with the /pmn-framework/
+         base. A hand-written link here pointed at /manifest.webmanifest on the
+         bare host, which is a 404, and sat next to the correct one. -->
 
     <!-- Typography: self-hosted, no third party. Until 2026-09-17 this block
          loaded webfonts from a CDN, so every visitor was disclosed to it before

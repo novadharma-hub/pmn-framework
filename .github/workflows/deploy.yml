@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Action majors bumped 2026-09-23: every deploy warned that the v4-era actions
+# target Node.js 20, which GitHub is retiring from its runners. The versions
+# below all declare node24 in their action.yml (checked, not assumed).
 permissions:
   contents: read
   pages: write
@@ -26,22 +29,25 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
 
+      # npm ci installs exactly what package-lock.json pins and fails if the two
+      # disagree. npm install could resolve a newer version on any deploy, so a
+      # compromised or broken release upstream would ship without a commit here.
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       # "npm run build" ends with "python3 scripts/build_pdf.py" (T4: the PDF is a
       # build output of the corpus). The runner has python3 but not reportlab, so
       # every deploy since that change failed at the last step -- the site kept
       # serving the previous successful build while main moved on.
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -52,16 +58,16 @@ jobs:
         run: npm run build
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       # Bing, and through it ChatGPT search, Copilot and DuckDuckGo, learns
       # every URL in sitemap.xml without anyone logging in anywhere. Never
