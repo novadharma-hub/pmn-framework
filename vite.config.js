@@ -3,6 +3,59 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { readFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+
+// Content-Security-Policy, sebagai <meta> karena GitHub Pages tidak bisa
+// mengirim header sendiri.
+//
+// Isi naskah dirender lewat dangerouslySetInnerHTML. Kalau suatu hari data
+// itu (atau apa pun yang disuntikkan) membawa <script> atau onerror=, CSP ini
+// yang menolaknya: skrip hanya boleh dari situs ini sendiri, dan skrip
+// inline hanya yang hash-nya dihitung di sini dari HTML final.
+//
+// Diinventaris 2026-09-23 sebelum ditulis: satu-satunya fetch adalah
+// ./data/*.json; api.anthropic.com dan situs AI lain di bundle hanya contoh
+// kode dan tautan (navigasi tidak diatur CSP); gambar hanya data: SVG di CSS;
+// tidak ada eval/new Function. style-src tetap 'unsafe-inline' karena React
+// memakai atribut style={{…}} di banyak komponen.
+//
+// Hanya saat build: dev server Vite menyuntik skrip inline dan websocket HMR
+// yang akan ditolak kebijakan ini.
+function contentSecurityPolicy() {
+  return {
+    name: 'pmn-csp',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html) {
+        const hash = [...html.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g)]
+          .filter(([, attrs]) => !/type=["']application\/(ld\+)?json["']/.test(attrs))
+          .map(([, , body]) => `'sha256-${createHash('sha256').update(body).digest('base64')}'`)
+        const policy = [
+          "default-src 'self'",
+          `script-src 'self' ${hash.join(' ')}`.trim(),
+          "style-src 'self' 'unsafe-inline'",
+          "img-src 'self' data:",
+          "font-src 'self'",
+          "connect-src 'self'",
+          "manifest-src 'self'",
+          "worker-src 'self'",
+          "object-src 'none'",
+          "base-uri 'self'",
+          "form-action 'none'",
+          'upgrade-insecure-requests',
+        ].join('; ')
+        // A policy that silently fails to land is worse than none: it reads
+        // as protected. So the build stops instead.
+        if (!/<meta charset="UTF-8" \/>/.test(html)) {
+          throw new Error('pmn-csp: <meta charset="UTF-8" /> not found in index.html')
+        }
+        return html.replace(/(<meta charset="UTF-8" \/>)/,
+          `$1\n    <meta http-equiv="Content-Security-Policy" content="${policy}" />`)
+      },
+    },
+  }
+}
 
 // Isi statis untuk <div id="root"> di index.html.
 //
@@ -48,6 +101,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     staticFallback(),
+    contentSecurityPolicy(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icons/pwa-192.png', 'icons/pwa-512.png'],
