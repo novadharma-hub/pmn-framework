@@ -153,8 +153,8 @@ The PMN reader platform operates under strict **Privacy by Architectural Design*
 - **Zero Telemetry & Zero Trackers:** No Google Analytics, no tracking pixels, no telemetry scripts, and no third-party network requests.
 - **Zero Cookies & Compliance Exemption:** The web client sets zero cookies (`document.cookie` is unused). Under GDPR (ePrivacy Directive Art. 5(3)) and Indonesia's UU PDP No. 27/2022, storage used exclusively for user-requested preferences (`localStorage`) is *strictly necessary* and legally exempt from invasive cookie consent popups.
 - **Client-Side Local Storage Sovereignty:** Margin notes (<kbd>Alt</kbd> + <kbd>N</kbd>), reading progress markers, bookmarks, and font preferences are stored strictly inside browser `localStorage`. Your thoughts and reading habits never leave your machine.
-- **Data Sovereignty Tools:** Built-in JSON export (`Export My Data`) and one-click data purge (`Clear All Local Data`) accessible directly from the Platform Policy modal.
-- **Platform Governance & Transparency Modal (`#/privacy`, `#/terms`, `#/disclaimer`, `#/ai`):** Instant access to complete storage inventories, canonical citation formats (1-click APA 7th & BibTeX), methodological limits (§15.0/§15.13 rejection of formula fetishism), and AI ingestion ethics.
+- **Data Sovereignty Tools:** Built-in JSON export (`Export My Data`) and one-click data purge (`Clear All Local Data`) accessible directly from the Rules & Data page.
+- **Rules & Data page (`#/rules`, `#/rules/terms`, `#/rules/limits`, `#/rules/ai`; the older `#/privacy`, `#/terms`, `#/disclaimer`, `#/ai` links still open it):** Instant access to complete storage inventories, canonical citation formats (1-click APA 7th & BibTeX), methodological limits (§15.0/§15.13 rejection of formula fetishism), and AI ingestion ethics.
 - **Offline Progressive Web App (PWA):** Equipped with a robust Service Worker (`vite-plugin-pwa` + `Workbox`) caching all 21 parts, glossary entries, search indexes, and styling tokens. Once loaded, the reader functions completely air-gapped without an internet connection.
 
 ---
