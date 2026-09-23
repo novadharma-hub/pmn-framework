@@ -172,7 +172,9 @@ def halaman(judul: str, deskripsi: str, url: str, badan: str, label: str) -> str
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'">
 <title>{judul}</title>
+<link rel="icon" type="image/png" href="../icons/pwa-192.png">
 <meta name="description" content="{deskripsi}">
 <meta name="author" content="Nova Dharma">
 <link rel="canonical" href="{url}">
