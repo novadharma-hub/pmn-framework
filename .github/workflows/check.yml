@@ -1,0 +1,48 @@
+name: Check build (pull requests)
+
+# Runs the same build the deploy runs, on every pull request, so a change that
+# breaks it is caught before merge instead of after. Until 2026-09-23 the only
+# workflow was the deploy, which runs on main: a broken build was discovered
+# only once it was already merged, while the site kept serving the last good
+# one. Nothing is published from here.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Same reason as in deploy.yml: the build ends with build_pdf.py.
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: python -m pip install --quiet reportlab
+
+      # Typecheck, vite, the AI surfaces (txt/, read/, sitemap.xml) and the
+      # PDF currency check: exactly what deploy.yml runs.
+      - name: Build
+        run: npm run build
