@@ -11,7 +11,7 @@ import ReadingPathsSection from './components/ReadingPathsSection'
 import TheoreticalAnatomySection from './components/TheoreticalAnatomySection'
 import AxiomStructureSection from './components/AxiomStructureSection'
 import MobileCollapse from './components/MobileCollapse'
-import PolicyModal, { PolicyTab } from './components/PolicyModal'
+import RulesPage, { PolicyTab } from './components/RulesPage'
 import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl } from './routing'
 
 
@@ -36,7 +36,7 @@ export default function App() {
   // dari localStorage, sehingga tautan yang dibagikan selalu membuka halaman
   // terakhir SI PENERIMA, bukan halaman yang dimaksud pengirim.
   const rutAwal = hashToRoute(window.location.hash)
-  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide'>(() => {
+  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide' | 'rules'>(() => {
     if (rutAwal) return rutAwal.page
     try {
       const s = localStorage.getItem('pmn-page')
@@ -81,12 +81,21 @@ export default function App() {
 
   const [kbdOpen, setKbdOpen] = useState(false)
   const [notesOpen, setNotesOpen] = useState(false)
-  const [policyOpen, setPolicyOpen] = useState(false)
-  const [policyTab, setPolicyTab] = useState<PolicyTab>('privacy')
+  // Rules & Data adalah halaman (#/rules/...), bukan jendela melayang lagi:
+  // lihat catatan di RulesPage.tsx.
+  const [rulesTab, setRulesTab] = useState<PolicyTab>(() => rutAwal?.rulesTab ?? 'privacy')
+  // Back di halaman Rules kembali ke halaman asal di DALAM aplikasi.
+  // history.back() tidak dipakai: bila halaman ini dibuka dari tautan luar,
+  // itu akan membawa pembaca keluar dari situs.
+  const halamanSebelumRules = useRef<'home' | 'contents' | 'reader' | 'guide'>('home')
   const openPolicy = (tab: PolicyTab = 'privacy') => {
-    setPolicyTab(tab)
-    setPolicyOpen(true)
+    if (page === 'home' || page === 'contents' || page === 'reader' || page === 'guide') {
+      halamanSebelumRules.current = page
+    }
+    setRulesTab(tab)
+    setPage('rules')
   }
+  const policyOpen = page === 'rules'
   const [contentWidth, setContentWidth] = useState<'narrow' | 'medium' | 'wide'>('wide')
   const [history, setHistory] = useState<[number, number][]>([])
   const [showTip, setShowTip] = useState<boolean>(() => {
@@ -174,13 +183,13 @@ export default function App() {
     // tiba - ID-nya hilang sebelum sempat dipulihkan.
     if (page === 'reader' && !data?.parts?.length) return
     const sectionId = page === 'reader' ? sectionIdAt(data?.parts, curPos[0], curPos[1]) : null
-    const hashBaru = routeToHash({ page, contentsSub, sectionId })
+    const hashBaru = routeToHash({ page, contentsSub, sectionId, rulesTab })
     if (hashBaru === window.location.hash) { sinkronPertama.current = false; return }
     const url = window.location.pathname + window.location.search + hashBaru
     if (sinkronPertama.current) window.history.replaceState(null, '', url)
     else window.history.pushState(null, '', url)
     sinkronPertama.current = false
-  }, [page, contentsSub, curPos, data])
+  }, [page, contentsSub, curPos, data, rulesTab])
 
   // URL -> state. Tanpa ini tombol Back browser tidak melakukan apa pun.
   useEffect(() => {
@@ -189,6 +198,7 @@ export default function App() {
       if (!r) return
       setPage(r.page)
       setContentsSub(r.contentsSub)
+      if (r.page === 'rules' && r.rulesTab) setRulesTab(r.rulesTab)
       if (r.page === 'reader' && r.sectionId) {
         const pos = findSection(data?.parts, r.sectionId)
         if (pos) setCurPos(pos)
@@ -201,20 +211,6 @@ export default function App() {
       window.removeEventListener('hashchange', onPop)
     }
   }, [data])
-
-  useEffect(() => {
-    const checkPolicyHash = () => {
-      const h = (window.location.hash || '').toLowerCase()
-      if (h === '#/privacy') openPolicy('privacy')
-      else if (h === '#/terms') openPolicy('terms')
-      else if (h === '#/disclaimer' || h === '#/disclaimers') openPolicy('disclaimer')
-      else if (h === '#/ai' || h === '#/ai-policy' || h === '#/ai-ethics') openPolicy('ai')
-      else if (h === '#/policies' || h === '#/policy') openPolicy('privacy')
-    }
-    checkPolicyHash()
-    window.addEventListener('hashchange', checkPolicyHash)
-    return () => window.removeEventListener('hashchange', checkPolicyHash)
-  }, [])
 
   const [version, setVersion] = useState('')
   const [loadedCount, setLoadedCount] = useState(0)
@@ -446,12 +442,16 @@ export default function App() {
         <button className="hbtn text-[10px] opacity-70" onClick={() => { if (page !== 'reader') setPage('reader'); setPaletteTrigger(t => t + 1) }}>JUMP ↗</button>
         <div id="hdr-r">
           <button id="focus-btn" className="focus-mode-btn" onClick={() => setFocusMode(v => !v)}>FOCUS</button>
-          <button id="hb-home" className={page === 'contents' && contentsSub === 'map' ? 'on' : ''} onClick={() => { setContentsSub('map'); setPage('contents') }}>Table of Contents</button>
+          <button id="hb-home" className={page === 'contents' && contentsSub === 'map' ? 'on' : ''} onClick={() => { setContentsSub('map'); setPage('contents') }}>
+            <span className="lbl-long">Table of Contents</span><span className="lbl-short">Contents</span>
+          </button>
           <button id="hb-gl" className={page === 'contents' && contentsSub === 'glossary' ? 'on' : ''} onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
           <button id="hb-guide" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>AI Guide</button>
           <button id="hb-policy" className={policyOpen ? 'on' : ''} onClick={() => openPolicy('privacy')}>Rules &amp; Data</button>
           <button id="theme-tog" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
-          <button id="hb-kbd" onClick={() => setKbdOpen(true)}>Keys [Alt+K]</button>
+          <button id="hb-kbd" onClick={() => setKbdOpen(true)}>
+            <span className="lbl-long">Keys [Alt+K]</span><span className="lbl-short">Keys</span>
+          </button>
         </div>
       </header>
 
@@ -523,6 +523,15 @@ export default function App() {
           {page === 'admin' && <VersionManager onBack={() => setPage('home')} />}
           {page === 'guide' && <GuideView onBackHome={() => setPage('home')} version={version} />}
 
+          {page === 'rules' && (
+            <RulesPage
+              tab={rulesTab}
+              onTabChange={setRulesTab}
+              onBack={() => setPage(halamanSebelumRules.current)}
+              version={version}
+            />
+          )}
+
         </div>
 
         {/* BOTTOM / MOBILE NAVIGATION BAR */}
@@ -574,7 +583,7 @@ export default function App() {
 
       <KeyboardModal isOpen={kbdOpen} onClose={() => setKbdOpen(false)} />
       <NotesModal isOpen={notesOpen} onClose={() => setNotesOpen(false)} data={data} onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }} />
-      <PolicyModal isOpen={policyOpen} initialTab={policyTab} onClose={() => setPolicyOpen(false)} version={version} />
+
       {/* Penataan letak kartu orientasi sengaja TIDAK inline: inline style
           mengalahkan stylesheet, sehingga media query tidak bisa menghentikan
           kartu ini melayang di atas CTA pada layar sempit. Lihat
