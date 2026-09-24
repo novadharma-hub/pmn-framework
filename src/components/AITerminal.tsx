@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import type { GuideTab } from '../routing'
 
 interface SubSection { id: string; title: string; html?: string; text?: string }
 interface Part { part: string; title: string; subs: SubSection[] }
@@ -7,41 +8,50 @@ interface AITerminalProps {
   parts: Part[]
   gl: Record<string, string>
   activeSec: SubSection | null
-  onOpenGuide?: () => void
+  onOpenGuide?: (tab?: GuideTab) => void
   version?: string
 }
 
-export type AIProviderId = 
-  | 'claude' 
-  | 'chatgpt' 
+/**
+ * Layanan chat tujuan "Copy & Launch". Diurutkan alfabetis dan tanpa nama
+ * versi model maupun peringkat: daftar sebelumnya ("GPT-6 Astra", "Rank #1
+ * on AA Index (53.37)", ...) basi dalam hitungan bulan dan tidak bisa
+ * diverifikasi dari situs statis ini. Kriteria memilih model ada di
+ * AI Guide (#/guide), yang tidak ikut basi.
+ *
+ * Tab "Developer API" dihapus 2026-09-24: payload JSON-nya tanpa max_tokens
+ * (ditolak API) dan versi cURL-nya rusak bila prompt memuat apostrof.
+ * Skrip yang teruji ada di #/guide/dev.
+ */
+export type AIProviderId =
+  | 'chatgpt'
+  | 'claude'
+  | 'deepseek'
+  | 'gemini'
   | 'glm'
-  | 'grok' 
+  | 'grok'
   | 'kimi'
-  | 'gemini' 
   | 'qwen'
-  | 'deepseek' 
-  | 'api'
 
 interface ProviderItem {
   id: AIProviderId
   name: string
   company: string
-  badge: string
   url: string
-  desc: string
 }
 
 const PROVIDERS: ProviderItem[] = [
-  { id: 'claude', name: 'Claude', company: 'Anthropic', badge: 'Fable 5.1 / Opus 5', url: 'https://claude.ai', desc: 'Rank #1 on AA Index (53.37): unyielding dialectical tension & systemic reasoning' },
-  { id: 'chatgpt', name: 'ChatGPT', company: 'OpenAI', badge: 'GPT-6 Astra / Sol', url: 'https://chatgpt.com', desc: 'Rank #2 on AA Index (52.81): multi-step deductive rigor & consistency audits' },
-  { id: 'glm', name: 'GLM', company: 'Zhipu AI', badge: 'GLM-5.3 / Flash', url: 'https://chatglm.cn', desc: 'Rank #7 on AA Index (44.86): sovereign open-weights leader for private on-prem analysis' },
-  { id: 'grok', name: 'Grok', company: 'xAI', badge: 'Grok 4.6 (500k)', url: 'https://grok.com', desc: 'Rank #8 on AA Index (44.41): direct dialectical challenge & uninhibited institutional critique' },
-  { id: 'kimi', name: 'Kimi', company: 'Moonshot AI', badge: 'Kimi K3 (1M)', url: 'https://kimi.moonshot.cn', desc: 'Rank #9 on AA Index (43.78): massive 1M token window holding entire PMN corpus' },
-  { id: 'gemini', name: 'Gemini', company: 'Google', badge: 'Gemini 3.8 Flash', url: 'https://aistudio.google.com', desc: 'Rank #12 on AA Index (41.19): high-velocity cross-Part concept mapping & NotebookLM' },
-  { id: 'qwen', name: 'Qwen', company: 'Alibaba Cloud', badge: 'Qwen3.8 (2.4T)', url: 'https://chat.qwen.ai', desc: 'Rank #13 on AA Index (40.04): explicit Thinking mode for materialist causal chains' },
-  { id: 'deepseek', name: 'DeepSeek', company: 'DeepSeek', badge: 'V4.1 Flash / Pro', url: 'https://chat.deepseek.com', desc: 'Rank #14 on AA Index (39.55): high-efficiency MoE reasoning & structural logic' },
-  { id: 'api', name: 'Developer API', company: 'Harness', badge: 'cURL / Python SDK', url: '', desc: 'Direct code snippets and payloads for local scripts or server-side RAG pipelines' },
+  { id: 'chatgpt', name: 'ChatGPT', company: 'OpenAI', url: 'https://chatgpt.com' },
+  { id: 'claude', name: 'Claude', company: 'Anthropic', url: 'https://claude.ai' },
+  { id: 'deepseek', name: 'DeepSeek', company: 'DeepSeek', url: 'https://chat.deepseek.com' },
+  { id: 'gemini', name: 'Gemini', company: 'Google', url: 'https://aistudio.google.com' },
+  { id: 'glm', name: 'GLM', company: 'Zhipu AI', url: 'https://chatglm.cn' },
+  { id: 'grok', name: 'Grok', company: 'xAI', url: 'https://grok.com' },
+  { id: 'kimi', name: 'Kimi', company: 'Moonshot AI', url: 'https://kimi.moonshot.cn' },
+  { id: 'qwen', name: 'Qwen', company: 'Alibaba Cloud', url: 'https://chat.qwen.ai' },
 ]
+
+const BASE = 'https://novadharma-hub.github.io/pmn-framework/'
 
 interface ModeItem {
   id: string
@@ -50,71 +60,75 @@ interface ModeItem {
   directive: string
 }
 
+// Setiap § di sini dicocokkan dengan judul dan isi seksinya (2026-09-24).
+// Versi sebelumnya mengartikan T = S · D · P · G sebagai "Surplus
+// extraction, Disparity, Probability of enforcement, Growth of extraction
+// rate" dan mengutip §6.3/§15.8 untuknya; naskah §15.2/§15.4 berkata lain.
 const MODES: ModeItem[] = [
   {
     id: 'analyst',
-    title: 'Structural Materialist Analyst',
-    desc: 'Traces underlying resource flows, power asymmetries, and non-arbitrary criteria (§3.4, §4.2).',
-    directive: `OPERATIONAL DIRECTIVE: PMN STRUCTURAL MATERIALIST ANALYST
-- Trace underlying material resource flows, power asymmetries, and incentive structures.
-- Evaluate impacts on the biological floor (minimizing structural suffering) vs genuine becoming (§3.4, §4.2).
-- Distinguish verified empirical evidence from self-serving institutional PR framing.`
+    title: 'Structural Analyst',
+    desc: 'Traces resource flows, power asymmetries, and effects on the floor and on becoming (§3.4, §4.2, §6.2).',
+    directive: `ROLE: PMN STRUCTURAL ANALYST
+- Trace the material resource flows, power asymmetries and incentive structures beneath the public narrative (§6.2, §6.3).
+- Assess effects on the biological floor (§3.4) and, separately, on the conditions for becoming (§4.2).
+- Separate what the evidence supports from institutional public relations.`
   },
   {
     id: 'diagnostic',
-    title: 'Forensic Capture Diagnostician (§7.3c-i)',
-    desc: 'Audits arrangements against the 5-Stage Institutional Capture Sequence and opacity resources.',
-    directive: `OPERATIONAL DIRECTIVE: FORENSIC CAPTURE DIAGNOSTICS (§7.3c-i)
-- Test the arrangement against the 5-Stage Institutional Capture Sequence.
-- Trace how technical complexity is being mobilized as an intentional opacity resource (§6.5).
-- Identify who bears the material costs at the biological floor (§3.4).
-- End with an explicit empirical test that would falsify your diagnosis.`
+    title: 'Capture Diagnostician (§7.3c-i)',
+    desc: 'Tests an institution against the five-stage capture sequence and its early-detection signals.',
+    directive: `ROLE: PMN CAPTURE DIAGNOSTICIAN (§7.3c-i)
+- Test the arrangement against the five stages: (1) Access Asymmetry, (2) Decision-Filter Capture & Preference Expression, (3) Personnel Alignment, (4) Objective Redefinition & Output Reorientation, (5) Accountability Capture & Consolidation.
+- List the early-detection signals present (§7.3b) and how the institution preserves itself against correction (§6.5).
+- Apply the diagnostics regardless of the institution's ideology or stated mission (§12.5).
+- Identify who bears the material costs, and end with the observation that would falsify the diagnosis.`
   },
   {
     id: 'adversarial',
-    title: 'Adversarial Dialectical Stress-Tester (§12.1)',
-    desc: 'Formulates strongest objections, tests for technocratic drift, and identifies hidden assumptions.',
-    directive: `OPERATIONAL DIRECTIVE: ADVERSARIAL DIALECTICAL STRESS-TESTER (§12.1)
-- Formulate the strongest possible materialist or pragmatic objection to this section's claims.
-- Identify latent technocratic assumptions or unstated boundary conditions.
-- Test whether the proposal risks technocratic drift, moralizing substitution, or paralysis by complexity (§12.5).`
+    title: 'Red Team (§12.1)',
+    desc: 'Builds the strongest objection, digs out hidden assumptions, and tests for technocratic drift (§12.8).',
+    directive: `ROLE: PMN RED TEAM (§12.1, §12.1c)
+- Build the strongest objection to the claims under discussion.
+- List the unstated empirical assumptions they rely on.
+- Test for technocratic drift (§6.4, §12.8) and for the cost of inaction (§1.5).
+- State what evidence would force PMN to revise its position.`
   },
   {
     id: 'equation',
-    title: 'Transformation Pressure Formula (T = S · D · P · G)',
-    desc: 'Deconstructs systemic pressure using the multiplicative transition equation (§6.3, §15.8).',
-    directive: `OPERATIONAL DIRECTIVE: TRANSFORMATION PRESSURE FORMULA ($T = S · D · P · G$)
-- Deconstruct systemic power dynamics using the multiplicative equation (§6.3, §15.8).
-- Analyze how Surplus extraction (S), Disparity (D), Probability of enforcement (P), and Growth of extraction rate (G) interact.
-- State required material preconditions for irreversible structural transition (§10.8).`
+    title: 'Transformation Pressure (T = S × D × P × G)',
+    desc: 'Structural suffering × duration × geographic spread × intergenerational transmission (§15.2, §15.4).',
+    directive: `ROLE: PMN TRANSFORMATION-PRESSURE ANALYST (§15.2, §15.4)
+- T = S × D × P × G, where S = structural suffering, D = duration, P = geographic spread (population scale), G = intergenerational transmission.
+- Characterise each variable; they multiply, they do not add. Compare T with the system's threshold for non-linear change (§10.5).
+- Assess counter-power capacity with §15.8 and name its bottleneck.`
   },
   {
     id: 'biological_floor',
-    title: 'Biological Floor & Vulnerability Audit (§3.4)',
-    desc: 'Evaluates baseline physical vulnerability, calorie/shelter baselines, and asymmetry of exit.',
-    directive: `OPERATIONAL DIRECTIVE: BIOLOGICAL FLOOR & VULNERABILITY AUDIT (§3.4, §4.1)
-- Ground evaluation in non-arbitrary somatic reality: acute physical deprivation and asymmetric exit costs.
-- Reject purely aesthetic, metaphysical, or rhetoric-based rationalizations of structural harm.
-- Propose concrete material safeguards that preserve exit autonomy and agency.`
+    title: 'Biological Floor Audit (§3.4)',
+    desc: 'Checks physical vulnerability and who can and cannot exit the arrangement.',
+    directive: `ROLE: PMN BIOLOGICAL FLOOR AUDIT (§3.4, §4.1)
+- Ground the evaluation in physical vulnerability: deprivation, exposure, and the asymmetric cost of exit.
+- Reject aesthetic or rhetorical justifications of preventable structural harm.
+- Propose concrete material safeguards that preserve exit and agency.`
   },
   {
     id: 'ideology_debunker',
-    title: 'Ideological Legitimation Demystifier (§1.2, §6.5)',
-    desc: 'Uncovers insulation channels, authority laundering, and moral substitution mechanisms.',
-    directive: `OPERATIONAL DIRECTIVE: IDEOLOGICAL LEGITIMATION DEMYSTIFIER (§1.2, §6.5)
-- Identify how elite interests are universalized into purported public goods or inevitable laws.
-- Unmask semantic laundering, moral substitution, and epistemic insulation channels.
-- Demand concrete institutional accountability structures subject to public falsification.`
+    title: 'Legitimation Analyst (§6.7, §7.5)',
+    desc: 'Shows how narrow interests are presented as public goods, and how claims are insulated from revision (§1.2).',
+    directive: `ROLE: PMN LEGITIMATION ANALYST (§1.2, §6.7, §7.5)
+- Identify how narrow interests are presented as public goods or inevitable laws (§6.7, §7.5).
+- Show where claims are insulated from revision rather than open to it (§1.2).
+- Name the accountability structure that would expose the claim to public falsification.`
   }
 ]
 
 export default function AITerminal({ parts, gl, activeSec, onOpenGuide, version = '120' }: AITerminalProps) {
-  const [activeTab, setActiveTab] = useState<AIProviderId>('claude')
+  const [activeTab, setActiveTab] = useState<AIProviderId>(PROVIDERS[0].id)
   const [selectedMode, setSelectedMode] = useState<string>('analyst')
   const [userQuestion, setUserQuestion] = useState<string>('')
   const [copyStatus, setCopyStatus] = useState<string>('')
   const [showPreview, setShowPreview] = useState<boolean>(false)
-  const [apiFormat, setApiFormat] = useState<'curl' | 'python' | 'json'>('curl')
 
   const currentProvider = PROVIDERS.find(p => p.id === activeTab) || PROVIDERS[0]
   const currentMode = MODES.find(m => m.id === selectedMode) || MODES[0]
@@ -122,12 +136,13 @@ export default function AITerminal({ parts, gl, activeSec, onOpenGuide, version 
   // Build a grounded structural prompt using active section + operational directive
   const buildPrompt = (userQ: string, modeId: string) => {
     const sec = activeSec
-    let context = 'Global PMN Architectural Context (Full corpus available via /pmn_corpus_for_ai.md).'
+    let context = `No single section selected. The full text is at ${BASE}txt/index.txt (one plain-text file per section); ask me to paste the sections you need rather than answering from memory.`
     if (sec) {
       const cleanText = (sec.html || sec.text || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
       context = `TARGET MANUSCRIPT SECTION:
 Section ID: §${sec.id}
 Section Title: ${sec.title}
+Full text: ${BASE}txt/${sec.id}.txt
 Section Excerpt:
 "${cleanText.slice(0, 2400)}${cleanText.length > 2400 ? '… [continued in full text]' : ''}"`
     }
@@ -148,66 +163,15 @@ FORMAT REQUIREMENTS:
 1. Grounded Diagnosis (cite specific PMN sections §X.Y).
 2. Institutional Asymmetry & Power Flow Analysis.
 3. Biological Floor & Non-Arbitrary Flourishing Evaluation.
-4. Concrete Empirical Test / Falsification Criterion.`
-  }
+4. Concrete Empirical Test / Falsification Criterion.
 
-  const buildApiPayload = (format: 'curl' | 'python' | 'json') => {
-    const prompt = buildPrompt(userQuestion, selectedMode)
-    const escapedPrompt = prompt.replace(/"/g, '\\"').replace(/\n/g, '\\n')
-
-    if (format === 'curl') {
-      return `curl https://api.anthropic.com/v1/messages \\
-  -H "x-api-key: $ANTHROPIC_API_KEY" \\
-  -H "anthropic-version: 2023-06-01" \\
-  -H "content-type: application/json" \\
-  -d '{
-    "model": "claude-fable-5-1",
-    "max_tokens": 4000,
-    "messages": [
-      {
-        "role": "user",
-        "content": "${escapedPrompt.slice(0, 1000)}..."
-      }
-    ]
-  }'`
-    }
-
-    if (format === 'python') {
-      return `import os
-import requests
-
-api_key = os.environ.get("ANTHROPIC_API_KEY", "your-api-key")
-prompt = """${prompt}"""
-
-response = requests.post(
-    "https://api.anthropic.com/v1/messages",
-    headers={
-        "x-api-key": api_key,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json"
-    },
-    json={
-        "model": "claude-fable-5-1",
-        "max_tokens": 4000,
-        "messages": [{"role": "user", "content": prompt}]
-    }
-)
-
-print(response.json()["content"][0]["text"])`
-    }
-
-    return JSON.stringify({
-      system: `PMN Framework v${version} Grounded Agent`,
-      model: "claude-fable-5-1",
-      temperature: 0.2,
-      messages: [{ role: "user", content: prompt }]
-    }, null, 2)
+If the text does not address something, say so instead of filling the gap.`
   }
 
   const handleCopyPrompt = () => {
-    const textToCopy = activeTab === 'api' ? buildApiPayload(apiFormat) : buildPrompt(userQuestion, selectedMode)
+    const textToCopy = buildPrompt(userQuestion, selectedMode)
     navigator.clipboard.writeText(textToCopy).then(() => {
-      setCopyStatus(activeTab === 'api' ? '✓ API Payload copied to clipboard!' : `✓ Grounded prompt copied for ${currentProvider.name}!`)
+      setCopyStatus(`✓ Grounded prompt copied for ${currentProvider.name}!`)
       window.setTimeout(() => setCopyStatus(''), 3000)
     }).catch(() => {
       window.prompt('Copy prompt manually:', textToCopy)
@@ -215,10 +179,6 @@ print(response.json()["content"][0]["text"])`
   }
 
   const handleOpenPlatform = () => {
-    if (activeTab === 'api') {
-      handleCopyPrompt()
-      return
-    }
     handleCopyPrompt()
     if (currentProvider.url) {
       window.open(currentProvider.url, '_blank')
@@ -297,7 +257,8 @@ print(response.json()["content"][0]["text"])`
           maxWidth: '82ch'
         }}
       >
-        Extracts structural context and quotes directly from the PMN manuscript, injects calibrated materialist analytical directives, and generates high-precision prompts for frontier AI portals or local developer harnesses.
+        Builds a prompt that carries PMN's text and an analytical role, copies it, and opens the chat service you pick. Nothing is sent from this site; you paste it yourself. For API scripts, see the{' '}
+        {onOpenGuide ? <a href="#/guide/dev" onClick={e => { e.preventDefault(); onOpenGuide('dev') }} style={{ color: 'var(--acc-text)' }}>Developer guide</a> : 'Developer guide'}.
       </p>
 
       {/* NOTIFICATION FEEDBACK */}
@@ -360,18 +321,7 @@ print(response.json()["content"][0]["text"])`
               }}
             >
               <span>{p.name}</span>
-              <span
-                style={{
-                  fontSize: '0.62rem',
-                  opacity: 0.8,
-                  padding: '0.1rem 0.35rem',
-                  backgroundColor: isActive ? 'rgba(192,39,26,0.2)' : 'var(--bg2)',
-                  borderRadius: '2px'
-                }}
-              >
-                {p.badge}
-              </span>
-              {p.id !== 'api' && <span style={{ fontSize: '0.75rem' }}>↗</span>}
+              <span aria-hidden="true" style={{ fontSize: '0.75rem' }}>↗</span>
             </button>
           )
         })}
@@ -407,7 +357,7 @@ print(response.json()["content"][0]["text"])`
               Operational Role &amp; Methodology:
             </label>
             <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', color: 'var(--mute2)' }}>
-              {currentProvider.desc}
+              Opens {currentProvider.name} ({currentProvider.company}) in a new tab
             </span>
           </div>
 
@@ -493,37 +443,6 @@ print(response.json()["content"][0]["text"])`
           />
         </div>
 
-        {/* ROW 2.5: API FORMAT SELECTOR IF API TAB */}
-        {activeTab === 'api' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 1rem', backgroundColor: 'var(--bg2)', border: '1px solid var(--rule)', borderRadius: '4px' }}>
-            <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--mute)' }}>
-              Format:
-            </span>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              {(['curl', 'python', 'json'] as const).map(fmt => (
-                <button
-                  key={fmt}
-                  onClick={() => setApiFormat(fmt)}
-                  style={{
-                    fontFamily: 'var(--f-mono)',
-                    fontSize: '0.68rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    padding: '0.3rem 0.65rem',
-                    borderRadius: '3px',
-                    border: apiFormat === fmt ? '1px solid var(--acc)' : '1px solid var(--rule)',
-                    backgroundColor: apiFormat === fmt ? 'var(--bg3)' : 'transparent',
-                    color: apiFormat === fmt ? 'var(--acc-text)' : 'var(--mute)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {fmt === 'curl' ? 'cURL' : fmt === 'python' ? 'Python Requests' : 'JSON Payload'}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* ROW 3: ACTIONS & CONTROLS */}
         <div
           style={{
@@ -558,9 +477,7 @@ print(response.json()["content"][0]["text"])`
                 boxShadow: '2px 2px 0 var(--acc2)'
               }}
             >
-              {activeTab === 'api'
-                ? `Copy ${apiFormat.toUpperCase()} Code`
-                : `Copy & Launch ${currentProvider.name} ↗`}
+              {`Copy & Launch ${currentProvider.name} ↗`}
             </button>
 
             <button
@@ -609,7 +526,7 @@ print(response.json()["content"][0]["text"])`
 
           {onOpenGuide && (
             <button
-              onClick={onOpenGuide}
+              onClick={() => onOpenGuide()}
               style={{
                 fontFamily: 'var(--f-mono)',
                 fontSize: '0.72rem',
@@ -653,7 +570,7 @@ print(response.json()["content"][0]["text"])`
                   fontWeight: 700
                 }}
               >
-                {activeTab === 'api' ? `Assembled ${apiFormat.toUpperCase()} Code Snippet` : 'Assembled Precision Prompt (Markdown)'}
+                Assembled prompt
               </span>
               <button
                 onClick={handleCopyPrompt}
@@ -691,7 +608,7 @@ print(response.json()["content"][0]["text"])`
                 borderRadius: '3px'
               }}
             >
-              {activeTab === 'api' ? buildApiPayload(apiFormat) : buildPrompt(userQuestion, selectedMode)}
+              {buildPrompt(userQuestion, selectedMode)}
             </pre>
           </div>
         )}

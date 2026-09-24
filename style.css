@@ -600,12 +600,15 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   max-width:820px;width:100%;margin:0 auto;
 }
 
+/* Angkatan dulu 13vh + skala 0.062 (+ hingga 5.5vh pada anaknya): pita
+   kosong ~160px sebelum marquee setelah sampul "lepas". Dikecilkan
+   2026-09-24: 4vh, skala 0.03, stats 1.5vh, tombol 2vh. Efeknya tetap ada. */
 .hero-parallax{
   will-change:transform,opacity;
   transform-origin:50% 38%;
   transform:
-    translate3d(0,calc(var(--cover-progress,0) * -13vh),0)
-    scale(calc(1 - var(--cover-progress,0) * 0.062));
+    translate3d(0,calc(var(--cover-progress,0) * -4vh),0)
+    scale(calc(1 - var(--cover-progress,0) * 0.03));
   opacity:calc(1 - var(--cover-progress,0) * 0.24);
 }
 
@@ -676,7 +679,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   border:1px solid var(--rule);
   background:var(--bg2);
   max-width:480px;margin-left:auto;margin-right:auto;margin-bottom:1.1rem;
-  transform:translate3d(0,calc(var(--cover-progress,0) * -4vh),0);
+  transform:translate3d(0,calc(var(--cover-progress,0) * -1.5vh),0);
   opacity:calc(1 - var(--cover-progress,0) * .18);
 }
 .stat{
@@ -692,7 +695,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 .hero-ctas{width:100%;max-width:520px;margin:0 auto 3.2rem;display:flex;flex-direction:column;gap:0;border:1px solid var(--ink)}
 [data-theme=dark] .hero-ctas{border-color:var(--rule2);background:#050505}
 .hero-ctas{
-  transform:translate3d(0,calc(var(--cover-progress,0) * -5.5vh),0);
+  transform:translate3d(0,calc(var(--cover-progress,0) * -2vh),0);
   opacity:calc(1 - var(--cover-progress,0) * .12);
 }
 
@@ -3573,4 +3576,19 @@ body.focus-mode #hdr-r #focus-btn {
 #guide-view .code-pre { white-space: pre; word-break: normal; overflow-x: auto; margin: 0; font-size: .78rem; }
 @media (max-width: 560px) {
   #guide-view .code-block { padding: 1rem 1rem 1.1rem; }
+}
+
+/* Beranda, 2026-09-24.
+   Reader Desk: grid 12 kolom dulu ditulis inline di App.tsx (span 8/4),
+   sehingga aturan satu kolom untuk ponsel di atas tidak pernah menang - di
+   390px kolom kanan selebar ~100px, satu kata per baris, tombol terpotong.
+   Sekarang sepenuhnya di sini. Titik patah 760px: di bawahnya kartu
+   "Useful next moves" terlalu sempit untuk berdampingan. */
+.home-bottom-grid { gap: 1.5rem; }
+.home-bottom-card.notes-card { grid-column: span 8; }
+.home-bottom-card.compact-card { grid-column: span 4; }
+@media (max-width: 760px) {
+  .home-bottom-grid { grid-template-columns: 1fr; }
+  .home-bottom-card.notes-card,
+  .home-bottom-card.compact-card { grid-column: auto; }
 }

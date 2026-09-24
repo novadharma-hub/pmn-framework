@@ -11,6 +11,8 @@ interface ReadingPath {
   title: string
   persona: string
   badge: string
+  /** Perkiraan waktu saja; jumlah seksi dihitung dari steps (dulu ditulis
+   *  tangan "4 Modules" di keenam jalur, padahal Path 04 berisi 3). */
   estTime: string
   summary: string
   steps: ReadingPathStep[]
@@ -31,7 +33,7 @@ const READING_PATHS: ReadingPath[] = [
     title: 'Epistemic Foundations & Realism',
     persona: 'Philosophers & Academic Researchers',
     badge: 'Foundations',
-    estTime: '~40 min · 4 Modules',
+    estTime: '~40 min',
     summary: 'Ground your inquiry in mind-independent material realism, physicalist limits, and the biological floor of suffering before engaging doctrine or applied cases.',
     leadPart: 'I',
     steps: [
@@ -46,7 +48,7 @@ const READING_PATHS: ReadingPath[] = [
     title: 'Power Forensics & Anti-Capture',
     persona: 'Policy Analysts & Institutional Auditors',
     badge: 'Power & Institutions',
-    estTime: '~50 min · 4 Modules',
+    estTime: '~50 min',
     summary: 'Dissect how power entrenches, how information asymmetries are leveraged, and how protective institutions degenerate into predatory extraction apparatuses.',
     leadPart: 'VI',
     steps: [
@@ -61,7 +63,7 @@ const READING_PATHS: ReadingPath[] = [
     title: 'Compressed Core (Fast-Track)',
     persona: 'Quick Readers & AI Context Briefing',
     badge: 'Compression',
-    estTime: '~25 min · 4 Modules',
+    estTime: '~25 min',
     summary: 'The most compressed formulation of PMN’s core thesis, diagnostic power mechanics, and materialist ethics in under thirty minutes.',
     steps: [
       { id: '15.15', label: '§15.15 Doctrinal Core', desc: 'The definitive, high-density summary of PMN metaphysics and ethics.' },
@@ -75,7 +77,7 @@ const READING_PATHS: ReadingPath[] = [
     title: 'Applied Ethics, Agency & Becoming',
     persona: 'Existential Readers & Ethical Practitioners',
     badge: 'Ethics & Agency',
-    estTime: '~45 min · 4 Modules',
+    estTime: '~45 min',
     summary: 'Move from the biological floor of suffering prevention toward the evaluative ceiling of human flourishing (genuine becoming) and historical praxis.',
     leadPart: 'XVII',
     steps: [
@@ -89,7 +91,7 @@ const READING_PATHS: ReadingPath[] = [
     title: 'Situation Diagnostics & Field Audit',
     persona: 'Systemic Reformers & Strategists',
     badge: 'Diagnostics',
-    estTime: '~55 min · 4 Modules',
+    estTime: '~55 min',
     summary: 'Deploy PMN analytical instruments to measure transformation pressure and formulate tactical interventions in real-world institutions.',
     leadPart: 'VII',
     steps: [
@@ -104,7 +106,7 @@ const READING_PATHS: ReadingPath[] = [
     title: 'Economic Doctrine & Contestability',
     persona: 'Political Economists & Policy Designers',
     badge: 'Economics',
-    estTime: '~45 min · 4 Modules',
+    estTime: '~45 min',
     summary: 'Transcend ownership formalism toward contestable governance, surplus allocation auditing, and unconditional biological floor security.',
     leadPart: 'XI',
     steps: [
@@ -145,7 +147,7 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
   const handleCopySyllabus = (path: ReadingPath, idx: number) => {
     const text = [
       `# PMN Reading Syllabus: ${path.title} (${path.badge})`,
-      `Target Persona: ${path.persona} | Estimated Time: ${path.estTime}`,
+      `Target Persona: ${path.persona} | Estimated Time: ${path.estTime} · ${path.steps.length} sections`,
       `Overview: ${path.summary}`,
       '',
       '## Curated Module Sequence:',
@@ -222,7 +224,7 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
                   PATH {path.num} · {path.badge}
                 </span>
                 <span style={{fontFamily:'var(--f-mono)', fontSize:'.65rem', color:'var(--mute)', background:'var(--bg)', border:'1px solid var(--rule)', padding:'.2rem .5rem'}}>
-                  {path.estTime}
+                  {path.estTime} &middot; {path.steps.length} {path.steps.length === 1 ? 'section' : 'sections'}
                 </span>
               </div>
 

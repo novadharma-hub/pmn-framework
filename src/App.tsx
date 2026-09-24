@@ -100,8 +100,10 @@ export default function App() {
   // "AI Guide" di navigasi selalu membuka tab pertama; tab lain dicapai
   // lewat tautan langsung atau dari dalam halaman.
   const [guideTab, setGuideTab] = useState<GuideTab>(() => rutAwal?.guideTab ?? 'start')
-  const openGuide = () => {
-    setGuideTab('start')
+  // Dipanggil langsung sebagai onClick (argumennya event, diabaikan) atau
+  // dengan nama tab, mis. openGuide('dev') dari Workbench di beranda.
+  const openGuide = (tab?: unknown) => {
+    setGuideTab(typeof tab === 'string' ? (tab as GuideTab) : 'start')
     setPage('guide')
   }
   const [contentWidth, setContentWidth] = useState<'narrow' | 'medium' | 'wide'>('wide')
@@ -818,8 +820,8 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
             </div>
             <p className="home-bottom-desc">Use this space like a working margin: save a line of inquiry, then jump back into the reader without losing your place.</p>
           </div>
-          <div className="home-bottom-grid" style={{display:'grid', gridTemplateColumns:'repeat(12, 1fr)', gap:'1.5rem'}}>
-            <article className="home-bottom-card notes-card" style={{gridColumn: 'span 8'}}>
+          <div className="home-bottom-grid">
+            <article className="home-bottom-card notes-card">
               <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.6rem'}}>
                 <span style={{fontFamily:'var(--f-mono)',fontSize:'.6rem',letterSpacing:'.15em',textTransform:'uppercase',color:'var(--mute)'}}>Quick Notes</span>
                 <div style={{display:'flex',gap:'.4rem'}}>
@@ -827,9 +829,9 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
                   <button className="annot-btn" onClick={() => { setDeskNotes(''); try { localStorage.removeItem('pmn-desk-notes') } catch {} }}>Clear</button>
                 </div>
               </div>
-              <textarea className="home-bottom-notes" placeholder="Your notes on this section…" value={deskNotes} onChange={e => { setDeskNotes(e.target.value); try { localStorage.setItem('pmn-desk-notes', e.target.value) } catch {} }} />
+              <textarea className="home-bottom-notes" placeholder="Your notes…" value={deskNotes} onChange={e => { setDeskNotes(e.target.value); try { localStorage.setItem('pmn-desk-notes', e.target.value) } catch {} }} />
             </article>
-            <article className="home-bottom-card compact-card" style={{gridColumn: 'span 4'}}>
+            <article className="home-bottom-card compact-card">
               <h3>Useful next moves</h3>
               <p>Keep one foot in the manuscript while you move between orientation, guidance, and platform governance.</p>
               <div className="home-bottom-actions">
