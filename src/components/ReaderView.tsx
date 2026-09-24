@@ -580,6 +580,46 @@ export default function ReaderView({
             />
             </div> {/* /reader-prose-box */}
 
+            {/* Prev/next seksi: LANGSUNG di bawah kotak teks, berukuran penuh.
+                Sampai 2026-09-24 blok ini duduk di dasar "Continue the
+                Inquiry" - pembaca yang selesai membaca harus menggulir
+                melewati dua panel rujukan (masing-masing sampai 380px) dan
+                kotak catatan untuk menemukan Next. Dua kolom di layar lebar,
+                menumpuk di bawah 640px. Kelas .sec-nav* di style.css memberi
+                jarak eksplisit: utility spasi Tailwind di sini mati karena
+                reset universal, sehingga teks menempel ke tepi kotak. */}
+            {(seksiSebelum || seksiSesudah) && (
+              <nav
+                aria-label="Section navigation"
+                className="sec-nav grid"
+                style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}
+              >
+                {seksiSebelum ? (
+                  <button
+                    onClick={() => { onSavePosition(sebelum!.pi, sebelum!.si) }}
+                    className="sec-nav-btn group text-left border border-pmn-rule/60 rounded-sm hover:border-pmn-acc transition-colors"
+                  >
+                    <span className="block font-mono text-[0.6rem] uppercase tracking-[0.18em] text-pmn-mute mb-1">&larr; Previous</span>
+                    <span className="block text-[0.95rem] text-pmn-mute group-hover:text-pmn-ink transition-colors leading-snug">
+                      {labelSeksi(seksiSebelum)}
+                    </span>
+                  </button>
+                ) : <span />}
+                {seksiSesudah && (
+                  <button
+                    onClick={() => { onSavePosition(sesudah!.pi, sesudah!.si) }}
+                    className="sec-nav-btn group text-right border border-pmn-rule/60 rounded-sm hover:border-pmn-acc transition-colors"
+                  >
+                    <span className="block font-mono text-[0.6rem] uppercase tracking-[0.18em] text-pmn-mute mb-1">Next &rarr;</span>
+                    <span className="block text-[0.95rem] text-pmn-mute group-hover:text-pmn-ink transition-colors leading-snug">
+                      {labelSeksi(seksiSesudah)}
+                    </span>
+                  </button>
+                )}
+              </nav>
+            )}
+
+
             <div className="reader-endcap space-y-16 pt-24 border-t border-pmn-rule/40 mt-32">
               <div className="reader-endcap-hdr flex justify-between items-end gap-12">
                 <div className="flex-1">
@@ -671,41 +711,6 @@ export default function ReaderView({
                   <textarea className="annot-ta" placeholder="Capture your analytical drift on this section..." value={noteText} onChange={e => setNoteText(e.target.value)} />
                 </section>
               </div>
-
-              {/* Prev/next seksi. Sengaja di DASAR seksi dan berukuran penuh:
-                  di sinilah pembaca berada ketika ia butuh, dan target sentuh
-                  pada ponsel harus cukup besar untuk ibu jari. Dua kolom di
-                  layar lebar, menumpuk di bawah 640px. */}
-              {(seksiSebelum || seksiSesudah) && (
-                <nav
-                  aria-label="Section navigation"
-                  className="mt-14 grid gap-3 border-t border-pmn-rule/40 pt-8"
-                  style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}
-                >
-                  {seksiSebelum ? (
-                    <button
-                      onClick={() => { onSavePosition(sebelum!.pi, sebelum!.si) }}
-                      className="group text-left border border-pmn-rule/60 rounded-sm px-4 py-3 hover:border-pmn-acc transition-colors min-h-[64px]"
-                    >
-                      <span className="block font-mono text-[0.6rem] uppercase tracking-[0.18em] text-pmn-mute mb-1">&larr; Previous</span>
-                      <span className="block text-[0.95rem] text-pmn-mute group-hover:text-pmn-ink transition-colors leading-snug">
-                        {labelSeksi(seksiSebelum)}
-                      </span>
-                    </button>
-                  ) : <span />}
-                  {seksiSesudah && (
-                    <button
-                      onClick={() => { onSavePosition(sesudah!.pi, sesudah!.si) }}
-                      className="group text-right border border-pmn-rule/60 rounded-sm px-4 py-3 hover:border-pmn-acc transition-colors min-h-[64px]"
-                    >
-                      <span className="block font-mono text-[0.6rem] uppercase tracking-[0.18em] text-pmn-mute mb-1">Next &rarr;</span>
-                      <span className="block text-[0.95rem] text-pmn-mute group-hover:text-pmn-ink transition-colors leading-snug">
-                        {labelSeksi(seksiSesudah)}
-                      </span>
-                    </button>
-                  )}
-                </nav>
-              )}
 
               <footer className="doc-footer border-t border-pmn-rule/40 py-16 flex justify-between items-center select-none font-mono text-[0.7rem] text-pmn-mute uppercase tracking-[0.3em] flex-wrap gap-4">
                 <div style={{ display: 'flex', gap: '1.2rem', alignItems: 'center', flexWrap: 'wrap' }}>
