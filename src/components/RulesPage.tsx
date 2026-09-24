@@ -134,7 +134,7 @@ export default function RulesPage({
         aria-label="Rules & Data"
         style={{
           width: '100%',
-          maxWidth: '780px',
+          maxWidth: '860px',
           margin: '0 auto',
           display: 'flex',
           flexDirection: 'column',
@@ -173,7 +173,7 @@ export default function RulesPage({
             <h2
               style={{
                 fontFamily: 'var(--f-head)',
-                fontSize: '1.15rem',
+                fontSize: 'clamp(1.2rem, 3vw + .5rem, 1.6rem)',
                 color: 'var(--ink)',
                 margin: '.2rem 0 0',
                 fontWeight: 700,
@@ -290,8 +290,8 @@ export default function RulesPage({
             padding: '1.4rem 1.6rem',
             flex: 1,
             fontFamily: 'var(--f-body)',
-            fontSize: '.88rem',
-            lineHeight: 1.65,
+            fontSize: '1rem',
+            lineHeight: 1.7,
             color: 'var(--ink)',
           }}
         >
@@ -320,7 +320,7 @@ export default function RulesPage({
                 </div>
               </div>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1rem 0 .4rem' }}>
                 1. Why Is There No Cookie Consent Banner?
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -329,7 +329,7 @@ export default function RulesPage({
                 Because the PMN Framework is <strong>100% free of cookies and tracking scripts</strong>, displaying a consent popup would constitute empty compliance theater.
               </p>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 2. Client-Side Local Storage Transparency
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.6rem' }}>
@@ -375,7 +375,7 @@ export default function RulesPage({
                 </table>
               </div>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 3. Reader Data Sovereignty
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -419,13 +419,23 @@ export default function RulesPage({
                   🗑️ Clear All Local Storage
                 </button>
               </div>
+
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.6rem 0 .4rem' }}>
+                4. Search Engines &amp; Indexing
+              </h3>
+              <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
+                Search engines such as Google and Bing may list this site in their results. That happens entirely on their side: their crawlers read the public pages the same way any visitor can. The site loads nothing from any search engine, so being indexed adds <strong>no cookies, trackers or third-party requests</strong> to your visit.
+              </p>
+              <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
+                Two public markers make indexing possible, and neither involves readers: a Google Search Console ownership tag in the page header (inert text that proves who runs the site), and an IndexNow key file that lets the build server tell Bing which pages exist after each update. If you arrive from a search engine, that engine knows what you searched for under its own privacy policy, not this one.
+              </p>
             </div>
           )}
 
           {/* TAB 2: TERMS & CITATION */}
           {activeTab === 'terms' && (
             <div>
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '.2rem 0 .4rem' }}>
                 1. Open Access &amp; Scholarship License
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -434,7 +444,7 @@ export default function RulesPage({
                 and critically analyze concepts from the text, provided proper attribution is maintained to <strong>Nova Dharma</strong>.
               </p>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 2. Canonical Integrity &amp; Distortion Prevention
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -449,7 +459,7 @@ export default function RulesPage({
                 </li>
               </ul>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 3. Standard Academic Citation Format
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.6rem' }}>
@@ -529,7 +539,7 @@ export default function RulesPage({
                 </p>
               </div>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1rem 0 .4rem' }}>
                 1. Heuristic Status of Formulas (Not Deterministic Calculators)
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -539,7 +549,7 @@ export default function RulesPage({
                 numerical calculators or chronological event forecasters is a form of <em>formula fetishism</em> explicitly repudiated by the framework.
               </p>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 2. Non-Professional Advisory Boundary
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -548,7 +558,7 @@ export default function RulesPage({
                 Applying the framework to real-world arrangements demands rigorous empirical contextualization and individual ethical accountability.
               </p>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 3. Openness to Empirical Falsification (§14.4b)
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -562,7 +572,7 @@ export default function RulesPage({
           {/* TAB 4: AI ETHICS POLICY */}
           {activeTab === 'ai' && (
             <div>
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '.2rem 0 .4rem' }}>
                 1. AI Ingestion &amp; Canonical Endpoints
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -570,17 +580,17 @@ export default function RulesPage({
               </p>
               <ul style={{ color: 'var(--ink2)', paddingLeft: '1.2rem', marginBottom: '1.2rem', fontFamily: 'var(--f-mono)', fontSize: '.8rem' }}>
                 <li style={{ marginBottom: '.3rem' }}>
-                  <a href="/llms.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms.txt</a> &mdash; Rapid structural index and core axiom inventory.
+                  <a href="llms.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms.txt</a> &mdash; Rapid structural index and core axiom inventory.
                 </li>
                 <li style={{ marginBottom: '.3rem' }}>
-                  <a href="/llms-full.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms-full.txt</a> &mdash; Comprehensive section-by-section analytical digest.
+                  <a href="llms-full.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms-full.txt</a> &mdash; Comprehensive section-by-section analytical digest.
                 </li>
                 <li style={{ marginBottom: '.3rem' }}>
-                  <a href="/pmn_corpus_for_ai.md" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/pmn_corpus_for_ai.md</a> &mdash; Unabridged Markdown corpus for long-context RAG pipelines.
+                  <a href="pmn_corpus_for_ai.md" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/pmn_corpus_for_ai.md</a> &mdash; Unabridged Markdown corpus for long-context RAG pipelines.
                 </li>
               </ul>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 2. Ethical Processing Constraints
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
@@ -595,7 +605,7 @@ export default function RulesPage({
                 </li>
               </ul>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: '1.05rem', margin: '1.2rem 0 .4rem' }}>
+              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 3. Errata Reporting &amp; Dialectical Engagement
               </h3>
               <p style={{ color: 'var(--ink2)', marginBottom: '.4rem' }}>
