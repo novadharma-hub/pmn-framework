@@ -195,9 +195,12 @@ interface AxiomStructureSectionProps {
   data: any
   onJump: (pIdx: number, sIdx: number) => void
   onStartReading: () => void
+  /** Ditampilkan sebagai tab di "How the Framework Is Built": tanpa judul
+   *  besar, satu kolom (kolom kiri dulu kosong sepanjang daftar). */
+  embedded?: boolean
 }
 
-export default function AxiomStructureSection({ data, onJump, onStartReading }: AxiomStructureSectionProps) {
+export default function AxiomStructureSection({ data, onJump, onStartReading, embedded = false }: AxiomStructureSectionProps) {
   const [tierFilter, setTierFilter] = useState<number | 0>(0)
   const [partFilter, setPartFilter] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -263,12 +266,12 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
   }, [filteredAxioms, tierFilter])
 
   return (
-    <div className="theses-section">
+    <div className={`theses-section${embedded ? ' theses-embedded' : ''}`}>
       <div className="theses-inner">
 
         {/* COLUMN 1: SIDEBAR LEAD CARD */}
         <div className="theses-lead">
-          <h2>Axiom Structure</h2>
+          {!embedded && <h2>Axiom Structure</h2>}
           <p className="theses-lead-sub">
             The twelve commitments below are transcribed from &sect;14.3, where the framework sets them out itself. Tiers are separated by what a successful challenge would cost: replacing the framework, restructuring the architecture, or revising a single claim. Tier&nbsp;3 depends on Tier&nbsp;2, which depends on Tier&nbsp;1 &mdash; with one exception &sect;14.3 names, at 3(c).
           </p>
@@ -316,7 +319,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                   onClick={() => setTierFilter(t.id)}
                   style={{
                     fontFamily:'var(--f-mono)',
-                    fontSize:'.68rem',
+                    fontSize:'.75rem',
                     letterSpacing:'.08em',
                     textTransform:'uppercase',
                     padding:'.35rem .65rem',
@@ -340,7 +343,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                 onChange={e => setPartFilter(e.target.value)}
                 style={{
                   fontFamily:'var(--f-mono)',
-                  fontSize:'.68rem',
+                  fontSize:'.75rem',
                   padding:'.35rem .6rem',
                   border:'1px solid var(--rule)',
                   background:'var(--bg2)',
@@ -405,10 +408,10 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                           
                           {/* META PILLS: DOMAIN + ANCHOR */}
                           <div style={{display:'flex', gap:'.5rem', marginBottom:'.8rem', flexWrap:'wrap', alignItems:'center'}}>
-                            <span style={{fontFamily:'var(--f-mono)', fontSize:'.62rem', letterSpacing:'.08em', textTransform:'uppercase', color:'var(--acc-text)', background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.15rem .45rem'}}>
+                            <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.08em', textTransform:'uppercase', color:'var(--acc-text)', background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.15rem .45rem'}}>
                               {ax.part}
                             </span>
-                            <span style={{fontFamily:'var(--f-mono)', fontSize:'.62rem', color:'var(--mute)', background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.15rem .45rem'}}>
+                            <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)', background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.15rem .45rem'}}>
                               Canon Anchor: §{ax.anchor}
                             </span>
                           </div>
@@ -428,7 +431,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                           <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:'.85rem', marginBottom:'1rem'}}>
                             {ax.tier === 1 && (
                               <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.9rem 1rem'}}>
-                                <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.62rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
+                                <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
                                   Basis &mdash; adopted, not derived:
                                 </strong>
                                 <p style={{fontFamily:'var(--f-body)', fontSize:'.86rem', lineHeight:1.6, color:'var(--ink2)', margin:0}}>
@@ -439,7 +442,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
 
                             {ax.tier === 2 && (
                               <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.9rem 1rem'}}>
-                                <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.62rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
+                                <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
                                   What a successful challenge must show:
                                 </strong>
                                 <p style={{fontFamily:'var(--f-body)', fontSize:'.86rem', lineHeight:1.6, color:'var(--ink2)', margin:0}}>
@@ -450,7 +453,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
 
                             {ax.tier === 3 && (
                               <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.9rem 1rem'}}>
-                                <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.62rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
+                                <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
                                   Falsification condition:
                                 </strong>
                                 <p style={{fontFamily:'var(--f-body)', fontSize:'.86rem', lineHeight:1.6, color: ax.evidence ? 'var(--ink2)' : 'var(--mute)', margin:0, fontStyle: ax.evidence ? 'normal' : 'italic'}}>
@@ -460,7 +463,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                             )}
 
                             <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.9rem 1rem'}}>
-                              <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.62rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.35rem'}}>
+                              <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.35rem'}}>
                                 Cost of a successful challenge:
                               </strong>
                               <p style={{fontFamily:'var(--f-body)', fontSize:'.86rem', lineHeight:1.6, color:'var(--ink2)', margin:0}}>
@@ -481,7 +484,7 @@ export default function AxiomStructureSection({ data, onJump, onStartReading }: 
                                 border:'1px solid var(--rule2)',
                                 color:'var(--ink)',
                                 fontFamily:'var(--f-mono)',
-                                fontSize:'.68rem',
+                                fontSize:'.75rem',
                                 letterSpacing:'.1em',
                                 textTransform:'uppercase',
                                 padding:'.4rem .8rem',

@@ -24,7 +24,10 @@ import React, { useState, useEffect } from 'react'
   yang masih bisa bocor lewat selektor yang salah lingkup.
 */
 
-const PONSEL = '(max-width: 639px)'
+// Sejak 2026-09-24 juga tablet (sampai 959px). Diukur: di 768px beranda
+// 10.800px - lebih panjang dari desktop (8.500px), karena grid desktop
+// sudah menumpuk jadi satu kolom tapi belum dilipat.
+const PONSEL = '(max-width: 959px)'
 
 function usePonsel() {
   const [ponsel, setPonsel] = useState(
@@ -52,7 +55,7 @@ export default function MobileCollapse({ judul, ringkas, children }: Props) {
   const ponsel = usePonsel()
   const [buka, setBuka] = useState(false)
 
-  // Di atas 640px: tidak ada apa pun dari komponen ini di dalam pohon.
+  // Di atas 960px: tidak ada apa pun dari komponen ini di dalam pohon.
   if (!ponsel) return <>{children}</>
 
   return (
@@ -66,7 +69,7 @@ export default function MobileCollapse({ judul, ringkas, children }: Props) {
           <span className="block font-pmn-head text-[1.05rem] text-pmn-ink leading-snug">
             {judul}
           </span>
-          <span className="block font-pmn-mono text-[0.62rem] uppercase tracking-[0.14em] text-pmn-mute mt-1 leading-relaxed">
+          <span className="block font-pmn-mono text-[0.72rem] uppercase tracking-[0.14em] text-pmn-mute mt-1 leading-relaxed">
             {ringkas}
           </span>
         </span>
