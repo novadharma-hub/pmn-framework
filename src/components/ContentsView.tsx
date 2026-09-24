@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { PageHeader, PageFooter } from './PageHeader'
 
 interface SubSection { id: string; title: string; html?: string; text?: string; is_intro?: boolean }
 interface Part { part: string; title: string; subs: SubSection[] }
@@ -226,31 +227,14 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
       id="srch-view" 
       className="view on flex flex-col h-full bg-pmn-bg select-none w-full"
     >
-      <div className="sv-hdr-wrap flex-none w-full sticky top-0 z-50">
-        {/* Full-width relative container so title centers across the whole viewport */}
-        <div className="w-full h-[64px] relative flex items-center justify-center px-6 lg:px-10">
-          {/* Button absolutely positioned at left edge of the inner 1280px column */}
-          <div className="absolute flex items-center" style={{ left: 'max(1.5rem, calc(50% - 640px + 1.5rem))' }}>
-            <button
-              className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-pmn-mute hover:text-pmn-acc transition-colors flex items-center gap-2 group whitespace-nowrap"
-              onClick={onBackHome}
-            >
-              <span className="text-base leading-none transition-transform group-hover:-translate-x-1">←</span> Home
-            </button>
-          </div>
-
-          <h2 className="font-pmn-head font-normal text-[1.15rem] lg:text-[1.35rem] text-pmn-ink whitespace-nowrap leading-none tracking-tight" id="sv-hdr">
-            {activeTab === 'map'
-              ? <>Table of Contents<span className="sv-hdr-sub"> — Manuscript Map</span></>
-              : activeTab === 'glossary'
-                ? <>Glossary<span className="sv-hdr-sub"> — Key Terms</span></>
-                : 'Search Analysis'}
-          </h2>
-
-          {/* Satu kontrol ukuran untuk SELURUH permukaan contents: daftar isi,
-              glosarium, dan hasil pencarian sama-sama memakai
-              --contents-scale. Bukan kluster kontrol baru. */}
-          <div className="sv-scale absolute flex items-center gap-2" style={{ right: 'max(1.5rem, calc(50% - 640px + 1.5rem))' }}>
+      <PageHeader
+        title={activeTab === 'map' ? 'Table of Contents' : activeTab === 'glossary' ? 'Glossary' : 'Search Analysis'}
+        subtitle={activeTab === 'map' ? ' — Manuscript Map' : activeTab === 'glossary' ? ' — Key Terms' : undefined}
+        onBack={onBackHome}
+        tools={
+          /* Satu kontrol ukuran untuk SELURUH permukaan contents: daftar isi,
+             glosarium, dan hasil pencarian sama-sama memakai --contents-scale. */
+          <div className="sv-scale flex items-center gap-2">
             <span className="sv-scale-lbl">Size</span>
             <div className="sv-scale-grp" role="group" aria-label="Contents text size">
               <button type="button" onClick={() => setContentsScale(v => Math.max(0.85, +(v - 0.1).toFixed(2)))} aria-label="Smaller">A-</button>
@@ -258,8 +242,8 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
               <button type="button" onClick={() => setContentsScale(v => Math.min(1.4, +(v + 0.1).toFixed(2)))} aria-label="Larger">A+</button>
             </div>
           </div>
-        </div>
-      </div>
+        }
+      />
       
       <div id="sv-body-scroll" className="flex-1 overflow-y-auto custom-scrollbar w-full flex flex-col items-center">
         <div id="sv-body" className="w-full flex flex-col items-center max-w-[1280px] mx-auto box-border">
@@ -568,9 +552,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
           )}
 
         </div>
-        <footer className="w-full py-20 border-t border-pmn-rule text-center text-[0.7rem] font-pmn-mono text-pmn-mute uppercase tracking-[0.4em] bg-pmn-bg flex-none">
-          Progressive Materialist Naturalism &mdash; SYSTEM RELEASE V{version}
-        </footer>
+        <PageFooter version={version} />
       </div>
     </div>
   )

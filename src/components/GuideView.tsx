@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import { PageHeader, PageFooter } from './PageHeader'
 
 interface GuideViewProps {
   onBackHome: () => void
@@ -654,66 +655,7 @@ if ANTHROPIC_API_KEY:
         background: 'var(--bg)'
       }}
     >
-      {/* STICKY FULL-WIDTH HEADER */}
-      <div className="sv-hdr-wrap flex-none w-full sticky top-0 z-50 border-b border-pmn-rule bg-pmn-bg">
-        <div
-          style={{
-            width: '100%',
-            maxWidth: '1280px',
-            margin: '0 auto',
-            height: '64px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingLeft: 'clamp(1.25rem, 3.5vw, 2.75rem)',
-            paddingRight: 'clamp(1.25rem, 3.5vw, 2.75rem)',
-            gap: '1rem'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 0 }}>
-            <span
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: '0.72rem',
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                padding: '0.35rem 0.65rem',
-                borderRadius: '4px',
-                backgroundColor: 'var(--acc)',
-                color: '#ffffff',
-                fontWeight: 700,
-                whiteSpace: 'nowrap',
-                flexShrink: 0,
-                lineHeight: 1,
-                display: 'inline-block'
-              }}
-            >
-              AI LAB
-            </span>
-            <p
-              className="sv-hdr !border-none !p-0 !m-0 font-pmn-head text-[1.15rem] sm:text-[1.35rem] text-pmn-ink font-semibold"
-              style={{
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}
-            >
-              PMN Agent &amp; Deployment Guide
-            </p>
-          </div>
-          <button
-            className="hbtn font-mono text-[0.7rem] uppercase tracking-widest text-pmn-mute hover:text-pmn-ink border border-pmn-rule hover:border-pmn-acc rounded px-3.5 py-2 transition-colors cursor-pointer whitespace-nowrap"
-            onClick={onBackHome}
-            style={{
-              flexShrink: 0,
-              backgroundColor: 'var(--bg2)',
-              padding: '0.45rem 1rem'
-            }}
-          >
-            &larr; Return Home
-          </button>
-        </div>
-      </div>
+      <PageHeader title="AI Guide" subtitle=" — Grounding & Deployment" onBack={onBackHome} />
 
       {/* SCROLLABLE VIEWPORT CONTAINER */}
       <div
@@ -1643,9 +1585,7 @@ if ANTHROPIC_API_KEY:
         </div>
       </div>
 
-      <footer className="w-full py-12 border-t border-pmn-rule text-center text-xs font-pmn-mono text-pmn-mute uppercase tracking-[0.3em] bg-pmn-bg">
-        Progressive Materialist Naturalism &mdash; V{version} &bull; Canonical AI Specification
-      </footer>
+      <PageFooter version={version} />
     </div>
   </div>
   )
