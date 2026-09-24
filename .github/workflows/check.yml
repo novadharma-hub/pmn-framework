@@ -25,6 +25,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      # Office files carry the author's account name in their metadata
+      # (docProps/core.xml). Eight manuscript .docx files once reached this
+      # repository that way. No .env needed: any tracked Office file fails.
+      - name: No Office documents in the repository
+        run: |
+          found="$(git ls-files '*.docx' '*.doc' '*.docm' '*.xlsx' '*.xls' '*.pptx' '*.ppt' '*.odt' '*.ods' '*.odp')"
+          if [ -n "$found" ]; then
+            echo "::error::Office documents must not be committed (metadata leak risk):"
+            echo "$found"
+            exit 1
+          fi
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:

@@ -1,322 +1,65 @@
-# Progressive Materialist Naturalism (PMN) — Reader Platform & AI Grounding Ecosystem
+# Progressive Materialist Naturalism (PMN)
 
-[![Version](https://img.shields.io/badge/Release-v126%20Canonical-795290.svg?style=flat-square)](https://github.com/novadharma-hub/pmn-framework/releases)
+[![Release](https://img.shields.io/badge/Release-v126-795290.svg?style=flat-square)](https://github.com/novadharma-hub/pmn-framework/releases)
 [![Live Reader](https://img.shields.io/badge/Live%20Reader-GitHub%20Pages-2ea44f.svg?style=flat-square)](https://novadharma-hub.github.io/pmn-framework/)
-[![Stack](https://img.shields.io/badge/Stack-React%2018%20%2B%20TypeScript%20%2B%20Vite-61DAFB.svg?style=flat-square)](#quick-start)
-[![AI-Ready](https://img.shields.io/badge/AI--Grounding-llms.txt%20%7C%20json%20%7C%20md-orange.svg?style=flat-square)](#official-ai-grounding--machine-endpoints)
-[![Corpus Scale](https://img.shields.io/badge/Corpus-21%20Parts%20%7C%20235%20Sections%20%7C%20~330k%20Words-blue.svg?style=flat-square)](#overview)
-[![License: CC BY-SA 4.0](https://img.shields.io/badge/Manuscript-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](https://creativecommons.org/licenses/by-sa/4.0/)
-[![License: MIT](https://img.shields.io/badge/Platform%20Code-MIT-yellow.svg?style=flat-square)](./LICENSE)
+[![Corpus](https://img.shields.io/badge/Corpus-235%20sections%20%7C%20~330k%20words-blue.svg?style=flat-square)](#what-is-in-this-repository)
+[![Manuscript: CC BY-SA 4.0](https://img.shields.io/badge/Manuscript-CC%20BY--SA%204.0-lightgrey.svg?style=flat-square)](https://creativecommons.org/licenses/by-sa/4.0/)
+[![Code: MIT](https://img.shields.io/badge/Platform%20Code-MIT-yellow.svg?style=flat-square)](./LICENSE)
+
+**[Read online](https://novadharma-hub.github.io/pmn-framework/)** · **[AI Guide](https://novadharma-hub.github.io/pmn-framework/#/guide)** · **[Download PDF / Markdown](https://github.com/novadharma-hub/pmn-framework/releases/latest)**
+
+Progressive Materialist Naturalism is a philosophical framework by **Nova Dharma** for analysing institutions, power and
+structural suffering from material conditions rather than stated intentions. This repository holds the manuscript data
+(v126: a Preface, Parts I–XVII, a Coda, Intellectual Debts and a Bibliography; 235 sections, 239 glossary terms) and the
+reader website built from it.
 
 ---
 
-### [📖 Read Online (Web App)](https://novadharma-hub.github.io/pmn-framework/) &nbsp;·&nbsp; [🤖 AI Guide & Grounding](https://novadharma-hub.github.io/pmn-framework/#/guide) &nbsp;·&nbsp; [📥 Download Release (PDF & MD)](https://github.com/novadharma-hub/pmn-framework/releases/tag/v126)
+## For AI agents and crawlers
 
-**For AI agents and crawlers: plain URLs, no JavaScript needed.** Start with the first one.
+Plain URLs, no JavaScript needed. Start with the first one.
 
 ```text
 https://novadharma-hub.github.io/pmn-framework/txt/index.txt          every section as its own small .txt file (start here)
 https://novadharma-hub.github.io/pmn-framework/llms.txt               llms.txt index
-https://novadharma-hub.github.io/pmn-framework/llms-full.txt          everything in one file (2.4 MB; most fetchers truncate it)
 https://novadharma-hub.github.io/pmn-framework/read/                  static HTML edition, one page per section
-https://novadharma-hub.github.io/pmn-framework/txt/part_VII.txt       one whole Part as plain text (part_I … part_XVII, part_Preface, part_Coda, …)
-https://novadharma-hub.github.io/pmn-framework/data/gl.json           glossary (237 terms)
+https://novadharma-hub.github.io/pmn-framework/txt/part_VII.txt       one whole Part (part_I … part_XVII, part_Preface, part_Coda, …)
+https://novadharma-hub.github.io/pmn-framework/llms-full.txt          everything in one file (2.4 MB; most fetchers truncate it)
+https://novadharma-hub.github.io/pmn-framework/llms.json              machine-readable manifest
+https://novadharma-hub.github.io/pmn-framework/data/gl.json           glossary (239 terms)
 https://novadharma-hub.github.io/pmn-framework/sitemap.xml            sitemap
 ```
 
-A high-performance, offline-capable interactive reader platform and AI grounding ecosystem for the **Progressive Materialist Naturalism (PMN)** philosophical manuscript (v126 Canonical by **Nova Dharma**).
-
-PMN is a post-theistic, materialist philosophical framework engineered to analyze institutional power, dismantle structural capture, minimize non-consensual biological suffering, and maximize genuine human becoming across multi-generational horizons.
-
----
-
-## Quick Navigation
-
-- [Overview & Core Philosophy](#overview)
-- [Flagship Interactive Reader Engines](#flagship-interactive-reader-engines)
-  - [1. Reading Paths Engine (6 Curated Pathways)](#1-reading-paths-engine)
-  - [2. Theoretical Anatomy Inspector (4 Diagnostic Modes)](#2-theoretical-anatomy-inspector)
-  - [3. Axiomatic Architecture (11 Axioms in 3 Tiers)](#3-axiomatic-architecture)
-  - [4. In-Reader AI Grounding Terminal](#4-in-reader-ai-grounding-terminal)
-- [Zero-Tracking Private Reading Desk, Policy & Offline PWA](#zero-tracking-private-reading-desk-policy--offline-pwa)
-- [Official AI Grounding & Machine Endpoints](#official-ai-grounding--machine-endpoints)
-- [Frontier & Developer API Ingestion Guide](#frontier--developer-api-ingestion-guide)
-  - [1. Cloud Frontier AI Deployment (2026 Lineup)](#1-cloud-frontier-ai-deployment-2026-lineup)
-  - [2. Developer API Harness (Python SDK / Automated Auditing)](#2-developer-api-harness)
-  - [3. Sovereign Local Inference (Ollama / vLLM / SGLang)](#3-sovereign-local-inference)
-  - [4. Multi-Tier Model Selection Matrix](#4-multi-tier-model-selection-matrix)
-  - [5. Before You Ingest: Known Limits of This Corpus](#5-before-you-ingest-known-limits-of-this-corpus)
-- [Repository Architecture & Complete Directory Map](#repository-architecture--complete-directory-map)
-- [Quick Start & Local Development](#quick-start)
-- [Keyboard Shortcuts](#keyboard-shortcuts)
-- [CSS Design System & Theme Tokens](#css-token-system)
-- [Build, Audit & Release Pipeline](#build-audit--release-pipeline)
-- [Formatting Rules for Contributors](#formatting-rules-for-contributors)
-- [Citation & Academic Reference](#citation)
-- [License](#license)
-
----
-
-## Overview
-
-Progressive Materialist Naturalism (PMN) proceeds from a fundamental thesis: *moral, social, and political philosophy cannot be separated from the material conditions of physical reality and biological embodiment.*
-
-```mermaid
-graph TD
-    A["Mind-Independent Reality<br/>(Ontological Realism §1.6)"] --> B["Biological Floor<br/>(Minimizing Structural Suffering §3.4)"]
-    A --> C["Anti-Foreclosure Criterion<br/>(Maximizing Genuine Becoming §5.1)"]
-    B --> D["Diagnostic Power Mechanics<br/>Transfer Pressure Formula: T = S · D · P · G (§6.3)"]
-    C --> D
-    D --> E["Institutional Contestability<br/>& Anti-Capture Architecture (§11.2, §12.5)"]
-```
-
-### Core Philosophical Pillars
-
-1. **Epistemic Authority & Ontological Realism (§1.1, §1.6):** Reality is mind-independent. Analytical rigor requires prioritizing material constraints, thermodynamic limits, and empirical feedback over narrative comforting, scholastic theology, or discursive idealism.
-2. **The Biological Floor (§3.0–§3.4):** Sentient vulnerability is not subjective preference. The minimization of non-consensual biological and structural suffering serves as the non-negotiable moral bedrock.
-3. **The Anti-Foreclosure Criterion (§5.1):** Human flourishing and developmental expansion (*genuine becoming*) represent the aspirational evaluative ceiling, conditioned upon the prior security of the biological floor.
-4. **Structural Power Mechanics & Institutional Capture (§6.2, §7.3c-i):** Power asymmetries systematically convert protective institutions into self-preserving extraction apparatuses through a predictable 5-stage capture sequence.
-5. **Universal Contestability & Accountability (§11.2, §12.5):** No doctrine, office, custodian, or ideology holds immunity from empirical auditing, dissent, and non-violent procedural revision.
-
----
-
-## Flagship Interactive Reader Engines
-
-The PMN web platform features four specialized interactive modules designed to transform complex philosophical prose into diagnostic, navigable instruments:
-
-### 1. Reading Paths Engine
-
-Rather than forcing linear reading across all 330,000 words, the **Reading Paths Engine** offers six curated navigational pathways tailored to distinct reader personas and research objectives:
-
-| Path | Track Title | Target Persona | Est. Time & Scope | Key Sequence |
-|---|---|---|---|---|
-| **01** | **Epistemic Foundations & Realism** | Academic Philosophers & Epistemologists | ~40 min · 4 Modules | §1.1 &rarr; §1.6 &rarr; §2.4 &rarr; §3.4 |
-| **02** | **Power Forensics & Anti-Capture** | Policy Analysts & Institutional Auditors | ~50 min · 4 Modules | §6.2 &rarr; §7.1 &rarr; §7.3c-i &rarr; §8.2 |
-| **03** | **Compressed Core (Fast-Track)** | Rapid Onboarding & AI Context Briefings | ~25 min · 4 Modules | §15.15 &rarr; §1.6 &rarr; §3.4 &rarr; §7.3 |
-| **04** | **Applied Ethics, Agency & Becoming** | Ethicists & Existential Practitioners | ~45 min · 4 Modules | §3.4 &rarr; §5.1 &rarr; §17.1 &rarr; §18.2 |
-| **05** | **Situation Diagnostics & Field Audit** | Institutional Reformers & Strategists | ~55 min · 4 Modules | §2.4 &rarr; §6.3 &rarr; §7.3 &rarr; §11.2 |
-| **06** | **Economic Doctrine & Contestability** | Political Economists & Policy Designers | ~45 min · 4 Modules | §11.1 &rarr; §11.3 &rarr; §11.5 &rarr; §12.1 |
-
-*Each path tracks reading progress locally, provides deep-link jump affordances, and provides direct copyable paths for study groups.*
-
-### 2. Theoretical Anatomy Inspector
-
-An interactive diagnostic visualizer dissecting the manuscript's architectural mechanics across four specialized modes:
-
-1. **Non-Reductive Layered Architecture (`layers`):** Explores the three non-collapsible analytical strata:
-   - **Layer 1: Material Ground & Biological Constraints (Parts I–IV):** Thermodynamic limits, biospheric carrying capacity, and somatic vulnerability (§3.4).
-   - **Layer 2: Institutional Force Fields & Structural Power (Parts VI–XII):** Custodian incentives, information hoarding, and systemic extraction (§7.3).
-   - **Layer 3: Genuine Becoming & Subjective Agency (Parts V, XVII–XXI):** Navigational agency, ethical praxis, and developmental expansion (§5.1).
-2. **Transfer Pressure Formula (`formula`):** Deconstructs the multiplicative surplus transfer equation:
-   $$\mathbf{T = S \cdot D \cdot P \cdot G}$$
-   - $\mathbf{S}$ (*Structural Surplus*): Total extractable material or cognitive surplus (§6.3a).
-   - $\mathbf{D}$ (*Dependency Asymmetry*): Constituent reliance on institutional provision (§6.3b).
-   - $\mathbf{P}$ (*Exit Penalty*): Material, social, or legal cost of defection (§6.3c).
-   - $\mathbf{G}$ (*Governance Opacity*): Informational and procedural hoarding by custodians (§6.3d).
-   *(Demonstrates mathematically why minimizing opacity $G$ or exit penalty $P$ to near zero collapses predatory leverage).*
-3. **5-Stage Institutional Capture Lifecycle (`capture`):** Diagnostic audit tool tracing institutional decay:
-   - *Stage 1: Mandate Inception* &rarr; *Stage 2: Custodian Specialization* &rarr; *Stage 3: Information Asymmetry* &rarr; *Stage 4: Extractive Entrenchment* &rarr; *Stage 5: Ideological Naturalization*.
-4. **Part Structure Navigator (`parts`):** Structural explorer mapping all 21 Roman-numeral parts from foundational ontology to applied civilizational praxis.
-
-### 3. Axiomatic Architecture
-
-A formal epistemological registry codifying PMN into **11 canonical axioms** distributed across three epistemological tiers. In accordance with PMN's anti-dogmatic criterion (§1.4), each axiom is defined alongside its **formal defense** and **explicit falsification conditions**:
-
-- **Tier 1 — Foundational Axioms:**
-  - `1a`: *Mind-Independent Material Reality is Primary* (§1.6)
-  - `1b`: *Biological Suffering Has Negative Evaluative Valence* (§3.4)
-  - `1c`: *Genuine Becoming is Evaluatively Significant* (§5.1)
-  - `1d`: *Anti-Dogmatic Design & Zero Authority Privilege* (§1.4)
-- **Tier 2 — Structural Commitments:**
-  - `2a`: *Conditional Biological Constraints* (§3.2)
-  - `2b`: *Non-Collapsible Layered Architecture* (§2.4)
-  - `2c`: *Universal Institutional Contestability* (§11.2)
-  - `2d`: *Bounds of Coercive Proportionality* (§7.4)
-- **Tier 3 — Empirical Hypotheses:**
-  - `3a`: *Information Asymmetry as Structural Power* (§7.3)
-  - `3b`: *Narrative Inertia & Discourse Retardation* (§8.2)
-  - `3c`: *Multiplicative Transfer Equation ($T = S \cdot D \cdot P \cdot G$)* (§6.3)
-
-### 4. In-Reader AI Grounding Terminal
-
-An integrated workbench accessible directly inside the reader modal (`AITerminal.tsx`):
-- **Dynamic Context Injection:** Automatically bundles active reading sections and bibliography anchors into clean LLM context blocks.
-- **Token Budget Transparency:** Real-time token estimations and word counts before copying prompts.
-- **Persona & Task Modes:** One-click pre-configured prompts for *Socratic Red-Teaming*, *Institutional Capture Audit*, *Epistemic Verification*, and *Philosophical Translation*.
-
----
-
-## Zero-Tracking Private Reading Desk, Policy & Offline PWA
-
-The PMN reader platform operates under strict **Privacy by Architectural Design**:
-
-- **Zero Telemetry & Zero Trackers:** No Google Analytics, no tracking pixels, no telemetry scripts, and no third-party network requests.
-- **Zero Cookies & Compliance Exemption:** The web client sets zero cookies (`document.cookie` is unused). Under GDPR (ePrivacy Directive Art. 5(3)) and Indonesia's UU PDP No. 27/2022, storage used exclusively for user-requested preferences (`localStorage`) is *strictly necessary* and legally exempt from invasive cookie consent popups.
-- **Client-Side Local Storage Sovereignty:** Margin notes (<kbd>Alt</kbd> + <kbd>N</kbd>), reading progress markers, bookmarks, and font preferences are stored strictly inside browser `localStorage`. Your thoughts and reading habits never leave your machine.
-- **Data Sovereignty Tools:** Built-in JSON export (`Export My Data`) and one-click data purge (`Clear All Local Data`) accessible directly from the Rules & Data page.
-- **Rules & Data page (`#/rules`, `#/rules/terms`, `#/rules/limits`, `#/rules/ai`; the older `#/privacy`, `#/terms`, `#/disclaimer`, `#/ai` links still open it):** Instant access to complete storage inventories, canonical citation formats (1-click APA 7th & BibTeX), methodological limits (§15.0/§15.13 rejection of formula fetishism), and AI ingestion ethics.
-- **Offline Progressive Web App (PWA):** Equipped with a robust Service Worker (`vite-plugin-pwa` + `Workbox`) caching all 21 parts, glossary entries, search indexes, and styling tokens. Once loaded, the reader functions completely air-gapped without an internet connection.
-
----
-
-## Official AI Grounding & Machine Endpoints
-
-PMN provides production-grade, machine-readable discovery indices and grounding corpora for Large Language Models (LLMs), retrieval systems, autonomous coding agents, and academic researchers:
-
-| Endpoint | Format | Description & Primary Use Case | Direct Access URL |
-|---|---|---|---|
-| **`/llms.txt`** | Plain Text / Markdown | Official standard index ([llmstxt.org](https://llmstxt.org/)) providing summary, architecture map, and file registry. | [`/llms.txt`](https://novadharma-hub.github.io/pmn-framework/llms.txt) |
-| **`/llms.json`** | JSON (REST API) | Structured catalog containing full metadata, section manifests, citation counts, and direct deep-links. | [`/llms.json`](https://novadharma-hub.github.io/pmn-framework/llms.json) |
-| **`/llms.md`** | Markdown Table | Detailed architectural reference including all 21 parts, analytical modules, and axiomatic relationships. | [`/llms.md`](https://novadharma-hub.github.io/pmn-framework/llms.md) |
-| **`/pmn_corpus_for_ai.md`** | Plain Markdown | Full ~330,000-word flat manuscript export stripped of HTML markup. Optimized for 1M+ context windows. | [`/pmn_corpus_for_ai.md`](https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md) |
-| **`/txt/index.txt`** | Plain Text | Every section in reading order, each as its own `text/plain` file (largest ~55 KB), plus one file per Part. Built from `data/parts.json` on every deploy by `scripts/build_ai_surfaces.py`. Use this when a fetcher truncates long files. | [`/txt/index.txt`](https://novadharma-hub.github.io/pmn-framework/txt/index.txt) |
-| **`/read/`** | Static HTML | The whole manuscript as plain HTML, one page per section, readable without JavaScript and listed in [`sitemap.xml`](https://novadharma-hub.github.io/pmn-framework/sitemap.xml) for search engines. | [`/read/`](https://novadharma-hub.github.io/pmn-framework/read/) |
-| **`data/parts/part_*.json`** | JSON REST Endpoints | Individual modular endpoints for each of the 21 parts for lightweight per-module programmatic querying. | [`data/parts/manifest.json`](https://novadharma-hub.github.io/pmn-framework/data/parts/manifest.json) |
-
-### Programmatic Ingestion Examples
-
-#### cURL / Wget:
-```bash
-# 1. Fetch LLM discovery index
-curl -sL https://novadharma-hub.github.io/pmn-framework/llms.txt
-
-# 2. Fetch structured JSON module manifest
-curl -sL https://novadharma-hub.github.io/pmn-framework/llms.json | jq '.modules[0]'
-
-# 3. Download full flat corpus for local RAG / indexing (~2.3MB)
-curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o pmn_corpus_v126.md
-```
-
-#### Python Ingestion (REST & Modular Query):
-```python
-import urllib.request
-import json
-
-# Fetch structured manifest
-url = "https://novadharma-hub.github.io/pmn-framework/llms.json"
-with urllib.request.urlopen(url) as response:
-    manifest = json.loads(response.read().decode('utf-8'))
-    print(f"Loaded PMN Version: {manifest['version']}")
-    print(f"Total Sections: {manifest['corpus_stats']['total_sections']}")
-
-# Fetch Part VI (Power Dynamics & Institutional Capture) modularly
-part_vi_url = "https://novadharma-hub.github.io/pmn-framework/data/parts/part_VI.json"
-with urllib.request.urlopen(part_vi_url) as response:
-    part_vi = json.loads(response.read().decode('utf-8'))
-    print(f"Part VI Title: {part_vi['title']}")
-```
-
----
-
-## Frontier & Developer API Ingestion Guide
-
-For complete prompts, role profiles, and diagnostic instructions, visit the in-app **[AI Guide (`#/guide`)](https://novadharma-hub.github.io/pmn-framework/#/guide)**.
-
-### 1. Cloud Frontier AI Deployment
-
-- **Anthropic Claude (`claude-opus-5` / `claude-sonnet-5` / `claude-haiku-4-5-20251001`):** Upload `pmn_corpus_for_ai.md` into Project Knowledge, or call the API directly. Strongest at holding the permanent tensions of Part XIII without forcing a resolution.
-- **OpenAI (GPT-6 Astra / GPT-5.6 Sol / Terra / Luna):** GPT-6 Astra is the flagship reasoning tier; the 5.6 family spans professional work down to cost-sensitive volume. ([docs](https://developers.openai.com/api/docs/models))
-- **Google DeepMind (Gemini 3.8 Flash / 3.7 Flash / 3.5 Flash-Lite / NotebookLM):** NotebookLM is the best choice for *checking* whether a claim is actually in the text, because its answers link back to the source. ([docs](https://ai.google.dev/gemini-api/docs/models))
-- **DeepSeek (DeepSeek-V4-Pro 1.6T/49B active · DeepSeek-V4-Flash 284B/13B active):** OpenAI- and Anthropic-compatible API formats. ([docs](https://api-docs.deepseek.com/))
-- **Moonshot Kimi (Kimi K3, 1M context · Kimi K2.7 Code, 256k):** K3's 1M window holds the entire corpus in one prompt. ([docs](https://platform.moonshot.ai/))
-- **Alibaba Qwen (`qwen3.7-max` / `qwen3.7-plus`):** hybrid Thinking / Non-Thinking modes — enable Thinking deliberately when probing causal claims. ([docs](https://www.alibabacloud.com/help/en/model-studio/models))
-- **Mistral AI (Mistral Medium 3.5 · Large 3 · Small 4):** `reasoning_effort` lets you raise effort for the heavier Parts. ([docs](https://docs.mistral.ai/models/overview))
-- **Z.ai GLM (GLM-5.3 · GLM-5.2, 1M ctx · GLM-5, 744B MoE, MIT licence):** the strongest fully open-weight route if the corpus must not leave your machine. ([weights](https://huggingface.co/zai-org))
-- **xAI Grok (`grok-4.6`, 500k context):** knowledge cut-off 1 Feb 2026 — do not ask it about events after that date. ([docs](https://docs.x.ai/developers/models))
-
-> Verified 2026-09-09 against each provider's own documentation. **Re-verify before relying on this list.**
-
-### 2. Developer API Harness
-
-For automated auditing, continuous integration testing, and research scripts, query frontier models via direct API calls injecting canonical PMN context:
+Links with `#` (such as `#/s/7.3`) are app routes; crawlers drop everything after `#`, so use `txt/7.3.txt` or
+`read/7.3.html` instead.
 
 ```python
-import os
-import requests
+import json, urllib.request
 
-CORPUS_URL = "https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md"
+BASE = "https://novadharma-hub.github.io/pmn-framework/"
+manifest = json.load(urllib.request.urlopen(BASE + "llms.json"))
+print(manifest["version"], manifest["statistics"]["sections_count"])
 
-def fetch_pmn_corpus():
-    r = requests.get(CORPUS_URL)
-    r.raise_for_status()
-    return r.text
-
-def audit_institution_with_pmn(policy_document: str, api_key: str):
-    corpus_text = fetch_pmn_corpus()
-    system_prompt = (
-        "You are an expert institutional auditor grounded in Progressive Materialist Naturalism (PMN v126).\n"
-        "Analyze the provided institutional policy against the PMN 5-stage capture cycle (§7.3c-i) "
-        "and calculate potential transfer pressure using T = S · D · P · G (§6.3).\n"
-        "Strictly cite PMN section anchors."
-    )
-    # Execute API call to Anthropic, OpenAI, or Gemini endpoint
-    # ...
+section = urllib.request.urlopen(BASE + "txt/7.3c-i.txt").read().decode("utf-8")
 ```
-
-### 3. Sovereign Local Inference (Ollama / vLLM / SGLang)
-
-Run a sovereign, air-gapped PMN analyst locally with zero cloud telemetry using [Ollama](https://ollama.ai) or high-throughput [vLLM](https://github.com/vllm-project/vllm):
-
-#### Step 1: Download Corpus
-```bash
-curl -sL https://novadharma-hub.github.io/pmn-framework/pmn_corpus_for_ai.md -o pmn_corpus_v126.md
-```
-
-#### Step 2: Create `Modelfile` (Ollama 64K Context)
-```dockerfile
-FROM qwen2.5:32b
-# Alternatives: check your runtime's current library — the open-weight landscape moves fast.
-# Verified open-weight options as of 2026-09-09: GLM-5 (MIT), GLM-5.2, GLM-5.3, Mistral Small 4.
-
-PARAMETER temperature 0.25
-PARAMETER top_p 0.85
-PARAMETER num_ctx 65536
-
-SYSTEM """
-You are an expert analyst in Progressive Materialist Naturalism (PMN v126 by Nova Dharma).
-Ground your analysis in material reality, the biological floor (§3.4), and institutional capture diagnostics (§7.3c-i).
-Always cite specific PMN section numbers (e.g., §1.3, §3.4c, §6.5, §7.3c-i, §15.15) and resist ideological capture or narrative inflation.
-"""
-```
-
-#### Step 3: Build & Launch
-```bash
-ollama create pmn-analyst -f Modelfile
-ollama run pmn-analyst "Explain how custodian advantage leads to institutional capture according to PMN §7.3."
-```
-
-### 4. Multi-Tier Model Selection Matrix
-
-> **Verified 2026-09-09** against each provider's own live documentation. Every row below was checked at
-> that date; none of it is written from model memory. **If you are reading this more than a few months later,
-> treat the table as stale and re-verify** — an earlier version of this matrix was "corrected" against an
-> agent's recollection and deleted real models as fictional. A model list that cannot be maintained is worse
-> than no model list.
-
-| Task Category | Frontier Tier | Fast / Economy Tier | Local / Sovereign Tier |
-|---|---|---|---|
-| **Deep Dialectic Red-Teaming** | Claude Opus 5 · GPT-6 Astra · GPT-5.6 Sol | Claude Sonnet 5 · GPT-5.6 Terra | GLM-5.3 · GLM-5 (MIT) |
-| **Institutional Capture Audits** | Claude Opus 5 · DeepSeek-V4-Pro | DeepSeek-V4-Flash · Qwen3.7-Plus | GLM-5.2 · Mistral Small 4 |
-| **Whole-Corpus RAG & Retrieval** | Kimi K3 (1M ctx) · Gemini 3.8 Flash | Gemini 3.5 Flash-Lite | GLM-5.2 (1M ctx) · Grok 4.6 (500k, API) |
-| **Formula & Structural Modeling** | GPT-6 Astra · Qwen3.7-Max (Thinking) | Mistral Medium 3.5 (`reasoning_effort`) | GLM-5.3 · Kimi K2.7 Code (256k) |
-| **Source-Grounded Verification** | NotebookLM (answers link back to source) | — | — |
-
-Sources checked: [developers.openai.com](https://developers.openai.com/api/docs/models) ·
-[ai.google.dev](https://ai.google.dev/gemini-api/docs/models) ·
-[api-docs.deepseek.com](https://api-docs.deepseek.com/) ·
-[alibabacloud.com Model Studio](https://www.alibabacloud.com/help/en/model-studio/models) ·
-[platform.moonshot.ai](https://platform.moonshot.ai/) ·
-[docs.mistral.ai](https://docs.mistral.ai/models/overview) ·
-[docs.z.ai](https://docs.z.ai/release-notes/new-released) ·
-[docs.x.ai](https://docs.x.ai/developers/models)
 
 ---
 
-### 5. Before You Ingest: Known Limits of This Corpus
+## Using PMN with an AI model
 
-Measured against v120 on 2026-09-09. These apply **identically to every model above** — model choice does not
-affect them. Any AI you feed this corpus to will reproduce them confidently, because nothing in the text marks
-them.
+The **[AI Guide](https://novadharma-hub.github.io/pmn-framework/#/guide)** covers this in full: how to give a model the
+text, a priming prompt, seven analytical roles, example questions, a tested Python script, and the endpoints above.
+
+In short: a model that has not been given PMN's text will guess. Put the text in front of it (the sections you need,
+from `txt/index.txt`), ask it to cite section numbers, and check that the numbers exist.
+
+This README deliberately names no models. Model lists go stale within months; the guide gives selection criteria and a
+five-minute test with known answers instead.
+
+### Before you ingest: known limits of this corpus
+
+Measured against v120 on 2026-09-09 and not re-measured since. These apply to every model, because nothing in the text
+marks them.
 
 | Measured | What it means when you query the corpus |
 |---|---|
@@ -324,180 +67,85 @@ them.
 | **0 of 57 causal-mechanism sections state a defeater** (scope hedging is good — 84% qualify their conditions) | Before asking a model to "test" a claim, ask what evidence would defeat it. If the corpus does not say, make the model report the absence rather than invent a test. |
 | **13 empirical / historical sections cite nothing** — including all of Part XVII (~5,100 words of case studies) and §7.8 (4,004 words) | These are where fabricated supporting detail is most likely. Request the claim and its source separately, and verify the source yourself. |
 | **§15.0b is outvoted 4-to-1 on the `S` notation** — it states `S = f(R, B, V)` is "not a measurable sum"; §3.4b (×2), §7.8, §15.14 and the glossary write `S = R + B + V` | If a model computes `S` as a sum it is following the majority of the text against the section that claims authority over the term. |
-| **The glossary says "seven diagnostic questions"; §11.0 is headed "Nine"** and lists eight, one of which the text itself calls the eighth. v118.6 and v119 both said seven | Expect two different answers to the same question. |
 
-**None of this is a list of errors in the philosophy.** Every item is about *traceability* — whether a reader
-can check a claim, not whether the claim is true. It is published here because PMN's own primary diagnostic
-(§1.2) is whether a framework revises under evidence or insulates itself from it, and a framework that hides
-its weak points from its readers has already begun to insulate.
-
----
-
-## Repository Architecture & Complete Directory Map
-
-Every file and directory in this repository is strictly curated and serves a specific production role:
-
-```
-pmn-framework/
-├── .github/
-│   └── workflows/deploy.yml        # Automated GitHub Pages CI/CD deployment pipeline
-├── data/                           # Canonical manuscript JSON data (Modular & Bundled)
-│   ├── parts.json                  # Complete bundled manuscript (all 21 parts)
-│   ├── parts/                      # Modular per-part JSON files for lazy loading & REST APIs
-│   │   ├── manifest.json           # Registry of all 21 parts, titles, and section spans
-│   │   └── part_*.json             # Individual JSON payload for each part
-│   ├── gl.json                     # Complete glossary dictionary (237 philosophical terms)
-│   ├── glg.json                    # Categorical groupings of glossary terms
-│   ├── look.json                   # Fast O(1) section ID lookup index (e.g., "7.3c-i" -> part/sub)
-│   ├── ci.json                     # Cross-reference bidirectional citation graph
-│   ├── quotes.json                 # Curated canonical thesis quotes
-│   ├── rel.json                    # Relational conceptual graph across analytical domains
-│   └── version.json                # Canonical release version metadata (v126)
-│
-├── public_static/                  # Static assets mirrored to the domain root
-│   ├── llms.txt                    # Standard LLM discovery index (llmstxt.org)
-│   ├── llms.json                   # Machine-readable JSON REST API catalog
-│   ├── llms.md                     # Architectural markdown specification
-│   ├── pmn_corpus_for_ai.md        # Full uncompressed flat manuscript text (~2.3MB)
-│   ├── PMN_Latest.md               # Direct download alias for latest manuscript Markdown
-│   ├── PMN_Latest.pdf              # Direct download alias for latest manuscript PDF
-│   ├── data/                       # Deployed mirror of data/ directory for web routing
-│   └── icons/                      # PWA high-resolution application icons (192px & 512px)
-│
-├── src/                            # Modern React 18 + TypeScript SPA source code
-│   ├── main.tsx                    # Application entry point & theme initialization
-│   ├── App.tsx                     # Top-level shell, global navigation & HomeView
-│   ├── routing.ts                  # Hash-based deep link router with section anchor parsing
-│   ├── index.css                   # Tailwind v4 directives & typographic measure constraints
-│   ├── lib/                        # Optional decoupled client-side sync connectors
-│   └── components/                 # Production UI components
-│       ├── ReaderView.tsx          # Dual-column reading interface (prose + dynamic inspector)
-│       ├── GuideView.tsx           # Comprehensive Frontier & Local AI Ingestion Guide (#/guide)
-│       ├── ReadingPathsSection.tsx # Interactive 6-track Reading Paths engine
-│       ├── TheoreticalAnatomySection.tsx # 4-mode Theoretical Anatomy diagnostic visualizer
-│       ├── AxiomStructureSection.tsx     # 11-Axiom formal epistemological matrix
-│       ├── AITerminal.tsx          # In-page grounding terminal with live section injection
-│       ├── ContentsView.tsx        # Comprehensive Table of Contents & Dynamic Index
-│       ├── Sidebar.tsx             # Collapsible section hierarchy & progress navigation
-│       ├── CommandPalette.tsx      # Spotlight search & instant section switcher [Alt+/]
-│       ├── KeyboardModal.tsx       # Interactive keyboard shortcuts modal [Alt+K]
-│       ├── NotesModal.tsx          # Local zero-tracking margin annotations desk [Alt+N]
-│       ├── ParticlesBackground.tsx # Ambient canvas background
-│       └── VersionManager.tsx      # Version verification & changelog viewer
-│
-├── scripts/                        # Production Python audit, verification, and conversion tools
-│   ├── pmn_tools/                  # Core structural auditing utilities
-│   │   ├── pmn_check.py            # Structural gatekeeper (xrefs, duplicate IDs, orphan bib)
-│   │   ├── pmn_diff.py             # Precise semantic version differ
-│   │   └── pmn_ledger.py           # Canonical section sequence and status tracking
-│   ├── preflight.py                # Pre-release verification suite
-│   ├── docx_import_pipeline.py     # DOCX to structured JSON extraction pipeline
-│   ├── security_check.py           # Pre-commit secret and privacy de-identification scanner
-│   └── verify_formatting.py        # Markdown and typographical consistency validator
-│
-├── dist/                           # Compiled production PWA bundle (served via GitHub Pages)
-├── index.html                      # HTML5 entry document with complete OpenGraph & PWA metadata
-├── style.css                       # Master semantic CSS variable token engine
-├── vite.config.js                  # Vite bundler configuration & PWA Service Worker caching rules
-├── tsconfig.json                   # TypeScript compiler configuration
-├── DESIGN.md                       # Complete UI/UX Specification v2.0
-├── LICENSE                         # Dual-license definitions (MIT Platform / CC BY-SA 4.0 Corpus)
-└── README.md                       # This canonical repository presentation document
-```
+**None of this is a list of errors in the philosophy.** Every item is about *traceability*: whether a reader can check
+a claim, not whether the claim is true. PMN's own primary diagnostic (§1.2) asks whether a framework revises under
+evidence or insulates itself from it, and a framework that hides its weak points from its readers has already begun
+to insulate.
 
 ---
 
-## Quick Start
+## The reader
 
-### Prerequisites
-- Node.js 18+ or 20+
-- npm 9+
-- Python 3.11+ (for running validation scripts)
+- **Home:** reading paths (six short routes into the text), "How the Framework Is Built" (the three analytical layers,
+  the primary formula of §15.2, the five-stage capture sequence of §7.3c-i, the twelve axioms of §14.3, and every Part),
+  and an AI workbench that builds a grounded prompt from the text.
+- **Reader:** one section at a time, with notes, highlights, glossary tooltips and previous/next links.
+- **Contents, Glossary, Search, AI Guide, Rules & Data**, each at its own URL (`#/contents`, `#/glossary`, `#/search`,
+  `#/guide/...`, `#/rules/...`).
+- **Privacy:** no cookies, no analytics, no accounts, no server. Notes, progress and preferences stay in the browser's
+  `localStorage`; the Rules & Data page can export or clear them.
+- **Offline:** a service worker caches the manuscript, so the reader works without a connection once loaded.
 
-### Development
+### Keyboard shortcuts
+
+| Keys | Action |
+|---|---|
+| <kbd>Alt</kbd>+<kbd>C</kbd> | Table of Contents |
+| <kbd>Alt</kbd>+<kbd>/</kbd> | Command palette (jump / search) |
+| <kbd>Alt</kbd>+<kbd>?</kbd> | Glossary |
+| <kbd>Alt</kbd>+<kbd>R</kbd> | Resume last reading position |
+| <kbd>Alt</kbd>+<kbd>N</kbd> | My Notes |
+| <kbd>Alt</kbd>+<kbd>F</kbd> | Focus mode |
+| <kbd>Alt</kbd>+<kbd>T</kbd> | Dark / light theme |
+| <kbd>Alt</kbd>+<kbd>K</kbd> | All shortcuts |
+| <kbd>←</kbd> / <kbd>→</kbd> | Previous / next section |
+
+---
+
+## What is in this repository
+
+```
+data/                 manuscript data written by the local pipeline (parts.json, glossary, lookups)
+public_static/        files served at the site root: data/ copy, llms.*, PDF, icons, fonts
+src/                  React 18 + TypeScript reader (App.tsx, routing.ts, components/)
+style.css             design tokens and styles (see DESIGN.md)
+scripts/              build and audit tools
+  build_ai_surfaces.py  txt/, read/ and sitemap.xml, generated on every build
+  build_pdf.py          the typeset PDF
+  check_glossary.py     build gate: glossary categories must name real entries
+  security_check.py     scan for secrets and personal data before publishing
+  indexnow_ping.py      tell search engines about new URLs after deploy
+  pmn_tools/            manuscript checks (pmn_check, pmn_diff, ...)
+  audit_*.py            manuscript audits (quotes, citations, symbols, content)
+modularizer.py        local pipeline: manuscript -> data/ and public_static/
+pmn_console.py        local menu for the pipeline
+dist/                 built site, deployed to GitHub Pages
+```
+
+The manuscript source (`.docx`) is kept outside this repository; only generated data is published.
+
+---
+
+## Development
+
+Requires Node.js 22 and Python 3.11+.
+
 ```bash
-# Clone the repository
-git clone https://github.com/novadharma-hub/pmn-framework.git
-cd pmn-framework
-
-# Install dependencies
-npm install
-
-# Start local Vite development server
-npm run dev
-# -> http://localhost:5173/pmn-framework/
+npm ci
+npm run dev       # http://localhost:5173/pmn-framework/
+npm run build     # typecheck, glossary gate, Vite build, txt/ read/ sitemap, PDF
+npm run preview   # serve the built site
 ```
 
-### Production Build
-```bash
-# Compile TypeScript, bundle assets, and generate dist/
-npm run build
+Every pull request is built by `.github/workflows/check.yml`; merges to `main` deploy through `deploy.yml`.
 
-# Preview production build locally
-npm run preview
-```
+### Contributor rules
 
----
-
-## Keyboard Shortcuts
-
-The platform is designed keyboard-first. All shortcuts use <kbd>Alt</kbd> to prevent browser or operating system shortcut collisions:
-
-| Key Binding | Action | Description |
-|---|---|---|
-| <kbd>Alt</kbd> + <kbd>C</kbd> | **Contents** | Open Table of Contents & Navigation Map |
-| <kbd>Alt</kbd> + <kbd>R</kbd> | **Resume** | Jump directly to last active reading section |
-| <kbd>Alt</kbd> + <kbd>/</kbd> | **Command Palette** | Open Global Search & Spotlight Switcher |
-| <kbd>Alt</kbd> + <kbd>?</kbd> | **Glossary** | Open 237-term Conceptual Glossary & Index |
-| <kbd>Alt</kbd> + <kbd>N</kbd> | **Notes** | Open Private Margin Notes & Local Desk |
-| <kbd>Alt</kbd> + <kbd>F</kbd> | **Focus Mode** | Toggle distraction-free reading canvas |
-| <kbd>Alt</kbd> + <kbd>K</kbd> | **Shortcuts** | Display interactive Keyboard Shortcuts Cheat Sheet |
-| <kbd>←</kbd> / <kbd>→</kbd> | **Navigation** | Navigate to previous / next analytical section |
-
----
-
-## CSS Token System
-
-The design system enforces strict semantic CSS tokens declared in `style.css`. **Do not use Tailwind color classes for theme-sensitive UI.** Always leverage CSS variables:
-
-| Token Variable | Light Theme | Dark Theme | Purpose |
-|---|---|---|---|
-| `var(--bg)` | `#fdfbf7` (Warm cream) | `#0d0d0d` (Deep obsidian) | Page canvas background |
-| `var(--bg2)` | `#f7f3eb` (Paper light) | `#171717` (Surface panel) | Card & sidebar containers |
-| `var(--ink)` | `#1c1510` (Deep charcoal) | `#f5f0e8` (Soft parchment) | Primary prose text |
-| `var(--ink2)` | `#4a3a2d` (Muted umber) | `#c8bfb2` (Secondary stone) | Subheadings & metadata |
-| `var(--acc)` | `#b83a1b` (Terracotta crimson) | `#c0271a` (Vibrant carmine) | Primary brand accent |
-| `var(--mute)` | `#756456` (Dust umber) | `#8a7d6e` (Subtle grey) | Borders, captions, hints |
-| `var(--rule)` | `#e8dcc4` (Parchment line) | `#302b27` (Charcoal line) | Section dividing rules |
-
----
-
-## Build, Audit & Release Pipeline
-
-The PMN publication workflow enforces a rigorous, automated verification gate:
-
-1. **DOCX Extraction:** Python pipeline (`scripts/docx_import_pipeline.py`) parses the canonical manuscript DOCX. The source document is held outside this repository; only the generated artefacts are published.
-2. **Structural Integrity Audit:** Run `pmn_check.py` to audit section numbering, broken cross-references, orphan bibliography items, and duplicate anchors:
-   ```bash
-   python scripts/pmn_tools/pmn_check.py v126
-   ```
-3. **Frontend Compilation:** Vite compiles TypeScript and bundles assets into `dist/`:
-   ```bash
-   npm run build
-   ```
-4. **Machine Endpoint Synchronization:** Endpoints (`llms.txt`, `llms.json`, `llms.md`, `pmn_corpus_for_ai.md`) are verified and synced across root, `public_static/`, and `dist/`.
-5. **Pre-Release Preflight:** Automated checks ensure clean git working trees, validated checksums, and zero unescaped HTML entities.
-
----
-
-## Formatting Rules for Contributors
-
-When contributing code or automated tooling to this repository:
-1. **Never hand-edit generated manuscript files:** `data/parts.json`, `data/parts/`, `pmn_corpus_for_ai.md`, or `dist/` must be generated through the official build pipeline.
-2. **HTML Quote Escaping:** Manuscript HTML strings inside JSON files must escape internal quotes as `"`.
-3. **Canonical Cross-References:** Use the canonical format `<a class="xref" href="#3.2" data-sid="3.2">3.2</a>`.
-4. **Theme Token Adherence:** Always use `var(--token)` from `style.css`. Never introduce hardcoded hex colors into component styles.
-5. **Verification Gate:** Ensure `npm run build` compiles with 0 errors and `pmn_check.py` returns `BERSIH` before opening pull requests.
+1. Never hand-edit generated files (`data/parts.json`, `data/parts/`, `pmn_corpus_for_ai.md`, `dist/`); regenerate them.
+2. Use the CSS variables in `style.css` (`var(--ink)`, `var(--acc)`, ...) rather than hard-coded colours.
+3. Section references use the section id (`7.3c-i`); check that any id you cite exists in `txt/index.txt`.
+4. `npm run build` must pass before opening a pull request.
 
 ---
 
@@ -526,12 +174,5 @@ Dharma, N. (2026). Progressive Materialist Naturalism: A Framework for Minimizin
 
 ## License
 
-- **Platform Code:** The reader web application, UI components, interactive engines, and build scripts are licensed under the **[MIT License](./LICENSE)**.
-- **Manuscript Content:** The PMN manuscript, theoretical corpus, glossary definitions, and AI grounding texts are licensed under **[Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/)**.
-
----
-
-<p align="center">
-  <em>"Philosophers have only interpreted the world in various ways. The point, however, is to reconstruct its material foundations."</em><br>
-  — <strong>Nova Dharma</strong>
-</p>
+- **Platform code** (the reader, components, build scripts): [MIT](./LICENSE).
+- **Manuscript** (text, glossary, AI grounding files): [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).

@@ -79,17 +79,6 @@ export interface PartLike {
   subs?: Array<{ id?: string }>
 }
 
-/**
- * Halaman yang TIDAK pernah masuk URL. 'login' dan 'admin' adalah pintu
- * pengelolaan; menaruhnya di URL berarti membagikannya secara tak sengaja
- * lewat tautan yang di-copy.
- */
-const HALAMAN_PRIVAT = ['login', 'admin']
-
-export function bolehMasukUrl(page: string): page is PmnPage {
-  return !HALAMAN_PRIVAT.includes(page)
-}
-
 /** Cari posisi [indeks part, indeks seksi] dari sebuah ID seksi. */
 export function findSection(parts: PartLike[] | null | undefined, sectionId: string): [number, number] | null {
   if (!parts || !sectionId) return null

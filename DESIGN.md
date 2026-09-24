@@ -1,6 +1,6 @@
 # PMN Framework — Design System & Platform Architecture
 
-**Specification Version:** 2.0 (Aligned with Canonical Manuscript v120)  
+**Specification Version:** 2.1 (updated 2026-09-24 for the current reader)  
 **Aesthetic:** Warm Editorial / Archival Minimalism / Print-Grade Precision  
 **Character:** Scholarly, book-grade reading environment engineered for high cognitive endurance. Deep crimson on near-black (dark mode) or aged archival parchment (light mode). Serif typography for sustained reading; crisp monospace for analytical UI chrome.
 
@@ -72,39 +72,37 @@ Themes are toggled via the `data-theme="dark"` attribute on the `<html>` root el
 
 ---
 
-## 4. Core Interactive Engines & Layout Architecture
+## 4. Page Structure & Interactive Sections
 
-The platform features four interactive on-ramps preceding the reader prose column:
+### A. Shared page shell (`PageHeader.tsx`)
+* Contents, Glossary, Search, AI Guide and Rules & Data share one header (back · title · tools), one intro block
+  (`.pg-intro`: eyebrow, `.pg-h1`, `.pg-lede`) and one footer. Tabs on the AI Guide and Rules & Data use `.pg-tabs`;
+  each tab is a real link with its own URL (`#/guide/prompts`, `#/rules/terms`).
+* One scroll container per page. No boxed inner panels that scroll on their own.
 
-### A. Reading Paths Engine (`ReadingPathsSection.tsx`)
-* **Purpose:** Curates 6 distinct reading tracks tailored to reader personas (*Epistemic Foundations*, *Power Forensics*, *Compressed Core*, *Applied Ethics & Becoming*, *Diagnostic Frameworks*, *Economic Doctrine*).
-* **Components:**
-  - Track selector pills with estimated duration and difficulty badges.
-  - Interactive multi-step syllabus checklist with live local progress tracking (`localStorage`).
-  - One-click Markdown syllabus exporter (`Download Syllabus .md`).
+### B. Home
+1. **Cover:** title, stats, primary actions.
+2. **Reading Paths** (`ReadingPathsSection.tsx`): six compact cards. Steps are a titled, folding list; labels are the
+   real section titles.
+3. **How the Framework Is Built** (`TheoreticalAnatomySection.tsx`): one tabbed section: 3-layer stack, primary formula
+   (§15.2, §15.4), capture sequence (§7.3c-i), axioms (§14.3, rendered by `AxiomStructureSection.tsx` with `embedded`,
+   single column), Part directory.
+4. **AI Workbench** (`AITerminal.tsx`): builds a prompt from the text plus an analytical role and opens the chosen chat
+   service. Services are listed alphabetically with no model versions or rankings.
+* On screens up to 960px the reference sections fold (`MobileCollapse.tsx`); homepage text is at least 12px.
 
-### B. Theoretical Anatomy Workbench (`TheoreticalAnatomySection.tsx`)
-* **Purpose:** Interactive structural lab providing 4 diagnostic modes:
-  1. *3-Layer Analytical Stack* (Layer 1: Material Bedrock, Layer 2: Institutional Force Fields, Layer 3: Genuine Becoming).
-  2. *Multiplicative Transfer Equation Inspector* ($T = S \cdot D \cdot P \cdot G$) with real-time variable impact analysis.
-  3. *5-Stage Institutional Capture Sequence* (§7.3c-i) with clinical symptoms, field diagnostic indicators, and anti-capture protocols.
-  4. *Part Directory* (Parts I through XXI) with analytical sub-module registry.
+### C. Axiom Structure layout rule
+* Stand-alone, `.theses-inner` is a 2-column grid and must have exactly two children (`.theses-lead`, `.theses-main`).
+  Embedded (`.theses-embedded`), it is a single column.
 
-### C. Axiom Structure System (`AxiomStructureSection.tsx`)
-* **Purpose:** Interactive catalog of the 11 canon axioms across 3 tiers (*Tier 1: Foundational Axioms*, *Tier 2: Structural Commitments*, *Tier 3: Empirical Hypotheses*).
-* **Layout Rule (CRITICAL):**
-  - Uses the `.theses-inner` 2-column CSS Grid: `grid-template-columns: minmax(350px, 1.08fr) minmax(0, 2.18fr)`.
-  - Strictly requires **exactly two direct children**:
-    - **Child 1:** `.theses-lead` (sticky left sidebar card).
-    - **Child 2:** `.theses-main` (right column container bundling filters, search bar, and the axiom accordion stack).
-  - *Adding a third direct child to `.theses-inner` collapses the grid into a single misaligned column.*
+### D. AI Guide (`GuideView.tsx`)
+* Five tabs: Start, Prompts, Questions, Developer, Endpoints. No model names or model matrix: model lists go stale, so
+  the guide gives selection criteria and a five-minute test instead. Every section number cited in a prompt must exist
+  and match its section's title and content.
 
-### D. AI Lab & Grounding Ecosystem (`GuideView.tsx` & `AITerminal.tsx`)
-* **Purpose:** Operational interface for researchers and developers to ground frontier and sovereign LLMs without epistemic sycophancy.
-* **Architecture:**
-  - Dual Deployment: Interactive Web Portals (NotebookLM, Claude Projects, AI Studio) vs. Local Developer Harnesses & APIs (Python, Cursor, Claude Code, LiteLLM).
-  - Multi-tier Model Matrix: Pro vs. Flash vs. Pure Reasoning with explicit API strings (`claude-3-7-sonnet-20250219`, `gemini-1.5-pro`, `o1`, `deepseek-chat`).
-  - In-Reader `AITerminal`: Prepares precision context packs locked to the active section with direct dispatch to Claude, Gemini, DeepSeek, ChatGPT, or cURL API payloads.
+### E. Mobile chrome (<= 960px)
+* Text fields are 16px (iOS zooms on focus below that). Bottom nav uses the line icons in `NavIcon` (App.tsx), 11px labels
+  and a bar on the active tab.
 
 ---
 
