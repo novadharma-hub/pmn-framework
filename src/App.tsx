@@ -12,7 +12,7 @@ import TheoreticalAnatomySection from './components/TheoreticalAnatomySection'
 import AxiomStructureSection from './components/AxiomStructureSection'
 import MobileCollapse from './components/MobileCollapse'
 import RulesPage, { PolicyTab } from './components/RulesPage'
-import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl } from './routing'
+import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl, GuideTab } from './routing'
 
 
 
@@ -96,6 +96,14 @@ export default function App() {
     setPage('rules')
   }
   const policyOpen = page === 'rules'
+  // AI Guide juga bertab dengan URL sendiri (#/guide/prompts, ...). Tombol
+  // "AI Guide" di navigasi selalu membuka tab pertama; tab lain dicapai
+  // lewat tautan langsung atau dari dalam halaman.
+  const [guideTab, setGuideTab] = useState<GuideTab>(() => rutAwal?.guideTab ?? 'start')
+  const openGuide = () => {
+    setGuideTab('start')
+    setPage('guide')
+  }
   const [contentWidth, setContentWidth] = useState<'narrow' | 'medium' | 'wide'>('wide')
   const [history, setHistory] = useState<[number, number][]>([])
   const [showTip, setShowTip] = useState<boolean>(() => {
@@ -183,13 +191,13 @@ export default function App() {
     // tiba - ID-nya hilang sebelum sempat dipulihkan.
     if (page === 'reader' && !data?.parts?.length) return
     const sectionId = page === 'reader' ? sectionIdAt(data?.parts, curPos[0], curPos[1]) : null
-    const hashBaru = routeToHash({ page, contentsSub, sectionId, rulesTab })
+    const hashBaru = routeToHash({ page, contentsSub, sectionId, rulesTab, guideTab })
     if (hashBaru === window.location.hash) { sinkronPertama.current = false; return }
     const url = window.location.pathname + window.location.search + hashBaru
     if (sinkronPertama.current) window.history.replaceState(null, '', url)
     else window.history.pushState(null, '', url)
     sinkronPertama.current = false
-  }, [page, contentsSub, curPos, data, rulesTab])
+  }, [page, contentsSub, curPos, data, rulesTab, guideTab])
 
   // URL -> state. Tanpa ini tombol Back browser tidak melakukan apa pun.
   useEffect(() => {
@@ -199,6 +207,7 @@ export default function App() {
       setPage(r.page)
       setContentsSub(r.contentsSub)
       if (r.page === 'rules' && r.rulesTab) setRulesTab(r.rulesTab)
+      if (r.page === 'guide' && r.guideTab) setGuideTab(r.guideTab)
       if (r.page === 'reader' && r.sectionId) {
         const pos = findSection(data?.parts, r.sectionId)
         if (pos) setCurPos(pos)
@@ -446,7 +455,7 @@ export default function App() {
             <span className="lbl-long">Table of Contents</span><span className="lbl-short">Contents</span>
           </button>
           <button id="hb-gl" className={page === 'contents' && contentsSub === 'glossary' ? 'on' : ''} onClick={() => { setContentsSub('glossary'); setPage('contents') }}>Glossary</button>
-          <button id="hb-guide" className={page === 'guide' ? 'on' : ''} onClick={() => setPage('guide')}>AI Guide</button>
+          <button id="hb-guide" className={page === 'guide' ? 'on' : ''} onClick={openGuide}>AI Guide</button>
           <button id="hb-policy" className={policyOpen ? 'on' : ''} onClick={() => openPolicy('privacy')}>Rules &amp; Data</button>
           <button id="theme-tog" onClick={toggleTheme}>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button>
           <button id="hb-kbd" onClick={() => setKbdOpen(true)}>
@@ -466,7 +475,7 @@ export default function App() {
               onResumeReading={() => setPage('reader')}
               onOpenAdmin={() => setPage('login')}
               onOpenNotes={() => setNotesOpen(true)}
-              onOpenGuide={() => setPage('guide')}
+              onOpenGuide={openGuide}
               onOpenGlossary={() => { setContentsSub('glossary'); setPage('contents') }}
               onOpenPolicy={openPolicy}
               onJump={(pi: number, si: number) => { navToSection(pi, si); setPage('reader') }}
@@ -521,7 +530,14 @@ export default function App() {
 
           {page === 'login' && <AdminLogin onLogin={() => setPage('admin')} onBack={() => setPage('home')} />}
           {page === 'admin' && <VersionManager onBack={() => setPage('home')} />}
-          {page === 'guide' && <GuideView onBackHome={() => setPage('home')} version={version} />}
+          {page === 'guide' && (
+            <GuideView
+              tab={guideTab}
+              onTabChange={setGuideTab}
+              onBackHome={() => setPage('home')}
+              version={version}
+            />
+          )}
 
           {page === 'rules' && (
             <RulesPage
@@ -553,7 +569,7 @@ export default function App() {
           </button>
           <button
             className={`mob-nav-btn${page === 'guide' ? ' active' : ''}`}
-            onClick={() => setPage('guide')}
+            onClick={openGuide}
           >
             <span>&#9881;</span><span className="mob-nav-lbl">Guide</span>
           </button>
@@ -598,11 +614,11 @@ export default function App() {
           <p style={{fontFamily:'var(--f-body)',fontSize:'.78rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
             {hasFinePointer && <>Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>Alt+K</kbd> anytime for shortcuts, or visit </>}
             {!hasFinePointer && <>Visit </>}
-            the <button onClick={() => setPage('guide')} style={{color:'var(--acc-text)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
+            the <button onClick={openGuide} style={{color:'var(--acc-text)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
           </p>
           <div style={{display:'flex',gap:'.5rem'}}>
             <button onClick={() => setPage('contents')} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
-            <button onClick={() => setPage('guide')} style={{border:'1px solid var(--rule)',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',color:'var(--ink)',background:'none',cursor:'pointer'}}>OPEN AI GUIDE</button>
+            <button onClick={openGuide} style={{border:'1px solid var(--rule)',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',color:'var(--ink)',background:'none',cursor:'pointer'}}>OPEN AI GUIDE</button>
           </div>
         </div>
       )}

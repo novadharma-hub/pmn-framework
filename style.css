@@ -2460,11 +2460,6 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
   margin-top: 4rem; padding: 2rem; border: 1px solid var(--rule); background: var(--bg2);
   font-style: italic; font-size: .95rem; color: var(--ink2); line-height: 1.8; text-align: center;
 }
-#guide-view footer {
-  border-top: 1px solid var(--rule); padding: 2rem; background: var(--bg2);
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-  font-family: var(--f-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mute2);
-}
 /* ================================================================
    Visual Upgrade v1 - theme-aware reader polish
    Scoped as an additive layer so it can be rolled back cleanly.
@@ -3490,3 +3485,92 @@ body.focus-mode #hdr-r #focus-btn {
   flex: none !important;
 }
 #toc-panel { background: transparent !important; }
+
+/* Tab halaman sekunder (2026-09-24): AI Guide dan Rules & Data. Tabnya
+   tautan sungguhan (#/guide/prompts, #/rules/terms) supaya bisa dibagikan
+   dan dibuka di tab baru. Membungkus (wrap), bukan baris gulir horizontal: di HP semua
+   tab tetap terlihat (lima tab = 3+2 pada 390px) - baris gulir menyembunyikan
+   tab terakhir, masalah yang sama dengan jendela Rules yang lama. */
+.pg-tabs {
+  display: flex; flex-wrap: wrap;
+  margin: 0 clamp(16px, 3vw, 28px);
+  border-bottom: 1px solid var(--rule);
+}
+.pg-tabs-5 { --tab-min: 104px; }
+.pg-tab {
+  flex: 1 1 var(--tab-min, 150px);
+  display: flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 8px 12px;
+  font-family: var(--f-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+  text-align: center; text-decoration: none; cursor: pointer;
+  color: var(--mute); background: transparent;
+  border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.pg-tab:hover { color: var(--ink); }
+.pg-tab[aria-current=page] { color: var(--acc-text); background: var(--bg2); border-bottom-color: var(--acc); }
+.pg-tab:focus-visible { outline: 2px solid var(--acc); outline-offset: -2px; }
+
+/* AI Guide di kerangka bersama: satu wadah gulir (#guide-view), kolom
+   920px dari .pg-col-text, jarak tepi sama dengan .pg-intro. */
+#guide-view > * { flex: none; }
+#guide-view .guide-page { max-width: none; padding: clamp(24px, 4vw, 40px) clamp(16px, 3vw, 28px) 0; }
+#guide-view .step { margin-bottom: 2.5rem; padding-bottom: 2.5rem; }
+#guide-view .step-h2 { font-size: clamp(1.2rem, 1vw + 1rem, 1.5rem); }
+#guide-view .step a, #guide-view .guide-about a, #guide-view .note-box a { color: var(--acc-text); text-decoration: underline; text-underline-offset: 2px; }
+#guide-view code { font-family: var(--f-mono); font-size: .85em; overflow-wrap: anywhere; }
+#guide-view .guide-list { margin: 1rem 0 0; padding-left: 1.3rem; list-style: disc; max-width: 68ch; }
+#guide-view .guide-list-num { list-style: decimal; }
+#guide-view .guide-list li { font-size: 1rem; line-height: 1.7; color: var(--ink2); padding-left: .2rem; }
+#guide-view .guide-list li + li { margin-top: .7rem; }
+#guide-view .note-box .guide-list { margin: .6rem 0 .8rem; }
+#guide-view .note-box .guide-list li { font-size: .92rem; }
+#guide-view .guide-small { font-size: .85rem !important; color: var(--mute) !important; margin-top: 1rem; }
+#guide-view .guide-table-wrap { overflow-x: auto; margin-top: 1rem; border: 1px solid var(--rule); }
+#guide-view .guide-table { width: 100%; border-collapse: collapse; font-size: .9rem; line-height: 1.5; }
+#guide-view .guide-table th {
+  text-align: left; padding: .6rem .8rem; background: var(--bg2); border-bottom: 1px solid var(--rule);
+  font-family: var(--f-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mute);
+}
+#guide-view .guide-table td { padding: .7rem .8rem; border-bottom: 1px solid var(--rule); color: var(--ink2); vertical-align: top; }
+#guide-view .guide-table tr:last-child td { border-bottom: 0; }
+#guide-view .guide-table td:first-child { color: var(--ink); font-weight: 600; }
+@media (max-width: 560px) {
+  /* Tabel tiga kolom jadi kartu bertumpuk: tidak ada gulir samping di HP. */
+  #guide-view .guide-table thead { display: none; }
+  #guide-view .guide-table tr { display: block; padding: .7rem .8rem; border-bottom: 1px solid var(--rule); }
+  #guide-view .guide-table tr:last-child { border-bottom: 0; }
+  #guide-view .guide-table td { display: block; padding: .1rem 0; border: 0; }
+}
+#guide-view .vtabs { gap: 0; }
+#guide-view .vtab { min-height: 40px; }
+#guide-view .code-label { padding-right: 5.5rem; }
+#guide-view .question-card, #guide-view .guide-ep { display: flex; flex-direction: column; }
+#guide-view .question-note { flex: 1; }
+#guide-view .guide-copy-inline {
+  align-self: flex-start; margin-top: .8rem; min-height: 32px; padding: .2rem .6rem; cursor: pointer;
+  background: transparent; border: 1px solid var(--rule2); color: var(--mute);
+  font-family: var(--f-mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase;
+}
+#guide-view .guide-copy-inline:hover { color: var(--acc-text); border-color: var(--acc); }
+#guide-view .guide-ep-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
+#guide-view .guide-ep-top a { font-size: .8rem; color: var(--acc-text); }
+#guide-view .guide-ep-fmt {
+  font-family: var(--f-mono); font-size: .64rem; font-weight: 700; letter-spacing: .08em;
+  padding: .12rem .45rem; background: var(--acc); color: var(--bg);
+}
+#guide-view .guide-ep .workflow-note { flex: 1; }
+#guide-view .guide-ep-foot {
+  display: flex; justify-content: space-between; align-items: center; gap: .6rem;
+  margin-top: .8rem; padding-top: .6rem; border-top: 1px solid var(--rule);
+}
+#guide-view .guide-ep-foot code { color: var(--mute); font-size: .74rem; }
+#guide-view .guide-ep-foot .guide-copy-inline { margin-top: 0; flex: none; }
+#guide-view .guide-about { padding-top: 1rem; }
+#guide-view .guide-about p { font-size: .95rem; line-height: 1.7; color: var(--mute); max-width: 68ch; }
+#guide-view .closing { margin-top: 0; }
+/* Kode sungguhan tidak dibungkus: baris Python yang terpotong di HP sulit
+   dibaca. Gulir samping di dalam bloknya saja; prompt (prosa) tetap membungkus. */
+#guide-view .code-pre { white-space: pre; word-break: normal; overflow-x: auto; margin: 0; font-size: .78rem; }
+@media (max-width: 560px) {
+  #guide-view .code-block { padding: 1rem 1rem 1.1rem; }
+}
