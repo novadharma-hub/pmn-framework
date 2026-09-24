@@ -3407,3 +3407,86 @@ body.focus-mode #hdr-r #focus-btn {
   background: transparent;
   cursor: pointer;
 }
+
+/* ===================================================================
+   Kerangka halaman sekunder (2026-09-24): Daftar Isi, Glosarium,
+   Pencarian, AI Guide, Rules & Data. Satu header (PageHeader.tsx), satu
+   blok pembuka, satu footer. Sebelumnya tiga pola header berbeda, dan
+   Daftar Isi/Glosarium dibungkus kotak bergaris-berbayang yang membuatnya
+   terasa seperti lembar terpisah di atas halaman.
+   =================================================================== */
+.pg-hdr {
+  position: sticky; top: 0; z-index: 50;
+  flex: none; width: 100%;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--rule2);
+}
+[data-theme=dark] .pg-hdr { background: #101010; border-bottom-color: var(--rule); }
+.pg-hdr-in {
+  max-width: 1280px; margin: 0 auto; height: 64px;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+  padding: 0 clamp(12px, 3vw, 40px);
+}
+.pg-back {
+  justify-self: start;
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  background: none; border: 0; cursor: pointer; white-space: nowrap;
+  font-family: var(--f-mono); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--mute);
+}
+.pg-back:hover { color: var(--acc-text); }
+.pg-title {
+  min-width: 0; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--f-head); font-weight: 400; line-height: 1.2;
+  font-size: clamp(1.05rem, .6vw + .9rem, 1.35rem);
+  color: var(--ink);
+}
+.pg-tools { justify-self: end; display: flex; align-items: center; gap: 8px; }
+@media (max-width: 680px) {
+  .pg-hdr-in { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
+  .pg-sub, .sv-scale-lbl { display: none; }
+}
+
+.pg-col { width: 100%; margin: 0 auto; }
+.pg-col-text { max-width: 920px; }
+
+.pg-intro { padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 28px) 20px; }
+.pg-eyebrow {
+  font-family: var(--f-mono); font-size: .66rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--acc-text);
+  margin-bottom: 10px;
+}
+.pg-h1 {
+  font-family: var(--f-head); font-weight: 400; line-height: 1.15;
+  font-size: clamp(1.6rem, 2vw + 1rem, 2.4rem);
+  color: var(--ink); margin: 0 0 10px;
+}
+.pg-lede { font-family: var(--f-body); font-size: 1.05rem; line-height: 1.6; color: var(--mute); max-width: 60ch; margin: 0; }
+
+.pg-foot {
+  width: 100%; flex: none; margin-top: 48px; padding: 40px 16px;
+  border-top: 1px solid var(--rule); text-align: center;
+  font-family: var(--f-mono); font-size: .68rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--mute);
+}
+
+/* Daftar Isi / Glosarium / Pencarian: tanpa kotak pembungkus. Konten
+   langsung di atas latar halaman, seperti halaman baca. */
+#sv-body {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+/* Satu wadah gulir per halaman: #sv-body-scroll. Terukur sebelum perubahan:
+   di Daftar Isi #toc-panel bergulir sendiri (tinggi 512px, isi 6.860px pada
+   1280x860), di Glosarium #sv-body (580px dari 12.526px) - daftar
+   bergulir di dalam kotak, dengan footer halaman terlihat di bawahnya. */
+#sv-body,
+#toc-panel {
+  overflow: visible !important;
+  flex: none !important;
+}
+#toc-panel { background: transparent !important; }
