@@ -240,7 +240,11 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
           </div>
 
           <h2 className="font-pmn-head font-normal text-[1.15rem] lg:text-[1.35rem] text-pmn-ink whitespace-nowrap leading-none tracking-tight" id="sv-hdr">
-            {activeTab === 'map' ? 'Table of Contents — Manuscript Map' : activeTab === 'glossary' ? 'Glossary — Key Terms' : 'Search Analysis'}
+            {activeTab === 'map'
+              ? <>Table of Contents<span className="sv-hdr-sub"> — Manuscript Map</span></>
+              : activeTab === 'glossary'
+                ? <>Glossary<span className="sv-hdr-sub"> — Key Terms</span></>
+                : 'Search Analysis'}
           </h2>
 
           {/* Satu kontrol ukuran untuk SELURUH permukaan contents: daftar isi,

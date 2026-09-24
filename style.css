@@ -3336,3 +3336,57 @@ body.focus-mode #hdr-r #focus-btn {
   #hdr-r .lbl-long { display: none; }
   #hdr-r .lbl-short { display: inline; }
 }
+
+/* ===================================================================
+   Audit HP 2026-09-24 (390x844, sentuh). Terukur sebelum perubahan:
+   - Header contents/glosarium: tombol Home dan kontrol Size diposisikan
+     absolut di kiri/kanan, judul nowrap di tengah - pada 390px judul
+     "Glossary — Key Terms" menabrak label SIZE dan kotak A-/A/A+.
+   - #glossary-panel lebar 396px di wadah 358px (padding 16px): kotak
+     filter menempel ke tepi kiri, "TERMS" terpotong di kanan.
+   - Label #mob-nav 6,7px (.42rem).
+   - Target sentuh: N/M/W dan A-/A/A+ di reader 36x19, A-/A/A+ contents
+     30x26, huruf glosarium 26x28, "← Home" 56x19. Pedoman umum
+     (Apple HIG, Material) minimal 44px.
+   Target sentuh hanya dibesarkan untuk penunjuk kasar (jari); di desktop
+   ukuran rapatnya tetap.
+   =================================================================== */
+@media (max-width: 680px) {
+  /* Header: tiga kolom mengalir, bukan tumpukan absolut. */
+  .sv-hdr-wrap > div { justify-content: space-between; gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .sv-hdr-wrap > div > .absolute { position: static !important; }
+  .sv-hdr-wrap #sv-hdr { flex: 1 1 auto; min-width: 0; text-align: center; overflow: hidden; text-overflow: ellipsis; font-size: 1.05rem; }
+  .sv-hdr-sub { display: none; }
+  .sv-scale-lbl { display: none; }
+
+  #glossary-panel { width: 100%; max-width: 100%; min-width: 0; }
+  .gl-cari { min-width: 0; flex-basis: 100%; }
+  .gl-hitung { margin-left: 0; }
+
+  #mob-nav .mob-nav-lbl { font-size: .62rem; letter-spacing: .02em; }
+
+  /* Baris glosarium: istilah, kategori, garis titik dan nomor seksi dalam
+     satu baris tidak muat - nomor seksi (mis. 7.3c-i) terdorong 17px ke
+     luar layar pada 360px. Istilah mendapat barisnya sendiri. */
+  .gl-baris { flex-wrap: wrap; row-gap: 4px; }
+  .gl-baris-ist { flex: 1 1 100%; }
+}
+/* Header reader di bawah 640px: kolom 1fr-auto-1fr membuat kolom kiri
+   (panah + "§ Sections", ~123px) sama lebar dengan kolom kanan, dan judul
+   Part (maks 45vw) ditimpa tombol Sections. Judul kini mengisi sisa ruang
+   dan terpotong rapi dengan elipsis. */
+@media (max-width: 639px) {
+  #reader-nav > div { grid-template-columns: auto minmax(0, 1fr) auto !important; column-gap: 8px; }
+  #reader-nav > div > div:nth-child(2) { max-width: none !important; min-width: 0; }
+}
+@media (pointer: coarse) {
+  #reader-nav button { min-height: 44px; min-width: 44px; }
+}
+@media (pointer: coarse) {
+  .sv-scale-grp button { width: 44px; min-height: 40px; }
+  .sv-hdr-wrap > div > .absolute:first-child button { min-height: 44px; }
+  .gl-abjad { gap: 4px; }
+  .gl-abjad a { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; font-size: .8rem; }
+  .gl-seg button { min-height: 44px; }
+  .reader-meta button { min-height: 40px; min-width: 44px; }
+}
