@@ -87,7 +87,7 @@ PART 1 OF 2 — AI GROUNDING DOCUMENTATION (identical to llms.md)
 ## Structured Data Endpoints
 
 - **Parts Manifest:** [`manifest.json`](https://novadharma-hub.github.io/pmn-framework/data/parts/manifest.json) — Full structural hierarchy of parts and sections.
-- **Glossary (237 Terms):** [`gl.json`](https://novadharma-hub.github.io/pmn-framework/data/gl.json) — Vocabulary definitions and cross-references.
+- **Glossary (239 Terms):** [`gl.json`](https://novadharma-hub.github.io/pmn-framework/data/gl.json) — Vocabulary definitions and cross-references.
 - **Glossary Domains:** [`glg.json`](https://novadharma-hub.github.io/pmn-framework/data/glg.json) — 16 conceptual categorization clusters.
 - **Semantic Relational Map:** [`rel.json`](https://novadharma-hub.github.io/pmn-framework/data/rel.json) — Directed connections across conceptual nodes.
 - **Analytical Quotes:** [`quotes.json`](https://novadharma-hub.github.io/pmn-framework/data/quotes.json) — 25 core analytical aphorisms.
