@@ -68,6 +68,11 @@ export default function ReaderView({
   const pIdx = (curPos ? curPos[0] : partIdx) ?? 0
   const sIdx = (curPos ? curPos[1] : secIdx) ?? 0
   const p = data.parts[pIdx]; const s = p?.subs[sIdx]
+  // Seksi memuat `html`, bukan `text`. Rumus lama membaca s.text, yang tidak
+  // pernah ada, sehingga setiap seksi berbunyi "1 min read" - termasuk 3.4b
+  // yang ~7.000 kata. 200 kata per menit, sama dengan rumus lama.
+  const menitBaca = Math.max(1, Math.ceil(
+    (s?.html || '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length / 200))
   const isRead = !!readMap[`${pIdx}-${sIdx}`]
 
   // Navigasi seksi-ke-seksi. Reader ini TIDAK PERNAH memilikinya.
@@ -462,7 +467,7 @@ export default function ReaderView({
 
               <div className="reader-meta flex flex-col md:flex-row md:items-center justify-between pb-0 mb-0 select-none gap-4">
                 <span className="font-mono text-[0.65rem] text-pmn-mute opacity-60 uppercase tracking-widest italic">
-                  {s?.text ? `${Math.ceil(s.text.split(/\s+/).length / 200)} min read` : '1 min read'}
+                  {`${menitBaca} min read`}
                 </span>
                 
                 {/* section wrapper used instead of div to bypass the legacy .reader-meta > div styling */}
