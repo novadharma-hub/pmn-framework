@@ -109,7 +109,7 @@
   border:1px solid rgba(157,52,29,.25);
   background:rgba(255,248,236,.82);
   font-family:var(--f-mono);
-  font-size:.62rem;
+  font-size:.75rem;
   letter-spacing:.16em;
   text-transform:uppercase;
   color:var(--acc-text);
@@ -138,9 +138,9 @@
   max-width:12ch;
 }
 [data-theme=dark] .theses-lead h2{color:var(--acc-text)}
-.theses-lead-sub{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;color:var(--mute2);margin-top:.85rem;line-height:1.62;max-width:19rem}
+.theses-lead-sub{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.11em;text-transform:uppercase;color:var(--mute2);margin-top:.85rem;line-height:1.62;max-width:19rem}
 .theses-tier-list{margin-top:1.5rem;display:flex;flex-direction:column;gap:.55rem}
-.theses-tier-chip{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.theses-tier-chip{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
 .theses-tier-chip.tier-1{color:var(--acc-text)}
 .theses-tier-chip.tier-2{color:var(--ink2)}
 .theses-tier-chip.tier-3{color:var(--mute2)}
@@ -195,8 +195,8 @@
   font-family:var(--f-mono);
   text-transform:uppercase;
 }
-.reading-stat strong{display:block;font-size:.67rem;letter-spacing:.15em;color:var(--mute2);margin-bottom:.24rem}
-.reading-stat span{display:block;font-size:.68rem;letter-spacing:.05em;line-height:1.48;color:var(--ink)}
+.reading-stat strong{display:block;font-size:.75rem;letter-spacing:.15em;color:var(--mute2);margin-bottom:.24rem}
+.reading-stat span{display:block;font-size:.75rem;letter-spacing:.05em;line-height:1.48;color:var(--ink)}
 [data-theme=dark] .reading-stat{background:rgba(255,255,255,.012)}
 .reading-paths-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem}
 .path-card{
@@ -237,7 +237,7 @@
 .path-kicker{display:block;margin-bottom:.55rem;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc-text)}
 .path-card h3{font-family:var(--f-head);font-size:1.08rem;line-height:1.16;color:var(--ink);margin-bottom:.68rem;max-width:14ch;padding-right:0}
 .path-card p{font-family:var(--f-body);font-size:.9rem;line-height:1.68;color:var(--ink2);margin-bottom:1rem;max-width:none}
-.path-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:transparent;border:1px solid var(--rule2);padding:.55rem .95rem;cursor:pointer;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.11em;text-transform:uppercase;color:var(--mute);transition:color .15s,border-color .15s,background .15s}
+.path-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:transparent;border:1px solid var(--rule2);padding:.55rem .95rem;cursor:pointer;font-family:var(--f-mono);font-size:.75rem;letter-spacing:.11em;text-transform:uppercase;color:var(--mute);transition:color .15s,border-color .15s,background .15s}
 .path-btn{margin-top:auto;align-self:flex-start}
 .path-btn:hover{color:var(--acc-text);border-color:var(--acc);background:rgba(0,0,0,.02)}
 [data-theme=dark] .path-btn:hover{background:rgba(255,255,255,.03)}
@@ -256,9 +256,9 @@
 .home-bottom-card::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(173,52,30,.42),transparent);opacity:.9}
 .home-bottom-card h3{font-family:var(--f-head);font-size:1.05rem;line-height:1.28;color:var(--ink)}
 .home-bottom-card p{font-size:.9rem;line-height:1.68;color:var(--ink2)}
-.home-bottom-list{display:flex;flex-direction:column;gap:.45rem;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;color:var(--mute)}
+.home-bottom-list{display:flex;flex-direction:column;gap:.45rem;font-family:var(--f-mono);font-size:.75rem;letter-spacing:.06em;color:var(--mute)}
 .home-bottom-list span{display:block}
-.home-bottom-link{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.72rem .95rem;border:1px solid var(--rule2);font-family:var(--f-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:transparent;transition:border-color .15s,color .15s,background .15s}
+.home-bottom-link{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.72rem .95rem;border:1px solid var(--rule2);font-family:var(--f-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;background:transparent;transition:border-color .15s,color .15s,background .15s}
 .home-bottom-link:hover{border-color:var(--acc);color:var(--acc-text);background:rgba(173,52,30,.06)}
 .home-bottom-card.notes-card{grid-column:span 6}
 .home-bottom-card.compact-card{grid-column:span 3}
@@ -275,7 +275,7 @@
 [data-theme=dark] .home-bottom-notes{background:#0f0f0f}
 .home-bottom-notes:focus{border-color:var(--acc2)}
 .home-bottom-notes::placeholder{color:var(--mute3)}
-.home-bottom-status{font-family:var(--f-mono);font-size:.72rem;color:var(--acc2);display:block;min-height:1em;opacity:0;transition:opacity .3s}
+.home-bottom-status{font-family:var(--f-mono);font-size:.75rem;color:var(--acc2);display:block;min-height:1em;opacity:0;transition:opacity .3s}
 .home-bottom-status.show{opacity:1}
 .home-bottom-actions .home-bottom-link{flex:1;min-width:140px}
 .home-bottom-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
@@ -284,8 +284,8 @@
 .home-bottom-stat{border:1px solid var(--rule2);padding:.85rem .9rem;background:rgba(255,255,255,.32);display:flex;flex-direction:column;gap:.28rem}
 [data-theme=dark] .home-bottom-stat{background:rgba(255,255,255,.03)}
 .home-bottom-stat strong{font-family:var(--f-head);font-size:1.1rem;line-height:1;color:var(--ink)}
-.home-bottom-stat span{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
-.home-bottom-caption{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;color:var(--mute2)}
+.home-bottom-stat span{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute2)}
+.home-bottom-caption{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;color:var(--mute2)}
 /* ── Srch-view (contents + glossary + search) ── */
 #srch-view{flex-direction:column;height:100%;overflow:hidden}
 .sv-hdr-wrap {
@@ -379,10 +379,10 @@
 
 /* Platform Tabs */
 .hai-tabs{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.25rem}
-.hai-tab{font-family:var(--f-mono);font-size:0.72rem;letter-spacing:0.04em;padding:0.55rem 0.95rem;background:var(--bg);color:var(--mute);border:1px solid var(--rule);border-radius:4px;cursor:pointer;transition:all .18s ease;display:inline-flex;align-items:center;gap:0.45rem;white-space:nowrap;user-select:none}
+.hai-tab{font-family:var(--f-mono);font-size:.75rem;letter-spacing:0.04em;padding:0.55rem 0.95rem;background:var(--bg);color:var(--mute);border:1px solid var(--rule);border-radius:4px;cursor:pointer;transition:all .18s ease;display:inline-flex;align-items:center;gap:0.45rem;white-space:nowrap;user-select:none}
 .hai-tab:hover{background:var(--bg3);color:var(--ink);border-color:var(--rule2);transform:translateY(-1px)}
 .hai-tab.active{background:var(--bg3);color:var(--acc-text);border-color:var(--acc);box-shadow:2px 2px 0 var(--acc2);font-weight:600}
-.hai-tab-badge{font-size:0.62rem;opacity:.75;padding:0.1rem 0.35rem;background:var(--bg2);border-radius:2px}
+.hai-tab-badge{font-size:.75rem;opacity:.75;padding:0.1rem 0.35rem;background:var(--bg2);border-radius:2px}
 .hai-tab.active .hai-tab-badge{background:rgba(192,39,26,0.2);color:var(--acc-text)}
 
 /* Main Workbench Panel */
@@ -409,9 +409,9 @@
 .hai-btn-group{display:flex;align-items:center;flex-wrap:wrap;gap:0.65rem}
 .hai-btn-primary{background:var(--acc);color:#ffffff!important;border:1px solid var(--acc);font-family:var(--f-mono);font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.7rem 1.4rem!important;border-radius:4px;cursor:pointer;transition:all .18s ease;display:inline-flex;align-items:center;gap:0.5rem;box-shadow:2px 2px 0 var(--acc2)}
 .hai-btn-primary:hover{background:var(--acc2);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--acc2)}
-.hai-btn-secondary{background:var(--bg2);color:var(--ink);border:1px solid var(--rule);font-family:var(--f-mono);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;padding:0.7rem 1.15rem!important;border-radius:4px;cursor:pointer;transition:all .15s ease;display:inline-flex;align-items:center;gap:0.4rem}
+.hai-btn-secondary{background:var(--bg2);color:var(--ink);border:1px solid var(--rule);font-family:var(--f-mono);font-size:.75rem;letter-spacing:0.06em;text-transform:uppercase;padding:0.7rem 1.15rem!important;border-radius:4px;cursor:pointer;transition:all .15s ease;display:inline-flex;align-items:center;gap:0.4rem}
 .hai-btn-secondary:hover{background:var(--bg3);border-color:var(--rule2);color:var(--acc-text)}
-.hai-guide-link{font-family:var(--f-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mute);cursor:pointer;background:none;border:none;transition:color .15s ease;padding:0.4rem 0.2rem}
+.hai-guide-link{font-family:var(--f-mono);font-size:.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mute);cursor:pointer;background:none;border:none;transition:color .15s ease;padding:0.4rem 0.2rem}
 .hai-guide-link:hover{color:var(--acc-text)}
 
 /* Preview & Terminal Output */
@@ -688,7 +688,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
   border-right:1px solid var(--rule);
 }
 .stat:last-child{border-right:none}
-.stat-lbl{display:block;font-family:'Source Code Pro',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute2);margin-bottom:.3rem}
+.stat-lbl{display:block;font-family:'Source Code Pro',monospace;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mute2);margin-bottom:.3rem}
 .stat-val{font-family:'Libre Baskerville',serif;font-size:1.05rem;color:var(--acc-text)}
 
 /* CTA console block — like reference screenshot */
@@ -704,7 +704,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 
 .cta-p{
   flex:1;
-  font-family:'Source Code Pro',monospace;font-size:.72rem;
+  font-family:'Source Code Pro',monospace;font-size:.75rem;
   letter-spacing:.18em;text-transform:uppercase;
   background:var(--acc);color:#fff;
   border:none;border-right:1px solid var(--acc2);
@@ -728,7 +728,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 [data-theme=dark] .cta-row-s{border-bottom-color:var(--rule2)}
 .cta-s{
   flex:1;
-  font-family:'Source Code Pro',monospace;font-size:.68rem;
+  font-family:'Source Code Pro',monospace;font-size:.75rem;
   letter-spacing:.12em;text-transform:uppercase;
   background:var(--bg2);color:var(--ink);
   border:none;border-right:1px solid var(--ink);
@@ -746,7 +746,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 }
 .cta-util{
   flex:1;
-  font-family:'Source Code Pro',monospace;font-size:.65rem;
+  font-family:'Source Code Pro',monospace;font-size:.75rem;
   letter-spacing:.1em;text-transform:uppercase;
   background:var(--bg2);color:var(--mute);
   border:none;border-right:1px solid var(--ink);
@@ -763,7 +763,7 @@ body{font-family:'Lora',Georgia,serif;background:var(--bg);color:var(--ink);line
 /* Scroll indicator */
 .hero-scroll{
   position:absolute;bottom:3.2rem;left:50%;transform:translateX(-50%);
-  font-family:'Source Code Pro',monospace;font-size:.66rem;
+  font-family:'Source Code Pro',monospace;font-size:.75rem;
   letter-spacing:.2em;text-transform:uppercase;color:var(--mute2);
   display:flex;flex-direction:column;align-items:center;gap:.55rem;
   animation:hero-pulse 2.5s ease-in-out infinite;
@@ -1237,7 +1237,7 @@ button:focus-visible{outline:1.5px solid var(--acc);outline-offset:2px}
   .theses-inner{grid-template-columns:1fr;gap:1.5rem;padding:0}
   .theses-lead h2{font-size:1.55rem;position:static;max-width:none}
   .theses-lead{padding:2.9rem 1rem 1.1rem;box-shadow:none}
-  .theses-tier-chip,.thesis-tier-hdr{font-size:.72rem}
+  .theses-tier-chip,.thesis-tier-hdr{font-size:.75rem}
   .reading-paths{padding:2rem 1.4rem 3rem}
   .reading-paths-hdr{grid-template-columns:1fr;gap:.6rem}
   .reading-paths-hdr p{font-size:.85rem;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -2659,7 +2659,7 @@ body, #hdr, #mob-nav, .view, .path-card, .thesis-item, .thesis-toggle, .anatomy-
 .hai-tabs { display: flex; flex-wrap: wrap; gap: 12px; }
 .hai-tab {
   font-family: var(--f-mono);
-  font-size: .65rem;
+  font-size:.75rem;
   letter-spacing: .1em;
   text-transform: uppercase;
   background: var(--bg2);
@@ -3028,13 +3028,9 @@ body.focus-mode #hdr-r #focus-btn {
 #home-chat-log .hcl-placeholder { line-height: 1.75; opacity: .75; }
 #home-chat-log .hcl-placeholder br { display: block; content: ""; margin-top: 10px; }
 
-/* Tab "Inline chat - planned" adalah keterangan status, bukan tujuan
-   setara. Dibedakan supaya tidak terbaca sebagai fitur rusak. */
-.hai-tab:last-child {
-  opacity: .7;
-  border-style: dashed;
-}
-.hai-tab:last-child.active { opacity: 1; }
+/* (Aturan .hai-tab:last-child yang meredupkan tab terakhir dihapus
+   2026-09-24: tab status "Inline chat - planned" sudah tidak ada, dan aturan
+   itu membuat layanan urutan terakhir - kini Qwen - tampak nonaktif.) */
 
 /* HALAMAN PANDUAN
    Lebar baris 850px pada teks 16px = 85 karakter, jauh di atas rentang
@@ -3592,3 +3588,37 @@ body.focus-mode #hdr-r #focus-btn {
   .home-bottom-card.notes-card,
   .home-bottom-card.compact-card { grid-column: auto; }
 }
+
+/* Axiom Structure sebagai tab di "How the Framework Is Built" (2026-09-24).
+   Satu kolom: pengantar + chip tier di atas, daftar di bawah. */
+.theses-section.theses-embedded { padding: 0; background: none; border: 0; }
+.theses-embedded .theses-inner { display: block; max-width: none; }
+.theses-embedded .theses-lead { padding: 0 0 1.25rem; border: 0; background: none; box-shadow: none; overflow: visible; }
+.theses-embedded .theses-lead::before,
+.theses-embedded .theses-lead::after { display: none; }
+.theses-embedded .theses-lead-sub { max-width: 68ch; margin-top: 0; }
+.theses-embedded .theses-tier-list { margin-top: .9rem; }
+
+/* Reading Paths, kartu ringkas (2026-09-24). Judul dulu max-width:14ch,
+   sehingga "Epistemic Foundations & Realism" terpecah tiga baris dengan
+   ruang kosong di sampingnya; angka hantu "01" (::after) menabrak tombol
+   Syllabus. Langkah kini daftar berjudul yang dilipat. */
+.path-card h3 { max-width: none; }
+.path-card::after { content: none; }
+.reading-paths-hdr p { max-width: 60ch; }
+.path-progress { height: 3px; background: var(--rule); margin: 0 0 .7rem; overflow: hidden; }
+.path-progress > div { height: 100%; background: var(--acc); transition: width .3s ease; }
+.path-steps { margin: 0 0 1rem; }
+.path-steps summary {
+  cursor: pointer; font-family: var(--f-mono); font-size: .75rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--mute); padding: .35rem 0; min-height: 32px;
+}
+.path-steps summary:hover { color: var(--acc-text); }
+.path-steps ol { list-style: decimal; margin: .4rem 0 0; padding-left: 1.3rem; }
+.path-steps li + li { margin-top: .35rem; }
+.path-steps li button {
+  background: none; border: 0; padding: .15rem 0; cursor: pointer; text-align: left;
+  font-family: var(--f-body); font-size: .9rem; line-height: 1.45; color: var(--ink2);
+  text-decoration: underline; text-decoration-color: var(--rule2); text-underline-offset: 3px;
+}
+.path-steps li button:hover { color: var(--acc-text); text-decoration-color: var(--acc); }

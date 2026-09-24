@@ -197,7 +197,7 @@ If the text does not address something, say so instead of filling the gap.`
           <span
             style={{
               fontFamily: 'var(--f-mono)',
-              fontSize: '0.62rem',
+              fontSize:'.75rem',
               fontWeight: 700,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
@@ -216,7 +216,7 @@ If the text does not address something, say so instead of filling the gap.`
             <span
               style={{
                 fontFamily: 'var(--f-mono)',
-                fontSize: '0.72rem',
+                fontSize:'.75rem',
                 color: 'var(--acc-text)',
                 border: '1px solid var(--rule2)',
                 padding: '0.35rem 0.75rem',
@@ -231,7 +231,7 @@ If the text does not address something, say so instead of filling the gap.`
             <span
               style={{
                 fontFamily: 'var(--f-mono)',
-                fontSize: '0.68rem',
+                fontSize:'.75rem',
                 color: 'var(--mute)',
                 border: '1px solid var(--rule)',
                 padding: '0.3rem 0.65rem',
@@ -305,7 +305,7 @@ If the text does not address something, say so instead of filling the gap.`
               onClick={() => setActiveTab(p.id)}
               style={{
                 fontFamily: 'var(--f-mono)',
-                fontSize: '0.72rem',
+                fontSize:'.75rem',
                 padding: '0.55rem 0.95rem',
                 borderRadius: '4px',
                 border: isActive ? '1px solid var(--acc)' : '1px solid var(--rule)',
@@ -356,7 +356,7 @@ If the text does not address something, say so instead of filling the gap.`
             >
               Operational Role &amp; Methodology:
             </label>
-            <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', color: 'var(--mute2)' }}>
+            <span style={{ fontFamily: 'var(--f-mono)', fontSize:'.75rem', color: 'var(--mute2)' }}>
               Opens {currentProvider.name} ({currentProvider.company}) in a new tab
             </span>
           </div>
@@ -405,7 +405,7 @@ If the text does not address something, say so instead of filling the gap.`
             >
               Analytical Query / Custom Directive:
             </label>
-            <span style={{ fontFamily: 'var(--f-mono)', fontSize: '0.68rem', color: 'var(--mute2)' }}>
+            <span style={{ fontFamily: 'var(--f-mono)', fontSize:'.75rem', color: 'var(--mute2)' }}>
               (Press Enter or click Copy to proceed)
             </span>
           </div>
@@ -488,7 +488,7 @@ If the text does not address something, say so instead of filling the gap.`
                 color: 'var(--ink)',
                 border: '1px solid var(--rule)',
                 fontFamily: 'var(--f-mono)',
-                fontSize: '0.72rem',
+                fontSize:'.75rem',
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
                 padding: '0.75rem 1.15rem',
@@ -509,7 +509,7 @@ If the text does not address something, say so instead of filling the gap.`
                 border: '1px dashed var(--rule2)',
                 color: showPreview ? 'var(--acc-text)' : 'var(--mute)',
                 fontFamily: 'var(--f-mono)',
-                fontSize: '0.72rem',
+                fontSize:'.75rem',
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
                 padding: '0.75rem 1rem',
@@ -529,7 +529,7 @@ If the text does not address something, say so instead of filling the gap.`
               onClick={() => onOpenGuide()}
               style={{
                 fontFamily: 'var(--f-mono)',
-                fontSize: '0.72rem',
+                fontSize:'.75rem',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
                 color: 'var(--mute)',
@@ -563,7 +563,7 @@ If the text does not address something, say so instead of filling the gap.`
               <span
                 style={{
                   fontFamily: 'var(--f-mono)',
-                  fontSize: '0.68rem',
+                  fontSize:'.75rem',
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                   color: 'var(--acc-text)',
@@ -576,7 +576,7 @@ If the text does not address something, say so instead of filling the gap.`
                 onClick={handleCopyPrompt}
                 style={{
                   fontFamily: 'var(--f-mono)',
-                  fontSize: '0.65rem',
+                  fontSize:'.75rem',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   padding: '0.25rem 0.6rem',
@@ -613,21 +613,6 @@ If the text does not address something, say so instead of filling the gap.`
           </div>
         )}
 
-        {/* BOTTOM ARCHITECTURAL NOTE */}
-        <div style={{ paddingTop: '0.5rem', borderTop: '1px dashed var(--rule2)' }}>
-          <p
-            style={{
-              fontFamily: 'var(--f-mono)',
-              fontSize: '0.68rem',
-              letterSpacing: '0.04em',
-              lineHeight: 1.5,
-              color: 'var(--mute2)',
-              margin: 0
-            }}
-          >
-            <strong>Note on Architecture:</strong> PMN Framework is a client-side static web application without a server backend. This terminal operates as a <em>zero-trust client bridge</em>: it generates fully grounded manuscript context packs locally in your browser and transfers them via clipboard to your own authenticated AI accounts or developer pipelines, ensuring zero credential risk and absolute reader privacy.
-          </p>
-        </div>
       </div>
     </div>
   )
