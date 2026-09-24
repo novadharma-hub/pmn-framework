@@ -79,6 +79,18 @@ export default function App() {
   }, [focusMode])
 
   const [kbdOpen, setKbdOpen] = useState(false)
+  // Di <= 960px kolom cari bertulisan 16px (lihat style.css, "Kerangka HP")
+  // dan hanya ~90-120px lebar: placeholder panjang terpotong jadi "Search —".
+  const [layarSempit, setLayarSempit] = useState(() => {
+    try { return window.matchMedia('(max-width: 960px)').matches } catch { return false }
+  })
+  useEffect(() => {
+    let mq: MediaQueryList
+    try { mq = window.matchMedia('(max-width: 960px)') } catch { return }
+    const ubah = () => setLayarSempit(mq.matches)
+    mq.addEventListener('change', ubah)
+    return () => mq.removeEventListener('change', ubah)
+  }, [])
   const [notesOpen, setNotesOpen] = useState(false)
   // Rules & Data adalah halaman (#/rules/...), bukan jendela melayang lagi:
   // lihat catatan di RulesPage.tsx.
@@ -433,7 +445,7 @@ export default function App() {
           <span id="srch-icon">&#8981;</span>
           <input
             id="srch-in" type="search"
-            placeholder="Search — e.g. 3.4b"
+            placeholder={layarSempit ? 'Search' : 'Search — e.g. 3.4b'}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             onFocus={() => {
@@ -553,35 +565,38 @@ export default function App() {
 
         {/* BOTTOM / MOBILE NAVIGATION BAR */}
         <nav id="mob-nav" className="mob-nav" aria-label="Mobile Navigation">
-          <button className={`mob-nav-btn${page === 'home' ? ' active' : ''}`} onClick={() => setPage('home')}>
-            <span>&#8962;</span><span className="mob-nav-lbl">Cover</span>
+          <button className={`mob-nav-btn${page === 'home' ? ' active' : ''}`} aria-current={page === 'home' ? 'page' : undefined} onClick={() => setPage('home')}>
+            <NavIcon name="home" /><span className="mob-nav-lbl">Cover</span>
           </button>
-          <button className={`mob-nav-btn${page === 'contents' && contentsSub === 'map' ? ' active' : ''}`} onClick={() => { setContentsSub('map'); setPage('contents') }}>
-            <span>&#9776;</span><span className="mob-nav-lbl">Map</span>
+          <button className={`mob-nav-btn${page === 'contents' && contentsSub === 'map' ? ' active' : ''}`} aria-current={page === 'contents' && contentsSub === 'map' ? 'page' : undefined} onClick={() => { setContentsSub('map'); setPage('contents') }}>
+            <NavIcon name="map" /><span className="mob-nav-lbl">Map</span>
           </button>
-          <button className={`mob-nav-btn${page === 'reader' ? ' active' : ''}`} onClick={() => setPage('reader')}>
-            <span>&#9654;</span><span className="mob-nav-lbl">Read</span>
+          <button className={`mob-nav-btn${page === 'reader' ? ' active' : ''}`} aria-current={page === 'reader' ? 'page' : undefined} onClick={() => setPage('reader')}>
+            <NavIcon name="read" /><span className="mob-nav-lbl">Read</span>
           </button>
           <button
             className={`mob-nav-btn${page === 'contents' && contentsSub === 'glossary' ? ' active' : ''}`}
+            aria-current={page === 'contents' && contentsSub === 'glossary' ? 'page' : undefined}
             onClick={() => { setContentsSub('glossary'); setPage('contents') }}
           >
-            <span>&#167;</span><span className="mob-nav-lbl">Glossary</span>
+            <NavIcon name="glossary" /><span className="mob-nav-lbl">Glossary</span>
           </button>
           <button
             className={`mob-nav-btn${page === 'guide' ? ' active' : ''}`}
+            aria-current={page === 'guide' ? 'page' : undefined}
             onClick={openGuide}
           >
-            <span>&#9881;</span><span className="mob-nav-lbl">Guide</span>
+            <NavIcon name="guide" /><span className="mob-nav-lbl">AI Guide</span>
           </button>
           <button
             className={`mob-nav-btn${policyOpen ? ' active' : ''}`}
+            aria-current={policyOpen ? 'page' : undefined}
             onClick={() => openPolicy('privacy')}
           >
-            <span>&#9878;</span><span className="mob-nav-lbl">Rules</span>
+            <NavIcon name="rules" /><span className="mob-nav-lbl">Rules</span>
           </button>
-          <button className="mob-nav-btn" onClick={toggleTheme}>
-            <span>{theme === 'dark' ? '☀' : '☾'}</span>
+          <button className="mob-nav-btn" onClick={toggleTheme} aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}>
+            <NavIcon name={theme === 'dark' ? 'sun' : 'moon'} />
             <span className="mob-nav-lbl">{theme === 'dark' ? 'Light' : 'Dark'}</span>
           </button>
         </nav>
@@ -628,6 +643,37 @@ export default function App() {
 }
 
 // ─── HomeView ─────────────────────────────────────────────────────────────────
+
+/**
+ * Ikon navigasi bawah (HP/tablet). Sampai 2026-09-24 berupa karakter teks
+ * (⌂ ☰ ▶ § ⚙ ⚖ ☀) yang tiap font gambar berbeda ukuran dan ketebalannya.
+ * Satu set garis 24px, warna mengikuti teks tombol.
+ */
+function NavIcon({ name }: { name: 'home' | 'map' | 'read' | 'glossary' | 'guide' | 'rules' | 'sun' | 'moon' }) {
+  const common = {
+    width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor',
+    strokeWidth: 1.7, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const,
+    'aria-hidden': true, className: 'mob-nav-ico',
+  }
+  switch (name) {
+    case 'home':
+      return <svg {...common}><path d="M3 11.5 12 4l9 7.5" /><path d="M5.5 10v10h13V10" /><path d="M10 20v-5h4v5" /></svg>
+    case 'map':
+      return <svg {...common}><path d="M9 6h11M9 12h11M9 18h11" /><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" strokeWidth={2.6} /></svg>
+    case 'read':
+      return <svg {...common}><path d="M3 5.5h6a3 3 0 0 1 3 3V20a2.5 2.5 0 0 0-2.5-2.5H3z" /><path d="M21 5.5h-6a3 3 0 0 0-3 3V20a2.5 2.5 0 0 1 2.5-2.5H21z" /></svg>
+    case 'glossary':
+      return <svg {...common}><text x="12" y="18" textAnchor="middle" fontSize="19" fontFamily="Georgia, 'Times New Roman', serif" fill="currentColor" stroke="none">§</text></svg>
+    case 'guide':
+      return <svg {...common}><path d="M12 3.5l1.9 5.1L19 10.5l-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" /><path d="M18.5 16.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" /></svg>
+    case 'rules':
+      return <svg {...common}><path d="M12 4v16M7 20h10M5 7h14" /><path d="M5 7l-2.5 5.5a2.5 2.5 0 0 0 5 0z" /><path d="M19 7l-2.5 5.5a2.5 2.5 0 0 0 5 0z" /></svg>
+    case 'sun':
+      return <svg {...common}><circle cx="12" cy="12" r="4" /><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4" /></svg>
+    case 'moon':
+      return <svg {...common}><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" /></svg>
+  }
+}
 
 function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onOpenGlossary, onOpenPolicy, onJump, showTip, setShowTip, version }: any) {
   const totalSections = data.parts.reduce((a: number, p: any) => a + (p.subs?.length || 0), 0)
