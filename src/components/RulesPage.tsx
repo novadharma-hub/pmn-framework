@@ -13,11 +13,21 @@
  * Tab dikendalikan App (satu sumber kebenaran, ikut URL); komponen ini tidak
  * menyimpan salinannya sendiri.
  */
-import React, { useState, useEffect } from 'react'
-import type { RulesTab } from '../routing'
+import React, { useState, useEffect, useRef } from 'react'
+import { routeToHash, type RulesTab } from '../routing'
 import { PageHeader, PageFooter } from './PageHeader'
 
 export type PolicyTab = RulesTab
+
+const RULES_TABS: Array<[PolicyTab, string]> = [
+  ['privacy', '🛡️ Privacy & Data'],
+  ['terms', '📜 Terms & Citation'],
+  ['disclaimer', '⚖️ Epistemic Limits'],
+  ['ai', '🤖 AI Ethics Policy'],
+]
+
+const rulesHref = (tab: PolicyTab) =>
+  routeToHash({ page: 'rules', contentsSub: 'map', sectionId: null, rulesTab: tab })
 
 interface RulesPageProps {
   tab: PolicyTab
@@ -36,6 +46,10 @@ export default function RulesPage({
   const [storageStats, setStorageStats] = useState<{ count: number; sizeKb: string }>({ count: 0, sizeKb: '0' })
 
   useEffect(() => { calcStorageStats() }, [])
+
+  // Tab baru mulai dari atas, seperti halaman baru (sama dengan AI Guide).
+  const scrollRef = useRef<HTMLDivElement>(null)
+  useEffect(() => { scrollRef.current?.scrollTo({ top: 0 }) }, [activeTab])
 
   const calcStorageStats = () => {
     let totalChars = 0
@@ -123,6 +137,7 @@ export default function RulesPage({
     <>
       <div
         id="rules-view"
+        ref={scrollRef}
         style={{
           position: 'absolute',
           inset: 0,
@@ -139,95 +154,29 @@ export default function RulesPage({
           <p className="pg-lede">How this site treats your data, how to cite PMN, the limits of its claims, and the rules for AI use.</p>
         </div>
 
-        {/* Tab Navigation */}
-        <nav
-          aria-label="Rules & Data sections"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-            flexShrink: 0,
-            borderBottom: '1px solid var(--rule)',
-            background: 'var(--bg)',
-          }}
-        >
-          <button
-            onClick={() => setActiveTab('privacy')}
-            style={{
-              padding: '.75rem .9rem',
-              fontFamily: 'var(--f-mono)',
-              fontSize: '.7rem',
-              letterSpacing: '.06em',
-              textTransform: 'uppercase',
-              background: activeTab === 'privacy' ? 'var(--bg2)' : 'transparent',
-              color: activeTab === 'privacy' ? 'var(--acc-text)' : 'var(--mute)',
-              border: 'none',
-              borderBottom: activeTab === 'privacy' ? '2px solid var(--acc)' : '2px solid transparent',
-              cursor: 'pointer',
-              textAlign: 'center',
-            }}
-          >
-            🛡️ Privacy &amp; Data
-          </button>
-          <button
-            onClick={() => setActiveTab('terms')}
-            style={{
-              padding: '.75rem .9rem',
-              fontFamily: 'var(--f-mono)',
-              fontSize: '.7rem',
-              letterSpacing: '.06em',
-              textTransform: 'uppercase',
-              background: activeTab === 'terms' ? 'var(--bg2)' : 'transparent',
-              color: activeTab === 'terms' ? 'var(--acc-text)' : 'var(--mute)',
-              border: 'none',
-              borderBottom: activeTab === 'terms' ? '2px solid var(--acc)' : '2px solid transparent',
-              cursor: 'pointer',
-              textAlign: 'center',
-            }}
-          >
-            📜 Terms &amp; Citation
-          </button>
-          <button
-            onClick={() => setActiveTab('disclaimer')}
-            style={{
-              padding: '.75rem .9rem',
-              fontFamily: 'var(--f-mono)',
-              fontSize: '.7rem',
-              letterSpacing: '.06em',
-              textTransform: 'uppercase',
-              background: activeTab === 'disclaimer' ? 'var(--bg2)' : 'transparent',
-              color: activeTab === 'disclaimer' ? 'var(--acc-text)' : 'var(--mute)',
-              border: 'none',
-              borderBottom: activeTab === 'disclaimer' ? '2px solid var(--acc)' : '2px solid transparent',
-              cursor: 'pointer',
-              textAlign: 'center',
-            }}
-          >
-            ⚖️ Epistemic Limits
-          </button>
-          <button
-            onClick={() => setActiveTab('ai')}
-            style={{
-              padding: '.75rem .9rem',
-              fontFamily: 'var(--f-mono)',
-              fontSize: '.7rem',
-              letterSpacing: '.06em',
-              textTransform: 'uppercase',
-              background: activeTab === 'ai' ? 'var(--bg2)' : 'transparent',
-              color: activeTab === 'ai' ? 'var(--acc-text)' : 'var(--mute)',
-              border: 'none',
-              borderBottom: activeTab === 'ai' ? '2px solid var(--acc)' : '2px solid transparent',
-              cursor: 'pointer',
-              textAlign: 'center',
-            }}
-          >
-            🤖 AI Ethics Policy
-          </button>
+        {/* Tab: tautan sungguhan (#/rules/terms dst.), gaya bersama .pg-tabs. */}
+        <nav aria-label="Rules & Data sections" className="pg-tabs">
+          {RULES_TABS.map(([key, label]) => (
+            <a
+              key={key}
+              href={rulesHref(key)}
+              className="pg-tab"
+              aria-current={activeTab === key ? 'page' : undefined}
+              onClick={e => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+                e.preventDefault()
+                setActiveTab(key)
+              }}
+            >
+              {label}
+            </a>
+          ))}
         </nav>
 
         {/* Content Body */}
         <div
           style={{
-            padding: '1.4rem 1.6rem',
+            padding: 'clamp(24px, 4vw, 40px) clamp(16px, 3vw, 28px) 0',
             flex: 1,
             fontFamily: 'var(--f-body)',
             fontSize: '1rem',
@@ -523,7 +472,10 @@ export default function RulesPage({
                   <a href="llms.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms.txt</a> &mdash; Rapid structural index and core axiom inventory.
                 </li>
                 <li style={{ marginBottom: '.3rem' }}>
-                  <a href="llms-full.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms-full.txt</a> &mdash; Comprehensive section-by-section analytical digest.
+                  <a href="txt/index.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/txt/index.txt</a> &mdash; Every section as its own small plain-text file. Best starting point for agents.
+                </li>
+                <li style={{ marginBottom: '.3rem' }}>
+                  <a href="llms-full.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms-full.txt</a> &mdash; The complete text in one file (~2.4 MB); most fetchers truncate it.
                 </li>
                 <li style={{ marginBottom: '.3rem' }}>
                   <a href="pmn_corpus_for_ai.md" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/pmn_corpus_for_ai.md</a> &mdash; Unabridged Markdown corpus for long-context RAG pipelines.
