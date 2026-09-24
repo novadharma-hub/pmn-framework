@@ -376,12 +376,15 @@ def main():
             input("\n  Press Enter to continue...")
             
         elif choice == "6":
-            print("\n\033[92m[RUNNING] Launching Python dev server on port 8000...\033[0m")
+            print("\n\033[92m[RUNNING] Launching Vite dev server (npm run dev)...\033[0m")
             print("\033[90m(To stop server, press CTRL+C inside this window)\033[0m\n")
             time.sleep(1)
             try:
                 # Direct import or subprocess run of local server to keep interactive terminal active
-                subprocess.run([sys.executable, "jalankan_web.py"])
+                # jalankan_web.py (server untuk app.js era monolit) dihapus
+                # 2026-09-24; situs kini dibangun Vite. shell=True agar npm
+                # ditemukan juga di Windows (npm.cmd).
+                subprocess.run("npm run dev", shell=True)
             except KeyboardInterrupt:
                 print("\n  Local server closed successfully.")
             except Exception as e:

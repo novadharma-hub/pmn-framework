@@ -61,7 +61,7 @@ Each link is the whole Part as plain text. Parts III, VII, X, XIII and XV are la
 
 ## Structured Data Endpoints
 
-- [Glossary (237 Terms)](https://novadharma-hub.github.io/pmn-framework/data/gl.json): Canonical vocabulary definitions with section cross-references.
+- [Glossary (239 Terms)](https://novadharma-hub.github.io/pmn-framework/data/gl.json): Canonical vocabulary definitions with section cross-references.
 - [Glossary Categories](https://novadharma-hub.github.io/pmn-framework/data/glg.json): Grouped terminology across 16 conceptual domains.
 - [Per-Part JSON](https://novadharma-hub.github.io/pmn-framework/data/parts/part_VII.json): Each Part as JSON with section HTML (`data/parts/part_<Part>.json`, e.g. part_I, part_Intellectual_Debts). The plain-text files above carry the same text with fewer tokens.
 - [Parts Manifest](https://novadharma-hub.github.io/pmn-framework/data/parts/manifest.json): Hierarchical structure of all 21 parts and 235 sections.

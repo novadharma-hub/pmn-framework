@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Pemeriksa Ikatan Simbol, Konsistensi Hitungan, dan Rujukan Silang PMN (audit_simbol.py)
+"""Pemeriksa Ikatan Simbol, Konsistensi Hitungan, dan Rujukan Silang PMN (audit_symbols.py)
 
 Spesifikasi: private/docs/internal/PROMPT_ANTIGRAVITY_AUDIT_SIMBOL.md
 Penulis: Antigravity (menjawab review Claude 2026-09-07 dan 2026-09-08)

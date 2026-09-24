@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import ParticlesBackground from './components/ParticlesBackground'
 import ReaderView from './components/ReaderView'
 import ContentsView from './components/ContentsView'
-import VersionManager from './components/VersionManager'
 import KeyboardModal from './components/KeyboardModal'
 import NotesModal from './components/NotesModal'
 import GuideView from './components/GuideView'
@@ -11,7 +10,7 @@ import ReadingPathsSection from './components/ReadingPathsSection'
 import TheoreticalAnatomySection from './components/TheoreticalAnatomySection'
 import MobileCollapse from './components/MobileCollapse'
 import RulesPage, { PolicyTab } from './components/RulesPage'
-import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl, GuideTab } from './routing'
+import { hashToRoute, routeToHash, findSection, sectionIdAt, GuideTab } from './routing'
 
 
 
@@ -26,16 +25,15 @@ export default function App() {
   //
   // Selama flag ini hidup, ia adalah permukaan KEDUA yang bisa menyimpang
   // diam-diam dari yang pertama — dan penyimpangan itu persis bug yang
-  // dilaporkan. Berkasnya TIDAK dihapus: ia satu-satunya bukti kerja bahwa
-  // pembaca bisa dibangun tanpa ketergantungan tata letak pada style.css, dan
-  // itu pengetahuan mahal. Ia dibekukan sebagai rujukan arsitektur, bukan
-  // dipertahankan sebagai pembaca alternatif yang tak dipakai siapa pun.
+  // dilaporkan. Berkasnya dihapus 2026-09-24 (audit repo); sebagai rujukan
+  // arsitektur - pembaca tanpa ketergantungan tata letak pada style.css - ia
+  // tetap ada di riwayat git: src/components/ReaderView2.tsx.
   const ReaderComp = ReaderView
   // URL menang atas localStorage. Sebelum ini reload memulihkan view terakhir
   // dari localStorage, sehingga tautan yang dibagikan selalu membuka halaman
   // terakhir SI PENERIMA, bukan halaman yang dimaksud pengirim.
   const rutAwal = hashToRoute(window.location.hash)
-  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'login' | 'admin' | 'guide' | 'rules'>(() => {
+  const [page, setPage] = useState<'home' | 'contents' | 'reader' | 'guide' | 'rules'>(() => {
     if (rutAwal) return rutAwal.page
     try {
       const s = localStorage.getItem('pmn-page')
@@ -198,7 +196,6 @@ export default function App() {
   // (termasuk saat #/reader berubah jadi #/s/<id> begitu data selesai muat).
   const sinkronPertama = useRef(true)
   useEffect(() => {
-    if (!bolehMasukUrl(page)) return
     // Jangan sentuh URL selama ID seksi belum bisa dipetakan. Tanpa penjaga
     // ini, memuat #/s/3.4c akan menulis ulang URL jadi #/reader sebelum data
     // tiba - ID-nya hilang sebelum sempat dipulihkan.
@@ -486,7 +483,6 @@ export default function App() {
               data={data} readMap={readMap} resumeSec={resumeSection}
               onStartReading={() => setPage('contents')}
               onResumeReading={() => setPage('reader')}
-              onOpenAdmin={() => setPage('login')}
               onOpenNotes={() => setNotesOpen(true)}
               onOpenGuide={openGuide}
               onOpenGlossary={() => { setContentsSub('glossary'); setPage('contents') }}
@@ -541,8 +537,6 @@ export default function App() {
             />
           )}
 
-          {page === 'login' && <AdminLogin onLogin={() => setPage('admin')} onBack={() => setPage('home')} />}
-          {page === 'admin' && <VersionManager onBack={() => setPage('home')} />}
           {page === 'guide' && (
             <GuideView
               tab={guideTab}
@@ -675,7 +669,7 @@ function NavIcon({ name }: { name: 'home' | 'map' | 'read' | 'glossary' | 'guide
   }
 }
 
-function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenAdmin, onOpenNotes, onOpenGuide, onOpenGlossary, onOpenPolicy, onJump, showTip, setShowTip, version }: any) {
+function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, onOpenNotes, onOpenGuide, onOpenGlossary, onOpenPolicy, onJump, showTip, setShowTip, version }: any) {
   const totalSections = data.parts.reduce((a: number, p: any) => a + (p.subs?.length || 0), 0)
   const readCount = Object.keys(readMap).length
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
@@ -876,34 +870,3 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
   )
 }
 
-// ─── AdminLogin ───────────────────────────────────────────────────────────────
-
-function AdminLogin({ onLogin, onBack }: any) {
-  const [u, setU] = useState('')
-  const [p, setP] = useState('')
-  const [err, setErr] = useState('')
-  const submit = () => {
-    if (u === 'admin' && p === 'pmn117') { onLogin() }
-    else { setErr('Access Denied.') }
-  }
-  return (
-    <div id="home-view" className="view on" style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100%'}}>
-      <div style={{background:'var(--bg2)',border:'1px solid var(--rule)',padding:'3rem',boxShadow:'12px 12px 0 rgba(0,0,0,.3)',maxWidth:'360px',width:'100%'}}>
-        <h2 style={{fontFamily:'var(--f-head)',fontSize:'1.3rem',fontWeight:700,marginBottom:'2rem',color:'var(--ink)'}}>Admin Authorization</h2>
-        <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
-          <input
-            style={{width:'100%',background:'var(--bg)',border:'1px solid var(--rule)',padding:'1rem',fontFamily:'var(--f-body)',fontSize:'.9rem',outline:'none',color:'var(--ink)'}}
-            placeholder="Identifier" value={u} onChange={e => setU(e.target.value)}
-          />
-          <input
-            style={{width:'100%',background:'var(--bg)',border:'1px solid var(--rule)',padding:'1rem',fontFamily:'var(--f-body)',fontSize:'.9rem',outline:'none',color:'var(--ink)'}}
-            type="password" placeholder="Passphrase" value={p} onChange={e => setP(e.target.value)}
-          />
-          {err && <p style={{color:'var(--acc-text)',fontSize:'.8rem',fontStyle:'italic'}}>{err}</p>}
-          <button onClick={submit} className="cta-p cta-main" style={{width:'100%',padding:'1rem',marginTop:'.5rem'}}>Authorize &uarr;</button>
-          <button onClick={onBack} style={{width:'100%',background:'none',border:'none',color:'var(--mute)',fontFamily:'var(--f-mono)',fontSize:'.75rem',textTransform:'uppercase',letterSpacing:'.15em',cursor:'pointer',marginTop:'.5rem'}}>&larr; Cancel</button>
-        </div>
-      </div>
-    </div>
-  )
-}

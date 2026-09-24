@@ -1,8 +1,4 @@
-# PMN Framework - Public Repository .gitignore
-# This is the minimal, safe version committed to GitHub.
-#
-# For the full detailed ignore rules (including private workspace layout),
-# see: private/configs/.gitignore.public-full
+# PMN Framework - .gitignore
 
 # Microsoft Word temporary lock files
 ~$*.docx
@@ -41,26 +37,19 @@ __pycache__/
 *.pyd
 .pytest_cache/
 
-# Local build artifacts & backups
+# Local build artifacts, backups, logs
 *.bak
-index.html.bak
-legacy/index.offline.html
-legacy/app.js
-LENGKAPI_DIAGNOSIS_UNTUK_AI.md
 *.patch
-ROLLBACK_*
-
-# PMN Workspace specific
-pmn_system_log.txt
-config.enc
-private/
+*.log
 backup/
+legacy/
+
+# Local-only working files: never published
+private/
 *.enc
-
-# Database schema — keep local only, not for public repo
+*.docx
+*.doc
 supabase/
-
-# Internal product/planning docs
 PRD.md
 
 # Ignore versioned release assets to prevent Git history bloat
@@ -69,15 +58,12 @@ dist/PMN_Framework_v*.md
 public_static/PMN_Framework_v*.pdf
 public_static/PMN_Framework_v*.md
 
-# Internal-only backup snapshots (stale, not for public repo)
+# Stale snapshots
 src/txt/
 index.ui.2.html
-legacy/
 
-# Claude Code agent config (lokal saja)
+# Local tool state (editors, agents, hooks)
 .claude/
-
-# Mimosa security-hook state (internal, jangan pernah masuk repo publik)
 .mimosa/
 
 # Build outputs of scripts/build_ai_surfaces.py (static edition, plain-text

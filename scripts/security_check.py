@@ -12,9 +12,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Nama kunci DAN nilai yang mirip rahasia. Dulu cukup nama + ":"/"=", yang
+# menandai kata "token" dalam arti token CSS atau token kata ("token = [",
+# "{token: hex}") - empat alarm palsu permanen yang membuat peringatan
+# sungguhan mudah terlewat. Kini nilainya harus string >= 8 karakter atau
+# untaian >= 16 karakter tanpa kurung pemanggil fungsi.
 SECRET_ASSIGNMENT_RE = re.compile(
     r"\b(api[_-]?key|secret|token|password|passwd|bearer|authorization|"
-    r"bot_token|chat_id|service_role)\b\s*[:=]",
+    r"bot_token|chat_id|service_role)\b[\"']?\s*[:=]\s*"
+    r"(?:[\"'][^\"'\s]{8,}[\"']|[A-Za-z0-9_\-./+]{16,}(?![A-Za-z0-9_(]))",
     re.IGNORECASE,
 )
 
@@ -126,6 +132,18 @@ def check_tracked_cache() -> list[str]:
         if "__pycache__" in line or line.endswith(".pyc"):
             bad.append(line)
     return bad
+
+
+def check_tracked_office_files() -> list[str]:
+    """Berkas Office tidak boleh masuk repo, apa pun isinya.
+
+    2026-09-24: delapan DOCX naskah (v106-v116) pernah ter-commit dan
+    metadata "lastModifiedBy"-nya memuat nama asli penulis. Pemindaian
+    istilah di bawah butuh PMN_SENSITIVE_TERMS dari .env lokal; pemeriksaan
+    ini tidak, jadi tetap bekerja di CI dan di mesin mana pun."""
+    output = run_git(["ls-files"])
+    exts = (".docx", ".doc", ".docm", ".xlsx", ".xls", ".pptx", ".ppt", ".odt", ".ods", ".odp")
+    return [line for line in output.splitlines() if line.lower().endswith(exts)]
 
 
 def muat_env() -> int:
@@ -257,65 +275,24 @@ def check_json_validity() -> list[str]:
     return findings
 
 
-def is_private_public_layout() -> bool:
-    """Detect if we are running inside the recommended pmn-workspace layout.
-
-    Handles two common cases:
-    1. Running from the workspace public folder (direct)
-    2. Running from the git repo junction (D:\\pmn-framework)
-    """
-    try:
-        candidates = []
-
-        # Case 1: Script is inside a 'public' folder
-        if ROOT.name.lower() == "public":
-            candidates.append(ROOT.parent / "private")
-
-        # Case 2: Current ROOT might be the junction target (D:\pmn-framework)
-        # Check if there is a known private sibling at workspace level
-        # Try going up one level from ROOT
-        candidates.append(ROOT.parent / "private")
-
-        # Also check the classic D:\pmn-workspace location as fallback
-        candidates.append(Path(r"D:\pmn-workspace\private"))
-
-        for private_dir in candidates:
-            if private_dir.exists():
-                # Additional sanity: look for known private subfolders
-                if (private_dir / "backups").exists() or (private_dir / "docs").exists():
-                    return True
-        return False
-    except Exception:
-        return False
-
-
 def check_ignore_contract() -> list[str]:
     ignore_path = ROOT / ".gitignore"
     text = ignore_path.read_text(encoding="utf-8", errors="ignore") if ignore_path.exists() else ""
 
-    if is_private_public_layout():
-        # In the recommended private/public layout, many sensitive folders
-        # (raw_inputs, backups, LENGKAPI_DIAGNOSIS, etc.) live in private/.
-        # We only require the minimal set that should still be present in the
-        # public .gitignore.
-        required = [
-            ".env",
-            "__pycache__/",
-            "*.pyc",
-            "*.bak",           # Still good to ignore in public
-            "index.html.bak",
-        ]
-    else:
-        # Legacy single-folder mode: keep the original strict expectations
-        required = [
-            ".env",
-            "docs/raw_inputs/",
-            "docs/clean_outputs/",
-            "backups/",
-            "LENGKAPI_DIAGNOSIS_UNTUK_AI.md",
-            "__pycache__/",
-            "*.pyc",
-        ]
+    # Satu daftar untuk kedua tata letak (2026-09-24). Daftar lama menuntut
+    # nama berkas privat secara harfiah (mis. LENGKAPI_DIAGNOSIS_UNTUK_AI.md),
+    # sehingga .gitignore publik terpaksa memuat nama-nama itu. Aturan umum
+    # di bawah mencakup semuanya: *.bak juga menangkap index.html.bak, dan
+    # backup/, private/ menangkap isi folder kerja lokal.
+    required = [
+        ".env",
+        "__pycache__/",
+        "*.pyc",
+        "*.bak",
+        "backup/",
+        "private/",
+        "*.docx",
+    ]
 
     return [item for item in required if item not in text]
 
@@ -326,6 +303,7 @@ def main() -> int:
     checks = {
         "Possible secrets/config references": check_secret_patterns(),
         "Tracked Python cache files": check_tracked_cache(),
+        "Tracked Office documents (metadata risk)": check_tracked_office_files(),
         "Public metadata leaks (Critical)": crit_metadata,
         "Invalid JSON files": check_json_validity(),
         "Missing .gitignore rules": check_ignore_contract(),

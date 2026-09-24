@@ -21,7 +21,7 @@ python modularizer.py compile
 echo.
 echo ============================================================
 echo   All files synchronized and index.html compiled!
-echo   Double-click index.html or run buka_web.bat to preview.
+echo   Run "npm run dev" to preview in the browser.
 echo ============================================================
 echo.
 pause
