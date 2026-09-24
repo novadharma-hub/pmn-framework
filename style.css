@@ -3390,3 +3390,20 @@ body.focus-mode #hdr-r #focus-btn {
   .gl-seg button { min-height: 44px; }
   .reader-meta button { min-height: 40px; min-width: 44px; }
 }
+
+/* Prev/next seksi (ReaderView), dipindah tepat di bawah kotak teks
+   2026-09-24. Jarak ditulis eksplisit: reset universal berkas ini
+   mematikan px-4/py-3/mt-14/pt-8, dan tanpa ini teks menempel ke tepi
+   kotak (terlihat oleh penulis di layar desktop). */
+.sec-nav {
+  gap: 12px;
+  margin-top: 28px;
+}
+.sec-nav-btn {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  padding: 14px 18px;
+  background: transparent;
+  cursor: pointer;
+}
