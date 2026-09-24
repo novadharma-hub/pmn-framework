@@ -9,6 +9,9 @@ interface TheoreticalAnatomySectionProps {
 
 type AnatomyMode = 'layers' | 'formula' | 'capture' | 'parts'
 
+/** "Part VI" untuk angka Romawi; "Preface", "Coda" dsb. apa adanya. */
+const labelPart = (part: string) => (/^[IVXLC]+$/.test(part) ? 'Part ' + part : part)
+
 export default function TheoreticalAnatomySection({ data, onJump, onStartReading, version = '120' }: TheoreticalAnatomySectionProps) {
   const [activeMode, setActiveMode] = useState<AnatomyMode>('layers')
   const [selectedLayer, setSelectedLayer] = useState<number>(0)
@@ -71,8 +74,8 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
       keySections: [
         { id: '2.1', title: 'Reality as Primary' },
         { id: '1.9', title: 'Epistemic Authority' },
-        { id: '2.4', title: 'Non-Reductive Layered Architecture' },
-        { id: '3.4', title: 'The Biological Floor of Suffering' },
+        { id: '2.4', title: 'Social Ontology' },
+        { id: '3.4', title: 'The Minimal Anchor' },
       ],
     },
     {
@@ -84,20 +87,20 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
       principle: 'Protective institutions systematically degenerate into predatory extraction mechanisms due to information asymmetries and custodian entrenchment.',
       mechanics: [
         'Structural forces operate above and beyond the subjective moral intent of individual officeholders.',
-        'Multiplicative surplus transfer equation: T = S · D · P · G.',
+        'Transformation pressure is multiplicative: T = S × D × P × G (§15.2).',
         'Narrative inertia and ideological lag justifying constituent compliance.',
       ],
       keySections: [
-        { id: '6.2', title: 'Resource & Capacity Asymmetry' },
+        { id: '6.2', title: 'Power as Structural Position' },
         { id: '7.3', title: 'The Custodian Problem' },
-        { id: '7.3c-i', title: 'The Capture Sequence' },
-        { id: '11.0', title: 'The Economic Diagnostics' },
+        { id: '7.3c-i', title: 'A General Theory of Capture' },
+        { id: '11.0', title: 'Two Levels of Economic Analysis' },
       ],
     },
     {
       id: 3,
       title: 'Genuine Becoming & Subjective Agency',
-      scope: 'Parts V, XVII through XXI',
+      scope: 'Parts V and XVII, and the Coda',
       anchorSec: '5.1',
       badge: 'Horizon / Human Potential',
       principle: 'The expansion of developmental capacity (genuine becoming) is the highest evaluative vector, contingent upon securing the biological floor beneath it.',
@@ -108,7 +111,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
       ],
       keySections: [
         { id: '4.5', title: 'The Anti-Foreclosure Criterion' },
-        { id: '17.1', title: 'Ethics in Historical Situations' },
+        { id: '17.1', title: 'The Prohibition Case' },
         { id: '10.10c', title: 'The Extended Agent Typology' },
         { id: '10.1', title: 'Why Systems Change' },
       ],
@@ -242,9 +245,9 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
         <div style={{display:'flex', flexWrap:'wrap', gap:'.5rem', marginBottom:'2rem'}}>
           {[
             { id: 'layers', label: '1. 3-Layer Analytical Stack' },
-            { id: 'formula', label: '2. Power Transfer Formula (T = S · D · P · G)' },
+            { id: 'formula', label: '2. Transformation Pressure (T = S × D × P × G)' },
             { id: 'capture', label: '3. The Capture Sequence (§7.3c-i)' },
-            { id: 'parts', label: '4. Module Directory (Parts I–XXI)' },
+            { id: 'parts', label: '4. Part Directory (Preface to Bibliography)' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -594,12 +597,12 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
           </div>
         )}
 
-        {/* PANEL 4: PART DIRECTORY (Part I - XXI) */}
+        {/* PANEL 4: PART DIRECTORY (Preface, Parts I-XVII, Coda, Debts, Bibliography) */}
         {activeMode === 'parts' && (
           <div className="anatomy-terminal" style={{display:'grid', gridTemplateColumns:'minmax(220px, 280px) 1fr', border:'1px solid var(--rule)', background:'var(--bg)', minHeight:'520px', boxShadow:'12px 12px 0 rgba(0,0,0,0.05)'}}>
             <div style={{borderRight:'1px solid var(--rule)', background:'var(--bg2)', overflowY:'auto', maxHeight:'580px'}}>
               <div style={{background:'var(--acc)', color:'#fff', fontFamily:'var(--f-mono)', fontSize:'.7rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'.12em', padding:'.8rem 1rem'}}>
-                Part Index (I &ndash; XXI)
+                Part Index
               </div>
               {anatParts.map((p: any, i: number) => (
                 <button
@@ -620,7 +623,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                     fontWeight: selectedPartIndex === i ? 700 : 400
                   }}
                 >
-                  Part {p.part}
+                  {labelPart(p.part)}
                 </button>
               ))}
             </div>
@@ -630,7 +633,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                 <div>
                   <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'.8rem'}}>
                     <span style={{fontFamily:'var(--f-mono)', fontSize:'.72rem', color:'var(--acc-text)', fontWeight:700, textTransform:'uppercase'}}>
-                      Part {currentPart.part}
+                      {labelPart(currentPart.part)}
                     </span>
                     <span style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', color:'var(--mute)'}}>
                       {currentPart.subs?.length || 0} Analytical Modules
@@ -685,7 +688,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                       fontWeight:700
                     }}
                   >
-                    Open Part {currentPart.part} in Reader &rarr;
+                    Open {labelPart(currentPart.part)} in Reader &rarr;
                   </button>
                 </div>
               )}
