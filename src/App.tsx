@@ -9,7 +9,6 @@ import GuideView from './components/GuideView'
 import AITerminal from './components/AITerminal'
 import ReadingPathsSection from './components/ReadingPathsSection'
 import TheoreticalAnatomySection from './components/TheoreticalAnatomySection'
-import AxiomStructureSection from './components/AxiomStructureSection'
 import MobileCollapse from './components/MobileCollapse'
 import RulesPage, { PolicyTab } from './components/RulesPage'
 import { hashToRoute, routeToHash, findSection, sectionIdAt, bolehMasukUrl, GuideTab } from './routing'
@@ -609,18 +608,18 @@ export default function App() {
       {page === 'home' && showTip && !pastCover && (
         <div className="hero-orientation-tip animate-in fade-in zoom-in duration-300">
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.3rem'}}>
-            <div style={{fontFamily:'var(--f-mono)',fontSize:'.62rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc-text)'}}>&#9679; ORIENTATION TIP</div>
+            <div style={{fontFamily:'var(--f-mono)',fontSize:'.75rem',letterSpacing:'.2em',textTransform:'uppercase',color:'var(--acc-text)'}}>&#9679; ORIENTATION TIP</div>
             <button onClick={() => { try{localStorage.setItem('pmn-tip-dismissed','1')}catch{}; setShowTip(false) }} style={{background:'none',border:'none',color:'var(--mute)',cursor:'pointer',fontSize:'1.05rem',lineHeight:1}} title="Close tip">×</button>
           </div>
           <div style={{fontFamily:'var(--f-head)',fontSize:'.95rem',color:'var(--ink)',marginBottom:'.3rem'}}>Welcome to PMN Framework</div>
-          <p style={{fontFamily:'var(--f-body)',fontSize:'.78rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
+          <p style={{fontFamily:'var(--f-body)',fontSize:'.85rem',lineHeight:1.5,color:'var(--mute)',marginBottom:'.65rem'}}>
             {hasFinePointer && <>Press <kbd style={{fontFamily:'var(--f-mono)',border:'1px solid var(--rule)',padding:'.1rem .35rem'}}>Alt+K</kbd> anytime for shortcuts, or visit </>}
             {!hasFinePointer && <>Visit </>}
             the <button onClick={openGuide} style={{color:'var(--acc-text)', background:'none', border:'none', padding:0, font:'inherit', cursor:'pointer', textDecoration:'underline'}}>AI Agent Guide</button>.
           </p>
           <div style={{display:'flex',gap:'.5rem'}}>
-            <button onClick={() => setPage('contents')} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
-            <button onClick={openGuide} style={{border:'1px solid var(--rule)',fontFamily:'var(--f-mono)',fontSize:'.65rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',color:'var(--ink)',background:'none',cursor:'pointer'}}>OPEN AI GUIDE</button>
+            <button onClick={() => setPage('contents')} style={{background:'var(--acc)',color:'#fff',border:'none',fontFamily:'var(--f-mono)',fontSize:'.75rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',cursor:'pointer'}}>START READING</button>
+            <button onClick={openGuide} style={{border:'1px solid var(--rule)',fontFamily:'var(--f-mono)',fontSize:'.75rem',letterSpacing:'.12em',textTransform:'uppercase',padding:'.32rem .65rem',color:'var(--ink)',background:'none',cursor:'pointer'}}>OPEN AI GUIDE</button>
           </div>
         </div>
       )}
@@ -635,7 +634,6 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
   const readCount = Object.keys(readMap).length
   const readPct = totalSections > 0 ? Math.round((readCount / totalSections) * 100) : 0
 
-  const [deskNotes, setDeskNotes] = useState(() => { try { return localStorage.getItem('pmn-desk-notes') || '' } catch { return '' } })
 
   // Restored cover scroll parallax logic in React
   useEffect(() => {
@@ -723,16 +721,16 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
             <div className="hero-ctas">
               <div className="cta-row-main">
                 <button id="cta-begin" className="cta-p cta-main" onClick={onStartReading}>
-                  Start Reading <span style={{opacity:.82, fontSize:'.68rem'}}>[Alt+C]</span>
+                  Start Reading <span style={{opacity:.82, fontSize:'.75rem'}}>[Alt+C]</span>
                 </button>
                 {resumeSec && (
                   <button id="cta-resume" className="cta-p secondary" onClick={onResumeReading}>
-                    Resume &rarr; <span style={{opacity:.82, fontSize:'.68rem'}}>[Alt+R]</span>
+                    Resume &rarr; <span style={{opacity:.82, fontSize:'.75rem'}}>[Alt+R]</span>
                   </button>
                 )}
               </div>
               <div className="cta-row-s">
-                <button id="cta-gl" className="cta-s" onClick={onOpenGlossary}>Key Terms <span style={{opacity:.76, fontSize:'.68rem'}}>[Alt+?]</span></button>
+                <button id="cta-gl" className="cta-s" onClick={onOpenGlossary}>Key Terms <span style={{opacity:.76, fontSize:'.75rem'}}>[Alt+?]</span></button>
                 <a href="https://github.com/novadharma-hub/pmn-framework/releases/latest" className="cta-s" target="_blank" rel="noopener">Download Manuscript &darr;</a>
                 <button className="cta-s" onClick={onOpenGuide}>AI Guide & Endpoints [v{version}] &rarr;</button>
               </div>
@@ -763,7 +761,7 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
         </div>
       </div>
 
-      {/* READING PATHS — dilipat HANYA di ponsel; di atas 640px
+      {/* READING PATHS — dilipat di ponsel dan tablet; di atas 960px
           MobileCollapse mengembalikan anaknya apa adanya. */}
       <MobileCollapse
         judul="Reading Paths"
@@ -778,28 +776,16 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
         />
       </MobileCollapse>
 
-      {/* THEORETICAL ANATOMY */}
+      {/* HOW THE FRAMEWORK IS BUILT: Theoretical Anatomy + Axiom Structure (tab) */}
       <MobileCollapse
-        judul="Theoretical Anatomy &amp; Causal Engine"
-        ringkas="Layers, the formula architecture, and the five-stage capture sequence"
+        judul="How the Framework Is Built"
+        ringkas="Layers, the primary formula, the capture sequence, the twelve axioms, and every Part"
       >
         <TheoreticalAnatomySection
           data={data}
           onJump={onJump}
           onStartReading={onStartReading}
           version={version}
-        />
-      </MobileCollapse>
-
-      {/* AXIOM STRUCTURE */}
-      <MobileCollapse
-        judul="Axiom Structure"
-        ringkas="Twelve commitments across three tiers, as §14.3 states them"
-      >
-        <AxiomStructureSection
-          data={data}
-          onJump={onJump}
-          onStartReading={onStartReading}
         />
       </MobileCollapse>
 
@@ -810,80 +796,19 @@ function HomeView({ data, readMap, resumeSec, onStartReading, onResumeReading, o
         </div>
       </div>
 
-      {/* READER DESK */}
-      <section className="home-bottom">
-        <div className="home-bottom-inner">
-          <div className="home-bottom-hdr">
-            <div>
-              <span className="home-bottom-kicker">Reader Desk</span>
-              <h2 className="home-bottom-title">Keep notes, prompts, and feedback near the manuscript.</h2>
-            </div>
-            <p className="home-bottom-desc">Use this space like a working margin: save a line of inquiry, then jump back into the reader without losing your place.</p>
-          </div>
-          <div className="home-bottom-grid">
-            <article className="home-bottom-card notes-card">
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'.6rem'}}>
-                <span style={{fontFamily:'var(--f-mono)',fontSize:'.6rem',letterSpacing:'.15em',textTransform:'uppercase',color:'var(--mute)'}}>Quick Notes</span>
-                <div style={{display:'flex',gap:'.4rem'}}>
-                  <button className="annot-btn" onClick={() => { try { navigator.clipboard.writeText(deskNotes) } catch { window.prompt('Copy:', deskNotes) } }}>Copy</button>
-                  <button className="annot-btn" onClick={() => { setDeskNotes(''); try { localStorage.removeItem('pmn-desk-notes') } catch {} }}>Clear</button>
-                </div>
-              </div>
-              <textarea className="home-bottom-notes" placeholder="Your notes…" value={deskNotes} onChange={e => { setDeskNotes(e.target.value); try { localStorage.setItem('pmn-desk-notes', e.target.value) } catch {} }} />
-            </article>
-            <article className="home-bottom-card compact-card">
-              <h3>Useful next moves</h3>
-              <p>Keep one foot in the manuscript while you move between orientation, guidance, and platform governance.</p>
-              <div className="home-bottom-actions">
-                <button className="home-bottom-link" onClick={onStartReading}>Open orientation</button>
-                <button className="home-bottom-link" onClick={onOpenGuide}>Open AI Guide</button>
-                <button className="home-bottom-link" onClick={() => onOpenPolicy?.('privacy')}>Transparency &amp; Policy</button>
-              </div>
-            </article>
-          </div>
-
-          {/* Release Snapshot — now SEPARATE section (not jammed/terhimpit in Reader Desk grid). Matches Image 1 look + live stats + open actions */}
-          <div className="home-bottom-card release-card" style={{marginTop: '2rem', padding: '2rem'}}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'2rem',flexWrap:'wrap'}}>
-              <div style={{flex: '1', minWidth: '300px'}}>
-                <h3 style={{fontSize:'1.4rem', marginBottom:'.5rem'}}>Release Snapshot</h3>
-                <p style={{fontSize:'.9rem',color:'var(--ink2)',maxWidth:'400px'}}>Live manuscript state, version tracking, and quick access to core foundations.</p>
-              </div>
-              <div style={{display:'flex', gap:'2rem', flexWrap:'wrap', flex: '2', justifyContent: 'flex-end'}}>
-                <div style={{textAlign: 'center'}}>
-                  <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Parts</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc-text)'}}>{data.parts.length}</strong>
-                </div>
-                <div style={{textAlign: 'center'}}>
-                  <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Sections</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc-text)'}}>{totalSections}</strong>
-                </div>
-                <div style={{textAlign: 'center'}}>
-                  <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Read</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc-text)'}}>{readPct}%</strong>
-                </div>
-                <div style={{textAlign: 'center'}}>
-                  <span style={{display:'block',fontSize:'.7rem',color:'var(--mute)',textTransform:'uppercase',letterSpacing:'.1em'}}>Release</span>
-                  <strong style={{fontSize: '1.8rem', color: 'var(--acc-text)'}}>V{version}</strong>
-                </div>
-              </div>
-            </div>
-            <div className="home-bottom-actions" style={{marginTop:'1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--rule)', display: 'flex', gap: '1rem'}}>
-              <button className="home-bottom-link" onClick={onStartReading}>Open Full Contents Map &rarr;</button>
-              <button className="home-bottom-link" onClick={() => { onJump(1, 0) }}>Jump to Foundations &rarr;</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Reader Desk (Quick Notes + "Useful next moves") dan Release Snapshot
+          dihapus 2026-09-24: angka rilis sudah ada di sampul, tautannya ada di
+          sampul dan footer, dan catatan bebas (pmn-desk-notes) kini menjadi
+          "General notes" di My Notes - satu tempat mencatat, data lama tetap. */}
 
       {/* HOME FOOTER */}
       <div className="home-footer-bar">
         <div style={{display:'flex',flexDirection:'column',gap:'.35rem'}}>
           <span>[C] 2026 Nova Dharma // PMN Collective</span>
-          <span style={{opacity:.55,fontSize:'.68rem',fontWeight:400,textTransform:'none',letterSpacing:'.02em'}}>Zero cookies &bull; Zero trackers &bull; 100% Client-side sovereignty</span>
+          <span style={{opacity:.55,fontSize:'.75rem',fontWeight:400,textTransform:'none',letterSpacing:'.02em'}}>Zero cookies &bull; Zero trackers &bull; 100% Client-side sovereignty</span>
         </div>
 
-        <div style={{display:'flex',gap:'.85rem',alignItems:'center',flexWrap:'wrap',fontSize:'.72rem'}}>
+        <div style={{display:'flex',gap:'.85rem',alignItems:'center',flexWrap:'wrap',fontSize:'.75rem'}}>
           <button onClick={() => onOpenPolicy?.('privacy')} style={{background:'none',border:'none',color:'var(--ink2)',cursor:'pointer',padding:0,font:'inherit',textTransform:'uppercase',letterSpacing:'.06em'}} className="hover:text-[var(--acc-text)] transition-colors">Privacy &amp; Data</button>
           <span style={{color:'var(--rule)'}}>•</span>
           <button onClick={() => onOpenPolicy?.('terms')} style={{background:'none',border:'none',color:'var(--ink2)',cursor:'pointer',padding:0,font:'inherit',textTransform:'uppercase',letterSpacing:'.06em'}} className="hover:text-[var(--acc-text)] transition-colors">Terms &amp; Citation</button>
@@ -930,7 +855,7 @@ function AdminLogin({ onLogin, onBack }: any) {
           />
           {err && <p style={{color:'var(--acc-text)',fontSize:'.8rem',fontStyle:'italic'}}>{err}</p>}
           <button onClick={submit} className="cta-p cta-main" style={{width:'100%',padding:'1rem',marginTop:'.5rem'}}>Authorize &uarr;</button>
-          <button onClick={onBack} style={{width:'100%',background:'none',border:'none',color:'var(--mute)',fontFamily:'var(--f-mono)',fontSize:'.72rem',textTransform:'uppercase',letterSpacing:'.15em',cursor:'pointer',marginTop:'.5rem'}}>&larr; Cancel</button>
+          <button onClick={onBack} style={{width:'100%',background:'none',border:'none',color:'var(--mute)',fontFamily:'var(--f-mono)',fontSize:'.75rem',textTransform:'uppercase',letterSpacing:'.15em',cursor:'pointer',marginTop:'.5rem'}}>&larr; Cancel</button>
         </div>
       </div>
     </div>

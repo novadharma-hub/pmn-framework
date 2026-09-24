@@ -18,6 +18,21 @@ interface NoteEntry {
 export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModalProps) {
   const [notes, setNotes] = useState<NoteEntry[]>([])
   const [status, setStatus] = useState('')
+  // Catatan bebas yang tak terikat seksi. Kuncinya tetap 'pmn-desk-notes' -
+  // sampai 2026-09-24 ini kotak "Quick Notes" di beranda; dipindah ke sini
+  // supaya hanya ada satu tempat mencatat, tanpa memindahkan data pembaca.
+  const [general, setGeneral] = useState('')
+  useEffect(() => {
+    if (!isOpen) return
+    try { setGeneral(localStorage.getItem('pmn-desk-notes') || '') } catch { /* storage diblokir */ }
+  }, [isOpen])
+  const saveGeneral = (v: string) => {
+    setGeneral(v)
+    try {
+      if (v.trim()) localStorage.setItem('pmn-desk-notes', v)
+      else localStorage.removeItem('pmn-desk-notes')
+    } catch { /* storage diblokir */ }
+  }
 
   // Load notes on open or local storage changes
   useEffect(() => {
@@ -63,7 +78,9 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
   if (!isOpen) return null
 
   const handleCopyAll = () => {
-    const text = notes.map(n => `[Section ${n.id} — ${n.title}]\n${n.note}`).join('\n\n---\n\n')
+    const parts = notes.map(n => `[Section ${n.id} — ${n.title}]\n${n.note}`)
+    if (general.trim()) parts.unshift(`[General notes]\n${general.trim()}`)
+    const text = parts.join('\n\n---\n\n')
     navigator.clipboard.writeText(text).then(() => {
       setStatus('All notes copied.')
       window.setTimeout(() => setStatus(''), 1800)
@@ -146,7 +163,7 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
             📝 My Notes
           </span>
           <div style={{ display: 'flex', gap: '.6rem', alignItems: 'center' }}>
-            {notes.length > 0 && (
+            {(notes.length > 0 || general.trim() !== '') && (
               <button
                 onClick={handleCopyAll}
                 style={{
@@ -192,6 +209,27 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
             gap: '1.5rem',
           }}
         >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
+            <label
+              htmlFor="notes-general"
+              style={{ fontFamily: 'var(--f-mono)', fontSize: '.75rem', letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--acc-text)' }}
+            >
+              General notes
+            </label>
+            <textarea
+              id="notes-general"
+              value={general}
+              onChange={e => saveGeneral(e.target.value)}
+              placeholder="Anything not tied to one section. Saved in this browser only."
+              rows={4}
+              style={{
+                width: '100%', boxSizing: 'border-box', resize: 'vertical',
+                background: 'var(--bg)', color: 'var(--ink)', border: '1px solid var(--rule)',
+                padding: '.7rem .85rem', fontFamily: 'var(--f-body)', fontSize: '.95rem', lineHeight: 1.6,
+              }}
+            />
+          </div>
+
           {notes.length === 0 ? (
             <div
               style={{
@@ -202,7 +240,7 @@ export default function NotesModal({ isOpen, onClose, data, onJump }: NotesModal
                 padding: '2.5rem 0',
               }}
             >
-              No saved notes yet. Read the manuscript and save notes from the bottom of any reader section.
+              No section notes yet. Save one from the bottom of any section in the reader.
             </div>
           ) : (
             notes.map(n => (
