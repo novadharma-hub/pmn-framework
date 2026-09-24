@@ -15,6 +15,7 @@
  */
 import React, { useState, useEffect } from 'react'
 import type { RulesTab } from '../routing'
+import { PageHeader, PageFooter } from './PageHeader'
 
 export type PolicyTab = RulesTab
 
@@ -130,73 +131,12 @@ export default function RulesPage({
           background: 'var(--bg)',
         }}
       >
-      <main
-        aria-label="Rules & Data"
-        style={{
-          width: '100%',
-          maxWidth: '860px',
-          margin: '0 auto',
-          display: 'flex',
-          flexDirection: 'column',
-          background: 'var(--bg)',
-          borderLeft: '1px solid var(--rule)',
-          borderRight: '1px solid var(--rule)',
-          minHeight: '100%',
-        }}
-      >
-        {/* Header Bar */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '1rem',
-            padding: '.9rem 1.4rem',
-            borderBottom: '1px solid var(--rule)',
-            background: 'var(--bg2)',
-          }}
-        >
-          <div>
-            <span
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: '.62rem',
-                letterSpacing: '.2em',
-                textTransform: 'uppercase',
-                color: 'var(--acc-text)',
-                fontWeight: 700,
-                display: 'block',
-              }}
-            >
-              Platform Governance &amp; Web Standards
-            </span>
-            <h2
-              style={{
-                fontFamily: 'var(--f-head)',
-                fontSize: 'clamp(1.2rem, 3vw + .5rem, 1.6rem)',
-                color: 'var(--ink)',
-                margin: '.2rem 0 0',
-                fontWeight: 700,
-              }}
-            >
-              PMN Transparency &amp; Policy Center
-            </h2>
-          </div>
-          <button
-            onClick={onBack}
-            style={{
-              background: 'none',
-              border: '1px solid var(--rule)',
-              color: 'var(--mute)',
-              cursor: 'pointer',
-              fontFamily: 'var(--f-mono)',
-              fontSize: '.72rem',
-              padding: '.3rem .6rem',
-              flexShrink: 0,
-            }}
-          >
-            &larr; Back
-          </button>
+      <PageHeader title="Rules & Data" onBack={onBack} backLabel="Back" />
+      <main aria-label="Rules & Data" className="pg-col pg-col-text">
+        <div className="pg-intro">
+          <div className="pg-eyebrow">Platform governance &amp; web standards</div>
+          <h1 className="pg-h1">Transparency &amp; Policy Center</h1>
+          <p className="pg-lede">How this site treats your data, how to cite PMN, the limits of its claims, and the rules for AI use.</p>
         </div>
 
         {/* Tab Navigation */}
@@ -625,39 +565,8 @@ export default function RulesPage({
           )}
         </div>
 
-        {/* Footer Bar */}
-        <div
-          style={{
-            padding: '.75rem 1.4rem',
-            borderTop: '1px solid var(--rule)',
-            background: 'var(--bg2)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontSize: '.72rem',
-            fontFamily: 'var(--f-mono)',
-            color: 'var(--mute)',
-          }}
-        >
-          <span>Progressive Materialist Naturalism &mdash; Release v{version}</span>
-          <button
-            onClick={onBack}
-            style={{
-              background: 'var(--acc)',
-              color: '#fff',
-              border: 'none',
-              padding: '.35rem .8rem',
-              fontFamily: 'var(--f-mono)',
-              fontSize: '.68rem',
-              letterSpacing: '.1em',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-            }}
-          >
-            &larr; Back
-          </button>
-        </div>
       </main>
+      <PageFooter version={version} />
       </div>
     </>
   )
