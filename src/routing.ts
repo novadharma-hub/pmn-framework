@@ -18,6 +18,8 @@ export type PmnPage = 'home' | 'contents' | 'reader' | 'guide' | 'rules'
 export type ContentsSub = 'map' | 'glossary' | 'search'
 /** Tab halaman Rules & Data. */
 export type RulesTab = 'privacy' | 'terms' | 'disclaimer' | 'ai'
+/** Tab halaman AI Guide. */
+export type GuideTab = 'start' | 'prompts' | 'questions' | 'dev' | 'endpoints'
 
 export interface RouteState {
   page: PmnPage
@@ -26,6 +28,8 @@ export interface RouteState {
   sectionId: string | null
   /** Tab untuk halaman rules; diabaikan halaman lain. */
   rulesTab?: RulesTab
+  /** Tab untuk halaman guide; diabaikan halaman lain. */
+  guideTab?: GuideTab
 }
 
 /**
@@ -38,6 +42,18 @@ const SEGMEN_TAB: Record<RulesTab, string> = {
   terms: 'terms',
   disclaimer: 'limits',
   ai: 'ai',
+}
+
+/**
+ * Segmen URL tiap tab AI Guide. 'start' adalah tab bawaan, jadi URL-nya
+ * cukup #/guide - tautan lama ke #/guide tetap mendarat di tempat yang sama.
+ */
+const SEGMEN_GUIDE: Record<GuideTab, string> = {
+  start: '',
+  prompts: 'prompts',
+  questions: 'questions',
+  dev: 'dev',
+  endpoints: 'endpoints',
 }
 
 /**
@@ -100,8 +116,10 @@ export function routeToHash(state: RouteState): string {
   switch (state.page) {
     case 'home':
       return ''
-    case 'guide':
-      return '#/guide'
+    case 'guide': {
+      const seg = SEGMEN_GUIDE[state.guideTab ?? 'start']
+      return seg ? '#/guide/' + seg : '#/guide'
+    }
     case 'rules': {
       const seg = SEGMEN_TAB[state.rulesTab ?? 'privacy']
       return seg ? '#/rules/' + seg : '#/rules'
@@ -128,7 +146,14 @@ export function hashToRoute(hash: string, parts?: PartLike[] | null): RouteState
   const bersih = (hash || '').replace(/^#\/?/, '').replace(/\/+$/, '')
 
   if (bersih === '') return { page: 'home', contentsSub: 'map', sectionId: null }
-  if (bersih === 'guide') return { page: 'guide', contentsSub: 'map', sectionId: null }
+  if (bersih === 'guide' || bersih.startsWith('guide/')) {
+    const seg = bersih.slice('guide/'.length)
+    const tab = bersih === 'guide'
+      ? 'start'
+      : (Object.keys(SEGMEN_GUIDE) as GuideTab[]).find(t => SEGMEN_GUIDE[t] === seg)
+    if (!tab) return null
+    return { page: 'guide', contentsSub: 'map', sectionId: null, guideTab: tab }
+  }
   if (bersih === 'contents') return { page: 'contents', contentsSub: 'map', sectionId: null }
   if (bersih === 'glossary') return { page: 'contents', contentsSub: 'glossary', sectionId: null }
   if (bersih === 'search') return { page: 'contents', contentsSub: 'search', sectionId: null }
