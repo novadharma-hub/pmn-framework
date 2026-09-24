@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import AxiomStructureSection from './AxiomStructureSection'
 
 interface TheoreticalAnatomySectionProps {
   data: any
@@ -7,7 +8,7 @@ interface TheoreticalAnatomySectionProps {
   version?: string
 }
 
-type AnatomyMode = 'layers' | 'formula' | 'capture' | 'parts'
+type AnatomyMode = 'layers' | 'formula' | 'capture' | 'axioms' | 'parts'
 
 /** "Part VI" untuk angka Romawi; "Preface", "Coda" dsb. apa adanya. */
 const labelPart = (part: string) => (/^[IVXLC]+$/.test(part) ? 'Part ' + part : part)
@@ -229,15 +230,12 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
         {/* HEADER */}
         <div className="anatomy-section-hdr" style={{display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:'1.5rem', marginBottom:'2rem', borderBottom:'1px solid var(--rule)', paddingBottom:'1.5rem'}}>
           <div>
-            <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.18em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
-              ● PMN STRUCTURAL MECHANICS
+            <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.18em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
+              ● Theoretical anatomy &amp; axiom structure
             </div>
             <h2 style={{fontFamily:'var(--f-head)', fontSize:'clamp(1.8rem, 3.5vw, 2.4rem)', color:'var(--ink)', margin:0}}>
-              Theoretical Anatomy &amp; Causal Engine
+              How the Framework Is Built
             </h2>
-          </div>
-          <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', color:'var(--mute)', background:'var(--bg)', border:'1px solid var(--rule)', padding:'.4rem .75rem', textTransform:'uppercase', letterSpacing:'.1em'}}>
-            Engine Status: Verified v{version} Canonical
           </div>
         </div>
 
@@ -247,14 +245,15 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
             { id: 'layers', label: '1. 3-Layer Analytical Stack' },
             { id: 'formula', label: '2. Transformation Pressure (T = S × D × P × G)' },
             { id: 'capture', label: '3. The Capture Sequence (§7.3c-i)' },
-            { id: 'parts', label: '4. Part Directory (Preface to Bibliography)' },
+            { id: 'axioms', label: '4. Axiom Structure (§14.3)' },
+            { id: 'parts', label: '5. Part Directory (Preface to Bibliography)' },
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveMode(tab.id as AnatomyMode)}
               style={{
                 fontFamily:'var(--f-mono)',
-                fontSize:'.72rem',
+                fontSize:'.75rem',
                 letterSpacing:'.08em',
                 textTransform:'uppercase',
                 padding:'.6rem 1rem',
@@ -289,17 +288,17 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                   }}
                 >
                   <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'.6rem'}}>
-                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', fontWeight:700, color:'var(--acc-text)'}}>
+                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', fontWeight:700, color:'var(--acc-text)'}}>
                       LAYER {layer.id}
                     </span>
-                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.62rem', color:'var(--mute)', background:'var(--bg)', border:'1px solid var(--rule)', padding:'.15rem .4rem'}}>
+                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)', background:'var(--bg)', border:'1px solid var(--rule)', padding:'.15rem .4rem'}}>
                       {layer.badge}
                     </span>
                   </div>
                   <h4 style={{fontFamily:'var(--f-head)', fontSize:'1.12rem', color:'var(--ink)', margin:'0 0 .4rem 0'}}>
                     {layer.title}
                   </h4>
-                  <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', color:'var(--mute)', textTransform:'uppercase'}}>
+                  <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)', textTransform:'uppercase'}}>
                     Scope: {layer.scope}
                   </div>
                 </div>
@@ -311,7 +310,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
               <div style={{borderTop:'1px solid var(--rule)', paddingTop:'1.8rem'}}>
                 <div style={{display:'flex', justifyContent:'space-between', alignItems:'baseline', flexWrap:'wrap', gap:'1rem', marginBottom:'1rem'}}>
                   <div>
-                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.14em', textTransform:'uppercase', color:'var(--acc-text)'}}>
+                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.14em', textTransform:'uppercase', color:'var(--acc-text)'}}>
                       OPERATIONAL PRINCIPLE &mdash; LAYER {LAYERS[selectedLayer].id}
                     </span>
                     <h3 style={{fontFamily:'var(--f-head)', fontSize:'1.4rem', color:'var(--ink)', margin:'.3rem 0 0 0'}}>
@@ -325,7 +324,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                       color:'#fff',
                       border:'none',
                       fontFamily:'var(--f-mono)',
-                      fontSize:'.72rem',
+                      fontSize:'.75rem',
                       letterSpacing:'.1em',
                       textTransform:'uppercase',
                       padding:'.55rem .95rem',
@@ -343,7 +342,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
 
                 <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:'1.5rem', marginBottom:'1.5rem'}}>
                   <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'1.2rem'}}>
-                    <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.12em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.8rem'}}>
+                    <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.12em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.8rem'}}>
                       Primary Causal Mechanisms:
                     </div>
                     <ul style={{margin:0, paddingLeft:'1.2rem', fontFamily:'var(--f-body)', fontSize:'.9rem', color:'var(--ink2)', lineHeight:1.65}}>
@@ -354,7 +353,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                   </div>
 
                   <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'1.2rem'}}>
-                    <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.12em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.8rem'}}>
+                    <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.12em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.8rem'}}>
                       Key Analytical Sections:
                     </div>
                     <div style={{display:'flex', flexDirection:'column', gap:'.4rem'}}>
@@ -374,7 +373,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                             color:'var(--ink)'
                           }}
                         >
-                          <span style={{fontFamily:'var(--f-mono)', fontSize:'.72rem', color:'var(--acc-text)', fontWeight:700}}>§{sec.id}</span>
+                          <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--acc-text)', fontWeight:700}}>§{sec.id}</span>
                           <span style={{fontFamily:'var(--f-head)', fontSize:'.88rem', color:'var(--ink2)'}}>{sec.title}</span>
                           <span style={{fontFamily:'var(--f-mono)', fontSize:'.7rem', color:'var(--mute)'}}>&rarr;</span>
                         </button>
@@ -384,7 +383,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                 </div>
 
                 {/* Flow indicator */}
-                <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.8rem 1.2rem', fontFamily:'var(--f-mono)', fontSize:'.72rem', color:'var(--mute)', display:'flex', alignItems:'center', gap:'.8rem', flexWrap:'wrap'}}>
+                <div style={{background:'var(--bg2)', border:'1px solid var(--rule)', padding:'.8rem 1.2rem', fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)', display:'flex', alignItems:'center', gap:'.8rem', flexWrap:'wrap'}}>
                   <span style={{color:'var(--acc-text)', fontWeight:700}}>● CAUSAL FLOW:</span>
                   <span>Material Bedrock (Physical Limits)</span>
                   <span>&rarr;</span>
@@ -401,7 +400,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
         {activeMode === 'formula' && (
           <div style={{background:'var(--bg)', border:'1px solid var(--rule)', padding:'2rem', boxShadow:'8px 8px 0 rgba(0,0,0,0.05)'}}>
             <div style={{textAlign:'center', padding:'1.8rem 1rem', background:'var(--bg2)', border:'1px solid var(--rule)', marginBottom:'2rem'}}>
-              <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.2em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.6rem'}}>
+              <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.2em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.6rem'}}>
                 THE PRIMARY FORMULA — TRANSFORMATION PRESSURE (PMN §15.2)
               </div>
               <div style={{fontFamily:'var(--f-head)', fontSize:'clamp(2.2rem, 5vw, 3.4rem)', color:'var(--acc-text)', letterSpacing:'.1em', margin:'0 0 .6rem 0'}}>
@@ -430,11 +429,11 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                     <span style={{fontFamily:'var(--f-head)', fontSize:'1.6rem', color: selectedVar === v ? 'var(--acc-text)' : 'var(--ink)', fontWeight:700}}>
                       {v}
                     </span>
-                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.65rem', color:'var(--mute)'}}>
+                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)'}}>
                       §{FORMULA_VARS[v].anchor}
                     </span>
                   </div>
-                  <div style={{fontFamily:'var(--f-mono)', fontSize:'.72rem', color:'var(--ink2)', lineHeight:1.3}}>
+                  <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--ink2)', lineHeight:1.3}}>
                     {FORMULA_VARS[v].name}
                   </div>
                 </button>
@@ -445,7 +444,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
               <div style={{border:'1px solid var(--rule)', background:'var(--bg2)', padding:'1.6rem', borderRadius:'2px'}}>
                 <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:'1rem', marginBottom:'1rem', borderBottom:'1px solid var(--rule)', paddingBottom:'.8rem'}}>
                   <div>
-                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.12em', textTransform:'uppercase', color:'var(--acc-text)'}}>
+                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.12em', textTransform:'uppercase', color:'var(--acc-text)'}}>
                       VARIABLE {selectedVar} &mdash; DIAGNOSTIC ANALYSIS
                     </span>
                     <h3 style={{fontFamily:'var(--f-head)', fontSize:'1.35rem', color:'var(--ink)', margin:'.2rem 0 0 0'}}>
@@ -473,7 +472,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
 
                 <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:'1.2rem'}}>
                   <div>
-                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.4rem'}}>
+                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.4rem'}}>
                       Formal Definition:
                     </strong>
                     <p style={{fontFamily:'var(--f-body)', fontSize:'.92rem', lineHeight:1.65, color:'var(--ink)', margin:0}}>
@@ -482,7 +481,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                   </div>
 
                   <div>
-                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.4rem'}}>
+                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.4rem'}}>
                       Empirical Field Test:
                     </strong>
                     <p style={{fontFamily:'var(--f-body)', fontSize:'.92rem', lineHeight:1.65, color:'var(--ink2)', margin:0, fontStyle:'italic'}}>
@@ -491,7 +490,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                   </div>
 
                   <div style={{gridColumn:'1 / -1', background:'var(--bg)', border:'1px solid var(--rule)', padding:'1rem 1.2rem', marginTop:'.5rem'}}>
-                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.4rem'}}>
+                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.4rem'}}>
                       How the manuscript says it behaves:
                     </strong>
                     <p style={{fontFamily:'var(--f-body)', fontSize:'.92rem', lineHeight:1.65, color:'var(--ink)', margin:0}}>
@@ -521,7 +520,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                     transition:'all .15s ease'
                   }}
                 >
-                  <div style={{fontFamily:'var(--f-mono)', fontSize:'.65rem', color: selectedStage === i ? 'var(--acc-text)' : 'var(--mute)', fontWeight:700, marginBottom:'.2rem'}}>
+                  <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color: selectedStage === i ? 'var(--acc-text)' : 'var(--mute)', fontWeight:700, marginBottom:'.2rem'}}>
                     STAGE {stg.num}
                   </div>
                   <div style={{fontFamily:'var(--f-head)', fontSize:'.82rem', color:'var(--ink)', lineHeight:1.2}}>
@@ -535,7 +534,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
               <div style={{border:'1px solid var(--rule)', background:'var(--bg2)', padding:'1.8rem', borderRadius:'2px'}}>
                 <div style={{display:'flex', justifyContent:'space-between', alignItems:'baseline', flexWrap:'wrap', gap:'1rem', marginBottom:'1.2rem', borderBottom:'1px solid var(--rule)', paddingBottom:'1rem'}}>
                   <div>
-                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.14em', textTransform:'uppercase', color:'var(--acc-text)'}}>
+                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.14em', textTransform:'uppercase', color:'var(--acc-text)'}}>
                       INSTITUTIONAL DEGENERATION &mdash; STAGE {CAPTURE_STAGES[selectedStage].num}
                     </span>
                     <h3 style={{fontFamily:'var(--f-head)', fontSize:'1.45rem', color:'var(--ink)', margin:'.3rem 0 .2rem 0'}}>
@@ -552,7 +551,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                       color:'#fff',
                       border:'none',
                       fontFamily:'var(--f-mono)',
-                      fontSize:'.72rem',
+                      fontSize:'.75rem',
                       letterSpacing:'.1em',
                       textTransform:'uppercase',
                       padding:'.55rem .95rem',
@@ -566,7 +565,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
 
                 <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:'1.4rem'}}>
                   <div style={{background:'var(--bg)', border:'1px solid var(--rule)', padding:'1.2rem'}}>
-                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.5rem'}}>
+                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.5rem'}}>
                       Clinical Symptoms &amp; Manifestations:
                     </strong>
                     <p style={{fontFamily:'var(--f-body)', fontSize:'.92rem', lineHeight:1.68, color:'var(--ink)', margin:0}}>
@@ -575,7 +574,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                   </div>
 
                   <div style={{background:'var(--bg)', border:'1px solid var(--rule)', padding:'1.2rem'}}>
-                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.5rem'}}>
+                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.5rem'}}>
                       Empirical Field Indicators:
                     </strong>
                     <p style={{fontFamily:'var(--f-body)', fontSize:'.92rem', lineHeight:1.68, color:'var(--ink2)', margin:0}}>
@@ -584,7 +583,7 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                   </div>
 
                   <div style={{gridColumn:'1 / -1', background:'var(--bg)', border:'1px solid var(--rule)', padding:'1.2rem'}}>
-                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.5rem'}}>
+                    <strong style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.1em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.5rem'}}>
                       What can be done at this stage:
                     </strong>
                     <p style={{fontFamily:'var(--f-body)', fontSize:'.95rem', lineHeight:1.68, color:'var(--ink)', margin:0}}>
@@ -597,7 +596,14 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
           </div>
         )}
 
-        {/* PANEL 4: PART DIRECTORY (Preface, Parts I-XVII, Coda, Debts, Bibliography) */}
+        {/* PANEL 4: AXIOM STRUCTURE — dulu seksi beranda tersendiri
+            (~2.800px), kini tab. `embedded` membuang judul besar dan
+            kolom kiri lengket yang meninggalkan ruang kosong. */}
+        {activeMode === 'axioms' && (
+          <AxiomStructureSection data={data} onJump={onJump} onStartReading={onStartReading} embedded />
+        )}
+
+        {/* PANEL 5: PART DIRECTORY (Preface, Parts I-XVII, Coda, Debts, Bibliography) */}
         {activeMode === 'parts' && (
           <div className="anatomy-terminal" style={{display:'grid', gridTemplateColumns:'minmax(220px, 280px) 1fr', border:'1px solid var(--rule)', background:'var(--bg)', minHeight:'520px', boxShadow:'12px 12px 0 rgba(0,0,0,0.05)'}}>
             <div style={{borderRight:'1px solid var(--rule)', background:'var(--bg2)', overflowY:'auto', maxHeight:'580px'}}>
@@ -632,10 +638,10 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
               {currentPart && (
                 <div>
                   <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'.8rem'}}>
-                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.72rem', color:'var(--acc-text)', fontWeight:700, textTransform:'uppercase'}}>
+                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--acc-text)', fontWeight:700, textTransform:'uppercase'}}>
                       {labelPart(currentPart.part)}
                     </span>
-                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', color:'var(--mute)'}}>
+                    <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)'}}>
                       {currentPart.subs?.length || 0} Analytical Modules
                     </span>
                   </div>
@@ -650,8 +656,8 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                       : `This part contains ${currentPart.subs?.length || 0} analytical modules exploring fundamental PMN theory.`}
                   </p>
 
-                  <div style={{fontFamily:'var(--f-mono)', fontSize:'.72rem', marginBottom:'1.5rem', display:'flex', flexDirection:'column', gap:'.4rem'}}>
-                    <div style={{color:'var(--mute)', textTransform:'uppercase', letterSpacing:'.1em', fontSize:'.65rem', marginBottom:'.2rem'}}>
+                  <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', marginBottom:'1.5rem', display:'flex', flexDirection:'column', gap:'.4rem'}}>
+                    <div style={{color:'var(--mute)', textTransform:'uppercase', letterSpacing:'.1em', fontSize:'.75rem', marginBottom:'.2rem'}}>
                       Sub-Module Analytical Registry:
                     </div>
                     {(currentPart.subs || []).slice(0, 8).map((s: any) => (

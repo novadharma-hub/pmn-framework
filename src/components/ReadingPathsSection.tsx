@@ -27,6 +27,9 @@ interface ReadingPathsSectionProps {
   version?: string
 }
 
+// Label langkah = judul seksi sebenarnya (sebelum titik dua), 2026-09-24.
+// Sebelumnya sebagian ditulis bebas dan keliru, mis. §11.1 berlabel
+// "Beyond Ownership" (judul §11.5) dan §11.5 "Unconditional Living Floor".
 const READING_PATHS: ReadingPath[] = [
   {
     num: '01',
@@ -38,9 +41,9 @@ const READING_PATHS: ReadingPath[] = [
     leadPart: 'I',
     steps: [
       { id: '2.1', label: '§2.1 Reality as Primary', desc: 'Mind-independent physical reality as the primary ground.' },
-      { id: '1.9', label: '§1.9 Epistemic Authority', desc: 'Rejection of revelation, theological dogma, and scholastic immunity.' },
-      { id: '2.4', label: '§2.4 Layered Architecture', desc: 'Thermodynamic, structural, and agent tiers without reductive collapse.' },
-      { id: '3.4', label: '§3.4 The Biological Floor', desc: 'Sentient vulnerability and non-negotiable suffering minimization.' },
+      { id: '1.9', label: '§1.9 Epistemic Authority', desc: 'Who gets believed without checking: epistemic authority as an unequally distributed material resource.' },
+      { id: '2.4', label: '§2.4 Social Ontology', desc: 'Thermodynamic, structural, and agent tiers without reductive collapse.' },
+      { id: '3.4', label: '§3.4 The Minimal Anchor', desc: 'Sentient vulnerability and non-negotiable suffering minimization.' },
     ],
   },
   {
@@ -52,10 +55,10 @@ const READING_PATHS: ReadingPath[] = [
     summary: 'Dissect how power entrenches, how information asymmetries are leveraged, and how protective institutions degenerate into predatory extraction apparatuses.',
     leadPart: 'VI',
     steps: [
-      { id: '6.2', label: '§6.2 Resource Asymmetry', desc: 'Material disparities that construct uneven bargaining fields.' },
+      { id: '6.2', label: '§6.2 Power as Structural Position', desc: 'Material disparities that construct uneven bargaining fields.' },
       { id: '7.3', label: '§7.3 The Custodian Problem', desc: 'How protective stewardship mutates into self-preserving interest.' },
-      { id: '7.3c-i', label: '§7.3c-i The Capture Sequence', desc: 'The canonical account of capture: mechanism, stages, and detection.' },
-      { id: '8.4b', label: '§8.4b Narrative Typology', desc: 'Ideological lag and false consciousness legitimizing status-quo capture.' },
+      { id: '7.3c-i', label: '§7.3c-i A General Theory of Capture', desc: 'The canonical account of capture: mechanism, stages, and detection.' },
+      { id: '8.4b', label: '§8.4b Narrative Typology', desc: 'How governing narratives structure political time and what populations can perceive as possible.' },
     ],
   },
   {
@@ -66,10 +69,10 @@ const READING_PATHS: ReadingPath[] = [
     estTime: '~25 min',
     summary: 'The most compressed formulation of PMN’s core thesis, diagnostic power mechanics, and materialist ethics in under thirty minutes.',
     steps: [
-      { id: '15.15', label: '§15.15 Doctrinal Core', desc: 'The definitive, high-density summary of PMN metaphysics and ethics.' },
-      { id: '1.9', label: '§1.9 Epistemic Authority', desc: 'Empirical evidentiary standards and common-sense accountability.' },
-      { id: '3.4', label: '§3.4 Physical Suffering', desc: 'The non-arbitrary biological floor of moral valuation.' },
-      { id: '7.3', label: '§7.3 Institutional Diagnostic', desc: 'Methods for auditing custodian advantage and capture signatures.' },
+      { id: '15.15', label: '§15.15 The Compressed Core', desc: 'The definitive, high-density summary of PMN metaphysics and ethics.' },
+      { id: '1.9', label: '§1.9 Epistemic Authority', desc: 'How claims acquire social standing, and why that standing is a resource distributed unequally.' },
+      { id: '3.4', label: '§3.4 The Minimal Anchor', desc: 'The non-arbitrary biological floor of moral valuation.' },
+      { id: '7.3', label: '§7.3 The Custodian Problem', desc: 'Methods for auditing custodian advantage and capture signatures.' },
     ],
   },
   {
@@ -81,9 +84,9 @@ const READING_PATHS: ReadingPath[] = [
     summary: 'Move from the biological floor of suffering prevention toward the evaluative ceiling of human flourishing (genuine becoming) and historical praxis.',
     leadPart: 'XVII',
     steps: [
-      { id: '3.4', label: '§3.4 Sentience & Pain', desc: 'The moral bedrock: unavoidable biological aversion to somatic trauma.' },
-      { id: '4.5', label: '§4.5 Anti-Foreclosure Criterion', desc: 'Optimal developmental capacity expansion as the evaluative ceiling.' },
-      { id: '17.1', label: '§17.1 Ethics in Historical Practice', desc: 'Moral action and systemic trade-offs under material resource constraints.' },
+      { id: '3.4', label: '§3.4 The Minimal Anchor', desc: 'The minimal anchor: reducing structural suffering, and why the floor is not arbitrary.' },
+      { id: '4.5', label: '§4.5 The Anti-Foreclosure Criterion', desc: 'Optimal developmental capacity expansion as the evaluative ceiling.' },
+      { id: '17.1', label: '§17.1 The Prohibition Case', desc: 'Moral action and systemic trade-offs under material resource constraints.' },
     ],
   },
   {
@@ -95,10 +98,10 @@ const READING_PATHS: ReadingPath[] = [
     summary: 'Deploy PMN analytical instruments to measure transformation pressure and formulate tactical interventions in real-world institutions.',
     leadPart: 'VII',
     steps: [
-      { id: '2.4', label: '§2.4 3-Tier Analysis', desc: 'Separating thermodynamic limits, structural incentives, and individual agency.' },
-      { id: '15.2', label: '§15.2 Transformation Pressure T', desc: 'The net force pushing a system toward reorganization: T = S × D × P × G.' },
-      { id: '7.3', label: '§7.3 Capture Checklist', desc: 'Empirical audit indicators for institutional integrity degradation.' },
-      { id: '11.0', label: '§11.0 Contestability Diagnostics', desc: 'Designing viable, low-cost institutional channels for dissent.' },
+      { id: '2.4', label: '§2.4 Social Ontology', desc: 'Separating thermodynamic limits, structural incentives, and individual agency.' },
+      { id: '15.2', label: '§15.2 The Primary Formula', desc: 'The net force pushing a system toward reorganization: T = S × D × P × G.' },
+      { id: '7.3', label: '§7.3 The Custodian Problem', desc: 'Empirical audit indicators for institutional integrity degradation.' },
+      { id: '11.0', label: '§11.0 Two Levels of Economic Analysis', desc: 'Keeps two levels apart: the questions any economic analysis must ask, and PMN\'s own economic doctrine.' },
     ],
   },
   {
@@ -110,9 +113,9 @@ const READING_PATHS: ReadingPath[] = [
     summary: 'Transcend ownership formalism toward contestable governance, surplus allocation auditing, and unconditional biological floor security.',
     leadPart: 'XI',
     steps: [
-      { id: '11.1', label: '§11.1 Beyond Ownership', desc: 'Real power is determined by allocation control, not nominal title deeds.' },
-      { id: '11.3', label: '§11.3 Accountability Diagnostics', desc: 'Mechanisms for surplus auditing and monopolistic capture restriction.' },
-      { id: '11.5', label: '§11.5 Unconditional Living Floor', desc: 'Basic material security as an inalienable prerequisite for civic participation.' },
+      { id: '11.1', label: '§11.1 Economics Without Prior Commitments', desc: 'Economic systems are tools; which works is an empirical question, not a prior commitment.' },
+      { id: '11.3', label: '§11.3 Horizon and Instrument', desc: 'The horizon the minimal anchor points toward, versus the instruments that move toward it now.' },
+      { id: '11.5', label: '§11.5 Power Beyond Ownership', desc: 'Power that does not come from ownership: expertise, information, and network effects.' },
       { id: '3.10', label: '§3.10 Ecological Constraints', desc: 'Biospheric carrying capacity and thermodynamic limits on production.' },
     ],
   },
@@ -182,30 +185,14 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
       {/* HEADER */}
       <div className="reading-paths-hdr">
         <div>
-          <span style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.18em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
+          <span style={{display:'block', fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.18em', textTransform:'uppercase', color:'var(--acc-text)', marginBottom:'.35rem'}}>
             ● GUIDED ONBOARDING &amp; PATHWAYS
           </span>
           <h2>Reading Paths</h2>
         </div>
         <p>
-          Not every reader approaches PMN with the same inquiry. Choose a curated multi-step journey below to navigate according to your investigative agenda: foundations, power analysis, compression, or practical ethics.
+          Six short routes into the text, by what you came looking for. In a hurry? Path 03 gives the compressed core (§15.15) in about 25 minutes. Progress fills in as you mark sections read.
         </p>
-      </div>
-
-      {/* META STATS BAR */}
-      <div className="reading-paths-meta">
-        <div className="reading-stat">
-          <strong>Path Logic</strong>
-          <span>Navigate by research task and persona, not by linear obligation.</span>
-        </div>
-        <div className="reading-stat">
-          <strong>Fastest Route (25 Min)</strong>
-          <span>Select Path 03 for compressed core doctrine (§15.15) before delving into architectural details.</span>
-        </div>
-        <div className="reading-stat">
-          <strong>Progress Tracking</strong>
-          <span>Milestone indicators update automatically as you mark sections read.</span>
-        </div>
       </div>
 
       {/* GRID OF PATH CARDS */}
@@ -215,15 +202,14 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
           return (
             <div 
               key={path.num} 
-              className="path-card" 
-              data-ghost={path.num}
+              className="path-card"
             >
               {/* TOP ROW: Kicker + Badge + Est Time */}
               <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'.8rem', flexWrap:'wrap', gap:'.5rem'}}>
-                <span style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', letterSpacing:'.16em', textTransform:'uppercase', color:'var(--acc-text)', fontWeight:700}}>
+                <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', letterSpacing:'.16em', textTransform:'uppercase', color:'var(--acc-text)', fontWeight:700}}>
                   PATH {path.num} · {path.badge}
                 </span>
-                <span style={{fontFamily:'var(--f-mono)', fontSize:'.65rem', color:'var(--mute)', background:'var(--bg)', border:'1px solid var(--rule)', padding:'.2rem .5rem'}}>
+                <span style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)', background:'var(--bg)', border:'1px solid var(--rule)', padding:'.2rem .5rem'}}>
                   {path.estTime} &middot; {path.steps.length} {path.steps.length === 1 ? 'section' : 'sections'}
                 </span>
               </div>
@@ -232,7 +218,7 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
               <h3 style={{fontFamily:'var(--f-head)', fontSize:'1.22rem', color:'var(--ink)', margin:'0 0 .3rem 0', lineHeight:1.25}}>
                 {path.title}
               </h3>
-              <div style={{fontFamily:'var(--f-mono)', fontSize:'.68rem', color:'var(--mute)', textTransform:'uppercase', letterSpacing:'.08em', marginBottom:'.8rem'}}>
+              <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)', textTransform:'uppercase', letterSpacing:'.08em', marginBottom:'.8rem'}}>
                 Target: {path.persona}
               </div>
 
@@ -241,44 +227,25 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
                 {path.summary}
               </p>
 
-              {/* STEP ROADMAP TAGS */}
-              <div style={{marginBottom:'1.2rem', background:'var(--bg)', border:'1px solid var(--rule)', padding:'.8rem', borderRadius:'2px'}}>
-                <div style={{fontFamily:'var(--f-mono)', fontSize:'.62rem', letterSpacing:'.12em', textTransform:'uppercase', color:'var(--mute)', marginBottom:'.5rem', display:'flex', justifyContent:'space-between'}}>
-                  <span>Curated Module Sequence</span>
-                  <span>Progress: {progress}%</span>
-                </div>
-                
-                {/* Progress bar */}
-                <div style={{width:'100%', height:'3px', background:'var(--rule)', marginBottom:'.6rem', borderRadius:'1px', overflow:'hidden'}}>
-                  <div style={{width:`${progress}%`, height:'100%', background:'var(--acc)', transition:'width .3s ease'}} />
-                </div>
-
-                {/* Step badges */}
-                <div style={{display:'flex', flexWrap:'wrap', gap:'.4rem'}}>
-                  {path.steps.map((step, sIdx) => (
-                    <button
-                      key={step.id}
-                      onClick={() => jumpToSectionId(step.id)}
-                      title={`${step.label}: ${step.desc}`}
-                      style={{
-                        background:'var(--bg2)',
-                        border:'1px solid var(--rule)',
-                        color:'var(--ink)',
-                        fontFamily:'var(--f-mono)',
-                        fontSize:'.68rem',
-                        padding:'.25rem .5rem',
-                        cursor:'pointer',
-                        display:'inline-flex',
-                        alignItems:'center',
-                        gap:'.3rem'
-                      }}
-                    >
-                      <span style={{color:'var(--acc-text)', fontWeight:700}}>{sIdx + 1}.</span>
-                      <span>{step.id}</span>
-                    </button>
-                  ))}
-                </div>
+              {/* LANGKAH: dulu chip berisi nomor seksi saja ("2.1", "1.9"), yang
+                  tak berarti apa-apa tanpa judul. Kini daftar berjudul, dilipat. */}
+              <div className="path-progress" aria-hidden="true">
+                <div style={{width:`${progress}%`}} />
               </div>
+              <details className="path-steps">
+                <summary>
+                  {path.steps.length} sections &middot; {progress}% read
+                </summary>
+                <ol>
+                  {path.steps.map(step => (
+                    <li key={step.id}>
+                      <button type="button" onClick={() => jumpToSectionId(step.id)}>
+                        {step.label}
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </details>
 
               {/* BOTTOM ACTIONS */}
               <div style={{display:'flex', gap:'.6rem', marginTop:'auto', paddingTop:'.8rem', borderTop:'1px solid var(--rule)'}}>
@@ -290,7 +257,7 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
                     color:'#fff',
                     border:'none',
                     fontFamily:'var(--f-mono)',
-                    fontSize:'.72rem',
+                    fontSize:'.75rem',
                     letterSpacing:'.12em',
                     textTransform:'uppercase',
                     padding:'.65rem .8rem',
@@ -310,7 +277,7 @@ export default function ReadingPathsSection({ data, readMap, onJump, onStartRead
                     color:'var(--ink2)',
                     border:'1px solid var(--rule)',
                     fontFamily:'var(--f-mono)',
-                    fontSize:'.68rem',
+                    fontSize:'.75rem',
                     letterSpacing:'.08em',
                     textTransform:'uppercase',
                     padding:'.65rem .5rem',

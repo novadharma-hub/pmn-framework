@@ -17,7 +17,7 @@ const SHORTCUTS = [
     { key: '←', desc: 'Previous section' },
     { key: 'Alt+F', desc: 'Toggle Focus Mode (hide sidebar)' },
     { key: 'Esc', desc: 'Exit Focus Mode (also the ✕ chip, top right)' },
-    { key: 'Alt+N', desc: 'Toggle Quick Notes modal' },
+    { key: 'Alt+N', desc: 'Open or close My Notes' },
   ]},
   { section: 'Content', items: [
     { key: 'Alt+?', desc: 'Jump to Glossary' },
