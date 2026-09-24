@@ -3622,3 +3622,34 @@ body.focus-mode #hdr-r #focus-btn {
   text-decoration: underline; text-decoration-color: var(--rule2); text-underline-offset: 3px;
 }
 .path-steps li button:hover { color: var(--acc-text); text-decoration-color: var(--acc); }
+
+/* =====================================================================
+   Kerangka HP & tablet kecil (<= 960px), 2026-09-24. Diukur di 390px:
+   - #srch-in 11,2px. iOS Safari memperbesar halaman bila field yang
+     disentuh bertulisan < 16px, dan tidak mengecilkannya kembali.
+   - JUMP / FOCUS: teks 10,4px, tinggi 32px (target sentuh ~44px).
+   - Label #mob-nav 9,9px; ikon karakter teks yang tiap font gambar lain.
+   ===================================================================== */
+@media (max-width: 960px) {
+  #srch-in { font-size: 16px; font-family: var(--f-body); letter-spacing: 0; }
+  /* Semua kolom teks, bukan hanya #srch-in: filter Glosarium, pencarian,
+     kotak pertanyaan AI Workbench, catatan. Banyak yang ber-font inline,
+     karena itu !important. */
+  input[type="text"], input[type="search"], input:not([type]), textarea, select {
+    font-size: 16px !important;
+  }
+  #hdr button.hbtn, #hdr-r #focus-btn { font-size: .75rem; min-height: 40px; }
+
+  #mob-nav .mob-nav-btn { position: relative; gap: 3px; padding-top: 6px; }
+  #mob-nav .mob-nav-ico { display: block; width: 22px; height: 22px; }
+  #mob-nav .mob-nav-lbl {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; line-height: 1.1;
+    white-space: nowrap;
+  }
+  #mob-nav .mob-nav-btn.active::before {
+    content: ""; position: absolute; top: 0; left: 22%; right: 22%;
+    height: 2px; background: var(--acc); border-radius: 0 0 2px 2px;
+  }
+  #mob-nav .mob-nav-btn:focus-visible { outline: 2px solid var(--acc); outline-offset: -3px; }
+}
