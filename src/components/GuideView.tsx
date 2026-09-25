@@ -128,7 +128,7 @@ const ENDPOINTS: Array<{ id: string; format: string; path: string; name: string;
     format: 'TXT',
     path: 'llms-full.txt',
     name: 'Whole book, one file',
-    desc: 'About 2.4 MB (~450k tokens). Most fetchers truncate it; use it only for upload or local processing.',
+    desc: 'About 2.4 MB, roughly half a million tokens. Most fetchers truncate it; use it only for upload or local processing.',
   },
   {
     id: 'ep-json',
@@ -157,6 +157,52 @@ const ENDPOINTS: Array<{ id: string; format: string; path: string; name: string;
     path: 'PMN_Latest.pdf',
     name: 'Typeset PDF',
     desc: 'The whole book, about 630 pages. Best for NotebookLM and other tools that index uploaded sources.',
+  },
+]
+
+/**
+ * Tingkatan menurut apa yang bisa dibaca alat, bukan merek (2026-09-24).
+ * Ukuran dari v126: buku ~2,4 MB (~450k-600k token menurut tokenizer),
+ * Part terbesar (X) ~300 KB, seksi terbesar ~53 KB. Model sepintar apa pun
+ * dengan jendela 200k tetap tidak bisa memuat seluruh buku; karena itu
+ * tingkatan tidak diurutkan menurut nama model.
+ */
+type TierId = 'agent' | 'whole' | 'part' | 'section' | 'notebook'
+const TIERS: Array<{ id: TierId; badge: string; name: string; needs: string; give: string; good: string; limit: string }> = [
+  {
+    id: 'agent', badge: 'A', name: 'Agent with file access',
+    needs: 'A coding or research agent that can read files or fetch URLs (for example Claude Code, Codex, Cursor).',
+    give: 'The repository (clone it) or the per-section files in txt/. The agent searches first, then reads only what it needs.',
+    good: 'The deepest work: questions that cross many Parts, with exact quotations. Size is no limit because nothing is loaded at once.',
+    limit: 'It must open a section before citing it. Ask it to show which files it read.',
+  },
+  {
+    id: 'whole', badge: 'B', name: 'Whole book in one conversation',
+    needs: 'A context window of about 1 million tokens, so the book fits with room to work.',
+    give: 'llms-full.txt (plain text) or the PDF.',
+    good: 'Questions that connect distant Parts, in an ordinary chat.',
+    limit: 'Long contexts blur: ask for the sentence behind each claim. Near the window limit, drop to tier C.',
+  },
+  {
+    id: 'part', badge: 'C', name: 'One to three Parts',
+    needs: 'A context window of about 128k tokens or more (the largest Part is roughly 65k–80k).',
+    give: 'The Part files for your topic (txt/part_VII.txt and so on).',
+    good: 'Working through one theme in depth: capture (VII), the formulas (XV), meaning (V).',
+    limit: 'The model cannot see other Parts. It should say which section to add rather than guess.',
+  },
+  {
+    id: 'section', badge: 'D', name: 'A few sections',
+    needs: 'Any model, including free tiers and small local models.',
+    give: 'One to three section files from txt/index.txt, pasted in full.',
+    good: 'One focused question; checking a single claim.',
+    limit: 'Easy to overreach: the model should stop and ask for more sections instead of filling gaps.',
+  },
+  {
+    id: 'notebook', badge: 'N', name: 'Source-grounded notebook',
+    needs: 'A tool that indexes uploads and cites passages (for example NotebookLM).',
+    give: 'The PDF as a source.',
+    good: 'Checking what the text actually says; its answers link to the passage.',
+    limit: 'Retrieves passages rather than reading the whole: weaker at connecting distant Parts.',
   },
 ]
 
@@ -353,6 +399,35 @@ Text: ${BASE}txt/index.txt - fetch the sections you need, one plain-text file ea
 Cite section numbers; never invent one that is not in the index.
 Evaluate institutions by material incentives and the five-stage capture sequence (§7.3c-i), not by stated intentions.`
 
+  const tierPrompts: Partial<Record<TierId, string>> = {
+    agent: `You have file access. Work from the text of Progressive Materialist Naturalism (PMN) v${version}, not from memory.
+
+1. Get the text: clone https://github.com/novadharma-hub/pmn-framework (read-only) and search pmn_corpus_for_ai.md, where each section starts with "#### Section <id> — <title>". Or fetch the sections you need from ${BASE}txt/index.txt.
+2. Search first (key terms, section ids), then read every section you will rely on in full.
+3. Cite the section id for each claim and quote the sentence you rely on. Never cite a section you have not opened.
+4. List the files or sections you read at the end.
+5. If the text does not address something, say so.
+
+Question: [your question]`,
+    whole: `I am attaching the complete text of PMN (Progressive Materialist Naturalism) v${version}. Use only this text.
+
+Before answering, list the sections you will rely on (id and title). Then answer, citing the section id for each claim and quoting the sentence behind each key claim. Where the text is silent, say so. Where Parts pull in different directions, show the tension instead of resolving it (Part XIII keeps some tensions open on purpose).
+
+Question: [your question]`,
+    part: `I am attaching Part [X] of PMN (Progressive Materialist Naturalism) v${version}, not the whole book. Answer only from what is attached.
+
+If the question needs another Part, name the section ids I should add (from ${BASE}txt/index.txt) instead of guessing what they say. Cite section ids and quote the sentence you rely on.
+
+Question: [your question]`,
+    section: `Below are sections [ids] of PMN (Progressive Materialist Naturalism) v${version}, pasted in full. Answer only from them.
+
+If they are not enough, say which other sections to paste (ids from ${BASE}txt/index.txt) and stop there. Quote the sentence behind each claim.
+
+[paste the sections here]
+
+Question: [your question]`,
+  }
+
   const copyBtn = (id: string, text: string, label = 'Copy') => (
     <button type="button" className={`copy-btn ${copied === id ? 'copied' : ''}`} onClick={() => copyText(id, text)}>
       {copied === id ? 'Copied' : label}
@@ -406,15 +481,14 @@ Evaluate institutions by material incentives and the five-stage capture sequence
                 <h2 className="step-h2">Getting a grounded answer</h2>
                 <ol className="guide-list guide-list-num">
                   <li>
-                    <strong>Give it the text.</strong> The whole book is about 330,000 words (~450k tokens), more than many chat windows hold. Tools that
-                    index uploads, such as NotebookLM or project knowledge in Claude or ChatGPT, search it instead of reading it all. For a focused question,
-                    give only the sections you need: every section has its own small file, listed in{' '}
-                    <a href={BASE + 'txt/index.txt'} target="_blank" rel="noopener noreferrer">txt/index.txt</a>.
+                    <strong>Give it the text, as much as your tool can hold.</strong> The whole book is about half a million tokens (roughly
+                    450k–600k, depending on the model's tokenizer), more than most chat windows hold. The tiers below say what to give each kind of
+                    tool.
                   </li>
                   <li>
-                    <strong>Prime it.</strong> Send the{' '}
-                    <a href="#/guide/prompts" onClick={goTab('prompts')}>priming prompt</a> as the first message. It asks the model to reason inside the
-                    framework, cite section numbers, and admit when the text is silent.
+                    <strong>Prime it.</strong> Use the starter prompt for your tier, or the{' '}
+                    <a href="#/guide/prompts" onClick={goTab('prompts')}>priming prompt</a> as the first message. Both ask the model to reason inside
+                    the framework, cite section numbers, and admit when the text is silent.
                   </li>
                   <li>
                     <strong>Ask a precise question.</strong> Name the institution, the sections, and what evidence would change the answer. See the{' '}
@@ -424,52 +498,52 @@ Evaluate institutions by material incentives and the five-stage capture sequence
               </section>
 
               <section className="step">
-                <span className="step-num">Where</span>
-                <h2 className="step-h2">Which kind of tool</h2>
-                <div className="guide-table-wrap">
-                  <table className="guide-table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Tool</th>
-                        <th scope="col">Give it</th>
-                        <th scope="col">Good for</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Source-grounded notebook (NotebookLM)</td>
-                        <td>The <a href={BASE + 'PMN_Latest.pdf'} target="_blank" rel="noopener noreferrer">PDF</a></td>
-                        <td>Checking what the text says; answers link to the passage</td>
-                      </tr>
-                      <tr>
-                        <td>Chat project with files (Claude Projects, ChatGPT Projects, Gemini Gems)</td>
-                        <td>The PDF or the Parts you need, plus the agent prompt as instructions</td>
-                        <td>Long discussions that stay grounded across many turns</td>
-                      </tr>
-                      <tr>
-                        <td>Plain chat with an upload</td>
-                        <td>One or a few section files</td>
-                        <td>A single, focused question</td>
-                      </tr>
-                      <tr>
-                        <td>Your own script or agent</td>
-                        <td>Sections fetched from txt/</td>
-                        <td>
-                          Repeated audits and batches; see <a href="#/guide/dev" onClick={goTab('dev')}>Developer</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <span className="step-num">Tiers</span>
+                <h2 className="step-h2">What your tool can hold decides the method</h2>
+                <p>
+                  Tiers are set by what a tool can read, not by brand: a very capable model with a small context window still cannot hold the whole
+                  book. Pick the highest tier your tool supports.
+                </p>
+                <div className="guide-tiers">
+                  {TIERS.map(t => (
+                    <div className="guide-tier" key={t.id}>
+                      <div className="guide-tier-hdr">
+                        <span className="guide-tier-badge">{t.badge}</span>
+                        <h3>{t.name}</h3>
+                      </div>
+                      <dl className="guide-tier-dl">
+                        <dt>Needs</dt><dd>{t.needs}</dd>
+                        <dt>Give it</dt><dd>{t.give}</dd>
+                        <dt>Good for</dt><dd>{t.good}</dd>
+                        <dt>Watch for</dt><dd>{t.limit}</dd>
+                      </dl>
+                      {tierPrompts[t.id] && (
+                        <details className="guide-tier-prompt">
+                          <summary>Starter prompt</summary>
+                          <div className="code-block">
+                            <span className="code-label">{t.name}</span>
+                            {copyBtn('tier-' + t.id, tierPrompts[t.id])}
+                            <div className="code-text">{tierPrompts[t.id]}</div>
+                          </div>
+                        </details>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                <p className="guide-small">Product features and limits change often; check each tool's own documentation for current upload and context limits.</p>
+                <p className="guide-small">
+                  Sizes measured on v{version}: whole book about 2.4 MB of text; largest Part (X) about 300 KB, roughly 65k–80k tokens; largest
+                  section about 53 KB, roughly 12k–14k tokens; median section about 8 KB. Product limits change often; check each tool's own
+                  documentation.
+                </p>
               </section>
 
               <section className="step">
-                <span className="step-num">Which model</span>
-                <h2 className="step-h2">Choosing a model</h2>
-                <p>Models change every few months, so this page names none. What matters for PMN does not change. Look for a model that:</p>
+                <span className="step-num">Within a tier</span>
+                <h2 className="step-h2">Is the model any good at this?</h2>
+                <p>
+                  This page names no models: lists of them go stale within months. Within your tier, look for a model that:
+                </p>
                 <ul className="guide-list">
-                  <li><strong>Holds enough text.</strong> At least the Part you are asking about; the largest Parts are 150–300 KB of text.</li>
                   <li><strong>Quotes accurately.</strong> Asked for the sentence behind a claim, it gives one you can find in the text.</li>
                   <li><strong>Keeps tensions open.</strong> PMN deliberately leaves some tensions unresolved (Part XIII). A good model does not smooth them into a compromise.</li>
                   <li><strong>Admits gaps.</strong> It says "the text does not address this" instead of inventing a PMN position.</li>
