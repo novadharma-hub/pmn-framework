@@ -70,7 +70,8 @@ To set PMN up once rather than per chat, the guide's
 
 - **The PMN skills**, in the Agent Skills format that Claude, Codex, OpenCode, Cursor and other agents read:
   - `pmn`: the whole manuscript, one file per section, with index, glossary and analytical roles. Answers from the
-    text with citations. The other two read the text from it.
+    text with citations, and is the front door: it sends a personal problem, a real case, a thought experiment, a
+    wish to learn or to test PMN to the skill below that fits. The others read the text from it.
   - `pmn-diagnose`: a structured diagnosis of a real situation at any scale, from a person or workplace to an
     institution or a country (level of causation, capture stage or transformation pressure with evidence, who
     pays, what would overturn it).

@@ -111,7 +111,7 @@ Agent Skills one version behind; direct pushes to `main` are not checked for thi
 
 ## Status
 
-Last updated: 2026-09-25 (after PR #24).
+Last updated: 2026-09-25 (after PR #25).
 
 ### Done recently
 
@@ -130,6 +130,8 @@ Last updated: 2026-09-25 (after PR #24).
   `data/parts/part_<Part>.json` when a Part is read (and the next one ahead); `parts.json` is fetched only for
   Search. First load went from about 3.1 MB to about 1 MB. `build_ai_surfaces.py` fails if the per-Part files do
   not match `parts.json`.
+- #25: `pmn` is the front door and routes each kind of request to the right skill; thought experiments handled in
+  `pmn-diagnose` and `pmn-critic` (§12.1c).
 
 ### Next, in order
 

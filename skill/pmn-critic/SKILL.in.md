@@ -49,6 +49,10 @@ cross-references that bear on the objection.
 4. Look for substantive contradictions: two claims PMN makes that cannot both be true, or a method that its own
    tests would reject. Quote both passages. Wording, labels, numbering and tidiness are not the target (see Rules).
 
+**Thought experiment** (a scenario built to break PMN). §12.1c uses extreme scenarios as "assumption archaeology":
+push a variable to its limit and see which hidden assumption the conclusion depended on. Run the scenario through
+PMN's own reasoning, name the assumption it exposes, and judge whether PMN's answer survives or needs revising.
+
 **Falsification audit** (a specific claim).
 State what evidence would count against the claim, whether PMN itself says so (§14.4b gives conditions for some),
 and whether the claim is built to absorb any outcome: confirming evidence counts, disconfirming evidence is

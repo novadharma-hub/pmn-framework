@@ -1,6 +1,6 @@
 ---
 name: pmn
-description: Grounds answers in the text of Progressive Materialist Naturalism (PMN), the philosophical framework by Nova Dharma, using the full manuscript bundled with this skill (version v126). Use this skill whenever the user mentions PMN, Progressive Materialist Naturalism or Nova Dharma, cites a PMN section number (for example §7.3c-i or §15.2), or asks to analyse an institution, policy, capture, structural suffering, the biological floor, transformation pressure (T = S × D × P × G) or counter-power "with PMN" or "the way PMN would", in any language, even if they do not name the framework precisely.
+description: Grounds answers in the text of Progressive Materialist Naturalism (PMN), the philosophical framework by Nova Dharma, using the full manuscript bundled with this skill (version v126), and is the front door to the other PMN skills (learn, diagnose, strategy, critic). Use this skill whenever the user mentions PMN, Progressive Materialist Naturalism or Nova Dharma, cites a PMN section number (for example §7.3c-i or §15.2), or brings anything to PMN: curiosity, a personal problem, a request for an opinion, a real case at any scale, a thought experiment, a wish to learn it or to test it, or asks about capture, structural suffering, the biological floor, transformation pressure or counter-power "the way PMN would", in any language, even if they do not name the framework precisely.
 ---
 
 # PMN: answer from the text, not from memory
@@ -8,6 +8,30 @@ description: Grounds answers in the text of Progressive Materialist Naturalism (
 PMN is recent and specific. A model answering from memory produces generic materialism with PMN's vocabulary
 pasted on, and invents section numbers. This skill carries the whole manuscript (v126, 235
 sections) so every claim can be checked against the text.
+
+## First: what kind of request is this?
+
+This skill answers questions about what PMN says. For other kinds of request, the sibling skills have the method;
+read the named `SKILL.md` and follow it. They sit next to this folder (`../pmn-learn/SKILL.md` and so on); if one
+is not installed, read it from https://raw.githubusercontent.com/novadharma-hub/pmn-framework/main/plugins/pmn/skills/<name>/SKILL.md, or follow its idea briefly from here.
+
+| The user | Use |
+|---|---|
+| is curious, asks what PMN says or means | this skill (below) |
+| wants to learn PMN, is new to it, or finds it confusing | `pmn-learn` |
+| brings a real situation, from their own life or workplace to an institution or a country, or asks for PMN's view of it | `pmn-diagnose` |
+| asks what to do about a situation | `pmn-strategy`, after a short diagnosis |
+| wants to question, test or attack PMN, or asks whether a critic is right | `pmn-critic` |
+| poses a thought experiment | `pmn-diagnose` to work out what PMN says about the imagined case; `pmn-critic` when the scenario is built to break PMN |
+
+- **Several at once** (a problem and what to do about it): diagnose first, then strategy, in one answer.
+- **Unclear:** pick the most likely reading and say which in one line, or ask one short question if a wrong guess
+  would waste the user's time. A short "what is PMN?" gets a short answer here, with an offer to go further with
+  `pmn-learn`. A thought experiment whose aim is unclear goes to `pmn-diagnose`; name what the scenario exposes about
+  PMN's assumptions either way.
+- **Asking for an opinion:** keep what PMN says (cited) apart from your own judgement, and label the second as yours.
+- **Someone struggling:** respond to the person first. PMN explains the structure around a situation; it does not
+  replace care, and if someone may be at risk, that comes before any analysis.
 
 ## Where the text is
 
@@ -30,7 +54,8 @@ https://novadharma-hub.github.io/pmn-framework/txt/index.txt on the website.
 2. **Read before citing.** Open every section you will rely on and read it in full. A section id you have not
    opened is a guess, and PMN's cross-references are dense enough that guesses are usually wrong.
 3. **Answer with citations.** Cite the section id (§7.3c-i) for each claim and quote the sentence it rests on
-   for the key ones. Readers of PMN check citations; a wrong one costs more than a missing one.
+   for the key ones. Readers of PMN check citations; a wrong one costs more than a missing one. When a conclusion
+   combines several sections and no single one states it, say it is a synthesis of those sections.
 4. **Say where the text is silent.** If the manuscript does not address something, say so and, if useful, say
    what PMN's method would ask next. Do not fill the gap with a position PMN does not state.
 5. **Keep tensions open.** PMN deliberately leaves some tensions unresolved (Part XIII). Show the tension; do not
