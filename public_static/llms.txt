@@ -51,7 +51,7 @@ Each link is the whole Part as plain text. Parts III, VII, X, XIII and XV are la
 - [XI — The Economic Doctrine](https://novadharma-hub.github.io/pmn-framework/txt/part_XI.txt): Economics without prior commitments, structural incentives, and accountability-contestability.
 - [XII — How This Framework Operates](https://novadharma-hub.github.io/pmn-framework/txt/part_XII.txt): Methodology, stress-testing, genealogical critique, and technocratic drift safeguards.
 - [XIII — Tensions That Cannot Be Resolved — Only Managed](https://novadharma-hub.github.io/pmn-framework/txt/part_XIII.txt): Permanent tensions, horizon boundaries, and PMN analytical limits.
-- [XV — The Formula Architecture](https://novadharma-hub.github.io/pmn-framework/txt/part_XV.txt): Diagnostic formulas (§15.0b), transformation pressure ($T = S \cdot D \cdot P \cdot G$), and compressed core (§15.15).
+- [XV — The Formula Architecture](https://novadharma-hub.github.io/pmn-framework/txt/part_XV.txt): Canonical term definitions (§15.0b), transformation pressure ($T = S \cdot D \cdot P \cdot G$), and compressed core (§15.15).
 - [XVI — Technology as Structural Variable](https://novadharma-hub.github.io/pmn-framework/txt/part_XVI.txt): Technology, AI, automation, and distributed post-biological cognition.
 - [XVII — Cases and the Individual: Pattern, Drift, and the Demands of the Framework](https://novadharma-hub.github.io/pmn-framework/txt/part_XVII.txt): Individual conduct, praxis, detecting personal drift, and acting within institutions.
 - [XIV — Summary: Framework, Doctrine, and What Remains Open](https://novadharma-hub.github.io/pmn-framework/txt/part_XIV.txt): Framework transmission, institutional integrity, and self-capture diagnosis (§14.6).

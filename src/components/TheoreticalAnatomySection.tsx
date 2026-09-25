@@ -295,9 +295,9 @@ export default function TheoreticalAnatomySection({ data, onJump, onStartReading
                       {layer.badge}
                     </span>
                   </div>
-                  <h4 style={{fontFamily:'var(--f-head)', fontSize:'1.12rem', color:'var(--ink)', margin:'0 0 .4rem 0'}}>
+                  <h3 style={{fontFamily:'var(--f-head)', fontSize:'1.12rem', color:'var(--ink)', margin:'0 0 .4rem 0'}}>
                     {layer.title}
-                  </h4>
+                  </h3>
                   <div style={{fontFamily:'var(--f-mono)', fontSize:'.75rem', color:'var(--mute)', textTransform:'uppercase'}}>
                     Scope: {layer.scope}
                   </div>
