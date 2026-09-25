@@ -347,12 +347,22 @@ export default function ReaderView({
   useEffect(() => {
     const scroller = mainRef.current
     if (!scroller) return
+    // Bilah reader bersembunyi saat menggulir ke bawah dan muncul lagi saat
+    // menggulir ke atas. Kelasnya hanya berpengaruh di HP (style.css): di
+    // layar 390x844 dua bilah atas plus menu bawah memakan ~20% layar.
+    let terakhir = scroller.scrollTop
     const updateProgress = () => {
       const winScroll = scroller.scrollTop
       const height = scroller.scrollHeight - scroller.clientHeight
       const scrolled = height > 0 ? (winScroll / height) * 100 : 0
       const bar = document.getElementById('reading-progress')
       if (bar) bar.style.width = scrolled + '%'
+      const nav = document.getElementById('reader-nav')
+      const selisih = winScroll - terakhir
+      if (nav && Math.abs(selisih) > 6) {
+        nav.classList.toggle('rdr-nav-hidden', selisih > 0 && winScroll > 160)
+        terakhir = winScroll
+      }
     }
     scroller.addEventListener('scroll', updateProgress)
     updateProgress()
@@ -437,7 +447,7 @@ export default function ReaderView({
                 &larr; <span className="hidden sm:inline">&nbsp;Table of Contents</span>
               </button>
               <button
-                className="font-mono text-[0.62rem] uppercase tracking-widest text-pmn-acc border border-pmn-rule px-2.5 py-1 sm:hidden shrink-0 transition-all hover:bg-pmn-acc hover:text-white"
+                className="rdr-sec-btn font-mono text-[0.62rem] uppercase tracking-widest text-pmn-acc border border-pmn-rule px-2.5 py-1 sm:hidden shrink-0 transition-all hover:bg-pmn-acc hover:text-white"
                 onClick={() => setSbOpen(v => !v)}
                 aria-expanded={sbOpen}
                 aria-controls="sidebar"
@@ -449,19 +459,30 @@ export default function ReaderView({
 
             {/* Center: naturally sized, grid places it at exact center */}
             <div className="flex flex-col items-center justify-center text-center pointer-events-none px-3 overflow-hidden" style={{ maxWidth: '45vw' }}>
-              <span className="font-mono text-[0.55rem] sm:text-[0.6rem] lg:text-[0.7rem] text-pmn-acc uppercase tracking-[0.2em] leading-none mb-1 font-bold whitespace-nowrap">Part {p?.part}</span>
-              <span className="font-pmn-head text-[0.75rem] sm:text-[0.85rem] lg:text-[1rem] font-bold text-pmn-ink leading-snug truncate w-full">{p?.title}</span>
+              <span className="rdr-part-lbl font-mono text-[0.55rem] sm:text-[0.6rem] lg:text-[0.7rem] text-pmn-acc uppercase tracking-[0.2em] leading-none mb-1 font-bold whitespace-nowrap">Part {p?.part}</span>
+              <span className="rdr-part-title font-pmn-head text-[0.75rem] sm:text-[0.85rem] lg:text-[1rem] font-bold text-pmn-ink leading-snug truncate w-full">{p?.title}</span>
             </div>
 
             {/* Right: Mark Read / Completed button — justify-end pushes to right edge */}
             <div className="flex items-center justify-end gap-2">
+              {/* Cari/lompat seksi: di HP header global (tempat JUMP) disembunyikan. */}
+              <button
+                type="button"
+                className="rdr-find-btn font-mono text-pmn-mute hover:text-pmn-ink items-center justify-center shrink-0"
+                onClick={() => setCommandPaletteOpen(true)}
+                aria-label="Find a section"
+                title="Find a section"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+              </button>
               <button
                 onClick={() => onMarkRead(pIdx, sIdx)}
+                aria-pressed={isRead}
                 className={`font-mono text-[0.58rem] lg:text-[0.65rem] uppercase tracking-widest border transition-all shrink-0 whitespace-nowrap ${isRead ? 'border-pmn-acc text-pmn-acc bg-pmn-acc/5' : 'border-pmn-rule text-pmn-mute hover:border-pmn-ink hover:text-pmn-ink'}`}
                 style={{ padding: '6px 12px', cursor: 'pointer' }}
               >
                 <span className="hidden sm:inline">{isRead ? 'Completed' : 'Mark Read'}</span>
-                <span className="sm:hidden">{isRead ? '✓' : '○'}</span>
+                <span className="sm:hidden">{isRead ? '✓ Read' : 'Mark read'}</span>
               </button>
             </div>
           </div>
@@ -482,8 +503,8 @@ export default function ReaderView({
                 </span>
                 
                 {/* section wrapper used instead of div to bypass the legacy .reader-meta > div styling */}
-                <section className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full md:w-auto">
-                  <div className="flex items-center justify-between sm:justify-start gap-3">
+                <section className="rdr-controls flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full md:w-auto">
+                  <div className="rdr-measure flex items-center justify-between sm:justify-start gap-3">
                     <span className="font-mono text-[0.58rem] text-pmn-mute uppercase tracking-[0.12em]">Measure</span>
                     <div className="flex bg-pmn-bg2 border border-pmn-rule p-1 rounded-sm gap-0.5 select-none">
                       <button
@@ -507,10 +528,10 @@ export default function ReaderView({
                     </div>
                   </div>
                   
-                  <div className="hidden sm:block w-px h-6 bg-pmn-rule/40" />
+                  <div className="rdr-measure hidden sm:block w-px h-6 bg-pmn-rule/40" />
                   
-                  <div className="flex items-center justify-between sm:justify-start gap-3">
-                    <span className="font-mono text-[0.58rem] text-pmn-mute uppercase tracking-[0.12em]">Zoom</span>
+                  <div className="rdr-zoom flex items-center justify-between sm:justify-start gap-3">
+                    <span className="rdr-zoom-lbl font-mono text-[0.58rem] text-pmn-mute uppercase tracking-[0.12em]">Zoom</span>
                     <div className="flex bg-pmn-bg2 border border-pmn-rule p-1 rounded-sm gap-0.5 select-none">
                       <button
                         onClick={() => changeReaderScale(-0.1)}
