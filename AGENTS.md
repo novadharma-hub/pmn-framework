@@ -118,6 +118,9 @@ Last updated: 2026-09-25 (after PR #21).
   `.docx` files. Only GitHub can do this.
 - **Manuscript questions found by the skills** (the owner's call, in the `.docx`):
   - §15.4: the heading says "Geographic spread (P)", the text says "the population scale variable P".
+  - §15.4 defines G as "intergenerational transmission", then a few paragraphs later uses G for cross-group
+    alignment ("ensure that G remains low — that the populations ... understand themselves as having separate
+    rather than shared interests"), headed "Ga". Two different factors share one letter in the main formula.
   - §15.0b calls itself canonical but does not define D, P or G.
   - "Advanced V" (§15.0b): a population that does not complain can read as "no structural suffering" or as
     "suffering hidden by advanced V", with no indicator of V independent of the outcome it explains. The critic

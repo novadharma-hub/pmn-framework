@@ -24,25 +24,32 @@ system" when it really was individual. Most real cases need two levels; say whic
 
 ## Sections to read
 
-Always: §7.0b, §6.2 and §6.3 (judge by incentives and structural position, not stated intentions), §12.1b
-(second-order effects, including of doing nothing), §12.5d (misuse triggers, run on your own draft) and §12.5e
-(partial data). Then by level:
+Always: §7.0b, §6.2 and §6.3 (judge by incentives and structural position, not stated intentions), §12.3b (the
+distribution visibility test), §12.1b (second-order effects, including of doing nothing), §12.5d (misuse triggers,
+run on your own draft) and §12.5e (partial data). Then the list for the primary level, and for the secondary level
+too when you name one:
 
 - **Micro (organism, household, workplace, community).** §3.4 the minimal anchor (biological floor) and §3.4b the
   typology of suffering; §5.6 and §5.6b meaning as a material condition; §3.12 how individually rational choices
   add up to collective problems; §10.15 micro-politics and structural change.
-- **Meso (organisation, institution, policy).** §7.3c-i the five-stage capture sequence and §7.3b its early-warning
-  indicators; §7.3c incentive architecture; §6.5 how institutions preserve themselves; §12.5 (capture diagnostics
-  apply regardless of ideology); §6.6 when legitimacy is involved.
+- **Meso (organisation, institution, policy).** §7.3c incentive architecture; §6.5 how institutions preserve
+  themselves; §6.6 when legitimacy is involved. When a body with a mandate to serve a public or a membership (a
+  regulator, a public agency, a union, a party) is turned toward a concentrated interest, that is capture: §7.3c-i
+  the five-stage sequence, §7.3b its early-warning indicators, §12.5 (the diagnostics apply regardless of ideology).
+  A private firm pursuing its own interest through its own design (pricing, algorithms, contracts) is not captured;
+  analyse it through incentive architecture and structural position instead of forcing the capture stages onto it.
 - **Macro (sector, country, regime, international order).** §15.2 and §15.4 transformation pressure
-  T = S × D × P × G, with §15.0b for the canonical terms and §15.13 for what the formulas cannot do; §15.12 reading
+  T = S × D × P × G, with §15.0b for the canonical terms and §15.13 for what the formulas cannot do. §15.4 defines
+  G as intergenerational transmission but later also uses G for cross-group alignment (headed "Ga"); state which
+  reading you use, or treat them as two factors; §15.12 reading
   current conditions; §10.5 thresholds and §10.5b political time; §7.8 regime types; §9.0 and §9.2 for the
   international dimension.
 - Remedies, only if asked: §7.3d for institutions, §10.6 and §10.9 for system change. §13.1c when someone calls a
   long-standing conflict permanent.
 
-This list is where to start, not a boundary: when a section you read points to another that bears on the case,
-open that one too.
+These lists are where to start, not a boundary. Search `index.md` and the glossary for the case's own terms too
+(a platform, debt, land, a religion...): PMN may address them in a section no list names. When a section you read
+points to another that bears on the case, open that one as well.
 
 ## Procedure
 
@@ -55,8 +62,9 @@ open that one too.
 4. **Apply the level's tests.**
    - Micro: which conditions touch the biological floor, which touch meaning, and which are produced by the
      structure around the person rather than by the person.
-   - Meso: for each of the five capture stages, the evidence for and against, using the §7.3b indicators. The case
-     sits at the highest stage with real evidence.
+   - Meso: the incentives each actor faces and what they produce. If it is a capture case (see above), then for
+     each of the five stages the evidence for and against, using the §7.3b indicators; the case sits at the highest
+     stage with real evidence.
    - Macro: evidence for each factor of T (S, D, P, G) and for the institution's adaptive and repressive capacity;
      where the formulas stop being informative, say so (§15.13).
 5. **Consequences.** First-order and second-order, across the layers in §12.1b, and the consequences of inaction.
@@ -84,8 +92,8 @@ open that one too.
 1. **Diagnosis:** one paragraph, plain language.
 2. **Level:** primary and secondary, and why.
 3. **Facts used:** given / general knowledge / assumed.
-4. **Findings for the level:** for meso cases a table with columns Stage, Evidence, Status (present / absent /
-   unknown); for macro cases a table with columns Factor, Evidence, Strength; for micro cases the floor, meaning and
+4. **Findings for the level:** for capture cases a table with columns Stage, Evidence, Status (present / absent /
+   unknown); for other meso cases a table with columns Actor, Incentive, Effect; for macro cases a table with columns Factor, Evidence, Strength; for micro cases the floor, meaning and
    structure findings.
 5. **Who pays, who gains.**
 6. **Second-order effects,** including of inaction.
