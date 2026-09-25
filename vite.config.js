@@ -132,7 +132,7 @@ export default defineConfig({
         // dibelokkan SW ke cangkang SPA.
         globIgnores: ['read/**', 'txt/**'],
         navigateFallbackDenylist: [
-          /\.(txt|md|pdf|json|xml|docx|png|jpg|jpeg|svg|webp|ico)$/i,
+          /\.(txt|md|pdf|json|xml|docx|zip|png|jpg|jpeg|svg|webp|ico)$/i,
           /\/data\//,
           /\/read\//,
         ],

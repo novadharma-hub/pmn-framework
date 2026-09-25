@@ -56,7 +56,7 @@ set by capacity, not by brand (the whole book is roughly half a million tokens):
 
 | Tier | Needs | Give it |
 |---|---|---|
-| **A. Agent with file access** | Can read files or fetch URLs (Claude Code, Codex, Cursor, ...) | Clone this repository or fetch `txt/`; search, then read |
+| **A. Agent with file access** | Can read files or fetch URLs (Claude Code, Codex, Cursor, ...) | The PMN skill, a clone of this repository, or `txt/`; search, then read |
 | **B. Whole book** | Context window of about 1M tokens | `llms-full.txt` or the PDF |
 | **C. One to three Parts** | About 128k tokens or more | `txt/part_<Part>.txt` (largest Part roughly 65k–80k tokens) |
 | **D. A few sections** | Any model | Section files from `txt/index.txt` |
@@ -64,6 +64,15 @@ set by capacity, not by brand (the whole book is roughly half a million tokens):
 
 Each tier has a starter prompt in the guide. No model is named or ranked: lists of models go stale within months. The
 guide gives quality criteria and a five-minute test with known answers instead.
+
+To set PMN up once rather than per chat, the guide's
+**[Install](https://novadharma-hub.github.io/pmn-framework/#/guide/install)** tab has:
+
+- **The PMN skill** ([`pmn-skill.zip`](https://novadharma-hub.github.io/pmn-framework/pmn-skill.zip)), an Agent Skill
+  for Claude and other agents that read the format. It bundles the whole manuscript, one file per section, with the
+  index, glossary and analytical roles, so the model reads and cites the sections a question needs. Built from
+  `skill/pmn/` by `scripts/build_skill.py` on every build.
+- **Instructions for a Custom GPT, Gemini Gem or Claude Project**, to paste alongside `llms-full.txt` as a knowledge file.
 
 ### Before you ingest: known limits of this corpus
 
@@ -117,11 +126,13 @@ to insulate.
 ```
 data/                 manuscript data written by the local pipeline (parts.json, glossary, lookups)
 public_static/        files served at the site root: data/ copy, llms.*, PDF, icons, fonts
+skill/pmn/            hand-written parts of the Agent Skill (SKILL.md, roles)
 src/                  React 18 + TypeScript reader (App.tsx, routing.ts, components/)
 style.css             design tokens and styles (see DESIGN.md)
 scripts/              build and audit tools
   build_ai_surfaces.py  txt/, read/ and sitemap.xml, generated on every build
   build_pdf.py          the typeset PDF
+  build_skill.py        pmn-skill.zip (the Agent Skill) from skill/pmn/ and the corpus
   check_glossary.py     build gate: glossary categories must name real entries
   security_check.py     scan for secrets and personal data before publishing
   indexnow_ping.py      tell search engines about new URLs after deploy

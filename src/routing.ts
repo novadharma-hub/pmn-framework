@@ -19,7 +19,7 @@ export type ContentsSub = 'map' | 'glossary' | 'search'
 /** Tab halaman Rules & Data. */
 export type RulesTab = 'privacy' | 'terms' | 'disclaimer' | 'ai'
 /** Tab halaman AI Guide. */
-export type GuideTab = 'start' | 'prompts' | 'questions' | 'dev' | 'endpoints'
+export type GuideTab = 'start' | 'install' | 'prompts' | 'questions' | 'dev' | 'endpoints'
 
 export interface RouteState {
   page: PmnPage
@@ -50,6 +50,7 @@ const SEGMEN_TAB: Record<RulesTab, string> = {
  */
 const SEGMEN_GUIDE: Record<GuideTab, string> = {
   start: '',
+  install: 'install',
   prompts: 'prompts',
   questions: 'questions',
   dev: 'dev',

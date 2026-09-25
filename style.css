@@ -3496,6 +3496,7 @@ body.focus-mode #hdr-r #focus-btn {
   border-bottom: 1px solid var(--rule);
 }
 .pg-tabs-5 { --tab-min: 104px; }
+.pg-tabs-6 { --tab-min: 96px; }
 .pg-tab {
   flex: 1 1 var(--tab-min, 150px);
   display: flex; align-items: center; justify-content: center;
@@ -3680,3 +3681,14 @@ body.focus-mode #hdr-r #focus-btn {
 #guide-view .guide-tier-prompt summary::-webkit-details-marker { display: none; }
 #guide-view .guide-tier-prompt summary::before { content: "\25B8"; font-size: .9em; }
 #guide-view .guide-tier-prompt[open] summary::before { content: "\25BE"; }
+
+/* Tab Install di AI Guide (2026-09-25): tombol unduh skill. */
+#guide-view .step a.guide-dl {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.1rem;
+  font-family: var(--f-mono); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--acc-text); background: var(--bg2); text-decoration: none; border: 1px solid var(--acc);
+}
+#guide-view .step a.guide-dl:hover { background: var(--bg); }
+#guide-view .step a.guide-dl:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+#guide-view .guide-small-inline { font-size: .85rem; color: var(--mute); margin-left: .6rem; }
+#guide-view .guide-list .code-block { margin: .6rem 0 0; }
