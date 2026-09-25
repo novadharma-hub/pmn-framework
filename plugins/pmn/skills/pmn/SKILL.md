@@ -17,7 +17,9 @@ sections) so every claim can be checked against the text.
 - `references/roles.md`: analytical roles (structural analyst, capture diagnostician, red team, counter-power
   strategist, meaning-infrastructure analyst, evidence auditor) to use when the user asks for that kind of analysis.
 
-Online copy of the same files: https://novadharma-hub.github.io/pmn-framework/txt/index.txt (useful if a newer version exists; the bundled one is v126).
+Online copies of the same files, always the latest edition (the bundled one is v126):
+https://raw.githubusercontent.com/novadharma-hub/pmn-framework/main/plugins/pmn/skills/pmn/references/ on GitHub (or clone https://github.com/novadharma-hub/pmn-framework and grep), and
+https://novadharma-hub.github.io/pmn-framework/txt/index.txt on the website.
 
 ## How to answer
 

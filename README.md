@@ -71,8 +71,9 @@ To set PMN up once rather than per chat, the guide's
 - **The PMN skills**, in the Agent Skills format that Claude, Codex, OpenCode, Cursor and other agents read:
   - `pmn`: the whole manuscript, one file per section, with index, glossary and analytical roles. Answers from the
     text with citations. The other two read the text from it.
-  - `pmn-diagnose`: a structured diagnosis of a real institution or policy (capture stage with evidence, who pays,
-    second-order effects, what would overturn it).
+  - `pmn-diagnose`: a structured diagnosis of a real situation at any scale, from a person or workplace to an
+    institution or a country (level of causation, capture stage or transformation pressure with evidence, who
+    pays, what would overturn it).
   - `pmn-critic`: questions PMN itself (strongest objections, misreadings, unfalsifiable claims, inconsistencies).
 
   ```
@@ -174,6 +175,9 @@ npm run preview   # serve the built site
 ```
 
 Every pull request is built by `.github/workflows/check.yml`; merges to `main` deploy through `deploy.yml`.
+
+AI agents working on the repository start from [`AGENTS.md`](AGENTS.md): rules, build steps, and the current status
+and next tasks, kept up to date with every pull request.
 
 ### Contributor rules
 

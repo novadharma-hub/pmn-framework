@@ -6,7 +6,7 @@ and files the model opens only when it needs them. The same folders install
 into Claude, Codex, OpenCode, Cursor and other agents that read the format.
 
 Sources (hand-written, with {{VERSION}} {{SECTIONS}} {{TERMS}} {{BASE}}
-{{TEXT_ACCESS}} placeholders):
+{{REPO}} {{RAW}} {{TEXT_ACCESS}} placeholders):
   skill/<name>/SKILL.in.md        one folder per skill; other files are copied
   skill/_shared/text-access.md    how the method skills find the text
   public_static/data/parts.json, gl.json, glg.json
@@ -51,6 +51,7 @@ DATA = REPO_ROOT / "public_static" / "data"
 PLUGIN = REPO_ROOT / "plugins" / "pmn"
 MARKETPLACE = REPO_ROOT / ".claude-plugin" / "marketplace.json"
 REPO_URL = "https://github.com/novadharma-hub/pmn-framework"
+RAW_URL = "https://raw.githubusercontent.com/novadharma-hub/pmn-framework/main/"
 ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 UTAMA = "pmn"  # the skill that carries the manuscript
 
@@ -180,7 +181,8 @@ def main() -> int:
     korpus["references/glossary.md"] = tulis_glosarium(label, gl, glg)
     id_ada = set(ukuran)
 
-    nilai = {"VERSION": label, "SECTIONS": str(len(ukuran)), "TERMS": str(len(gl)), "BASE": BASE}
+    nilai = {"VERSION": label, "SECTIONS": str(len(ukuran)), "TERMS": str(len(gl)), "BASE": BASE,
+             "REPO": REPO_URL, "RAW": RAW_URL}
     skills: dict[str, dict[str, str]] = {}
     try:
         nilai["TEXT_ACCESS"] = isi_templat(

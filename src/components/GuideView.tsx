@@ -180,8 +180,8 @@ const SKILLS: Array<{ name: string; does: string; when: string }> = [
   },
   {
     name: 'pmn-diagnose',
-    does: 'A structured diagnosis of a real institution or policy: capture stage with evidence, who pays and who gains, second-order effects, what would overturn it.',
-    when: '"Is this regulator captured?", "Analyse this policy with PMN."',
+    does: 'A structured diagnosis of a real situation at any scale: a person or workplace, an institution or policy, a country or the international order. Finds the level that produces the outcome, applies its tests, and says what would overturn the diagnosis.',
+    when: '"Is this regulator captured?", "Is my situation my fault?", "How much pressure for change is there?"',
   },
   {
     name: 'pmn-critic',
@@ -666,7 +666,7 @@ Licence: CC BY-SA 4.0. Credit "Progressive Materialist Naturalism by Nova Dharma
                 </div>
                 <p className="guide-small">
                   Only <code>pmn</code> carries the manuscript. The other two read it from there, so install <code>pmn</code> in every case. Without
-                  it they fall back to fetching sections from this site.
+                  it they fetch sections from GitHub or this site, which always hold the latest edition.
                 </p>
 
                 <h3 className="guide-h3">Claude Code</h3>
