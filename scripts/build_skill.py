@@ -6,9 +6,10 @@ and files the model opens only when it needs them. The same folders install
 into Claude, Codex, OpenCode, Cursor and other agents that read the format.
 
 Sources (hand-written, with {{VERSION}} {{SECTIONS}} {{TERMS}} {{BASE}}
-{{REPO}} {{RAW}} {{TEXT_ACCESS}} placeholders):
+{{REPO}} {{RAW}} placeholders):
   skill/<name>/SKILL.in.md        one folder per skill; other files are copied
-  skill/_shared/text-access.md    how the method skills find the text
+  skill/_shared/<name>.md         shared blocks, inserted as {{NAME}} ({{TEXT_ACCESS}},
+                                  {{INCONSISTENCIES}}, {{LANGUAGE}})
   public_static/data/parts.json, gl.json, glg.json
 
 Only the `pmn` skill carries the manuscript (one file per section, index,
@@ -185,8 +186,10 @@ def main() -> int:
              "REPO": REPO_URL, "RAW": RAW_URL}
     skills: dict[str, dict[str, str]] = {}
     try:
-        nilai["TEXT_ACCESS"] = isi_templat(
-            (SRC / "_shared" / "text-access.md").read_text(encoding="utf-8"), nilai).rstrip("\n")
+        # skill/_shared/<nama>.md -> {{NAMA}}: potongan yang dipakai bersama semua skill.
+        for f in sorted((SRC / "_shared").glob("*.md")):
+            kunci = f.stem.upper().replace("-", "_")
+            nilai[kunci] = isi_templat(f.read_text(encoding="utf-8"), nilai).rstrip("\n")
         folders = sorted(d for d in SRC.iterdir() if d.is_dir() and not d.name.startswith("_"))
         for d in folders:
             berkas: dict[str, str] = {}

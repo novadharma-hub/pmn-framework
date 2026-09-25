@@ -1,6 +1,6 @@
 ---
 name: pmn-critic
-description: Questions Progressive Materialist Naturalism (PMN) seriously instead of applying it. Builds the strongest objections to PMN, checks whether a given criticism lands or misreads the text, finds unfalsifiable claims, doctrine passed off as framework, and inconsistencies, all against the text itself. Use whenever the user wants to criticise, critique, red-team, stress-test, debunk or find weaknesses in PMN or Nova Dharma's framework, asks whether a PMN claim is falsifiable or what would prove PMN wrong, or asks whether a critic of PMN is right, even if they only say "is PMN actually convincing?".
+description: Questions Progressive Materialist Naturalism (PMN) seriously instead of applying it. Builds the strongest objections to PMN, checks whether a given criticism lands or misreads the text, finds unfalsifiable claims, doctrine passed off as framework, and inconsistencies, all against the text itself. Use whenever the user wants to criticise, critique, red-team, stress-test, debunk or find weaknesses in PMN or Nova Dharma's framework, asks whether a PMN claim is falsifiable or what would prove PMN wrong, or asks whether a critic of PMN is right, in any language, even if they only say "is PMN actually convincing?".
 ---
 
 # Questioning PMN seriously
@@ -83,7 +83,8 @@ explained away. That pattern is what §1.2 calls insulation.
   critique is as useless as a defensive one.
 - **Name the kind of problem.** A gap (the text is silent), an acknowledged tension (Part XIII), a contradiction
   (the text says incompatible things), unfalsifiability, or doctrine smuggled in as framework. They call for
-  different fixes.
+  different fixes. The known inconsistencies (below) are fair targets, but an objection that only restates a
+  labelling slip is weak: ask whether the argument still fails once the intended reading is used.
 - **Mark what comes from outside the text.** Empirical literature, history and rival philosophers are fair game;
   label them as outside the manuscript and say how sure you are.
 
@@ -98,5 +99,34 @@ For each objection:
 - **What would settle it:** the evidence or argument that would decide it, and what PMN would have to change.
 
 Depth beats breadth: take the two or three objections that matter most and do them properly, then offer to go
-further. Close with the strongest objection that survives, and the list of sections you read. Answer in the user's language;
-keep section ids and quoted sentences in the original English.
+further. Close with the strongest objection that survives, and the list of sections you read.
+
+## When the text disagrees with itself
+
+The manuscript (v126) is being revised, and in places it contradicts itself: a symbol used for two things,
+a heading that names a variable one way and the paragraph another, a "canonical" section that leaves a term out.
+Handle this openly instead of silently picking one reading:
+
+1. **Check the known list first.** The `pmn` skill's `references/known-issues.md` lists the inconsistencies found
+   so far, with a recommended reading for each (online: https://raw.githubusercontent.com/novadharma-hub/pmn-framework/main/plugins/pmn/skills/pmn/references/known-issues.md).
+2. **Quote both passages** with their section ids, so the user sees the conflict.
+3. **Choose a reading and give the reason.** In this order: an explicit definition ("the G variable
+   (intergenerational transmission)") over a later passing use; the dedicated section over an aside elsewhere;
+   the reading that keeps the argument coherent over the one that breaks it. Where two meanings are both needed,
+   treat them as two separate things and name them apart.
+4. **Carry the uncertainty.** If the conclusion depends on which reading is right, say so and give both outcomes.
+5. **Report new ones.** An inconsistency not on the list goes at the end of your answer as a possible manuscript
+   issue, with both quotes. Do not "fix" PMN by inventing a position it does not state.
+
+## Language
+
+The manuscript is in English, and English is the default. Answer in the language the user writes in; if that is
+unclear, use English.
+
+- **Search in English.** Translate the user's concepts into PMN's English terms before searching the index,
+  glossary and sections (for example "penangkapan lembaga" or "captura institucional" → "capture"). The glossary
+  gives PMN's own wording.
+- **Quote in the original.** Keep section ids and quoted sentences in English, exactly as written; when you answer
+  in another language, follow each key quote with a translation.
+- **Keep PMN's terms recognisable.** On first use in another language, give the English term in brackets
+  (for example "lantai biologis (biological floor)"), so the user can find it in the text.

@@ -61,9 +61,8 @@ too when you name one:
   A private firm pursuing its own interest through its own design (pricing, algorithms, contracts) is not captured;
   analyse it through incentive architecture and structural position instead of forcing the capture stages onto it.
 - **Macro (sector, country, regime, international order).** §15.2 and §15.4 transformation pressure
-  T = S × D × P × G, with §15.0b for the canonical terms and §15.13 for what the formulas cannot do. §15.4 defines
-  G as intergenerational transmission but later also uses G for cross-group alignment (headed "Ga"); state which
-  reading you use, or treat them as two factors; §15.12 reading
+  T = S × D × P × G, with §15.0b for the canonical terms and §15.13 for what the formulas cannot do (the formula's
+  letters are not used consistently; see the known inconsistencies below); §15.12 reading
   current conditions; §10.5 thresholds and §10.5b political time; §7.8 regime types; §9.0 and §9.2 for the
   international dimension.
 - Remedies, only if asked: §7.3d for institutions, §10.6 and §10.9 for system change. §13.1c when someone calls a
@@ -122,4 +121,32 @@ points to another that bears on the case, open that one as well.
 7. **Confidence and what would overturn it:** specific, observable evidence.
 8. **Sections read.**
 
-Answer in the user's language; keep section ids and quoted sentences in the original English.
+## When the text disagrees with itself
+
+The manuscript (v126) is being revised, and in places it contradicts itself: a symbol used for two things,
+a heading that names a variable one way and the paragraph another, a "canonical" section that leaves a term out.
+Handle this openly instead of silently picking one reading:
+
+1. **Check the known list first.** The `pmn` skill's `references/known-issues.md` lists the inconsistencies found
+   so far, with a recommended reading for each (online: https://raw.githubusercontent.com/novadharma-hub/pmn-framework/main/plugins/pmn/skills/pmn/references/known-issues.md).
+2. **Quote both passages** with their section ids, so the user sees the conflict.
+3. **Choose a reading and give the reason.** In this order: an explicit definition ("the G variable
+   (intergenerational transmission)") over a later passing use; the dedicated section over an aside elsewhere;
+   the reading that keeps the argument coherent over the one that breaks it. Where two meanings are both needed,
+   treat them as two separate things and name them apart.
+4. **Carry the uncertainty.** If the conclusion depends on which reading is right, say so and give both outcomes.
+5. **Report new ones.** An inconsistency not on the list goes at the end of your answer as a possible manuscript
+   issue, with both quotes. Do not "fix" PMN by inventing a position it does not state.
+
+## Language
+
+The manuscript is in English, and English is the default. Answer in the language the user writes in; if that is
+unclear, use English.
+
+- **Search in English.** Translate the user's concepts into PMN's English terms before searching the index,
+  glossary and sections (for example "penangkapan lembaga" or "captura institucional" → "capture"). The glossary
+  gives PMN's own wording.
+- **Quote in the original.** Keep section ids and quoted sentences in English, exactly as written; when you answer
+  in another language, follow each key quote with a translation.
+- **Keep PMN's terms recognisable.** On first use in another language, give the English term in brackets
+  (for example "lantai biologis (biological floor)"), so the user can find it in the text.

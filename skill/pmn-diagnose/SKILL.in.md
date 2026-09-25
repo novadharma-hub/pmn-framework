@@ -39,9 +39,8 @@ too when you name one:
   A private firm pursuing its own interest through its own design (pricing, algorithms, contracts) is not captured;
   analyse it through incentive architecture and structural position instead of forcing the capture stages onto it.
 - **Macro (sector, country, regime, international order).** §15.2 and §15.4 transformation pressure
-  T = S × D × P × G, with §15.0b for the canonical terms and §15.13 for what the formulas cannot do. §15.4 defines
-  G as intergenerational transmission but later also uses G for cross-group alignment (headed "Ga"); state which
-  reading you use, or treat them as two factors; §15.12 reading
+  T = S × D × P × G, with §15.0b for the canonical terms and §15.13 for what the formulas cannot do (the formula's
+  letters are not used consistently; see the known inconsistencies below); §15.12 reading
   current conditions; §10.5 thresholds and §10.5b political time; §7.8 regime types; §9.0 and §9.2 for the
   international dimension.
 - Remedies, only if asked: §7.3d for institutions, §10.6 and §10.9 for system change. §13.1c when someone calls a
@@ -100,4 +99,6 @@ points to another that bears on the case, open that one as well.
 7. **Confidence and what would overturn it:** specific, observable evidence.
 8. **Sections read.**
 
-Answer in the user's language; keep section ids and quoted sentences in the original English.
+{{INCONSISTENCIES}}
+
+{{LANGUAGE}}

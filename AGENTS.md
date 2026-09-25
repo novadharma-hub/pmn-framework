@@ -28,6 +28,8 @@ Progressive Materialist Naturalism (PMN), a philosophical manuscript by **Nova D
 - a PDF, and Agent Skills in `plugins/pmn/skills/` (see README, "Using PMN with an AI model")
 
 The manuscript source (`.docx`) lives outside this repository on the owner's PC. Only generated data is published.
+A full rewrite of the manuscript is in progress there. Until it lands, the published text (v126) contains known
+inconsistencies; the skills handle them through `skill/pmn/references/known-issues.md`.
 
 ## Rules that are never broken
 
@@ -71,6 +73,20 @@ and the PDF check).
 
 After a UI change, open the changed pages at phone width (390px) and desktop width and check both themes.
 
+## Agent Skills
+
+Sources in `skill/`: one folder per skill with `SKILL.in.md`, shared blocks in `skill/_shared/` (text access,
+inconsistencies, language), and `skill/pmn/references/known-issues.md`. `scripts/build_skill.py` fills the
+placeholders, checks that every section id the skills cite exists, and writes `plugins/pmn/`.
+
+- Test a changed skill with a real agent on a realistic prompt (give it only the installed skills folder, ask for
+  the answer plus a trace of files opened and anything unclear), and fold the findings back in.
+- Found a new inconsistency in the manuscript? Add it to `known-issues.md` with both quotes and a recommended
+  reading.
+- **When the rewritten manuscript lands**, section ids may change. The build then fails on every section id the
+  skills cite that no longer exists: update the pointers in `skill/`, re-check `known-issues.md` (drop what the
+  rewrite fixed), and re-run the skill tests.
+
 ## Releasing a new manuscript version
 
 On the owner's PC: import the `.docx` with `pmn_console.py` (options 1 and 2), then **run `npm run build`** and
@@ -90,7 +106,7 @@ Agent Skills one version behind; direct pushes to `main` are not checked for thi
 
 ## Status
 
-Last updated: 2026-09-25 (after PR #21).
+Last updated: 2026-09-25 (after PR #22).
 
 ### Done recently
 
@@ -101,6 +117,7 @@ Last updated: 2026-09-25 (after PR #21).
 - #20: skills `pmn-diagnose` and `pmn-critic`, installable from GitHub (`/plugin marketplace add
   novadharma-hub/pmn-framework`, `npx skills add novadharma-hub/pmn-framework`).
 - #21: skills can read the text from GitHub; `pmn-diagnose` covers micro, meso and macro (§7.0b); this file.
+- #22: all skills handle the manuscript's inconsistencies (`known-issues.md`) and any language, English by default.
 
 ### Next, in order
 
@@ -116,13 +133,7 @@ Last updated: 2026-09-25 (after PR #21).
 
 - **GitHub Support request** ("Deletes") to purge the old pull-request refs (#1–#16) that still hold the removed
   `.docx` files. Only GitHub can do this.
-- **Manuscript questions found by the skills** (the owner's call, in the `.docx`):
-  - §15.4: the heading says "Geographic spread (P)", the text says "the population scale variable P".
-  - §15.4 defines G as "intergenerational transmission", then a few paragraphs later uses G for cross-group
-    alignment ("ensure that G remains low — that the populations ... understand themselves as having separate
-    rather than shared interests"), headed "Ga". Two different factors share one letter in the main formula.
-  - §15.0b calls itself canonical but does not define D, P or G.
-  - "Advanced V" (§15.0b): a population that does not complain can read as "no structural suffering" or as
-    "suffering hidden by advanced V", with no indicator of V independent of the outcome it explains. The critic
-    skill judged this the strongest surviving objection to PMN.
+- **Manuscript inconsistencies** for the rewrite: see `skill/pmn/references/known-issues.md` (two meanings of G,
+  P named two ways, T and A, D/P/G missing from §15.0b, no independent indicator for advanced V). The critic skill
+  judged the last one the strongest surviving objection to PMN.
 - Review the eight rewritten Reading Paths descriptions and the unified citation format (Rules page).
