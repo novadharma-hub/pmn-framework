@@ -23,7 +23,9 @@ criticism that lands on the actual text, and an honest verdict when it does not.
 - §15.0b and the glossary entry for any term you attack: the canonical definition is what the objection has to hit.
 - The section that states the claim under attack, and any section that answers the objection.
 
-This list is where to start, not a boundary: follow cross-references that bear on the objection.
+For a narrow question (one Part, one formula, one claim), start with the sections that state the target and bring
+in the method sections above as the objection needs them. This list is where to start, not a boundary: follow
+cross-references that bear on the objection.
 
 ## Pick the mode from the request
 
@@ -68,8 +70,10 @@ explained away. That pattern is what §1.2 calls insulation.
   critique is as useless as a defensive one.
 - **Name the kind of problem.** A gap (the text is silent), an acknowledged tension (Part XIII), a contradiction
   (the text says incompatible things), unfalsifiability, or doctrine smuggled in as framework. They call for
-  different fixes. Unlike the other PMN skills, this one may name a genuine contradiction when it matters to the
-  argument (`known-issues.md` lists the known ones); minor label slips stay out.
+  different fixes.
+- **Known drafting problems are not objections.** `known-issues.md` records them for the author; it is not a source
+  of criticism. Do not build an answer on them. Mention one briefly only if the user asks about that passage, or if
+  the problem changes what an argument actually claims even on its best reading.
 - **Mark what comes from outside the text.** Empirical literature, history and rival philosophers are fair game;
   label them as outside the manuscript and say how sure you are.
 
