@@ -38,7 +38,9 @@ cross-references that bear on the case.
    arrangement absorbing pressure, straining, or near a threshold (§10.5, §15.12)?
 3. **Counter-power audit (§15.8).** For each factor (organisation O, narrative N, resources Rs, coalition width W,
    repression Rp, internal fragmentation Cf): the current level and the evidence. The factors multiply, so the
-   weakest one limits everything; name it. Use current capacity, not hoped-for capacity (§13.4f).
+   weakest one limits everything; name it. Use current capacity, not hoped-for capacity (§13.4f). Repression is
+   whatever the opposing side can do to punish organisers, not only state force: dismissal, account deactivation,
+   blacklisting, lawsuits, loss of contracts.
 4. **Window (§15.11).** Closed, opening or open, and how ready the actors are. A window that opens before readiness
    tends to end in repression or someone else's gain; often the right move is to build readiness for the next one.
 5. **Mode.** Work through §13.4f's diagnostic for accommodation against transformation, including the lock-in risk
