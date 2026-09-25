@@ -209,6 +209,27 @@ export default function App() {
     sinkronPertama.current = false
   }, [page, contentsSub, curPos, data, rulesTab, guideTab])
 
+  // Judul tab per halaman (audit 2026-09-24: semua rute berjudul sama, jadi
+  // tab, bookmark dan riwayat browser tak bisa dibedakan). Judul beranda
+  // diambil dari index.html sekali, supaya SEO beranda tidak berubah.
+  const judulBeranda = useRef(document.title)
+  useEffect(() => {
+    const GUIDE: Record<GuideTab, string> = { start: '', prompts: 'Prompts', questions: 'Questions', dev: 'Developer', endpoints: 'Endpoints' }
+    const RULES: Record<string, string> = { privacy: 'Privacy', terms: 'Terms & Citation', disclaimer: 'Epistemic Limits', ai: 'AI Policy' }
+    let t = judulBeranda.current
+    if (page === 'reader') {
+      const sub = data?.parts?.[curPos[0]]?.subs?.[curPos[1]]
+      if (sub?.id) t = `§${sub.id} ${sub.title || ''}`.trim() + ' — PMN'
+    } else if (page === 'contents') {
+      t = (contentsSub === 'glossary' ? 'Glossary' : contentsSub === 'search' ? 'Search' : 'Contents') + ' — PMN'
+    } else if (page === 'guide') {
+      t = (GUIDE[guideTab] ? GUIDE[guideTab] + ' · ' : '') + 'AI Guide — PMN'
+    } else if (page === 'rules') {
+      t = (RULES[rulesTab] ? RULES[rulesTab] + ' · ' : '') + 'Rules & Data — PMN'
+    }
+    document.title = t
+  }, [page, contentsSub, curPos, data, guideTab, rulesTab])
+
   // URL -> state. Tanpa ini tombol Back browser tidak melakukan apa pun.
   useEffect(() => {
     const onPop = () => {
@@ -451,7 +472,7 @@ export default function App() {
             }}
             onKeyDown={e => { if (e.key === 'Enter') handleGlobalSearchJump(); if (e.key === 'Escape') setSearchQuery('') }}
           />
-          <select id="srch-part" value={searchPartFilter} onChange={e => setSearchPartFilter(e.target.value)}>
+          <select id="srch-part" aria-label="Limit search to one Part" value={searchPartFilter} onChange={e => setSearchPartFilter(e.target.value)}>
             <option value="">All parts</option>
             {data?.parts?.map((p: any) => <option key={p.part} value={p.part}>{p.part}</option>)}
           </select>
@@ -476,7 +497,11 @@ export default function App() {
 
       {/* PAGE SHELL — height = 100vh - 52px (header height) */}
       <div className="page-shell">
-        <div className="views-shell" style={{flex:1, overflow:'hidden', position:'relative', minHeight:0, width:'100%'}}>
+        {/* Satu landmark <main> untuk semua halaman (audit axe 2026-09-24:
+            Cover, Daftar Isi, Glosarium tidak punya <main> sama sekali, dan
+            konten di luar landmark tak terjangkau navigasi pembaca layar).
+            Karena itu halaman di dalamnya tidak memakai <main> lagi. */}
+        <main id="main-content" className="views-shell" style={{flex:1, overflow:'hidden', position:'relative', minHeight:0, width:'100%'}}>
 
           {page === 'home' && (
             <HomeView
@@ -555,7 +580,7 @@ export default function App() {
             />
           )}
 
-        </div>
+        </main>
 
         {/* BOTTOM / MOBILE NAVIGATION BAR */}
         <nav id="mob-nav" className="mob-nav" aria-label="Mobile Navigation">

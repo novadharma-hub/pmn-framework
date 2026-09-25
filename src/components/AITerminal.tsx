@@ -363,6 +363,7 @@ If the text does not address something, say so instead of filling the gap.`
 
           <select
             className="hai-select"
+            aria-label="Analytical role"
             value={selectedMode}
             onChange={e => setSelectedMode(e.target.value)}
             style={{

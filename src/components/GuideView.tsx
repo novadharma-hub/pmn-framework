@@ -367,7 +367,7 @@ Evaluate institutions by material incentives and the five-stage capture sequence
       style={{ position: 'absolute', inset: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch', background: 'var(--bg)' }}
     >
       <PageHeader title="AI Guide" subtitle=" — Using PMN with AI" onBack={onBackHome} />
-      <main aria-label="AI Guide" className="pg-col pg-col-text">
+      <div className="pg-col pg-col-text">
         <div className="pg-intro">
           <div className="pg-eyebrow">PMN v{version} &middot; AI Guide</div>
           <h1 className="pg-h1">Using PMN with AI</h1>
@@ -684,7 +684,7 @@ Evaluate institutions by material incentives and the five-stage capture sequence
             </p>
           </section>
         </div>
-      </main>
+      </div>
       <PageFooter version={version} />
     </div>
   )

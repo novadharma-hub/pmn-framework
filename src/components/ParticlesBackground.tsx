@@ -249,7 +249,8 @@ export default function ParticlesBackground() {
   }, [])
 
   return (
-    <canvas 
+    <canvas
+      aria-hidden="true"
       ref={canvasRef} 
       className="absolute top-0 left-0 w-full h-full pointer-events-none z-0"
     />

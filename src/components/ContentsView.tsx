@@ -276,7 +276,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                 </div>
               </div>
 
-              <p className="toc-lbl border-b border-pmn-rule pb-3 mb-12 font-pmn-mono text-[0.7rem] text-pmn-acc uppercase tracking-[0.3em] font-bold opacity-80">Manuscript Mapping</p>
+              <p className="toc-lbl border-b border-pmn-rule pb-3 mb-12 font-pmn-mono text-[0.7rem] text-pmn-acc-text uppercase tracking-[0.3em] font-bold opacity-80">Manuscript Mapping</p>
               
               <div id="toc-grid" className="toc-grid">
                 {data.parts.map((p, pIdx) => {
@@ -533,7 +533,7 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
 
                 {searchResults.length === 0 && (
                   <div className="py-24 w-full flex flex-col items-center text-center">
-                    <p className="font-pmn-body text-xl text-pmn-mute italic opacity-60 max-w-[400px] mx-auto leading-relaxed">
+                    <p className="font-pmn-body text-xl text-pmn-mute italic max-w-[400px] mx-auto leading-relaxed">
                       {searchQuery 
                         ? `No direct matches found in the manuscript for "${searchQuery}".` 
                         : "Enter a term above to begin analytical search."

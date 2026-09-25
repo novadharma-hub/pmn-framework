@@ -155,18 +155,17 @@ If you reference, analyze, or cite Progressive Materialist Naturalism in academi
 
 ### APA (7th ed.)
 ```text
-Dharma, N. (2026). Progressive Materialist Naturalism: A Framework for Minimizing Structural Suffering and Maximizing Genuine Becoming (Version 126) [Manuscript]. Novadharma Hub. https://novadharma-hub.github.io/pmn-framework/
+Dharma, N. (2026). Progressive Materialist Naturalism (Version 126) [Manuscript]. https://novadharma-hub.github.io/pmn-framework/
 ```
 
 ### BibTeX
 ```bibtex
-@book{dharma2026pmn,
-  author    = {Nova Dharma and PMN Working Group},
-  title     = {Progressive Materialist Naturalism: A Framework for Minimizing Structural Suffering and Maximizing Genuine Becoming},
-  year      = {2026},
-  version   = {v126},
-  url       = {https://novadharma-hub.github.io/pmn-framework/},
-  publisher = {Novadharma Hub}
+@misc{dharma2026pmn,
+  author       = {Dharma, Nova},
+  title        = {Progressive Materialist Naturalism},
+  year         = {2026},
+  note         = {Manuscript, version 126},
+  howpublished = {\url{https://novadharma-hub.github.io/pmn-framework/}}
 }
 ```
 

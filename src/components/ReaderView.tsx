@@ -402,7 +402,7 @@ export default function ReaderView({
         />
       )}
 
-      <main ref={mainRef} id="reader-main" className="flex-1 overflow-y-auto custom-scrollbar relative bg-pmn-bg">
+      <div ref={mainRef} id="reader-main" className="flex-1 overflow-y-auto custom-scrollbar relative bg-pmn-bg">
         <div 
           id="reader-nav"
           role="navigation"
@@ -466,7 +466,7 @@ export default function ReaderView({
               <h1 className="font-pmn-head font-bold text-pmn-ink text-2xl lg:text-4xl leading-tight mb-5 text-center">{s?.title}</h1>
 
               <div className="reader-meta flex flex-col md:flex-row md:items-center justify-between pb-0 mb-0 select-none gap-4">
-                <span className="font-mono text-[0.65rem] text-pmn-mute opacity-60 uppercase tracking-widest italic">
+                <span className="font-mono text-[0.75rem] text-pmn-mute uppercase tracking-widest italic">
                   {`${menitBaca} min read`}
                 </span>
                 
@@ -728,7 +728,7 @@ export default function ReaderView({
             </div>
           </div>
         </div>
-      </main>
+      </div>
 
       <CommandPalette 
         parts={data.parts} glossary={data.gl} isOpen={commandPaletteOpen} 

@@ -19,6 +19,25 @@ import { PageHeader, PageFooter } from './PageHeader'
 
 export type PolicyTab = RulesTab
 
+/**
+ * Semua kunci localStorage yang dipakai situs. Sampai 2026-09-24 tabel ini
+ * menyebut 8 dari 16 (audit: pmn-page, pmn-sub, pmn-history, pmn-gl-*, ...
+ * tidak tercantum), padahal halaman ini menjanjikan inventaris lengkap.
+ * Tambah baris di sini setiap kali kode memakai kunci pmn-* baru.
+ */
+const STORAGE_KEYS: Array<[string, string]> = [
+  ['pmn-theme', 'Dark or light theme'],
+  ['pmn-read, pmn-pos', 'Sections marked as read, and the last reading position'],
+  ['pmn-history', 'Recently opened sections (for the back/history list)'],
+  ['pmn-page, pmn-sub', 'Which page and sub-view was open last (Cover, Contents, Glossary, ...)'],
+  ['pmn-desk-notes, pmn-an-*', 'Your notes: general notes, and notes attached to sections'],
+  ['pmn-hl-v3', 'Text highlights'],
+  ['pmn-reader-scale, pmn-contents-scale, pmn-sidebar-scale', 'Text size in the reader, the contents pages and the reader sidebar'],
+  ['pmn-content-width', 'Reading column width (narrow / medium / wide)'],
+  ['pmn-gl-view, pmn-gl-sort', 'Glossary layout (index or cards) and sort order'],
+  ['pmn-tip-dismissed', 'Whether you closed the orientation tip on the cover'],
+]
+
 const RULES_TABS: Array<[PolicyTab, string]> = [
   ['privacy', '🛡️ Privacy & Data'],
   ['terms', '📜 Terms & Citation'],
@@ -123,14 +142,18 @@ export default function RulesPage({
     }
   }
 
-  const apaCitation = `Dharma, N. (2026). Progressive Materialist Naturalism: A Structural Analytic Framework for Non-Ideal Realities (Version ${version}). PMN Collective. https://novadharma-hub.github.io/pmn-framework/`
+  // Kutipan hanya memuat yang bisa diverifikasi: penulis, judul, versi, URL.
+  // Sampai 2026-09-24 di sini tertulis subjudul "A Structural Analytic
+  // Framework for Non-Ideal Realities" dan penerbit "PMN Collective", sementara
+  // README menulis subjudul dan penerbit lain lagi. Naskahnya sendiri tidak
+  // memuat keduanya. Satu bentuk, sama dengan README.
+  const apaCitation = `Dharma, N. (2026). Progressive Materialist Naturalism (Version ${version}) [Manuscript]. https://novadharma-hub.github.io/pmn-framework/`
   const bibtexCitation = `@misc{dharma2026pmn,
-  author = {Dharma, Nova},
-  title = {Progressive Materialist Naturalism: A Structural Analytic Framework for Non-Ideal Realities},
-  year = {2026},
-  edition = {v${version}},
-  publisher = {PMN Collective},
-  url = {https://novadharma-hub.github.io/pmn-framework/}
+  author       = {Dharma, Nova},
+  title        = {Progressive Materialist Naturalism},
+  year         = {2026},
+  note         = {Manuscript, version ${version}},
+  howpublished = {\\url{https://novadharma-hub.github.io/pmn-framework/}}
 }`
 
   return (
@@ -147,7 +170,7 @@ export default function RulesPage({
         }}
       >
       <PageHeader title="Rules & Data" onBack={onBack} backLabel="Back" />
-      <main aria-label="Rules & Data" className="pg-col pg-col-text">
+      <div className="pg-col pg-col-text">
         <div className="pg-intro">
           <div className="pg-eyebrow">Platform governance &amp; web standards</div>
           <h1 className="pg-h1">Transparency &amp; Policy Center</h1>
@@ -209,18 +232,18 @@ export default function RulesPage({
                 </div>
               </div>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1rem 0 .4rem' }}>
                 1. Why Is There No Cookie Consent Banner?
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 Under the <strong>ePrivacy Directive (Article 5(3))</strong>, the <strong>GDPR</strong>, and international data protection standards, 
                 cookie consent banners are <em>only mandatory</em> when a website deploys non-essential trackers (such as third-party analytics, cross-site beacons, or advertising telemetry). 
                 Because the PMN Framework is <strong>100% free of cookies and tracking scripts</strong>, displaying a consent popup would constitute empty compliance theater.
               </p>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 2. Client-Side Local Storage Transparency
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.6rem' }}>
                 All reader personalization features operate strictly client-side within your browser (strictly necessary local storage). The keys used include:
               </p>
@@ -235,38 +258,20 @@ export default function RulesPage({
                     </tr>
                   </thead>
                   <tbody>
-                    <tr style={{ borderBottom: '1px solid var(--rule)' }}>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--acc-text)' }}>pmn-theme</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--ink2)' }}>Visual presentation preference (Dark / Light mode)</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--mute)' }}>Local browser</td>
-                    </tr>
-                    <tr style={{ borderBottom: '1px solid var(--rule)' }}>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--acc-text)' }}>pmn-read, pmn-pos</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--ink2)' }}>Checklist of completed sections and last reading position</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--mute)' }}>Local browser</td>
-                    </tr>
-                    <tr style={{ borderBottom: '1px solid var(--rule)' }}>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--acc-text)' }}>pmn-desk-notes, pmn-an-*</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--ink2)' }}>Personal analytical notes and section margin commentary</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--mute)' }}>Local browser</td>
-                    </tr>
-                    <tr style={{ borderBottom: '1px solid var(--rule)' }}>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--acc-text)' }}>pmn-hl-v3</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--ink2)' }}>Text highlights and color markers across manuscript sections</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--mute)' }}>Local browser</td>
-                    </tr>
-                    <tr style={{ borderBottom: '1px solid var(--rule)' }}>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--acc-text)' }}>pmn-reader-scale</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--ink2)' }}>Custom typographic scale and measure setting</td>
-                      <td style={{ padding: '.45rem .6rem', color: 'var(--mute)' }}>Local browser</td>
-                    </tr>
+                    {STORAGE_KEYS.map(([keys, purpose]) => (
+                      <tr key={keys} style={{ borderBottom: '1px solid var(--rule)' }}>
+                        <td style={{ padding: '.45rem .6rem', color: 'var(--acc-text)' }}>{keys}</td>
+                        <td style={{ padding: '.45rem .6rem', color: 'var(--ink2)' }}>{purpose}</td>
+                        <td style={{ padding: '.45rem .6rem', color: 'var(--mute)' }}>Local browser</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 3. Reader Data Sovereignty
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 Currently storing <strong>{storageStats.count} local records</strong> (~{storageStats.sizeKb} KB) in your browser. 
                 You maintain complete, unmediated control over your data:
@@ -309,9 +314,9 @@ export default function RulesPage({
                 </button>
               </div>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.6rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.6rem 0 .4rem' }}>
                 4. Search Engines &amp; Indexing
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 Search engines such as Google and Bing may list this site in their results. That happens entirely on their side: their crawlers read the public pages the same way any visitor can. The site loads nothing from any search engine, so being indexed adds <strong>no cookies, trackers or third-party requests</strong> to your visit.
               </p>
@@ -324,18 +329,22 @@ export default function RulesPage({
           {/* TAB 2: TERMS & CITATION */}
           {activeTab === 'terms' && (
             <div>
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '.2rem 0 .4rem' }}>
                 1. Open Access &amp; Scholarship License
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
-                The manuscript of <em>Progressive Materialist Naturalism (PMN)</em> is provided openly for personal study, 
-                critical review, scholarly research, and non-commercial education. Readers are encouraged to cite, reference, 
-                and critically analyze concepts from the text, provided proper attribution is maintained to <strong>Nova Dharma</strong>.
+                {/* Dulu: "...and non-commercial education" - bertentangan dengan LICENSE
+                    (CC BY-SA 4.0 mengizinkan penggunaan komersial). LICENSE yang
+                    berlaku; ringkasan ini mengikutinya. */}
+                The manuscript of <em>Progressive Materialist Naturalism (PMN)</em> is licensed under{' '}
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>CC BY-SA 4.0</a>.
+                You may share, adapt and use it, including commercially, provided you credit <strong>Nova Dharma</strong>,
+                link to the source, say if you changed it, and release adaptations under the same licence.
               </p>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 2. Canonical Integrity &amp; Distortion Prevention
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 To preserve the analytical coherence and falsifiability of the framework:
               </p>
@@ -348,9 +357,9 @@ export default function RulesPage({
                 </li>
               </ul>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 3. Standard Academic Citation Format
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.6rem' }}>
                 Use the official citation formats below for research papers, dissertations, peer-reviewed articles, or public commentary:
               </p>
@@ -428,9 +437,9 @@ export default function RulesPage({
                 </p>
               </div>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1rem 0 .4rem' }}>
                 1. Heuristic Status of Formulas (Not Deterministic Calculators)
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 The mathematical expressions in Part XV (such as $T = S \times D \times P \times G$ and $Tr = T / (C \times L) - CP$) are 
                 <strong> qualitative heuristic instruments</strong> designed to isolate critical institutional variables, their direction of influence, 
@@ -438,18 +447,18 @@ export default function RulesPage({
                 numerical calculators or chronological event forecasters is a form of <em>formula fetishism</em> explicitly repudiated by the framework.
               </p>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 2. Non-Professional Advisory Boundary
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 PMN is an apparatus for macro-structural analysis of institutions, historical trajectories, and material power distributions. 
                 It <strong>is not intended as, and cannot substitute for, legal counsel, medical guidance, financial advisory, or personal psychological clinical treatment</strong>. 
                 Applying the framework to real-world arrangements demands rigorous empirical contextualization and individual ethical accountability.
               </p>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 3. Openness to Empirical Falsification (§14.4b)
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 Consistent with materialist naturalism, PMN rejects dogmatic immunity. If rigorous empirical findings or historical developments 
                 refute the postulates presented in this manuscript, the only valid methodological response is 
@@ -461,30 +470,30 @@ export default function RulesPage({
           {/* TAB 4: AI ETHICS POLICY */}
           {activeTab === 'ai' && (
             <div>
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '.2rem 0 .4rem' }}>
                 1. AI Ingestion &amp; Canonical Endpoints
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 This platform provides dedicated structured endpoints for reasoning agents and language models to minimize hallucinations and preserve citation fidelity:
               </p>
               <ul style={{ color: 'var(--ink2)', paddingLeft: '1.2rem', marginBottom: '1.2rem', fontFamily: 'var(--f-mono)', fontSize: '.8rem' }}>
                 <li style={{ marginBottom: '.3rem' }}>
-                  <a href="llms.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms.txt</a> &mdash; Rapid structural index and core axiom inventory.
+                  <a href="llms.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>/llms.txt</a> &mdash; Rapid structural index and core axiom inventory.
                 </li>
                 <li style={{ marginBottom: '.3rem' }}>
-                  <a href="txt/index.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/txt/index.txt</a> &mdash; Every section as its own small plain-text file. Best starting point for agents.
+                  <a href="txt/index.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>/txt/index.txt</a> &mdash; Every section as its own small plain-text file. Best starting point for agents.
                 </li>
                 <li style={{ marginBottom: '.3rem' }}>
-                  <a href="llms-full.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/llms-full.txt</a> &mdash; The complete text in one file (~2.4 MB); most fetchers truncate it.
+                  <a href="llms-full.txt" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>/llms-full.txt</a> &mdash; The complete text in one file (~2.4 MB); most fetchers truncate it.
                 </li>
                 <li style={{ marginBottom: '.3rem' }}>
-                  <a href="pmn_corpus_for_ai.md" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)' }}>/pmn_corpus_for_ai.md</a> &mdash; Unabridged Markdown corpus for long-context RAG pipelines.
+                  <a href="pmn_corpus_for_ai.md" target="_blank" rel="noreferrer" style={{ color: 'var(--acc-text)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>/pmn_corpus_for_ai.md</a> &mdash; Unabridged Markdown corpus for long-context RAG pipelines.
                 </li>
               </ul>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 2. Ethical Processing Constraints
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.8rem' }}>
                 Developers, researchers, and agent architectures utilizing the PMN corpus are expected to honor the framework's ethical commitments:
               </p>
@@ -497,9 +506,9 @@ export default function RulesPage({
                 </li>
               </ul>
 
-              <h3 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
+              <h2 style={{ fontFamily: 'var(--f-head)', fontSize: 'clamp(1.05rem, 1.5vw + .75rem, 1.25rem)', margin: '1.2rem 0 .4rem' }}>
                 3. Errata Reporting &amp; Dialectical Engagement
-              </h3>
+              </h2>
               <p style={{ color: 'var(--ink2)', marginBottom: '.4rem' }}>
                 To submit identified manuscript inconsistencies, cross-reference errors, or proposed apparatus improvements, please open an Issue on the public repository:
               </p>
@@ -517,7 +526,7 @@ export default function RulesPage({
           )}
         </div>
 
-      </main>
+      </div>
       <PageFooter version={version} />
       </div>
     </>

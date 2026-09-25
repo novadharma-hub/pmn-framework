@@ -112,7 +112,7 @@ export default function Sidebar({ parts, readMap, curPos, onSelectSection, onClo
         }}
       >
         <span className="sb-plbl-chev shrink-0" aria-hidden="true">{isOpen ? '▾' : '▸'}</span>
-        <span className="font-pmn-mono text-[0.65rem] tracking-[0.2em] opacity-60 shrink-0 ml-2">P.{p.part}</span>
+        <span className="font-pmn-mono text-[0.65rem] tracking-[0.2em] shrink-0 ml-2">P.{p.part}</span>
         <span className="mx-2 opacity-30 shrink-0">·</span>
         <span className="min-w-0 break-words">{p.title}</span>
       </button>
