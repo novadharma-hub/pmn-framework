@@ -1,6 +1,6 @@
 ---
 name: pmn
-description: Grounds answers in the text of Progressive Materialist Naturalism (PMN), the philosophical framework by Nova Dharma, using the full manuscript bundled with this skill (version {{VERSION}}). Use this skill whenever the user mentions PMN, Progressive Materialist Naturalism or Nova Dharma, cites a PMN section number (for example §7.3c-i or §15.2), or asks to analyse an institution, policy, capture, structural suffering, the biological floor, transformation pressure (T = S × D × P × G) or counter-power "with PMN" or "the way PMN would", even if they do not name the framework precisely.
+description: Grounds answers in the text of Progressive Materialist Naturalism (PMN), the philosophical framework by Nova Dharma, using the full manuscript bundled with this skill (version {{VERSION}}). Use this skill whenever the user mentions PMN, Progressive Materialist Naturalism or Nova Dharma, cites a PMN section number (for example §7.3c-i or §15.2), or asks to analyse an institution, policy, capture, structural suffering, the biological floor, transformation pressure (T = S × D × P × G) or counter-power "with PMN" or "the way PMN would", in any language, even if they do not name the framework precisely.
 ---
 
 # PMN: answer from the text, not from memory
@@ -14,6 +14,7 @@ sections) so every claim can be checked against the text.
 - `references/index.md`: every section in reading order, with its id, title, Part and file name. Start here.
 - `references/sections/<id>.txt`: one file per section, full text (for example `references/sections/7.3c-i.txt`).
 - `references/glossary.md`: {{TERMS}} defined terms, each with the section it comes from.
+- `references/known-issues.md`: places where the manuscript contradicts itself, with the reading to use.
 - `references/roles.md`: analytical roles (structural analyst, capture diagnostician, red team, counter-power
   strategist, meaning-infrastructure analyst, evidence auditor) to use when the user asks for that kind of analysis.
 
@@ -33,7 +34,9 @@ Online copies of the same files, always the latest edition (the bundled one is {
 4. **Say where the text is silent.** If the manuscript does not address something, say so and, if useful, say
    what PMN's method would ask next. Do not fill the gap with a position PMN does not state.
 5. **Keep tensions open.** PMN deliberately leaves some tensions unresolved (Part XIII). Show the tension; do not
-   smooth it into a compromise.
+   smooth it into a compromise. A deliberate tension is different from an inconsistency in the text (below).
+
+{{INCONSISTENCIES}}
 
 ## How PMN reasons (orientation only; verify in the text before relying on it)
 
@@ -51,8 +54,8 @@ follow the section and say so.
 
 - Lead with the answer, then the reasoning, with section ids inline.
 - End analytical answers with: the sections read, the main uncertainty, and what would change the conclusion.
-- Match the user's language (answer in Indonesian if they write in Indonesian); keep section ids and quoted
-  sentences in the original English.
+
+{{LANGUAGE}}
 
 ## Licence and attribution
 

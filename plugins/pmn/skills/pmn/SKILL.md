@@ -1,6 +1,6 @@
 ---
 name: pmn
-description: Grounds answers in the text of Progressive Materialist Naturalism (PMN), the philosophical framework by Nova Dharma, using the full manuscript bundled with this skill (version v126). Use this skill whenever the user mentions PMN, Progressive Materialist Naturalism or Nova Dharma, cites a PMN section number (for example §7.3c-i or §15.2), or asks to analyse an institution, policy, capture, structural suffering, the biological floor, transformation pressure (T = S × D × P × G) or counter-power "with PMN" or "the way PMN would", even if they do not name the framework precisely.
+description: Grounds answers in the text of Progressive Materialist Naturalism (PMN), the philosophical framework by Nova Dharma, using the full manuscript bundled with this skill (version v126). Use this skill whenever the user mentions PMN, Progressive Materialist Naturalism or Nova Dharma, cites a PMN section number (for example §7.3c-i or §15.2), or asks to analyse an institution, policy, capture, structural suffering, the biological floor, transformation pressure (T = S × D × P × G) or counter-power "with PMN" or "the way PMN would", in any language, even if they do not name the framework precisely.
 ---
 
 # PMN: answer from the text, not from memory
@@ -14,6 +14,7 @@ sections) so every claim can be checked against the text.
 - `references/index.md`: every section in reading order, with its id, title, Part and file name. Start here.
 - `references/sections/<id>.txt`: one file per section, full text (for example `references/sections/7.3c-i.txt`).
 - `references/glossary.md`: 239 defined terms, each with the section it comes from.
+- `references/known-issues.md`: places where the manuscript contradicts itself, with the reading to use.
 - `references/roles.md`: analytical roles (structural analyst, capture diagnostician, red team, counter-power
   strategist, meaning-infrastructure analyst, evidence auditor) to use when the user asks for that kind of analysis.
 
@@ -33,7 +34,24 @@ https://novadharma-hub.github.io/pmn-framework/txt/index.txt on the website.
 4. **Say where the text is silent.** If the manuscript does not address something, say so and, if useful, say
    what PMN's method would ask next. Do not fill the gap with a position PMN does not state.
 5. **Keep tensions open.** PMN deliberately leaves some tensions unresolved (Part XIII). Show the tension; do not
-   smooth it into a compromise.
+   smooth it into a compromise. A deliberate tension is different from an inconsistency in the text (below).
+
+## When the text disagrees with itself
+
+The manuscript (v126) is being revised, and in places it contradicts itself: a symbol used for two things,
+a heading that names a variable one way and the paragraph another, a "canonical" section that leaves a term out.
+Handle this openly instead of silently picking one reading:
+
+1. **Check the known list first.** The `pmn` skill's `references/known-issues.md` lists the inconsistencies found
+   so far, with a recommended reading for each (online: https://raw.githubusercontent.com/novadharma-hub/pmn-framework/main/plugins/pmn/skills/pmn/references/known-issues.md).
+2. **Quote both passages** with their section ids, so the user sees the conflict.
+3. **Choose a reading and give the reason.** In this order: an explicit definition ("the G variable
+   (intergenerational transmission)") over a later passing use; the dedicated section over an aside elsewhere;
+   the reading that keeps the argument coherent over the one that breaks it. Where two meanings are both needed,
+   treat them as two separate things and name them apart.
+4. **Carry the uncertainty.** If the conclusion depends on which reading is right, say so and give both outcomes.
+5. **Report new ones.** An inconsistency not on the list goes at the end of your answer as a possible manuscript
+   issue, with both quotes. Do not "fix" PMN by inventing a position it does not state.
 
 ## How PMN reasons (orientation only; verify in the text before relying on it)
 
@@ -51,8 +69,19 @@ follow the section and say so.
 
 - Lead with the answer, then the reasoning, with section ids inline.
 - End analytical answers with: the sections read, the main uncertainty, and what would change the conclusion.
-- Match the user's language (answer in Indonesian if they write in Indonesian); keep section ids and quoted
-  sentences in the original English.
+
+## Language
+
+The manuscript is in English, and English is the default. Answer in the language the user writes in; if that is
+unclear, use English.
+
+- **Search in English.** Translate the user's concepts into PMN's English terms before searching the index,
+  glossary and sections (for example "penangkapan lembaga" or "captura institucional" → "capture"). The glossary
+  gives PMN's own wording.
+- **Quote in the original.** Keep section ids and quoted sentences in English, exactly as written; when you answer
+  in another language, follow each key quote with a translation.
+- **Keep PMN's terms recognisable.** On first use in another language, give the English term in brackets
+  (for example "lantai biologis (biological floor)"), so the user can find it in the text.
 
 ## Licence and attribution
 
