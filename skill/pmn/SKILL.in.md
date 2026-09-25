@@ -64,5 +64,6 @@ credit "Progressive Materialist Naturalism by Nova Dharma" and link {{BASE}}.
 
 ## Related skills
 
-If they are installed alongside this one: `pmn-diagnose` for a structured diagnosis of a specific institution or
-policy, and `pmn-critic` for questioning PMN itself. Both read the text from this skill's `references/` folder.
+If they are installed alongside this one: `pmn-learn` to teach PMN step by step, `pmn-diagnose` for a structured
+diagnosis of a real situation at any scale, `pmn-strategy` for what to do about it, and `pmn-critic` for questioning
+PMN itself. All of them read the text from this skill's `references/` folder.

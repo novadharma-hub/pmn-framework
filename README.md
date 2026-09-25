@@ -74,7 +74,10 @@ To set PMN up once rather than per chat, the guide's
   - `pmn-diagnose`: a structured diagnosis of a real situation at any scale, from a person or workplace to an
     institution or a country (level of causation, capture stage or transformation pressure with evidence, who
     pays, what would overturn it).
-  - `pmn-critic`: questions PMN itself (strongest objections, misreadings, unfalsifiable claims, inconsistencies).
+  - `pmn-strategy`: what to do (where the system stands, counter-power and its weakest factor, whether a window is
+    open, accommodation or transformation, realistic options).
+  - `pmn-learn`: teaches PMN from the text, one section at a time, along the site's reading paths.
+  - `pmn-critic`: questions PMN's ideas (strongest objections, misreadings, unfalsifiable claims, blind spots).
 
   ```
   # Claude Code
