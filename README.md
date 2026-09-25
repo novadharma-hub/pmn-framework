@@ -50,11 +50,20 @@ section = urllib.request.urlopen(BASE + "txt/7.3c-i.txt").read().decode("utf-8")
 The **[AI Guide](https://novadharma-hub.github.io/pmn-framework/#/guide)** covers this in full: how to give a model the
 text, a priming prompt, seven analytical roles, example questions, a tested Python script, and the endpoints above.
 
-In short: a model that has not been given PMN's text will guess. Put the text in front of it (the sections you need,
-from `txt/index.txt`), ask it to cite section numbers, and check that the numbers exist.
+In short: a model that has not been given PMN's text will guess. Put the text in front of it, ask it to cite section
+numbers, and check that the numbers exist. How much text you can give depends on the tool, so the guide works in tiers
+set by capacity, not by brand (the whole book is roughly half a million tokens):
 
-This README deliberately names no models. Model lists go stale within months; the guide gives selection criteria and a
-five-minute test with known answers instead.
+| Tier | Needs | Give it |
+|---|---|---|
+| **A. Agent with file access** | Can read files or fetch URLs (Claude Code, Codex, Cursor, ...) | Clone this repository or fetch `txt/`; search, then read |
+| **B. Whole book** | Context window of about 1M tokens | `llms-full.txt` or the PDF |
+| **C. One to three Parts** | About 128k tokens or more | `txt/part_<Part>.txt` (largest Part roughly 65k–80k tokens) |
+| **D. A few sections** | Any model | Section files from `txt/index.txt` |
+| **N. Notebook** | Indexes uploads (e.g. NotebookLM) | The PDF |
+
+Each tier has a starter prompt in the guide. No model is named or ranked: lists of models go stale within months. The
+guide gives quality criteria and a five-minute test with known answers instead.
 
 ### Before you ingest: known limits of this corpus
 

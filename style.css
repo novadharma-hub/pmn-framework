@@ -3653,3 +3653,30 @@ body.focus-mode #hdr-r #focus-btn {
   }
   #mob-nav .mob-nav-btn:focus-visible { outline: 2px solid var(--acc); outline-offset: -3px; }
 }
+
+/* AI Guide: tingkatan (2026-09-24). */
+#guide-view .guide-tiers { display: grid; gap: 1rem; margin-top: 1.2rem; }
+#guide-view .guide-tier { border: 1px solid var(--rule); background: var(--bg2); padding: 1rem 1.1rem; }
+#guide-view .guide-tier-hdr { display: flex; align-items: center; gap: .7rem; margin-bottom: .6rem; }
+#guide-view .guide-tier-hdr h3 { font-family: var(--f-head); font-size: 1.08rem; font-weight: 600; color: var(--ink); margin: 0; }
+#guide-view .guide-tier-badge {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+  font-family: var(--f-mono); font-size: .8rem; font-weight: 700; color: var(--bg); background: var(--acc);
+}
+#guide-view .guide-tier-dl { display: grid; grid-template-columns: 6.5rem 1fr; gap: .35rem .8rem; margin: 0; }
+#guide-view .guide-tier-dl dt { font-family: var(--f-mono); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); padding-top: .15rem; }
+#guide-view .guide-tier-dl dd { margin: 0; font-size: .92rem; line-height: 1.55; color: var(--ink2); }
+@media (max-width: 560px) {
+  #guide-view .guide-tier-dl { grid-template-columns: 1fr; gap: .1rem; }
+  #guide-view .guide-tier-dl dd { margin-bottom: .45rem; }
+}
+#guide-view .guide-tier-prompt { margin-top: .7rem; }
+#guide-view .guide-tier-prompt summary {
+  cursor: pointer; min-height: 36px; display: flex; align-items: center;
+  font-family: var(--f-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--acc-text);
+}
+#guide-view .guide-tier-prompt .code-block { margin: .5rem 0 0; }
+#guide-view .guide-tier-prompt summary { list-style: none; gap: .45rem; }
+#guide-view .guide-tier-prompt summary::-webkit-details-marker { display: none; }
+#guide-view .guide-tier-prompt summary::before { content: "\25B8"; font-size: .9em; }
+#guide-view .guide-tier-prompt[open] summary::before { content: "\25BE"; }

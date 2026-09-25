@@ -7,7 +7,7 @@ Reported 2026-09-23 by an agent that tried to read the site and could not:
     so any crawler that does not run JS sees nothing at all.
   * The per-Part JSON files are 60–320 KB of escaped HTML. Fetchers truncate
     them mid-Part, and the reader never learns that the Part continued.
-  * llms-full.txt is 2.4 MB (~450k tokens). In practice a fetcher reads only
+  * llms-full.txt is 2.4 MB (roughly half a million tokens). In practice a fetcher reads only
     its opening, which is the glossary.
   * The Pages domain is not in any search index, and many AI fetchers may only
     open URLs that appeared in a search result or in the conversation.

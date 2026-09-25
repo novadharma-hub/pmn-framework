@@ -6,7 +6,7 @@ PMN is a comprehensive, non-ideal structural philosophy spanning epistemology, o
 
 ## Start Here: Small Plain-Text Files
 
-> **Fetcher note (sizes).** The whole corpus is ~330k words (~450k tokens) and most fetchers truncate long files, so `llms-full.txt` is usually read only up to its glossary. Every section is therefore also published as its own `text/plain` file (largest ~55 KB), and every Part as one plain-text file. Start from the index and fetch only what you need.
+> **Fetcher note (sizes).** The whole corpus is ~330k words (roughly half a million tokens; 450k–600k depending on the tokenizer) and most fetchers truncate long files, so `llms-full.txt` is usually read only up to its glossary. Every section is therefore also published as its own `text/plain` file (largest ~55 KB), and every Part as one plain-text file. Start from the index and fetch only what you need.
 
 - [Plain-Text Section Index](https://novadharma-hub.github.io/pmn-framework/txt/index.txt): Every one of the 235 sections in reading order, each with the full URL of its own small `.txt` file and its size. Fetch this first.
 - [Static HTML Edition](https://novadharma-hub.github.io/pmn-framework/read/): The same manuscript as plain HTML pages, one per section, readable without JavaScript. The interactive reader at the site root needs JavaScript; crawlers that do not run it should use this.
