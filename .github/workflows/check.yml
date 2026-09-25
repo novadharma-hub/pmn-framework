@@ -58,3 +58,16 @@ jobs:
       # PDF currency check: exactly what deploy.yml runs.
       - name: Build
         run: npm run build
+
+      # plugins/ and .claude-plugin/ are committed so that installers can fetch
+      # the skills straight from GitHub (/plugin marketplace add, npx skills
+      # add); build_skill.py regenerates them from the corpus. A difference
+      # here means the committed skills no longer match the manuscript.
+      - name: Committed skills match the build
+        run: |
+          stale="$(git status --porcelain -- plugins .claude-plugin)"
+          if [ -n "$stale" ]; then
+            echo "::error::plugins/ is out of date: run npm run build, then commit plugins/ and .claude-plugin/"
+            echo "$stale" | head -20
+            exit 1
+          fi

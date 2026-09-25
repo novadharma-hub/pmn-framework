@@ -1,0 +1,55 @@
+PMN Framework v126 | Part XIII: Tensions That Cannot Be Resolved — Only Managed
+§13.2 The Tensions
+Source: https://novadharma-hub.github.io/pmn-framework/read/13.2.html
+
+Each tension below is accompanied by three elements: the conditions that generate it (why it exists), the conditions that would eliminate it (what would have to change for it to no longer be a tension), and the diagnostic boundary between a tension that is being managed well and one that has been dissolved. The last element matters because the failure mode of calling a managed tension an eliminated one is one of the most reliable producers of the overconfidence that the framework is designed to prevent.
+
+A tension passes from the first category to the second — from permanent management to genuine elimination — only when the conditions generating it have materially changed, not when skill at managing it has improved. Better management produces more honest prioritization and less unnecessary cost. Elimination produces a situation in which the pull between the values no longer exists at all. The distinction is testable: if the tension reappears under pressure, it was being managed, not eliminated.
+
+Idealism and Pragmatism. The long-term direction requires commitment to goals not currently achievable. The short-term navigation requires working within existing arrangements that fall well short of those goals. These pull in different directions, and the tension between them is not resolvable by finding the right balance — any balance chosen will involve genuine sacrifice of one or the other.
+
+Generating conditions: There is a gap between conditions as they are and conditions as they should be, and actors must engage with both simultaneously. This gap is the constitutive feature of political and ethical action directed toward change.
+
+Elimination conditions: The gap closes — the conditions sought are achieved. At that point the tension loses its generative conditions — there is no longer a gap between direction and present that the tension inhabits. This is the framework's asymptotic limit, not an achievable terminus: the framework treats it as an orientation point, not an expected arrival.
+
+Diagnostic boundary: A tension managed well produces deliberate, revisable trade-offs — choosing this action now while holding the direction. A tension falsely declared dissolved produces actors who mistake their current position for the destination, stop testing their work against the direction, and begin defending what exists rather than moving toward what is required.
+
+Morality and Effectiveness. Actions most effective at producing desired outcomes are sometimes actions that compromise other commitments the framework holds. The utilitarian calculation is always available as justification — and its availability is the reason it requires more scrutiny, not less. The framework is skeptical of convenient utilitarian conclusions in proportion to how convenient they are.
+
+Generating conditions: The world is adversarial: achieving outcomes requires operating in conditions where the means available are constrained by what opponents permit, and the most constrained paths are often not the most effective ones. Any actor that commits to moral constraints accepts costs that unconstrained actors do not bear.
+
+Elimination conditions: A world in which the most effective path to desired outcomes never requires moral compromise — in which all goals can be achieved by means that violate no other commitments. This has no historical precedent and no structural basis in what adversarial conditions are. The tension does not dissolve under better conditions; it shifts terrain.
+
+Diagnostic boundary: Managed well: each trade-off is made explicitly, reluctantly, with full acknowledgment of what is being sacrificed and why. Falsely dissolved: one side is absorbed into the other — either morality is redefined as whatever is effective (the end justifies the means), or effectiveness is subordinated entirely to moral purity, making action impossible. Both collapses are recognizable by the disappearance of genuine cost.
+
+Institutions and Accountability. Institutions are necessary coordination mechanisms for any activity at scale. But every institution concentrates some authority, and concentrated authority generates predictable self-preservation behavior in whoever holds it — regardless of their intentions at the moment of appointment.
+
+Generating conditions: Coordination at scale requires delegating authority beyond what personal relationship networks can enforce. Delegation creates positions with interests attached to them. The interests attached to institutional positions include the continuation of those positions — which systematically biases institutional behavior toward self-preservation. This is a consequence of how delegation and incentives interact, not of the character of specific actors.
+
+Elimination conditions: Coordination at scale without delegation of authority — which would require either reducing the scale of coordination to what personal relationships can manage, or transforming the cognitive and social architecture of the organisms who build institutions so that self-preservation incentives no longer operate. Neither is available within any foreseeable horizon.
+
+Diagnostic boundary: Managed well: institutions are subject to external accountability mechanisms with genuine enforcement capacity, and those mechanisms are themselves subject to independent oversight. Falsely dissolved: formal accountability mechanisms exist but have been captured by the institution being held accountable, producing the appearance of oversight without the function.
+
+Realism and Direction. Accurate description of how the world currently operates is necessary for effective action. But accurate description sustained long enough without the counter-pressure of direction slides into normalization — treating what is as what must be.
+
+Generating conditions: Both capacities — describing accurately and orienting toward change — are necessary, and they pull against each other. Accurate description requires taking existing arrangements seriously on their own terms. Maintaining direction requires holding existing arrangements against a standard they do not meet. Neither can be abandoned without the analysis becoming either ineffective or dishonest.
+
+Elimination conditions: The gap closes — when existing arrangements already satisfy the evaluative standard, accurate description and the direction of what should exist converge. This tension loses its generative conditions under the same circumstances as the Idealism-Pragmatism tension — when the gap between existing arrangements and the evaluative standard closes.
+
+Diagnostic boundary: Managed well: description and direction are held simultaneously, with each correcting the excesses of the other — direction prevents description from becoming apology, description prevents direction from becoming fantasy. Falsely dissolved toward realism: the direction is abandoned as impractical and the analysis becomes a sophisticated account of why things cannot change. Falsely dissolved toward idealism: the description is distorted to fit the direction, and the analysis loses contact with what is actually happening.
+
+Scale and Accountability. Larger scales of coordination address larger problems and produce greater capacity for collective action. But accountability — genuine, not merely formal — requires that those affected by decisions can understand, evaluate, and contest them. The cognitive and informational demands of accountability grow with scale faster than the capacity to meet them.
+
+Generating conditions: Human cognitive architecture sets limits on the complexity of systems any individual or group can genuinely oversee. (Dunbar 1992) Beyond those limits, accountability becomes formal rather than substantive: the mechanisms exist, the oversight bodies convene, but the information asymmetry between those being held accountable and those doing the holding is too large for the accountability to function as intended. Coordination at scale requires precisely the organizational complexity that creates this asymmetry.
+
+Elimination conditions: Either a reduction of the scale at which coordination operates to within cognitive limits — which would require abandoning the benefits of coordination at global scale — or a transformation of human cognitive capacity sufficient to oversee genuinely complex systems in real time. The second is a possible long-term development; it is not available now. Until then, every increase in coordinative capacity comes with a corresponding increase in the difficulty of genuine accountability.
+
+Diagnostic boundary: Managed well: accountability mechanisms are designed with explicit acknowledgment of their cognitive limits — simplified reporting, rotated oversight, external audits by genuinely independent actors, deliberate reduction of complexity where the accountability cost of complexity exceeds the coordinative benefit. Falsely dissolved: formal accountability structures are treated as producing genuine accountability, when they are in fact producing the appearance of accountability at a scale that makes genuine oversight impossible.
+
+Certainty and Humility. Acting in the world requires commitments more confident than the available evidence strictly supports. Complete epistemic humility produces paralysis, which has material consequences. False certainty produces the epistemic failure the framework is designed to avoid.
+
+Generating conditions: Actors with partial knowledge must make decisions under time pressure with real consequences. The requirements of action (commit, allocate, act) and the requirements of honest epistemology (remain open, revise, acknowledge limits) are structurally incompatible at the moment of decision. This is the condition of any knowing agent that must act.
+
+Elimination conditions: Either perfect knowledge — in which certainty and honesty converge — or conditions in which decisions can be made and reversed without consequence, allowing humility to be maintained throughout. Neither exists. The tension is inherent to action under uncertainty, which is the only kind of action available.
+
+Diagnostic boundary: Managed well: commitments are held firmly enough to act on, and revisable enough to update when evidence requires — with explicit mechanisms for revision rather than the assumption that revision will happen naturally. Falsely dissolved toward certainty: commitments become positions to be defended rather than hypotheses to be tested. Falsely dissolved toward humility: the acknowledgment of uncertainty becomes a reason not to act, which is itself a decision with consequences.

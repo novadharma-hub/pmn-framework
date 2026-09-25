@@ -1,27 +1,34 @@
 #!/usr/bin/env python3
-"""Build the PMN Agent Skill: dist/pmn-skill.zip.
+"""Build the PMN Agent Skills and the plugin that ships them.
 
 An Agent Skill is a folder with a SKILL.md (YAML frontmatter + instructions)
-and reference files the model opens only when it needs them. This one bundles
-the whole manuscript, one file per section, so a model with the skill installed
-answers from the text instead of from memory.
+and files the model opens only when it needs them. The same folders install
+into Claude, Codex, OpenCode, Cursor and other agents that read the format.
 
-Sources:
-  skill/pmn/SKILL.md, skill/pmn/references/roles.md   hand-written, with
-      {{VERSION}} {{SECTIONS}} {{TERMS}} {{BASE}} placeholders
-  public_static/data/parts.json, gl.json, glg.json    the corpus and glossary
+Sources (hand-written, with {{VERSION}} {{SECTIONS}} {{TERMS}} {{BASE}}
+{{TEXT_ACCESS}} placeholders):
+  skill/<name>/SKILL.in.md        one folder per skill; other files are copied
+  skill/_shared/text-access.md    how the method skills find the text
+  public_static/data/parts.json, gl.json, glg.json
 
-Output (zip root is the folder "pmn/", which is what skill installers expect):
-  pmn/SKILL.md
-  pmn/references/index.md            every section in reading order
-  pmn/references/sections/<id>.txt  one section each, same text as txt/<id>.txt
-  pmn/references/glossary.md         defined terms by category
-  pmn/references/roles.md            analytical roles
+Only the `pmn` skill carries the manuscript (one file per section, index,
+glossary). The method skills (pmn-critic, pmn-diagnose) read it from the
+sibling folder ../pmn/references/, which is where every installer puts it:
+a plugin's skills/ directory, ~/.claude/skills/, .agents/skills/ and so on.
+Copying 2.4 MB into every skill would waste space and let copies drift.
 
-The zip is deterministic (fixed timestamps, sorted entries): the same corpus
-gives the same bytes, so a rebuild without content changes is not a new file.
+Outputs:
+  plugins/pmn/skills/<name>/...           committed, so GitHub installs work:
+  plugins/pmn/.claude-plugin/plugin.json    /plugin marketplace add, npx skills
+  .claude-plugin/marketplace.json
+  dist/pmn-skill.zip, dist/<name>.zip     downloads for Claude apps (gitignored)
 
-Standard library only. Run after vite build (it writes into dist/).
+Zips are deterministic (fixed timestamps, sorted entries), and the committed
+tree is rewritten in full on every build, so a stale section file cannot
+survive a renumbering. CI fails a pull request whose committed tree differs
+from what the build produces.
+
+Standard library only. Run after vite build (the zips go into dist/).
 """
 from __future__ import annotations
 
@@ -29,6 +36,7 @@ import argparse
 import io
 import json
 import re
+import shutil
 import sys
 import zipfile
 from pathlib import Path
@@ -38,10 +46,17 @@ from build_ai_surfaces import (  # noqa: E402
     BASE, PARTS, REPO_ROOT, judul_seksi, kb, ke_teks, nama_part, versi,
 )
 
-SKILL_SRC = REPO_ROOT / "skill" / "pmn"
+SRC = REPO_ROOT / "skill"
 DATA = REPO_ROOT / "public_static" / "data"
-ROOT = "pmn/"
+PLUGIN = REPO_ROOT / "plugins" / "pmn"
+MARKETPLACE = REPO_ROOT / ".claude-plugin" / "marketplace.json"
+REPO_URL = "https://github.com/novadharma-hub/pmn-framework"
 ZIP_TIME = (1980, 1, 1, 0, 0, 0)
+UTAMA = "pmn"  # the skill that carries the manuscript
+
+PLUGIN_DESC = ("Progressive Materialist Naturalism (PMN) by Nova Dharma: the full manuscript as a skill that "
+               "answers from the text with section citations, plus skills to diagnose institutions and to "
+               "question PMN itself.")
 
 
 def isi_seksi(label: str, judul_part: str, s: dict) -> str:
@@ -94,26 +109,49 @@ def isi_templat(teks: str, nilai: dict) -> str:
     return teks
 
 
-def periksa_frontmatter(teks: str) -> None:
+def periksa_frontmatter(folder: str, teks: str) -> None:
     m = re.match(r"---\n(.*?)\n---\n", teks, re.S)
     if not m:
-        raise ValueError("SKILL.md has no YAML frontmatter")
+        raise ValueError("%s: SKILL.md has no YAML frontmatter" % folder)
     kolom = dict(re.findall(r"^([a-z_]+):\s*(.*)$", m.group(1), re.M))
     nama, desk = kolom.get("name", ""), kolom.get("description", "")
     if not re.fullmatch(r"[a-z0-9-]{1,64}", nama):
-        raise ValueError("name must be 1-64 lowercase letters, digits or hyphens: %r" % nama)
+        raise ValueError("%s: name must be 1-64 lowercase letters, digits or hyphens: %r" % (folder, nama))
+    if nama != folder:
+        raise ValueError("%s: name %r must match the folder name" % (folder, nama))
     if not desk or len(desk) > 1024:
-        raise ValueError("description must be 1-1024 characters (is %d)" % len(desk))
+        raise ValueError("%s: description must be 1-1024 characters (is %d)" % (folder, len(desk)))
     if "<" in desk or ">" in desk:
-        raise ValueError("description must not contain angle brackets")
+        raise ValueError("%s: description must not contain angle brackets" % folder)
 
 
 def periksa_rujukan(nama: str, teks: str, id_ada: set) -> None:
-    """Every §id the skill's own text names must exist in the corpus."""
+    """Every §id the skills' own text names must exist in the corpus."""
     salah = sorted({r for r in re.findall(r"§(\d+(?:\.\d+[a-z]*(?:-[ivx]+)?)?)", teks)
                     if r not in id_ada and "." in r})
     if salah:
         raise ValueError("%s cites sections that do not exist: %s" % (nama, ", ".join(salah)))
+
+
+def semver(label: str) -> str:
+    """v126 -> 126.0.0, v117.9 -> 117.9.0: plugin managers compare versions."""
+    angka = re.findall(r"\d+", label)[:3] or ["0"]
+    return ".".join(angka + ["0"] * (3 - len(angka)))
+
+
+def zip_deterministik(berkas: dict, akar: str) -> bytes:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+        for path in sorted(berkas):
+            info = zipfile.ZipInfo(akar + path, date_time=ZIP_TIME)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o644 << 16
+            z.writestr(info, berkas[path].encode("utf-8"))
+    return buf.getvalue()
+
+
+def json_teks(data: dict) -> str:
+    return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
 
 
 def main() -> int:
@@ -130,44 +168,80 @@ def main() -> int:
     glg = json.loads((DATA / "glg.json").read_text(encoding="utf-8"))
     label = versi()
 
-    berkas: dict[str, str] = {}
+    korpus: dict[str, str] = {}
     ukuran: dict[str, int] = {}
     for P in parts:
         judul_part = nama_part(P)
         for s in P["subs"]:
             teks = isi_seksi(label, judul_part, s)
-            berkas["references/sections/%s.txt" % s["id"]] = teks
+            korpus["references/sections/%s.txt" % s["id"]] = teks
             ukuran[s["id"]] = len(teks.encode("utf-8"))
+    korpus["references/index.md"] = tulis_indeks(parts, label, ukuran)
+    korpus["references/glossary.md"] = tulis_glosarium(label, gl, glg)
     id_ada = set(ukuran)
 
     nilai = {"VERSION": label, "SECTIONS": str(len(ukuran)), "TERMS": str(len(gl)), "BASE": BASE}
+    skills: dict[str, dict[str, str]] = {}
     try:
-        skill = isi_templat((SKILL_SRC / "SKILL.md").read_text(encoding="utf-8"), nilai)
-        roles = isi_templat((SKILL_SRC / "references" / "roles.md").read_text(encoding="utf-8"), nilai)
-        periksa_frontmatter(skill)
-        periksa_rujukan("SKILL.md", skill, id_ada)
-        periksa_rujukan("roles.md", roles, id_ada)
+        nilai["TEXT_ACCESS"] = isi_templat(
+            (SRC / "_shared" / "text-access.md").read_text(encoding="utf-8"), nilai).rstrip("\n")
+        folders = sorted(d for d in SRC.iterdir() if d.is_dir() and not d.name.startswith("_"))
+        for d in folders:
+            berkas: dict[str, str] = {}
+            for f in sorted(d.rglob("*")):
+                if not f.is_file():
+                    continue
+                rel = f.relative_to(d).as_posix()
+                teks = isi_templat(f.read_text(encoding="utf-8"), nilai)
+                periksa_rujukan("%s/%s" % (d.name, rel), teks, id_ada)
+                berkas["SKILL.md" if rel == "SKILL.in.md" else rel] = teks
+            if "SKILL.md" not in berkas:
+                raise ValueError("%s: no SKILL.in.md" % d.name)
+            periksa_frontmatter(d.name, berkas["SKILL.md"])
+            skills[d.name] = berkas
+        if UTAMA not in skills:
+            raise ValueError("skill/%s is missing" % UTAMA)
     except ValueError as e:
         print("[ERROR] %s" % e, file=sys.stderr)
         return 1
+    skills[UTAMA].update(korpus)
 
-    berkas["SKILL.md"] = skill
-    berkas["references/roles.md"] = roles
-    berkas["references/index.md"] = tulis_indeks(parts, label, ukuran)
-    berkas["references/glossary.md"] = tulis_glosarium(label, gl, glg)
+    # Committed plugin tree: rewritten in full so nothing stale survives.
+    shutil.rmtree(PLUGIN, ignore_errors=True)
+    for nama, berkas in skills.items():
+        for rel, teks in berkas.items():
+            p = PLUGIN / "skills" / nama / rel
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(teks, encoding="utf-8", newline="\n")
+    manifest = {
+        "name": "pmn",
+        "version": semver(label),
+        "description": PLUGIN_DESC,
+        "author": {"name": "Nova Dharma", "url": BASE},
+        "homepage": BASE + "#/guide/install",
+        "repository": REPO_URL,
+        "license": "CC-BY-SA-4.0",
+        "keywords": ["philosophy", "political-philosophy", "institutions", "capture", "materialism"],
+    }
+    (PLUGIN / ".claude-plugin").mkdir(parents=True, exist_ok=True)
+    (PLUGIN / ".claude-plugin" / "plugin.json").write_text(json_teks(manifest), encoding="utf-8", newline="\n")
+    MARKETPLACE.parent.mkdir(parents=True, exist_ok=True)
+    MARKETPLACE.write_text(json_teks({
+        "name": "pmn-framework",
+        "description": "Plugins for working with Progressive Materialist Naturalism (PMN).",
+        "owner": {"name": "Nova Dharma", "url": BASE},
+        "plugins": [{"name": "pmn", "source": "./plugins/pmn", "description": PLUGIN_DESC}],
+    }), encoding="utf-8", newline="\n")
 
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-        for path in sorted(berkas):
-            info = zipfile.ZipInfo(ROOT + path, date_time=ZIP_TIME)
-            info.compress_type = zipfile.ZIP_DEFLATED
-            info.external_attr = 0o644 << 16
-            z.writestr(info, berkas[path].encode("utf-8"))
-    tujuan = out / "pmn-skill.zip"
-    tujuan.write_bytes(buf.getvalue())
+    # Downloads for apps that take one zip per skill.
+    ringkas = []
+    for nama, berkas in skills.items():
+        f = out / ("pmn-skill.zip" if nama == UTAMA else nama + ".zip")
+        f.write_bytes(zip_deterministik(berkas, nama + "/"))
+        ringkas.append("%s %s" % (f.name, kb(f.stat().st_size)))
 
-    print("[ok] pmn-skill.zip: %d sections, %d terms, %s (SKILL.md %d lines)"
-          % (len(ukuran), len(gl), kb(tujuan.stat().st_size), skill.count("\n")))
+    print("[ok] skills: %s (%d sections, %d terms); plugin pmn %s"
+          % (", ".join(ringkas), len(ukuran), len(gl), manifest["version"]))
     return 0
 
 

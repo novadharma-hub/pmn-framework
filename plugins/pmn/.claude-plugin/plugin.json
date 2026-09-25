@@ -1,0 +1,19 @@
+{
+  "name": "pmn",
+  "version": "126.0.0",
+  "description": "Progressive Materialist Naturalism (PMN) by Nova Dharma: the full manuscript as a skill that answers from the text with section citations, plus skills to diagnose institutions and to question PMN itself.",
+  "author": {
+    "name": "Nova Dharma",
+    "url": "https://novadharma-hub.github.io/pmn-framework/"
+  },
+  "homepage": "https://novadharma-hub.github.io/pmn-framework/#/guide/install",
+  "repository": "https://github.com/novadharma-hub/pmn-framework",
+  "license": "CC-BY-SA-4.0",
+  "keywords": [
+    "philosophy",
+    "political-philosophy",
+    "institutions",
+    "capture",
+    "materialism"
+  ]
+}

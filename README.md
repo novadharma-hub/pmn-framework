@@ -68,10 +68,24 @@ guide gives quality criteria and a five-minute test with known answers instead.
 To set PMN up once rather than per chat, the guide's
 **[Install](https://novadharma-hub.github.io/pmn-framework/#/guide/install)** tab has:
 
-- **The PMN skill** ([`pmn-skill.zip`](https://novadharma-hub.github.io/pmn-framework/pmn-skill.zip)), an Agent Skill
-  for Claude and other agents that read the format. It bundles the whole manuscript, one file per section, with the
-  index, glossary and analytical roles, so the model reads and cites the sections a question needs. Built from
-  `skill/pmn/` by `scripts/build_skill.py` on every build.
+- **The PMN skills**, in the Agent Skills format that Claude, Codex, OpenCode, Cursor and other agents read:
+  - `pmn`: the whole manuscript, one file per section, with index, glossary and analytical roles. Answers from the
+    text with citations. The other two read the text from it.
+  - `pmn-diagnose`: a structured diagnosis of a real institution or policy (capture stage with evidence, who pays,
+    second-order effects, what would overturn it).
+  - `pmn-critic`: questions PMN itself (strongest objections, misreadings, unfalsifiable claims, inconsistencies).
+
+  ```
+  # Claude Code
+  /plugin marketplace add novadharma-hub/pmn-framework
+  /plugin install pmn@pmn-framework
+
+  # Codex, OpenCode, Cursor, Gemini CLI and others
+  npx skills add novadharma-hub/pmn-framework
+  ```
+
+  Claude apps take one zip per skill from the Install tab. The skills live in `plugins/pmn/skills/`, generated from
+  `skill/` by `scripts/build_skill.py` on every build.
 - **Instructions for a Custom GPT, Gemini Gem or Claude Project**, to paste alongside `llms-full.txt` as a knowledge file.
 
 ### Before you ingest: known limits of this corpus
@@ -126,13 +140,14 @@ to insulate.
 ```
 data/                 manuscript data written by the local pipeline (parts.json, glossary, lookups)
 public_static/        files served at the site root: data/ copy, llms.*, PDF, icons, fonts
-skill/pmn/            hand-written parts of the Agent Skill (SKILL.md, roles)
+skill/                hand-written sources of the Agent Skills (SKILL.in.md per skill)
+plugins/pmn/          generated Agent Skills plugin; .claude-plugin/ holds the marketplace entry
 src/                  React 18 + TypeScript reader (App.tsx, routing.ts, components/)
 style.css             design tokens and styles (see DESIGN.md)
 scripts/              build and audit tools
   build_ai_surfaces.py  txt/, read/ and sitemap.xml, generated on every build
   build_pdf.py          the typeset PDF
-  build_skill.py        pmn-skill.zip (the Agent Skill) from skill/pmn/ and the corpus
+  build_skill.py        the Agent Skills (plugins/pmn/, zips in dist/) from skill/ and the corpus
   check_glossary.py     build gate: glossary categories must name real entries
   security_check.py     scan for secrets and personal data before publishing
   indexnow_ping.py      tell search engines about new URLs after deploy

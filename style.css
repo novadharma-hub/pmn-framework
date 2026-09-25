@@ -3692,3 +3692,5 @@ body.focus-mode #hdr-r #focus-btn {
 #guide-view .step a.guide-dl:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 #guide-view .guide-small-inline { font-size: .85rem; color: var(--mute); margin-left: .6rem; }
 #guide-view .guide-list .code-block { margin: .6rem 0 0; }
+#guide-view .guide-h3 { font-size: 1.05rem; margin: 1.8rem 0 .4rem; color: var(--ink); }
+#guide-view .guide-dl-row { display: flex; flex-wrap: wrap; gap: .6rem; }

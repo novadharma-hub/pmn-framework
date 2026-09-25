@@ -1,23 +1,23 @@
 ---
 name: pmn
-description: Grounds answers in the text of Progressive Materialist Naturalism (PMN), the philosophical framework by Nova Dharma, using the full manuscript bundled with this skill (version {{VERSION}}). Use this skill whenever the user mentions PMN, Progressive Materialist Naturalism or Nova Dharma, cites a PMN section number (for example §7.3c-i or §15.2), or asks to analyse an institution, policy, capture, structural suffering, the biological floor, transformation pressure (T = S × D × P × G) or counter-power "with PMN" or "the way PMN would", even if they do not name the framework precisely.
+description: Grounds answers in the text of Progressive Materialist Naturalism (PMN), the philosophical framework by Nova Dharma, using the full manuscript bundled with this skill (version v126). Use this skill whenever the user mentions PMN, Progressive Materialist Naturalism or Nova Dharma, cites a PMN section number (for example §7.3c-i or §15.2), or asks to analyse an institution, policy, capture, structural suffering, the biological floor, transformation pressure (T = S × D × P × G) or counter-power "with PMN" or "the way PMN would", even if they do not name the framework precisely.
 ---
 
 # PMN: answer from the text, not from memory
 
 PMN is recent and specific. A model answering from memory produces generic materialism with PMN's vocabulary
-pasted on, and invents section numbers. This skill carries the whole manuscript ({{VERSION}}, {{SECTIONS}}
+pasted on, and invents section numbers. This skill carries the whole manuscript (v126, 235
 sections) so every claim can be checked against the text.
 
 ## Where the text is
 
 - `references/index.md`: every section in reading order, with its id, title, Part and file name. Start here.
 - `references/sections/<id>.txt`: one file per section, full text (for example `references/sections/7.3c-i.txt`).
-- `references/glossary.md`: {{TERMS}} defined terms, each with the section it comes from.
+- `references/glossary.md`: 239 defined terms, each with the section it comes from.
 - `references/roles.md`: analytical roles (structural analyst, capture diagnostician, red team, counter-power
   strategist, meaning-infrastructure analyst, evidence auditor) to use when the user asks for that kind of analysis.
 
-Online copy of the same files: {{BASE}}txt/index.txt (useful if a newer version exists; the bundled one is {{VERSION}}).
+Online copy of the same files: https://novadharma-hub.github.io/pmn-framework/txt/index.txt (useful if a newer version exists; the bundled one is v126).
 
 ## How to answer
 
@@ -55,4 +55,9 @@ follow the section and say so.
 ## Licence and attribution
 
 The manuscript is © Nova Dharma, licensed CC BY-SA 4.0. When quoting at length or producing derived material,
-credit "Progressive Materialist Naturalism by Nova Dharma" and link {{BASE}}.
+credit "Progressive Materialist Naturalism by Nova Dharma" and link https://novadharma-hub.github.io/pmn-framework/.
+
+## Related skills
+
+If they are installed alongside this one: `pmn-diagnose` for a structured diagnosis of a specific institution or
+policy, and `pmn-critic` for questioning PMN itself. Both read the text from this skill's `references/` folder.
