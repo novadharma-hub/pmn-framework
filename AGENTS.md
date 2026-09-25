@@ -142,11 +142,13 @@ Last updated: 2026-09-25 (after PR #26).
 ### Waiting on the owner
 
 - **GitHub Support request** to purge the old pull-request refs (#1–#16) that still hold the removed `.docx` files.
-  Only GitHub can do this. Use the dedicated sensitive-data form, not the general "Deletes" menu (some options there
-  delete a whole repository): https://support.github.com/contact?legacy&tags=rr-remove-data . Give the repository
-  (`novadharma-hub/pmn-framework`), the affected pull requests (#1–#16), the first changed commit
-  (`042cc1533033d18bb8168e16d23b3749615faa71`), and that the repository has no forks. Checked 2026-09-25: PRs #17
-  onwards are clean.
+  Only GitHub can do this. Route on help.github.com (checked with the owner, 2026-09-25): Repositories →
+  **Repository features** → tick **Branches** → repository URL → message. **Never "Deletes"**: that form deletes or
+  purges a whole repository (it asks for "the URL of the repository you would like to delete" and a Delete
+  confirmation). The message gives the affected pull requests (#1–#16), the first changed commit
+  (`042cc1533033d18bb8168e16d23b3749615faa71`), that the repository has no forks, and asks GitHub to dereference
+  those pull requests, clear cached views and run garbage collection. PRs #17 onwards are clean. Ask the owner
+  whether the ticket has been sent before doing anything about it.
 - **For the manuscript rewrite:**
   - `skill/pmn/references/known-issues.md`: G used for two different factors in §15.4 (substantive), plus two label
     slips (P's heading, D/P/G missing from §15.0b).
