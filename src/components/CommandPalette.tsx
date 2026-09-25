@@ -92,7 +92,7 @@ export default function CommandPalette({ parts, glossary, onSelectSection, onTog
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[500] flex items-start justify-center pt-24 px-4 bg-black/60 backdrop-blur-md select-none transition-opacity duration-200">
+    <div role="dialog" aria-modal="true" aria-label="Find a section" className="fixed inset-0 z-[500] flex items-start justify-center pt-24 px-4 bg-black/60 backdrop-blur-md select-none transition-opacity duration-200">
       <div className="w-full max-w-[580px] bg-pmn-bg border border-pmn-rule shadow-[0_20px_50px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col max-h-[500px] rounded-xs">
         <div className="flex items-center gap-4 border-b border-pmn-rule px-5 py-4 bg-pmn-bg2/50">
           <span className="font-pmn-mono text-lg text-pmn-acc opacity-80">&#8981;</span>
@@ -101,6 +101,7 @@ export default function CommandPalette({ parts, glossary, onSelectSection, onTog
             type="text"
             className="flex-1 bg-transparent border-none outline-none font-pmn-mono text-[0.88rem] text-pmn-ink placeholder:text-pmn-mute/30"
             placeholder="Type a command, section, or keyword..."
+            aria-label="Find a section, command or keyword"
             value={query}
             onChange={e => setQuery(e.target.value)}
           />

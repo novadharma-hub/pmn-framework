@@ -65,6 +65,11 @@ export default function App() {
   useEffect(() => {
     document.body.classList.toggle('focus-mode', focusMode)
   }, [focusMode])
+  // Di HP (≤680px) halaman baca menyembunyikan header global: bilah reader
+  // sudah memuat kembali, daftar seksi dan cari (lihat style.css).
+  useEffect(() => {
+    document.body.classList.toggle('page-reader', page === 'reader')
+  }, [page])
   // Hint "cara keluar" muncul saat fokus menyala, memudar setelah 4,5 dtk;
   // chip exit tetap tersedia selama fokus menyala (dua-duanya hasil UX pass
   // setelah laporan user: fokus tak sengaja menyala tanpa jalan keluar terlihat).

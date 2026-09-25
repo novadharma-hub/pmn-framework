@@ -111,7 +111,7 @@ Agent Skills one version behind; direct pushes to `main` are not checked for thi
 
 ## Status
 
-Last updated: 2026-09-25 (after PR #25).
+Last updated: 2026-09-25 (after PR #26).
 
 ### Done recently
 
@@ -132,11 +132,12 @@ Last updated: 2026-09-25 (after PR #25).
   not match `parts.json`.
 - #25: `pmn` is the front door and routes each kind of request to the right skill; thought experiments handled in
   `pmn-diagnose` and `pmn-critic` (§12.1c).
+- #26: reader page on phones (≤680px): one top bar that hides while scrolling down, a find button in place of
+  the hidden global header, no Measure panel, text full width with 16px edges (358px of 390px instead of ~320px).
 
 ### Next, in order
 
-1. **Reader page on phones.** Two top bars stacked; the Measure/Zoom panel is cramped.
-2. **Re-measure the README "known limits" section** against the current version.
+1. **Re-measure the README "known limits" section** against the current version.
 
 ### Waiting on the owner
 

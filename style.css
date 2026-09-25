@@ -3702,3 +3702,57 @@ body.focus-mode #hdr-r #focus-btn {
   font-family: var(--f-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase;
   color: var(--acc-text); background: transparent; border: 1px solid var(--acc); cursor: pointer;
 }
+
+/* ===================================================================
+   Halaman baca di HP (2026-09-25). Terukur di 390x844 sebelum perubahan:
+   header global 52px + bilah reader 60px + menu bawah 58px = 170px
+   (20% layar) terkunci; kartu judul 380px dengan panel Measure yang tak
+   berguna di layar sempit; teks di dalam kartu berbingkai dengan margin
+   ganda sehingga lebar baris ~320px dari 390px; tombol "○" tanpa label.
+   =================================================================== */
+@media (max-width: 680px) {
+  /* Satu bilah atas saja: header global disembunyikan di halaman baca. */
+  body.page-reader #hdr { display: none; }
+  body.page-reader .page-shell { height: 100vh !important; }
+
+  /* Bilah reader: lebih ramping, bersembunyi saat menggulir ke bawah. */
+  #reader-nav { height: 52px !important; transition: transform .22s ease; }
+  #reader-nav.rdr-nav-hidden { transform: translateY(-100%); }
+  #reader-nav .rdr-sec-btn { padding: 0 10px !important; min-height: 36px !important; min-width: 0 !important; display: inline-flex !important; align-items: center; }
+  #reader-nav .rdr-find-btn { display: inline-flex !important; min-width: 40px !important; min-height: 44px; }
+  #reader-nav > div:first-child { padding-inline: 4px 8px !important; }
+  /* Judul Part terpotong jadi "How to Orga…" di 390px; judul seksi sudah
+     tampil besar di bawahnya. Cukup "Part VII". */
+  #reader-nav .rdr-part-title { display: none; }
+  #reader-nav .rdr-part-lbl { font-size: .72rem !important; margin-bottom: 0 !important; }
+  /* Garis progres baca menempel di bawah header global; header itu kini
+     tersembunyi, jadi garisnya naik ke tepi atas layar (di atas bilah reader). */
+  body.page-reader #reading-progress { top: 0 !important; z-index: 130; }
+
+  /* Teks selebar layar dengan tepi 16px; kartu dan bingkainya dilepas. */
+  #reader-col { padding-left: 16px !important; padding-right: 16px !important; }
+  #reader-col > div { padding-left: 0 !important; padding-right: 0 !important; }
+  /* #reader-col: mengalahkan aturan tema terang di src/index.css
+     (:root:not([data-theme=dark]) .reader-prose-box). */
+  #reader-col .reader-title-card,
+  #reader-col .reader-prose-box {
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .reader-title-card { padding-top: 1.4rem !important; padding-bottom: .9rem !important; margin-bottom: .4rem; border-bottom: 1px solid var(--rule) !important; border-radius: 0; }
+  .reader-title-card .sec-eye { margin-bottom: .9rem !important; }
+  .reader-title-card h1 { font-size: 1.6rem !important; max-width: none; margin-bottom: .9rem !important; }
+  .reader-prose-box { padding-top: 1rem !important; }
+
+  /* Waktu baca dan zoom dalam satu baris; Measure tidak berarti di HP. */
+  .reader-meta { flex-direction: row !important; align-items: center !important; justify-content: space-between !important; }
+  .reader-meta > section.rdr-controls { width: auto !important; flex-direction: row !important; gap: 0 !important; }
+  .rdr-measure { display: none !important; }
+  .rdr-zoom-lbl { display: none; }
+}
+
+/* Tombol cari di bilah reader hanya untuk HP; di atas 680px JUMP ada di header. */
+.rdr-find-btn { display: none; }
