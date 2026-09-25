@@ -31,6 +31,8 @@ interface ReaderViewProps {
   focusMode?: boolean
   setFocusMode?: (v: boolean) => void
   onOpenPolicy?: (tab?: 'privacy' | 'terms' | 'disclaimer' | 'ai') => void
+  /** Muat ulang teks satu Part setelah gagal (App memuat teks per Part). */
+  onLoadPart?: (pi: number) => void
 }
 
 const SPECIAL: Record<string, boolean> = { 'Preface': true, 'Coda': true, 'Intellectual Debts': true, 'Bibliography': true }
@@ -47,7 +49,7 @@ const shortenId = (id: string) => {
 export default function ReaderView({ 
   data, partIdx, secIdx, curPos, readMap, onMarkRead, onSavePosition, onBackHome, onToggleTheme, theme, forceOpenPalette,
   contentWidth = 'narrow', onChangeWidth, history = [], version = '',
-  focusMode = false, setFocusMode = (_v: boolean) => {}, onOpenPolicy
+  focusMode = false, setFocusMode = (_v: boolean) => {}, onOpenPolicy, onLoadPart
 }: ReaderViewProps) {
   const [sbOpen, setSbOpen] = useState(window.innerWidth > 1024)
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
@@ -68,6 +70,10 @@ export default function ReaderView({
   const pIdx = (curPos ? curPos[0] : partIdx) ?? 0
   const sIdx = (curPos ? curPos[1] : secIdx) ?? 0
   const p = data.parts[pIdx]; const s = p?.subs[sIdx]
+  // Sejak 2026-09-25 teks dimuat per Part (App.tsx): kerangka datang dulu,
+  // `html` menyusul. Selama belum ada, tampilkan penanda, bukan halaman kosong.
+  const teksSiap = typeof s?.html === 'string'
+  const gagalMuat = !teksSiap && !!(p as any)?.loadError
   // Seksi memuat `html`, bukan `text`. Rumus lama membaca s.text, yang tidak
   // pernah ada, sehingga setiap seksi berbunyi "1 min read" - termasuk 3.4b
   // yang ~7.000 kata. 200 kata per menit, sama dengan rumus lama.
@@ -133,7 +139,12 @@ export default function ReaderView({
   // Process highlights and XREFs into HTML
   const processedHTML = useMemo(() => {
     if (!s) return ''
-    let html = s.html || `<p>${s.text}</p>`
+    if (!teksSiap) {
+      return gagalMuat
+        ? '<p class="prose-status">This section could not be loaded. Check your connection and try again.</p>'
+        : '<p class="prose-status" aria-busy="true">Loading this section…</p>'
+    }
+    let html = s.html
     const sHls = highlights[s.id] || []
 
     // 1. Inject Highlights
@@ -145,7 +156,7 @@ export default function ReaderView({
     })
 
     return html
-  }, [s, highlights])
+  }, [s, highlights, teksSiap, gagalMuat])
 
   // Click handler for highlights and xrefs
   const handleProseClick = (e: React.MouseEvent) => {
@@ -349,10 +360,10 @@ export default function ReaderView({
   }, [s])
 
   useEffect(() => {
-    if (!s || isRead) return
+    if (!s || isRead || !teksSiap) return
     const timer = setTimeout(() => { onMarkRead(pIdx, sIdx) }, 10000)
     return () => clearTimeout(timer)
-  }, [pIdx, sIdx, s, isRead])
+  }, [pIdx, sIdx, s, isRead, teksSiap])
 
   const saveNote = () => {
     if (!s) return
@@ -467,7 +478,7 @@ export default function ReaderView({
 
               <div className="reader-meta flex flex-col md:flex-row md:items-center justify-between pb-0 mb-0 select-none gap-4">
                 <span className="font-mono text-[0.75rem] text-pmn-mute uppercase tracking-widest italic">
-                  {`${menitBaca} min read`}
+                  {teksSiap ? `${menitBaca} min read` : '\u00A0'}
                 </span>
                 
                 {/* section wrapper used instead of div to bypass the legacy .reader-meta > div styling */}
@@ -578,6 +589,9 @@ export default function ReaderView({
               onMouseUp={handleProseMouseUp}
               onMouseOver={handleProseMouseOver}
             />
+            {gagalMuat && onLoadPart && (
+              <button type="button" className="prose-retry" onClick={() => onLoadPart(pIdx)}>Try again</button>
+            )}
             </div> {/* /reader-prose-box */}
 
             {/* Prev/next seksi: LANGSUNG di bawah kotak teks, berukuran penuh.

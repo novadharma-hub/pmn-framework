@@ -144,7 +144,7 @@ export default defineConfig({
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'pmn-data',
-              expiration: { maxEntries: 30, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              expiration: { maxEntries: 60, maxAgeSeconds: 7 * 24 * 60 * 60 },
             },
           },
         ],

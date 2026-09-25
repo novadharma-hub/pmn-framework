@@ -67,6 +67,10 @@ python3 scripts/security_check.py  # secrets and personal data; one warning is e
 (`plugins/pmn/`, `.claude-plugin/marketplace.json`, `dist/pmn-*.zip`) and `scripts/build_pdf.py` (`llms-full.txt`
 and the PDF check).
 
+The reader loads text one Part at a time: `data/parts/manifest.json` (titles and ids, no text) first, then
+`data/parts/part_<Part>.json` on demand, and `data/parts.json` only for Search. All three come from
+`modularizer.py`; the build fails if they disagree.
+
 `dist/`, `plugins/` and `.claude-plugin/` are committed: commit what the build produces. CI
 (`.github/workflows/check.yml`) builds every PR and fails if the committed skills differ from the build; merging to
 `main` deploys through `deploy.yml`.
@@ -107,7 +111,7 @@ Agent Skills one version behind; direct pushes to `main` are not checked for thi
 
 ## Status
 
-Last updated: 2026-09-25 (after PR #23).
+Last updated: 2026-09-25 (after PR #24).
 
 ### Done recently
 
@@ -122,12 +126,15 @@ Last updated: 2026-09-25 (after PR #23).
 - #23: skills `pmn-strategy` and `pmn-learn`; inconsistencies resolved quietly and read charitably; `pmn-critic`
   targets ideas, not writing. Reading paths moved to `src/data/reading-paths.json` (shared by the site and
   `pmn-learn`).
+- #24: text loads per Part. The app starts from `data/parts/manifest.json` (about 40 KB) and fetches
+  `data/parts/part_<Part>.json` when a Part is read (and the next one ahead); `parts.json` is fetched only for
+  Search. First load went from about 3.1 MB to about 1 MB. `build_ai_surfaces.py` fails if the per-Part files do
+  not match `parts.json`.
 
 ### Next, in order
 
-1. **Performance.** First load is about 3.1 MB, of which `data/parts.json` is about 2.3 MB. Load Parts on demand.
-2. **Reader page on phones.** Two top bars stacked; the Measure/Zoom panel is cramped.
-3. **Re-measure the README "known limits" section** against the current version.
+1. **Reader page on phones.** Two top bars stacked; the Measure/Zoom panel is cramped.
+2. **Re-measure the README "known limits" section** against the current version.
 
 ### Waiting on the owner
 
