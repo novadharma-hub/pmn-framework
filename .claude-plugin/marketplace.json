@@ -1,0 +1,15 @@
+{
+  "name": "pmn-framework",
+  "description": "Plugins for working with Progressive Materialist Naturalism (PMN).",
+  "owner": {
+    "name": "Nova Dharma",
+    "url": "https://novadharma-hub.github.io/pmn-framework/"
+  },
+  "plugins": [
+    {
+      "name": "pmn",
+      "source": "./plugins/pmn",
+      "description": "Progressive Materialist Naturalism (PMN) by Nova Dharma: the full manuscript as a skill that answers from the text with section citations, plus skills to diagnose institutions and to question PMN itself."
+    }
+  ]
+}

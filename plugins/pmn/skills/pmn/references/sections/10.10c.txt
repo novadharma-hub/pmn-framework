@@ -1,0 +1,5 @@
+PMN Framework v126 | Part X: How Systems Change: Adaptive Dynamics and Historical Transformation
+§10.10c The Extended Agent Typology: Beyond the Hero-Vigilante Binary
+Source: https://novadharma-hub.github.io/pmn-framework/read/10.10c.html
+
+The binary of hero and vigilante — the actor who amplifies structural analysis against personal cost versus the actor who performs solidarity while protecting positional interests — captures something real about the ecosystem dynamics analyzed in 10.10 and 10.10b. But a binary is analytically insufficient for the full range of positions that populate actual political ecosystems. The positions that consistently determine whether movements maintain counter-power capacity past the point of partial institutional success are not primarily the heroic or the vigilante — they are the positions whose actors have less dramatic but structurally more consequential functions: managing organizational continuity, controlling resource flows, holding the institutional relationships that movements depend on, and translating between the inside and outside positions that any sustained effort requires.

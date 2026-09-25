@@ -72,5 +72,6 @@ dist/txt/
 dist/read/
 dist/sitemap.xml
 
-# Build output of scripts/build_skill.py (the Agent Skill download).
+# Build output of scripts/build_skill.py (Agent Skill downloads; plugins/ is committed).
 dist/pmn-skill.zip
+dist/pmn-*.zip

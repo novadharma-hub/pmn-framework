@@ -1,0 +1,5 @@
+PMN Framework v126 | Part X: How Systems Change: Adaptive Dynamics and Historical Transformation
+§10.10c-ii The Watcher Problem: Coordination From Above and Behind
+Source: https://novadharma-hub.github.io/pmn-framework/read/10.10c-ii.html
+
+All seven positions face a version of the watcher problem that 10.14 analyzes at the institutional level: the actors whose function is to maintain accountability within the ecosystem are themselves positions whose occupants have interests and are subject to the same capture dynamics as any other position. There is no position within the ecosystem that is structurally exempt from the incentive pressures that produce drift. The implication is not that accountability is impossible but that it requires distributed redundancy — multiple positions with overlapping accountability functions and genuine capacity to act on each other's drift, rather than a single designated accountability role that becomes the system's single point of failure.

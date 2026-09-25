@@ -169,6 +169,27 @@ const ENDPOINTS: Array<{ id: string; format: string; path: string; name: string;
  * dengan jendela 200k tetap tidak bisa memuat seluruh buku; karena itu
  * tingkatan tidak diurutkan menurut nama model.
  */
+const REPO = 'https://github.com/novadharma-hub/pmn-framework'
+
+/** Skill yang dibangun scripts/build_skill.py dari skill/<nama>/. */
+const SKILLS: Array<{ name: string; does: string; when: string }> = [
+  {
+    name: 'pmn',
+    does: 'The whole manuscript, one file per section, with the index, glossary and analytical roles. Answers from the text with section citations.',
+    when: 'Any question about PMN. The base for the other two.',
+  },
+  {
+    name: 'pmn-diagnose',
+    does: 'A structured diagnosis of a real institution or policy: capture stage with evidence, who pays and who gains, second-order effects, what would overturn it.',
+    when: '"Is this regulator captured?", "Analyse this policy with PMN."',
+  },
+  {
+    name: 'pmn-critic',
+    does: 'Questions PMN itself: the strongest objections, whether a criticism lands or misreads, unfalsifiable claims, inconsistencies.',
+    when: '"Is PMN convincing?", "Is this critic right?", "What would prove PMN wrong?"',
+  },
+]
+
 type TierId = 'agent' | 'whole' | 'part' | 'section' | 'notebook'
 const TIERS: Array<{ id: TierId; badge: string; name: string; needs: string; give: string; good: string; limit: string }> = [
   {
@@ -443,7 +464,10 @@ Answer in the user's language; keep section ids and quoted sentences in the orig
 
 Licence: CC BY-SA 4.0. Credit "Progressive Materialist Naturalism by Nova Dharma" and link ${BASE}`
 
-  const skillCli = `unzip pmn-skill.zip -d ~/.claude/skills/`
+  const ccPlugin = `/plugin marketplace add novadharma-hub/pmn-framework
+/plugin install pmn@pmn-framework`
+
+  const npxSkills = `npx skills add novadharma-hub/pmn-framework`
 
   const copyBtn = (id: string, text: string, label = 'Copy') => (
     <button type="button" className={`copy-btn ${copied === id ? 'copied' : ''}`} onClick={() => copyText(id, text)}>
@@ -613,43 +637,74 @@ Licence: CC BY-SA 4.0. Credit "Progressive Materialist Naturalism by Nova Dharma
               <section className="step">
                 <p>
                   Set PMN up once instead of pasting the text into every chat. Two ways, depending on the tool. Both carry a copy of v{version}: when
-                  the version on this site changes, download again.
+                  the version on this site changes, update or download again.
                 </p>
               </section>
 
               <section className="step">
-                <span className="step-num">Claude and agents</span>
-                <h2 className="step-h2">Install the PMN skill</h2>
+                <span className="step-num">Claude, Codex, OpenCode, Cursor and other agents</span>
+                <h2 className="step-h2">Install the PMN skills</h2>
                 <p>
-                  A skill is a folder of instructions and files that the model opens only when a question needs it. This one holds the whole
-                  manuscript, one file per section, plus the index, the glossary and the analytical roles. With it installed, asking about PMN or
-                  citing a section number makes the model read the relevant sections and cite them, without you pasting anything.
+                  A skill is a folder of instructions and files that the model opens only when a question needs it. There are three, and they work
+                  together:
                 </p>
-                <p>
-                  <a className="guide-dl" href="pmn-skill.zip" download>Download pmn-skill.zip</a>{' '}
-                  <span className="guide-small-inline">about 0.9 MB, v{version}</span>
-                </p>
-                <ul className="guide-list">
-                  <li>
-                    <strong>Claude apps (web, desktop).</strong> In Claude's settings, open the Skills section and upload the zip as it is. Skills
-                    need code execution to be switched on. Menu names move between releases; Claude's help pages have the current steps.
-                  </li>
-                  <li>
-                    <strong>Claude Code.</strong> Unzip into your skills folder (or into <code>.claude/skills/</code> inside one project):
-                    <div className="code-block">
-                      <span className="code-label">Terminal</span>
-                      {copyBtn('skill-cli', skillCli)}
-                      <div className="code-text">{skillCli}</div>
-                    </div>
-                  </li>
-                  <li>
-                    <strong>Other agents</strong> that read the Agent Skills format (a folder with a <code>SKILL.md</code>) can use the same folder;
-                    their documentation says where skills live.
-                  </li>
-                </ul>
+                <div className="guide-table-wrap">
+                  <table className="guide-table">
+                    <thead>
+                      <tr><th>Skill</th><th>What it does</th><th>Use it when</th></tr>
+                    </thead>
+                    <tbody>
+                      {SKILLS.map(s => (
+                        <tr key={s.name}>
+                          <td><code>{s.name}</code></td>
+                          <td>{s.does}</td>
+                          <td>{s.when}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                 <p className="guide-small">
-                  Test it with the five-minute test on the <a href="#/guide" onClick={goTab('start')}>Start tab</a>. The skill works best where the
-                  model can run commands and search files; it still has to open a section before citing it.
+                  Only <code>pmn</code> carries the manuscript. The other two read it from there, so install <code>pmn</code> in every case. Without
+                  it they fall back to fetching sections from this site.
+                </p>
+
+                <h3 className="guide-h3">Claude Code</h3>
+                <div className="code-block">
+                  <span className="code-label">In a Claude Code session</span>
+                  {copyBtn('cc-plugin', ccPlugin)}
+                  <pre className="code-text code-pre">{ccPlugin}</pre>
+                </div>
+
+                <h3 className="guide-h3">Codex, OpenCode, Cursor, Gemini CLI and others</h3>
+                <p>
+                  The <code>skills</code> installer copies the folders into each agent's skills directory. Add <code>-g</code> to install for every
+                  project instead of the current one.
+                </p>
+                <div className="code-block">
+                  <span className="code-label">Terminal</span>
+                  {copyBtn('npx-skills', npxSkills)}
+                  <pre className="code-text code-pre">{npxSkills}</pre>
+                </div>
+
+                <h3 className="guide-h3">Claude apps (web, desktop)</h3>
+                <p>
+                  In Claude's settings, open the Skills section and upload each zip as it is, <code>pmn</code> first. Skills need code execution to be
+                  switched on. Menu names move between releases; Claude's help pages have the current steps.
+                </p>
+                <p className="guide-dl-row">
+                  <a className="guide-dl" href="pmn-skill.zip" download>pmn-skill.zip</a>
+                  <a className="guide-dl" href="pmn-diagnose.zip" download>pmn-diagnose.zip</a>
+                  <a className="guide-dl" href="pmn-critic.zip" download>pmn-critic.zip</a>
+                </p>
+                <p className="guide-small">
+                  The first is about 0.9 MB (the whole manuscript); the other two are a few KB. Any other agent that reads the Agent Skills format can
+                  use the same folders: unzip them side by side in its skills directory. Source:{' '}
+                  <a href={REPO + '/tree/main/plugins/pmn/skills'} target="_blank" rel="noopener noreferrer">plugins/pmn/skills</a>.
+                </p>
+                <p className="guide-small">
+                  Test with the five-minute test on the <a href="#/guide" onClick={goTab('start')}>Start tab</a>. The skills work best where the model
+                  can run commands and search files; it still has to open a section before citing it.
                 </p>
               </section>
 
