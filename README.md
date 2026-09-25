@@ -121,7 +121,8 @@ to insulate.
   `#/guide/...`, `#/rules/...`).
 - **Privacy:** no cookies, no analytics, no accounts, no server. Notes, progress and preferences stay in the browser's
   `localStorage`; the Rules & Data page can export or clear them.
-- **Offline:** a service worker caches the manuscript, so the reader works without a connection once loaded.
+- **Offline:** a service worker caches what you have opened: each Part you read, and the whole text once you have used
+  Search. Text loads one Part at a time, so the first visit downloads about 0.3 MB instead of the whole book.
 
 ### Keyboard shortcuts
 

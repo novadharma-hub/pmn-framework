@@ -279,6 +279,32 @@ def tulis_sitemap(url_baca: list, parts: list, out: Path) -> int:
     return len(url)
 
 
+def periksa_per_part(parts: list) -> list:
+    """Reader memuat parts/manifest.json lalu parts/part_<Part>.json per Part
+    (sejak 2026-09-25), dan parts.json utuh hanya untuk pencarian. Ketiganya
+    harus sama persis; bila tidak, pembaca melihat judul dari satu versi dan
+    teks dari versi lain. Mengembalikan daftar masalah (kosong = cocok)."""
+    d = PARTS.parent / "parts"
+    masalah = []
+    try:
+        manifest = json.loads((d / "manifest.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        return ["parts/manifest.json: %s" % e]
+    if [(M["part"], M["title"], [(s["id"], s["title"]) for s in M["subs"]]) for M in manifest] != \
+       [(P["part"], P["title"], [(s["id"], s["title"]) for s in P["subs"]]) for P in parts]:
+        masalah.append("parts/manifest.json does not match parts.json (parts, titles or section ids)")
+    for P in parts:
+        f = d / (nama_berkas_part(P["part"]) + ".json")
+        try:
+            subs = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as e:
+            masalah.append("%s: %s" % (f.name, e))
+            continue
+        if [(s["id"], s["html"]) for s in subs] != [(s["id"], s["html"]) for s in P["subs"]]:
+            masalah.append("%s does not match parts.json" % f.name)
+    return masalah
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(REPO_ROOT / "dist"))
@@ -297,6 +323,13 @@ def main() -> int:
               % ", ".join(sorted(asing)), file=sys.stderr)
         print("[ERROR] extend TAG_DIIZINKAN and ke_teks() before shipping.",
               file=sys.stderr)
+        return 1
+
+    masalah = periksa_per_part(parts)
+    if masalah:
+        for m in masalah:
+            print("[ERROR] %s" % m, file=sys.stderr)
+        print("[ERROR] regenerate the data with modularizer.py so the per-Part files match.", file=sys.stderr)
         return 1
 
     for sub in ("txt", "read"):

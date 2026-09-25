@@ -20,6 +20,8 @@ interface ContentsViewProps {
   onBackHome: () => void
   onSetSubView?: (v: 'map' | 'glossary' | 'search') => void
   onSearch?: (query: string) => void
+  /** false selama teks lengkap belum dimuat: pencarian baru mencocokkan judul. */
+  fullTextReady?: boolean
   contentWidth?: 'narrow' | 'medium' | 'wide'
   onChangeWidth?: (w: 'narrow' | 'medium' | 'wide') => void
   version?: string
@@ -49,7 +51,7 @@ const shortenId = (id: string) => {
   return id
 }
 
-export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth, version = '' }: ContentsViewProps) {
+export default function ContentsView({ data, readMap, curPos, subView = 'map', searchQuery = '', searchPartFilter = '', onSelectSection, onBackHome, onSetSubView, onSearch, contentWidth = 'wide', onChangeWidth, version = '', fullTextReady = true }: ContentsViewProps) {
   const activeTab = subView
   // --contents-scale sudah dipakai 9 aturan CSS (TOC, glosarium, hasil cari)
   // tetapi tidak pernah ada yang menyetelnya - nilainya permanen 1. Pipanya
@@ -496,6 +498,11 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                   {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} for &ldquo;{searchQuery || '...'}&rdquo;
                   {searchPartFilter && <span className="block text-xl mt-3 opacity-50 font-mono uppercase tracking-widest">in Part {searchPartFilter}</span>}
                 </h3>
+                {!fullTextReady && (
+                  <p className="search-loading font-mono text-[0.75rem] text-pmn-mute uppercase tracking-widest mt-6" role="status">
+                    Titles only so far. Loading the full text…
+                  </p>
+                )}
               </div>
 
               <div className="w-full space-y-0">
@@ -534,7 +541,9 @@ export default function ContentsView({ data, readMap, curPos, subView = 'map', s
                 {searchResults.length === 0 && (
                   <div className="py-24 w-full flex flex-col items-center text-center">
                     <p className="font-pmn-body text-xl text-pmn-mute italic max-w-[400px] mx-auto leading-relaxed">
-                      {searchQuery 
+                      {searchQuery && !fullTextReady
+                        ? 'Searching the full text as soon as it has loaded…'
+                        : searchQuery
                         ? `No direct matches found in the manuscript for "${searchQuery}".` 
                         : "Enter a term above to begin analytical search."
                       }

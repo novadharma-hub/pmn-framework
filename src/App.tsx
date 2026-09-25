@@ -170,6 +170,8 @@ export default function App() {
   // karena ID seksi harus dipetakan ke posisi [part, seksi]. Sekali saja:
   // sesudah itu URL mengikuti navigasi, bukan sebaliknya.
   const rutSeksiSudahDipakai = useRef(false)
+  // Part tujuan tautan #/s/<id>, dibaca pemuat teks sebelum setCurPos berlaku.
+  const partTujuan = useRef<number | null>(null)
   useEffect(() => {
     if (!data?.parts?.length || rutSeksiSudahDipakai.current) return
     rutSeksiSudahDipakai.current = true
@@ -179,6 +181,7 @@ export default function App() {
 
     const pos = sah?.sectionId ? findSection(data.parts, sah.sectionId) : null
     if (pos) {
+      partTujuan.current = pos[0]
       setCurPos(pos)
       setPage('reader')
       return
@@ -252,6 +255,66 @@ export default function App() {
     }
   }, [data])
 
+  // --- Teks per Part (lihat "Data loading") ---
+  const dataRef = useRef<any>(null)
+  dataRef.current = data
+  const muatanPart = useRef<Map<number, Promise<void>>>(new Map())
+  const muatanSemua = useRef<Promise<void> | null>(null)
+  const [teksPenuh, setTeksPenuh] = useState(false)
+
+  const muatPart = (pi: number): Promise<void> => {
+    const d = dataRef.current
+    const P = d?.parts?.[pi]
+    if (!P || P.subs.every((s: any) => typeof s.html === 'string')) return Promise.resolve()
+    const ada = muatanPart.current.get(pi)
+    if (ada) return ada
+    const berkas = 'part_' + String(P.part).replace(/ /g, '_')
+    const janji = fetch(`./data/parts/${berkas}.json`)
+      .then(r => { if (!r.ok) throw new Error(String(r.status)); return r.json() })
+      .then((subs: any[]) => {
+        const html: Record<string, string> = {}
+        subs.forEach(s => { if (s && typeof s.html === 'string') html[s.id] = s.html })
+        setData((prev: any) => prev && {
+          ...prev,
+          parts: prev.parts.map((Q: any, i: number) => i !== pi ? Q : {
+            ...Q, loadError: false,
+            subs: Q.subs.map((s: any) => (s.id in html ? { ...s, html: html[s.id] } : s)),
+          }),
+        })
+      })
+      .catch(() => {
+        // Lupakan janji yang gagal agar "Try again" benar-benar mencoba lagi.
+        muatanPart.current.delete(pi)
+        setData((prev: any) => prev && {
+          ...prev,
+          parts: prev.parts.map((Q: any, i: number) => (i === pi ? { ...Q, loadError: true } : Q)),
+        })
+      })
+    muatanPart.current.set(pi, janji)
+    return janji
+  }
+
+  const muatSemua = (): Promise<void> => {
+    if (teksPenuh) return Promise.resolve()
+    if (muatanSemua.current) return muatanSemua.current
+    muatanSemua.current = fetch('./data/parts.json')
+      .then(r => { if (!r.ok) throw new Error(String(r.status)); return r.json() })
+      .then((penuh: any[]) => {
+        const html: Record<string, string> = {}
+        penuh.forEach(P => P.subs.forEach((s: any) => { html[s.id] = s.html }))
+        setData((prev: any) => prev && {
+          ...prev,
+          parts: prev.parts.map((Q: any) => ({
+            ...Q, loadError: false,
+            subs: Q.subs.map((s: any) => (typeof html[s.id] === 'string' ? { ...s, html: html[s.id] } : s)),
+          })),
+        })
+        setTeksPenuh(true)
+      })
+      .catch(() => { muatanSemua.current = null })
+    return muatanSemua.current
+  }
+
   const [version, setVersion] = useState('')
   const [loadedCount, setLoadedCount] = useState(0)
 
@@ -315,9 +378,16 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [page, data, curPos, theme, focusMode, toggleTheme])
 
-  // Data loading
+  // Data loading.
+  //
+  // Sampai 2026-09-25 aplikasi menunggu parts.json (2,3 MB; ~680 KB gzip)
+  // sebelum menampilkan apa pun, termasuk beranda yang tidak memakai teks
+  // naskah sama sekali. Sekarang yang dimuat di awal hanya kerangka
+  // (parts/manifest.json, ~40 KB: judul dan ID semua seksi, tanpa html) dan
+  // berkas kecil lainnya. Teks menyusul per Part lewat muatPart() saat
+  // dibaca, dan seluruhnya lewat muatSemua() saat pencarian dibuka.
   useEffect(() => {
-    const dataFiles = ['parts', 'gl', 'glg', 'rel', 'look', 'quotes', 'ci', 'version']
+    const dataFiles = ['parts/manifest', 'gl', 'glg', 'rel', 'look', 'quotes', 'ci', 'version']
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 15000)
 
@@ -377,6 +447,36 @@ export default function App() {
   useEffect(() => {
     try { localStorage.setItem('pmn-page', page) } catch {}
   }, [page])
+
+  // Reader: Part yang sedang dibaca, lalu Part sesudahnya (tombol "Next" di
+  // akhir Part tidak perlu menunggu). Di halaman lain: Part posisi terakhir
+  // dimuat saat peramban senggang, supaya "Resume reading" langsung terbuka.
+  const adaData = !!data
+  useEffect(() => {
+    if (!adaData) return
+    // Saat data baru tiba, efek rute (#/s/<id>) di atas baru saja memanggil
+    // setCurPos, dan curPos di sini masih posisi lama: pakai Part tujuannya.
+    let pi = curPos[0]
+    if (partTujuan.current !== null) {
+      if (partTujuan.current === pi) partTujuan.current = null
+      else pi = partTujuan.current
+    }
+    if (page === 'reader' || partTujuan.current !== null) {
+      muatPart(pi).then(() => {
+        if (dataRef.current?.parts?.[pi + 1]) muatPart(pi + 1)
+      })
+      return
+    }
+    const w = window as any
+    const id = w.requestIdleCallback ? w.requestIdleCallback(() => muatPart(pi)) : setTimeout(() => muatPart(pi), 2000)
+    return () => { w.cancelIdleCallback ? w.cancelIdleCallback(id) : clearTimeout(id) }
+  }, [adaData, page, curPos[0]])
+
+  // Pencarian butuh seluruh teks: satu permintaan parts.json, hanya saat dipakai.
+  useEffect(() => {
+    if (!adaData) return
+    if ((page === 'contents' && contentsSub === 'search') || searchQuery.trim().length >= 2) muatSemua()
+  }, [adaData, page, contentsSub, searchQuery])
 
   useEffect(() => {
     try { localStorage.setItem('pmn-sub', contentsSub) } catch {}
@@ -535,6 +635,7 @@ export default function App() {
               contentWidth={contentWidth}
               onChangeWidth={changeWidth}
               version={version}
+              fullTextReady={teksPenuh}
             />
           )}
 
@@ -559,6 +660,7 @@ export default function App() {
               history={history}
               version={version}
               onOpenPolicy={openPolicy}
+              onLoadPart={muatPart}
             />
           )}
 
