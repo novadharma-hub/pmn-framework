@@ -81,8 +81,9 @@ placeholders, checks that every section id the skills cite exists, and writes `p
 
 - Test a changed skill with a real agent on a realistic prompt (give it only the installed skills folder, ask for
   the answer plus a trace of files opened and anything unclear), and fold the findings back in.
-- Found a new inconsistency in the manuscript? Add it to `known-issues.md` with both quotes and a recommended
-  reading.
+- Found a new inconsistency in the manuscript? Read both passages in context first; most apparent conflicts are
+  loose wording or a later refinement. Only a genuine contradiction goes into `known-issues.md`, with both quotes
+  and a recommended reading.
 - **When the rewritten manuscript lands**, section ids may change. The build then fails on every section id the
   skills cite that no longer exists: update the pointers in `skill/`, re-check `known-issues.md` (drop what the
   rewrite fixed), and re-run the skill tests.
@@ -106,7 +107,7 @@ Agent Skills one version behind; direct pushes to `main` are not checked for thi
 
 ## Status
 
-Last updated: 2026-09-25 (after PR #22).
+Last updated: 2026-09-25 (after PR #23).
 
 ### Done recently
 
@@ -118,22 +119,24 @@ Last updated: 2026-09-25 (after PR #22).
   novadharma-hub/pmn-framework`, `npx skills add novadharma-hub/pmn-framework`).
 - #21: skills can read the text from GitHub; `pmn-diagnose` covers micro, meso and macro (§7.0b); this file.
 - #22: all skills handle the manuscript's inconsistencies (`known-issues.md`) and any language, English by default.
+- #23: skills `pmn-strategy` and `pmn-learn`; inconsistencies resolved quietly and read charitably; `pmn-critic`
+  targets ideas, not writing. Reading paths moved to `src/data/reading-paths.json` (shared by the site and
+  `pmn-learn`).
 
 ### Next, in order
 
-1. **Skills `pmn-strategy` and `pmn-learn`.** Strategy: counter-power, reform or revolution, sequencing and
-   organisational form (§10.6, §10.8, §10.9, Part XV); `pmn-diagnose` already covers T as diagnosis, so this one is
-   about what to do. Learn: teaching PMN to a beginner along the Reading Paths, step by step. Same pattern as the
-   others: source in `skill/<name>/SKILL.in.md`, test with a real agent on a realistic prompt before merging.
-2. **Performance.** First load is about 3.1 MB, of which `data/parts.json` is about 2.3 MB. Load Parts on demand.
-3. **Reader page on phones.** Two top bars stacked; the Measure/Zoom panel is cramped.
-4. **Re-measure the README "known limits" section** against the current version.
+1. **Performance.** First load is about 3.1 MB, of which `data/parts.json` is about 2.3 MB. Load Parts on demand.
+2. **Reader page on phones.** Two top bars stacked; the Measure/Zoom panel is cramped.
+3. **Re-measure the README "known limits" section** against the current version.
 
 ### Waiting on the owner
 
 - **GitHub Support request** ("Deletes") to purge the old pull-request refs (#1–#16) that still hold the removed
   `.docx` files. Only GitHub can do this.
-- **Manuscript inconsistencies** for the rewrite: see `skill/pmn/references/known-issues.md` (two meanings of G,
-  P named two ways, T and A, D/P/G missing from §15.0b, no independent indicator for advanced V). The critic skill
-  judged the last one the strongest surviving objection to PMN.
+- **For the manuscript rewrite:**
+  - `skill/pmn/references/known-issues.md`: G used for two different factors in §15.4 (substantive), plus two label
+    slips (P's heading, D/P/G missing from §15.0b).
+  - A substantive objection from the critic skill's test: "advanced V" (§15.0b) has no indicator independent of the
+    absence of complaint it explains, so at the level of a single case "people do not complain" fits both "little
+    structural suffering" and "suffering hidden by advanced V".
 - Review the eight rewritten Reading Paths descriptions and the unified citation format (Rules page).

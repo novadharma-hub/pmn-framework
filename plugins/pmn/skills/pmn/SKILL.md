@@ -38,20 +38,23 @@ https://novadharma-hub.github.io/pmn-framework/txt/index.txt on the website.
 
 ## When the text disagrees with itself
 
-The manuscript (v126) is being revised, and in places it contradicts itself: a symbol used for two things,
-a heading that names a variable one way and the paragraph another, a "canonical" section that leaves a term out.
-Handle this openly instead of silently picking one reading:
+The manuscript (v126) is being revised, and a few passages genuinely conflict. Most apparent conflicts are
+not real ones: a heading summarises loosely, two sections work at different levels, a later section refines an
+earlier one, or PMN keeps a tension open on purpose (Part XIII). Read charitably: assume the author meant something
+coherent, and treat two passages as inconsistent only when no reasonable reading in context reconciles them.
+Differences of wording are not inconsistencies. The user wants the best reading of PMN, not a list of drafting
+slips, so resolve the real ones quietly:
 
-1. **Check the known list first.** The `pmn` skill's `references/known-issues.md` lists the inconsistencies found
-   so far, with a recommended reading for each (online: https://raw.githubusercontent.com/novadharma-hub/pmn-framework/main/plugins/pmn/skills/pmn/references/known-issues.md).
-2. **Quote both passages** with their section ids, so the user sees the conflict.
-3. **Choose a reading and give the reason.** In this order: an explicit definition ("the G variable
-   (intergenerational transmission)") over a later passing use; the dedicated section over an aside elsewhere;
-   the reading that keeps the argument coherent over the one that breaks it. Where two meanings are both needed,
-   treat them as two separate things and name them apart.
-4. **Carry the uncertainty.** If the conclusion depends on which reading is right, say so and give both outcomes.
-5. **Report new ones.** An inconsistency not on the list goes at the end of your answer as a possible manuscript
-   issue, with both quotes. Do not "fix" PMN by inventing a position it does not state.
+1. **Use the recommended reading.** The `pmn` skill's `references/known-issues.md` lists the known cases with the
+   reading to use (online: https://raw.githubusercontent.com/novadharma-hub/pmn-framework/main/plugins/pmn/skills/pmn/references/known-issues.md). For a case not on the list:
+   an explicit definition beats a later passing use, the dedicated section beats an aside, and the reading that
+   keeps the argument coherent beats the one that breaks it. Where two meanings are both needed, treat them as two
+   things and name them apart.
+2. **Answer from that reading without narrating the inconsistency.** Do not add "the text is inconsistent here".
+3. **One short clause, only when needed.** Add it in two cases: when you quote a sentence whose wording differs
+   from the reading you use (for example, quoting "ensure that G remains low" while treating it as cross-group
+   alignment: add "here G means cross-group alignment"), or when the conclusion would change under the other
+   reading. If the user asks about the passage itself, answer directly.
 
 ## How PMN reasons (orientation only; verify in the text before relying on it)
 
@@ -90,5 +93,6 @@ credit "Progressive Materialist Naturalism by Nova Dharma" and link https://nova
 
 ## Related skills
 
-If they are installed alongside this one: `pmn-diagnose` for a structured diagnosis of a specific institution or
-policy, and `pmn-critic` for questioning PMN itself. Both read the text from this skill's `references/` folder.
+If they are installed alongside this one: `pmn-learn` to teach PMN step by step, `pmn-diagnose` for a structured
+diagnosis of a real situation at any scale, `pmn-strategy` for what to do about it, and `pmn-critic` for questioning
+PMN itself. All of them read the text from this skill's `references/` folder.

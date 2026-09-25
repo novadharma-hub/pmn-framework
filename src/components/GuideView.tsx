@@ -176,7 +176,7 @@ const SKILLS: Array<{ name: string; does: string; when: string }> = [
   {
     name: 'pmn',
     does: 'The whole manuscript, one file per section, with the index, glossary and analytical roles. Answers from the text with section citations.',
-    when: 'Any question about PMN. The base for the other two.',
+    when: 'Any question about PMN. The base for the others.',
   },
   {
     name: 'pmn-diagnose',
@@ -184,8 +184,18 @@ const SKILLS: Array<{ name: string; does: string; when: string }> = [
     when: '"Is this regulator captured?", "Is my situation my fault?", "How much pressure for change is there?"',
   },
   {
+    name: 'pmn-strategy',
+    does: 'What to do: where the system stands, the counter-power available and its weakest factor, whether a window is open, accommodation or transformation, and realistic options.',
+    when: '"How do we push this change?", "Reform or something bigger?", "When should we act?"',
+  },
+  {
+    name: 'pmn-learn',
+    does: 'Teaches PMN from the text, one section at a time: plain explanation, the key sentence, an example, a question to check understanding, what to read next.',
+    when: '"Teach me PMN from the start", "I have an hour", "Is PMN just Marxism?"',
+  },
+  {
     name: 'pmn-critic',
-    does: 'Questions PMN itself: the strongest objections, whether a criticism lands or misreads, unfalsifiable claims, inconsistencies.',
+    does: "Questions PMN's ideas: the strongest objections to its arguments and assumptions, whether a criticism lands or misreads, unfalsifiable claims, blind spots.",
     when: '"Is PMN convincing?", "Is this critic right?", "What would prove PMN wrong?"',
   },
 ]
@@ -459,7 +469,7 @@ How to answer:
 3. If the files do not address something, say so. Do not fill the gap with a position PMN does not state.
 4. Judge institutions by material incentives and structural position, not by stated intentions. Keep open the tensions the text leaves open (Part XIII) instead of smoothing them into a compromise.
 5. For a diagnosis, say what evidence would change it.
-6. The manuscript is being revised and sometimes contradicts itself (for example, §15.4 uses G for two different things). When passages disagree, quote both and say which reading you use and why; do not silently pick one.
+6. The manuscript is being revised and sometimes contradicts itself (for example, §15.4 uses G for two different things). Use the reading that keeps the argument coherent (an explicit definition over a later passing use) and answer from it without commenting on the inconsistency, unless a quote you give reads differently or the conclusion depends on it.
 
 Answer in the user's language (English if unclear). Search the files in English, since the text is English; keep section ids and quoted sentences in the original English and translate key quotes. End analytical answers with the sections you relied on.
 
@@ -646,7 +656,7 @@ Licence: CC BY-SA 4.0. Credit "Progressive Materialist Naturalism by Nova Dharma
                 <span className="step-num">Claude, Codex, OpenCode, Cursor and other agents</span>
                 <h2 className="step-h2">Install the PMN skills</h2>
                 <p>
-                  A skill is a folder of instructions and files that the model opens only when a question needs it. There are three, and they work
+                  A skill is a folder of instructions and files that the model opens only when a question needs it. There are five, and they work
                   together:
                 </p>
                 <div className="guide-table-wrap">
@@ -666,7 +676,7 @@ Licence: CC BY-SA 4.0. Credit "Progressive Materialist Naturalism by Nova Dharma
                   </table>
                 </div>
                 <p className="guide-small">
-                  Only <code>pmn</code> carries the manuscript. The other two read it from there, so install <code>pmn</code> in every case. Without
+                  Only <code>pmn</code> carries the manuscript. The others read it from there, so install <code>pmn</code> in every case. Without
                   it they fetch sections from GitHub or this site, which always hold the latest edition.
                 </p>
 
@@ -696,10 +706,12 @@ Licence: CC BY-SA 4.0. Credit "Progressive Materialist Naturalism by Nova Dharma
                 <p className="guide-dl-row">
                   <a className="guide-dl" href="pmn-skill.zip" download>pmn-skill.zip</a>
                   <a className="guide-dl" href="pmn-diagnose.zip" download>pmn-diagnose.zip</a>
+                  <a className="guide-dl" href="pmn-strategy.zip" download>pmn-strategy.zip</a>
+                  <a className="guide-dl" href="pmn-learn.zip" download>pmn-learn.zip</a>
                   <a className="guide-dl" href="pmn-critic.zip" download>pmn-critic.zip</a>
                 </p>
                 <p className="guide-small">
-                  The first is about 0.9 MB (the whole manuscript); the other two are a few KB. Any other agent that reads the Agent Skills format can
+                  The first is about 0.9 MB (the whole manuscript); the others are a few KB each. Any other agent that reads the Agent Skills format can
                   use the same folders: unzip them side by side in its skills directory. Source:{' '}
                   <a href={REPO + '/tree/main/plugins/pmn/skills'} target="_blank" rel="noopener noreferrer">plugins/pmn/skills</a>.
                 </p>

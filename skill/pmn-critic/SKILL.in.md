@@ -1,6 +1,6 @@
 ---
 name: pmn-critic
-description: Questions Progressive Materialist Naturalism (PMN) seriously instead of applying it. Builds the strongest objections to PMN, checks whether a given criticism lands or misreads the text, finds unfalsifiable claims, doctrine passed off as framework, and inconsistencies, all against the text itself. Use whenever the user wants to criticise, critique, red-team, stress-test, debunk or find weaknesses in PMN or Nova Dharma's framework, asks whether a PMN claim is falsifiable or what would prove PMN wrong, or asks whether a critic of PMN is right, in any language, even if they only say "is PMN actually convincing?".
+description: Questions the ideas of Progressive Materialist Naturalism (PMN) seriously instead of applying them. Builds the strongest objections to PMN's arguments and assumptions, checks whether a given criticism lands or misreads the text, and finds unfalsifiable claims, doctrine passed off as framework, blind spots and genuine contradictions, all against the text itself. Use whenever the user wants to criticise, critique, red-team, stress-test, debunk or find weaknesses in PMN or Nova Dharma's framework, asks whether a PMN claim is falsifiable or what would prove PMN wrong, or asks whether a critic of PMN is right, in any language, even if they only say "is PMN actually convincing?".
 ---
 
 # Questioning PMN seriously
@@ -23,7 +23,9 @@ criticism that lands on the actual text, and an honest verdict when it does not.
 - §15.0b and the glossary entry for any term you attack: the canonical definition is what the objection has to hit.
 - The section that states the claim under attack, and any section that answers the objection.
 
-This list is where to start, not a boundary: follow cross-references that bear on the objection.
+For a narrow question (one Part, one formula, one claim), start with the sections that state the target and bring
+in the method sections above as the objection needs them. This list is where to start, not a boundary: follow
+cross-references that bear on the objection.
 
 ## Pick the mode from the request
 
@@ -44,8 +46,8 @@ This list is where to start, not a boundary: follow cross-references that bear o
 2. State the strongest rival position in its own best form, as its ablest defender would put it.
 3. Turn PMN's own tests on PMN: §1.2, the §12.3b tests, §12.5b, §13.1c (who benefits from calling a conflict a
    permanent tension, here PMN itself?), §14.6.
-4. Look for inconsistencies: a term used differently across sections, a variable named two ways, a
-   cross-reference that points to the wrong place. Quote both passages.
+4. Look for substantive contradictions: two claims PMN makes that cannot both be true, or a method that its own
+   tests would reject. Quote both passages. Wording, labels, numbering and tidiness are not the target (see Rules).
 
 **Falsification audit** (a specific claim).
 State what evidence would count against the claim, whether PMN itself says so (§14.4b gives conditions for some),
@@ -54,6 +56,13 @@ explained away. That pattern is what §1.2 calls insulation.
 
 ## Rules
 
+- **Criticise the substance, not the writing.** The target is PMN's ideas: its arguments, assumptions, evidence,
+  predictions and blind spots. A loose heading, an inconsistent label, a typo or an untidy cross-reference is not a
+  criticism of PMN; leave them out unless the user asks for an editorial review, or unless the slip changes what an
+  argument claims.
+- **Read PMN at its best too.** Before calling two passages contradictory, look for the reading in context that
+  reconciles them (different levels, a later refinement, a deliberate Part XIII tension). An objection that survives
+  PMN's strongest reading is worth far more than one that depends on its weakest phrasing.
 - **PMN does not grade its own work.** A passage where PMN anticipates an objection is not automatically an answer
   to it. Say whether the anticipation actually meets the objection. PMN describing itself as anti-dogmatic is a
   claim to test, not evidence.
@@ -61,8 +70,10 @@ explained away. That pattern is what §1.2 calls insulation.
   critique is as useless as a defensive one.
 - **Name the kind of problem.** A gap (the text is silent), an acknowledged tension (Part XIII), a contradiction
   (the text says incompatible things), unfalsifiability, or doctrine smuggled in as framework. They call for
-  different fixes. The known inconsistencies (below) are fair targets, but an objection that only restates a
-  labelling slip is weak: ask whether the argument still fails once the intended reading is used.
+  different fixes.
+- **Known drafting problems are not objections.** `known-issues.md` records them for the author; it is not a source
+  of criticism. Do not build an answer on them. Mention one briefly only if the user asks about that passage, or if
+  the problem changes what an argument actually claims even on its best reading.
 - **Mark what comes from outside the text.** Empirical literature, history and rival philosophers are fair game;
   label them as outside the manuscript and say how sure you are.
 

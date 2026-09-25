@@ -49,6 +49,7 @@ from build_ai_surfaces import (  # noqa: E402
 
 SRC = REPO_ROOT / "skill"
 DATA = REPO_ROOT / "public_static" / "data"
+PATHS = REPO_ROOT / "src" / "data" / "reading-paths.json"
 PLUGIN = REPO_ROOT / "plugins" / "pmn"
 MARKETPLACE = REPO_ROOT / ".claude-plugin" / "marketplace.json"
 REPO_URL = "https://github.com/novadharma-hub/pmn-framework"
@@ -99,6 +100,25 @@ def tulis_glosarium(label: str, gl: dict, glg: dict) -> str:
     if sisa:
         baris += ["", "## Other terms", ""]
         baris += ["- **%s**: %s" % (t, gl[t]) for t in sisa]
+    return "\n".join(baris) + "\n"
+
+
+def tulis_jalur(label: str, jalur: list, judul: dict, id_ada: set) -> str:
+    """Jalur baca situs -> paths.md untuk pmn-learn. ID tak dikenal = build gagal."""
+    salah = sorted({s["id"] for j in jalur for s in j["steps"] if s["id"] not in id_ada})
+    if salah:
+        raise ValueError("src/data/reading-paths.json names sections that do not exist: %s" % ", ".join(salah))
+    baris = [
+        "# PMN %s: reading paths" % label,
+        "",
+        "The reading paths on the PMN website (%s), each a short sequence for a particular reader." % BASE,
+    ]
+    for j in jalur:
+        baris += ["", "## %s. %s" % (j["num"], j["title"]), "",
+                  "For: %s. About %s, %d sections." % (j["persona"], j["estTime"].lstrip("~"), len(j["steps"])),
+                  "", j["summary"], ""]
+        for i, s in enumerate(j["steps"], 1):
+            baris.append("%d. §%s %s: %s" % (i, s["id"], judul[s["id"]], s["desc"]))
     return "\n".join(baris) + "\n"
 
 
@@ -181,6 +201,7 @@ def main() -> int:
     korpus["references/index.md"] = tulis_indeks(parts, label, ukuran)
     korpus["references/glossary.md"] = tulis_glosarium(label, gl, glg)
     id_ada = set(ukuran)
+    judul = {s["id"]: s["title"] for P in parts for s in P["subs"]}
 
     nilai = {"VERSION": label, "SECTIONS": str(len(ukuran)), "TERMS": str(len(gl)), "BASE": BASE,
              "REPO": REPO_URL, "RAW": RAW_URL}
@@ -210,6 +231,13 @@ def main() -> int:
         print("[ERROR] %s" % e, file=sys.stderr)
         return 1
     skills[UTAMA].update(korpus)
+    if "pmn-learn" in skills:
+        try:
+            jalur = json.loads(PATHS.read_text(encoding="utf-8"))
+            skills["pmn-learn"]["paths.md"] = tulis_jalur(label, jalur, judul, id_ada)
+        except ValueError as e:
+            print("[ERROR] %s" % e, file=sys.stderr)
+            return 1
 
     # Committed plugin tree: rewritten in full so nothing stale survives.
     shutil.rmtree(PLUGIN, ignore_errors=True)
