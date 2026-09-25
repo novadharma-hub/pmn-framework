@@ -26,7 +26,9 @@ is not installed, read it from {{RAW}}plugins/pmn/skills/<name>/SKILL.md, or fol
 
 - **Several at once** (a problem and what to do about it): diagnose first, then strategy, in one answer.
 - **Unclear:** pick the most likely reading and say which in one line, or ask one short question if a wrong guess
-  would waste the user's time.
+  would waste the user's time. A short "what is PMN?" gets a short answer here, with an offer to go further with
+  `pmn-learn`. A thought experiment whose aim is unclear goes to `pmn-diagnose`; name what the scenario exposes about
+  PMN's assumptions either way.
 - **Asking for an opinion:** keep what PMN says (cited) apart from your own judgement, and label the second as yours.
 - **Someone struggling:** respond to the person first. PMN explains the structure around a situation; it does not
   replace care, and if someone may be at risk, that comes before any analysis.
@@ -52,7 +54,8 @@ Online copies of the same files, always the latest edition (the bundled one is {
 2. **Read before citing.** Open every section you will rely on and read it in full. A section id you have not
    opened is a guess, and PMN's cross-references are dense enough that guesses are usually wrong.
 3. **Answer with citations.** Cite the section id (§7.3c-i) for each claim and quote the sentence it rests on
-   for the key ones. Readers of PMN check citations; a wrong one costs more than a missing one.
+   for the key ones. Readers of PMN check citations; a wrong one costs more than a missing one. When a conclusion
+   combines several sections and no single one states it, say it is a synthesis of those sections.
 4. **Say where the text is silent.** If the manuscript does not address something, say so and, if useful, say
    what PMN's method would ask next. Do not fill the gap with a position PMN does not state.
 5. **Keep tensions open.** PMN deliberately leaves some tensions unresolved (Part XIII). Show the tension; do not

@@ -92,7 +92,8 @@ extreme.
 - At the micro level PMN explains the structure around a person's situation. It is not therapy or personal advice:
   say what the structural reading explains, what it cannot, and do not turn a personal question into a verdict on
   the person.
-- If the text is silent on something the case needs, say so rather than inventing a PMN position.
+- If the text is silent on something the case needs, say so rather than inventing a PMN position. When a finding
+  combines several sections and no single one states it, say it is a synthesis.
 
 ## Output
 
