@@ -175,12 +175,12 @@ const REPO = 'https://github.com/novadharma-hub/pmn-framework'
 const SKILLS: Array<{ name: string; does: string; when: string }> = [
   {
     name: 'pmn',
-    does: 'The whole manuscript, one file per section, with the index, glossary and analytical roles. Answers from the text with section citations.',
-    when: 'Any question about PMN. The base for the others.',
+    does: 'The whole manuscript, one file per section, with the index, glossary and analytical roles. Answers from the text with section citations, and sends other kinds of request to the right skill below.',
+    when: 'Any question about PMN, including a personal problem, a request for an opinion or a thought experiment. The base for the others.',
   },
   {
     name: 'pmn-diagnose',
-    does: 'A structured diagnosis of a real situation at any scale: a person or workplace, an institution or policy, a country or the international order. Finds the level that produces the outcome, applies its tests, and says what would overturn the diagnosis.',
+    does: 'A structured diagnosis of a real or imagined situation at any scale: a person or workplace, an institution or policy, a country or the international order. Finds the level that produces the outcome, applies its tests, and says what would overturn the diagnosis.',
     when: '"Is this regulator captured?", "Is my situation my fault?", "How much pressure for change is there?"',
   },
   {

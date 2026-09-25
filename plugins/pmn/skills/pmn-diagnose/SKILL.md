@@ -1,6 +1,6 @@
 ---
 name: pmn-diagnose
-description: Diagnoses a real situation with Progressive Materialist Naturalism (PMN) at whatever scale it sits, citing the PMN text. Micro (a person's or household's conditions, a workplace, a community), meso (an organisation, regulator, company, party, movement, law or policy) or macro (a sector, a country's political economy, a regime, the international order). Finds the level that actually produces the outcome, then applies that level's tests (biological floor and meaning, the five-stage capture sequence, transformation pressure T = S × D × P × G), maps who pays and who gains, and states what evidence would overturn the diagnosis. Use whenever the user asks to analyse, audit, assess or diagnose a specific case with PMN, asks whether something is captured, or asks what PMN would say about a named situation, in any language.
+description: Diagnoses a real situation with Progressive Materialist Naturalism (PMN) at whatever scale it sits, citing the PMN text. Micro (a person's or household's conditions, a workplace, a community), meso (an organisation, regulator, company, party, movement, law or policy) or macro (a sector, a country's political economy, a regime, the international order). Also works on thought experiments (an imagined society, policy or scenario). Finds the level that actually produces the outcome, then applies that level's tests (biological floor and meaning, the five-stage capture sequence, transformation pressure T = S × D × P × G), maps who pays and who gains, and states what evidence would overturn the diagnosis. Use whenever the user asks to analyse, audit, assess or diagnose a specific case with PMN, asks whether something is captured, or asks what PMN would say about a named situation, in any language.
 ---
 
 # Diagnosing a case with PMN
@@ -96,6 +96,14 @@ points to another that bears on the case, open that one as well.
    the form "supported at [strength] given [assumptions]; reversed by [evidence]".
 8. **Remedies, only if asked,** aimed at the primary level: an organisational problem needs organisational
    redesign, a system problem does not yield to replacing individuals (§7.0b).
+
+## Thought experiments
+
+When the case is imagined ("a society where…", "suppose the state could…"), the stipulations are the facts: do not
+question them unless they contradict themselves. Keep apart what follows from PMN and what follows only from the
+stipulations, and say where the scenario pushes PMN beyond the conditions it was built for. §12.1c treats extreme
+scenarios as a way to expose hidden assumptions and names four productive kinds; read it when the scenario is
+extreme.
 
 ## Rules
 
