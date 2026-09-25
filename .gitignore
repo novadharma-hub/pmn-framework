@@ -71,3 +71,6 @@ index.ui.2.html
 dist/txt/
 dist/read/
 dist/sitemap.xml
+
+# Build output of scripts/build_skill.py (the Agent Skill download).
+dist/pmn-skill.zip

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && python3 scripts/check_glossary.py && vite build && python3 scripts/build_ai_surfaces.py && python3 scripts/build_pdf.py",
+    "build": "tsc --noEmit && python3 scripts/check_glossary.py && vite build && python3 scripts/build_ai_surfaces.py && python3 scripts/build_skill.py && python3 scripts/build_pdf.py",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },

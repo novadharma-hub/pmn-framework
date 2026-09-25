@@ -214,7 +214,7 @@ export default function App() {
   // diambil dari index.html sekali, supaya SEO beranda tidak berubah.
   const judulBeranda = useRef(document.title)
   useEffect(() => {
-    const GUIDE: Record<GuideTab, string> = { start: '', prompts: 'Prompts', questions: 'Questions', dev: 'Developer', endpoints: 'Endpoints' }
+    const GUIDE: Record<GuideTab, string> = { start: '', install: 'Install', prompts: 'Prompts', questions: 'Questions', dev: 'Developer', endpoints: 'Endpoints' }
     const RULES: Record<string, string> = { privacy: 'Privacy', terms: 'Terms & Citation', disclaimer: 'Epistemic Limits', ai: 'AI Policy' }
     let t = judulBeranda.current
     if (page === 'reader') {

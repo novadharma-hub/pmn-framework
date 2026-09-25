@@ -1,6 +1,7 @@
 /**
  * AI Guide — halaman bertab dengan URL sendiri per tab:
  *   #/guide            Start      tiga langkah, memilih alat & model, tanda gagal
+ *   #/guide/install    Install    Claude Skill, Custom GPT / Gem / Project
  *   #/guide/prompts    Prompts    prompt pembuka + tujuh peran
  *   #/guide/questions  Questions  delapan contoh pertanyaan
  *   #/guide/dev        Developer  skrip Python, aturan IDE agen
@@ -39,6 +40,7 @@ const LAST_REVIEWED = '2026-09-24'
 
 const TABS: Array<[GuideTab, string, string]> = [
   ['start', 'Start', '#/guide'],
+  ['install', 'Install', '#/guide/install'],
   ['prompts', 'Prompts', '#/guide/prompts'],
   ['questions', 'Questions', '#/guide/questions'],
   ['dev', 'Developer', '#/guide/dev'],
@@ -172,7 +174,7 @@ const TIERS: Array<{ id: TierId; badge: string; name: string; needs: string; giv
   {
     id: 'agent', badge: 'A', name: 'Agent with file access',
     needs: 'A coding or research agent that can read files or fetch URLs (for example Claude Code, Codex, Cursor).',
-    give: 'The repository (clone it) or the per-section files in txt/. The agent searches first, then reads only what it needs.',
+    give: 'The PMN skill (see Install), the repository (clone it), or the per-section files in txt/. The agent searches first, then reads only what it needs.',
     good: 'The deepest work: questions that cross many Parts, with exact quotations. Size is no limit because nothing is loaded at once.',
     limit: 'It must open a section before citing it. Ask it to show which files it read.',
   },
@@ -428,6 +430,21 @@ If they are not enough, say which other sections to paste (ids from ${BASE}txt/i
 Question: [your question]`,
   }
 
+  const assistantRule = `You answer questions about Progressive Materialist Naturalism (PMN) v${version}, a philosophical framework by Nova Dharma. The full text is in your knowledge files: in llms-full.txt every section starts with a line "#### Section <id> — <title>".
+
+How to answer:
+1. Search the knowledge files for the concepts in the question before answering. Never answer about PMN from memory: it is recent, and memory produces generic materialism with PMN's words pasted on.
+2. Cite the section id (for example §7.3c-i) for each claim and quote the sentence it rests on for the key ones. Only cite a section you have found in the files.
+3. If the files do not address something, say so. Do not fill the gap with a position PMN does not state.
+4. Judge institutions by material incentives and structural position, not by stated intentions. Keep open the tensions the text leaves open (Part XIII) instead of smoothing them into a compromise.
+5. For a diagnosis, say what evidence would change it.
+
+Answer in the user's language; keep section ids and quoted sentences in the original English. End analytical answers with the sections you relied on.
+
+Licence: CC BY-SA 4.0. Credit "Progressive Materialist Naturalism by Nova Dharma" and link ${BASE}`
+
+  const skillCli = `unzip pmn-skill.zip -d ~/.claude/skills/`
+
   const copyBtn = (id: string, text: string, label = 'Copy') => (
     <button type="button" className={`copy-btn ${copied === id ? 'copied' : ''}`} onClick={() => copyText(id, text)}>
       {copied === id ? 'Copied' : label}
@@ -451,7 +468,7 @@ Question: [your question]`,
           </p>
         </div>
 
-        <nav aria-label="AI Guide sections" className="pg-tabs pg-tabs-5">
+        <nav aria-label="AI Guide sections" className="pg-tabs pg-tabs-6">
           {TABS.map(([key, label, href]) => (
             <a
               key={key}
@@ -588,6 +605,81 @@ Question: [your question]`,
                 A good PMN deployment makes the model more disciplined, not more eloquent. If an answer sounds smooth and agreeable while the structural
                 variables and section references fade away, it has failed. Keep the text loaded, give it a role, and ask what would prove it wrong.
               </div>
+            </>
+          )}
+
+          {tab === 'install' && (
+            <>
+              <section className="step">
+                <p>
+                  Set PMN up once instead of pasting the text into every chat. Two ways, depending on the tool. Both carry a copy of v{version}: when
+                  the version on this site changes, download again.
+                </p>
+              </section>
+
+              <section className="step">
+                <span className="step-num">Claude and agents</span>
+                <h2 className="step-h2">Install the PMN skill</h2>
+                <p>
+                  A skill is a folder of instructions and files that the model opens only when a question needs it. This one holds the whole
+                  manuscript, one file per section, plus the index, the glossary and the analytical roles. With it installed, asking about PMN or
+                  citing a section number makes the model read the relevant sections and cite them, without you pasting anything.
+                </p>
+                <p>
+                  <a className="guide-dl" href="pmn-skill.zip" download>Download pmn-skill.zip</a>{' '}
+                  <span className="guide-small-inline">about 0.9 MB, v{version}</span>
+                </p>
+                <ul className="guide-list">
+                  <li>
+                    <strong>Claude apps (web, desktop).</strong> In Claude's settings, open the Skills section and upload the zip as it is. Skills
+                    need code execution to be switched on. Menu names move between releases; Claude's help pages have the current steps.
+                  </li>
+                  <li>
+                    <strong>Claude Code.</strong> Unzip into your skills folder (or into <code>.claude/skills/</code> inside one project):
+                    <div className="code-block">
+                      <span className="code-label">Terminal</span>
+                      {copyBtn('skill-cli', skillCli)}
+                      <div className="code-text">{skillCli}</div>
+                    </div>
+                  </li>
+                  <li>
+                    <strong>Other agents</strong> that read the Agent Skills format (a folder with a <code>SKILL.md</code>) can use the same folder;
+                    their documentation says where skills live.
+                  </li>
+                </ul>
+                <p className="guide-small">
+                  Test it with the five-minute test on the <a href="#/guide" onClick={goTab('start')}>Start tab</a>. The skill works best where the
+                  model can run commands and search files; it still has to open a section before citing it.
+                </p>
+              </section>
+
+              <section className="step">
+                <span className="step-num">ChatGPT, Gemini, Claude Projects</span>
+                <h2 className="step-h2">Make a PMN assistant</h2>
+                <p>
+                  A Custom GPT, a Gemini Gem or a Claude Project keeps the text and the instructions in one place, so every new chat starts grounded.
+                </p>
+                <ol className="guide-list guide-list-num">
+                  <li>Create the GPT, Gem or Project.</li>
+                  <li>Paste the instructions below into its instructions field.</li>
+                  <li>
+                    Upload <a href={BASE + 'llms-full.txt'} target="_blank" rel="noopener noreferrer">llms-full.txt</a> (2.4 MB, the whole book) as a
+                    knowledge file. If the tool refuses it as too large, upload the Part files for your topic instead (listed in{' '}
+                    <a href={BASE + 'txt/index.txt'} target="_blank" rel="noopener noreferrer">txt/index.txt</a>).
+                  </li>
+                </ol>
+                <div className="code-block">
+                  <span className="code-label">Instructions</span>
+                  {copyBtn('assistant-rule', assistantRule)}
+                  <div className="code-text">{assistantRule}</div>
+                </div>
+                <div className="note-box">
+                  <span className="note-label">What to expect</span>
+                  These tools usually search the uploaded file rather than read all of it, like a notebook (tier N on the Start tab). They are good at
+                  finding what the text says and weaker at connecting distant Parts. For questions that cross the whole book, use an agent with the
+                  skill or a model that holds the whole book (tiers A and B).
+                </div>
+              </section>
             </>
           )}
 
